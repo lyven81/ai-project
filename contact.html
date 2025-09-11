@@ -7,6 +7,26 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Track Contact form submissions
+            const contactForm = document.querySelector('form');
+            if (contactForm) {
+                contactForm.addEventListener('submit', () => {
+                    // Track form submission event
+                    console.log('AI Portfolio Contact form submitted');
+                    
+                    // You can add Google Analytics tracking here if needed:
+                    // gtag('event', 'contact_form_submit', {
+                    //   event_category: 'lead',
+                    //   event_label: 'AI Portfolio Contact Form'
+                    // });
+                });
+            }
+        });
+    </script>
+    
     <style>
         body {
             font-family: 'Poppins', sans-serif;
@@ -122,17 +142,54 @@
             color: #555;
             margin-bottom: 25px;
         }
-        .form-wrapper {
+        .contact-form {
             background-color: #ffffff;
-            padding: 20px;
-            border-radius: 6px;
+            padding: 30px;
+            border-radius: 8px;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
         }
-        iframe {
+        .contact-form label {
+            display: block;
+            margin-bottom: 8px;
+            color: #222;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+        .contact-form input,
+        .contact-form textarea {
             width: 100%;
-            height: 500px;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+            box-sizing: border-box;
+            background-color: #f9f9f9;
+            transition: all 0.2s ease;
+        }
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            border-color: #007BFF;
+            outline: none;
+            background-color: #ffffff;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+        }
+        .contact-form .submit-btn {
+            width: 100%;
+            background-color: #007BFF;
+            color: white;
+            text-decoration: none;
+            padding: 12px 25px;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 1rem;
             border: none;
-            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        .contact-form .submit-btn:hover {
+            background-color: #0056b3;
         }
         footer {
             text-align: center;
@@ -206,11 +263,18 @@
             <h3>Send a Message</h3>
             <p>Have a specific AI project in mind? Fill out the form below and I'll get back to you within 24 hours.</p>
             
-            <div class="form-wrapper">
-                <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSf0rAjyuXJtl83q32filKrk-I1xtE3zGUP6K7VxBe1WuNx0RA/viewform?embedded=true" frameborder="0" marginheight="0" marginwidth="0">
-                    Loading contact form...
-                </iframe>
-            </div>
+            <form action="https://formsubmit.co/director@pinnacleslearning.com" method="post" class="contact-form">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" placeholder="Your Full Name" required>
+
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="Your Email Address" required>
+
+                <label for="message">Tell Us About Your AI Project</label>
+                <textarea id="message" name="message" rows="6" placeholder="What AI solutions interest you? (e.g., computer vision, chatbots, image processing, creative AI)" required></textarea>
+
+                <button type="submit" class="submit-btn">Request AI Consultation</button>
+            </form>
         </section>
     </div>
 
