@@ -98,9 +98,10 @@ class DemoMode:
     def show_demo_interface(self):
         """Display the demo interface"""
         st.markdown("""
-        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
-                    padding: 2rem; border-radius: 12px; color: white; text-align: center; margin-bottom: 2rem;">
-            <h2>🎬 Demo Mode Active</h2>
+        <div style="background: #f5f5dc; 
+                    padding: 2rem; border-radius: 12px; color: #333; text-align: center; margin-bottom: 2rem;
+                    border: 2px solid #daa520;">
+            <h2 style="color: #333;">🎬 Demo Mode Active</h2>
             <p>Experience Claude PDF Summarizer without API keys!</p>
             <p><em>Upload any PDF or use our sample document to see the magic happen!</em></p>
         </div>

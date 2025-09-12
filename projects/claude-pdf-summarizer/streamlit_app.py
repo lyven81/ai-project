@@ -19,6 +19,40 @@ if DEMO_MODE:
         layout="wide"
     )
     
+    # Apply portfolio color scheme
+    st.markdown("""
+    <style>
+    .stApp {
+        background-color: #ffffff;
+        color: #222;
+    }
+    .stButton > button {
+        background-color: #f5f5dc;
+        color: #333;
+        border: 1px solid #daa520;
+        border-radius: 4px;
+    }
+    .stButton > button:hover {
+        background-color: #daa520;
+        color: white;
+    }
+    .stSelectbox > div > div {
+        background-color: #f9f9f9;
+        color: #222;
+    }
+    .stFileUploader > div {
+        background-color: #f9f9f9;
+        border: 2px dashed #007BFF;
+    }
+    .stSidebar {
+        background-color: #f9f9f9;
+    }
+    .stSidebar .stSelectbox > div > div {
+        background-color: #ffffff;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+    
     from demo_mode import run_demo_mode
     run_demo_mode()
     
@@ -177,6 +211,41 @@ def summarize_with_claude(prompt: str) -> str:
 
 # ----------------- Streamlit UI -----------------
 st.set_page_config(page_title="Claude PDF Summarizer", layout="centered")
+
+# Apply portfolio color scheme
+st.markdown("""
+<style>
+.stApp {
+    background-color: #ffffff;
+    color: #222;
+}
+.stButton > button {
+    background-color: #f5f5dc;
+    color: #333;
+    border: 1px solid #daa520;
+    border-radius: 4px;
+}
+.stButton > button:hover {
+    background-color: #daa520;
+    color: white;
+}
+.stSelectbox > div > div {
+    background-color: #f9f9f9;
+    color: #222;
+}
+.stFileUploader > div {
+    background-color: #f9f9f9;
+    border: 2px dashed #007BFF;
+}
+.stSidebar {
+    background-color: #f9f9f9;
+}
+.stSidebar .stSelectbox > div > div {
+    background-color: #ffffff;
+}
+</style>
+""", unsafe_allow_html=True)
+
 st.title("📄 Claude 3 PDF Summarizer")
 
 uploaded_file = st.file_uploader("Upload a PDF file", type="pdf")
