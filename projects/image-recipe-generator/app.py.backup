@@ -1,0 +1,456 @@
+# app.py
+import httpx
+import os
+import io
+import sys
+import base64
+from typing import Optional, List
+
+from PIL import Image
+from fastapi import FastAPI, HTTPException, File, UploadFile, Form, Request
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
+from pydantic import BaseModel
+
+# ---------- Make stdout/stderr UTF-8 safe on Windows ----------
+try:
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")  # Python 3.7+
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+except Exception:
+    pass
+
+def log_safe(msg: str) -> None:
+    """Log ASCII-only to avoid terminal emoji/Unicode issues on Windows."""
+    try:
+        sys.stdout.write((msg.encode("ascii", "ignore").decode("ascii") + "\n"))
+        sys.stdout.flush()
+    except Exception:
+        pass
+
+# ---------- Load .env locally (no-op on Cloud Run) ----------
+try:
+    from dotenv import load_dotenv  # type: ignore
+    load_dotenv()
+except Exception:
+    pass
+
+# ---------- Anthropic client ----------
+ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
+log_safe(f"[init] API key found: {bool(ANTHROPIC_API_KEY)}")
+log_safe(f"[init] API key length: {len(ANTHROPIC_API_KEY) if ANTHROPIC_API_KEY else 0}")
+
+anthropic_client = None
+APIStatusError = Exception
+try:
+    if ANTHROPIC_API_KEY:
+        from anthropic import Anthropic, APIStatusError as _APIStatusError
+        APIStatusError = _APIStatusError
+        # a slightly longer timeout + good connection pooling
+        http_client = httpx.Client(
+            timeout=httpx.Timeout(connect=10, read=60, write=30, pool=60),
+            limits=httpx.Limits(max_connections=100, max_keepalive_connections=20),
+        )
+        anthropic_client = Anthropic(api_key=ANTHROPIC_API_KEY, http_client=http_client)
+    else:
+        log_safe("[init] No ANTHROPIC_API_KEY found in environment")
+except Exception as e:
+    log_safe(f"[init] Failed to init Anthropic client: {e}")
+    anthropic_client = None
+
+
+# ---------- FastAPI app ----------
+app = FastAPI(
+    title="AI Recipe Generator",
+    version="1.0.2",
+    description="Generate creative recipes from food photos using AI",
+)
+templates = Jinja2Templates(directory=".")
+
+# ---------- Response model ----------
+class RecipeResponse(BaseModel):
+    recipe_name: str
+    ingredients: List[str]
+    instructions: List[str]
+    prep_time: Optional[str] = None
+    cook_time: Optional[str] = None
+    servings: Optional[int] = None
+    difficulty: str
+    tips: Optional[List[str]] = None
+    encouragement: Optional[str] = None
+
+# ---------- System prompt ----------
+RECIPE_SYSTEM_PROMPT = """You are a friendly, encouraging AI cooking companion who helps people create delicious meals from whatever ingredients they have available. Your goal is to make cooking accessible, fun, and confidence-building for everyone, regardless of their skill level.
+
+## Critical First Step - Image Analysis:
+**BEFORE generating any recipe, you MUST:**
+1. **Identify if the image contains food ingredients** - If the image shows non-food items, politely decline and explain you can only generate recipes from food images
+2. **Identify specific ingredients** - List the exact food items you can see in the image
+3. **Inform the user** what ingredients you've identified before proceeding
+
+## Response Guidelines:
+1. **First analyze if image contains food** - If not food, politely decline with: "I can see this image doesn't contain food ingredients. I can only generate recipes from images of food items. Please upload an image with ingredients like vegetables, meat, eggs, or other cooking ingredients."
+2. **Identify visible ingredients** and tell user what you see
+3. **Create a unique recipe** that uses those specific ingredients
+4. **Match the difficulty** to the user's specified skill level
+5. **Incorporate cuisine style** requested by user
+6. **Adapt to dietary restrictions** if specified
+7. **Use encouraging language** throughout
+
+## Response Format:
+
+🔍 **What I Can See:**
+[List the specific ingredients identified in the image]
+
+🍽️ [Creative Recipe Name Based on Identified Ingredients]
+
+[Brief encouraging intro about the recipe using the specific ingredients]
+
+📋 Ingredients You'll Need:
+• [List each identified ingredient with quantities]
+• [Include any additional pantry items needed]
+
+👨‍🍳 Let's Cook Together! (Step-by-Step):
+
+1. [First step - specific to identified ingredients]
+2. [Second step - include helpful tips]
+3. [Continue with numbered steps tailored to the ingredients]
+4. [Final step with presentation tips]
+
+⏱️ Time & Details:
+• Prep Time: [X minutes]
+• Cook Time: [X minutes]
+• Serves: [X people]
+• Difficulty: [Beginner/Intermediate/Advanced]
+
+💡 Chef's Tips for Success:
+• [Helpful tip #1 specific to these ingredients]
+• [Helpful tip #2 specific to these ingredients]
+• [Helpful tip #3 specific to these ingredients]
+
+✨ You've Got This!
+[Encouraging closing message specific to this recipe]
+
+## Important Rules:
+- **NEVER generate recipes for non-food images**
+- **ALWAYS identify ingredients first**
+- **Make recipes truly unique** based on what you see
+- **No hardcoded responses** - everything should be based on the actual image
+- **Be specific** about ingredients and cooking methods
+"""
+
+# ---------- Helpers ----------
+def encode_image_to_base64(image_file: UploadFile) -> str:
+    try:
+        b = image_file.file.read()
+        img = Image.open(io.BytesIO(b))
+        max_side = 1600
+        w, h = img.size
+        if max(w, h) > max_side:
+            if w >= h:
+                new_w, new_h = max_side, int(h * (max_side / w))
+            else:
+                new_h, new_w = max_side, int(w * (max_side / h))
+            img = img.resize((new_w, new_h))
+        out = io.BytesIO()
+        img.save(out, format="JPEG", quality=85, optimize=True)
+        return base64.b64encode(out.getvalue()).decode("utf-8")
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Error processing image: {str(e)}")
+        
+def create_recipe_prompt(
+    cuisine_style: str,
+    cooking_level: str,
+    meal_type: str,
+    dietary_restrictions: Optional[str],
+) -> str:
+    base = f"""**CRITICAL: First determine if this image contains food ingredients. If not, respond with: "I can see this image doesn't contain food ingredients. I can only generate recipes from images of food items. Please upload an image with ingredients like vegetables, meat, eggs, or other cooking ingredients."**
+
+If the image DOES contain food ingredients, then:
+
+1. **FIRST**: Identify and list the specific food ingredients you can see in the image
+2. **THEN**: Create a {cuisine_style} recipe suitable for a {cooking_level.lower()} cook using those exact ingredients
+
+**Requirements:**
+- Cuisine Style: {cuisine_style}
+- Cooking Level: {cooking_level}
+- Meal Type: {meal_type}"""
+    if dietary_restrictions:
+        base += f"\n- Dietary Restrictions: {dietary_restrictions}"
+    base += """
+
+**Critical Guidelines:**
+1. **MUST identify if image contains food first** - reject non-food images politely
+2. **MUST list specific ingredients** you see before creating recipe
+3. **Use ONLY the visible ingredients** as main components
+4. **Create unique recipe** based on the actual ingredients in THIS image
+5. **No generic responses** - everything must be tailored to what you see
+6. You may suggest common pantry items (salt, pepper, oil, etc.) not visible
+7. Write in encouraging tone and break down steps clearly
+8. Include timing estimates and helpful tips specific to these ingredients
+
+Create a personalized recipe based on the specific ingredients you identify in this image!"""
+    return base
+
+def create_error_response(error_message: str, cooking_level: str) -> RecipeResponse:
+    return RecipeResponse(
+        recipe_name="Unable to Generate Recipe",
+        ingredients=["Please upload an image with food ingredients"],
+        instructions=["Upload a clear image of food ingredients for recipe generation"],
+        prep_time=None,
+        cook_time=None,
+        servings=None,
+        difficulty=cooking_level,
+        tips=["Make sure your image shows food items clearly"],
+        encouragement=error_message,
+    )
+
+def parse_recipe_response(text: str, cooking_level: str) -> RecipeResponse:
+    import re
+
+    try:
+        # Non-food detection (from model reply)
+        if ("doesn't contain food ingredients" in text) or (
+            "can only generate recipes from images of food" in text
+        ):
+            return create_error_response(
+                "I can see this image doesn't contain food ingredients. I can only generate recipes from images of food items. Please upload an image with ingredients like vegetables, meat, eggs, or other cooking ingredients.",
+                cooking_level,
+            )
+
+        # Ingredient identification
+        ingredient_identification = ""
+        identification_match = re.search(r"🔍\s*\*\*What I Can See:\*\*\s*([^🍽️]+)", text, re.DOTALL)
+        if identification_match:
+            ingredient_identification = identification_match.group(1).strip()
+
+        # Recipe name
+        name_match = re.search(r"🍽️\s*(.+?)(?=\n|$)", text)
+        recipe_name = name_match.group(1).strip() if name_match else "Recipe from Your Ingredients"
+
+        # Ingredients list
+        ingredients: List[str] = []
+        ingredients_patterns = [
+            r"📋\s*.*?Ingredients.*?:(.*?)(?=👨‍🍳|🍳|\*\*|$)",
+            r"📋\s*.*?:(.*?)(?=👨‍🍳|🍳|\*\*|$)",
+            r"Ingredients.*?:(.*?)(?=👨‍🍳|🍳|Let's Cook|\*\*|$)",
+        ]
+        for pattern in ingredients_patterns:
+        m = re.search(pattern, text, re.DOTALL | re.IGNORECASE)
+        if m:
+            block = m.group(1)
+            ingredients = [
+                ln.strip().lstrip("•-*").strip()
+                for ln in block.splitlines()
+                if ln.strip() and ln.strip()[0:1] in {"•", "-", "*"}
+            ]
+            if ingredients:
+                break
+
+    # Instructions
+    instructions: List[str] = []
+    steps_patterns = [
+        r"👨‍🍳\s*.*?Step.*?:(.*?)(?=⏱️|Time & Details|\*\*|$)",
+        r"👨‍🍳\s*.*?:(.*?)(?=⏱️|Time & Details|\*\*|$)",
+        r"Let's Cook.*?:(.*?)(?=⏱️|Time & Details|\*\*|$)",
+        r"Instructions.*?:(.*?)(?=⏱️|Time & Details|\*\*|$)",
+    ]
+    for pattern in steps_patterns:
+        m = re.search(pattern, text, re.DOTALL | re.IGNORECASE)
+        if m:
+            block = m.group(1)
+            numbered = re.findall(r"(\d+\.\s*[^\n]+(?:\n(?!\d+\.).+)*)", block)
+            if numbered:
+                instructions = [s.strip() for s in numbered if s.strip()]
+            else:
+                for line in block.splitlines():
+                    line = line.strip()
+                    if line and len(line) > 10:
+                        cleaned = line.lstrip("•-*0123456789. ").strip()
+                        if cleaned and len(cleaned) > 10:
+                            instructions.append(cleaned)
+            if instructions:
+                break
+
+    # Timing/servings
+    prep_match = re.search(r"Prep Time:\s*([^\n•]+)", text, re.I)
+    prep_time = prep_match.group(1).strip() if prep_match else None
+    cook_match = re.search(r"Cook Time:\s*([^\n•]+)", text, re.I)
+    cook_time = cook_match.group(1).strip() if cook_match else None
+    servings = None
+    m = re.search(r"Serves?:\s*(\d+)", text, re.I)
+    if m:
+        try:
+            servings = int(m.group(1))
+        except Exception:
+            servings = None
+
+    # Tips
+    tips: List[str] = []
+    tips_patterns = [
+        r"💡\s*.*?Tips.*?:(.*?)(?=✨|\*\*|$)",
+        r"💡\s*.*?:(.*?)(?=✨|\*\*|$)",
+        r"Tips.*?:(.*?)(?=✨|\*\*|$)",
+    ]
+    for pattern in tips_patterns:
+        m = re.search(pattern, text, re.DOTALL | re.I)
+        if m:
+            block = m.group(1)
+            tips = [
+                ln.strip().lstrip("•-*").strip()
+                for ln in block.splitlines()
+                if ln.strip() and ln.strip()[0:1] in {"•", "-", "*"}
+            ]
+            if tips:
+                break
+
+    # Encouragement
+    encouragement = None
+    for pattern in [r"✨\s*.*?:\s*(.*?)$", r"You've Got This!\s*(.*?)$", r"✨\s*(.*?)$"]:
+        m = re.search(pattern, text, re.DOTALL | re.I)
+        if m:
+            encouragement = m.group(1).strip()
+            if encouragement:
+                break
+
+    if ingredient_identification:
+        encouragement = (ingredient_identification + " " + (encouragement or "")).strip()
+
+    return RecipeResponse(
+        recipe_name=recipe_name,
+        ingredients=ingredients or ["Ingredients from your uploaded image"],
+        instructions=instructions or ["Please check the full AI response above for detailed cooking steps"],
+        prep_time=prep_time if isinstance(prep_time, str) else None,
+        cook_time=cook_time if isinstance(cook_time, str) else None,
+        servings=servings,
+        difficulty=cooking_level,
+        tips=tips or ["Cook with confidence and taste as you go!"],
+        encouragement=encouragement or "You've got this! Every ingredient tells a story, and yours will be delicious!",
+    )
+
+    except Exception as e:
+        log_safe(f"ERROR in parse_recipe_response: {e}")
+        return create_error_response(
+            "There was an issue parsing the recipe. Please try again!",
+            cooking_level,
+        )
+
+# ---------- Routes ----------
+@app.get("/", response_class=HTMLResponse)
+async def root(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request, "title": "AI Recipe Generator"})
+
+@app.get("/healthz")
+def health():
+    return {"status": "ok", "message": "AI Recipe Generator is running"}
+
+@app.get("/debug/env")
+def debug_env():
+    api_key = os.getenv("ANTHROPIC_API_KEY")
+    return {
+        "has_api_key": bool(api_key),
+        "api_key_length": len(api_key) if api_key else 0,
+        "api_key_starts_with": api_key[:10] + "..." if api_key else None,
+        "client_initialized": bool(anthropic_client is not None),
+        "client_type": str(type(anthropic_client)) if anthropic_client else None,
+        "environment_vars": {
+            key: "***" if "key" in key.lower() or "secret" in key.lower() else value
+            for key, value in os.environ.items()
+            if key.startswith(("ANTHROPIC", "GOOGLE", "GCLOUD", "CLOUD"))
+        },
+    }
+
+@app.get("/debug/net")
+def debug_net():
+    """Quick outbound egress test."""
+    results = {}
+    try:
+        import httpx as _httpx
+        for url in ["https://www.google.com", "https://api.anthropic.com"]:
+            try:
+                r = _httpx.get(url, timeout=10)
+                results[url] = {"ok": True, "status": r.status_code}
+            except Exception as e:
+                results[url] = {"ok": False, "error": repr(e)}
+    except Exception as e:
+        results["error"] = f"httpx import failed: {e}"
+    return results
+
+@app.post("/analyze-recipe", response_model=RecipeResponse)
+async def analyze_recipe(
+    image: UploadFile = File(..., description="Image of food ingredients or cooking ingredients"),
+    cuisine_style: str = Form(..., description="Preferred cuisine style"),
+    cooking_level: str = Form(..., description="Cooking skill level"),
+    meal_type: str = Form(default="Any", description="Type of meal"),
+    dietary_restrictions: Optional[str] = Form(default=None, description="Dietary restrictions"),
+):
+    if not image.content_type or not image.content_type.startswith("image/"):
+        raise HTTPException(status_code=400, detail="Please upload a valid image file showing food ingredients")
+
+    image.file.seek(0, 2)
+    size = image.file.tell()
+    image.file.seek(0)
+    if size > 10 * 1024 * 1024:
+        raise HTTPException(status_code=400, detail="Image file too large. Please upload an image smaller than 10MB.")
+
+    if not anthropic_client:
+        return create_error_response(
+            "I can see your image, but I need my AI capabilities to analyze ingredients and generate recipes. Please check the API configuration.",
+            cooking_level,
+        )
+
+    try:
+        log_safe(f"DEBUG Processing image: name={image.filename} type={image.content_type}")
+        b64 = encode_image_to_base64(image)
+        log_safe(f"DEBUG Image encoded, len={len(b64)}")
+
+        user_prompt = create_recipe_prompt(cuisine_style, cooking_level, meal_type, dietary_restrictions)
+        log_safe("DEBUG Prompt created")
+
+        # Use 'input_image' for Anthropic image messages
+        resp = anthropic_client.messages.create(
+            model="claude-3-5-sonnet-20241022",
+            max_tokens=1500,
+            temperature=0.3,
+            system=RECIPE_SYSTEM_PROMPT,
+            messages=[
+                {
+                    "role": "user",
+                    "content": [
+                        {
+                            "type": "image",
+                            "source": {"type": "base64", "media_type": "image/jpeg", "data": b64},
+                        },
+                        {"type": "text", "text": user_prompt},
+                    ],
+                }
+            ],
+        )
+
+        ai_text = (resp.content[0].text if resp and getattr(resp, "content", None) else "").strip()
+        if not ai_text:
+            log_safe("ERROR Empty AI text response")
+            return create_error_response(
+                "The AI service returned an empty response. Please try again!",
+                cooking_level,
+            )
+
+        recipe = parse_recipe_response(ai_text, cooking_level)
+        log_safe(f"DEBUG Parsed recipe: {recipe.recipe_name}")
+        return recipe
+
+    except APIStatusError as e:
+        log_safe(f"ERROR API Status Error: {e}")
+        return create_error_response(
+            f"AI service error: {str(e)}. Please try again in a moment!",
+            cooking_level,
+        )
+    except Exception as e:
+        log_safe(f"ERROR Unexpected Exception: {type(e).__name__}: {e}")
+        return create_error_response(
+            f"Unexpected error: {str(e)}. Please try uploading your image again!",
+            cooking_level,
+        )
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("app:app", host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))

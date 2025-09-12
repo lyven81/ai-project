@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+            background: white;
+            padding: 16px;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .education-section {
+            margin-bottom: 24px;
+            padding: 20px;
+            background: linear-gradient(135deg, #faf5ff 0%, #e9d8fd 100%);
+            border-radius: 12px;
+            border-left: 4px solid #9f7aea;
+        }
+
+        .education-section h3 {
+            color: #553c9a;
+            margin-bottom: 12px;
+            font-size: 1.3rem;
+        }
+
+        .education-section p {
+            color: #4a5568;
+            margin-bottom: 12px;
+        }
+
+        .consultation-modes {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .mode-card {
+            padding: 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .mode-card.simple {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+        }
+
+        .mode-card.advanced {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+        }
+
+        .mode-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .mode-card.active {
+            border-color: #667eea;
+            box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
+        }
+
+        .mode-card h4 {
+            color: #2d3748;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        .mode-card p {
+            color: #4a5568;
+            font-size: 0.9rem;
+        }
+
+        .element-calculator {
+            display: none;
+            margin-bottom: 20px;
+            padding: 16px;
+            background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+            border-radius: 12px;
+            border: 2px solid #6366f1;
+        }
+
+        .element-calculator h4 {
+            color: #3730a3;
+            margin-bottom: 12px;
+        }
+
+        .calculated-element {
+            display: none;
+            padding: 16px;
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border-radius: 12px;
+            margin-bottom: 16px;
+            border-left: 4px solid #059669;
+        }
+
+        .calculated-element h4 {
+            color: #064e3b;
+            margin-bottom: 8px;
+        }
+
+        .calculated-element p {
+            color: #065f46;
+        }
+
+        .element-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+            padding: 16px;
+            background: linear-gradient(135deg, #faf5ff 0%, #e9d8fd 100%);
+            border-radius: 12px;
+        }
+
+        .element-card {
+            text-align: center;
+            padding: 12px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .element-emoji {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        .element-name {
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2d3748;
+            font-size: 0.95rem;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            transform: translateY(-1px);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .element-select {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            font-weight: 600;
+        }
+
+        .element-select option {
+            background: white;
+            color: #333;
+        }
+
+        .birth-date-required {
+            background: linear-gradient(135deg, #fed7d7 0%, #feb2b2 100%);
+            border-color: #fc8181;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .submit-btn:disabled {
+            background: linear-gradient(135deg, #a0aec0 0%, #718096 100%);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .calculate-btn {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(72, 187, 120, 0.3);
+        }
+
+        .output-section {
+            margin-top: 24px;
+        }
+
+        .response-box {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 16px;
+            white-space: pre-wrap;
+            min-height: 80px;
+            color: #2d3748;
+            line-height: 1.8;
+            border-left: 4px solid #ed8936;
+        }
+
+        .response-box.empty {
+            background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e0 100%);
+            color: #4a5568;
+            font-style: italic;
+            border-left: 4px solid #a0aec0;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            color: #667eea;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .error {
+            background: linear-gradient(135deg, #fed7d7 0%, #feb2b2 100%);
+            border: 2px solid #fc8181;
+            color: #c53030;
+            padding: 16px;
+            border-radius: 12px;
+            margin-top: 16px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                padding: 12px;
+            }
+            
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .element-info {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+
+            .consultation-modes {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏮 專業風水顧問</h1>
+            <p>資深風水師「玄機老師」｜基於傳統風水學與五行原理的智慧諮詢</p>
+        </div>
+
+        <div class="education-section">
+            <h3>🌟 什麼是五行八字？</h3>
+            <p><strong>五行</strong>是中國古代哲學的核心概念，包含木、火、土、金、水五種基本元素，代表不同的能量特質和生命週期。</p>
+            <p><strong>八字</strong>是根據你的出生年月日時推算出的四組天干地支，反映你與生俱來的五行特質和命運傾向。</p>
+            <p>💡 <strong>別擔心不懂八字！</strong>只需提供出生日期，系統會自動為你推算專屬的五行特質。</p>
+        </div>
+
+        <div class="consultation-modes">
+            <div class="mode-card simple active" onclick="switchMode('simple')">
+                <h4>🌸 簡易模式</h4>
+                <p>提供出生日期，自動推算五行</p>
+            </div>
+            <div class="mode-card advanced" onclick="switchMode('advanced')">
+                <h4>🔮 進階模式</h4>
+                <p>已知五行八字，直接選擇元素</p>
+            </div>
+        </div>
+
+        <div class="element-calculator" id="elementCalculator">
+            <h4>🧮 五行八字推算</h4>
+            <p>請提供您的出生日期，系統將為您推算專屬的五行特質：</p>
+            <div class="form-group">
+                <label for="calcBirthDate">出生日期</label>
+                <input type="date" id="calcBirthDate" class="birth-date-required" required>
+            </div>
+            <button type="button" class="calculate-btn" onclick="calculateElements()">
+                🔍 推算我的五行八字
+            </button>
+        </div>
+
+        <div class="calculated-element" id="calculatedElement">
+            <h4>🎯 您的五行特質</h4>
+            <div id="elementResult"></div>
+        </div>
+
+        <div class="element-info">
+            <div class="element-card">
+                <div class="element-emoji">🌲</div>
+                <div class="element-name">木 - 春季東方</div>
+            </div>
+            <div class="element-card">
+                <div class="element-emoji">🔥</div>
+                <div class="element-name">火 - 夏季南方</div>
+            </div>
+            <div class="element-card">
+                <div class="element-emoji">🏔️</div>
+                <div class="element-name">土 - 長夏中央</div>
+            </div>
+            <div class="element-card">
+                <div class="element-emoji">⚔️</div>
+                <div class="element-name">金 - 秋季西方</div>
+            </div>
+            <div class="element-card">
+                <div class="element-emoji">💧</div>
+                <div class="element-name">水 - 冬季北方</div>
+            </div>
+        </div>
+
+        <form id="fengshuiForm" onsubmit="event.preventDefault(); send();">
+            <div class="form-group">
+                <label for="userName">你的名字</label>
+                <input type="text" id="userName" value="求問者" required>
+            </div>
+
+            <div class="form-group" id="elementSelectGroup">
+                <label for="userElement">你的主要五行元素 (進階模式)</label>
+                <select id="userElement" class="element-select">
+                    <option value="">請選擇你的五行元素</option>
+                    <option value="木">🌲 木 - 成長創新 (春季東方)</option>
+                    <option value="火">🔥 火 - 熱情活躍 (夏季南方)</option>
+                    <option value="土">🏔️ 土 - 穩定包容 (長夏中央)</option>
+                    <option value="金">⚔️ 金 - 收斂果決 (秋季西方)</option>
+                    <option value="水">💧 水 - 智慧靈動 (冬季北方)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="questionCategory">問題類型</label>
+                <select id="questionCategory">
+                    <option value="">綜合諮詢</option>
+                    <option value="感情">💕 感情問題</option>
+                    <option value="事業">💼 事業發展</option>
+                    <option value="健康">🍃 健康狀況</option>
+                    <option value="財運">💰 財運狀況</option>
+                    <option value="居家環境">🏠 居家環境</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="userQuestion">你的問題</label>
+                <textarea id="userQuestion" placeholder="請詳細描述你的具體情況，例如：我的辦公室朝北，最近工作不順，想了解如何調整風水來改善運勢..." rows="4" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="timeframe">諮詢時間範圍</label>
+                <select id="timeframe">
+                    <option value="今天">今天</option>
+                    <option value="本週">本週</option>
+                    <option value="本月">本月</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="birthDate">出生日期 (簡易模式必填)</label>
+                <input type="date" id="birthDate" class="birth-date-required">
+            </div>
+
+            <div class="form-group">
+                <label for="birthTime">出生時間 (可選，用於更精確八字)</label>
+                <input type="time" id="birthTime" placeholder="HH:MM">
+            </div>
+
+            <div class="form-group">
+                <label for="homeDirection">居家朝向 (可選)</label>
+                <select id="homeDirection">
+                    <option value="">請選擇朝向</option>
+                    <option value="東方">🌅 東方 (木元素)</option>
+                    <option value="東南">🌤️ 東南 (木元素)</option>
+                    <option value="南方">☀️ 南方 (火元素)</option>
+                    <option value="西南">🌆 西南 (土元素)</option>
+                    <option value="西方">🌇 西方 (金元素)</option>
+                    <option value="西北">🌃 西北 (金元素)</option>
+                    <option value="北方">🌌 北方 (水元素)</option>
+                    <option value="東北">🏔️ 東北 (土元素)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="mood">目前心情狀態 (可選)</label>
+                <input type="text" id="mood" placeholder="例如：焦慮、興奮、困惑、平靜...">
+            </div>
+
+            <div class="form-group">
+                <label for="partnerElement">伴侶五行元素 (感情問題時可填寫)</label>
+                <select id="partnerElement">
+                    <option value="">請選擇伴侶的五行元素</option>
+                    <option value="木">🌲 木 - 成長創新</option>
+                    <option value="火">🔥 火 - 熱情活躍</option>
+                    <option value="土">🏔️ 土 - 穩定包容</option>
+                    <option value="金">⚔️ 金 - 收斂果決</option>
+                    <option value="水">💧 水 - 智慧靈動</option>
+                </select>
+            </div>
+
+            <button type="submit" class="submit-btn" id="submitBtn">
+                🏮 開始專業風水諮詢
+            </button>
+        </form>
+
+        <div class="output-section">
+            <div class="loading" id="loading">
+                🏮 玄機老師正在為你分析五行運勢...
+            </div>
+            <div class="response-box empty" id="responseBox">
+                歡迎來到專業風水諮詢！<br><br>
+                <strong>🌸 簡易模式：</strong>提供出生日期，自動推算五行特質<br>
+                <strong>🔮 進階模式：</strong>已知自己五行的朋友可直接選擇<br><br>
+                玄機老師將根據您的五行特質為您提供專業風水指導
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentMode = 'simple';
+        let calculatedUserElement = null;
+
+        function switchMode(mode) {
+            currentMode = mode;
+            
+            // Update UI
+            document.querySelectorAll('.mode-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            document.querySelector(`.mode-card.${mode}`).classList.add('active');
+            
+            const elementSelectGroup = document.getElementById('elementSelectGroup');
+            const elementCalculator = document.getElementById('elementCalculator');
+            const birthDateField = document.getElementById('birthDate');
+            
+            if (mode === 'simple') {
+                elementSelectGroup.style.display = 'none';
+                elementCalculator.style.display = 'block';
+                birthDateField.required = true;
+                birthDateField.classList.add('birth-date-required');
+            } else {
+                elementSelectGroup.style.display = 'block';
+                elementCalculator.style.display = 'none';
+                birthDateField.required = false;
+                birthDateField.classList.remove('birth-date-required');
+                // Hide calculated element result in advanced mode
+                document.getElementById('calculatedElement').style.display = 'none';
+            }
+        }
+
+        async function calculateElements() {
+            const birthDate = document.getElementById('calcBirthDate').value;
+            if (!birthDate) {
+                alert('請先選擇出生日期！');
+                return;
+            }
+
+            try {
+                const response = await fetch('/calculate-elements', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ birth_date: birthDate })
+                });
+
+                const data = await response.json();
+                
+                if (data.error) {
+                    alert(data.error);
+                    return;
+                }
+
+                const elements = data.elements;
+                const descriptions = data.element_descriptions;
+                
+                calculatedUserElement = elements.primary;
+                
+                const resultDiv = document.getElementById('elementResult');
+                const primary = descriptions[elements.primary];
+                const secondary = descriptions[elements.secondary];
+                
+                resultDiv.innerHTML = `
+                    <p><strong>主要五行：${primary.name}（${primary.traits}）</strong></p>
+                    <p>方位：${primary.direction} | 季節：${primary.season} | 顏色：${primary.color}</p>
+                    <p><strong>輔助五行：${secondary.name}（${secondary.traits}）</strong></p>
+                    <p class="explanation" style="margin-top:12px; font-style:italic; color:#065f46;">${elements.explanation}</p>
+                `;
+                
+                document.getElementById('calculatedElement').style.display = 'block';
+                
+                // Auto-fill birth date in main form
+                document.getElementById('birthDate').value = birthDate;
+                
+            } catch (error) {
+                console.error('計算五行失敗:', error);
+                alert('計算失敗，請稍後再試');
+            }
+        }
+
+        async function send() {
+            const submitBtn = document.getElementById('submitBtn');
+            const loading = document.getElementById('loading');
+            const responseBox = document.getElementById('responseBox');
+            
+            // 取得表單資料
+            const userName = document.getElementById('userName').value.trim();
+            const userQuestion = document.getElementById('userQuestion').value.trim();
+            const questionCategory = document.getElementById('questionCategory').value;
+            const timeframe = document.getElementById('timeframe').value;
+            const homeDirection = document.getElementById('homeDirection').value;
+            const birthDate = document.getElementById('birthDate').value;
+            const birthTime = document.getElementById('birthTime').value;
+            const mood = document.getElementById('mood').value.trim();
+            const partnerElement = document.getElementById('partnerElement').value;
+            
+            let userElement = null;
+            
+            if (currentMode === 'advanced') {
+                userElement = document.getElementById('userElement').value;
+                if (!userElement) {
+                    alert('進階模式請選擇五行元素！');
+                    return;
+                }
+            } else {
+                // Simple mode - use calculated element or require birth date
+                if (calculatedUserElement) {
+                    userElement = calculatedUserElement;
+                } else if (birthDate) {
+                    userElement = null; // Let backend calculate
+                } else {
+                    alert('簡易模式請提供出生日期！');
+                    return;
+                }
+            }
+            
+            // 驗證輸入
+            if (!userName || !userQuestion) {
+                alert('請填寫姓名和問題！');
+                return;
+            }
+            
+            // 設定載入狀態
+            submitBtn.disabled = true;
+            submitBtn.textContent = '🏮 玄機老師諮詢中...';
+            loading.style.display = 'block';
+            loading.textContent = '🌟 正在結合您的五行特質進行深度風水分析...';
+            responseBox.className = 'response-box empty';
+            responseBox.textContent = '';
+            
+            // 準備請求資料
+            const requestData = {
+                user: userName,
+                element: userElement,
+                question: userQuestion,
+                category: questionCategory || null,
+                timeframe: timeframe,
+                home_direction: homeDirection || null,
+                birth_date: birthDate || null,
+                birth_time: birthTime || null,
+                mood: mood || null,
+                partner_element: partnerElement || null
+            };
+            
+            try {
+                // 發送請求到後端API
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(requestData)
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                
+                // 顯示增強的回應內容
+                responseBox.className = 'response-box';
+                
+                let displayText = data.reply || '抱歉，無法取得風水建議，請稍後再試。';
+                
+                // 添加風水學洞察
+                if (data.fengshui_insight) {
+                    displayText += '\n\n🌟 風水學洞察：\n';
+                    displayText += `🏮 當日五行：${data.fengshui_insight.daily_element_influence}\n`;
+                    displayText += `🍂 季節能量：${data.fengshui_insight.seasonal_energy}\n`;
+                    displayText += `⚡ 元素指導：${data.fengshui_insight.element_guidance}\n`;
+                    displayText += `🧭 八卦指引：${data.fengshui_insight.bagua_guidance}`;
+                }
+                
+                // 添加時機指導
+                if (data.timing_advice) {
+                    displayText += '\n\n⏰ 最佳時機：\n' + data.timing_advice;
+                }
+                
+                // 添加實用建議
+                if (data.tips && data.tips.length > 0) {
+                    displayText += '\n\n💎 專業建議：\n';
+                    data.tips.forEach((tip, index) => {
+                        displayText += `${index + 1}. ${tip}\n`;
+                    });
+                }
+                
+                // 添加正面肯定語
+                if (data.affirmation) {
+                    displayText += '\n✨ 能量祝福：\n' + data.affirmation;
+                }
+                
+                // 添加幸運元素
+                if (data.lucky_elements) {
+                    displayText += '\n\n🍀 今日幸運元素：\n';
+                    displayText += `🎨 幸運色彩：${data.lucky_elements.color}\n`;
+                    displayText += `🔢 幸運數字：${data.lucky_elements.number}\n`;
+                    displayText += `🧭 幸運方位：${data.lucky_elements.direction}\n`;
+                    displayText += `⏰ 幸運時段：${data.lucky_elements.time}\n`;
+                    displayText += `🌸 對應季節：${data.lucky_elements.season}`;
+                }
+                
+                // 添加五行和諧分析
+                if (data.harmony_score && partnerElement) {
+                    displayText += '\n\n💕 五行和諧分析：\n';
+                    displayText += `與${partnerElement}元素的和諧度：${data.harmony_score}%`;
+                    
+                    let harmonyLevel = '';
+                    if (data.harmony_score >= 80) harmonyLevel = '✨ 天作之合';
+                    else if (data.harmony_score >= 65) harmonyLevel = '💖 相生和諧';
+                    else if (data.harmony_score >= 50) harmonyLevel = '💫 平衡穩定';
+                    else harmonyLevel = '💪 需要調和';
+                    
+                    displayText += ` (${harmonyLevel})`;
+                }
+                
+                responseBox.textContent = displayText;
+                
+            } catch (error) {
+                console.error('請求失敗:', error);
+                responseBox.className = 'response-box error';
+                responseBox.textContent = `連線錯誤：${error.message}\n\n請確認後端伺服器是否正在運行，並重新嘗試。`;
+            } finally {
+                // 恢復按鈕狀態
+                submitBtn.disabled = false;
+                submitBtn.textContent = '🏮 開始專業風水諮詢';
+                loading.style.display = 'none';
+            }
+        }
+        
+        // 按 Enter 鍵提交（在 textarea 中按 Shift+Enter 換行）
+        document.getElementById('userQuestion').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                send();
+            }
+        });
+        
+        // 頁面載入時初始化簡易模式
+        window.addEventListener('load', function() {
+            switchMode('simple');
+            document.getElementById('userQuestion').focus();
+        });
+    </script>
+</body>
+</html>

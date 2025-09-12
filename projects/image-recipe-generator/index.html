@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Recipe Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            display: none;
+        }
+        .recipe-section {
+            margin-bottom: 20px;
+        }
+        .recipe-section h3 {
+            color: #333;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 5px;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 5px;
+        }
+        .encouragement {
+            background-color: #e8f5e8;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #4CAF50;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🍳 AI Recipe Generator</h1>
+        <p style="text-align: center; color: #666; margin-bottom: 30px;">
+            Upload a photo of your ingredients and let AI create a delicious recipe for you!
+        </p>
+        
+        <form id="recipeForm" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="image">📸 Upload Image of Ingredients:</label>
+                <input type="file" id="image" name="image" accept="image/*" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="cuisine_style">🌍 Cuisine Style:</label>
+                <select id="cuisine_style" name="cuisine_style" required>
+                    <option value="Any">Any Cuisine</option>
+                    <option value="Italian">Italian</option>
+                    <option value="Asian">Asian</option>
+                    <option value="Mexican">Mexican</option>
+                    <option value="American">American</option>
+                    <option value="Mediterranean">Mediterranean</option>
+                    <option value="Indian">Indian</option>
+                    <option value="French">French</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="cooking_level">👨‍🍳 Your Cooking Level:</label>
+                <select id="cooking_level" name="cooking_level" required>
+                    <option value="Beginner">Beginner</option>
+                    <option value="Intermediate">Intermediate</option>
+                    <option value="Advanced">Advanced</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="meal_type">🍽️ Meal Type:</label>
+                <select id="meal_type" name="meal_type">
+                    <option value="Any">Any</option>
+                    <option value="Breakfast">Breakfast</option>
+                    <option value="Lunch">Lunch</option>
+                    <option value="Dinner">Dinner</option>
+                    <option value="Snack">Snack</option>
+                    <option value="Dessert">Dessert</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="dietary_restrictions">🥗 Dietary Restrictions (Optional):</label>
+                <input type="text" id="dietary_restrictions" name="dietary_restrictions" 
+                       placeholder="e.g., vegetarian, gluten-free, dairy-free">
+            </div>
+            
+            <button type="submit">Generate Recipe! 🚀</button>
+        </form>
+        
+        <div class="loading" id="loading">
+            <p>🔍 Analyzing your ingredients and creating a delicious recipe...</p>
+        </div>
+        
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        document.getElementById('recipeForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const loading = document.getElementById('loading');
+            const result = document.getElementById('result');
+            const formData = new FormData(this);
+            
+            loading.style.display = 'block';
+            result.style.display = 'none';
+            
+            try {
+                const response = await fetch('/analyze-recipe', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to generate recipe');
+                }
+                
+                const recipe = await response.json();
+                displayRecipe(recipe);
+                
+            } catch (error) {
+                result.innerHTML = `
+                    <div style="color: red; text-align: center;">
+                        <h3>Oops! Something went wrong</h3>
+                        <p>Don't worry though - you can still create something delicious with your ingredients! 
+                        Trust your instincts and have fun cooking! 🌟</p>
+                    </div>
+                `;
+                result.style.display = 'block';
+            }
+            
+            loading.style.display = 'none';
+        });
+        
+        function displayRecipe(recipe) {
+            const result = document.getElementById('result');
+            
+            let html = `
+                <div class="recipe-section">
+                    <h2>🍽️ ${recipe.recipe_name}</h2>
+                </div>
+            `;
+            
+            if (recipe.ingredients && recipe.ingredients.length > 0) {
+                html += `
+                    <div class="recipe-section">
+                        <h3>📋 Ingredients</h3>
+                        <ul>
+                            ${recipe.ingredients.map(ing => `<li>${ing}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+            
+            if (recipe.instructions && recipe.instructions.length > 0) {
+                html += `
+                    <div class="recipe-section">
+                        <h3>👨‍🍳 Instructions</h3>
+                        <ol>
+                            ${recipe.instructions.map(inst => `<li>${inst}</li>`).join('')}
+                        </ol>
+                    </div>
+                `;
+            }
+            
+            if (recipe.prep_time || recipe.cook_time || recipe.servings) {
+                html += '<div class="recipe-section"><h3>⏱️ Details</h3><ul>';
+                if (recipe.prep_time) html += `<li><strong>Prep Time:</strong> ${recipe.prep_time}</li>`;
+                if (recipe.cook_time) html += `<li><strong>Cook Time:</strong> ${recipe.cook_time}</li>`;
+                if (recipe.servings) html += `<li><strong>Servings:</strong> ${recipe.servings}</li>`;
+                html += `<li><strong>Difficulty:</strong> ${recipe.difficulty}</li></ul></div>`;
+            }
+            
+            if (recipe.tips && recipe.tips.length > 0) {
+                html += `
+                    <div class="recipe-section">
+                        <h3>💡 Tips</h3>
+                        <ul>
+                            ${recipe.tips.map(tip => `<li>${tip}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+            
+            if (recipe.encouragement) {
+                html += `
+                    <div class="encouragement">
+                        <strong>✨ ${recipe.encouragement}</strong>
+                    </div>
+                `;
+            }
+            
+            result.innerHTML = html;
+            result.style.display = 'block';
+            result.scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

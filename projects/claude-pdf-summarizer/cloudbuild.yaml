@@ -1,0 +1,45 @@
+steps:
+  # Build the Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: 
+      - 'build'
+      - '-t'
+      - 'us-central1-docker.pkg.dev/$PROJECT_ID/claude-apps/claude-pdf-summarizer:$COMMIT_SHA'
+      - '.'
+  
+  # Push the image to Artifact Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'us-central1-docker.pkg.dev/$PROJECT_ID/claude-apps/claude-pdf-summarizer:$COMMIT_SHA'
+  
+  # Deploy to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'claude-pdf-summarizer'
+      - '--image'
+      - 'us-central1-docker.pkg.dev/$PROJECT_ID/claude-apps/claude-pdf-summarizer:$COMMIT_SHA'
+      - '--region'
+      - 'us-central1'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
+      - '--set-env-vars'
+      - 'ANTHROPIC_API_KEY=$$ANTHROPIC_API_KEY'
+      - '--memory'
+      - '1Gi'
+      - '--cpu'
+      - '1'
+      - '--max-instances'
+      - '10'
+      - '--port'
+      - '8000'
+
+substitutions:
+  _SERVICE_NAME: claude-pdf-summarizer
+
+options:
+  logging: CLOUD_LOGGING_ONLY
