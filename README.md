@@ -2,7 +2,7 @@
 
 [![Portfolio Website](https://img.shields.io/badge/Portfolio-Live-green?logo=vercel)](https://lyven81.github.io/ai-project/)
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-black?logo=github)](https://github.com/lyven81/ai-project)
-[![Projects](https://img.shields.io/badge/Projects-11-blue)](#-featured-projects)
+[![Projects](https://img.shields.io/badge/Projects-12-blue)](#-featured-projects)
 [![AI Powered](https://img.shields.io/badge/AI-Powered-orange?logo=tensorflow)](https://github.com/lyven81/ai-project)
 
 **Innovative AI Solutions for Modern Challenges** - A curated collection of production-ready AI applications showcasing expertise in computer vision, natural language processing, document processing, and creative AI technologies.
@@ -13,7 +13,7 @@
 
 ## 🌟 Portfolio Overview
 
-This repository contains **11 production-deployed AI applications** demonstrating proficiency across multiple AI domains. Each project includes comprehensive documentation, live demos, and complete source code with deployment configurations.
+This repository contains **12 production-deployed AI applications** demonstrating proficiency across multiple AI domains. Each project includes comprehensive documentation, live demos, and complete source code with deployment configurations.
 
 **🎯 Portfolio Highlights:**
 - **15+ AI Technologies** integrated across projects
@@ -69,6 +69,12 @@ This repository contains **11 production-deployed AI applications** demonstratin
 - **AI Capabilities:** Document structure analysis, text-to-speech conversion, synchronized highlighting, chapter navigation
 
 ### 🤖 Conversational AI & Specialized Chatbots
+
+#### [Chinese Traditional Calendar with AI Consultant (中華傳統日曆)](./projects/chinese-calender/)
+**Revolutionary conversational AI-powered traditional Chinese lunar calendar with personalized auspicious date consultation**
+- **Live Demo:** [chinese-calender-169218045868.asia-southeast1.run.app](https://chinese-calender-169218045868.asia-southeast1.run.app/)
+- **Tech Stack:** Python, FastAPI, Progressive Web App, Conversational AI, Traditional Chinese Calendar Algorithms
+- **AI Capabilities:** Natural language calendar consultation, personalized auspicious date recommendations, cultural education, intent recognition, real-time chat interface
 
 #### [Professional Astrology Consultant (專業星座顧問)](./projects/horoscope-chatbot/)
 **AI-powered personalized horoscope readings and astrological insights**
@@ -147,6 +153,7 @@ ai-project/
 │   ├── ai-photo-editor/         # AI-powered photo editing
 │   ├── ai-group-photo-generator/ # Group photo composition AI
 │   ├── claude-pdf-summarizer/   # Document processing & summarization
+│   ├── chinese-calender/        # Conversational AI traditional calendar
 │   ├── horoscope-chatbot/       # Astrology consultation AI
 │   ├── fengshui-chatbot/        # Feng Shui advisory AI
 │   ├── image-recipe-generator/  # Food image to recipe AI
@@ -195,6 +202,7 @@ All projects are production-deployed and accessible via live demos:
 | AI Group Photo Generator | [Launch App](https://ai-group-photo-generator-169218045868.us-west1.run.app/) | Creative AI |
 | Claude PDF Summarizer | [Launch App](https://summarizer-218391175125.asia-southeast1.run.app/) | Document Processing |
 | PDF-to-Audio Reader | [Launch App](https://pdf-to-audio-reader-169218045868.us-west1.run.app/) | Document Processing |
+| Chinese Traditional Calendar | [Launch App](https://chinese-calender-169218045868.asia-southeast1.run.app/) | Conversational AI |
 | Astrology Consultant | [Launch App](https://horoscope-chatbot-218391175125.asia-southeast1.run.app/) | Conversational AI |
 | Feng Shui Consultant | [Launch App](https://fengshui-chatbot-218391175125.asia-southeast1.run.app/) | Conversational AI |
 | AI Recipe Generator | [Launch App](https://image-recipe-generator-218391175125.us-central1.run.app/) | Creative AI |
