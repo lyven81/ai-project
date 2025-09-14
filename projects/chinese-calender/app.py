@@ -374,12 +374,169 @@ def get_stats(db: Session = Depends(get_db)):
         }
     }
 
+async def chat_with_rule_based_ai(request: ChatRequest, db: Session = Depends(get_db)):
+    """基于规则的AI回复（演示模式）"""
+
+    message = request.message.lower()
+
+    # 分析用户意图，提供智能回复
+    recommendations = None
+    day_info = None
+    ai_message = ""
+
+    # 检查是否询问今日信息
+    if any(keyword in message for keyword in ["今天", "今日", "现在"]):
+        try:
+            today = date.today().strftime("%Y-%m-%d")
+            day = db.query(Day).filter(Day.id == today).first()
+            if day:
+                day_info = DayResponse(
+                    id=day.id,
+                    lunar_date=day.lunar_date,
+                    zodiac_of_day=day.zodiac_of_day,
+                    solar_term=day.solar_term,
+                    yi=day.yi,
+                    ji=day.ji,
+                    chong_zodiac=day.chong_zodiac,
+                    notes=day.notes
+                )
+
+                ai_message = f"根据传统黄历，今日{day_info.lunar_date}，{day_info.zodiac_of_day}日。\n\n" \
+                           f"今日宜：{', '.join(day_info.yi[:3])}\n" \
+                           f"今日忌：{', '.join(day_info.ji[:3])}\n\n" \
+                           f"建议您根据黄历安排今日活动。"
+        except:
+            ai_message = "抱歉，无法获取今日黄历信息，请稍后重试。"
+    else:
+        # 检查是否需要推荐吉日
+        purpose_keywords = {
+            "marriage": ["结婚", "婚礼", "嫁娶", "办婚礼", "结婚吉日"],
+            "move": ["搬家", "迁移", "搬迁", "入宅", "搬家吉日"],
+            "opening": ["开业", "开张", "创业", "开店", "开业吉日"],
+            "contract": ["签约", "签合同", "签字", "合同", "签约吉日"],
+            "travel": ["旅行", "出行", "旅游", "出差", "旅行吉日"],
+            "groundbreaking": ["动土", "装修", "建房", "施工", "动土吉日"]
+        }
+
+        detected_purpose = None
+        purpose_name = ""
+
+        for purpose, keywords in purpose_keywords.items():
+            if any(keyword in message for keyword in keywords):
+                detected_purpose = purpose
+                purpose_name = {
+                    "marriage": "结婚",
+                    "move": "搬家",
+                    "opening": "开业",
+                    "contract": "签约",
+                    "travel": "旅行",
+                    "groundbreaking": "动土"
+                }[purpose]
+                break
+
+        if detected_purpose:
+            try:
+                # 获取未来30天的推荐
+                from_date = date.today().strftime("%Y-%m-%d")
+                to_date = (date.today() + timedelta(days=30)).strftime("%Y-%m-%d")
+
+                days = db.query(Day).filter(
+                    Day.id >= from_date,
+                    Day.id <= to_date
+                ).order_by(Day.id).all()
+
+                good_days = []
+                purpose_items = PURPOSE_MAPPING.get(detected_purpose, [])
+
+                for day in days:
+                    day_data = {
+                        "id": day.id,
+                        "lunar_date": day.lunar_date,
+                        "zodiac_of_day": day.zodiac_of_day,
+                        "solar_term": day.solar_term,
+                        "yi": day.yi,
+                        "ji": day.ji,
+                        "chong_zodiac": day.chong_zodiac,
+                        "notes": day.notes
+                    }
+
+                    if is_good_day_for_purpose(day_data, detected_purpose):
+                        yi_items = [item.split("（")[0] for item in day.yi]
+                        suitable_reasons = [item for item in purpose_items if item in yi_items]
+
+                        recommendation = RecommendationResponse(
+                            date=day.id,
+                            lunar_date=day.lunar_date,
+                            zodiac_of_day=day.zodiac_of_day,
+                            solar_term=day.solar_term,
+                            yi=day.yi,
+                            suitable_reasons=suitable_reasons,
+                            notes=day.notes
+                        )
+                        good_days.append(recommendation)
+
+                        if len(good_days) >= 5:
+                            break
+
+                recommendations = good_days
+
+                if recommendations:
+                    ai_message = f"根据传统黄历，为您推荐以下适合{purpose_name}的吉日：\n\n" \
+                               f"最近的几个好日子都已为您筛选出来，每个日期都符合传统择吉原则。" \
+                               f"建议您根据具体情况选择最合适的日期。"
+                else:
+                    ai_message = f"很抱歉，未来30天内暂未找到特别适合{purpose_name}的吉日。" \
+                               f"建议您稍后查询更远的日期，或考虑其他时间安排。"
+            except:
+                ai_message = "抱歉，查询出现问题，请稍后重试。"
+        else:
+            # 通用回复
+            if any(keyword in message for keyword in ["黄历", "历法", "传统", "文化"]):
+                ai_message = "中国传统黄历是古代先贤根据天文历法、五行学说和生肖理论制定的择吉系统。" \
+                           "它能帮助我们选择适合进行重要活动的吉日，避开不利的时机。\n\n" \
+                           "您可以问我关于今日黄历、选择吉日或传统文化的问题。"
+            elif any(keyword in message for keyword in ["你好", "您好", "hello", "hi"]):
+                ai_message = "您好！我是您的黄历顾问助手。我可以帮您：\n\n" \
+                           "• 查询今日黄历信息\n" \
+                           "• 推荐结婚、搬家、开业等吉日\n" \
+                           "• 解答传统文化相关问题\n\n" \
+                           "请告诉我您需要什么帮助？"
+            elif any(keyword in message for keyword in ["帮助", "怎么用", "功能"]):
+                ai_message = "我可以为您提供以下服务：\n\n" \
+                           "1. 今日黄历查询 - 问「今天适合做什么？」\n" \
+                           "2. 吉日推荐 - 问「我要结婚，推荐个好日子」\n" \
+                           "3. 传统文化解答 - 问黄历相关知识\n\n" \
+                           "直接输入您的问题即可！"
+            else:
+                ai_message = "感谢您的咨询！我是专业的黄历顾问助手。\n\n" \
+                           "您可以询问：\n" \
+                           "• 今日黄历：「今天适合做什么？」\n" \
+                           "• 择吉日期：「推荐个结婚/搬家/开业的好日子」\n" \
+                           "• 传统文化：黄历相关知识\n\n" \
+                           "请告诉我具体需要什么帮助？"
+
+    if not ai_message:
+        ai_message = "感谢您的咨询！我是您的黄历顾问助手。\n\n" \
+                   "您可以询问：\n" \
+                   "• 今日黄历：「今天适合做什么？」\n" \
+                   "• 择吉日期：「推荐个结婚/搬家/开业的好日子」\n" \
+                   "• 传统文化：黄历相关知识\n\n" \
+                   "请告诉我具体需要什么帮助？"
+
+    return ChatResponse(
+        message=ai_message,
+        conversation_id=f"{request.user_id}_{datetime.now().timestamp()}",
+        recommendations=recommendations,
+        day_info=day_info
+    )
+
 @app.post("/api/chat", response_model=ChatResponse)
 async def chat_with_ai(request: ChatRequest, db: Session = Depends(get_db)):
     """与AI进行对话咨询"""
 
     if not anthropic_client:
-        raise HTTPException(status_code=503, detail="AI服务暂不可用，请联系管理员配置API密钥")
+        # 提供基于规则的智能回复作为演示模式
+        return await chat_with_rule_based_ai(request, db)
 
     try:
         # 构建系统提示
