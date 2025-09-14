@@ -62,7 +62,7 @@ This repository contains **10 production-deployed AI applications** demonstratin
 - **Tech Stack:** Python, Streamlit, Claude 3 Haiku API, PDF Processing
 - **AI Capabilities:** Multi-language summarization, executive/simple/kids formats, key insights extraction
 
-#### [PDF-to-Audio Reader](./ai-weekend-projects/pdf-to-audio-reader/)
+#### [PDF-to-Audio Reader](./projects/pdf-to-audio-reader/)
 **Convert PDF documents into natural-sounding audio with AI-powered structuring**
 - **Live Demo:** [pdf-to-audio-reader-169218045868.us-west1.run.app](https://pdf-to-audio-reader-169218045868.us-west1.run.app/)
 - **Tech Stack:** React, TypeScript, Gemini AI, Web Speech API, PDF.js
@@ -144,8 +144,7 @@ ai-project/
 │   ├── horoscope-chatbot/       # Astrology consultation AI
 │   ├── fengshui-chatbot/        # Feng Shui advisory AI
 │   ├── image-recipe-generator/  # Food image to recipe AI
-│   └── polaroid-moments-generator/ # Vintage photo generation AI
-├── ai-weekend-projects/          # Weekend and experimental projects
+│   ├── polaroid-moments-generator/ # Vintage photo generation AI
 │   └── pdf-to-audio-reader/     # PDF to audio conversion with AI
 └── README.md                    # This comprehensive overview
 ```
