@@ -2,7 +2,7 @@
 
 [![Portfolio Website](https://img.shields.io/badge/Portfolio-Live-green?logo=vercel)](https://lyven81.github.io/ai-project/)
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-black?logo=github)](https://github.com/lyven81/ai-project)
-[![Projects](https://img.shields.io/badge/Projects-9-blue)](#-featured-projects)
+[![Projects](https://img.shields.io/badge/Projects-10-blue)](#-featured-projects)
 [![AI Powered](https://img.shields.io/badge/AI-Powered-orange?logo=tensorflow)](https://github.com/lyven81/ai-project)
 
 **Innovative AI Solutions for Modern Challenges** - A curated collection of production-ready AI applications showcasing expertise in computer vision, natural language processing, document processing, and creative AI technologies.
@@ -13,7 +13,7 @@
 
 ## 🌟 Portfolio Overview
 
-This repository contains **9 production-deployed AI applications** demonstrating proficiency across multiple AI domains. Each project includes comprehensive documentation, live demos, and complete source code with deployment configurations.
+This repository contains **10 production-deployed AI applications** demonstrating proficiency across multiple AI domains. Each project includes comprehensive documentation, live demos, and complete source code with deployment configurations.
 
 **🎯 Portfolio Highlights:**
 - **15+ AI Technologies** integrated across projects
@@ -61,6 +61,12 @@ This repository contains **9 production-deployed AI applications** demonstrating
 - **Live Demo:** [summarizer-218391175125.asia-southeast1.run.app](https://summarizer-218391175125.asia-southeast1.run.app/)
 - **Tech Stack:** Python, Streamlit, Claude 3 Haiku API, PDF Processing
 - **AI Capabilities:** Multi-language summarization, executive/simple/kids formats, key insights extraction
+
+#### [PDF-to-Audio Reader](./ai-weekend-projects/pdf-to-audio-reader/)
+**Convert PDF documents into natural-sounding audio with AI-powered structuring**
+- **Live Demo:** [pdf-to-audio-reader-169218045868.us-west1.run.app](https://pdf-to-audio-reader-169218045868.us-west1.run.app/)
+- **Tech Stack:** React, TypeScript, Gemini AI, Web Speech API, PDF.js
+- **AI Capabilities:** Document structure analysis, text-to-speech conversion, synchronized highlighting, chapter navigation
 
 ### 🤖 Conversational AI & Specialized Chatbots
 
@@ -139,6 +145,8 @@ ai-project/
 │   ├── fengshui-chatbot/        # Feng Shui advisory AI
 │   ├── image-recipe-generator/  # Food image to recipe AI
 │   └── polaroid-moments-generator/ # Vintage photo generation AI
+├── ai-weekend-projects/          # Weekend and experimental projects
+│   └── pdf-to-audio-reader/     # PDF to audio conversion with AI
 └── README.md                    # This comprehensive overview
 ```
 
@@ -180,6 +188,7 @@ All projects are production-deployed and accessible via live demos:
 | AI Photo Editor | [Launch App](https://gemini-image-editor-169218045868.us-west1.run.app/) | Image Processing |
 | AI Group Photo Generator | [Launch App](https://ai-group-photo-generator-169218045868.us-west1.run.app/) | Creative AI |
 | Claude PDF Summarizer | [Launch App](https://summarizer-218391175125.asia-southeast1.run.app/) | Document Processing |
+| PDF-to-Audio Reader | [Launch App](https://pdf-to-audio-reader-169218045868.us-west1.run.app/) | Document Processing |
 | Astrology Consultant | [Launch App](https://horoscope-chatbot-218391175125.asia-southeast1.run.app/) | Conversational AI |
 | Feng Shui Consultant | [Launch App](https://fengshui-chatbot-218391175125.asia-southeast1.run.app/) | Conversational AI |
 | AI Recipe Generator | [Launch App](https://image-recipe-generator-218391175125.us-central1.run.app/) | Creative AI |
