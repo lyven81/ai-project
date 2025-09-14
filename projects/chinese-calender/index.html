@@ -430,6 +430,181 @@
             }
         }
 
+        /* 对话区域样式 */
+        .chat-section {
+            display: none;
+            background: white;
+            border-radius: 16px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            height: calc(100vh - 200px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            padding: 20px 25px 15px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-header h3 {
+            color: #2c3e50;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px 25px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .message.user {
+            align-self: flex-end;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .message.ai {
+            align-self: flex-start;
+            background: #f8f9fa;
+            color: #2c3e50;
+            border: 1px solid #e9ecef;
+        }
+
+        .message-time {
+            font-size: 11px;
+            opacity: 0.7;
+            margin-top: 4px;
+        }
+
+        .recommendations-in-chat {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 15px;
+            margin-top: 10px;
+            border-left: 4px solid #27ae60;
+        }
+
+        .recommendation-item-chat {
+            background: white;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 8px;
+            border-left: 3px solid #27ae60;
+        }
+
+        .chat-input-area {
+            padding: 15px 25px;
+            border-top: 1px solid #f0f0f0;
+            background: #fafafa;
+        }
+
+        .chat-input-container {
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
+
+        .chat-input {
+            flex: 1;
+            min-height: 40px;
+            max-height: 120px;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            font-size: 14px;
+            resize: none;
+            outline: none;
+            font-family: inherit;
+        }
+
+        .chat-input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .send-button {
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            transition: transform 0.2s ease;
+        }
+
+        .send-button:hover {
+            transform: scale(1.05);
+        }
+
+        .send-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            max-width: 80px;
+            padding: 12px 16px;
+            background: #f8f9fa;
+            border-radius: 18px;
+            border: 1px solid #e9ecef;
+            align-self: flex-start;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 4px;
+        }
+
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            background: #999;
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% {
+                transform: translateY(0);
+            }
+            30% {
+                transform: translateY(-10px);
+            }
+        }
+
         /* 隐藏滚动条 */
         ::-webkit-scrollbar {
             width: 6px;
@@ -514,6 +689,34 @@
                 </div>
             </div>
         </div>
+
+        <!-- AI咨询对话区域 -->
+        <div id="chat-section" class="chat-section">
+            <div class="chat-header">
+                <h3>🤖 AI黄历顾问</h3>
+                <button class="action-btn" onclick="showHome()" style="padding: 8px 12px; font-size: 12px;">返回</button>
+            </div>
+            <div class="chat-messages" id="chat-messages">
+                <div class="message ai">
+                    <div>您好！我是您的专属AI黄历顾问 🗓️</div>
+                    <div>我可以帮您：</div>
+                    <div style="margin: 8px 0;">
+                        • 选择结婚、搬家、开业等吉日<br>
+                        • 解答传统黄历文化问题<br>
+                        • 提供个性化择日建议<br>
+                        • 分析今日黄历信息
+                    </div>
+                    <div>请问有什么可以帮助您的吗？</div>
+                    <div class="message-time">刚刚</div>
+                </div>
+            </div>
+            <div class="chat-input-area">
+                <div class="chat-input-container">
+                    <textarea class="chat-input" id="chat-input" placeholder="请输入您的问题..." rows="1"></textarea>
+                    <button class="send-button" id="send-button" onclick="sendMessage()">📤</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- 底部导航 -->
@@ -521,6 +724,10 @@
         <div class="nav-item active" onclick="showHome()">
             <div class="nav-icon">🏠</div>
             <div class="nav-label">首页</div>
+        </div>
+        <div class="nav-item" onclick="showChat()">
+            <div class="nav-icon">🤖</div>
+            <div class="nav-label">AI咨询</div>
         </div>
         <div class="nav-item" onclick="showRecommend()">
             <div class="nav-icon">🎯</div>
@@ -530,16 +737,14 @@
             <div class="nav-icon">❤️</div>
             <div class="nav-label">收藏</div>
         </div>
-        <div class="nav-item" onclick="showSettings()">
-            <div class="nav-icon">⚙️</div>
-            <div class="nav-label">设置</div>
-        </div>
     </div>
 
     <script>
         // 全局变量
         let currentUser = 'default_user';
         let currentPurpose = 'marriage';
+        let conversationHistory = [];
+        let isTyping = false;
 
         // API基础URL
         const API_BASE = '';
@@ -548,12 +753,16 @@
         document.addEventListener('DOMContentLoaded', function() {
             loadTodayInfo();
             setupPurposeSelector();
-            
+            setupChatInput();
+
             // 生成用户ID（实际项目中应该使用更安全的方式）
             if (!localStorage.getItem('userId')) {
                 localStorage.setItem('userId', 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9));
             }
             currentUser = localStorage.getItem('userId');
+
+            // 加载对话历史
+            loadConversationHistory();
         });
 
         // 加载今日信息
@@ -805,6 +1014,179 @@
             }
         }
 
+        // 聊天功能
+        function setupChatInput() {
+            const chatInput = document.getElementById('chat-input');
+            const sendButton = document.getElementById('send-button');
+
+            // 自动调整文本框高度
+            chatInput.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+            });
+
+            // 回车发送消息
+            chatInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+        }
+
+        async function sendMessage() {
+            const chatInput = document.getElementById('chat-input');
+            const message = chatInput.value.trim();
+
+            if (!message || isTyping) return;
+
+            // 清空输入框并重置高度
+            chatInput.value = '';
+            chatInput.style.height = 'auto';
+
+            // 添加用户消息到界面
+            addMessageToChat('user', message);
+
+            // 保存到对话历史
+            conversationHistory.push({ role: 'user', content: message });
+
+            // 显示正在输入状态
+            showTypingIndicator();
+            isTyping = true;
+            document.getElementById('send-button').disabled = true;
+
+            try {
+                const response = await fetch(`${API_BASE}/api/chat`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        user_id: currentUser,
+                        message: message,
+                        conversation_history: conversationHistory.slice(-10) // 只发送最近10轮对话
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // 移除正在输入指示器
+                    hideTypingIndicator();
+
+                    // 添加AI回复到界面
+                    addMessageToChat('ai', data.message, data.recommendations, data.day_info);
+
+                    // 保存AI回复到对话历史
+                    conversationHistory.push({ role: 'assistant', content: data.message });
+
+                    // 保存对话历史到本地存储
+                    saveConversationHistory();
+                } else {
+                    hideTypingIndicator();
+                    addMessageToChat('ai', `抱歉，出现了错误：${data.detail || '服务暂不可用'}`);
+                }
+            } catch (error) {
+                console.error('发送消息失败:', error);
+                hideTypingIndicator();
+                addMessageToChat('ai', '抱歉，网络连接出现问题，请稍后重试。');
+            }
+
+            isTyping = false;
+            document.getElementById('send-button').disabled = false;
+        }
+
+        function addMessageToChat(sender, message, recommendations = null, dayInfo = null) {
+            const chatMessages = document.getElementById('chat-messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+
+            let recommendationsHtml = '';
+            if (recommendations && recommendations.length > 0) {
+                recommendationsHtml = `
+                    <div class="recommendations-in-chat">
+                        <h4 style="margin-bottom: 8px; color: #27ae60;">🎯 推荐吉日</h4>
+                        ${recommendations.slice(0, 3).map(rec => `
+                            <div class="recommendation-item-chat">
+                                <div style="font-weight: 600;">${formatDate(new Date(rec.date))}</div>
+                                <div style="font-size: 12px; color: #666; margin: 2px 0;">${rec.lunar_date}</div>
+                                <div style="display: flex; gap: 4px; margin-top: 6px;">
+                                    ${rec.suitable_reasons.map(reason =>
+                                        `<span style="background: #27ae60; color: white; padding: 2px 6px; border-radius: 8px; font-size: 10px;">${reason}</span>`
+                                    ).join('')}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+
+            let dayInfoHtml = '';
+            if (dayInfo) {
+                dayInfoHtml = `
+                    <div class="recommendations-in-chat">
+                        <h4 style="margin-bottom: 8px; color: #2196F3;">📅 今日黄历</h4>
+                        <div style="background: white; padding: 12px; border-radius: 8px;">
+                            <div style="font-weight: 600; margin-bottom: 4px;">${dayInfo.lunar_date}</div>
+                            <div style="font-size: 12px; color: #666; margin-bottom: 8px;">${dayInfo.zodiac_of_day}日</div>
+                            <div style="margin-bottom: 6px;">
+                                <span style="color: #27ae60; font-weight: 500;">宜：</span>
+                                <span style="font-size: 12px;">${dayInfo.yi.slice(0, 3).join('、')}</span>
+                            </div>
+                            <div>
+                                <span style="color: #e74c3c; font-weight: 500;">忌：</span>
+                                <span style="font-size: 12px;">${dayInfo.ji.slice(0, 3).join('、')}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            messageDiv.innerHTML = `
+                <div>${message}</div>
+                ${recommendationsHtml}
+                ${dayInfoHtml}
+                <div class="message-time">${new Date().toLocaleTimeString()}</div>
+            `;
+
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function showTypingIndicator() {
+            const chatMessages = document.getElementById('chat-messages');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'typing-indicator';
+            typingDiv.id = 'typing-indicator';
+            typingDiv.innerHTML = `
+                <div class="typing-dots">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+            `;
+            chatMessages.appendChild(typingDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function hideTypingIndicator() {
+            const typingIndicator = document.getElementById('typing-indicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+        }
+
+        function saveConversationHistory() {
+            localStorage.setItem(`chat_history_${currentUser}`, JSON.stringify(conversationHistory));
+        }
+
+        function loadConversationHistory() {
+            const saved = localStorage.getItem(`chat_history_${currentUser}`);
+            if (saved) {
+                conversationHistory = JSON.parse(saved);
+            }
+        }
+
         // 页面切换函数
         function showHome() {
             hideAllSections();
@@ -812,28 +1194,35 @@
             setActiveNav(0);
         }
 
+        function showChat() {
+            hideAllSections();
+            document.getElementById('chat-section').style.display = 'flex';
+            setActiveNav(1);
+            // 聚焦输入框
+            setTimeout(() => {
+                document.getElementById('chat-input').focus();
+            }, 100);
+        }
+
         function showRecommend() {
             hideAllSections();
             document.getElementById('recommend-section').style.display = 'block';
             loadRecommendations();
-            setActiveNav(1);
+            setActiveNav(2);
         }
 
         function showFavorites() {
             hideAllSections();
             document.getElementById('favorites-section').style.display = 'block';
             loadFavorites();
-            setActiveNav(2);
-        }
-
-        function showSettings() {
-            alert('⚙️ 设置功能开发中...');
+            setActiveNav(3);
         }
 
         function hideAllSections() {
             document.getElementById('home-section').style.display = 'none';
             document.getElementById('recommend-section').style.display = 'none';
             document.getElementById('favorites-section').style.display = 'none';
+            document.getElementById('chat-section').style.display = 'none';
         }
 
         function setActiveNav(index) {
