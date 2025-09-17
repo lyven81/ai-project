@@ -4,13 +4,17 @@
 [![Streamlit](https://img.shields.io/badge/Streamlit-1.28+-red?logo=streamlit)](https://streamlit.io/)
 [![Claude API](https://img.shields.io/badge/Claude-API-purple?logo=anthropic)](https://anthropic.com/)
 [![Docker](https://img.shields.io/badge/Docker-Ready-blue?logo=docker)](https://docker.com/)
-[![Live Demo](https://img.shields.io/badge/Live-Demo-green?logo=streamlit)](https://your-demo-link.com)
+[![Live Demo](https://img.shields.io/badge/Live-Demo-green?logo=streamlit)](https://summarizer-218391175125.asia-southeast1.run.app/)
 
 Intelligent document processing with AI-powered summarization using Claude 3 Haiku. Upload PDFs and get bullet-point summaries in multiple languages and styles - from executive summaries to kid-friendly explanations.
 
+<div align="center">
+<img width="1200" height="475" alt="Claude PDF Summarizer Banner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+</div>
+
 ## 🚀 Live Demo
 
-**[🌟 View Live Demo](#)** | [📹 Video Demo](#)
+**[🌟 View Live Demo](https://summarizer-218391175125.asia-southeast1.run.app/)** | [📹 Video Demo](#)
 
 ## ✨ Features
 
@@ -49,8 +53,8 @@ Intelligent document processing with AI-powered summarization using Claude 3 Hai
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/claude-pdf-summarizer.git
-cd claude-pdf-summarizer
+git clone https://github.com/lyven81/ai-project.git
+cd ai-project/projects/claude-pdf-summarizer
 
 # Create virtual environment
 python -m venv venv
@@ -134,6 +138,26 @@ claude-pdf-summarizer/
 ├── serve.py                 # Production server
 └── README.md
 ```
+
+## 🤖 AI Document Processing Capabilities
+
+### Claude 3 Haiku Integration
+- **Advanced Language Understanding:** Contextual analysis of document content
+- **Multi-format Support:** Handles academic papers, business reports, legal documents
+- **Key Information Extraction:** Identifies main points, conclusions, and recommendations
+- **Content Categorization:** Automatically organizes information by importance
+
+### Document Intelligence Features
+- **Text Extraction:** Advanced PDF parsing with layout preservation
+- **Content Analysis:** Semantic understanding of document structure
+- **Language Detection:** Automatic identification of document language
+- **Quality Assessment:** Evaluation of text clarity and completeness
+
+### Summarization Algorithms
+- **Extractive Summarization:** Selects key sentences from original text
+- **Abstractive Summarization:** Generates new summary text with AI understanding
+- **Hierarchical Processing:** Maintains document structure and flow
+- **Context Preservation:** Ensures summary accuracy and coherence
 
 ## 🧪 Testing & Development
 

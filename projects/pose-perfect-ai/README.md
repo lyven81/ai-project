@@ -55,8 +55,8 @@ Advanced computer vision application for real-time pose analysis, form correctio
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/pose-perfect-ai.git
-cd pose-perfect-ai
+git clone https://github.com/lyven81/ai-project.git
+cd ai-project/projects/pose-perfect-ai
 
 # Install dependencies
 npm install
