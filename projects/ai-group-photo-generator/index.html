@@ -1,26 +1,159 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-g" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AI Group Photo Generator</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="/portfolio-theme.css">
-  <script type="importmap">
-{
-  "imports": {
-    "react": "https://aistudiocdn.com/react@^19.1.1",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.1.1/",
-    "react/": "https://aistudiocdn.com/react@^19.1.1/",
-    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.17.0"
-  }
-}
-</script>
-<link rel="stylesheet" href="/index.css">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Group Photo Generator - Source Code</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 30px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        .badge {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+        .links {
+            text-align: center;
+            margin: 30px 0;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            margin: 0 10px 10px 10px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        .btn-primary {
+            background-color: #007BFF;
+            color: white;
+        }
+        .btn-secondary {
+            background-color: #28a745;
+            color: white;
+        }
+        .btn-tertiary {
+            background-color: #6c757d;
+            color: white;
+        }
+        .content {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .back-link {
+            margin-bottom: 20px;
+        }
+        .back-link a {
+            color: #007BFF;
+            text-decoration: none;
+        }
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            .btn {
+                display: block;
+                margin: 10px 0;
+            }
+        }
+    </style>
 </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/index.tsx"></script>
-  </body>
+<body>
+    <div class="container">
+        <div class="back-link">
+            <a href="../../">← Back to Portfolio</a>
+        </div>
+
+        <div class="header">
+            <h1>🤳 AI Group Photo Generator</h1>
+            <p>Intelligent Group Photography & Professional Photo Composition</p>
+
+            <div class="badges">
+                <span class="badge">Python</span>
+                <span class="badge">Streamlit</span>
+                <span class="badge">Computer Vision</span>
+                <span class="badge">AI Processing</span>
+            </div>
+        </div>
+
+        <div class="links">
+            <a href="https://ai-group-photo-generator-169218045868.us-west1.run.app/" target="_blank" class="btn btn-primary">🚀 Launch Live Demo</a>
+            <a href="https://github.com/lyven81/ai-project/tree/main/projects/ai-group-photo-generator" target="_blank" class="btn btn-secondary">📁 View GitHub Repository</a>
+            <a href="README.md" class="btn btn-tertiary">📖 Read Documentation</a>
+        </div>
+
+        <div class="content">
+            <h2>Project Overview</h2>
+            <p>AI Group Photo Generator is an intelligent application that creates professional group photographs using advanced computer vision and AI processing techniques. The system can seamlessly blend multiple individual photos into cohesive group compositions with natural lighting and positioning.</p>
+
+            <h3 style="margin-top: 30px;">Key Features</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li>🤖 <strong>AI-Powered Composition:</strong> Intelligent arrangement of multiple subjects</li>
+                <li>🎨 <strong>Natural Blending:</strong> Seamless integration with realistic lighting</li>
+                <li>👥 <strong>Multi-Person Support:</strong> Handle multiple subjects simultaneously</li>
+                <li>📱 <strong>User-Friendly Interface:</strong> Simple upload and generation process</li>
+                <li>⚡ <strong>Fast Processing:</strong> Quick results with high-quality output</li>
+            </ul>
+
+            <h3 style="margin-top: 30px;">Technology Stack</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>Backend:</strong> Python with Streamlit framework</li>
+                <li><strong>AI Processing:</strong> Computer vision algorithms for subject extraction</li>
+                <li><strong>Image Processing:</strong> Advanced blending and composition techniques</li>
+                <li><strong>Deployment:</strong> Docker containerization with Google Cloud Run</li>
+            </ul>
+
+            <h3 style="margin-top: 30px;">Getting Started</h3>
+            <p>Visit the <a href="https://ai-group-photo-generator-169218045868.us-west1.run.app/" target="_blank">live demo</a> to try the application, or check out the <a href="https://github.com/lyven81/ai-project/tree/main/projects/ai-group-photo-generator" target="_blank">GitHub repository</a> for installation instructions and source code.</p>
+        </div>
+    </div>
+</body>
 </html>
