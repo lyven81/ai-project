@@ -2,7 +2,7 @@
 
 [![Portfolio Website](https://img.shields.io/badge/Portfolio-Live-green?logo=vercel)](https://lyven81.github.io/ai-project/)
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-black?logo=github)](https://github.com/lyven81/ai-project)
-[![Projects](https://img.shields.io/badge/Projects-12-blue)](#-featured-projects)
+[![Projects](https://img.shields.io/badge/Projects-13-blue)](#-featured-projects)
 [![AI Powered](https://img.shields.io/badge/AI-Powered-orange?logo=tensorflow)](https://github.com/lyven81/ai-project)
 
 **Innovative AI Solutions for Modern Challenges** - A curated collection of production-ready AI applications showcasing expertise in computer vision, natural language processing, document processing, and creative AI technologies.
@@ -13,7 +13,7 @@
 
 ## 🌟 Portfolio Overview
 
-This repository contains **12 production-deployed AI applications** demonstrating proficiency across multiple AI domains. Each project includes comprehensive documentation, live demos, and complete source code with deployment configurations.
+This repository contains **13 production-deployed AI applications** demonstrating proficiency across multiple AI domains. Each project includes comprehensive documentation, live demos, and complete source code with deployment configurations.
 
 **🎯 Portfolio Highlights:**
 - **15+ AI Technologies** integrated across projects
@@ -108,6 +108,12 @@ This repository contains **12 production-deployed AI applications** demonstratin
 - **Tech Stack:** React, TypeScript, Gemini AI, Computer Vision, Image Generation
 - **AI Capabilities:** Face extraction, hairstyle application, identity preservation, photorealistic avatar creation
 
+#### [AI Expression Generator](./projects/ai-expression-generator/)
+**Generate 9 different emotional expressions from a single photo using advanced AI technology**
+- **Live Demo:** [ai-expression-generator-169218045868.us-west1.run.app](https://ai-expression-generator-169218045868.us-west1.run.app/)
+- **Tech Stack:** React, TypeScript, Gemini 2.5 Flash, Multimodal AI, Image Processing
+- **AI Capabilities:** Facial expression transformation, identity preservation, emotional range generation, photorealistic quality
+
 ## 🛠️ Technical Skills Demonstrated
 
 ### **AI & Machine Learning**
@@ -159,7 +165,8 @@ ai-project/
 │   ├── image-recipe-generator/  # Food image to recipe AI
 │   ├── polaroid-moments-generator/ # Vintage photo generation AI
 │   ├── pdf-to-audio-reader/     # PDF to audio conversion with AI
-│   └── ai-avatar-hairstyle-generator/ # Virtual hairstyle avatar generation
+│   ├── ai-avatar-hairstyle-generator/ # Virtual hairstyle avatar generation
+│   └── ai-expression-generator/ # Emotional expression transformation AI
 └── README.md                    # This comprehensive overview
 ```
 
@@ -208,6 +215,7 @@ All projects are production-deployed and accessible via live demos:
 | AI Recipe Generator | [Launch App](https://image-recipe-generator-218391175125.us-central1.run.app/) | Creative AI |
 | Polaroid Moments Generator | [Launch App](https://polaroid-moments-generator-169218045868.us-west1.run.app/) | Creative AI |
 | AI Avatar Hairstyle Generator | [Launch App](https://ai-avatar-hairstyle-generator-169218045868.us-west1.run.app/) | Creative AI |
+| AI Expression Generator | [Launch App](https://ai-expression-generator-169218045868.us-west1.run.app/) | Creative AI |
 
 ## 💼 Professional Highlights
 
