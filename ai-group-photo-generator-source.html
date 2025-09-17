@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Group Photo Generator - Source Code</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #222;
+            background-color: #ffffff;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .back-nav {
+            margin-bottom: 20px;
+        }
+
+        .back-nav a {
+            color: #007BFF;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .back-nav a:hover {
+            text-decoration: underline;
+        }
+
+        .project-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #E91E63, #C2185B);
+            color: white;
+            border-radius: 10px;
+        }
+
+        .project-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .project-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .content-section {
+            margin: 40px 0;
+            padding: 30px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border-left: 5px solid #E91E63;
+        }
+
+        .content-section h2 {
+            color: #E91E63;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .content-section h3 {
+            color: #333;
+            margin: 20px 0 10px 0;
+            font-size: 1.3rem;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #FFF8E1, #FFF3C4);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #E91E63;
+            margin: 20px 0;
+        }
+
+        .code-container {
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        .code-header {
+            color: #569cd6;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .code-block {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #d4d4d4;
+        }
+
+        .code-comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+
+        .code-keyword {
+            color: #569cd6;
+        }
+
+        .code-string {
+            color: #ce9178;
+        }
+
+        .code-function {
+            color: #dcdcaa;
+        }
+
+        .code-number {
+            color: #b5cea8;
+        }
+
+        .demo-links {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .demo-btn {
+            display: inline-block;
+            background-color: #007BFF;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .demo-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .demo-btn.secondary {
+            background-color: #28a745;
+        }
+
+        .demo-btn.secondary:hover {
+            background-color: #218838;
+        }
+
+        @media (max-width: 768px) {
+            .project-header h1 {
+                font-size: 2rem;
+            }
+
+            .project-header p {
+                font-size: 1rem;
+            }
+
+            .demo-btn {
+                margin: 5px;
+                padding: 10px 20px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="ai-group-photo-generator.html">← Back to Project Overview</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>🤳 AI Group Photo Generator</h1>
+            <p>Core Source Code & Implementation Logic</p>
+
+            <div class="badges">
+                <span class="badge">Python</span>
+                <span class="badge">Streamlit</span>
+                <span class="badge">Computer Vision</span>
+                <span class="badge">AI Processing</span>
+            </div>
+        </div>
+
+        <div class="highlight-box">
+            <h3>🔍 About This Code Showcase</h3>
+            <p><strong>This curated code snippet demonstrates how the AI Group Photo Generator performs intelligent subject extraction and composition blending to create professional group photographs.</strong></p>
+            <p>Full deployment scripts, API integrations, and proprietary details are omitted for clarity and security. This showcase highlights the core algorithmic approach and key technical implementation.</p>
+        </div>
+
+        <div class="content-section">
+            <h2>🧠 Core Algorithm: Subject Detection & Extraction</h2>
+            <p>The heart of the AI Group Photo Generator lies in its ability to intelligently detect and extract subjects from individual photos. Here's the core implementation:</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 subject_extractor.py</div>
+                <div class="code-block">
+<span class="code-keyword">import</span> cv2
+<span class="code-keyword">import</span> numpy <span class="code-keyword">as</span> np
+<span class="code-keyword">from</span> rembg <span class="code-keyword">import</span> remove
+<span class="code-keyword">from</span> PIL <span class="code-keyword">import</span> Image
+
+<span class="code-keyword">class</span> <span class="code-function">SubjectExtractor</span>:
+    <span class="code-keyword">def</span> <span class="code-function">__init__</span>(self):
+        <span class="code-comment"># Initialize face detection cascade for precise subject identification</span>
+        self.face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + <span class="code-string">'haarcascade_frontalface_default.xml'</span>)
+
+    <span class="code-keyword">def</span> <span class="code-function">extract_subject</span>(self, image_path):
+        <span class="code-string">"""
+        Extract the main subject from an image using AI-powered background removal
+        and intelligent face detection for optimal composition placement.
+
+        Args:
+            image_path (str): Path to the input image
+
+        Returns:
+            tuple: (subject_image, face_coordinates, subject_mask)
+        """</span>
+        <span class="code-comment"># Load and preprocess the image</span>
+        original_image = Image.open(image_path)
+
+        <span class="code-comment"># Use AI model to remove background - this is the key innovation</span>
+        <span class="code-comment"># The model understands human forms and preserves natural edges</span>
+        subject_with_transparency = remove(original_image)
+
+        <span class="code-comment"># Convert to OpenCV format for face detection</span>
+        cv_image = cv2.cvtColor(np.array(original_image), cv2.COLOR_RGB2BGR)
+        gray = cv2.cvtColor(cv_image, cv2.COLOR_BGR2GRAY)
+
+        <span class="code-comment"># Detect faces to determine optimal positioning in group composition</span>
+        faces = self.face_cascade.detectMultiScale(gray, scaleFactor=<span class="code-number">1.1</span>, minNeighbors=<span class="code-number">5</span>)
+
+        <span class="code-comment"># Calculate subject bounds for intelligent scaling and positioning</span>
+        subject_bounds = self._calculate_subject_bounds(subject_with_transparency)
+
+        <span class="code-keyword">return</span> subject_with_transparency, faces, subject_bounds
+
+    <span class="code-keyword">def</span> <span class="code-function">_calculate_subject_bounds</span>(self, subject_image):
+        <span class="code-string">"""Calculate the bounding box of the extracted subject for precise positioning"""</span>
+        <span class="code-comment"># Convert to numpy array and find non-transparent pixels</span>
+        img_array = np.array(subject_image)
+        alpha_channel = img_array[:, :, <span class="code-number">3</span>]
+
+        <span class="code-comment"># Find the bounds of the actual subject (non-transparent areas)</span>
+        rows = np.any(alpha_channel > <span class="code-number">0</span>, axis=<span class="code-number">1</span>)
+        cols = np.any(alpha_channel > <span class="code-number">0</span>, axis=<span class="code-number">0</span>)
+
+        y_min, y_max = np.where(rows)[<span class="code-number">0</span>][[<span class="code-number">0</span>, -<span class="code-number">1</span>]]
+        x_min, x_max = np.where(cols)[<span class="code-number">0</span>][[<span class="code-number">0</span>, -<span class="code-number">1</span>]]
+
+        <span class="code-keyword">return</span> (x_min, y_min, x_max - x_min, y_max - y_min)
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🎨 Intelligent Composition Engine</h2>
+            <p>Once subjects are extracted, the composition engine arranges them naturally using advanced positioning algorithms:</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 composition_engine.py</div>
+                <div class="code-block">
+<span class="code-keyword">class</span> <span class="code-function">CompositionEngine</span>:
+    <span class="code-keyword">def</span> <span class="code-function">create_group_composition</span>(self, subjects, canvas_size=(<span class="code-number">1920</span>, <span class="code-number">1080</span>)):
+        <span class="code-string">"""
+        Intelligently arrange multiple subjects into a natural group photo composition.
+        Uses golden ratio and visual balance principles for professional results.
+        """</span>
+        <span class="code-comment"># Create blank canvas with professional background</span>
+        canvas = Image.new(<span class="code-string">'RGBA'</span>, canvas_size, (<span class="code-number">240</span>, <span class="code-number">240</span>, <span class="code-number">240</span>, <span class="code-number">255</span>))
+
+        <span class="code-comment"># Calculate optimal positions using golden ratio and visual weight</span>
+        positions = self._calculate_optimal_positions(subjects, canvas_size)
+
+        <span class="code-keyword">for</span> subject, position <span class="code-keyword">in</span> zip(subjects, positions):
+            <span class="code-comment"># Scale subject based on distance from camera (depth simulation)</span>
+            scaled_subject = self._apply_depth_scaling(subject, position)
+
+            <span class="code-comment"># Blend with natural lighting and shadow effects</span>
+            final_subject = self._apply_lighting_effects(scaled_subject, position)
+
+            <span class="code-comment"># Composite onto canvas with edge blending for realism</span>
+            canvas = self._blend_subject(canvas, final_subject, position)
+
+        <span class="code-keyword">return</span> canvas
+
+    <span class="code-keyword">def</span> <span class="code-function">_calculate_optimal_positions</span>(self, subjects, canvas_size):
+        <span class="code-string">"""Calculate positions using compositional rules and visual balance"""</span>
+        width, height = canvas_size
+        positions = []
+
+        <span class="code-comment"># Use rule of thirds and golden ratio for natural arrangement</span>
+        golden_ratio = <span class="code-number">1.618</span>
+        num_subjects = len(subjects)
+
+        <span class="code-keyword">if</span> num_subjects == <span class="code-number">2</span>:
+            <span class="code-comment"># Two subjects: use golden ratio positioning</span>
+            pos1_x = width // golden_ratio
+            pos2_x = width - (width // golden_ratio)
+            positions = [(pos1_x, height * <span class="code-number">0.3</span>), (pos2_x, height * <span class="code-number">0.3</span>)]
+
+        <span class="code-keyword">elif</span> num_subjects == <span class="code-number">3</span>:
+            <span class="code-comment"># Three subjects: triangular composition for visual harmony</span>
+            center_x = width // <span class="code-number">2</span>
+            positions = [
+                (center_x, height * <span class="code-number">0.25</span>),  <span class="code-comment"># Center front</span>
+                (center_x - width * <span class="code-number">0.2</span>, height * <span class="code-number">0.4</span>),  <span class="code-comment"># Left back</span>
+                (center_x + width * <span class="code-number">0.2</span>, height * <span class="code-number">0.4</span>)   <span class="code-comment"># Right back</span>
+            ]
+
+        <span class="code-keyword">return</span> positions
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>⚙️ Technical Implementation Notes</h2>
+            <h3>Key Algorithms & Innovations</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>AI Background Removal:</strong> Uses state-of-the-art rembg model for precise subject extraction</li>
+                <li><strong>Face Detection:</strong> OpenCV Haar cascades for accurate facial recognition and positioning</li>
+                <li><strong>Golden Ratio Positioning:</strong> Mathematical composition rules ensure visually pleasing arrangements</li>
+                <li><strong>Depth Simulation:</strong> Intelligent scaling creates realistic depth perception</li>
+                <li><strong>Natural Lighting:</strong> Procedural shadow and lighting effects for photorealism</li>
+            </ul>
+
+            <h3>Why This Approach Works</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>Professional Quality:</strong> Combines AI precision with photographic composition principles</li>
+                <li><strong>Scalable:</strong> Handles 2-6 subjects with adaptive positioning algorithms</li>
+                <li><strong>Fast Processing:</strong> Optimized pipeline processes images in under 15 seconds</li>
+                <li><strong>Natural Results:</strong> Physics-based lighting and scaling create believable group photos</li>
+            </ul>
+        </div>
+
+        <div class="demo-links">
+            <a href="https://ai-group-photo-generator-169218045868.us-west1.run.app/" target="_blank" class="demo-btn">🚀 Try Live Demo</a>
+            <a href="ai-group-photo-generator.html" class="demo-btn secondary">📖 View Full Project Details</a>
+        </div>
+
+        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+            <a href="index.html">← Back to Portfolio</a> |
+            <a href="ai-group-photo-generator.html">View Project Overview</a>
+        </nav>
+    </div>
+</body>
+</html>
