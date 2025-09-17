@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF-to-Audio Reader - Source Code</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #222;
+            background-color: #ffffff;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .back-nav {
+            margin-bottom: 20px;
+        }
+
+        .back-nav a {
+            color: #007BFF;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .back-nav a:hover {
+            text-decoration: underline;
+        }
+
+        .project-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #2196F3, #1976D2);
+            color: white;
+            border-radius: 10px;
+        }
+
+        .project-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .project-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .content-section {
+            margin: 40px 0;
+            padding: 30px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border-left: 5px solid #2196F3;
+        }
+
+        .content-section h2 {
+            color: #2196F3;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .content-section h3 {
+            color: #333;
+            margin: 20px 0 10px 0;
+            font-size: 1.3rem;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #FFF8E1, #FFF3C4);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #2196F3;
+            margin: 20px 0;
+        }
+
+        .code-container {
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        .code-header {
+            color: #569cd6;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .code-block {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #d4d4d4;
+        }
+
+        .code-comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+
+        .code-keyword {
+            color: #569cd6;
+        }
+
+        .code-string {
+            color: #ce9178;
+        }
+
+        .code-function {
+            color: #dcdcaa;
+        }
+
+        .code-number {
+            color: #b5cea8;
+        }
+
+        .demo-links {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .demo-btn {
+            display: inline-block;
+            background-color: #007BFF;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .demo-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .demo-btn.secondary {
+            background-color: #28a745;
+        }
+
+        .demo-btn.secondary:hover {
+            background-color: #218838;
+        }
+
+        @media (max-width: 768px) {
+            .project-header h1 {
+                font-size: 2rem;
+            }
+
+            .project-header p {
+                font-size: 1rem;
+            }
+
+            .demo-btn {
+                margin: 5px;
+                padding: 10px 20px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="pdf-to-audio-reader.html">← Back to Project Overview</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>🔊 PDF-to-Audio Reader</h1>
+            <p>Core Source Code & Audio Narration Implementation</p>
+
+            <div class="badges">
+                <span class="badge">Python 3.9</span>
+                <span class="badge">Streamlit</span>
+                <span class="badge">Text-to-Speech</span>
+                <span class="badge">Audio Processing</span>
+            </div>
+        </div>
+
+        <div class="highlight-box">
+            <h3>🔍 About This Code Showcase</h3>
+            <p><strong>This curated code snippet demonstrates how the PDF-to-Audio Reader extracts text from documents, processes content for optimal narration, and generates high-quality audio with natural voice synthesis.</strong></p>
+            <p>Full deployment scripts, API integrations, and proprietary details are omitted for clarity and security. This showcase highlights the core text processing and audio generation algorithms.</p>
+        </div>
+
+        <div class="content-section">
+            <h2>📖 Core Algorithm: Document-to-Audio Engine</h2>
+            <p>The foundation of the PDF-to-Audio Reader is its ability to intelligently extract text from PDFs, optimize content for speech synthesis, and generate natural-sounding audio narration with proper pacing and pronunciation:</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 pdf_audio_processor.py</div>
+                <div class="code-block">
+<span class="code-keyword">import</span> PyPDF2
+<span class="code-keyword">import</span> streamlit <span class="code-keyword">as</span> st
+<span class="code-keyword">from</span> gtts <span class="code-keyword">import</span> gTTS
+<span class="code-keyword">from</span> pydub <span class="code-keyword">import</span> AudioSegment
+<span class="code-keyword">from</span> typing <span class="code-keyword">import</span> Dict, List, Optional, Tuple
+<span class="code-keyword">import</span> re
+<span class="code-keyword">import</span> io
+
+<span class="code-keyword">class</span> <span class="code-function">PDFAudioProcessor</span>:
+    <span class="code-string">"""
+    Advanced PDF-to-audio conversion engine that extracts text intelligently,
+    optimizes content for speech synthesis, and generates high-quality audio narration.
+    """</span>
+
+    <span class="code-keyword">def</span> <span class="code-function">__init__</span>(self):
+        <span class="code-comment"># Voice and language settings for natural narration</span>
+        self.voice_settings = {
+            <span class="code-string">'default'</span>: {<span class="code-string">'lang'</span>: <span class="code-string">'en'</span>, <span class="code-string">'slow'</span>: <span class="code-keyword">False</span>, <span class="code-string">'tld'</span>: <span class="code-string">'com'</span>},
+            <span class="code-string">'british'</span>: {<span class="code-string">'lang'</span>: <span class="code-string">'en'</span>, <span class="code-string">'slow'</span>: <span class="code-keyword">False</span>, <span class="code-string">'tld'</span>: <span class="code-string">'co.uk'</span>},
+            <span class="code-string">'australian'</span>: {<span class="code-string">'lang'</span>: <span class="code-string">'en'</span>, <span class="code-string">'slow'</span>: <span class="code-keyword">False</span>, <span class="code-string">'tld'</span>: <span class="code-string">'com.au'</span>},
+            <span class="code-string">'slow'</span>: {<span class="code-string">'lang'</span>: <span class="code-string">'en'</span>, <span class="code-string">'slow'</span>: <span class="code-keyword">True</span>, <span class="code-string">'tld'</span>: <span class="code-string">'com'</span>}
+        }
+
+        <span class="code-comment"># Text preprocessing patterns for better audio quality</span>
+        self.text_patterns = {
+            <span class="code-string">'abbreviations'</span>: {
+                <span class="code-string">'Dr.'</span>: <span class="code-string">'Doctor'</span>, <span class="code-string">'Mr.'</span>: <span class="code-string">'Mister'</span>, <span class="code-string">'Mrs.'</span>: <span class="code-string">'Missus'</span>, <span class="code-string">'Ms.'</span>: <span class="code-string">'Miss'</span>,
+                <span class="code-string">'Prof.'</span>: <span class="code-string">'Professor'</span>, <span class="code-string">'etc.'</span>: <span class="code-string">'etcetera'</span>, <span class="code-string">'vs.'</span>: <span class="code-string">'versus'</span>
+            },
+            <span class="code-string">'numbers'</span>: {
+                <span class="code-string">'1st'</span>: <span class="code-string">'first'</span>, <span class="code-string">'2nd'</span>: <span class="code-string">'second'</span>, <span class="code-string">'3rd'</span>: <span class="code-string">'third'</span>,
+                <span class="code-string">'&'</span>: <span class="code-string">'and'</span>, <span class="code-string">'@'</span>: <span class="code-string">'at'</span>, <span class="code-string">'%'</span>: <span class="code-string">'percent'</span>
+            }
+        }
+
+        <span class="code-comment"># Audio processing settings for optimal playback</span>
+        self.audio_settings = {
+            <span class="code-string">'sample_rate'</span>: <span class="code-number">22050</span>,
+            <span class="code-string">'channels'</span>: <span class="code-number">1</span>,  <span class="code-comment"># Mono for voice</span>
+            <span class="code-string">'format'</span>: <span class="code-string">'mp3'</span>,
+            <span class="code-string">'bitrate'</span>: <span class="code-string">'128k'</span>,
+            <span class="code-string">'silence_duration'</span>: <span class="code-number">0.5</span>  <span class="code-comment"># Seconds between sections</span>
+        }
+
+    <span class="code-keyword">def</span> <span class="code-function">convert_pdf_to_audio</span>(self, pdf_file, voice_type: str = <span class="code-string">'default'</span>,
+                            reading_speed: str = <span class="code-string">'normal'</span>) -> Tuple[bytes, Dict]:
+        <span class="code-string">"""
+        Convert PDF document to high-quality audio narration.
+        Handles text extraction, optimization, and natural voice synthesis.
+
+        Args:
+            pdf_file: Uploaded PDF file object
+            voice_type: Voice accent/style selection
+            reading_speed: Narration speed preference
+
+        Returns:
+            Tuple of (audio_bytes, processing_metadata)
+        """</span>
+
+        <span class="code-comment"># Step 1: Extract and structure text from PDF</span>
+        extracted_content = self._extract_structured_text(pdf_file)
+
+        <span class="code-comment"># Step 2: Optimize text for speech synthesis</span>
+        optimized_text = self._optimize_text_for_speech(extracted_content)
+
+        <span class="code-comment"># Step 3: Generate audio segments with proper pacing</span>
+        audio_segments = self._generate_audio_segments(optimized_text, voice_type, reading_speed)
+
+        <span class="code-comment"># Step 4: Combine segments into final audiobook</span>
+        final_audio = self._assemble_final_audiobook(audio_segments)
+
+        <span class="code-comment"># Step 5: Generate processing metadata</span>
+        metadata = self._generate_audio_metadata(extracted_content, optimized_text, final_audio)
+
+        <span class="code-keyword">return</span> final_audio, metadata
+
+    <span class="code-keyword">def</span> <span class="code-function">_extract_structured_text</span>(self, pdf_file) -> Dict:
+        <span class="code-string">"""
+        Extract text from PDF while preserving document structure.
+        Identifies chapters, sections, paragraphs for optimal audio pacing.
+        """</span>
+
+        pdf_reader = PyPDF2.PdfReader(pdf_file)
+        structured_content = {
+            <span class="code-string">'full_text'</span>: <span class="code-string">''</span>,
+            <span class="code-string">'chapters'</span>: [],
+            <span class="code-string">'sections'</span>: [],
+            <span class="code-string">'page_count'</span>: len(pdf_reader.pages),
+            <span class="code-string">'estimated_reading_time'</span>: <span class="code-number">0</span>
+        }
+
+        full_text = <span class="code-string">''</span>
+        current_chapter = <span class="code-string">''</span>
+        chapter_count = <span class="code-number">0</span>
+
+        <span class="code-keyword">for</span> page_num, page <span class="code-keyword">in</span> enumerate(pdf_reader.pages):
+            page_text = page.extract_text()
+
+            <span class="code-comment"># Clean and normalize text</span>
+            cleaned_text = self._clean_extracted_text(page_text)
+
+            <span class="code-comment"># Detect chapter breaks using common patterns</span>
+            <span class="code-keyword">if</span> self._is_chapter_break(cleaned_text):
+                <span class="code-keyword">if</span> current_chapter:
+                    structured_content[<span class="code-string">'chapters'</span>].append({
+                        <span class="code-string">'title'</span>: f<span class="code-string">"Chapter {chapter_count}"</span>,
+                        <span class="code-string">'content'</span>: current_chapter,
+                        <span class="code-string">'word_count'</span>: len(current_chapter.split())
+                    })
+                chapter_count += <span class="code-number">1</span>
+                current_chapter = cleaned_text
+            <span class="code-keyword">else</span>:
+                current_chapter += <span class="code-string">' '</span> + cleaned_text
+
+            full_text += <span class="code-string">' '</span> + cleaned_text
+
+        <span class="code-comment"># Add final chapter</span>
+        <span class="code-keyword">if</span> current_chapter:
+            structured_content[<span class="code-string">'chapters'</span>].append({
+                <span class="code-string">'title'</span>: f<span class="code-string">"Chapter {chapter_count}"</span>,
+                <span class="code-string">'content'</span>: current_chapter,
+                <span class="code-string">'word_count'</span>: len(current_chapter.split())
+            })
+
+        structured_content[<span class="code-string">'full_text'</span>] = full_text.strip()
+        structured_content[<span class="code-string">'total_words'</span>] = len(full_text.split())
+        structured_content[<span class="code-string">'estimated_reading_time'</span>] = self._estimate_reading_time(full_text)
+
+        <span class="code-keyword">return</span> structured_content
+
+    <span class="code-keyword">def</span> <span class="code-function">_optimize_text_for_speech</span>(self, content: Dict) -> Dict:
+        <span class="code-string">"""
+        Optimize extracted text for natural speech synthesis.
+        Handles pronunciation, pacing, and readability improvements.
+        """</span>
+
+        optimized_content = {
+            <span class="code-string">'chapters'</span>: [],
+            <span class="code-string">'total_segments'</span>: <span class="code-number">0</span>,
+            <span class="code-string">'processing_notes'</span>: []
+        }
+
+        <span class="code-keyword">for</span> chapter <span class="code-keyword">in</span> content[<span class="code-string">'chapters'</span>]:
+            chapter_text = chapter[<span class="code-string">'content'</span>]
+
+            <span class="code-comment"># Step 1: Expand abbreviations for better pronunciation</span>
+            expanded_text = self._expand_abbreviations(chapter_text)
+
+            <span class="code-comment"># Step 2: Normalize numbers and symbols</span>
+            normalized_text = self._normalize_numbers_and_symbols(expanded_text)
+
+            <span class="code-comment"># Step 3: Add natural pauses and emphasis</span>
+            paced_text = self._add_natural_pacing(normalized_text)
+
+            <span class="code-comment"># Step 4: Break into optimal speech segments</span>
+            speech_segments = self._create_speech_segments(paced_text)
+
+            optimized_content[<span class="code-string">'chapters'</span>].append({
+                <span class="code-string">'title'</span>: chapter[<span class="code-string">'title'</span>],
+                <span class="code-string">'segments'</span>: speech_segments,
+                <span class="code-string">'segment_count'</span>: len(speech_segments),
+                <span class="code-string">'optimization_applied'</span>: [<span class="code-string">'abbreviation_expansion'</span>, <span class="code-string">'number_normalization'</span>, <span class="code-string">'pacing_optimization'</span>]
+            })
+
+            optimized_content[<span class="code-string">'total_segments'</span>] += len(speech_segments)
+
+        <span class="code-keyword">return</span> optimized_content
+
+    <span class="code-keyword">def</span> <span class="code-function">_generate_audio_segments</span>(self, optimized_content: Dict,
+                              voice_type: str, reading_speed: str) -> List[AudioSegment]:
+        <span class="code-string">"""
+        Generate high-quality audio segments using advanced text-to-speech.
+        Applies voice characteristics and reading speed optimizations.
+        """</span>
+
+        voice_config = self.voice_settings.get(voice_type, self.voice_settings[<span class="code-string">'default'</span>])
+
+        <span class="code-comment"># Adjust voice settings based on reading speed preference</span>
+        <span class="code-keyword">if</span> reading_speed == <span class="code-string">'slow'</span>:
+            voice_config[<span class="code-string">'slow'</span>] = <span class="code-keyword">True</span>
+        <span class="code-keyword">elif</span> reading_speed == <span class="code-string">'fast'</span>:
+            voice_config[<span class="code-string">'slow'</span>] = <span class="code-keyword">False</span>
+
+        audio_segments = []
+
+        <span class="code-keyword">for</span> chapter <span class="code-keyword">in</span> optimized_content[<span class="code-string">'chapters'</span>]:
+            <span class="code-comment"># Add chapter title announcement</span>
+            title_audio = self._generate_title_audio(chapter[<span class="code-string">'title'</span>], voice_config)
+            audio_segments.append(title_audio)
+
+            <span class="code-comment"># Add pause after title</span>
+            pause = AudioSegment.silent(duration=<span class="code-number">1000</span>)  <span class="code-comment"># 1 second pause</span>
+            audio_segments.append(pause)
+
+            <span class="code-comment"># Process each text segment</span>
+            <span class="code-keyword">for</span> segment <span class="code-keyword">in</span> chapter[<span class="code-string">'segments'</span>]:
+                <span class="code-keyword">try</span>:
+                    <span class="code-comment"># Generate audio for text segment</span>
+                    tts = gTTS(
+                        text=segment[<span class="code-string">'text'</span>],
+                        lang=voice_config[<span class="code-string">'lang'</span>],
+                        slow=voice_config[<span class="code-string">'slow'</span>],
+                        tld=voice_config[<span class="code-string">'tld'</span>]
+                    )
+
+                    <span class="code-comment"># Convert to audio segment</span>
+                    audio_buffer = io.BytesIO()
+                    tts.write_to_fp(audio_buffer)
+                    audio_buffer.seek(<span class="code-number">0</span>)
+
+                    segment_audio = AudioSegment.from_mp3(audio_buffer)
+
+                    <span class="code-comment"># Apply audio enhancements</span>
+                    enhanced_audio = self._enhance_audio_quality(segment_audio)
+                    audio_segments.append(enhanced_audio)
+
+                    <span class="code-comment"># Add natural pause between segments</span>
+                    <span class="code-keyword">if</span> segment.get(<span class="code-string">'pause_after'</span>, <span class="code-keyword">True</span>):
+                        pause_duration = self._calculate_pause_duration(segment)
+                        pause = AudioSegment.silent(duration=pause_duration)
+                        audio_segments.append(pause)
+
+                <span class="code-keyword">except</span> Exception <span class="code-keyword">as</span> e:
+                    <span class="code-comment"># Handle TTS errors gracefully</span>
+                    <span class="code-keyword">continue</span>
+
+        <span class="code-keyword">return</span> audio_segments
+
+    <span class="code-keyword">def</span> <span class="code-function">_enhance_audio_quality</span>(self, audio: AudioSegment) -> AudioSegment:
+        <span class="code-string">"""
+        Apply audio enhancements for professional audiobook quality.
+        Includes normalization, noise reduction, and dynamic range optimization.
+        """</span>
+
+        <span class="code-comment"># Normalize audio levels for consistent volume</span>
+        normalized_audio = audio.normalize()
+
+        <span class="code-comment"># Apply gentle compression for better dynamics</span>
+        compressed_audio = normalized_audio.compress_dynamic_range(threshold=-<span class="code-number">20.0</span>, ratio=<span class="code-number">2.0</span>)
+
+        <span class="code-comment"># Apply subtle EQ for voice clarity</span>
+        enhanced_audio = compressed_audio.high_pass_filter(<span class="code-number">80</span>).low_pass_filter(<span class="code-number">8000</span>)
+
+        <span class="code-comment"># Fade in/out for smooth transitions</span>
+        final_audio = enhanced_audio.fade_in(<span class="code-number">100</span>).fade_out(<span class="code-number">100</span>)
+
+        <span class="code-keyword">return</span> final_audio
+
+    <span class="code-keyword">def</span> <span class="code-function">_assemble_final_audiobook</span>(self, audio_segments: List[AudioSegment]) -> bytes:
+        <span class="code-string">"""
+        Combine all audio segments into final audiobook file.
+        Applies professional mastering and export optimization.
+        """</span>
+
+        <span class="code-comment"># Combine all segments into single audio file</span>
+        final_audiobook = AudioSegment.empty()
+
+        <span class="code-keyword">for</span> segment <span class="code-keyword">in</span> audio_segments:
+            final_audiobook += segment
+
+        <span class="code-comment"># Apply final mastering</span>
+        mastered_audio = self._apply_final_mastering(final_audiobook)
+
+        <span class="code-comment"># Export to optimized format</span>
+        audio_buffer = io.BytesIO()
+        mastered_audio.export(
+            audio_buffer,
+            format=self.audio_settings[<span class="code-string">'format'</span>],
+            bitrate=self.audio_settings[<span class="code-string">'bitrate'</span>],
+            parameters=[<span class="code-string">"-ac"</span>, str(self.audio_settings[<span class="code-string">'channels'</span>])]
+        )
+
+        <span class="code-keyword">return</span> audio_buffer.getvalue()
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🎵 Advanced Audio Processing Engine</h2>
+            <p>The audio processing system provides professional-grade audio enhancements, including dynamic range compression, voice clarity optimization, and seamless segment transitions:</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 audio_enhancement.py</div>
+                <div class="code-block">
+<span class="code-keyword">class</span> <span class="code-function">AudioEnhancementEngine</span>:
+    <span class="code-keyword">def</span> <span class="code-function">_apply_final_mastering</span>(self, audio: AudioSegment) -> AudioSegment:
+        <span class="code-string">"""
+        Apply professional audio mastering for optimal listening experience.
+        Includes loudness normalization and dynamic range optimization.
+        """</span>
+
+        <span class="code-comment"># Step 1: Normalize loudness to broadcast standards</span>
+        target_loudness = -<span class="code-number">23.0</span>  <span class="code-comment"># LUFS (Loudness Units relative to Full Scale)</span>
+        current_loudness = self._measure_loudness(audio)
+        loudness_adjustment = target_loudness - current_loudness
+
+        normalized_audio = audio + loudness_adjustment
+
+        <span class="code-comment"># Step 2: Apply gentle limiting to prevent clipping</span>
+        limited_audio = self._apply_gentle_limiter(normalized_audio, threshold=-<span class="code-number">1.0</span>)
+
+        <span class="code-comment"># Step 3: Apply stereo width optimization for mono content</span>
+        optimized_audio = self._optimize_stereo_width(limited_audio)
+
+        <span class="code-comment"># Step 4: Apply final EQ for balanced frequency response</span>
+        final_audio = self._apply_mastering_eq(optimized_audio)
+
+        <span class="code-keyword">return</span> final_audio
+
+    <span class="code-keyword">def</span> <span class="code-function">_create_speech_segments</span>(self, text: str) -> List[Dict]:
+        <span class="code-string">"""
+        Break text into optimal segments for natural speech synthesis.
+        Considers sentence structure, paragraph breaks, and reading flow.
+        """</span>
+
+        segments = []
+
+        <span class="code-comment"># Split text into sentences while preserving structure</span>
+        sentences = self._intelligent_sentence_split(text)
+
+        current_segment = <span class="code-string">''</span>
+        segment_word_count = <span class="code-number">0</span>
+        max_segment_words = <span class="code-number">50</span>  <span class="code-comment"># Optimal for TTS processing</span>
+
+        <span class="code-keyword">for</span> sentence <span class="code-keyword">in</span> sentences:
+            sentence_words = len(sentence.split())
+
+            <span class="code-comment"># Check if adding this sentence would exceed optimal segment length</span>
+            <span class="code-keyword">if</span> segment_word_count + sentence_words > max_segment_words <span class="code-keyword">and</span> current_segment:
+                <span class="code-comment"># Complete current segment</span>
+                segments.append({
+                    <span class="code-string">'text'</span>: current_segment.strip(),
+                    <span class="code-string">'word_count'</span>: segment_word_count,
+                    <span class="code-string">'estimated_duration'</span>: self._estimate_speech_duration(current_segment),
+                    <span class="code-string">'pause_after'</span>: self._should_pause_after_segment(current_segment)
+                })
+
+                <span class="code-comment"># Start new segment</span>
+                current_segment = sentence
+                segment_word_count = sentence_words
+            <span class="code-keyword">else</span>:
+                <span class="code-comment"># Add to current segment</span>
+                <span class="code-keyword">if</span> current_segment:
+                    current_segment += <span class="code-string">' '</span> + sentence
+                <span class="code-keyword">else</span>:
+                    current_segment = sentence
+                segment_word_count += sentence_words
+
+        <span class="code-comment"># Add final segment</span>
+        <span class="code-keyword">if</span> current_segment:
+            segments.append({
+                <span class="code-string">'text'</span>: current_segment.strip(),
+                <span class="code-string">'word_count'</span>: segment_word_count,
+                <span class="code-string">'estimated_duration'</span>: self._estimate_speech_duration(current_segment),
+                <span class="code-string">'pause_after'</span>: <span class="code-keyword">True</span>  <span class="code-comment"># Always pause after final segment</span>
+            })
+
+        <span class="code-keyword">return</span> segments
+
+    <span class="code-keyword">def</span> <span class="code-function">_add_natural_pacing</span>(self, text: str) -> str:
+        <span class="code-string">"""
+        Add natural pacing cues to text for more human-like narration.
+        Inserts strategic pauses and emphasis markers.
+        """</span>
+
+        <span class="code-comment"># Add longer pauses after paragraph breaks</span>
+        text = re.sub(<span class="code-string">r'\n\s*\n'</span>, <span class="code-string">'. \n\n '</span>, text)
+
+        <span class="code-comment"># Add slight pauses after colons for lists or explanations</span>
+        text = re.sub(<span class="code-string">r':(\s+)'</span>, <span class="code-string">r':, \1'</span>, text)
+
+        <span class="code-comment"># Emphasize important transitional phrases</span>
+        emphasis_phrases = [
+            <span class="code-string">'however'</span>, <span class="code-string">'therefore'</span>, <span class="code-string">'furthermore'</span>, <span class="code-string">'in conclusion'</span>,
+            <span class="code-string">'for example'</span>, <span class="code-string">'on the other hand'</span>, <span class="code-string">'in contrast'</span>
+        ]
+
+        <span class="code-keyword">for</span> phrase <span class="code-keyword">in</span> emphasis_phrases:
+            <span class="code-comment"># Add subtle emphasis through comma placement</span>
+            pattern = <span class="code-string">r'\b'</span> + re.escape(phrase) + <span class="code-string">r'\b'</span>
+            replacement = <span class="code-string">f', {phrase},'</span>
+            text = re.sub(pattern, replacement, text, flags=re.IGNORECASE)
+
+        <span class="code-comment"># Improve number reading by adding spaces</span>
+        text = re.sub(<span class="code-string">r'(\d{4,})'</span>, <span class="code-keyword">lambda</span> m: <span class="code-string">' '</span>.join(m.group(<span class="code-number">1</span>)[i:i+<span class="code-number">3</span>] <span class="code-keyword">for</span> i <span class="code-keyword">in</span> range(<span class="code-number">0</span>, len(m.group(<span class="code-number">1</span>)), <span class="code-number">3</span>)), text)
+
+        <span class="code-keyword">return</span> text
+
+    <span class="code-keyword">def</span> <span class="code-function">_expand_abbreviations</span>(self, text: str) -> str:
+        <span class="code-string">"""
+        Expand abbreviations and acronyms for proper pronunciation.
+        Handles common abbreviations and context-specific expansions.
+        """</span>
+
+        expanded_text = text
+
+        <span class="code-comment"># Expand common abbreviations</span>
+        <span class="code-keyword">for</span> abbrev, expansion <span class="code-keyword">in</span> self.text_patterns[<span class="code-string">'abbreviations'</span>].items():
+            expanded_text = expanded_text.replace(abbrev, expansion)
+
+        <span class="code-comment"># Handle time abbreviations</span>
+        expanded_text = re.sub(<span class="code-string">r'\b(\d{1,2}):(\d{2})\s*(AM|PM)\b'</span>,
+                             <span class="code-keyword">lambda</span> m: f<span class="code-string">"{m.group(1)} {m.group(2)} {m.group(3)}"</span>,
+                             expanded_text, flags=re.IGNORECASE)
+
+        <span class="code-comment"># Handle date abbreviations</span>
+        month_abbreviations = {
+            <span class="code-string">'Jan'</span>: <span class="code-string">'January'</span>, <span class="code-string">'Feb'</span>: <span class="code-string">'February'</span>, <span class="code-string">'Mar'</span>: <span class="code-string">'March'</span>, <span class="code-string">'Apr'</span>: <span class="code-string">'April'</span>,
+            <span class="code-string">'May'</span>: <span class="code-string">'May'</span>, <span class="code-string">'Jun'</span>: <span class="code-string">'June'</span>, <span class="code-string">'Jul'</span>: <span class="code-string">'July'</span>, <span class="code-string">'Aug'</span>: <span class="code-string">'August'</span>,
+            <span class="code-string">'Sep'</span>: <span class="code-string">'September'</span>, <span class="code-string">'Oct'</span>: <span class="code-string">'October'</span>, <span class="code-string">'Nov'</span>: <span class="code-string">'November'</span>, <span class="code-string">'Dec'</span>: <span class="code-string">'December'</span>
+        }
+
+        <span class="code-keyword">for</span> abbrev, full_name <span class="code-keyword">in</span> month_abbreviations.items():
+            expanded_text = re.sub(<span class="code-string">r'\b'</span> + abbrev + <span class="code-string">r'\.?\b'</span>, full_name, expanded_text)
+
+        <span class="code-keyword">return</span> expanded_text
+
+    <span class="code-keyword">def</span> <span class="code-function">_estimate_speech_duration</span>(self, text: str) -> float:
+        <span class="code-string">"""
+        Estimate speech duration for text segment.
+        Based on average speaking rates and text complexity.
+        """</span>
+
+        word_count = len(text.split())
+
+        <span class="code-comment"># Average words per minute for natural speech</span>
+        base_wpm = <span class="code-number">150</span>
+
+        <span class="code-comment"># Adjust for text complexity</span>
+        complexity_factor = self._calculate_text_complexity(text)
+        adjusted_wpm = base_wpm * complexity_factor
+
+        <span class="code-comment"># Calculate duration in seconds</span>
+        duration_minutes = word_count / adjusted_wpm
+        duration_seconds = duration_minutes * <span class="code-number">60</span>
+
+        <span class="code-keyword">return</span> duration_seconds
+
+    <span class="code-keyword">def</span> <span class="code-function">_calculate_text_complexity</span>(self, text: str) -> float:
+        <span class="code-string">"""
+        Calculate text complexity factor for speech duration estimation.
+        Considers factors like punctuation density, word length, and technical terms.
+        """</span>
+
+        <span class="code-comment"># Count complex factors</span>
+        word_count = len(text.split())
+        long_words = len([word <span class="code-keyword">for</span> word <span class="code-keyword">in</span> text.split() <span class="code-keyword">if</span> len(word) > <span class="code-number">6</span>])
+        punctuation_count = len(re.findall(<span class="code-string">r'[,.;:!?]'</span>, text))
+
+        <span class="code-comment"># Calculate complexity factors</span>
+        long_word_ratio = long_words / word_count <span class="code-keyword">if</span> word_count > <span class="code-number">0</span> <span class="code-keyword">else</span> <span class="code-number">0</span>
+        punctuation_density = punctuation_count / word_count <span class="code-keyword">if</span> word_count > <span class="code-number">0</span> <span class="code-keyword">else</span> <span class="code-number">0</span>
+
+        <span class="code-comment"># Calculate adjustment factor (lower = slower speech needed)</span>
+        complexity_factor = <span class="code-number">1.0</span> - (long_word_ratio * <span class="code-number">0.3</span>) - (punctuation_density * <span class="code-number">0.2</span>)
+
+        <span class="code-comment"># Ensure factor stays within reasonable bounds</span>
+        <span class="code-keyword">return</span> max(<span class="code-number">0.7</span>, min(<span class="code-number">1.0</span>, complexity_factor))
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>⚙️ Technical Implementation Notes</h2>
+            <h3>Key Algorithms & Innovations</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>Intelligent Text Extraction:</strong> Advanced PDF parsing preserves document structure for optimal audio flow</li>
+                <li><strong>Speech Optimization:</strong> Text preprocessing includes abbreviation expansion and natural pacing enhancement</li>
+                <li><strong>Professional Audio Processing:</strong> Dynamic range compression, EQ, and mastering for audiobook quality</li>
+                <li><strong>Adaptive Segmentation:</strong> Smart text chunking respects sentence boundaries and optimal TTS processing</li>
+                <li><strong>Multi-Voice Support:</strong> Multiple accent and speed options for personalized listening experience</li>
+            </ul>
+
+            <h3>Why This Approach Works</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>Natural Narration:</strong> Text preprocessing ensures smooth, professional-sounding speech synthesis</li>
+                <li><strong>Optimal Pacing:</strong> Intelligent pause insertion creates natural reading rhythm</li>
+                <li><strong>Audio Quality:</strong> Professional mastering techniques deliver broadcast-quality results</li>
+                <li><strong>Scalable Processing:</strong> Efficient segmentation handles documents of any length</li>
+            </ul>
+        </div>
+
+        <div class="demo-links">
+            <a href="https://pdf-to-audio-reader-169218045868.us-west1.run.app/" target="_blank" class="demo-btn">🚀 Try Live Demo</a>
+            <a href="pdf-to-audio-reader.html" class="demo-btn secondary">📖 View Full Project Details</a>
+        </div>
+
+        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+            <a href="index.html">← Back to Portfolio</a> |
+            <a href="pdf-to-audio-reader.html">View Project Overview</a>
+        </nav>
+    </div>
+</body>
+</html>

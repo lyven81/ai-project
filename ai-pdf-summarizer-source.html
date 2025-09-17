@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI PDF Summarizer - Source Code</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #222;
+            background-color: #ffffff;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .back-nav {
+            margin-bottom: 20px;
+        }
+
+        .back-nav a {
+            color: #007BFF;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .back-nav a:hover {
+            text-decoration: underline;
+        }
+
+        .project-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #2196F3, #1976D2);
+            color: white;
+            border-radius: 10px;
+        }
+
+        .project-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .project-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .content-section {
+            margin: 40px 0;
+            padding: 30px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border-left: 5px solid #2196F3;
+        }
+
+        .content-section h2 {
+            color: #2196F3;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .content-section h3 {
+            color: #333;
+            margin: 20px 0 10px 0;
+            font-size: 1.3rem;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #FFF8E1, #FFF3C4);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #2196F3;
+            margin: 20px 0;
+        }
+
+        .code-container {
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        .code-header {
+            color: #569cd6;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .code-block {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #d4d4d4;
+        }
+
+        .code-comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+
+        .code-keyword {
+            color: #569cd6;
+        }
+
+        .code-string {
+            color: #ce9178;
+        }
+
+        .code-function {
+            color: #dcdcaa;
+        }
+
+        .code-number {
+            color: #b5cea8;
+        }
+
+        .demo-links {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .demo-btn {
+            display: inline-block;
+            background-color: #007BFF;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .demo-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .demo-btn.secondary {
+            background-color: #28a745;
+        }
+
+        .demo-btn.secondary:hover {
+            background-color: #218838;
+        }
+
+        @media (max-width: 768px) {
+            .project-header h1 {
+                font-size: 2rem;
+            }
+
+            .project-header p {
+                font-size: 1rem;
+            }
+
+            .demo-btn {
+                margin: 5px;
+                padding: 10px 20px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="ai-pdf-summarizer.html">← Back to Project Overview</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>📄 AI PDF Summarizer</h1>
+            <p>Core Source Code & Document Processing Implementation</p>
+
+            <div class="badges">
+                <span class="badge">Python 3.9</span>
+                <span class="badge">Streamlit</span>
+                <span class="badge">Gemini AI</span>
+                <span class="badge">PDF Processing</span>
+            </div>
+        </div>
+
+        <div class="highlight-box">
+            <h3>🔍 About This Code Showcase</h3>
+            <p><strong>This curated code snippet demonstrates how the AI PDF Summarizer extracts, processes, and intelligently summarizes complex PDF documents using advanced NLP techniques.</strong></p>
+            <p>Full deployment scripts, API integrations, and proprietary details are omitted for clarity and security. This showcase highlights the core document processing and AI summarization algorithms.</p>
+        </div>
+
+        <div class="content-section">
+            <h2>📖 Core Algorithm: Document Intelligence Engine</h2>
+            <p>The foundation of the AI PDF Summarizer is its ability to extract meaningful content from PDFs, understand document structure, and generate intelligent summaries tailored to user needs:</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 document_processor.py</div>
+                <div class="code-block">
+<span class="code-keyword">import</span> PyPDF2
+<span class="code-keyword">import</span> google.generativeai <span class="code-keyword">as</span> genai
+<span class="code-keyword">from</span> typing <span class="code-keyword">import</span> List, Dict, Optional
+<span class="code-keyword">import</span> re
+
+<span class="code-keyword">class</span> <span class="code-function">DocumentProcessor</span>:
+    <span class="code-string">"""
+    Advanced PDF processing engine that extracts, analyzes, and summarizes
+    complex documents while preserving important context and structure.
+    """</span>
+
+    <span class="code-keyword">def</span> <span class="code-function">__init__</span>(self, api_key: str):
+        genai.configure(api_key=api_key)
+        self.model = genai.GenerativeModel(<span class="code-string">'gemini-pro'</span>)
+
+        <span class="code-comment"># Pre-configured summarization strategies for different document types</span>
+        self.summarization_strategies = {
+            <span class="code-string">'research_paper'</span>: self._research_paper_strategy,
+            <span class="code-string">'business_report'</span>: self._business_report_strategy,
+            <span class="code-string">'technical_manual'</span>: self._technical_manual_strategy,
+            <span class="code-string">'legal_document'</span>: self._legal_document_strategy,
+            <span class="code-string">'general'</span>: self._general_strategy
+        }
+
+    <span class="code-keyword">def</span> <span class="code-function">process_pdf_intelligent</span>(self, pdf_file, summary_type: str = <span class="code-string">'general'</span>) -> Dict:
+        <span class="code-string">"""
+        Process PDF with intelligent content analysis and context-aware summarization.
+
+        Args:
+            pdf_file: Uploaded PDF file object
+            summary_type: Type of document for specialized processing
+
+        Returns:
+            Dictionary containing extracted text, document metadata, and AI summary
+        """</span>
+
+        <span class="code-comment"># Step 1: Extract raw content with structure preservation</span>
+        extracted_content = self._extract_structured_content(pdf_file)
+
+        <span class="code-comment"># Step 2: Analyze document characteristics and type</span>
+        document_analysis = self._analyze_document_structure(extracted_content)
+
+        <span class="code-comment"># Step 3: Apply intelligent chunking for large documents</span>
+        content_chunks = self._intelligent_chunking(extracted_content, document_analysis)
+
+        <span class="code-comment"># Step 4: Generate context-aware summary using appropriate strategy</span>
+        strategy = self.summarization_strategies.get(summary_type, self._general_strategy)
+        summary = <span class="code-keyword">await</span> strategy(content_chunks, document_analysis)
+
+        <span class="code-keyword">return</span> {
+            <span class="code-string">'original_text'</span>: extracted_content[<span class="code-string">'full_text'</span>],
+            <span class="code-string">'document_metadata'</span>: document_analysis,
+            <span class="code-string">'summary'</span>: summary,
+            <span class="code-string">'key_insights'</span>: summary[<span class="code-string">'insights'</span>],
+            <span class="code-string">'processing_stats'</span>: self._generate_processing_stats(extracted_content, summary)
+        }
+
+    <span class="code-keyword">def</span> <span class="code-function">_extract_structured_content</span>(self, pdf_file) -> Dict:
+        <span class="code-string">"""
+        Extract content while preserving document structure, headers, and formatting.
+        This enables better understanding of document hierarchy and importance.
+        """</span>
+
+        pdf_reader = PyPDF2.PdfReader(pdf_file)
+        content_structure = {
+            <span class="code-string">'full_text'</span>: <span class="code-string">''</span>,
+            <span class="code-string">'pages'</span>: [],
+            <span class="code-string">'headers'</span>: [],
+            <span class="code-string">'sections'</span>: [],
+            <span class="code-string">'metadata'</span>: pdf_reader.metadata
+        }
+
+        <span class="code-keyword">for</span> page_num, page <span class="code-keyword">in</span> enumerate(pdf_reader.pages):
+            page_text = page.extract_text()
+
+            <span class="code-comment"># Detect headers and section breaks using typography patterns</span>
+            headers = self._detect_headers(page_text)
+            sections = self._identify_sections(page_text, headers)
+
+            content_structure[<span class="code-string">'pages'</span>].append({
+                <span class="code-string">'page_number'</span>: page_num + <span class="code-number">1</span>,
+                <span class="code-string">'text'</span>: page_text,
+                <span class="code-string">'headers'</span>: headers,
+                <span class="code-string">'sections'</span>: sections
+            })
+
+            content_structure[<span class="code-string">'full_text'</span>] += page_text + <span class="code-string">'\n\n'</span>
+            content_structure[<span class="code-string">'headers'</span>].extend(headers)
+            content_structure[<span class="code-string">'sections'</span>].extend(sections)
+
+        <span class="code-keyword">return</span> content_structure
+
+    <span class="code-keyword">def</span> <span class="code-function">_intelligent_chunking</span>(self, content: Dict, analysis: Dict) -> List[Dict]:
+        <span class="code-string">"""
+        Smart content chunking that respects document structure and context.
+        Prevents breaking related concepts across chunks for better AI processing.
+        """</span>
+
+        chunks = []
+        current_chunk = <span class="code-string">''</span>
+        max_chunk_size = <span class="code-number">4000</span>  <span class="code-comment"># Optimal for AI processing</span>
+
+        <span class="code-keyword">for</span> section <span class="code-keyword">in</span> content[<span class="code-string">'sections'</span>]:
+            section_text = section[<span class="code-string">'content'</span>]
+
+            <span class="code-comment"># If adding this section would exceed limit, finalize current chunk</span>
+            <span class="code-keyword">if</span> len(current_chunk) + len(section_text) > max_chunk_size:
+                <span class="code-keyword">if</span> current_chunk:  <span class="code-comment"># Don't add empty chunks</span>
+                    chunks.append({
+                        <span class="code-string">'content'</span>: current_chunk,
+                        <span class="code-string">'section_headers'</span>: self._extract_chunk_headers(current_chunk),
+                        <span class="code-string">'importance_score'</span>: self._calculate_importance(current_chunk, analysis)
+                    })
+                current_chunk = section_text
+            <span class="code-keyword">else</span>:
+                current_chunk += <span class="code-string">'\n\n'</span> + section_text
+
+        <span class="code-comment"># Add final chunk</span>
+        <span class="code-keyword">if</span> current_chunk:
+            chunks.append({
+                <span class="code-string">'content'</span>: current_chunk,
+                <span class="code-string">'section_headers'</span>: self._extract_chunk_headers(current_chunk),
+                <span class="code-string">'importance_score'</span>: self._calculate_importance(current_chunk, analysis)
+            })
+
+        <span class="code-comment"># Sort chunks by importance for prioritized processing</span>
+        <span class="code-keyword">return</span> sorted(chunks, key=<span class="code-keyword">lambda</span> x: x[<span class="code-string">'importance_score'</span>], reverse=<span class="code-keyword">True</span>)
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🧠 Advanced Summarization Engine</h2>
+            <p>The summarization engine uses specialized strategies for different document types, ensuring optimal results for research papers, business reports, and technical manuals:</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 summarization_engine.py</div>
+                <div class="code-block">
+<span class="code-keyword">class</span> <span class="code-function">SummarizationEngine</span>:
+    <span class="code-keyword">async</span> <span class="code-function">_research_paper_strategy</span>(self, chunks: List[Dict], analysis: Dict) -> Dict:
+        <span class="code-string">"""
+        Specialized summarization for academic research papers.
+        Focuses on methodology, findings, and implications.
+        """</span>
+
+        <span class="code-comment"># Identify key academic sections</span>
+        abstract_chunk = self._find_section(chunks, [<span class="code-string">'abstract'</span>, <span class="code-string">'summary'</span>])
+        methodology_chunk = self._find_section(chunks, [<span class="code-string">'methodology'</span>, <span class="code-string">'methods'</span>, <span class="code-string">'approach'</span>])
+        results_chunk = self._find_section(chunks, [<span class="code-string">'results'</span>, <span class="code-string">'findings'</span>, <span class="code-string">'outcomes'</span>])
+        conclusion_chunk = self._find_section(chunks, [<span class="code-string">'conclusion'</span>, <span class="code-string">'discussion'</span>, <span class="code-string">'implications'</span>])
+
+        <span class="code-comment"># Generate comprehensive research summary</span>
+        summary_prompt = f<span class="code-string">"""
+        Analyze this research paper and provide a comprehensive academic summary:
+
+        Document Analysis: {analysis}
+
+        Focus on:
+        1. Research question and objectives
+        2. Methodology and experimental design
+        3. Key findings and statistical significance
+        4. Limitations and future research directions
+        5. Practical implications and applications
+
+        Provide citations to specific sections where possible.
+        """</span>
+
+        research_summary = <span class="code-keyword">await</span> self._generate_ai_summary(
+            self._combine_priority_chunks([abstract_chunk, methodology_chunk, results_chunk, conclusion_chunk]),
+            summary_prompt
+        )
+
+        <span class="code-keyword">return</span> {
+            <span class="code-string">'summary_type'</span>: <span class="code-string">'research_paper'</span>,
+            <span class="code-string">'main_summary'</span>: research_summary,
+            <span class="code-string">'insights'</span>: <span class="code-keyword">await</span> self._extract_research_insights(chunks),
+            <span class="code-string">'key_sections'</span>: {
+                <span class="code-string">'methodology'</span>: methodology_chunk[<span class="code-string">'content'</span>][:<span class="code-number">500</span>] <span class="code-keyword">if</span> methodology_chunk <span class="code-keyword">else</span> <span class="code-string">None</span>,
+                <span class="code-string">'findings'</span>: results_chunk[<span class="code-string">'content'</span>][:500] <span class="code-keyword">if</span> results_chunk <span class="code-keyword">else</span> <span class="code-string">None</span>
+            }
+        }
+
+    <span class="code-keyword">async</span> <span class="code-function">_business_report_strategy</span>(self, chunks: List[Dict], analysis: Dict) -> Dict:
+        <span class="code-string">"""
+        Business-focused summarization emphasizing key metrics and actionable insights.
+        Optimized for executive summaries and strategic decision-making.
+        """</span>
+
+        <span class="code-comment"># Identify business-critical sections</span>
+        executive_summary = self._find_section(chunks, [<span class="code-string">'executive summary'</span>, <span class="code-string">'overview'</span>])
+        financial_data = self._find_section(chunks, [<span class="code-string">'financial'</span>, <span class="code-string">'revenue'</span>, <span class="code-string">'performance'</span>])
+        recommendations = self._find_section(chunks, [<span class="code-string">'recommendations'</span>, <span class="code-string">'action items'</span>, <span class="code-string">'next steps'</span>])
+
+        business_prompt = f<span class="code-string">"""
+        Summarize this business document for executive review:
+
+        Document Type: {analysis.get('document_type', 'Business Report')}
+
+        Extract and highlight:
+        1. Key performance indicators and metrics
+        2. Strategic recommendations and action items
+        3. Risk factors and opportunities
+        4. Financial implications and ROI
+        5. Timeline and implementation priorities
+
+        Format for executive consumption with clear bullet points.
+        """</span>
+
+        business_summary = <span class="code-keyword">await</span> self._generate_ai_summary(
+            self._combine_priority_chunks([executive_summary, financial_data, recommendations]),
+            business_prompt
+        )
+
+        <span class="code-keyword">return</span> {
+            <span class="code-string">'summary_type'</span>: <span class="code-string">'business_report'</span>,
+            <span class="code-string">'main_summary'</span>: business_summary,
+            <span class="code-string">'insights'</span>: <span class="code-keyword">await</span> self._extract_business_insights(chunks),
+            <span class="code-string">'action_items'</span>: <span class="code-keyword">await</span> self._extract_action_items(chunks),
+            <span class="code-string">'metrics'</span>: <span class="code-keyword">await</span> self._extract_key_metrics(chunks)
+        }
+
+    <span class="code-keyword">def</span> <span class="code-function">_analyze_document_structure</span>(self, content: Dict) -> Dict:
+        <span class="code-string">"""
+        Analyze document characteristics to determine optimal processing strategy.
+        Uses pattern recognition to classify document type and complexity.
+        """</span>
+
+        full_text = content[<span class="code-string">'full_text'</span>].lower()
+        headers = [h.lower() <span class="code-keyword">for</span> h <span class="code-keyword">in</span> content[<span class="code-string">'headers'</span>]]
+
+        <span class="code-comment"># Pattern matching for document type classification</span>
+        doc_type = <span class="code-string">'general'</span>
+
+        <span class="code-keyword">if</span> any(keyword <span class="code-keyword">in</span> full_text <span class="code-keyword">for</span> keyword <span class="code-keyword">in</span> [<span class="code-string">'abstract'</span>, <span class="code-string">'methodology'</span>, <span class="code-string">'references'</span>, <span class="code-string">'citation'</span>]):
+            doc_type = <span class="code-string">'research_paper'</span>
+        <span class="code-keyword">elif</span> any(keyword <span class="code-keyword">in</span> full_text <span class="code-keyword">for</span> keyword <span class="code-keyword">in</span> [<span class="code-string">'revenue'</span>, <span class="code-string">'quarterly'</span>, <span class="code-string">'executive summary'</span>, <span class="code-string">'roi'</span>]):
+            doc_type = <span class="code-string">'business_report'</span>
+        <span class="code-keyword">elif</span> any(keyword <span class="code-keyword">in</span> full_text <span class="code-keyword">for</span> keyword <span class="code-keyword">in</span> [<span class="code-string">'installation'</span>, <span class="code-string">'configuration'</span>, <span class="code-string">'user manual'</span>, <span class="code-string">'api'</span>]):
+            doc_type = <span class="code-string">'technical_manual'</span>
+
+        <span class="code-keyword">return</span> {
+            <span class="code-string">'document_type'</span>: doc_type,
+            <span class="code-string">'page_count'</span>: len(content[<span class="code-string">'pages'</span>]),
+            <span class="code-string">'word_count'</span>: len(content[<span class="code-string">'full_text'</span>].split()),
+            <span class="code-string">'complexity_score'</span>: self._calculate_complexity(content),
+            <span class="code-string">'section_count'</span>: len(content[<span class="code-string">'sections'</span>]),
+            <span class="code-string">'has_structured_content'</span>: len(headers) > <span class="code-number">3</span>
+        }
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>⚙️ Technical Implementation Notes</h2>
+            <h3>Key Algorithms & Innovations</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>Intelligent Chunking:</strong> Context-aware content segmentation that preserves document structure</li>
+                <li><strong>Document Classification:</strong> Automated document type detection for specialized processing strategies</li>
+                <li><strong>Structure Preservation:</strong> Advanced header and section detection maintains document hierarchy</li>
+                <li><strong>Multi-Strategy Summarization:</strong> Specialized algorithms for research papers, business reports, and technical documents</li>
+                <li><strong>Importance Scoring:</strong> Priority-based content processing ensures critical information is highlighted</li>
+            </ul>
+
+            <h3>Why This Approach Works</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>Context-Aware Processing:</strong> Understands document structure for more accurate summarization</li>
+                <li><strong>Scalable Architecture:</strong> Handles documents from single pages to 100+ page reports</li>
+                <li><strong>Domain Expertise:</strong> Specialized strategies deliver relevant insights for different document types</li>
+                <li><strong>Quality Assurance:</strong> Multiple validation steps ensure summary accuracy and completeness</li>
+            </ul>
+        </div>
+
+        <div class="demo-links">
+            <a href="https://ai-pdf-summarizer-169218045868.us-west1.run.app/" target="_blank" class="demo-btn">🚀 Try Live Demo</a>
+            <a href="ai-pdf-summarizer.html" class="demo-btn secondary">📖 View Full Project Details</a>
+        </div>
+
+        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+            <a href="index.html">← Back to Portfolio</a> |
+            <a href="ai-pdf-summarizer.html">View Project Overview</a>
+        </nav>
+    </div>
+</body>
+</html>

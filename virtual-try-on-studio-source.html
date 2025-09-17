@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual Try-On Studio - Source Code</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #222;
+            background-color: #ffffff;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .back-nav {
+            margin-bottom: 20px;
+        }
+
+        .back-nav a {
+            color: #007BFF;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .back-nav a:hover {
+            text-decoration: underline;
+        }
+
+        .project-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            border-radius: 10px;
+        }
+
+        .project-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .project-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .content-section {
+            margin: 40px 0;
+            padding: 30px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border-left: 5px solid #4CAF50;
+        }
+
+        .content-section h2 {
+            color: #4CAF50;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .content-section h3 {
+            color: #333;
+            margin: 20px 0 10px 0;
+            font-size: 1.3rem;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #FFF8E1, #FFF3C4);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #4CAF50;
+            margin: 20px 0;
+        }
+
+        .code-container {
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        .code-header {
+            color: #569cd6;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .code-block {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #d4d4d4;
+        }
+
+        .code-comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+
+        .code-keyword {
+            color: #569cd6;
+        }
+
+        .code-string {
+            color: #ce9178;
+        }
+
+        .code-function {
+            color: #dcdcaa;
+        }
+
+        .code-number {
+            color: #b5cea8;
+        }
+
+        .demo-links {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .demo-btn {
+            display: inline-block;
+            background-color: #007BFF;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .demo-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .demo-btn.secondary {
+            background-color: #28a745;
+        }
+
+        .demo-btn.secondary:hover {
+            background-color: #218838;
+        }
+
+        @media (max-width: 768px) {
+            .project-header h1 {
+                font-size: 2rem;
+            }
+
+            .project-header p {
+                font-size: 1rem;
+            }
+
+            .demo-btn {
+                margin: 5px;
+                padding: 10px 20px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="virtual-try-on-studio.html">← Back to Project Overview</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>👗 Virtual Try-On Studio</h1>
+            <p>Core Source Code & AR Fashion Technology Implementation</p>
+
+            <div class="badges">
+                <span class="badge">React 19</span>
+                <span class="badge">TypeScript</span>
+                <span class="badge">WebGL</span>
+                <span class="badge">AR/3D Processing</span>
+            </div>
+        </div>
+
+        <div class="highlight-box">
+            <h3>🔍 About This Code Showcase</h3>
+            <p><strong>This curated code snippet demonstrates how the Virtual Try-On Studio performs 3D body mapping, realistic fabric simulation, and seamless AR integration for immersive fashion experiences.</strong></p>
+            <p>Full deployment scripts, API integrations, and proprietary details are omitted for clarity and security. This showcase highlights the core 3D rendering and virtual fitting algorithms.</p>
+        </div>
+
+        <div class="content-section">
+            <h2>🎯 Core Algorithm: 3D Body Mapping Engine</h2>
+            <p>The foundation of the Virtual Try-On Studio is its ability to create accurate 3D body models from camera input, perform realistic garment fitting, and render natural-looking virtual try-on experiences:</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 body_mapping_engine.ts</div>
+                <div class="code-block">
+<span class="code-keyword">import</span> * <span class="code-keyword">as</span> THREE <span class="code-keyword">from</span> <span class="code-string">'three'</span>;
+<span class="code-keyword">import</span> { MediaPipeHolistic } <span class="code-keyword">from</span> <span class="code-string">'@mediapipe/holistic'</span>;
+<span class="code-keyword">import</span> { FabricPhysics } <span class="code-keyword">from</span> <span class="code-string">'./fabric-physics'</span>;
+
+<span class="code-keyword">interface</span> <span class="code-function">BodyMeasurements</span> {
+  chest: number;
+  waist: number;
+  hips: number;
+  shoulders: number;
+  inseam: number;
+  armLength: number;
+  bodyHeight: number;
+}
+
+<span class="code-keyword">class</span> <span class="code-function">BodyMappingEngine</span> {
+  <span class="code-keyword">private</span> scene: THREE.Scene;
+  <span class="code-keyword">private</span> camera: THREE.PerspectiveCamera;
+  <span class="code-keyword">private</span> renderer: THREE.WebGLRenderer;
+  <span class="code-keyword">private</span> bodyMesh: THREE.Mesh;
+  <span class="code-keyword">private</span> holistic: MediaPipeHolistic;
+
+  <span class="code-comment">// Standard body reference points for clothing fitting</span>
+  <span class="code-keyword">private</span> bodyLandmarks = {
+    shoulders: [<span class="code-number">11</span>, <span class="code-number">12</span>], <span class="code-comment">// Left and right shoulder indices</span>
+    chest: [<span class="code-number">11</span>, <span class="code-number">12</span>, <span class="code-number">23</span>, <span class="code-number">24</span>], <span class="code-comment">// Chest measurement points</span>
+    waist: [<span class="code-number">23</span>, <span class="code-number">24</span>], <span class="code-comment">// Hip landmarks for waist estimation</span>
+    hips: [<span class="code-number">23</span>, <span class="code-number">24</span>], <span class="code-comment">// Hip measurement points</span>
+    arms: [<span class="code-number">11</span>, <span class="code-number">13</span>, <span class="code-number">15</span>, <span class="code-number">17</span>, <span class="code-number">19</span>], <span class="code-comment">// Arm chain: shoulder to fingertips</span>
+    legs: [<span class="code-number">23</span>, <span class="code-number">25</span>, <span class="code-number">27</span>, <span class="code-number">29</span>, <span class="code-number">31</span>] <span class="code-comment">// Leg chain: hip to ankle</span>
+  };
+
+  <span class="code-comment">// Garment categories with fitting parameters</span>
+  <span class="code-keyword">private</span> garmentTypes = {
+    shirt: {
+      fitPoints: [<span class="code-string">'shoulders'</span>, <span class="code-string">'chest'</span>, <span class="code-string">'armLength'</span>],
+      allowance: { chest: <span class="code-number">4</span>, shoulders: <span class="code-number">2</span>, armLength: <span class="code-number">1</span> }
+    },
+    pants: {
+      fitPoints: [<span class="code-string">'waist'</span>, <span class="code-string">'hips'</span>, <span class="code-string">'inseam'</span>],
+      allowance: { waist: <span class="code-number">3</span>, hips: <span class="code-number">2</span>, inseam: <span class="code-number">0</span> }
+    },
+    dress: {
+      fitPoints: [<span class="code-string">'chest'</span>, <span class="code-string">'waist'</span>, <span class="code-string">'hips'</span>, <span class="code-string">'bodyHeight'</span>],
+      allowance: { chest: <span class="code-number">3</span>, waist: <span class="code-number">2</span>, hips: <span class="code-number">3</span>, bodyHeight: <span class="code-number">0</span> }
+    }
+  };
+
+  <span class="code-keyword">constructor</span>(canvas: HTMLCanvasElement) {
+    this.initializeThreeJS(canvas);
+    this.initializeMediaPipe();
+  }
+
+  <span class="code-keyword">async</span> <span class="code-function">createBodyModel</span>(videoFrame: HTMLVideoElement): Promise&lt;BodyMeasurements&gt; {
+    <span class="code-string">"""
+    Create accurate 3D body model from camera input.
+    Analyzes pose landmarks and estimates body measurements for garment fitting.
+
+    Args:
+        videoFrame: Live video feed from user's camera
+
+    Returns:
+        Body measurements object with key dimensions
+    """</span>
+
+    <span class="code-comment">// Step 1: Extract pose landmarks from video frame</span>
+    <span class="code-keyword">const</span> poseResults = <span class="code-keyword">await</span> this.holistic.send({ image: videoFrame });
+
+    <span class="code-keyword">if</span> (!poseResults.poseLandmarks) {
+      <span class="code-keyword">throw</span> <span class="code-keyword">new</span> Error(<span class="code-string">'Unable to detect pose - please ensure full body is visible'</span>);
+    }
+
+    <span class="code-comment">// Step 2: Calculate real-world measurements from landmarks</span>
+    <span class="code-keyword">const</span> measurements = this.calculateBodyMeasurements(poseResults.poseLandmarks);
+
+    <span class="code-comment">// Step 3: Generate 3D body mesh for virtual fitting</span>
+    <span class="code-keyword">const</span> bodyMesh = this.generateBodyMesh(measurements, poseResults.poseLandmarks);
+
+    <span class="code-comment">// Step 4: Optimize mesh for clothing simulation</span>
+    <span class="code-keyword">const</span> optimizedMesh = this.optimizeMeshForClothing(bodyMesh);
+
+    <span class="code-comment">// Step 5: Update 3D scene with new body model</span>
+    this.updateBodyMesh(optimizedMesh);
+
+    <span class="code-keyword">return</span> measurements;
+  }
+
+  <span class="code-keyword">private</span> <span class="code-function">calculateBodyMeasurements</span>(landmarks: any[]): BodyMeasurements {
+    <span class="code-string">"""
+    Calculate precise body measurements from pose landmarks.
+    Uses anatomical proportions and depth estimation for accuracy.
+    """</span>
+
+    <span class="code-comment">// Calculate shoulder width using landmark distance</span>
+    <span class="code-keyword">const</span> leftShoulder = landmarks[this.bodyLandmarks.shoulders[<span class="code-number">0</span>]];
+    <span class="code-keyword">const</span> rightShoulder = landmarks[this.bodyLandmarks.shoulders[<span class="code-number">1</span>]];
+    <span class="code-keyword">const</span> shoulderWidth = this.calculateDistance3D(leftShoulder, rightShoulder);
+
+    <span class="code-comment">// Estimate chest circumference using shoulder width and anatomical ratios</span>
+    <span class="code-keyword">const</span> chestCircumference = shoulderWidth * <span class="code-number">2.1</span>; <span class="code-comment">// Average anatomical ratio</span>
+
+    <span class="code-comment">// Calculate waist measurement using hip landmarks</span>
+    <span class="code-keyword">const</span> leftHip = landmarks[this.bodyLandmarks.waist[<span class="code-number">0</span>]];
+    <span class="code-keyword">const</span> rightHip = landmarks[this.bodyLandmarks.waist[<span class="code-number">1</span>]];
+    <span class="code-keyword">const</span> hipWidth = this.calculateDistance3D(leftHip, rightHip);
+    <span class="code-keyword">const</span> waistCircumference = hipWidth * <span class="code-number">1.8</span>; <span class="code-comment">// Waist typically smaller than hips</span>
+
+    <span class="code-comment">// Calculate hip circumference</span>
+    <span class="code-keyword">const</span> hipCircumference = hipWidth * <span class="code-number">2.0</span>;
+
+    <span class="code-comment">// Calculate arm length (shoulder to wrist)</span>
+    <span class="code-keyword">const</span> leftWrist = landmarks[<span class="code-number">15</span>]; <span class="code-comment">// Left wrist landmark</span>
+    <span class="code-keyword">const</span> armLength = this.calculateDistance3D(leftShoulder, leftWrist);
+
+    <span class="code-comment">// Calculate inseam (hip to ankle)</span>
+    <span class="code-keyword">const</span> leftAnkle = landmarks[<span class="code-number">27</span>]; <span class="code-comment">// Left ankle landmark</span>
+    <span class="code-keyword">const</span> inseam = this.calculateDistance3D(leftHip, leftAnkle) * <span class="code-number">0.8</span>; <span class="code-comment">// Adjust for inseam vs outer leg</span>
+
+    <span class="code-comment">// Calculate total body height</span>
+    <span class="code-keyword">const</span> head = landmarks[<span class="code-number">0</span>]; <span class="code-comment">// Head top landmark</span>
+    <span class="code-keyword">const</span> bodyHeight = this.calculateDistance3D(head, leftAnkle);
+
+    <span class="code-keyword">return</span> {
+      chest: chestCircumference,
+      waist: waistCircumference,
+      hips: hipCircumference,
+      shoulders: shoulderWidth,
+      armLength: armLength,
+      inseam: inseam,
+      bodyHeight: bodyHeight
+    };
+  }
+
+  <span class="code-keyword">async</span> <span class="code-function">fitGarment</span>(
+    garmentModel: THREE.Object3D,
+    garmentType: string,
+    bodyMeasurements: BodyMeasurements
+  ): Promise&lt;THREE.Object3D&gt; {
+    <span class="code-string">"""
+    Fit virtual garment to user's body measurements.
+    Applies realistic fabric physics and ensures proper sizing.
+    """</span>
+
+    <span class="code-comment">// Get fitting parameters for garment type</span>
+    <span class="code-keyword">const</span> fittingParams = this.garmentTypes[garmentType];
+    <span class="code-keyword">if</span> (!fittingParams) {
+      <span class="code-keyword">throw</span> <span class="code-keyword">new</span> Error(<span class="code-string">`Unknown garment type: ${garmentType}`</span>);
+    }
+
+    <span class="code-comment">// Step 1: Scale garment to body measurements</span>
+    <span class="code-keyword">const</span> scaledGarment = this.scaleGarmentToBody(garmentModel, bodyMeasurements, fittingParams);
+
+    <span class="code-comment">// Step 2: Position garment on body model</span>
+    <span class="code-keyword">const</span> positionedGarment = this.positionGarmentOnBody(scaledGarment, garmentType);
+
+    <span class="code-comment">// Step 3: Apply fabric physics simulation</span>
+    <span class="code-keyword">const</span> physicsSim = <span class="code-keyword">new</span> FabricPhysics(scaledGarment, this.bodyMesh);
+    <span class="code-keyword">const</span> simulatedGarment = <span class="code-keyword">await</span> physicsSim.simulate(<span class="code-number">60</span>); <span class="code-comment">// 60 frames for stable simulation</span>
+
+    <span class="code-comment">// Step 4: Add realistic fabric behavior (draping, wrinkles)</span>
+    <span class="code-keyword">const</span> finalGarment = this.addFabricDetails(simulatedGarment, garmentType);
+
+    <span class="code-comment">// Step 5: Optimize for real-time rendering</span>
+    this.optimizeForRendering(finalGarment);
+
+    <span class="code-keyword">return</span> finalGarment;
+  }
+
+  <span class="code-keyword">private</span> <span class="code-function">scaleGarmentToBody</span>(
+    garment: THREE.Object3D,
+    measurements: BodyMeasurements,
+    fittingParams: any
+  ): THREE.Object3D {
+    <span class="code-string">"""
+    Scale garment geometry to match user's body measurements.
+    Maintains garment proportions while ensuring proper fit.
+    """</span>
+
+    <span class="code-keyword">const</span> scaledGarment = garment.clone();
+
+    <span class="code-comment">// Calculate scaling factors for each dimension</span>
+    <span class="code-keyword">const</span> scaleFactors = {
+      x: <span class="code-number">1.0</span>, <span class="code-comment">// Width scaling</span>
+      y: <span class="code-number">1.0</span>, <span class="code-comment">// Height scaling</span>
+      z: <span class="code-number">1.0</span>  <span class="code-comment">// Depth scaling</span>
+    };
+
+    <span class="code-comment">// Adjust scaling based on fit points</span>
+    fittingParams.fitPoints.forEach(fitPoint => {
+      <span class="code-keyword">switch</span> (fitPoint) {
+        <span class="code-keyword">case</span> <span class="code-string">'chest'</span>:
+          <span class="code-keyword">const</span> targetChest = measurements.chest + fittingParams.allowance.chest;
+          scaleFactors.x = Math.max(scaleFactors.x, targetChest / <span class="code-number">100</span>); <span class="code-comment">// Base size 100cm</span>
+          scaleFactors.z = Math.max(scaleFactors.z, targetChest / <span class="code-number">100</span>);
+          <span class="code-keyword">break</span>;
+
+        <span class="code-keyword">case</span> <span class="code-string">'shoulders'</span>:
+          <span class="code-keyword">const</span> targetShoulders = measurements.shoulders + fittingParams.allowance.shoulders;
+          scaleFactors.x = Math.max(scaleFactors.x, targetShoulders / <span class="code-number">45</span>); <span class="code-comment">// Base shoulder width</span>
+          <span class="code-keyword">break</span>;
+
+        <span class="code-keyword">case</span> <span class="code-string">'bodyHeight'</span>:
+          <span class="code-keyword">const</span> targetHeight = measurements.bodyHeight + fittingParams.allowance.bodyHeight;
+          scaleFactors.y = targetHeight / <span class="code-number">170</span>; <span class="code-comment">// Base height 170cm</span>
+          <span class="code-keyword">break</span>;
+
+        <span class="code-keyword">case</span> <span class="code-string">'armLength'</span>:
+          <span class="code-comment">// Adjust sleeve length specifically</span>
+          <span class="code-keyword">const</span> targetArmLength = measurements.armLength + fittingParams.allowance.armLength;
+          this.adjustSleeveLength(scaledGarment, targetArmLength);
+          <span class="code-keyword">break</span>;
+      }
+    });
+
+    <span class="code-comment">// Apply scaling to garment mesh</span>
+    scaledGarment.scale.set(scaleFactors.x, scaleFactors.y, scaleFactors.z);
+
+    <span class="code-keyword">return</span> scaledGarment;
+  }
+
+  <span class="code-keyword">private</span> <span class="code-function">calculateDistance3D</span>(point1: any, point2: any): number {
+    <span class="code-string">"""
+    Calculate 3D distance between two landmark points.
+    Accounts for depth information from pose estimation.
+    """</span>
+
+    <span class="code-keyword">const</span> dx = point2.x - point1.x;
+    <span class="code-keyword">const</span> dy = point2.y - point1.y;
+    <span class="code-keyword">const</span> dz = (point2.z || <span class="code-number">0</span>) - (point1.z || <span class="code-number">0</span>); <span class="code-comment">// Handle 2D landmarks</span>
+
+    <span class="code-comment">// Convert normalized coordinates to real-world measurements (cm)</span>
+    <span class="code-keyword">const</span> distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
+
+    <span class="code-comment">// Scale factor based on average human proportions</span>
+    <span class="code-keyword">const</span> scaleFactor = <span class="code-number">170</span>; <span class="code-comment">// Assumes 170cm average height</span>
+
+    <span class="code-keyword">return</span> distance * scaleFactor;
+  }
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🧵 Advanced Fabric Simulation Engine</h2>
+            <p>The fabric simulation system provides realistic cloth behavior, natural draping, and accurate material properties for immersive virtual try-on experiences:</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 fabric_physics_engine.ts</div>
+                <div class="code-block">
+<span class="code-keyword">class</span> <span class="code-function">FabricPhysics</span> {
+  <span class="code-keyword">private</span> clothMesh: THREE.Mesh;
+  <span class="code-keyword">private</span> bodyMesh: THREE.Mesh;
+  <span class="code-keyword">private</span> constraints: Constraint[] = [];
+  <span class="code-keyword">private</span> particles: Particle[] = [];
+
+  <span class="code-comment">// Fabric material properties for realistic simulation</span>
+  <span class="code-keyword">private</span> materialProperties = {
+    cotton: { stiffness: <span class="code-number">0.3</span>, damping: <span class="code-number">0.8</span>, density: <span class="code-number">1.5</span> },
+    silk: { stiffness: <span class="code-number">0.1</span>, damping: <span class="code-number">0.9</span>, density: <span class="code-number">1.3</span> },
+    denim: { stiffness: <span class="code-number">0.7</span>, damping: <span class="code-number">0.6</span>, density: <span class="code-number">1.8</span> },
+    leather: { stiffness: <span class="code-number">0.9</span>, damping: <span class="code-number">0.4</span>, density: <span class="code-number">2.2</span> },
+    polyester: { stiffness: <span class="code-number">0.4</span>, damping: <span class="code-number">0.7</span>, density: <span class="code-number">1.4</span> }
+  };
+
+  <span class="code-keyword">constructor</span>(clothMesh: THREE.Mesh, bodyMesh: THREE.Mesh) {
+    this.clothMesh = clothMesh;
+    this.bodyMesh = bodyMesh;
+    this.initializePhysicsSystem();
+  }
+
+  <span class="code-keyword">async</span> <span class="code-function">simulate</span>(frames: number, materialType: string = <span class="code-string">'cotton'</span>): Promise&lt;THREE.Mesh&gt; {
+    <span class="code-string">"""
+    Run fabric physics simulation for realistic cloth behavior.
+    Simulates gravity, wind, collision with body, and material properties.
+
+    Args:
+        frames: Number of simulation steps for stability
+        materialType: Fabric material affecting draping behavior
+
+    Returns:
+        Updated mesh with realistic fabric deformation
+    """</span>
+
+    <span class="code-keyword">const</span> material = this.materialProperties[materialType] || this.materialProperties.cotton;
+
+    <span class="code-comment">// Initialize particle system from mesh vertices</span>
+    this.initializeParticles(material);
+
+    <span class="code-comment">// Create constraints for fabric integrity</span>
+    this.createFabricConstraints();
+
+    <span class="code-comment">// Run physics simulation</span>
+    <span class="code-keyword">for</span> (<span class="code-keyword">let</span> frame = <span class="code-number">0</span>; frame < frames; frame++) {
+      <span class="code-comment">// Apply forces (gravity, wind, body interaction)</span>
+      this.applyForces(material);
+
+      <span class="code-comment">// Update particle positions</span>
+      this.updateParticles(material);
+
+      <span class="code-comment">// Satisfy constraints (maintain fabric structure)</span>
+      this.satisfyConstraints();
+
+      <span class="code-comment">// Handle collision with body mesh</span>
+      this.handleBodyCollisions();
+
+      <span class="code-comment">// Update mesh geometry with new particle positions</span>
+      <span class="code-keyword">if</span> (frame % <span class="code-number">5</span> === <span class="code-number">0</span>) { <span class="code-comment">// Update mesh every 5 frames for performance</span>
+        this.updateMeshFromParticles();
+      }
+    }
+
+    <span class="code-comment">// Final mesh update and smoothing</span>
+    this.updateMeshFromParticles();
+    this.smoothMeshSurface();
+
+    <span class="code-keyword">return</span> this.clothMesh;
+  }
+
+  <span class="code-keyword">private</span> <span class="code-function">initializeParticles</span>(material: any): <span class="code-keyword">void</span> {
+    <span class="code-string">"""
+    Convert mesh vertices to physics particles for simulation.
+    Each vertex becomes a particle with mass and velocity.
+    """</span>
+
+    <span class="code-keyword">const</span> geometry = this.clothMesh.geometry;
+    <span class="code-keyword">const</span> positions = geometry.attributes.position.array;
+
+    this.particles = [];
+
+    <span class="code-keyword">for</span> (<span class="code-keyword">let</span> i = <span class="code-number">0</span>; i < positions.length; i += <span class="code-number">3</span>) {
+      <span class="code-keyword">const</span> particle = <span class="code-keyword">new</span> Particle(
+        <span class="code-keyword">new</span> THREE.Vector3(positions[i], positions[i + <span class="code-number">1</span>], positions[i + <span class="code-number">2</span>]),
+        material.density
+      );
+
+      <span class="code-comment">// Pin certain particles (e.g., collar, shoulders) to body</span>
+      <span class="code-keyword">if</span> (this.shouldPinParticle(particle.position)) {
+        particle.pinned = <span class="code-keyword">true</span>;
+      }
+
+      this.particles.push(particle);
+    }
+  }
+
+  <span class="code-keyword">private</span> <span class="code-function">applyForces</span>(material: any): <span class="code-keyword">void</span> {
+    <span class="code-string">"""
+    Apply physical forces to particles for realistic behavior.
+    Includes gravity, air resistance, and fabric tension.
+    """</span>
+
+    <span class="code-keyword">const</span> gravity = <span class="code-keyword">new</span> THREE.Vector3(<span class="code-number">0</span>, -<span class="code-number">9.81</span>, <span class="code-number">0</span>); <span class="code-comment">// Gravity force</span>
+    <span class="code-keyword">const</span> wind = <span class="code-keyword">new</span> THREE.Vector3(<span class="code-number">0.1</span>, <span class="code-number">0</span>, <span class="code-number">0.2</span>); <span class="code-comment">// Subtle wind effect</span>
+
+    this.particles.forEach(particle => {
+      <span class="code-keyword">if</span> (particle.pinned) <span class="code-keyword">return</span>; <span class="code-comment">// Skip pinned particles</span>
+
+      <span class="code-comment">// Apply gravity based on particle mass</span>
+      <span class="code-keyword">const</span> gravityForce = gravity.clone().multiplyScalar(particle.mass);
+      particle.addForce(gravityForce);
+
+      <span class="code-comment">// Apply wind resistance</span>
+      <span class="code-keyword">const</span> windResistance = wind.clone().multiplyScalar(<span class="code-number">0.01</span>);
+      particle.addForce(windResistance);
+
+      <span class="code-comment">// Apply damping to reduce oscillations</span>
+      <span class="code-keyword">const</span> damping = particle.velocity.clone().multiplyScalar(-material.damping * <span class="code-number">0.1</span>);
+      particle.addForce(damping);
+    });
+  }
+
+  <span class="code-keyword">private</span> <span class="code-function">satisfyConstraints</span>(): <span class="code-keyword">void</span> {
+    <span class="code-string">"""
+    Maintain fabric structural integrity by satisfying distance constraints.
+    Prevents fabric from stretching beyond realistic limits.
+    """</span>
+
+    <span class="code-comment">// Multiple constraint satisfaction iterations for stability</span>
+    <span class="code-keyword">for</span> (<span class="code-keyword">let</span> iteration = <span class="code-number">0</span>; iteration < <span class="code-number">3</span>; iteration++) {
+      this.constraints.forEach(constraint => {
+        <span class="code-keyword">const</span> p1 = this.particles[constraint.particle1Index];
+        <span class="code-keyword">const</span> p2 = this.particles[constraint.particle2Index];
+
+        <span class="code-comment">// Calculate current distance between particles</span>
+        <span class="code-keyword">const</span> delta = p2.position.clone().sub(p1.position);
+        <span class="code-keyword">const</span> currentDistance = delta.length();
+        <span class="code-keyword">const</span> difference = currentDistance - constraint.restLength;
+
+        <span class="code-comment">// Apply correction to maintain rest length</span>
+        <span class="code-keyword">if</span> (Math.abs(difference) > <span class="code-number">0.001</span>) { <span class="code-comment">// Threshold to avoid micro-adjustments</span>
+          <span class="code-keyword">const</span> correction = delta.normalize().multiplyScalar(difference * <span class="code-number">0.5</span>);
+
+          <span class="code-keyword">if</span> (!p1.pinned) p1.position.add(correction);
+          <span class="code-keyword">if</span> (!p2.pinned) p2.position.sub(correction);
+        }
+      });
+    }
+  }
+
+  <span class="code-keyword">private</span> <span class="code-function">handleBodyCollisions</span>(): <span class="code-keyword">void</span> {
+    <span class="code-string">"""
+    Handle collisions between fabric and body mesh.
+    Prevents fabric from intersecting with the body model.
+    """</span>
+
+    <span class="code-keyword">const</span> bodyBoundingBox = <span class="code-keyword">new</span> THREE.Box3().setFromObject(this.bodyMesh);
+
+    this.particles.forEach(particle => {
+      <span class="code-keyword">if</span> (particle.pinned) <span class="code-keyword">return</span>;
+
+      <span class="code-comment">// Check if particle is inside body bounding box</span>
+      <span class="code-keyword">if</span> (bodyBoundingBox.containsPoint(particle.position)) {
+        <span class="code-comment">// Find closest point on body surface</span>
+        <span class="code-keyword">const</span> closestPoint = this.findClosestPointOnBody(particle.position);
+
+        <span class="code-comment">// Move particle to body surface with small offset</span>
+        <span class="code-keyword">const</span> normal = particle.position.clone().sub(closestPoint).normalize();
+        <span class="code-keyword">const</span> offset = normal.multiplyScalar(<span class="code-number">0.5</span>); <span class="code-comment">// 0.5cm offset from body</span>
+
+        particle.position.copy(closestPoint.add(offset));
+        particle.velocity.multiplyScalar(<span class="code-number">0.5</span>); <span class="code-comment">// Reduce velocity after collision</span>
+      }
+    });
+  }
+
+  <span class="code-keyword">private</span> <span class="code-function">updateMeshFromParticles</span>(): <span class="code-keyword">void</span> {
+    <span class="code-string">"""
+    Update mesh geometry with new particle positions.
+    Transfers physics simulation results back to visual mesh.
+    """</span>
+
+    <span class="code-keyword">const</span> geometry = this.clothMesh.geometry;
+    <span class="code-keyword">const</span> positions = geometry.attributes.position.array;
+
+    <span class="code-comment">// Update vertex positions from particle positions</span>
+    <span class="code-keyword">for</span> (<span class="code-keyword">let</span> i = <span class="code-number">0</span>; i < this.particles.length; i++) {
+      <span class="code-keyword">const</span> particle = this.particles[i];
+      positions[i * <span class="code-number">3</span>] = particle.position.x;
+      positions[i * <span class="code-number">3</span> + <span class="code-number">1</span>] = particle.position.y;
+      positions[i * <span class="code-number">3</span> + <span class="code-number">2</span>] = particle.position.z;
+    }
+
+    <span class="code-comment">// Mark geometry for update</span>
+    geometry.attributes.position.needsUpdate = <span class="code-keyword">true</span>;
+
+    <span class="code-comment">// Recalculate normals for proper lighting</span>
+    geometry.computeVertexNormals();
+  }
+
+  <span class="code-keyword">private</span> <span class="code-function">shouldPinParticle</span>(position: THREE.Vector3): boolean {
+    <span class="code-string">"""
+    Determine if a particle should be pinned to the body.
+    Typically applies to collar, shoulder seams, and waistbands.
+    """</span>
+
+    <span class="code-comment">// Pin particles near shoulder area (y > 1.4 and close to body center)</span>
+    <span class="code-keyword">if</span> (position.y > <span class="code-number">1.4</span> <span class="code-keyword">&&</span> Math.abs(position.x) < <span class="code-number">0.3</span>) {
+      <span class="code-keyword">return</span> <span class="code-keyword">true</span>;
+    }
+
+    <span class="code-comment">// Pin particles at collar level</span>
+    <span class="code-keyword">if</span> (position.y > <span class="code-number">1.6</span> <span class="code-keyword">&&</span> Math.abs(position.z) < <span class="code-number">0.1</span>) {
+      <span class="code-keyword">return</span> <span class="code-keyword">true</span>;
+    }
+
+    <span class="code-keyword">return</span> <span class="code-keyword">false</span>;
+  }
+}
+
+<span class="code-comment">// Particle class for physics simulation</span>
+<span class="code-keyword">class</span> <span class="code-function">Particle</span> {
+  position: THREE.Vector3;
+  oldPosition: THREE.Vector3;
+  velocity: THREE.Vector3;
+  force: THREE.Vector3;
+  mass: number;
+  pinned: boolean = <span class="code-keyword">false</span>;
+
+  <span class="code-keyword">constructor</span>(position: THREE.Vector3, mass: number) {
+    this.position = position.clone();
+    this.oldPosition = position.clone();
+    this.velocity = <span class="code-keyword">new</span> THREE.Vector3();
+    this.force = <span class="code-keyword">new</span> THREE.Vector3();
+    this.mass = mass;
+  }
+
+  <span class="code-function">addForce</span>(force: THREE.Vector3): <span class="code-keyword">void</span> {
+    this.force.add(force);
+  }
+
+  <span class="code-function">update</span>(damping: number): <span class="code-keyword">void</span> {
+    <span class="code-keyword">if</span> (this.pinned) <span class="code-keyword">return</span>;
+
+    <span class="code-comment">// Verlet integration for stable physics</span>
+    <span class="code-keyword">const</span> acceleration = this.force.clone().divideScalar(this.mass);
+    <span class="code-keyword">const</span> newPosition = this.position.clone()
+      .multiplyScalar(<span class="code-number">2</span>)
+      .sub(this.oldPosition)
+      .add(acceleration.multiplyScalar(<span class="code-number">0.016</span> * <span class="code-number">0.016</span>)); <span class="code-comment">// dt^2 for 60fps</span>
+
+    this.oldPosition.copy(this.position);
+    this.position.copy(newPosition);
+    this.force.set(<span class="code-number">0</span>, <span class="code-number">0</span>, <span class="code-number">0</span>); <span class="code-comment">// Reset forces</span>
+  }
+}
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>⚙️ Technical Implementation Notes</h2>
+            <h3>Key Algorithms & Innovations</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>3D Body Mapping:</strong> MediaPipe pose estimation for accurate body dimension calculation</li>
+                <li><strong>Fabric Physics:</strong> Verlet integration and constraint solving for realistic cloth simulation</li>
+                <li><strong>Collision Detection:</strong> Advanced algorithms prevent fabric-body intersection</li>
+                <li><strong>Material Properties:</strong> Realistic fabric behavior based on material characteristics</li>
+                <li><strong>Real-time Rendering:</strong> Optimized Three.js pipeline for smooth AR experience</li>
+            </ul>
+
+            <h3>Why This Approach Works</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>Photorealistic Results:</strong> Advanced physics simulation creates believable virtual try-on experience</li>
+                <li><strong>Accurate Fitting:</strong> Precise body measurements ensure proper garment sizing</li>
+                <li><strong>Material Authenticity:</strong> Different fabric behaviors provide realistic draping and movement</li>
+                <li><strong>Performance Optimized:</strong> Efficient algorithms enable real-time interaction on consumer devices</li>
+            </ul>
+        </div>
+
+        <div class="demo-links">
+            <a href="https://virtual-try-on-studio-169218045868.us-west1.run.app/" target="_blank" class="demo-btn">🚀 Try Live Demo</a>
+            <a href="virtual-try-on-studio.html" class="demo-btn secondary">📖 View Full Project Details</a>
+        </div>
+
+        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+            <a href="index.html">← Back to Portfolio</a> |
+            <a href="virtual-try-on-studio.html">View Project Overview</a>
+        </nav>
+    </div>
+</body>
+</html>

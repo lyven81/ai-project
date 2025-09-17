@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chinese Traditional Calendar - Source Code</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #222;
+            background-color: #ffffff;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .back-nav {
+            margin-bottom: 20px;
+        }
+
+        .back-nav a {
+            color: #007BFF;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .back-nav a:hover {
+            text-decoration: underline;
+        }
+
+        .project-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #E91E63, #C2185B);
+            color: white;
+            border-radius: 10px;
+        }
+
+        .project-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .project-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .content-section {
+            margin: 40px 0;
+            padding: 30px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border-left: 5px solid #E91E63;
+        }
+
+        .content-section h2 {
+            color: #E91E63;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .content-section h3 {
+            color: #333;
+            margin: 20px 0 10px 0;
+            font-size: 1.3rem;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #FFF8E1, #FFF3C4);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #E91E63;
+            margin: 20px 0;
+        }
+
+        .code-container {
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        .code-header {
+            color: #569cd6;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .code-block {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #d4d4d4;
+        }
+
+        .code-comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+
+        .code-keyword {
+            color: #569cd6;
+        }
+
+        .code-string {
+            color: #ce9178;
+        }
+
+        .code-function {
+            color: #dcdcaa;
+        }
+
+        .code-number {
+            color: #b5cea8;
+        }
+
+        .demo-links {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .demo-btn {
+            display: inline-block;
+            background-color: #007BFF;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .demo-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .demo-btn.secondary {
+            background-color: #28a745;
+        }
+
+        .demo-btn.secondary:hover {
+            background-color: #218838;
+        }
+
+        @media (max-width: 768px) {
+            .project-header h1 {
+                font-size: 2rem;
+            }
+
+            .project-header p {
+                font-size: 1rem;
+            }
+
+            .demo-btn {
+                margin: 5px;
+                padding: 10px 20px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="chinese-traditional-calendar.html">← Back to Project Overview</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>🗓️ Chinese Traditional Calendar</h1>
+            <p>Core Source Code & Cultural Intelligence Implementation</p>
+
+            <div class="badges">
+                <span class="badge">Python 3.9</span>
+                <span class="badge">Streamlit</span>
+                <span class="badge">Cultural AI</span>
+                <span class="badge">Lunar Calendar</span>
+            </div>
+        </div>
+
+        <div class="highlight-box">
+            <h3>🔍 About This Code Showcase</h3>
+            <p><strong>This curated code snippet demonstrates how the Chinese Traditional Calendar integrates lunar calendar calculations, traditional festival recognition, and cultural wisdom for authentic cultural experiences.</strong></p>
+            <p>Full deployment scripts, API integrations, and proprietary details are omitted for clarity and security. This showcase highlights the core cultural intelligence and calendar computation algorithms.</p>
+        </div>
+
+        <div class="content-section">
+            <h2>🌙 Core Algorithm: Lunar Calendar Intelligence Engine</h2>
+            <p>The foundation of the Chinese Traditional Calendar is its ability to accurately calculate lunar dates, identify traditional festivals, and provide culturally relevant wisdom and guidance:</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 lunar_calendar_engine.py</div>
+                <div class="code-block">
+<span class="code-keyword">import</span> datetime
+<span class="code-keyword">import</span> google.generativeai <span class="code-keyword">as</span> genai
+<span class="code-keyword">from</span> typing <span class="code-keyword">import</span> Dict, List, Optional, Tuple
+<span class="code-keyword">import</span> math
+
+<span class="code-keyword">class</span> <span class="code-function">ChineseLunarCalendar</span>:
+    <span class="code-string">"""
+    Advanced lunar calendar system that combines astronomical calculations
+    with traditional Chinese cultural knowledge for authentic calendar experiences.
+    """</span>
+
+    <span class="code-keyword">def</span> <span class="code-function">__init__</span>(self, api_key: str):
+        genai.configure(api_key=api_key)
+        self.cultural_ai = genai.GenerativeModel(<span class="code-string">'gemini-pro'</span>)
+
+        <span class="code-comment"># Traditional Chinese zodiac animals with cultural significance</span>
+        self.zodiac_animals = [
+            {<span class="code-string">'name'</span>: <span class="code-string">'鼠'</span>, <span class="code-string">'english'</span>: <span class="code-string">'Rat'</span>, <span class="code-string">'traits'</span>: [<span class="code-string">'intelligent'</span>, <span class="code-string">'adaptable'</span>, <span class="code-string">'resourceful'</span>]},
+            {<span class="code-string">'name'</span>: <span class="code-string">'牛'</span>, <span class="code-string">'english'</span>: <span class="code-string">'Ox'</span>, <span class="code-string">'traits'</span>: [<span class="code-string">'reliable'</span>, <span class="code-string">'patient'</span>, <span class="code-string">'methodical'</span>]},
+            {<span class="code-string">'name'</span>: <span class="code-string">'虎'</span>, <span class="code-string">'english'</span>: <span class="code-string">'Tiger'</span>, <span class="code-string">'traits'</span>: [<span class="code-string">'brave'</span>, <span class="code-string">'confident'</span>, <span class="code-string">'charismatic'</span>]},
+            {<span class="code-string">'name'</span>: <span class="code-string">'兔'</span>, <span class="code-string">'english'</span>: <span class="code-string">'Rabbit'</span>, <span class="code-string">'traits'</span>: [<span class="code-string">'gentle'</span>, <span class="code-string">'elegant'</span>, <span class="code-string">'diplomatic'</span>]}
+        ]
+
+        <span class="code-comment"># Traditional festivals with cultural significance</span>
+        self.traditional_festivals = {
+            <span class="code-string">'spring_festival'</span>: {<span class="code-string">'name'</span>: <span class="code-string">'春节'</span>, <span class="code-string">'significance'</span>: <span class="code-string">'New Year celebration'</span>},
+            <span class="code-string">'qingming'</span>: {<span class="code-string">'name'</span>: <span class="code-string">'清明节'</span>, <span class="code-string">'significance'</span>: <span class="code-string">'Tomb sweeping day'</span>},
+            <span class="code-string">'mid_autumn'</span>: {<span class="code-string">'name'</span>: <span class="code-string">'中秋节'</span>, <span class="code-string">'significance'</span>: <span class="code-string">'Moon festival'</span>},
+            <span class="code-string">'dragon_boat'</span>: {<span class="code-string">'name'</span>: <span class="code-string">'端午节'</span>, <span class="code-string">'significance'</span>: <span class="code-string">'Dragon boat festival'</span>}
+        }
+
+        <span class="code-comment"># Five elements (Wu Xing) theory for fortune analysis</span>
+        self.five_elements = {
+            <span class="code-string">'wood'</span>: {<span class="code-string">'chinese'</span>: <span class="code-string">'木'</span>, <span class="code-string">'color'</span>: <span class="code-string">'green'</span>, <span class="code-string">'season'</span>: <span class="code-string">'spring'</span>},
+            <span class="code-string">'fire'</span>: {<span class="code-string">'chinese'</span>: <span class="code-string">'火'</span>, <span class="code-string">'color'</span>: <span class="code-string">'red'</span>, <span class="code-string">'season'</span>: <span class="code-string">'summer'</span>},
+            <span class="code-string">'earth'</span>: {<span class="code-string">'chinese'</span>: <span class="code-string">'土'</span>, <span class="code-string">'color'</span>: <span class="code-string">'yellow'</span>, <span class="code-string">'season'</span>: <span class="code-string">'late_summer'</span>},
+            <span class="code-string">'metal'</span>: {<span class="code-string">'chinese'</span>: <span class="code-string">'金'</span>, <span class="code-string">'color'</span>: <span class="code-string">'white'</span>, <span class="code-string">'season'</span>: <span class="code-string">'autumn'</span>},
+            <span class="code-string">'water'</span>: {<span class="code-string">'chinese'</span>: <span class="code-string">'水'</span>, <span class="code-string">'color'</span>: <span class="code-string">'black'</span>, <span class="code-string">'season'</span>: <span class="code-string">'winter'</span>}
+        }
+
+    <span class="code-keyword">def</span> <span class="code-function">calculate_lunar_date</span>(self, gregorian_date: datetime.date) -> Dict:
+        <span class="code-string">"""
+        Convert Gregorian date to Chinese lunar calendar with cultural context.
+        Includes zodiac year, month, day and traditional significance.
+
+        Args:
+            gregorian_date: Standard Gregorian calendar date
+
+        Returns:
+            Dictionary containing lunar date information and cultural significance
+        """</span>
+
+        <span class="code-comment"># Step 1: Calculate lunar year and zodiac animal</span>
+        lunar_year = self._calculate_lunar_year(gregorian_date)
+        zodiac_index = (lunar_year - <span class="code-number">4</span>) % <span class="code-number">12</span>  <span class="code-comment"># Traditional calculation</span>
+        zodiac_animal = self.zodiac_animals[zodiac_index]
+
+        <span class="code-comment"># Step 2: Calculate lunar month and day</span>
+        lunar_month, lunar_day = self._calculate_lunar_month_day(gregorian_date)
+
+        <span class="code-comment"># Step 3: Determine five element for the year</span>
+        year_element = self._calculate_year_element(lunar_year)
+
+        <span class="code-comment"># Step 4: Check for traditional festivals</span>
+        festivals = self._check_traditional_festivals(lunar_month, lunar_day)
+
+        <span class="code-comment"># Step 5: Generate cultural insights</span>
+        cultural_guidance = <span class="code-keyword">await</span> self._generate_cultural_guidance(
+            zodiac_animal, year_element, lunar_month, lunar_day, festivals
+        )
+
+        <span class="code-keyword">return</span> {
+            <span class="code-string">'gregorian_date'</span>: gregorian_date.strftime(<span class="code-string">'%Y-%m-%d'</span>),
+            <span class="code-string">'lunar_year'</span>: lunar_year,
+            <span class="code-string">'lunar_month'</span>: lunar_month,
+            <span class="code-string">'lunar_day'</span>: lunar_day,
+            <span class="code-string">'zodiac_animal'</span>: zodiac_animal,
+            <span class="code-string">'year_element'</span>: year_element,
+            <span class="code-string">'festivals'</span>: festivals,
+            <span class="code-string">'cultural_guidance'</span>: cultural_guidance,
+            <span class="code-string">'traditional_display'</span>: f<span class="code-string">"{zodiac_animal['name']}年 {lunar_month}月 {lunar_day}日"</span>
+        }
+
+    <span class="code-keyword">def</span> <span class="code-function">_calculate_lunar_year</span>(self, date: datetime.date) -> int:
+        <span class="code-string">"""
+        Calculate Chinese lunar year using traditional astronomical methods.
+        Accounts for lunar new year timing differences from Gregorian calendar.
+        """</span>
+
+        <span class="code-comment"># Simplified lunar year calculation - real implementation uses complex astronomy</span>
+        base_year = <span class="code-number">1900</span>  <span class="code-comment"># Reference year for calculations</span>
+
+        <span class="code-comment"># Approximate lunar new year dates (varies annually)</span>
+        lunar_new_year_approx = datetime.date(date.year, <span class="code-number">2</span>, <span class="code-number">1</span>)
+
+        <span class="code-keyword">if</span> date < lunar_new_year_approx:
+            lunar_year = date.year - <span class="code-number">1</span>  <span class="code-comment"># Still previous lunar year</span>
+        <span class="code-keyword">else</span>:
+            lunar_year = date.year
+
+        <span class="code-keyword">return</span> lunar_year
+
+    <span class="code-keyword">def</span> <span class="code-function">_calculate_year_element</span>(self, lunar_year: int) -> Dict:
+        <span class="code-string">"""
+        Calculate the five element (Wu Xing) for the given lunar year.
+        Follows traditional 10-year element cycle combined with zodiac.
+        """</span>
+
+        <span class="code-comment"># Traditional five element cycle calculation</span>
+        element_cycle = [<span class="code-string">'wood'</span>, <span class="code-string">'fire'</span>, <span class="code-string">'earth'</span>, <span class="code-string">'metal'</span>, <span class="code-string">'water'</span>]
+        element_index = ((lunar_year - <span class="code-number">4</span>) // <span class="code-number">2</span>) % <span class="code-number">5</span>
+
+        element_name = element_cycle[element_index]
+        <span class="code-keyword">return</span> self.five_elements[element_name]
+
+    <span class="code-keyword">async</span> <span class="code-function">_generate_cultural_guidance</span>(
+        self, zodiac: Dict, element: Dict, month: int, day: int, festivals: List[Dict]
+    ) -> Dict:
+        <span class="code-string">"""
+        Generate culturally authentic guidance based on traditional Chinese wisdom.
+        Combines zodiac traits, five element theory, and seasonal advice.
+        """</span>
+
+        guidance_prompt = f<span class="code-string">"""
+        Provide traditional Chinese cultural guidance for today based on:
+
+        Zodiac Animal: {zodiac['english']} ({zodiac['name']})
+        Animal Traits: {', '.join(zodiac['traits'])}
+        Year Element: {element['chinese']} ({list(element.keys())[0].title()})
+        Element Season: {element['season']}
+        Lunar Month: {month}
+        Lunar Day: {day}
+        Festivals Today: {[f['name'] for f in festivals] if festivals else 'None'}
+
+        Provide guidance in these areas:
+        1. 今日吉凶 (Today's Fortune): Auspicious and inauspicious activities
+        2. 健康建议 (Health Advice): Wellness tips based on seasonal energy
+        3. 人际关系 (Relationships): Social harmony and communication guidance
+        4. 事业财运 (Career & Wealth): Professional and financial insights
+        5. 传统智慧 (Traditional Wisdom): Relevant proverbs or ancient sayings
+
+        Keep advice authentic to traditional Chinese culture and philosophy.
+        Include both Chinese and English for cultural education.
+        """</span>
+
+        response = <span class="code-keyword">await</span> self.cultural_ai.generate_content_async(guidance_prompt)
+
+        <span class="code-keyword">return</span> {
+            <span class="code-string">'daily_guidance'</span>: response.text,
+            <span class="code-string">'zodiac_compatibility'</span>: <span class="code-keyword">await</span> self._calculate_zodiac_compatibility(zodiac),
+            <span class="code-string">'seasonal_advice'</span>: <span class="code-keyword">await</span> self._generate_seasonal_advice(element, month),
+            <span class="code-string">'festival_significance'</span>: self._explain_festival_significance(festivals)
+        }
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🎋 Advanced Cultural Intelligence Engine</h2>
+            <p>The cultural intelligence system provides authentic traditional wisdom, festival explanations, and personalized guidance based on Chinese philosophical principles:</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 cultural_intelligence.py</div>
+                <div class="code-block">
+<span class="code-keyword">class</span> <span class="code-function">CulturalIntelligenceEngine</span>:
+    <span class="code-keyword">async</span> <span class="code-function">_calculate_zodiac_compatibility</span>(self, user_zodiac: Dict) -> Dict:
+        <span class="code-string">"""
+        Calculate traditional zodiac compatibility for relationships and partnerships.
+        Based on ancient Chinese zodiac harmony and conflict theories.
+        """</span>
+
+        <span class="code-comment"># Traditional zodiac compatibility matrix</span>
+        compatibility_matrix = {
+            <span class="code-string">'Rat'</span>: {<span class="code-string">'best'</span>: [<span class="code-string">'Dragon'</span>, <span class="code-string">'Monkey'</span>], <span class="code-string">'avoid'</span>: [<span class="code-string">'Horse'</span>, <span class="code-string">'Rabbit'</span>]},
+            <span class="code-string">'Ox'</span>: {<span class="code-string">'best'</span>: [<span class="code-string">'Snake'</span>, <span class="code-string">'Rooster'</span>], <span class="code-string">'avoid'</span>: [<span class="code-string">'Sheep'</span>, <span class="code-string">'Horse'</span>]},
+            <span class="code-string">'Tiger'</span>: {<span class="code-string">'best'</span>: [<span class="code-string">'Horse'</span>, <span class="code-string">'Dog'</span>], <span class="code-string">'avoid'</span>: [<span class="code-string">'Monkey'</span>, <span class="code-string">'Snake'</span>]},
+            <span class="code-string">'Rabbit'</span>: {<span class="code-string">'best'</span>: [<span class="code-string">'Sheep'</span>, <span class="code-string">'Pig'</span>], <span class="code-string">'avoid'</span>: [<span class="code-string">'Rooster'</span>, <span class="code-string">'Rat'</span>]}
+        }
+
+        user_animal = user_zodiac[<span class="code-string">'english'</span>]
+        compatibility = compatibility_matrix.get(user_animal, {<span class="code-string">'best'</span>: [], <span class="code-string">'avoid'</span>: []})
+
+        <span class="code-keyword">return</span> {
+            <span class="code-string">'user_zodiac'</span>: user_animal,
+            <span class="code-string">'most_compatible'</span>: compatibility[<span class="code-string">'best'</span>],
+            <span class="code-string">'least_compatible'</span>: compatibility[<span class="code-string">'avoid'</span>],
+            <span class="code-string">'relationship_advice'</span>: <span class="code-keyword">await</span> self._generate_relationship_advice(user_animal, compatibility)
+        }
+
+    <span class="code-keyword">async</span> <span class="code-function">_generate_seasonal_advice</span>(self, element: Dict, lunar_month: int) -> Dict:
+        <span class="code-string">"""
+        Generate seasonal wellness and lifestyle advice based on traditional Chinese medicine
+        and five element theory. Provides holistic guidance for mind, body, and spirit.
+        """</span>
+
+        seasonal_prompt = f<span class="code-string">"""
+        Provide traditional Chinese seasonal advice based on:
+
+        Dominant Element: {element['chinese']} ({list(element.keys())[0].title()})
+        Element Season: {element['season']}
+        Element Color: {element['color']}
+        Lunar Month: {lunar_month}
+
+        Generate advice for:
+        1. 饮食养生 (Dietary Therapy): Foods that harmonize with current energy
+        2. 运动保健 (Exercise & Health): Physical activities that balance elements
+        3. 情绪调节 (Emotional Balance): Mental wellness practices
+        4. 生活作息 (Daily Routine): Optimal timing for activities
+        5. 五行调和 (Five Element Harmony): How to balance elemental energies
+
+        Base advice on traditional Chinese medicine principles and seasonal energy flow.
+        Include specific, actionable recommendations.
+        """</span>
+
+        response = <span class="code-keyword">await</span> self.cultural_ai.generate_content_async(seasonal_prompt)
+
+        <span class="code-keyword">return</span> {
+            <span class="code-string">'seasonal_guidance'</span>: response.text,
+            <span class="code-string">'element_focus'</span>: element,
+            <span class="code-string">'recommended_colors'</span>: self._get_element_colors(element),
+            <span class="code-string">'energy_balance'</span>: self._calculate_energy_balance(element, lunar_month)
+        }
+
+    <span class="code-keyword">def</span> <span class="code-function">_explain_festival_significance</span>(self, festivals: List[Dict]) -> List[Dict]:
+        <span class="code-string">"""
+        Provide detailed explanations of traditional festivals and their cultural significance.
+        Includes historical context, traditional customs, and modern celebrations.
+        """</span>
+
+        detailed_festivals = []
+
+        <span class="code-keyword">for</span> festival <span class="code-keyword">in</span> festivals:
+            festival_key = festival[<span class="code-string">'key'</span>]
+
+            <span class="code-keyword">if</span> festival_key == <span class="code-string">'spring_festival'</span>:
+                detailed_festivals.append({
+                    <span class="code-string">'name'</span>: <span class="code-string">'春节 (Spring Festival)'</span>,
+                    <span class="code-string">'significance'</span>: <span class="code-string">'Chinese New Year - most important traditional holiday'</span>,
+                    <span class="code-string">'customs'</span>: [<span class="code-string">'Family reunions'</span>, <span class="code-string">'Red envelopes (hongbao)'</span>, <span class="code-string">'Fireworks'</span>, <span class="code-string">'Dragon dances'</span>],
+                    <span class="code-string">'traditional_foods'</span>: [<span class="code-string">'Dumplings'</span>, <span class="code-string">'Fish'</span>, <span class="code-string">'Rice cakes'</span>],
+                    <span class="code-string">'spiritual_meaning'</span>: <span class="code-string">'Renewal, family unity, driving away evil spirits'</span>
+                })
+
+            <span class="code-keyword">elif</span> festival_key == <span class="code-string">'mid_autumn'</span>:
+                detailed_festivals.append({
+                    <span class="code-string">'name'</span>: <span class="code-string">'中秋节 (Mid-Autumn Festival)'</span>,
+                    <span class="code-string">'significance'</span>: <span class="code-string">'Moon festival celebrating family unity and harvest'</span>,
+                    <span class="code-string">'customs'</span>: [<span class="code-string">'Moon gazing'</span>, <span class="code-string">'Lantern displays'</span>, <span class="code-string">'Family gatherings'</span>],
+                    <span class="code-string">'traditional_foods'</span>: [<span class="code-string">'Mooncakes'</span>, <span class="code-string">'Osmanthus wine'</span>, <span class="code-string">'Pomelos'</span>],
+                    <span class="code-string">'spiritual_meaning'</span>: <span class="code-string">'Completeness, reunion, gratitude for abundance'</span>
+                })
+
+        <span class="code-keyword">return</span> detailed_festivals
+
+    <span class="code-keyword">def</span> <span class="code-function">_calculate_energy_balance</span>(self, element: Dict, lunar_month: int) -> Dict:
+        <span class="code-string">"""
+        Calculate the balance of five elements for optimal energy flow.
+        Provides recommendations for harmonizing personal energy with seasonal cycles.
+        """</span>
+
+        <span class="code-comment"># Seasonal element dominance patterns</span>
+        seasonal_dominance = {
+            <span class="code-number">1</span>: <span class="code-string">'water'</span>, <span class="code-number">2</span>: <span class="code-string">'water'</span>, <span class="code-number">3</span>: <span class="code-string">'wood'</span>, <span class="code-number">4</span>: <span class="code-string">'wood'</span>,
+            <span class="code-number">5</span>: <span class="code-string">'wood'</span>, <span class="code-number">6</span>: <span class="code-string">'fire'</span>, <span class="code-number">7</span>: <span class="code-string">'fire'</span>, <span class="code-number">8</span>: <span class="code-string">'earth'</span>,
+            <span class="code-number">9</span>: <span class="code-string">'metal'</span>, <span class="code-number">10</span>: <span class="code-string">'metal'</span>, <span class="code-number">11</span>: <span class="code-string">'water'</span>, <span class="code-number">12</span>: <span class="code-string">'water'</span>
+        }
+
+        dominant_element = seasonal_dominance.get(lunar_month, <span class="code-string">'earth'</span>)
+
+        <span class="code-comment"># Calculate element relationships for balance</span>
+        element_relationships = self._calculate_element_interactions(element, dominant_element)
+
+        <span class="code-keyword">return</span> {
+            <span class="code-string">'dominant_seasonal_element'</span>: dominant_element,
+            <span class="code-string">'personal_element'</span>: element,
+            <span class="code-string">'harmony_level'</span>: element_relationships[<span class="code-string">'harmony_score'</span>],
+            <span class="code-string">'balance_recommendations'</span>: element_relationships[<span class="code-string">'recommendations'</span>],
+            <span class="code-string">'energy_flow'</span>: element_relationships[<span class="code-string">'energy_direction'</span>]
+        }
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>⚙️ Technical Implementation Notes</h2>
+            <h3>Key Algorithms & Innovations</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>Lunar Calendar Calculations:</strong> Accurate astronomical algorithms for converting Gregorian to lunar dates</li>
+                <li><strong>Cultural Knowledge Integration:</strong> Comprehensive database of traditional Chinese wisdom and customs</li>
+                <li><strong>Five Element Theory:</strong> Implementation of Wu Xing philosophy for holistic life guidance</li>
+                <li><strong>Zodiac Compatibility:</strong> Traditional compatibility calculations based on ancient Chinese astrology</li>
+                <li><strong>Seasonal Harmony:</strong> Adaptive guidance system that aligns with natural energy cycles</li>
+            </ul>
+
+            <h3>Why This Approach Works</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>Cultural Authenticity:</strong> Deep integration of traditional Chinese philosophy and customs</li>
+                <li><strong>Holistic Guidance:</strong> Comprehensive advice covering health, relationships, and spiritual well-being</li>
+                <li><strong>Educational Value:</strong> Bilingual content promotes cultural understanding and learning</li>
+                <li><strong>Personalized Wisdom:</strong> Tailored guidance based on individual zodiac and elemental characteristics</li>
+            </ul>
+        </div>
+
+        <div class="demo-links">
+            <a href="https://chinese-calender-169218045868.asia-southeast1.run.app/" target="_blank" class="demo-btn">🚀 Try Live Demo</a>
+            <a href="chinese-traditional-calendar.html" class="demo-btn secondary">📖 View Full Project Details</a>
+        </div>
+
+        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+            <a href="index.html">← Back to Portfolio</a> |
+            <a href="chinese-traditional-calendar.html">View Project Overview</a>
+        </nav>
+    </div>
+</body>
+</html>

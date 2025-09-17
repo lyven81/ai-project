@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini Image Editor - Source Code</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #222;
+            background-color: #ffffff;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .back-nav {
+            margin-bottom: 20px;
+        }
+
+        .back-nav a {
+            color: #007BFF;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .back-nav a:hover {
+            text-decoration: underline;
+        }
+
+        .project-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #9C27B0, #7B1FA2);
+            color: white;
+            border-radius: 10px;
+        }
+
+        .project-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .project-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .content-section {
+            margin: 40px 0;
+            padding: 30px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border-left: 5px solid #9C27B0;
+        }
+
+        .content-section h2 {
+            color: #9C27B0;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .content-section h3 {
+            color: #333;
+            margin: 20px 0 10px 0;
+            font-size: 1.3rem;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #FFF8E1, #FFF3C4);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #9C27B0;
+            margin: 20px 0;
+        }
+
+        .code-container {
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        .code-header {
+            color: #569cd6;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .code-block {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #d4d4d4;
+        }
+
+        .code-comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+
+        .code-keyword {
+            color: #569cd6;
+        }
+
+        .code-string {
+            color: #ce9178;
+        }
+
+        .code-function {
+            color: #dcdcaa;
+        }
+
+        .code-number {
+            color: #b5cea8;
+        }
+
+        .demo-links {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .demo-btn {
+            display: inline-block;
+            background-color: #007BFF;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .demo-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .demo-btn.secondary {
+            background-color: #28a745;
+        }
+
+        .demo-btn.secondary:hover {
+            background-color: #218838;
+        }
+
+        @media (max-width: 768px) {
+            .project-header h1 {
+                font-size: 2rem;
+            }
+
+            .project-header p {
+                font-size: 1rem;
+            }
+
+            .demo-btn {
+                margin: 5px;
+                padding: 10px 20px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="gemini-image-editor.html">← Back to Project Overview</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>🎨 Gemini Image Editor</h1>
+            <p>Core Source Code & AI Image Enhancement Implementation</p>
+
+            <div class="badges">
+                <span class="badge">React 19</span>
+                <span class="badge">TypeScript</span>
+                <span class="badge">Gemini Vision</span>
+                <span class="badge">Canvas API</span>
+            </div>
+        </div>
+
+        <div class="highlight-box">
+            <h3>🔍 About This Code Showcase</h3>
+            <p><strong>This curated code snippet demonstrates how the Gemini Image Editor performs intelligent photo enhancement, background manipulation, and AI-powered editing operations with professional-grade results.</strong></p>
+            <p>Full deployment scripts, API integrations, and proprietary details are omitted for clarity and security. This showcase highlights the core image processing and AI enhancement algorithms.</p>
+        </div>
+
+        <div class="content-section">
+            <h2>🖼️ Core Algorithm: AI Image Enhancement Engine</h2>
+            <p>The foundation of the Gemini Image Editor is its ability to intelligently analyze images, apply professional enhancements, and provide precise editing controls while maintaining image quality:</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 image_enhancement_engine.ts</div>
+                <div class="code-block">
+<span class="code-keyword">import</span> { GoogleGenerativeAI } <span class="code-keyword">from</span> <span class="code-string">'@google/generative-ai'</span>;
+<span class="code-keyword">import</span> { ImageProcessor } <span class="code-keyword">from</span> <span class="code-string">'./image-processor'</span>;
+
+<span class="code-keyword">interface</span> <span class="code-function">EnhancementSettings</span> {
+  brightness: number;
+  contrast: number;
+  saturation: number;
+  sharpness: number;
+  noiseReduction: number;
+  colorBalance: <span class="code-string">'auto'</span> | <span class="code-string">'warm'</span> | <span class="code-string">'cool'</span> | <span class="code-string">'neutral'</span>;
+}
+
+<span class="code-keyword">class</span> <span class="code-function">AIImageEnhancer</span> {
+  <span class="code-keyword">private</span> geminiVision: GoogleGenerativeAI;
+  <span class="code-keyword">private</span> canvas: HTMLCanvasElement;
+  <span class="code-keyword">private</span> ctx: CanvasRenderingContext2D;
+
+  <span class="code-comment">// Professional enhancement presets for different image types</span>
+  <span class="code-keyword">private</span> enhancementPresets = {
+    portrait: {
+      brightness: <span class="code-number">1.05</span>,
+      contrast: <span class="code-number">1.1</span>,
+      saturation: <span class="code-number">1.15</span>,
+      sharpness: <span class="code-number">0.8</span>,
+      noiseReduction: <span class="code-number">0.6</span>,
+      skinToneOptimization: <span class="code-keyword">true</span>
+    },
+    landscape: {
+      brightness: <span class="code-number">1.02</span>,
+      contrast: <span class="code-number">1.2</span>,
+      saturation: <span class="code-number">1.25</span>,
+      sharpness: <span class="code-number">1.1</span>,
+      noiseReduction: <span class="code-number">0.4</span>,
+      skyEnhancement: <span class="code-keyword">true</span>
+    },
+    product: {
+      brightness: <span class="code-number">1.08</span>,
+      contrast: <span class="code-number">1.15</span>,
+      saturation: <span class="code-number">1.05</span>,
+      sharpness: <span class="code-number">1.3</span>,
+      noiseReduction: <span class="code-number">0.8</span>,
+      backgroundClean: <span class="code-keyword">true</span>
+    }
+  };
+
+  <span class="code-keyword">constructor</span>(apiKey: string) {
+    this.geminiVision = <span class="code-keyword">new</span> GoogleGenerativeAI(apiKey);
+    this.canvas = document.createElement(<span class="code-string">'canvas'</span>);
+    this.ctx = this.canvas.getContext(<span class="code-string">'2d'</span>)!;
+  }
+
+  <span class="code-keyword">async</span> <span class="code-function">enhanceImageIntelligently</span>(imageFile: File): Promise&lt;string&gt; {
+    <span class="code-string">"""
+    Apply AI-powered intelligent enhancement to images.
+    Analyzes image content and applies optimal enhancement settings automatically.
+
+    Args:
+        imageFile: The input image file to enhance
+
+    Returns:
+        Base64-encoded enhanced image data
+    """</span>
+
+    <span class="code-comment">// Step 1: Analyze image content and characteristics</span>
+    <span class="code-keyword">const</span> imageAnalysis = <span class="code-keyword">await</span> this.analyzeImageContent(imageFile);
+
+    <span class="code-comment">// Step 2: Determine optimal enhancement strategy</span>
+    <span class="code-keyword">const</span> enhancementStrategy = this.determineEnhancementStrategy(imageAnalysis);
+
+    <span class="code-comment">// Step 3: Apply intelligent enhancements</span>
+    <span class="code-keyword">const</span> enhancedImage = <span class="code-keyword">await</span> this.applyIntelligentEnhancements(
+      imageFile,
+      enhancementStrategy
+    );
+
+    <span class="code-comment">// Step 4: Fine-tune based on content-specific optimizations</span>
+    <span class="code-keyword">const</span> finalImage = <span class="code-keyword">await</span> this.applyContentSpecificOptimizations(
+      enhancedImage,
+      imageAnalysis
+    );
+
+    <span class="code-keyword">return</span> finalImage;
+  }
+
+  <span class="code-keyword">private</span> <span class="code-keyword">async</span> <span class="code-function">analyzeImageContent</span>(imageFile: File): Promise&lt;any&gt; {
+    <span class="code-string">"""
+    Use Gemini Vision to analyze image content and characteristics.
+    Identifies image type, subjects, lighting conditions, and quality issues.
+    """</span>
+
+    <span class="code-keyword">const</span> model = this.geminiVision.getGenerativeModel({ model: <span class="code-string">'gemini-pro-vision'</span> });
+
+    <span class="code-keyword">const</span> analysisPrompt = <span class="code-string">"""
+    Analyze this image for professional photo enhancement. Identify:
+
+    1. IMAGE TYPE: Portrait, landscape, product, architecture, etc.
+    2. LIGHTING CONDITIONS: Natural, artificial, mixed, under/overexposed
+    3. SUBJECTS: People, objects, scenery (describe main elements)
+    4. QUALITY ISSUES: Noise, blur, color cast, compression artifacts
+    5. COMPOSITION: Rule of thirds, symmetry, leading lines
+    6. COLOR PALETTE: Dominant colors and overall tone
+    7. ENHANCEMENT NEEDS: Specific areas requiring improvement
+
+    Provide specific technical recommendations for enhancement.
+    """</span>;
+
+    <span class="code-keyword">const</span> imageBase64 = <span class="code-keyword">await</span> this.convertToBase64(imageFile);
+
+    <span class="code-keyword">const</span> result = <span class="code-keyword">await</span> model.generateContent([
+      analysisPrompt,
+      {
+        inlineData: {
+          data: imageBase64,
+          mimeType: imageFile.type
+        }
+      }
+    ]);
+
+    <span class="code-keyword">return</span> this.parseImageAnalysis(result.response.text());
+  }
+
+  <span class="code-keyword">private</span> <span class="code-function">applyIntelligentEnhancements</span>(
+    imageFile: File,
+    strategy: EnhancementSettings
+  ): Promise&lt;ImageData&gt; {
+    <span class="code-string">"""
+    Apply enhancement settings using advanced image processing algorithms.
+    Maintains quality while improving visual appeal and technical characteristics.
+    """</span>
+
+    <span class="code-keyword">return</span> <span class="code-keyword">new</span> Promise((resolve) => {
+      <span class="code-keyword">const</span> img = <span class="code-keyword">new</span> Image();
+
+      img.onload = () => {
+        <span class="code-comment">// Set canvas dimensions to match image</span>
+        this.canvas.width = img.width;
+        this.canvas.height = img.height;
+
+        <span class="code-comment">// Draw original image</span>
+        this.ctx.drawImage(img, <span class="code-number">0</span>, <span class="code-number">0</span>);
+
+        <span class="code-comment">// Apply brightness and contrast adjustments</span>
+        this.applyBrightnessContrast(strategy.brightness, strategy.contrast);
+
+        <span class="code-comment">// Apply saturation enhancement</span>
+        this.applySaturationAdjustment(strategy.saturation);
+
+        <span class="code-comment">// Apply sharpening filter</span>
+        this.applySharpeningFilter(strategy.sharpness);
+
+        <span class="code-comment">// Apply noise reduction</span>
+        this.applyNoiseReduction(strategy.noiseReduction);
+
+        <span class="code-comment">// Apply color balance correction</span>
+        this.applyColorBalance(strategy.colorBalance);
+
+        <span class="code-keyword">const</span> enhancedImageData = this.ctx.getImageData(<span class="code-number">0</span>, <span class="code-number">0</span>, this.canvas.width, this.canvas.height);
+        resolve(enhancedImageData);
+      };
+
+      img.src = URL.createObjectURL(imageFile);
+    });
+  }
+
+  <span class="code-keyword">private</span> <span class="code-function">applySharpeningFilter</span>(intensity: number): <span class="code-keyword">void</span> {
+    <span class="code-string">"""
+    Apply unsharp mask sharpening filter for enhanced image clarity.
+    Uses convolution matrix to enhance edge definition without artifacts.
+    """</span>
+
+    <span class="code-keyword">const</span> imageData = this.ctx.getImageData(<span class="code-number">0</span>, <span class="code-number">0</span>, this.canvas.width, this.canvas.height);
+    <span class="code-keyword">const</span> data = imageData.data;
+
+    <span class="code-comment">// Unsharp mask kernel for professional sharpening</span>
+    <span class="code-keyword">const</span> sharpenKernel = [
+      [<span class="code-number">0</span>, -intensity * <span class="code-number">0.25</span>, <span class="code-number">0</span>],
+      [-intensity * <span class="code-number">0.25</span>, <span class="code-number">1</span> + intensity, -intensity * <span class="code-number">0.25</span>],
+      [<span class="code-number">0</span>, -intensity * <span class="code-number">0.25</span>, <span class="code-number">0</span>]
+    ];
+
+    <span class="code-keyword">const</span> outputData = <span class="code-keyword">new</span> Uint8ClampedArray(data.length);
+
+    <span class="code-comment">// Apply convolution filter</span>
+    <span class="code-keyword">for</span> (<span class="code-keyword">let</span> y = <span class="code-number">1</span>; y < this.canvas.height - <span class="code-number">1</span>; y++) {
+      <span class="code-keyword">for</span> (<span class="code-keyword">let</span> x = <span class="code-number">1</span>; x < this.canvas.width - <span class="code-number">1</span>; x++) {
+        <span class="code-keyword">const</span> idx = (y * this.canvas.width + x) * <span class="code-number">4</span>;
+
+        <span class="code-keyword">for</span> (<span class="code-keyword">let</span> c = <span class="code-number">0</span>; c < <span class="code-number">3</span>; c++) { <span class="code-comment">// RGB channels</span>
+          <span class="code-keyword">let</span> sum = <span class="code-number">0</span>;
+
+          <span class="code-keyword">for</span> (<span class="code-keyword">let</span> ky = -<span class="code-number">1</span>; ky <= <span class="code-number">1</span>; ky++) {
+            <span class="code-keyword">for</span> (<span class="code-keyword">let</span> kx = -<span class="code-number">1</span>; kx <= <span class="code-number">1</span>; kx++) {
+              <span class="code-keyword">const</span> pixelIdx = ((y + ky) * this.canvas.width + (x + kx)) * <span class="code-number">4</span>;
+              sum += data[pixelIdx + c] * sharpenKernel[ky + <span class="code-number">1</span>][kx + <span class="code-number">1</span>];
+            }
+          }
+
+          outputData[idx + c] = Math.max(<span class="code-number">0</span>, Math.min(<span class="code-number">255</span>, sum));
+        }
+
+        outputData[idx + <span class="code-number">3</span>] = data[idx + <span class="code-number">3</span>]; <span class="code-comment">// Preserve alpha</span>
+      }
+    }
+
+    <span class="code-keyword">const</span> newImageData = <span class="code-keyword">new</span> ImageData(outputData, this.canvas.width, this.canvas.height);
+    this.ctx.putImageData(newImageData, <span class="code-number">0</span>, <span class="code-number">0</span>);
+  }
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🎛️ Advanced Image Processing Pipeline</h2>
+            <p>The image processing pipeline provides professional-grade tools for background removal, object manipulation, and creative effects with precise control:</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 advanced_image_processor.ts</div>
+                <div class="code-block">
+<span class="code-keyword">class</span> <span class="code-function">AdvancedImageProcessor</span> {
+  <span class="code-keyword">async</span> <span class="code-function">removeBackgroundIntelligently</span>(imageData: ImageData): Promise&lt;ImageData&gt; {
+    <span class="code-string">"""
+    Intelligent background removal using edge detection and color analysis.
+    Preserves fine details like hair and maintains natural edge transitions.
+    """</span>
+
+    <span class="code-comment">// Step 1: Detect subject boundaries using edge detection</span>
+    <span class="code-keyword">const</span> edges = this.detectSubjectEdges(imageData);
+
+    <span class="code-comment">// Step 2: Analyze color regions to identify background</span>
+    <span class="code-keyword">const</span> colorRegions = this.analyzeColorRegions(imageData);
+
+    <span class="code-comment">// Step 3: Create precision mask for subject isolation</span>
+    <span class="code-keyword">const</span> subjectMask = this.createSubjectMask(edges, colorRegions);
+
+    <span class="code-comment">// Step 4: Apply feathering for natural edge transitions</span>
+    <span class="code-keyword">const</span> featheredMask = this.applyEdgeFeathering(subjectMask);
+
+    <span class="code-comment">// Step 5: Extract subject with transparent background</span>
+    <span class="code-keyword">return</span> this.extractSubjectWithMask(imageData, featheredMask);
+  }
+
+  <span class="code-keyword">private</span> <span class="code-function">detectSubjectEdges</span>(imageData: ImageData): ImageData {
+    <span class="code-string">"""
+    Apply Sobel edge detection to identify subject boundaries.
+    Enhanced for portrait and object photography edge preservation.
+    """</span>
+
+    <span class="code-keyword">const</span> { width, height, data } = imageData;
+    <span class="code-keyword">const</span> edgeData = <span class="code-keyword">new</span> Uint8ClampedArray(data.length);
+
+    <span class="code-comment">// Sobel operators for edge detection</span>
+    <span class="code-keyword">const</span> sobelX = [[-<span class="code-number">1</span>, <span class="code-number">0</span>, <span class="code-number">1</span>], [-<span class="code-number">2</span>, <span class="code-number">0</span>, <span class="code-number">2</span>], [-<span class="code-number">1</span>, <span class="code-number">0</span>, <span class="code-number">1</span>]];
+    <span class="code-keyword">const</span> sobelY = [[-<span class="code-number">1</span>, -<span class="code-number">2</span>, -<span class="code-number">1</span>], [<span class="code-number">0</span>, <span class="code-number">0</span>, <span class="code-number">0</span>], [<span class="code-number">1</span>, <span class="code-number">2</span>, <span class="code-number">1</span>]];
+
+    <span class="code-keyword">for</span> (<span class="code-keyword">let</span> y = <span class="code-number">1</span>; y < height - <span class="code-number">1</span>; y++) {
+      <span class="code-keyword">for</span> (<span class="code-keyword">let</span> x = <span class="code-number">1</span>; x < width - <span class="code-number">1</span>; x++) {
+        <span class="code-keyword">let</span> gx = <span class="code-number">0</span>, gy = <span class="code-number">0</span>;
+
+        <span class="code-comment">// Apply Sobel operators</span>
+        <span class="code-keyword">for</span> (<span class="code-keyword">let</span> ky = -<span class="code-number">1</span>; ky <= <span class="code-number">1</span>; ky++) {
+          <span class="code-keyword">for</span> (<span class="code-keyword">let</span> kx = -<span class="code-number">1</span>; kx <= <span class="code-number">1</span>; kx++) {
+            <span class="code-keyword">const</span> idx = ((y + ky) * width + (x + kx)) * <span class="code-number">4</span>;
+            <span class="code-keyword">const</span> intensity = (data[idx] + data[idx + <span class="code-number">1</span>] + data[idx + <span class="code-number">2</span>]) / <span class="code-number">3</span>;
+
+            gx += intensity * sobelX[ky + <span class="code-number">1</span>][kx + <span class="code-number">1</span>];
+            gy += intensity * sobelY[ky + <span class="code-number">1</span>][kx + <span class="code-number">1</span>];
+          }
+        }
+
+        <span class="code-comment">// Calculate edge magnitude</span>
+        <span class="code-keyword">const</span> magnitude = Math.sqrt(gx * gx + gy * gy);
+        <span class="code-keyword">const</span> edgeValue = Math.min(<span class="code-number">255</span>, magnitude);
+
+        <span class="code-keyword">const</span> currentIdx = (y * width + x) * <span class="code-number">4</span>;
+        edgeData[currentIdx] = edgeValue;     <span class="code-comment">// R</span>
+        edgeData[currentIdx + <span class="code-number">1</span>] = edgeValue; <span class="code-comment">// G</span>
+        edgeData[currentIdx + <span class="code-number">2</span>] = edgeValue; <span class="code-comment">// B</span>
+        edgeData[currentIdx + <span class="code-number">3</span>] = <span class="code-number">255</span>;     <span class="code-comment">// A</span>
+      }
+    }
+
+    <span class="code-keyword">return</span> <span class="code-keyword">new</span> ImageData(edgeData, width, height);
+  }
+
+  <span class="code-keyword">async</span> <span class="code-function">applyCreativeEffects</span>(imageData: ImageData, effectType: string): Promise&lt;ImageData&gt; {
+    <span class="code-string">"""
+    Apply creative effects like vintage, HDR, or artistic filters.
+    Uses professional-grade algorithms for high-quality results.
+    """</span>
+
+    <span class="code-keyword">switch</span> (effectType) {
+      <span class="code-keyword">case</span> <span class="code-string">'vintage'</span>:
+        <span class="code-keyword">return</span> this.applyVintageEffect(imageData);
+      <span class="code-keyword">case</span> <span class="code-string">'hdr'</span>:
+        <span class="code-keyword">return</span> this.applyHDREffect(imageData);
+      <span class="code-keyword">case</span> <span class="code-string">'artistic'</span>:
+        <span class="code-keyword">return</span> this.applyArtisticEffect(imageData);
+      <span class="code-keyword">case</span> <span class="code-string">'black_white'</span>:
+        <span class="code-keyword">return</span> this.applyBlackWhiteConversion(imageData);
+      <span class="code-keyword">default</span>:
+        <span class="code-keyword">return</span> imageData;
+    }
+  }
+
+  <span class="code-keyword">private</span> <span class="code-function">applyVintageEffect</span>(imageData: ImageData): ImageData {
+    <span class="code-string">"""
+    Apply authentic vintage film effect with color grading and vignetting.
+    Simulates classic film photography characteristics.
+    """</span>
+
+    <span class="code-keyword">const</span> { width, height, data } = imageData;
+    <span class="code-keyword">const</span> vintageData = <span class="code-keyword">new</span> Uint8ClampedArray(data.length);
+
+    <span class="code-keyword">const</span> centerX = width / <span class="code-number">2</span>;
+    <span class="code-keyword">const</span> centerY = height / <span class="code-number">2</span>;
+    <span class="code-keyword">const</span> maxDistance = Math.sqrt(centerX * centerX + centerY * centerY);
+
+    <span class="code-keyword">for</span> (<span class="code-keyword">let</span> i = <span class="code-number">0</span>; i < data.length; i += <span class="code-number">4</span>) {
+      <span class="code-keyword">const</span> pixelIndex = i / <span class="code-number">4</span>;
+      <span class="code-keyword">const</span> x = pixelIndex % width;
+      <span class="code-keyword">const</span> y = Math.floor(pixelIndex / width);
+
+      <span class="code-comment">// Original RGB values</span>
+      <span class="code-keyword">let</span> r = data[i];
+      <span class="code-keyword">let</span> g = data[i + <span class="code-number">1</span>];
+      <span class="code-keyword">let</span> b = data[i + <span class="code-number">2</span>];
+
+      <span class="code-comment">// Apply sepia tone transformation</span>
+      <span class="code-keyword">const</span> sepiaR = (r * <span class="code-number">0.393</span>) + (g * <span class="code-number">0.769</span>) + (b * <span class="code-number">0.189</span>);
+      <span class="code-keyword">const</span> sepiaG = (r * <span class="code-number">0.349</span>) + (g * <span class="code-number">0.686</span>) + (b * <span class="code-number">0.168</span>);
+      <span class="code-keyword">const</span> sepiaB = (r * <span class="code-number">0.272</span>) + (g * <span class="code-number">0.534</span>) + (b * <span class="code-number">0.131</span>);
+
+      <span class="code-comment">// Apply vignetting effect</span>
+      <span class="code-keyword">const</span> distance = Math.sqrt((x - centerX) ** <span class="code-number">2</span> + (y - centerY) ** <span class="code-number">2</span>);
+      <span class="code-keyword">const</span> vignette = <span class="code-number">1</span> - (distance / maxDistance) * <span class="code-number">0.6</span>;
+
+      <span class="code-comment">// Combine effects and clamp values</span>
+      vintageData[i] = Math.min(<span class="code-number">255</span>, sepiaR * vignette);
+      vintageData[i + <span class="code-number">1</span>] = Math.min(<span class="code-number">255</span>, sepiaG * vignette);
+      vintageData[i + <span class="code-number">2</span>] = Math.min(<span class="code-number">255</span>, sepiaB * vignette);
+      vintageData[i + <span class="code-number">3</span>] = data[i + <span class="code-number">3</span>]; <span class="code-comment">// Preserve alpha</span>
+    }
+
+    <span class="code-keyword">return</span> <span class="code-keyword">new</span> ImageData(vintageData, width, height);
+  }
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>⚙️ Technical Implementation Notes</h2>
+            <h3>Key Algorithms & Innovations</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>AI-Powered Analysis:</strong> Gemini Vision analyzes image content for intelligent enhancement recommendations</li>
+                <li><strong>Professional Enhancement:</strong> Advanced algorithms for brightness, contrast, sharpening, and noise reduction</li>
+                <li><strong>Intelligent Background Removal:</strong> Edge detection and color analysis for precise subject isolation</li>
+                <li><strong>Creative Effects Pipeline:</strong> Professional-grade filters including vintage, HDR, and artistic transformations</li>
+                <li><strong>Real-time Processing:</strong> Optimized Canvas API operations for responsive editing experience</li>
+            </ul>
+
+            <h3>Why This Approach Works</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>Professional Quality:</strong> Industry-standard image processing algorithms deliver professional results</li>
+                <li><strong>Intelligent Automation:</strong> AI analysis enables one-click intelligent enhancements</li>
+                <li><strong>Precise Control:</strong> Manual controls allow fine-tuning for perfect results</li>
+                <li><strong>Non-Destructive Editing:</strong> Layered processing preserves original image quality</li>
+            </ul>
+        </div>
+
+        <div class="demo-links">
+            <a href="https://gemini-image-editor-169218045868.us-west1.run.app/" target="_blank" class="demo-btn">🚀 Try Live Demo</a>
+            <a href="gemini-image-editor.html" class="demo-btn secondary">📖 View Full Project Details</a>
+        </div>
+
+        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+            <a href="index.html">← Back to Portfolio</a> |
+            <a href="gemini-image-editor.html">View Project Overview</a>
+        </nav>
+    </div>
+</body>
+</html>

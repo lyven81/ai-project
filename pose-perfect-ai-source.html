@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pose Perfect AI - Source Code</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #222;
+            background-color: #ffffff;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .back-nav {
+            margin-bottom: 20px;
+        }
+
+        .back-nav a {
+            color: #007BFF;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .back-nav a:hover {
+            text-decoration: underline;
+        }
+
+        .project-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            border-radius: 10px;
+        }
+
+        .project-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .project-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .content-section {
+            margin: 40px 0;
+            padding: 30px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border-left: 5px solid #4CAF50;
+        }
+
+        .content-section h2 {
+            color: #4CAF50;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .content-section h3 {
+            color: #333;
+            margin: 20px 0 10px 0;
+            font-size: 1.3rem;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #FFF8E1, #FFF3C4);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #4CAF50;
+            margin: 20px 0;
+        }
+
+        .code-container {
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        .code-header {
+            color: #569cd6;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .code-block {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #d4d4d4;
+        }
+
+        .code-comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+
+        .code-keyword {
+            color: #569cd6;
+        }
+
+        .code-string {
+            color: #ce9178;
+        }
+
+        .code-function {
+            color: #dcdcaa;
+        }
+
+        .code-number {
+            color: #b5cea8;
+        }
+
+        .demo-links {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .demo-btn {
+            display: inline-block;
+            background-color: #007BFF;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .demo-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .demo-btn.secondary {
+            background-color: #28a745;
+        }
+
+        .demo-btn.secondary:hover {
+            background-color: #218838;
+        }
+
+        @media (max-width: 768px) {
+            .project-header h1 {
+                font-size: 2rem;
+            }
+
+            .project-header p {
+                font-size: 1rem;
+            }
+
+            .demo-btn {
+                margin: 5px;
+                padding: 10px 20px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="pose-perfect-ai.html">← Back to Project Overview</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>🤸‍♀️ Pose Perfect AI</h1>
+            <p>Core Source Code & Computer Vision Implementation</p>
+
+            <div class="badges">
+                <span class="badge">Python 3.9</span>
+                <span class="badge">OpenCV</span>
+                <span class="badge">MediaPipe</span>
+                <span class="badge">Real-time Analysis</span>
+            </div>
+        </div>
+
+        <div class="highlight-box">
+            <h3>🔍 About This Code Showcase</h3>
+            <p><strong>This curated code snippet demonstrates how Pose Perfect AI performs real-time pose analysis, skeletal tracking, and provides intelligent feedback for fitness and movement optimization.</strong></p>
+            <p>Full deployment scripts, API integrations, and proprietary details are omitted for clarity and security. This showcase highlights the core computer vision and pose analysis algorithms.</p>
+        </div>
+
+        <div class="content-section">
+            <h2>🦴 Core Algorithm: Real-time Pose Detection Engine</h2>
+            <p>The foundation of Pose Perfect AI is its ability to accurately detect human poses in real-time, analyze skeletal movements, and provide intelligent feedback for optimal form and technique:</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 pose_detection_engine.py</div>
+                <div class="code-block">
+<span class="code-keyword">import</span> cv2
+<span class="code-keyword">import</span> mediapipe <span class="code-keyword">as</span> mp
+<span class="code-keyword">import</span> numpy <span class="code-keyword">as</span> np
+<span class="code-keyword">from</span> typing <span class="code-keyword">import</span> Dict, List, Tuple, Optional
+<span class="code-keyword">import</span> math
+
+<span class="code-keyword">class</span> <span class="code-function">PosePerfectEngine</span>:
+    <span class="code-string">"""
+    Advanced pose detection and analysis engine that provides real-time feedback
+    for fitness movements, posture correction, and movement optimization.
+    """</span>
+
+    <span class="code-keyword">def</span> <span class="code-function">__init__</span>(self):
+        <span class="code-comment"># Initialize MediaPipe pose detection</span>
+        self.mp_pose = mp.solutions.pose
+        self.pose = self.mp_pose.Pose(
+            static_image_mode=<span class="code-keyword">False</span>,
+            model_complexity=<span class="code-number">2</span>,  <span class="code-comment"># High accuracy model</span>
+            enable_segmentation=<span class="code-keyword">True</span>,
+            min_detection_confidence=<span class="code-number">0.7</span>,
+            min_tracking_confidence=<span class="code-number">0.5</span>
+        )
+        self.mp_drawing = mp.solutions.drawing_utils
+
+        <span class="code-comment"># Define key body landmarks for analysis</span>
+        self.key_landmarks = {
+            <span class="code-string">'head'</span>: [self.mp_pose.PoseLandmark.NOSE, self.mp_pose.PoseLandmark.LEFT_EAR, self.mp_pose.PoseLandmark.RIGHT_EAR],
+            <span class="code-string">'shoulders'</span>: [self.mp_pose.PoseLandmark.LEFT_SHOULDER, self.mp_pose.PoseLandmark.RIGHT_SHOULDER],
+            <span class="code-string">'arms'</span>: [self.mp_pose.PoseLandmark.LEFT_ELBOW, self.mp_pose.PoseLandmark.RIGHT_ELBOW,
+                      self.mp_pose.PoseLandmark.LEFT_WRIST, self.mp_pose.PoseLandmark.RIGHT_WRIST],
+            <span class="code-string">'torso'</span>: [self.mp_pose.PoseLandmark.LEFT_HIP, self.mp_pose.PoseLandmark.RIGHT_HIP],
+            <span class="code-string">'legs'</span>: [self.mp_pose.PoseLandmark.LEFT_KNEE, self.mp_pose.PoseLandmark.RIGHT_KNEE,
+                     self.mp_pose.PoseLandmark.LEFT_ANKLE, self.mp_pose.PoseLandmark.RIGHT_ANKLE]
+        }
+
+        <span class="code-comment"># Exercise templates for form analysis</span>
+        self.exercise_templates = {
+            <span class="code-string">'squat'</span>: {
+                <span class="code-string">'target_angles'</span>: {<span class="code-string">'knee'</span>: <span class="code-number">90</span>, <span class="code-string">'hip'</span>: <span class="code-number">90</span>, <span class="code-string">'ankle'</span>: <span class="code-number">90</span>},
+                <span class="code-string">'key_points'</span>: [<span class="code-string">'knee_alignment'</span>, <span class="code-string">'back_straight'</span>, <span class="code-string">'weight_distribution'</span>]
+            },
+            <span class="code-string">'push_up'</span>: {
+                <span class="code-string">'target_angles'</span>: {<span class="code-string">'elbow'</span>: <span class="code-number">90</span>, <span class="code-string">'shoulder'</span>: <span class="code-number">0</span>, <span class="code-string">'hip'</span>: <span class="code-number">180</span>},
+                <span class="code-string">'key_points'</span>: [<span class="code-string">'straight_line'</span>, <span class="code-string">'elbow_position'</span>, <span class="code-string">'full_range'</span>]
+            },
+            <span class="code-string">'plank'</span>: {
+                <span class="code-string">'target_angles'</span>: {<span class="code-string">'hip'</span>: <span class="code-number">180</span>, <span class="code-string">'shoulder'</span>: <span class="code-number">90</span>, <span class="code-string">'ankle'</span>: <span class="code-number">90</span>},
+                <span class="code-string">'key_points'</span>: [<span class="code-string">'neutral_spine'</span>, <span class="code-string">'core_engagement'</span>, <span class="code-string">'steady_position'</span>]
+            }
+        }
+
+    <span class="code-keyword">def</span> <span class="code-function">analyze_pose_realtime</span>(self, frame: np.ndarray, exercise_type: str = <span class="code-string">'general'</span>) -> Dict:
+        <span class="code-string">"""
+        Perform real-time pose analysis on video frame.
+        Detects landmarks, calculates angles, and provides form feedback.
+
+        Args:
+            frame: Input video frame (BGR format)
+            exercise_type: Type of exercise being performed for specific analysis
+
+        Returns:
+            Dictionary containing pose analysis results and feedback
+        """</span>
+
+        <span class="code-comment"># Convert BGR to RGB for MediaPipe processing</span>
+        rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+
+        <span class="code-comment"># Detect pose landmarks</span>
+        results = self.pose.process(rgb_frame)
+
+        <span class="code-keyword">if</span> <span class="code-keyword">not</span> results.pose_landmarks:
+            <span class="code-keyword">return</span> {<span class="code-string">'status'</span>: <span class="code-string">'no_pose_detected'</span>, <span class="code-string">'feedback'</span>: <span class="code-string">'Please ensure full body is visible'</span>}
+
+        <span class="code-comment"># Extract landmark coordinates</span>
+        landmarks = self._extract_landmark_coordinates(results.pose_landmarks, frame.shape)
+
+        <span class="code-comment"># Calculate body angles and measurements</span>
+        body_angles = self._calculate_body_angles(landmarks)
+
+        <span class="code-comment"># Analyze posture and alignment</span>
+        posture_analysis = self._analyze_posture(landmarks, body_angles)
+
+        <span class="code-comment"># Generate exercise-specific feedback</span>
+        form_feedback = self._generate_form_feedback(landmarks, body_angles, exercise_type)
+
+        <span class="code-comment"># Calculate overall form score</span>
+        form_score = self._calculate_form_score(body_angles, posture_analysis, exercise_type)
+
+        <span class="code-comment"># Create visualization overlay</span>
+        annotated_frame = self._create_pose_visualization(frame, results.pose_landmarks, form_feedback)
+
+        <span class="code-keyword">return</span> {
+            <span class="code-string">'status'</span>: <span class="code-string">'pose_detected'</span>,
+            <span class="code-string">'landmarks'</span>: landmarks,
+            <span class="code-string">'body_angles'</span>: body_angles,
+            <span class="code-string">'posture_analysis'</span>: posture_analysis,
+            <span class="code-string">'form_feedback'</span>: form_feedback,
+            <span class="code-string">'form_score'</span>: form_score,
+            <span class="code-string">'annotated_frame'</span>: annotated_frame,
+            <span class="code-string">'exercise_type'</span>: exercise_type
+        }
+
+    <span class="code-keyword">def</span> <span class="code-function">_calculate_body_angles</span>(self, landmarks: Dict) -> Dict:
+        <span class="code-string">"""
+        Calculate important body angles for posture and movement analysis.
+        Computes joint angles using trigonometry for accurate measurements.
+        """</span>
+
+        angles = {}
+
+        <span class="code-comment"># Calculate knee angles (important for squats, lunges)</span>
+        <span class="code-keyword">if</span> <span class="code-string">'left_hip'</span> <span class="code-keyword">in</span> landmarks <span class="code-keyword">and</span> <span class="code-string">'left_knee'</span> <span class="code-keyword">in</span> landmarks <span class="code-keyword">and</span> <span class="code-string">'left_ankle'</span> <span class="code-keyword">in</span> landmarks:
+            angles[<span class="code-string">'left_knee'</span>] = self._calculate_angle(
+                landmarks[<span class="code-string">'left_hip'</span>], landmarks[<span class="code-string">'left_knee'</span>], landmarks[<span class="code-string">'left_ankle'</span>]
+            )
+
+        <span class="code-keyword">if</span> <span class="code-string">'right_hip'</span> <span class="code-keyword">in</span> landmarks <span class="code-keyword">and</span> <span class="code-string">'right_knee'</span> <span class="code-keyword">in</span> landmarks <span class="code-keyword">and</span> <span class="code-string">'right_ankle'</span> <span class="code-keyword">in</span> landmarks:
+            angles[<span class="code-string">'right_knee'</span>] = self._calculate_angle(
+                landmarks[<span class="code-string">'right_hip'</span>], landmarks[<span class="code-string">'right_knee'</span>], landmarks[<span class="code-string">'right_ankle'</span>]
+            )
+
+        <span class="code-comment"># Calculate elbow angles (important for push-ups, arm exercises)</span>
+        <span class="code-keyword">if</span> <span class="code-string">'left_shoulder'</span> <span class="code-keyword">in</span> landmarks <span class="code-keyword">and</span> <span class="code-string">'left_elbow'</span> <span class="code-keyword">in</span> landmarks <span class="code-keyword">and</span> <span class="code-string">'left_wrist'</span> <span class="code-keyword">in</span> landmarks:
+            angles[<span class="code-string">'left_elbow'</span>] = self._calculate_angle(
+                landmarks[<span class="code-string">'left_shoulder'</span>], landmarks[<span class="code-string">'left_elbow'</span>], landmarks[<span class="code-string">'left_wrist'</span>]
+            )
+
+        <span class="code-keyword">if</span> <span class="code-string">'right_shoulder'</span> <span class="code-keyword">in</span> landmarks <span class="code-keyword">and</span> <span class="code-string">'right_elbow'</span> <span class="code-keyword">in</span> landmarks <span class="code-keyword">and</span> <span class="code-string">'right_wrist'</span> <span class="code-keyword">in</span> landmarks:
+            angles[<span class="code-string">'right_elbow'</span>] = self._calculate_angle(
+                landmarks[<span class="code-string">'right_shoulder'</span>], landmarks[<span class="code-string">'right_elbow'</span>], landmarks[<span class="code-string">'right_wrist'</span>]
+            )
+
+        <span class="code-comment"># Calculate hip angles (important for squats, deadlifts)</span>
+        <span class="code-keyword">if</span> <span class="code-string">'left_shoulder'</span> <span class="code-keyword">in</span> landmarks <span class="code-keyword">and</span> <span class="code-string">'left_hip'</span> <span class="code-keyword">in</span> landmarks <span class="code-keyword">and</span> <span class="code-string">'left_knee'</span> <span class="code-keyword">in</span> landmarks:
+            angles[<span class="code-string">'left_hip'</span>] = self._calculate_angle(
+                landmarks[<span class="code-string">'left_shoulder'</span>], landmarks[<span class="code-string">'left_hip'</span>], landmarks[<span class="code-string">'left_knee'</span>]
+            )
+
+        <span class="code-comment"># Calculate shoulder angles (important for overhead movements)</span>
+        <span class="code-keyword">if</span> <span class="code-string">'left_hip'</span> <span class="code-keyword">in</span> landmarks <span class="code-keyword">and</span> <span class="code-string">'left_shoulder'</span> <span class="code-keyword">in</span> landmarks <span class="code-keyword">and</span> <span class="code-string">'left_elbow'</span> <span class="code-keyword">in</span> landmarks:
+            angles[<span class="code-string">'left_shoulder'</span>] = self._calculate_angle(
+                landmarks[<span class="code-string">'left_hip'</span>], landmarks[<span class="code-string">'left_shoulder'</span>], landmarks[<span class="code-string">'left_elbow'</span>]
+            )
+
+        <span class="code-keyword">return</span> angles
+
+    <span class="code-keyword">def</span> <span class="code-function">_calculate_angle</span>(self, point1: Tuple, point2: Tuple, point3: Tuple) -> float:
+        <span class="code-string">"""
+        Calculate angle between three points using vector mathematics.
+        Point2 is the vertex of the angle.
+        """</span>
+
+        <span class="code-comment"># Calculate vectors</span>
+        vector1 = np.array([point1[<span class="code-number">0</span>] - point2[<span class="code-number">0</span>], point1[<span class="code-number">1</span>] - point2[<span class="code-number">1</span>]])
+        vector2 = np.array([point3[<span class="code-number">0</span>] - point2[<span class="code-number">0</span>], point3[<span class="code-number">1</span>] - point2[<span class="code-number">1</span>]])
+
+        <span class="code-comment"># Calculate angle using dot product</span>
+        cosine_angle = np.dot(vector1, vector2) / (np.linalg.norm(vector1) * np.linalg.norm(vector2))
+
+        <span class="code-comment"># Clamp cosine value to valid range to avoid numerical errors</span>
+        cosine_angle = np.clip(cosine_angle, -<span class="code-number">1.0</span>, <span class="code-number">1.0</span>)
+
+        <span class="code-comment"># Convert to degrees</span>
+        angle = np.arccos(cosine_angle)
+        <span class="code-keyword">return</span> np.degrees(angle)
+
+    <span class="code-keyword">def</span> <span class="code-function">_analyze_posture</span>(self, landmarks: Dict, angles: Dict) -> Dict:
+        <span class="code-string">"""
+        Analyze overall posture and body alignment.
+        Detects common posture issues and provides corrective guidance.
+        """</span>
+
+        posture_analysis = {
+            <span class="code-string">'overall_score'</span>: <span class="code-number">0</span>,
+            <span class="code-string">'issues'</span>: [],
+            <span class="code-string">'recommendations'</span>: []
+        }
+
+        <span class="code-comment"># Check shoulder alignment</span>
+        <span class="code-keyword">if</span> <span class="code-string">'left_shoulder'</span> <span class="code-keyword">in</span> landmarks <span class="code-keyword">and</span> <span class="code-string">'right_shoulder'</span> <span class="code-keyword">in</span> landmarks:
+            shoulder_level = abs(landmarks[<span class="code-string">'left_shoulder'</span>][<span class="code-number">1</span>] - landmarks[<span class="code-string">'right_shoulder'</span>][<span class="code-number">1</span>])
+            <span class="code-keyword">if</span> shoulder_level > <span class="code-number">20</span>:  <span class="code-comment"># Threshold for uneven shoulders</span>
+                posture_analysis[<span class="code-string">'issues'</span>].append(<span class="code-string">'Uneven shoulders detected'</span>)
+                posture_analysis[<span class="code-string">'recommendations'</span>].append(<span class="code-string">'Focus on shoulder blade alignment'</span>)
+
+        <span class="code-comment"># Check hip alignment</span>
+        <span class="code-keyword">if</span> <span class="code-string">'left_hip'</span> <span class="code-keyword">in</span> landmarks <span class="code-keyword">and</span> <span class="code-string">'right_hip'</span> <span class="code-keyword">in</span> landmarks:
+            hip_level = abs(landmarks[<span class="code-string">'left_hip'</span>][<span class="code-number">1</span>] - landmarks[<span class="code-string">'right_hip'</span>][<span class="code-number">1</span>])
+            <span class="code-keyword">if</span> hip_level > <span class="code-number">15</span>:  <span class="code-comment"># Threshold for uneven hips</span>
+                posture_analysis[<span class="code-string">'issues'</span>].append(<span class="code-string">'Hip misalignment detected'</span>)
+                posture_analysis[<span class="code-string">'recommendations'</span>].append(<span class="code-string">'Engage core muscles for stability'</span>)
+
+        <span class="code-comment"># Check spine alignment (head, shoulders, hips in line)</span>
+        <span class="code-keyword">if</span> <span class="code-string">'nose'</span> <span class="code-keyword">in</span> landmarks <span class="code-keyword">and</span> <span class="code-string">'left_shoulder'</span> <span class="code-keyword">in</span> landmarks <span class="code-keyword">and</span> <span class="code-string">'left_hip'</span> <span class="code-keyword">in</span> landmarks:
+            head_forward = landmarks[<span class="code-string">'nose'</span>][<span class="code-number">0</span>] - landmarks[<span class="code-string">'left_shoulder'</span>][<span class="code-number">0</span>]
+            <span class="code-keyword">if</span> abs(head_forward) > <span class="code-number">30</span>:  <span class="code-comment"># Forward head posture threshold</span>
+                posture_analysis[<span class="code-string">'issues'</span>].append(<span class="code-string">'Forward head posture'</span>)
+                posture_analysis[<span class="code-string">'recommendations'</span>].append(<span class="code-string">'Keep head aligned over shoulders'</span>)
+
+        <span class="code-comment"># Calculate overall posture score</span>
+        max_issues = <span class="code-number">5</span>  <span class="code-comment"># Maximum possible issues</span>
+        current_issues = len(posture_analysis[<span class="code-string">'issues'</span>])
+        posture_analysis[<span class="code-string">'overall_score'</span>] = max(<span class="code-number">0</span>, (<span class="code-number">100</span> - (current_issues / max_issues) * <span class="code-number">100</span>))
+
+        <span class="code-keyword">return</span> posture_analysis
+
+    <span class="code-keyword">def</span> <span class="code-function">_generate_form_feedback</span>(self, landmarks: Dict, angles: Dict, exercise_type: str) -> Dict:
+        <span class="code-string">"""
+        Generate specific feedback based on exercise type and current form.
+        Provides actionable corrections for optimal performance.
+        """</span>
+
+        feedback = {
+            <span class="code-string">'exercise'</span>: exercise_type,
+            <span class="code-string">'corrections'</span>: [],
+            <span class="code-string">'good_points'</span>: [],
+            <span class="code-string">'overall_rating'</span>: <span class="code-string">'Good'</span>
+        }
+
+        <span class="code-keyword">if</span> exercise_type == <span class="code-string">'squat'</span>:
+            feedback.update(self._analyze_squat_form(landmarks, angles))
+        <span class="code-keyword">elif</span> exercise_type == <span class="code-string">'push_up'</span>:
+            feedback.update(self._analyze_pushup_form(landmarks, angles))
+        <span class="code-keyword">elif</span> exercise_type == <span class="code-string">'plank'</span>:
+            feedback.update(self._analyze_plank_form(landmarks, angles))
+        <span class="code-keyword">else</span>:
+            feedback.update(self._analyze_general_form(landmarks, angles))
+
+        <span class="code-keyword">return</span> feedback
+
+    <span class="code-keyword">def</span> <span class="code-function">_analyze_squat_form</span>(self, landmarks: Dict, angles: Dict) -> Dict:
+        <span class="code-string">"""
+        Analyze squat form with specific focus on knee tracking, depth, and balance.
+        """</span>
+
+        corrections = []
+        good_points = []
+
+        <span class="code-comment"># Check squat depth using knee angle</span>
+        <span class="code-keyword">if</span> <span class="code-string">'left_knee'</span> <span class="code-keyword">in</span> angles:
+            knee_angle = angles[<span class="code-string">'left_knee'</span>]
+            <span class="code-keyword">if</span> knee_angle > <span class="code-number">120</span>:
+                corrections.append(<span class="code-string">'Go deeper - thighs should be parallel to ground'</span>)
+            <span class="code-keyword">elif</span> knee_angle < <span class="code-number">70</span>:
+                corrections.append(<span class="code-string">'Avoid going too deep - maintain control'</span>)
+            <span class="code-keyword">else</span>:
+                good_points.append(<span class="code-string">'Good squat depth achieved'</span>)
+
+        <span class="code-comment"># Check knee alignment (knees should track over toes)</span>
+        <span class="code-keyword">if</span> <span class="code-string">'left_knee'</span> <span class="code-keyword">in</span> landmarks <span class="code-keyword">and</span> <span class="code-string">'left_ankle'</span> <span class="code-keyword">in</span> landmarks:
+            knee_x = landmarks[<span class="code-string">'left_knee'</span>][<span class="code-number">0</span>]
+            ankle_x = landmarks[<span class="code-string">'left_ankle'</span>][<span class="code-number">0</span>]
+            <span class="code-keyword">if</span> abs(knee_x - ankle_x) > <span class="code-number">30</span>:
+                corrections.append(<span class="code-string">'Keep knees aligned over toes'</span>)
+            <span class="code-keyword">else</span>:
+                good_points.append(<span class="code-string">'Good knee tracking'</span>)
+
+        <span class="code-comment"># Check back alignment</span>
+        <span class="code-keyword">if</span> <span class="code-string">'left_shoulder'</span> <span class="code-keyword">in</span> landmarks <span class="code-keyword">and</span> <span class="code-string">'left_hip'</span> <span class="code-keyword">in</span> landmarks:
+            torso_angle = self._calculate_torso_angle(landmarks)
+            <span class="code-keyword">if</span> torso_angle < <span class="code-number">45</span>:
+                corrections.append(<span class="code-string">'Keep chest up and maintain neutral spine'</span>)
+            <span class="code-keyword">else</span>:
+                good_points.append(<span class="code-string">'Good torso position'</span>)
+
+        rating = <span class="code-string">'Excellent'</span> <span class="code-keyword">if</span> len(corrections) == <span class="code-number">0</span> <span class="code-keyword">else</span> <span class="code-string">'Good'</span> <span class="code-keyword">if</span> len(corrections) <= <span class="code-number">2</span> <span class="code-keyword">else</span> <span class="code-string">'Needs Work'</span>
+
+        <span class="code-keyword">return</span> {
+            <span class="code-string">'corrections'</span>: corrections,
+            <span class="code-string">'good_points'</span>: good_points,
+            <span class="code-string">'overall_rating'</span>: rating
+        }
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>⚙️ Technical Implementation Notes</h2>
+            <h3>Key Algorithms & Innovations</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>Real-time Pose Detection:</strong> MediaPipe integration for accurate skeletal tracking at 30+ FPS</li>
+                <li><strong>Angle Calculation:</strong> Vector mathematics for precise joint angle measurements</li>
+                <li><strong>Form Analysis:</strong> Exercise-specific algorithms for movement quality assessment</li>
+                <li><strong>Posture Correction:</strong> AI-powered feedback system for alignment optimization</li>
+                <li><strong>Visual Feedback:</strong> Real-time overlay system with corrective guidance</li>
+            </ul>
+
+            <h3>Why This Approach Works</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>Scientific Accuracy:</strong> Biomechanically sound analysis based on sports science principles</li>
+                <li><strong>Real-time Performance:</strong> Optimized algorithms enable immediate feedback during exercise</li>
+                <li><strong>Personalized Guidance:</strong> Adaptive feedback system tailored to individual movement patterns</li>
+                <li><strong>Injury Prevention:</strong> Early detection of poor form reduces risk of exercise-related injuries</li>
+            </ul>
+        </div>
+
+        <div class="demo-links">
+            <a href="https://pose-perfect-ai-169218045868.us-west1.run.app/" target="_blank" class="demo-btn">🚀 Try Live Demo</a>
+            <a href="pose-perfect-ai.html" class="demo-btn secondary">📖 View Full Project Details</a>
+        </div>
+
+        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+            <a href="index.html">← Back to Portfolio</a> |
+            <a href="pose-perfect-ai.html">View Project Overview</a>
+        </nav>
+    </div>
+</body>
+</html>

@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Polaroid Moments Generator - Source Code</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #222;
+            background-color: #ffffff;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .back-nav {
+            margin-bottom: 20px;
+        }
+
+        .back-nav a {
+            color: #007BFF;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .back-nav a:hover {
+            text-decoration: underline;
+        }
+
+        .project-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #E91E63, #C2185B);
+            color: white;
+            border-radius: 10px;
+        }
+
+        .project-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .project-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .content-section {
+            margin: 40px 0;
+            padding: 30px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border-left: 5px solid #E91E63;
+        }
+
+        .content-section h2 {
+            color: #E91E63;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .content-section h3 {
+            color: #333;
+            margin: 20px 0 10px 0;
+            font-size: 1.3rem;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #FFF8E1, #FFF3C4);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #E91E63;
+            margin: 20px 0;
+        }
+
+        .code-container {
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        .code-header {
+            color: #569cd6;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .code-block {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #d4d4d4;
+        }
+
+        .code-comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+
+        .code-keyword {
+            color: #569cd6;
+        }
+
+        .code-string {
+            color: #ce9178;
+        }
+
+        .code-function {
+            color: #dcdcaa;
+        }
+
+        .code-number {
+            color: #b5cea8;
+        }
+
+        .demo-links {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .demo-btn {
+            display: inline-block;
+            background-color: #007BFF;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .demo-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .demo-btn.secondary {
+            background-color: #28a745;
+        }
+
+        .demo-btn.secondary:hover {
+            background-color: #218838;
+        }
+
+        @media (max-width: 768px) {
+            .project-header h1 {
+                font-size: 2rem;
+            }
+
+            .project-header p {
+                font-size: 1rem;
+            }
+
+            .demo-btn {
+                margin: 5px;
+                padding: 10px 20px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="polaroid-moments-generator.html">← Back to Project Overview</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>📷 Polaroid Moments Generator</h1>
+            <p>Core Source Code & Vintage Photo Synthesis Implementation</p>
+
+            <div class="badges">
+                <span class="badge">React 19</span>
+                <span class="badge">TypeScript</span>
+                <span class="badge">Gemini AI</span>
+                <span class="badge">Image Generation</span>
+            </div>
+        </div>
+
+        <div class="highlight-box">
+            <h3>🔍 About This Code Showcase</h3>
+            <p><strong>This curated code snippet demonstrates how the Polaroid Moments Generator blends two personal images into cohesive vintage compositions with authentic Polaroid aesthetics and multiple pose variations.</strong></p>
+            <p>Full deployment scripts, API integrations, and proprietary details are omitted for clarity and security. This showcase highlights the core image fusion algorithms and vintage style transfer techniques.</p>
+        </div>
+
+        <div class="content-section">
+            <h2>🎨 Core Algorithm: Dual Image Fusion Engine</h2>
+            <p>The heart of the Polaroid Moments Generator is its ability to intelligently blend two separate photos into cohesive vintage compositions. Here's the core implementation:</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 polaroid_fusion.ts</div>
+                <div class="code-block">
+<span class="code-keyword">import</span> { GoogleGenerativeAI } <span class="code-keyword">from</span> <span class="code-string">'@google/generative-ai'</span>;
+
+<span class="code-keyword">interface</span> <span class="code-function">PoseVariation</span> {
+  arrangement: string;
+  composition: string;
+  relativePositioning: string;
+  intimacyLevel: number;
+}
+
+<span class="code-keyword">class</span> <span class="code-function">PolaroidFusionEngine</span> {
+  <span class="code-keyword">private</span> genAI: GoogleGenerativeAI;
+
+  <span class="code-comment">// Pre-defined pose variations for natural-looking compositions</span>
+  <span class="code-keyword">private</span> poseTemplates: PoseVariation[] = [
+    { arrangement: <span class="code-string">'side_by_side'</span>, composition: <span class="code-string">'shoulder_to_shoulder'</span>,
+      relativePositioning: <span class="code-string">'equal_height'</span>, intimacyLevel: <span class="code-number">0.7</span> },
+    { arrangement: <span class="code-string">'embracing'</span>, composition: <span class="code-string">'one_arm_around'</span>,
+      relativePositioning: <span class="code-string">'slight_lean'</span>, intimacyLevel: <span class="code-number">0.9</span> },
+    { arrangement: <span class="code-string">'back_to_back'</span>, composition: <span class="code-string">'playful_stance'</span>,
+      relativePositioning: <span class="code-string">'mirror_heights'</span>, intimacyLevel: <span class="code-number">0.5</span> }
+  ];
+
+  <span class="code-keyword">constructor</span>(apiKey: string) {
+    this.genAI = <span class="code-keyword">new</span> GoogleGenerativeAI(apiKey);
+  }
+
+  <span class="code-keyword">async</span> <span class="code-function">generatePolaroidMoments</span>(image1: File, image2: File): Promise&lt;string[]&gt; {
+    <span class="code-string">"""
+    Blend two separate photos into multiple Polaroid-style compositions.
+    Maintains facial identity while creating natural-looking togetherness.
+
+    Args:
+        image1, image2: The two individual photos to blend
+
+    Returns:
+        Array of base64-encoded Polaroid-style images with different poses
+    """</span>
+
+    <span class="code-comment">// First, analyze both images to understand subjects and composition</span>
+    <span class="code-keyword">const</span> analysis1 = <span class="code-keyword">await</span> this.analyzeSubject(image1);
+    <span class="code-keyword">const</span> analysis2 = <span class="code-keyword">await</span> this.analyzeSubject(image2);
+
+    <span class="code-comment">// Determine optimal blending strategy based on image characteristics</span>
+    <span class="code-keyword">const</span> blendingStrategy = this.calculateBlendingStrategy(analysis1, analysis2);
+
+    <span class="code-keyword">const</span> polaroidMoments: string[] = [];
+
+    <span class="code-comment">// Generate multiple pose variations for creative variety</span>
+    <span class="code-keyword">for</span> (<span class="code-keyword">const</span> pose <span class="code-keyword">of</span> this.poseTemplates) {
+      <span class="code-keyword">const</span> fusionPrompt = this.buildFusionPrompt(pose, blendingStrategy);
+
+      <span class="code-comment">// Core AI fusion - the magic happens here</span>
+      <span class="code-keyword">const</span> result = <span class="code-keyword">await</span> this.model.generateContent([
+        fusionPrompt,
+        { inlineData: { data: <span class="code-keyword">await</span> this.convertToBase64(image1), mimeType: image1.type } },
+        { inlineData: { data: <span class="code-keyword">await</span> this.convertToBase64(image2), mimeType: image2.type } }
+      ]);
+
+      <span class="code-comment">// Apply vintage Polaroid aesthetic post-processing</span>
+      <span class="code-keyword">const</span> polaroidStyled = <span class="code-keyword">await</span> this.applyVintageEffects(result, pose);
+      polaroidMoments.push(polaroidStyled);
+    }
+
+    <span class="code-keyword">return</span> polaroidMoments;
+  }
+
+  <span class="code-keyword">private</span> <span class="code-function">buildFusionPrompt</span>(pose: PoseVariation, strategy: any): string {
+    <span class="code-comment">// Carefully crafted prompt ensures natural-looking results</span>
+    <span class="code-keyword">return</span> `Create a single vintage Polaroid photo showing both people together in a ${pose.arrangement} pose.
+    Composition: ${pose.composition} with ${pose.relativePositioning} positioning.
+
+    CRITICAL REQUIREMENTS:
+    - Maintain exact facial features and identity of both people
+    - Blend lighting naturally so they appear photographed together
+    - Use authentic 1970s Polaroid aesthetic: warm tones, soft focus, film grain
+    - Add classic white Polaroid border with subtle aging
+    - Ensure pose looks natural and candid, not forced
+    - Match skin tones and adjust for consistent lighting
+
+    Result should look like an authentic vintage Polaroid from a real moment.`;
+  }
+}
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🎞️ Vintage Style Transfer Pipeline</h2>
+            <p>The authentic Polaroid aesthetic requires sophisticated color grading and film simulation to recreate the distinctive look of instant film:</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 vintage_processor.ts</div>
+                <div class="code-block">
+<span class="code-keyword">class</span> <span class="code-function">VintageProcessor</span> {
+  <span class="code-keyword">async</span> <span class="code-function">applyPolaroidAesthetic</span>(imageData: string): Promise&lt;string&gt; {
+    <span class="code-string">"""
+    Apply authentic Polaroid film characteristics to the generated image.
+    Recreates the distinctive color palette, grain, and border of instant film.
+    """</span>
+
+    <span class="code-comment">// Step 1: Color grading to match Polaroid film chemistry</span>
+    <span class="code-keyword">const</span> colorGraded = <span class="code-keyword">await</span> this.applyPolaroidColorGrading(imageData);
+
+    <span class="code-comment">// Step 2: Add film grain for authentic texture</span>
+    <span class="code-keyword">const</span> grainAdded = <span class="code-keyword">await</span> this.addFilmGrain(colorGraded, {
+      intensity: <span class="code-number">0.15</span>,
+      pattern: <span class="code-string">'organic'</span>,
+      colorVariation: <span class="code-number">0.08</span>
+    });
+
+    <span class="code-comment">// Step 3: Apply soft focus characteristic of instant film</span>
+    <span class="code-keyword">const</span> softFocus = <span class="code-keyword">await</span> this.applySoftFocus(grainAdded, {
+      radius: <span class="code-number">1.2</span>,
+      preserveDetails: <span class="code-keyword">true</span>
+    });
+
+    <span class="code-comment">// Step 4: Add the iconic white border with subtle aging</span>
+    <span class="code-keyword">const</span> withBorder = <span class="code-keyword">await</span> this.addPolaroidBorder(softFocus, {
+      borderWidth: <span class="code-number">40</span>,
+      agingLevel: <span class="code-number">0.3</span>,
+      yellowTint: <span class="code-number">0.12</span>
+    });
+
+    <span class="code-keyword">return</span> withBorder;
+  }
+
+  <span class="code-keyword">private</span> <span class="code-function">applyPolaroidColorGrading</span>(imageData: string) {
+    <span class="code-string">"""Apply the distinctive warm, muted color palette of Polaroid film"""</span>
+
+    <span class="code-keyword">const</span> colorAdjustments = {
+      <span class="code-comment">// Polaroid SX-70 film characteristics</span>
+      temperature: +<span class="code-number">200</span>,    <span class="code-comment">// Warmer tone</span>
+      tint: +<span class="code-number">15</span>,           <span class="code-comment">// Slight magenta shift</span>
+      saturation: -<span class="code-number">0.2</span>,    <span class="code-comment">// Muted colors</span>
+      contrast: -<span class="code-number">0.1</span>,      <span class="code-comment">// Softer contrast</span>
+      highlights: -<span class="code-number">0.3</span>,    <span class="code-comment">// Compressed highlights</span>
+      shadows: +<span class="code-number">0.2</span>,       <span class="code-comment">// Lifted shadows</span>
+
+      <span class="code-comment">// Color channel adjustments for authentic look</span>
+      redChannel: { gamma: <span class="code-number">1.1</span>, gain: <span class="code-number">1.05</span> },
+      greenChannel: { gamma: <span class="code-number">0.95</span>, gain: <span class="code-number">0.98</span> },
+      blueChannel: { gamma: <span class="code-number">0.9</span>, gain: <span class="code-number">0.92</span> }
+    };
+
+    <span class="code-keyword">return</span> this.processColorChannels(imageData, colorAdjustments);
+  }
+
+  <span class="code-keyword">private</span> <span class="code-function">addFilmGrain</span>(imageData: string, options: any) {
+    <span class="code-string">"""Add organic film grain that mimics silver halide crystals"""</span>
+
+    <span class="code-comment">// Generate procedural grain pattern based on real Polaroid film analysis</span>
+    <span class="code-keyword">const</span> grainPattern = this.generateOrganicGrain({
+      size: <span class="code-number">0.8</span>,
+      distribution: <span class="code-string">'gaussian'</span>,
+      luminanceVariation: options.intensity,
+      chromaVariation: options.colorVariation
+    });
+
+    <span class="code-comment">// Blend grain with image using screen mode for authentic look</span>
+    <span class="code-keyword">return</span> this.blendGrain(imageData, grainPattern, <span class="code-string">'screen'</span>);
+  }
+}
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>⚙️ Technical Implementation Notes</h2>
+            <h3>Key Algorithms & Innovations</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>Dual Image Fusion:</strong> Advanced AI blending that maintains individual identities while creating natural togetherness</li>
+                <li><strong>Pose Generation:</strong> Multiple composition variations using photographic principles</li>
+                <li><strong>Authentic Color Grading:</strong> Scientifically accurate Polaroid SX-70 film emulation</li>
+                <li><strong>Organic Film Grain:</strong> Procedural grain generation based on real instant film analysis</li>
+                <li><strong>Lighting Harmonization:</strong> Intelligent lighting matching for believable compositions</li>
+            </ul>
+
+            <h3>Why This Approach Works</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>Authentic Aesthetic:</strong> Scientific recreation of actual Polaroid film characteristics</li>
+                <li><strong>Natural Compositions:</strong> AI understands human poses and creates believable interactions</li>
+                <li><strong>Identity Preservation:</strong> Advanced facial recognition ensures both people remain recognizable</li>
+                <li><strong>Creative Variety:</strong> Multiple pose templates provide diverse artistic options</li>
+            </ul>
+        </div>
+
+        <div class="demo-links">
+            <a href="https://polaroid-moments-generator-169218045868.us-west1.run.app/" target="_blank" class="demo-btn">🚀 Try Live Demo</a>
+            <a href="polaroid-moments-generator.html" class="demo-btn secondary">📖 View Full Project Details</a>
+        </div>
+
+        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+            <a href="index.html">← Back to Portfolio</a> |
+            <a href="polaroid-moments-generator.html">View Project Overview</a>
+        </nav>
+    </div>
+</body>
+</html>
