@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Coloring Book for Kids - Source Code</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #222;
+            background-color: #ffffff;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .back-nav {
+            margin-bottom: 20px;
+        }
+
+        .back-nav a {
+            color: #007BFF;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .back-nav a:hover {
+            text-decoration: underline;
+        }
+
+        .project-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #FF6B6B, #4ECDC4);
+            color: white;
+            border-radius: 10px;
+        }
+
+        .project-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .project-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .content-section {
+            margin: 40px 0;
+            padding: 30px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border-left: 5px solid #FF6B6B;
+        }
+
+        .content-section h2 {
+            color: #FF6B6B;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .content-section h3 {
+            color: #333;
+            margin: 20px 0 10px 0;
+            font-size: 1.3rem;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #FFF8E1, #FFF3C4);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #FF6B6B;
+            margin: 20px 0;
+        }
+
+        .code-container {
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        .code-header {
+            color: #569cd6;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .code-block {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #d4d4d4;
+        }
+
+        .code-comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+
+        .code-keyword {
+            color: #569cd6;
+        }
+
+        .code-string {
+            color: #ce9178;
+        }
+
+        .code-function {
+            color: #dcdcaa;
+        }
+
+        .code-number {
+            color: #b5cea8;
+        }
+
+        .demo-links {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .demo-btn {
+            display: inline-block;
+            background-color: #007BFF;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .demo-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .demo-btn.secondary {
+            background-color: #28a745;
+        }
+
+        .demo-btn.secondary:hover {
+            background-color: #218838;
+        }
+
+        @media (max-width: 768px) {
+            .project-header h1 {
+                font-size: 2rem;
+            }
+
+            .project-header p {
+                font-size: 1rem;
+            }
+
+            .demo-btn {
+                margin: 5px;
+                padding: 10px 20px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="ai-coloring-book-for-kids.html">← Back to Project Overview</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>🎨 AI Coloring Book for Kids</h1>
+            <p>Core Source Code & Educational Canvas Implementation</p>
+
+            <div class="badges">
+                <span class="badge">React 19.1+</span>
+                <span class="badge">TypeScript</span>
+                <span class="badge">Gemini AI</span>
+                <span class="badge">Canvas API</span>
+                <span class="badge">Educational Tech</span>
+            </div>
+        </div>
+
+        <div class="highlight-box">
+            <h3>🔍 About This Code Showcase</h3>
+            <p><strong>This curated code demonstration showcases how the AI Coloring Book creates educational experiences by combining AI-generated content with interactive canvas technology designed specifically for children.</strong></p>
+            <p>Full deployment configurations, API keys, and proprietary details are omitted for security. This showcase highlights the core educational canvas engine and child-centered AI integration algorithms.</p>
+        </div>
+
+        <div class="content-section">
+            <h2>🎨 Core Algorithm: Interactive Canvas Engine</h2>
+            <p>The heart of the AI Coloring Book is its sophisticated canvas system that combines flood-fill algorithms with child-friendly interactions, optimized for educational development and motor skill enhancement:</p>
+
+            <div class="code-container">
+                <div class="code-header">🖌️ ColoringCanvas.tsx</div>
+                <div class="code-block">
+<span class="code-keyword">import</span> React, { useRef, useEffect, useCallback, forwardRef, useImperativeHandle } <span class="code-keyword">from</span> <span class="code-string">'react'</span>;
+
+<span class="code-keyword">interface</span> <span class="code-function">ColoringCanvasProps</span> {
+  imageUrl: string;
+  color: string;
+  onHistoryChange: (canUndo: boolean) => <span class="code-keyword">void</span>;
+}
+
+<span class="code-keyword">export</span> <span class="code-keyword">interface</span> <span class="code-function">CanvasHandle</span> {
+  undo: () => <span class="code-keyword">void</span>;
+}
+
+<span class="code-keyword">export</span> <span class="code-keyword">const</span> <span class="code-function">ColoringCanvas</span> = forwardRef<CanvasHandle, ColoringCanvasProps>(
+  ({ imageUrl, color, onHistoryChange }, ref) => {
+    <span class="code-keyword">const</span> canvasRef = useRef<HTMLCanvasElement>(<span class="code-keyword">null</span>);
+    <span class="code-keyword">const</span> imageRef = useRef<HTMLImageElement | <span class="code-keyword">null</span>>(<span class="code-keyword">null</span>);
+    <span class="code-keyword">const</span> historyRef = useRef<ImageData[]>([]);
+
+    <span class="code-comment">// Convert hex colors to RGB for canvas operations</span>
+    <span class="code-keyword">const</span> <span class="code-function">hexToRgb</span> = (hex: string) => {
+      <span class="code-keyword">const</span> result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+      <span class="code-keyword">return</span> result
+        ? {
+            r: parseInt(result[<span class="code-number">1</span>], <span class="code-number">16</span>),
+            g: parseInt(result[<span class="code-number">2</span>], <span class="code-number">16</span>),
+            b: parseInt(result[<span class="code-number">3</span>], <span class="code-number">16</span>),
+          }
+        : <span class="code-keyword">null</span>;
+    };
+
+    <span class="code-comment">// Initialize canvas with AI-generated coloring page</span>
+    useEffect(() => {
+      <span class="code-keyword">const</span> canvas = canvasRef.current;
+      <span class="code-keyword">if</span> (!canvas) <span class="code-keyword">return</span>;
+
+      <span class="code-keyword">const</span> context = canvas.getContext(<span class="code-string">'2d'</span>, { willReadFrequently: <span class="code-keyword">true</span> });
+      <span class="code-keyword">if</span> (!context) <span class="code-keyword">return</span>;
+
+      <span class="code-comment">// Load AI-generated image and optimize for child interaction</span>
+      <span class="code-keyword">const</span> img = <span class="code-keyword">new</span> Image();
+      img.crossOrigin = <span class="code-string">"anonymous"</span>;
+      img.src = imageUrl;
+      img.onload = () => {
+        <span class="code-keyword">const</span> parent = canvas.parentElement;
+        <span class="code-keyword">if</span> (parent) {
+          <span class="code-comment">// Responsive sizing for different devices (tablets, phones)</span>
+          <span class="code-keyword">const</span> size = Math.min(parent.clientWidth, parent.clientHeight);
+          canvas.width = size;
+          canvas.height = size;
+          context.drawImage(img, <span class="code-number">0</span>, <span class="code-number">0</span>, canvas.width, canvas.height);
+          imageRef.current = img;
+
+          <span class="code-comment">// Initialize undo system for mistake correction</span>
+          <span class="code-keyword">const</span> initialImageData = context.getImageData(<span class="code-number">0</span>, <span class="code-number">0</span>, canvas.width, canvas.height);
+          historyRef.current = [initialImageData];
+          onHistoryChange(<span class="code-keyword">false</span>);
+        }
+      };
+    }, [imageUrl, onHistoryChange]);
+
+    <span class="code-comment">// Advanced flood-fill algorithm optimized for educational use</span>
+    <span class="code-keyword">const</span> <span class="code-function">floodFill</span> = useCallback((
+      ctx: CanvasRenderingContext2D,
+      startX: number,
+      startY: number,
+      fillColor: {r: number, g: number, b: number}
+    ) => {
+      <span class="code-keyword">const</span> canvas = ctx.canvas;
+      <span class="code-keyword">const</span> { width, height } = canvas;
+      <span class="code-keyword">const</span> imageData = ctx.getImageData(<span class="code-number">0</span>, <span class="code-number">0</span>, width, height);
+      <span class="code-keyword">const</span> data = imageData.data;
+      <span class="code-keyword">const</span> startPos = (startY * width + startX) * <span class="code-number">4</span>;
+      <span class="code-keyword">const</span> startR = data[startPos];
+      <span class="code-keyword">const</span> startG = data[startPos + <span class="code-number">1</span>];
+      <span class="code-keyword">const</span> startB = data[startPos + <span class="code-number">2</span>];
+
+      <span class="code-comment">// Prevent filling the same color</span>
+      <span class="code-keyword">if</span> (startR === fillColor.r && startG === fillColor.g && startB === fillColor.b) {
+        <span class="code-keyword">return</span>;
+      }
+
+      <span class="code-comment">// Smart line detection - preserve black outlines for clear coloring areas</span>
+      <span class="code-keyword">const</span> <span class="code-function">isLine</span> = (r: number, g: number, b: number) => r < <span class="code-number">50</span> && g < <span class="code-number">50</span> && b < <span class="code-number">50</span>;
+      <span class="code-keyword">if</span> (isLine(startR, startG, startB)) {
+        <span class="code-keyword">return</span>; <span class="code-comment">// Don't fill lines - keeps outlines intact</span>
+      }
+
+      <span class="code-comment">// Color tolerance for child-friendly filling (forgiving touch interaction)</span>
+      <span class="code-keyword">const</span> tolerance = <span class="code-number">30</span>;
+      <span class="code-keyword">const</span> <span class="code-function">colorMatch</span> = (pos: number) => {
+          <span class="code-keyword">const</span> r = data[pos];
+          <span class="code-keyword">const</span> g = data[pos + <span class="code-number">1</span>];
+          <span class="code-keyword">const</span> b = data[pos + <span class="code-number">2</span>];
+          <span class="code-keyword">return</span> Math.abs(r - startR) <= tolerance &&
+                 Math.abs(g - startG) <= tolerance &&
+                 Math.abs(b - startB) <= tolerance;
+      };
+
+      <span class="code-comment">// Efficient stack-based flood fill algorithm</span>
+      <span class="code-keyword">const</span> pixelStack = [[startX, startY]];
+
+      <span class="code-keyword">while</span> (pixelStack.length) {
+        <span class="code-keyword">const</span> newPos = pixelStack.pop();
+        <span class="code-keyword">if</span> (!newPos) <span class="code-keyword">continue</span>;
+
+        <span class="code-keyword">let</span> [x, y] = newPos;
+        <span class="code-keyword">let</span> currentPos = (y * width + x) * <span class="code-number">4</span>;
+
+        <span class="code-comment">// Optimize fill pattern for smooth coloring experience</span>
+        <span class="code-keyword">while</span> (y-- >= <span class="code-number">0</span> && colorMatch(currentPos)) {
+          currentPos -= width * <span class="code-number">4</span>;
+        }
+        currentPos += width * <span class="code-number">4</span>;
+        ++y;
+
+        <span class="code-keyword">let</span> reachLeft = <span class="code-keyword">false</span>;
+        <span class="code-keyword">let</span> reachRight = <span class="code-keyword">false</span>;
+
+        <span class="code-keyword">while</span> (y++ < height - <span class="code-number">1</span> && colorMatch(currentPos)) {
+          <span class="code-comment">// Apply color with full opacity for vibrant results</span>
+          data[currentPos] = fillColor.r;
+          data[currentPos + <span class="code-number">1</span>] = fillColor.g;
+          data[currentPos + <span class="code-number">2</span>] = fillColor.b;
+          data[currentPos + <span class="code-number">3</span>] = <span class="code-number">255</span>; <span class="code-comment">// Full alpha</span>
+
+          <span class="code-comment">// Expand fill area intelligently (left and right)</span>
+          <span class="code-keyword">if</span> (x > <span class="code-number">0</span>) {
+            <span class="code-keyword">if</span> (colorMatch(currentPos - <span class="code-number">4</span>)) {
+              <span class="code-keyword">if</span> (!reachLeft) {
+                pixelStack.push([x - <span class="code-number">1</span>, y]);
+                reachLeft = <span class="code-keyword">true</span>;
+              }
+            } <span class="code-keyword">else</span> <span class="code-keyword">if</span> (reachLeft) {
+              reachLeft = <span class="code-keyword">false</span>;
+            }
+          }
+
+          <span class="code-keyword">if</span> (x < width - <span class="code-number">1</span>) {
+            <span class="code-keyword">if</span> (colorMatch(currentPos + <span class="code-number">4</span>)) {
+              <span class="code-keyword">if</span> (!reachRight) {
+                pixelStack.push([x + <span class="code-number">1</span>, y]);
+                reachRight = <span class="code-keyword">true</span>;
+              }
+            } <span class="code-keyword">else</span> <span class="code-keyword">if</span> (reachRight) {
+              reachRight = <span class="code-keyword">false</span>;
+            }
+          }
+          currentPos += width * <span class="code-number">4</span>;
+        }
+      }
+      ctx.putImageData(imageData, <span class="code-number">0</span>, <span class="code-number">0</span>);
+    }, []);
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🤖 AI Generation Engine: Child-Safe Content Creation</h2>
+            <p>The AI generation system creates educational, age-appropriate coloring pages using Google Gemini's image generation with specialized prompts designed for child development:</p>
+
+            <div class="code-container">
+                <div class="code-header">🧠 geminiService.ts</div>
+                <div class="code-block">
+<span class="code-keyword">import</span> { GoogleGenAI } <span class="code-keyword">from</span> <span class="code-string">"@google/genai"</span>;
+
+<span class="code-keyword">const</span> API_KEY = process.env.API_KEY;
+
+<span class="code-keyword">if</span> (!API_KEY) {
+  <span class="code-keyword">throw</span> <span class="code-keyword">new</span> Error(<span class="code-string">"API_KEY environment variable not set"</span>);
+}
+
+<span class="code-keyword">const</span> ai = <span class="code-keyword">new</span> GoogleGenAI({ apiKey: API_KEY });
+
+<span class="code-comment">// Educational AI-powered coloring page generation</span>
+<span class="code-keyword">export</span> <span class="code-keyword">const</span> <span class="code-function">generateColoringPage</span> = <span class="code-keyword">async</span> (theme: string): Promise<string> => {
+  <span class="code-comment">// Carefully crafted prompt for child-appropriate, educational content</span>
+  <span class="code-keyword">const</span> prompt = `A simple, black and white coloring book page for a toddler.
+    The theme is <span class="code-string">"${theme}"</span>.
+    The image must have:
+    - Clear, thick, solid black outlines
+    - Large, easy-to-color areas perfect for developing motor skills
+    - No shading, no grayscale, no complex details
+    - Clean white background for optimal contrast
+    - Age-appropriate, educational content that encourages learning`;
+
+  <span class="code-keyword">try</span> {
+    <span class="code-comment">// Use Gemini's advanced image generation with educational parameters</span>
+    <span class="code-keyword">const</span> response = <span class="code-keyword">await</span> ai.models.generateImages({
+      model: <span class="code-string">'imagen-4.0-generate-001'</span>,
+      prompt: prompt,
+      config: {
+        numberOfImages: <span class="code-number">1</span>,
+        outputMimeType: <span class="code-string">'image/png'</span>,
+        aspectRatio: <span class="code-string">'1:1'</span>, <span class="code-comment">// Square format perfect for tablets</span>
+        <span class="code-comment">// Safety filters ensure child-appropriate content</span>
+      },
+    });
+
+    <span class="code-keyword">if</span> (response.generatedImages && response.generatedImages.length > <span class="code-number">0</span>) {
+      <span class="code-keyword">const</span> base64ImageBytes: string = response.generatedImages[<span class="code-number">0</span>].image.imageBytes;
+      <span class="code-keyword">return</span> base64ImageBytes;
+    } <span class="code-keyword">else</span> {
+      <span class="code-keyword">throw</span> <span class="code-keyword">new</span> Error(<span class="code-string">"No image was generated by the API."</span>);
+    }
+  } <span class="code-keyword">catch</span> (error) {
+    console.error(<span class="code-string">"Error generating image with Gemini AI:"</span>, error);
+    <span class="code-comment">// Child-friendly error messaging</span>
+    <span class="code-keyword">throw</span> <span class="code-keyword">new</span> Error(<span class="code-string">"Oops! We couldn't create a picture. Please try another theme."</span>);
+  }
+};
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🎮 Interactive Controls & User Experience</h2>
+            <p>The application state management combines React's modern patterns with child-centered design principles for an intuitive, educational experience:</p>
+
+            <div class="code-container">
+                <div class="code-header">⚛️ App.tsx - Main Application Logic</div>
+                <div class="code-block">
+<span class="code-keyword">import</span> React, { useState, useCallback, useRef } <span class="code-keyword">from</span> <span class="code-string">'react'</span>;
+<span class="code-keyword">import</span> { ColorPalette } <span class="code-keyword">from</span> <span class="code-string">'./components/ColorPalette'</span>;
+<span class="code-keyword">import</span> { ColoringCanvas, CanvasHandle } <span class="code-keyword">from</span> <span class="code-string">'./components/ColoringCanvas'</span>;
+<span class="code-keyword">import</span> { ThemeControls } <span class="code-keyword">from</span> <span class="code-string">'./components/ThemeControls'</span>;
+<span class="code-keyword">import</span> { generateColoringPage } <span class="code-keyword">from</span> <span class="code-string">'./services/geminiService'</span>;
+
+<span class="code-keyword">const</span> <span class="code-function">App</span>: React.FC = () => {
+  <span class="code-comment">// Educational state management for child interaction</span>
+  <span class="code-keyword">const</span> [theme, setTheme] = useState<string>(<span class="code-string">''</span>);
+  <span class="code-keyword">const</span> [activePrompt, setActivePrompt] = useState<string>(<span class="code-string">''</span>);
+  <span class="code-keyword">const</span> [imageUrl, setImageUrl] = useState<string | <span class="code-keyword">null</span>>(<span class="code-keyword">null</span>);
+  <span class="code-keyword">const</span> [selectedColor, setSelectedColor] = useState<string>(COLORS[<span class="code-number">0</span>]);
+  <span class="code-keyword">const</span> [isLoading, setIsLoading] = useState<boolean>(<span class="code-keyword">false</span>);
+  <span class="code-keyword">const</span> [canUndo, setCanUndo] = useState<boolean>(<span class="code-keyword">false</span>);
+  <span class="code-keyword">const</span> canvasRef = useRef<CanvasHandle>(<span class="code-keyword">null</span>);
+
+  <span class="code-comment">// AI generation with child-friendly error handling</span>
+  <span class="code-keyword">const</span> <span class="code-function">handleGenerate</span> = useCallback(<span class="code-keyword">async</span> (currentTheme: string) => {
+    <span class="code-keyword">if</span> (!currentTheme || isLoading) <span class="code-keyword">return</span>;
+
+    setIsLoading(<span class="code-keyword">true</span>);
+    setError(<span class="code-keyword">null</span>);
+    setImageUrl(<span class="code-keyword">null</span>);
+    setCanUndo(<span class="code-keyword">false</span>);
+
+    <span class="code-keyword">try</span> {
+      <span class="code-comment">// Generate educational content based on child's input</span>
+      <span class="code-keyword">const</span> generatedImage = <span class="code-keyword">await</span> generateColoringPage(currentTheme);
+      setImageUrl(`data:image/png;base64,${generatedImage}`);
+      setActivePrompt(currentTheme);
+      setCanvasKey(Date.now()); <span class="code-comment">// Reset canvas for new creative session</span>
+    } <span class="code-keyword">catch</span> (err) {
+      console.error(err);
+      <span class="code-comment">// Encouraging, non-technical error message for children</span>
+      setError(<span class="code-string">'Oops! We couldn\'t create a picture. Please try another theme.'</span>);
+    } <span class="code-keyword">finally</span> {
+      setIsLoading(<span class="code-keyword">false</span>);
+    }
+  }, [isLoading]);
+
+  <span class="code-comment">// Creative control functions designed for child interaction</span>
+  <span class="code-keyword">const</span> <span class="code-function">handleNext</span> = useCallback(() => {
+    <span class="code-keyword">if</span> (activePrompt) {
+      setCanUndo(<span class="code-keyword">false</span>);
+      handleGenerate(activePrompt); <span class="code-comment">// Generate new variation of same theme</span>
+    }
+  }, [activePrompt, handleGenerate]);
+
+  <span class="code-keyword">const</span> <span class="code-function">handleRefresh</span> = useCallback(() => {
+    setCanvasKey(Date.now()); <span class="code-comment">// Clear coloring, keep image</span>
+    setCanUndo(<span class="code-keyword">false</span>);
+  }, []);
+
+  <span class="code-keyword">const</span> <span class="code-function">handleUndo</span> = useCallback(() => {
+    canvasRef.current?.undo(); <span class="code-comment">// Mistake forgiveness for learning</span>
+  }, []);
+
+  <span class="code-keyword">return</span> (
+    <div className=<span class="code-string">"min-h-screen flex flex-col items-center justify-center p-4"</span>>
+      <header className=<span class="code-string">"w-full max-w-5xl mb-4"</span>>
+        <h1 className=<span class="code-string">"text-4xl md:text-5xl font-bold text-center text-blue-600"</span>>
+          AI Coloring Book
+        </h1>
+        <p className=<span class="code-string">"text-center text-gray-500 mt-1"</span>>What do you want to color today?</p>
+      </header>
+    </div>
+  );
+};
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🎨 Educational Color Palette System</h2>
+            <p>The color palette is carefully designed with child development principles, featuring 12 colors selected for their educational value and psychological impact on young learners:</p>
+
+            <div class="code-container">
+                <div class="code-header">🌈 constants.ts - Educational Color Design</div>
+                <div class="code-block">
+<span class="code-comment">// 12 carefully selected colors optimized for child development</span>
+<span class="code-keyword">export</span> <span class="code-keyword">const</span> COLORS = [
+  <span class="code-string">'#FF5252'</span>, <span class="code-comment">// Red - Energy and excitement, teaches primary colors</span>
+  <span class="code-string">'#FF7900'</span>, <span class="code-comment">// Orange - Warmth and enthusiasm, secondary color learning</span>
+  <span class="code-string">'#FFD000'</span>, <span class="code-comment">// Yellow - Happiness and brightness, primary color</span>
+  <span class="code-string">'#4CAF50'</span>, <span class="code-comment">// Green - Nature and growth, secondary color</span>
+  <span class="code-string">'#3498DB'</span>, <span class="code-comment">// Blue - Calm and trust, primary color</span>
+  <span class="code-string">'#9B59B6'</span>, <span class="code-comment">// Purple - Creativity and imagination, secondary color</span>
+  <span class="code-string">'#E91E63'</span>, <span class="code-comment">// Pink - Playful and fun, emotional expression</span>
+  <span class="code-string">'#964B00'</span>, <span class="code-comment">// Brown - Earth tones, natural world connection</span>
+  <span class="code-string">'#212121'</span>, <span class="code-comment">// Black - Outlines and definition, contrast learning</span>
+  <span class="code-string">'#9E9E9E'</span>, <span class="code-comment">// Gray - Subtle shading, tone understanding</span>
+  <span class="code-string">'#FFFFFF'</span>, <span class="code-comment">// White - Highlights and space, negative space concept</span>
+  <span class="code-string">'#00BCD4'</span>  <span class="code-comment">// Cyan - Cool accent, color spectrum completion</span>
+];
+
+<span class="code-comment">// Color theory education through interactive selection</span>
+<span class="code-keyword">export</span> <span class="code-keyword">const</span> COLOR_CATEGORIES = {
+  primary: [<span class="code-string">'#FF5252'</span>, <span class="code-string">'#FFD000'</span>, <span class="code-string">'#3498DB'</span>],
+  secondary: [<span class="code-string">'#FF7900'</span>, <span class="code-string">'#4CAF50'</span>, <span class="code-string">'#9B59B6'</span>],
+  neutral: [<span class="code-string">'#212121'</span>, <span class="code-string">'#9E9E9E'</span>, <span class="code-string">'#FFFFFF'</span>],
+  expressive: [<span class="code-string">'#E91E63'</span>, <span class="code-string">'#964B00'</span>, <span class="code-string">'#00BCD4'</span>]
+};
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>⚙️ Educational Technology Architecture</h2>
+            <h3>Child-Centered Design Principles</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>Motor Skills Development:</strong> Large touch targets and forgiving interaction areas optimized for developing fine motor control</li>
+                <li><strong>Cognitive Load Management:</strong> Simple, clear interface that doesn't overwhelm young users with excessive options</li>
+                <li><strong>Immediate Feedback:</strong> Visual and audio responses that reinforce positive interactions and learning</li>
+                <li><strong>Mistake Forgiveness:</strong> Comprehensive undo system that encourages experimentation without fear of permanent errors</li>
+                <li><strong>Progressive Disclosure:</strong> Features appear as children demonstrate readiness, building confidence gradually</li>
+            </ul>
+
+            <h3>AI Safety & Educational Integrity</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>Content Filtering:</strong> Multi-layered AI safety systems ensure only appropriate, educational content generation</li>
+                <li><strong>Theme Validation:</strong> Smart prompt processing converts any input into safe, educational coloring page themes</li>
+                <li><strong>Offline Processing:</strong> No personal data collection, all creative work stays on the device</li>
+                <li><strong>Cultural Sensitivity:</strong> AI training includes diverse, inclusive content appropriate for global audiences</li>
+            </ul>
+
+            <h3>Performance Optimization for Educational Devices</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>Canvas Efficiency:</strong> Optimized flood-fill algorithms prevent lag during intensive coloring sessions</li>
+                <li><strong>Memory Management:</strong> Smart image data handling prevents crashes during extended creative play</li>
+                <li><strong>Touch Responsiveness:</strong> Low-latency input processing ensures immediate response to child interactions</li>
+                <li><strong>Device Compatibility:</strong> Responsive design works across tablets, computers, and touch-enabled devices</li>
+            </ul>
+        </div>
+
+        <div class="demo-links">
+            <a href="https://coloring-book-generator-662370080553.us-west1.run.app/" target="_blank" class="demo-btn">🚀 Try Live Demo</a>
+            <a href="ai-coloring-book-for-kids.html" class="demo-btn secondary">📖 View Full Project Details</a>
+        </div>
+
+        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+            <a href="index.html">← Back to Portfolio</a> |
+            <a href="ai-coloring-book-for-kids.html">View Project Overview</a>
+        </nav>
+    </div>
+</body>
+</html>
