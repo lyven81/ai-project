@@ -2,7 +2,7 @@
 
 [![Portfolio Website](https://img.shields.io/badge/Portfolio-Live-green?logo=vercel)](https://lyven81.github.io/ai-project/)
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-black?logo=github)](https://github.com/lyven81/ai-project)
-[![Projects](https://img.shields.io/badge/Projects-15-blue)](#-featured-projects)
+[![Projects](https://img.shields.io/badge/Projects-16-blue)](#-featured-projects)
 [![AI Powered](https://img.shields.io/badge/AI-Powered-orange?logo=tensorflow)](https://github.com/lyven81/ai-project)
 
 **Innovative AI Solutions for Modern Challenges** - A curated collection of production-ready AI applications showcasing expertise in computer vision, natural language processing, document processing, and creative AI technologies.
@@ -13,7 +13,7 @@
 
 ## 🌟 Portfolio Overview
 
-This repository contains **15 production-deployed AI applications** demonstrating proficiency across multiple AI domains. Each project includes comprehensive documentation, live demos, and complete source code with deployment configurations.
+This repository contains **16 production-deployed AI applications** demonstrating proficiency across multiple AI domains. Each project includes comprehensive documentation, live demos, and complete source code with deployment configurations.
 
 **🎯 Portfolio Highlights:**
 - **15+ AI Technologies** integrated across projects
@@ -120,6 +120,12 @@ This repository contains **15 production-deployed AI applications** demonstratin
 - **Tech Stack:** React, TypeScript, Gemini 2.5 Flash, Multimodal AI, Image Processing
 - **AI Capabilities:** Facial expression transformation, identity preservation, emotional range generation, photorealistic quality
 
+#### [Polaroid Moments Generator 3](./projects/polaroid-moments-generator-3/)
+**Create nostalgic three-person group photos with AI-powered storytelling and vintage aesthetics**
+- **Live Demo:** [polaroid-moments-generator-3-person-169218045868.us-west1.run.app](https://polaroid-moments-generator-3-person-169218045868.us-west1.run.app/)
+- **Tech Stack:** React, TypeScript, Gemini AI, Advanced Multi-Image Processing
+- **AI Capabilities:** Three-person group composition, story-driven pose generation, social dynamics modeling, vintage polaroid aesthetics
+
 #### [AI Background Changer](./projects/ai-background-changer/)
 **Intelligent image background replacement using natural language prompts and Gemini AI**
 - **Live Demo:** [ai-background-changer-169218045868.us-west1.run.app](https://ai-background-changer-169218045868.us-west1.run.app/)
@@ -177,6 +183,7 @@ ai-project/
 │   ├── fengshui-chatbot/        # Feng Shui advisory AI
 │   ├── image-recipe-generator/  # Food image to recipe AI
 │   ├── polaroid-moments-generator/ # Vintage photo generation AI
+│   ├── polaroid-moments-generator-3/ # Three-person group photo AI
 │   ├── pdf-to-audio-reader/     # PDF to audio conversion with AI
 │   ├── ai-avatar-hairstyle-generator/ # Virtual hairstyle avatar generation
 │   ├── ai-expression-generator/ # Emotional expression transformation AI
@@ -229,6 +236,7 @@ All projects are production-deployed and accessible via live demos:
 | Feng Shui Consultant | [Launch App](https://fengshui-chatbot-218391175125.asia-southeast1.run.app/) | Conversational AI |
 | AI Recipe Generator | [Launch App](https://image-recipe-generator-218391175125.us-central1.run.app/) | Creative AI |
 | Polaroid Moments Generator | [Launch App](https://polaroid-moments-generator-169218045868.us-west1.run.app/) | Creative AI |
+| Polaroid Moments Generator 3 | [Launch App](https://polaroid-moments-generator-3-person-169218045868.us-west1.run.app/) | Creative AI |
 | AI Avatar Hairstyle Generator | [Launch App](https://ai-avatar-hairstyle-generator-169218045868.us-west1.run.app/) | Creative AI |
 | AI Expression Generator | [Launch App](https://ai-expression-generator-169218045868.us-west1.run.app/) | Creative AI |
 | AI Background Changer | [Launch App](https://ai-background-changer-169218045868.us-west1.run.app/) | Creative AI |
