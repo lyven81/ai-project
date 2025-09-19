@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker AI - Source Code</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #222;
+            background-color: #ffffff;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .back-nav {
+            margin-bottom: 20px;
+        }
+
+        .back-nav a {
+            color: #007BFF;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .back-nav a:hover {
+            text-decoration: underline;
+        }
+
+        .project-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #4F46E5, #7C3AED);
+            color: white;
+            border-radius: 10px;
+        }
+
+        .project-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .project-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .content-section {
+            margin: 40px 0;
+            padding: 30px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border-left: 5px solid #4F46E5;
+        }
+
+        .content-section h2 {
+            color: #4F46E5;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .content-section h3 {
+            color: #333;
+            margin: 20px 0 10px 0;
+            font-size: 1.3rem;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #FFF8E1, #FFF3C4);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #4F46E5;
+            margin: 20px 0;
+        }
+
+        .code-container {
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        .code-header {
+            color: #569cd6;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .code-block {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #d4d4d4;
+        }
+
+        .code-comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+
+        .code-keyword {
+            color: #569cd6;
+        }
+
+        .code-string {
+            color: #ce9178;
+        }
+
+        .code-function {
+            color: #dcdcaa;
+        }
+
+        .code-number {
+            color: #b5cea8;
+        }
+
+        .demo-links {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .demo-btn {
+            display: inline-block;
+            background-color: #007BFF;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .demo-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .demo-btn.secondary {
+            background-color: #28a745;
+        }
+
+        .demo-btn.secondary:hover {
+            background-color: #218838;
+        }
+
+        @media (max-width: 768px) {
+            .project-header h1 {
+                font-size: 2rem;
+            }
+
+            .project-header p {
+                font-size: 1rem;
+            }
+
+            .demo-btn {
+                margin: 5px;
+                padding: 10px 20px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="back-nav">
+            <a href="expense-tracker-ai.html">← Back to Project Overview</a>
+        </div>
+
+        <div class="project-header">
+            <h1>💳 Expense Tracker AI</h1>
+            <p>Core Source Code & Receipt Processing Implementation</p>
+
+            <div class="badges">
+                <span class="badge">React 19.1+</span>
+                <span class="badge">TypeScript</span>
+                <span class="badge">Gemini AI</span>
+                <span class="badge">Recharts</span>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>📋 About This Code Showcase</h2>
+            <p>This page presents the core implementation of the Expense Tracker AI, demonstrating how modern React, TypeScript, and Google Gemini AI work together to create an intelligent expense management system. The application showcases advanced patterns in AI integration, local storage management, and real-time data visualization.</p>
+
+            <div class="highlight-box">
+                <strong>🎯 Key Implementation Highlights:</strong>
+                <ul style="margin-top: 10px;">
+                    <li>AI-powered receipt processing with Google Gemini vision API</li>
+                    <li>Type-safe React components with comprehensive TypeScript definitions</li>
+                    <li>Custom hooks for local storage persistence and state management</li>
+                    <li>Interactive data visualization with Recharts integration</li>
+                    <li>Modern React patterns with functional components and hooks</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="code-container">
+            <div class="code-header">📱 App.tsx - Main Application Component</div>
+            <pre class="code-block">
+<span class="code-keyword">import</span> React, { useState } <span class="code-keyword">from</span> <span class="code-string">'react'</span>;
+<span class="code-keyword">import</span> { useLocalStorage } <span class="code-keyword">from</span> <span class="code-string">'./hooks/useLocalStorage'</span>;
+<span class="code-keyword">import</span> { Expense, ExpenseData } <span class="code-keyword">from</span> <span class="code-string">'./types'</span>;
+<span class="code-keyword">import</span> Dashboard <span class="code-keyword">from</span> <span class="code-string">'./components/Dashboard'</span>;
+<span class="code-keyword">import</span> ReceiptProcessorModal <span class="code-keyword">from</span> <span class="code-string">'./components/ReceiptProcessorModal'</span>;
+
+<span class="code-keyword">const</span> <span class="code-function">App</span>: React.FC = () => {
+  <span class="code-comment">// Local storage integration for expense persistence</span>
+  <span class="code-keyword">const</span> [expenses, setExpenses] = <span class="code-function">useLocalStorage</span>&lt;Expense[]&gt;(<span class="code-string">'expenses'</span>, []);
+  <span class="code-keyword">const</span> [isModalOpen, setIsModalOpen] = <span class="code-function">useState</span>(<span class="code-keyword">false</span>);
+
+  <span class="code-comment">// Handle new expense addition with automatic sorting</span>
+  <span class="code-keyword">const</span> <span class="code-function">handleAddExpense</span> = (expenseData: ExpenseData) => {
+    <span class="code-keyword">const</span> newExpense: Expense = {
+      ...expenseData,
+      id: <span class="code-string">`${Date.now()}-${Math.random()}`</span>,
+      date: <span class="code-keyword">new</span> <span class="code-function">Date</span>(expenseData.date).<span class="code-function">toISOString</span>(),
+    };
+
+    <span class="code-function">setExpenses</span>(prevExpenses =>
+      [...prevExpenses, newExpense].<span class="code-function">sort</span>((a, b) =>
+        <span class="code-keyword">new</span> <span class="code-function">Date</span>(b.date).<span class="code-function">getTime</span>() - <span class="code-keyword">new</span> <span class="code-function">Date</span>(a.date).<span class="code-function">getTime</span>()
+      )
+    );
+    <span class="code-function">setIsModalOpen</span>(<span class="code-keyword">false</span>);
+  };
+
+  <span class="code-keyword">return</span> (
+    &lt;<span class="code-keyword">div</span> className=<span class="code-string">"min-h-screen bg-base-100"</span>&gt;
+      &lt;<span class="code-keyword">header</span> className=<span class="code-string">"bg-base-200/50 backdrop-blur-sm"</span>&gt;
+        &lt;<span class="code-keyword">h1</span>&gt;Expense Tracker <span class="code-keyword">&lt;span</span> className=<span class="code-string">"text-brand-primary"</span>&gt;AI&lt;/<span class="code-keyword">span</span>&gt;&lt;/<span class="code-keyword">h1</span>&gt;
+      &lt;/<span class="code-keyword">header</span>&gt;
+      &lt;<span class="code-keyword">main</span>&gt;
+        &lt;Dashboard expenses={expenses} /&gt;
+        &lt;ExpenseList expenses={expenses.<span class="code-function">slice</span>(<span class="code-number">0</span>, <span class="code-number">10</span>)} /&gt;
+      &lt;/<span class="code-keyword">main</span>&gt;
+      &lt;ReceiptProcessorModal
+        isOpen={isModalOpen}
+        onSave={handleAddExpense}
+      /&gt;
+    &lt;/<span class="code-keyword">div</span>&gt;
+  );
+};
+            </pre>
+        </div>
+
+        <div class="code-container">
+            <div class="code-header">🤖 geminiService.ts - AI Receipt Processing</div>
+            <pre class="code-block">
+<span class="code-keyword">import</span> { GoogleGenerativeAI } <span class="code-keyword">from</span> <span class="code-string">'@google/generative-ai'</span>;
+<span class="code-keyword">import</span> { ExpenseData } <span class="code-keyword">from</span> <span class="code-string">'../types'</span>;
+
+<span class="code-comment">// Initialize Gemini AI with API key</span>
+<span class="code-keyword">const</span> genAI = <span class="code-keyword">new</span> <span class="code-function">GoogleGenerativeAI</span>(process.env.GEMINI_API_KEY || <span class="code-string">''</span>);
+
+<span class="code-keyword">export</span> <span class="code-keyword">async</span> <span class="code-keyword">function</span> <span class="code-function">extractExpenseDataFromImage</span>(imageFile: File): Promise&lt;ExpenseData&gt; {
+  <span class="code-keyword">try</span> {
+    <span class="code-comment">// Convert image to base64 for AI processing</span>
+    <span class="code-keyword">const</span> base64Data = <span class="code-keyword">await</span> <span class="code-function">fileToBase64</span>(imageFile);
+    <span class="code-keyword">const</span> model = genAI.<span class="code-function">getGenerativeModel</span>({ model: <span class="code-string">'gemini-1.5-flash'</span> });
+
+    <span class="code-comment">// Structured prompt for expense data extraction</span>
+    <span class="code-keyword">const</span> prompt = <span class="code-string">`
+      Analyze this receipt image and extract the following information in JSON format:
+      {
+        "merchant": "Store/Restaurant name",
+        "date": "YYYY-MM-DD format",
+        "total": number (total amount),
+        "currency": "USD or detected currency",
+        "category": "Food|Transport|Utilities|Entertainment|Shopping|Health|Housing|Other",
+        "items": [
+          {"name": "Item description", "price": number}
+        ]
+      }
+
+      Rules:
+      - Extract exact merchant name from receipt
+      - Parse date accurately (today if unclear: ${new Date().toISOString().split('T')[0]})
+      - Include ALL line items with prices
+      - Suggest most appropriate category
+      - Return only valid JSON, no additional text
+    `</span>;
+
+    <span class="code-keyword">const</span> result = <span class="code-keyword">await</span> model.<span class="code-function">generateContent</span>([
+      prompt,
+      {
+        inlineData: {
+          data: base64Data,
+          mimeType: imageFile.type,
+        },
+      },
+    ]);
+
+    <span class="code-comment">// Parse and validate AI response</span>
+    <span class="code-keyword">const</span> response = <span class="code-keyword">await</span> result.response;
+    <span class="code-keyword">const</span> text = response.<span class="code-function">text</span>();
+    <span class="code-keyword">const</span> cleanedText = text.<span class="code-function">replace</span>(/```json\n?|\n?```/g, <span class="code-string">''</span>).<span class="code-function">trim</span>();
+
+    <span class="code-keyword">const</span> extractedData = JSON.<span class="code-function">parse</span>(cleanedText) <span class="code-keyword">as</span> ExpenseData;
+
+    <span class="code-comment">// Validate and sanitize extracted data</span>
+    <span class="code-keyword">return</span> <span class="code-function">validateExpenseData</span>(extractedData);
+
+  } <span class="code-keyword">catch</span> (error) {
+    console.<span class="code-function">error</span>(<span class="code-string">'AI extraction failed:'</span>, error);
+    <span class="code-keyword">throw</span> <span class="code-keyword">new</span> <span class="code-function">Error</span>(<span class="code-string">'Failed to process receipt. Please try again.'</span>);
+  }
+}
+
+<span class="code-comment">// Data validation and sanitization</span>
+<span class="code-keyword">function</span> <span class="code-function">validateExpenseData</span>(data: <span class="code-keyword">any</span>): ExpenseData {
+  <span class="code-keyword">return</span> {
+    merchant: data.merchant || <span class="code-string">'Unknown Merchant'</span>,
+    date: data.date || <span class="code-keyword">new</span> <span class="code-function">Date</span>().<span class="code-function">toISOString</span>().<span class="code-function">split</span>(<span class="code-string">'T'</span>)[<span class="code-number">0</span>],
+    total: <span class="code-function">Number</span>(data.total) || <span class="code-number">0</span>,
+    currency: data.currency || <span class="code-string">'USD'</span>,
+    category: data.category || <span class="code-string">'Other'</span>,
+    items: <span class="code-function">Array</span>.<span class="code-function">isArray</span>(data.items) ? data.items : [],
+  };
+}
+            </pre>
+        </div>
+
+        <div class="code-container">
+            <div class="code-header">🎣 useLocalStorage.ts - Custom Hook for Data Persistence</div>
+            <pre class="code-block">
+<span class="code-keyword">import</span> { useState, useEffect } <span class="code-keyword">from</span> <span class="code-string">'react'</span>;
+
+<span class="code-comment">// Generic hook for localStorage with TypeScript support</span>
+<span class="code-keyword">export</span> <span class="code-keyword">function</span> useLocalStorage&lt;T&gt;(
+  key: <span class="code-keyword">string</span>,
+  initialValue: T
+): [T, (value: T | ((prev: T) => T)) => <span class="code-keyword">void</span>] {
+
+  <span class="code-comment">// Initialize state with localStorage value or default</span>
+  <span class="code-keyword">const</span> [storedValue, setStoredValue] = <span class="code-function">useState</span>&lt;T&gt;(() => {
+    <span class="code-keyword">try</span> {
+      <span class="code-keyword">if</span> (<span class="code-keyword">typeof</span> window === <span class="code-string">'undefined'</span>) {
+        <span class="code-keyword">return</span> initialValue;
+      }
+
+      <span class="code-keyword">const</span> item = window.localStorage.<span class="code-function">getItem</span>(key);
+      <span class="code-keyword">return</span> item ? JSON.<span class="code-function">parse</span>(item) : initialValue;
+    } <span class="code-keyword">catch</span> (error) {
+      console.<span class="code-function">error</span>(<span class="code-string">`Error reading localStorage key "${key}":`, error</span>);
+      <span class="code-keyword">return</span> initialValue;
+    }
+  });
+
+  <span class="code-comment">// Update localStorage when state changes</span>
+  <span class="code-keyword">const</span> <span class="code-function">setValue</span> = (value: T | ((prev: T) => T)) => {
+    <span class="code-keyword">try</span> {
+      <span class="code-keyword">const</span> valueToStore = value <span class="code-keyword">instanceof</span> <span class="code-function">Function</span>
+        ? <span class="code-function">value</span>(storedValue)
+        : value;
+
+      <span class="code-function">setStoredValue</span>(valueToStore);
+
+      <span class="code-keyword">if</span> (<span class="code-keyword">typeof</span> window !== <span class="code-string">'undefined'</span>) {
+        window.localStorage.<span class="code-function">setItem</span>(key, JSON.<span class="code-function">stringify</span>(valueToStore));
+      }
+    } <span class="code-keyword">catch</span> (error) {
+      console.<span class="code-function">error</span>(<span class="code-string">`Error setting localStorage key "${key}":`, error</span>);
+    }
+  };
+
+  <span class="code-keyword">return</span> [storedValue, setValue];
+}
+            </pre>
+        </div>
+
+        <div class="code-container">
+            <div class="code-header">📊 Dashboard.tsx - Analytics Component</div>
+            <pre class="code-block">
+<span class="code-keyword">import</span> React, { useState, useMemo } <span class="code-keyword">from</span> <span class="code-string">'react'</span>;
+<span class="code-keyword">import</span> { BarChart, Bar, XAxis, YAxis, PieChart, Pie, Cell, ResponsiveContainer } <span class="code-keyword">from</span> <span class="code-string">'recharts'</span>;
+<span class="code-keyword">import</span> { format, subDays, startOfWeek, startOfMonth, startOfYear } <span class="code-keyword">from</span> <span class="code-string">'date-fns'</span>;
+<span class="code-keyword">import</span> { Expense, TimeView } <span class="code-keyword">from</span> <span class="code-string">'../types'</span>;
+
+<span class="code-keyword">interface</span> DashboardProps {
+  expenses: Expense[];
+}
+
+<span class="code-keyword">const</span> <span class="code-function">Dashboard</span>: React.FC&lt;DashboardProps&gt; = ({ expenses }) => {
+  <span class="code-keyword">const</span> [timeView, setTimeView] = useState&lt;TimeView&gt;(<span class="code-string">'Monthly'</span>);
+
+  <span class="code-comment">// Memoized analytics calculations for performance</span>
+  <span class="code-keyword">const</span> analytics = <span class="code-function">useMemo</span>(() => {
+    <span class="code-keyword">const</span> now = <span class="code-keyword">new</span> <span class="code-function">Date</span>();
+    <span class="code-keyword">let</span> startDate: Date;
+
+    <span class="code-comment">// Dynamic date range based on selected view</span>
+    <span class="code-keyword">switch</span> (timeView) {
+      <span class="code-keyword">case</span> <span class="code-string">'Daily'</span>:
+        startDate = <span class="code-function">subDays</span>(now, <span class="code-number">7</span>);
+        <span class="code-keyword">break</span>;
+      <span class="code-keyword">case</span> <span class="code-string">'Weekly'</span>:
+        startDate = <span class="code-function">startOfWeek</span>(<span class="code-function">subDays</span>(now, <span class="code-number">28</span>));
+        <span class="code-keyword">break</span>;
+      <span class="code-keyword">case</span> <span class="code-string">'Monthly'</span>:
+        startDate = <span class="code-function">startOfMonth</span>(<span class="code-function">subDays</span>(now, <span class="code-number">90</span>));
+        <span class="code-keyword">break</span>;
+      <span class="code-keyword">case</span> <span class="code-string">'Yearly'</span>:
+        startDate = <span class="code-function">startOfYear</span>(<span class="code-function">subDays</span>(now, <span class="code-number">365</span>));
+        <span class="code-keyword">break</span>;
+    }
+
+    <span class="code-comment">// Filter and aggregate expense data</span>
+    <span class="code-keyword">const</span> filteredExpenses = expenses.<span class="code-function">filter</span>(expense =>
+      <span class="code-keyword">new</span> <span class="code-function">Date</span>(expense.date) >= startDate
+    );
+
+    <span class="code-comment">// Category-based spending analysis</span>
+    <span class="code-keyword">const</span> categoryTotals = filteredExpenses.<span class="code-function">reduce</span>((acc, expense) => {
+      acc[expense.category] = (acc[expense.category] || <span class="code-number">0</span>) + expense.total;
+      <span class="code-keyword">return</span> acc;
+    }, {} <span class="code-keyword">as</span> Record&lt;<span class="code-keyword">string</span>, <span class="code-keyword">number</span>&gt;);
+
+    <span class="code-keyword">return</span> {
+      totalSpent: filteredExpenses.<span class="code-function">reduce</span>((sum, exp) => sum + exp.total, <span class="code-number">0</span>),
+      categoryData: <span class="code-function">Object</span>.<span class="code-function">entries</span>(categoryTotals).<span class="code-function">map</span>(([name, value]) => ({
+        name,
+        value,
+        percentage: ((value / filteredExpenses.<span class="code-function">reduce</span>((sum, exp) => sum + exp.total, <span class="code-number">0</span>)) * <span class="code-number">100</span>).<span class="code-function">toFixed</span>(<span class="code-number">1</span>)
+      }))
+    };
+  }, [expenses, timeView]);
+
+  <span class="code-keyword">return</span> (
+    &lt;<span class="code-keyword">div</span> className=<span class="code-string">"dashboard-container"</span>&gt;
+      &lt;<span class="code-keyword">div</span> className=<span class="code-string">"time-selector"</span>&gt;
+        {[<span class="code-string">'Daily'</span>, <span class="code-string">'Weekly'</span>, <span class="code-string">'Monthly'</span>, <span class="code-string">'Yearly'</span>].<span class="code-function">map</span>(view => (
+          &lt;<span class="code-keyword">button</span>
+            key={view}
+            onClick={() => <span class="code-function">setTimeView</span>(view <span class="code-keyword">as</span> TimeView)}
+            className={timeView === view ? <span class="code-string">'active'</span> : <span class="code-string">''</span>}
+          &gt;
+            {view}
+          &lt;/<span class="code-keyword">button</span>&gt;
+        ))}
+      &lt;/<span class="code-keyword">div</span>&gt;
+
+      &lt;<span class="code-keyword">div</span> className=<span class="code-string">"charts-grid"</span>&gt;
+        &lt;ResponsiveContainer width=<span class="code-string">"100%"</span> height={<span class="code-number">300</span>}&gt;
+          &lt;PieChart&gt;
+            &lt;Pie
+              data={analytics.categoryData}
+              dataKey=<span class="code-string">"value"</span>
+              nameKey=<span class="code-string">"name"</span>
+              cx=<span class="code-string">"50%"</span>
+              cy=<span class="code-string">"50%"</span>
+              label={({ name, percentage }) => <span class="code-string">`${name}: ${percentage}%`</span>}
+            /&gt;
+          &lt;/PieChart&gt;
+        &lt;/ResponsiveContainer&gt;
+      &lt;/<span class="code-keyword">div</span>&gt;
+    &lt;/<span class="code-keyword">div</span>&gt;
+  );
+};
+            </pre>
+        </div>
+
+        <div class="content-section">
+            <h2>🔧 Technical Implementation Notes</h2>
+
+            <h3>🎯 Architecture Decisions</h3>
+            <ul>
+                <li><strong>React Functional Components:</strong> Modern hook-based architecture for better performance and cleaner code</li>
+                <li><strong>TypeScript Integration:</strong> Comprehensive type safety across all components and data structures</li>
+                <li><strong>Local Storage Strategy:</strong> Privacy-first approach with custom hooks for seamless persistence</li>
+                <li><strong>AI Integration Pattern:</strong> Robust error handling and data validation for Gemini API responses</li>
+            </ul>
+
+            <h3>🚀 Performance Optimizations</h3>
+            <ul>
+                <li><strong>Memoization:</strong> useMemo hooks for expensive calculations in analytics components</li>
+                <li><strong>Lazy Loading:</strong> Code splitting for optimal bundle size and loading performance</li>
+                <li><strong>Image Processing:</strong> Client-side base64 encoding to minimize server requests</li>
+                <li><strong>Data Validation:</strong> Comprehensive input sanitization and type checking</li>
+            </ul>
+
+            <h3>🛡️ Security & Privacy Features</h3>
+            <ul>
+                <li><strong>Local Data Storage:</strong> No server-side data persistence ensures complete privacy</li>
+                <li><strong>API Key Management:</strong> Environment-based configuration with secure key handling</li>
+                <li><strong>Input Validation:</strong> Sanitization of all user inputs and AI responses</li>
+                <li><strong>Error Boundaries:</strong> Graceful error handling to prevent application crashes</li>
+            </ul>
+        </div>
+
+        <div class="demo-links">
+            <a href="https://expense-tracker-ai-169218045868.us-west1.run.app/" target="_blank" class="demo-btn">🚀 Try Live Demo</a>
+            <a href="expense-tracker-ai.html" class="demo-btn secondary">📖 View Full Project Details</a>
+        </div>
+
+        <div class="back-nav" style="text-align: center; margin-top: 40px;">
+            <a href="expense-tracker-ai.html">← Back to Project Overview</a> |
+            <a href="index.html">Portfolio Home</a>
+        </div>
+    </div>
+</body>
+</html>

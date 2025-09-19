@@ -2,7 +2,7 @@
 
 [![Portfolio Website](https://img.shields.io/badge/Portfolio-Live-green?logo=vercel)](https://lyven81.github.io/ai-project/)
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-black?logo=github)](https://github.com/lyven81/ai-project)
-[![Projects](https://img.shields.io/badge/Projects-14-blue)](#-featured-projects)
+[![Projects](https://img.shields.io/badge/Projects-15-blue)](#-featured-projects)
 [![AI Powered](https://img.shields.io/badge/AI-Powered-orange?logo=tensorflow)](https://github.com/lyven81/ai-project)
 
 **Innovative AI Solutions for Modern Challenges** - A curated collection of production-ready AI applications showcasing expertise in computer vision, natural language processing, document processing, and creative AI technologies.
@@ -13,7 +13,7 @@
 
 ## 🌟 Portfolio Overview
 
-This repository contains **14 production-deployed AI applications** demonstrating proficiency across multiple AI domains. Each project includes comprehensive documentation, live demos, and complete source code with deployment configurations.
+This repository contains **15 production-deployed AI applications** demonstrating proficiency across multiple AI domains. Each project includes comprehensive documentation, live demos, and complete source code with deployment configurations.
 
 **🎯 Portfolio Highlights:**
 - **15+ AI Technologies** integrated across projects
@@ -61,6 +61,12 @@ This repository contains **14 production-deployed AI applications** demonstratin
 - **Live Demo:** [summarizer-218391175125.asia-southeast1.run.app](https://summarizer-218391175125.asia-southeast1.run.app/)
 - **Tech Stack:** Python, Streamlit, Claude 3 Haiku API, PDF Processing
 - **AI Capabilities:** Multi-language summarization, executive/simple/kids formats, key insights extraction
+
+#### [Expense Tracker AI](./projects/expense-tracker-ai/)
+**Intelligent expense tracking with AI-powered receipt processing using Google Gemini**
+- **Live Demo:** [expense-tracker-ai-169218045868.us-west1.run.app](https://expense-tracker-ai-169218045868.us-west1.run.app/)
+- **Tech Stack:** React, TypeScript, Gemini AI, Recharts, Local Storage
+- **AI Capabilities:** Receipt OCR processing, automatic data extraction, smart categorization, expense analytics
 
 #### [PDF-to-Audio Reader](./projects/pdf-to-audio-reader/)
 **Convert PDF documents into natural-sounding audio with AI-powered structuring**
@@ -165,6 +171,7 @@ ai-project/
 │   ├── ai-photo-editor/         # AI-powered photo editing
 │   ├── ai-group-photo-generator/ # Group photo composition AI
 │   ├── claude-pdf-summarizer/   # Document processing & summarization
+│   ├── expense-tracker-ai/      # AI-powered expense tracking
 │   ├── chinese-calender/        # Conversational AI traditional calendar
 │   ├── horoscope-chatbot/       # Astrology consultation AI
 │   ├── fengshui-chatbot/        # Feng Shui advisory AI
@@ -215,6 +222,7 @@ All projects are production-deployed and accessible via live demos:
 | AI Photo Editor | [Launch App](https://gemini-image-editor-169218045868.us-west1.run.app/) | Image Processing |
 | AI Group Photo Generator | [Launch App](https://ai-group-photo-generator-169218045868.us-west1.run.app/) | Creative AI |
 | Claude PDF Summarizer | [Launch App](https://summarizer-218391175125.asia-southeast1.run.app/) | Document Processing |
+| Expense Tracker AI | [Launch App](https://expense-tracker-ai-169218045868.us-west1.run.app/) | Document Processing |
 | PDF-to-Audio Reader | [Launch App](https://pdf-to-audio-reader-169218045868.us-west1.run.app/) | Document Processing |
 | Chinese Traditional Calendar | [Launch App](https://chinese-calender-169218045868.asia-southeast1.run.app/) | Conversational AI |
 | Astrology Consultant | [Launch App](https://horoscope-chatbot-218391175125.asia-southeast1.run.app/) | Conversational AI |
