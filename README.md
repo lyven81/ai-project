@@ -13,7 +13,7 @@
 
 ## 🌟 Portfolio Overview
 
-This repository contains **17 production-deployed AI applications** demonstrating proficiency across multiple AI domains. Each project includes comprehensive documentation, live demos, and complete source code with deployment configurations.
+This repository contains **18 production-deployed AI applications** demonstrating proficiency across multiple AI domains. Each project includes comprehensive documentation, live demos, and complete source code with deployment configurations.
 
 **🎯 Portfolio Highlights:**
 - **15+ AI Technologies** integrated across projects
@@ -138,6 +138,12 @@ This repository contains **17 production-deployed AI applications** demonstratin
 - **Tech Stack:** React 19.1+, TypeScript 5.8+, Gemini AI, Canvas API, Educational Technology
 - **AI Capabilities:** Theme-based coloring page generation, child-safe content filtering, educational AI prompts, interactive learning experiences
 
+#### [Coloring Book Generator](./projects/coloring-book-generator/)
+**AI-powered coloring book generator that creates custom-themed, printable PDF coloring books with age-appropriate complexity**
+- **Live Demo:** [coloring-book-generator-662370080553.us-west1.run.app](https://coloring-book-generator-662370080553.us-west1.run.app/)
+- **Tech Stack:** React 19.1+, TypeScript 5.8+, Gemini 2.5 Flash, Imagen 4.0, PDF Generation, Tailwind CSS
+- **AI Capabilities:** Two-stage AI pipeline, theme interpretation, sequential page creation, age-adaptive complexity, print optimization
+
 ## 🛠️ Technical Skills Demonstrated
 
 ### **AI & Machine Learning**
@@ -194,7 +200,8 @@ ai-project/
 │   ├── ai-avatar-hairstyle-generator/ # Virtual hairstyle avatar generation
 │   ├── ai-expression-generator/ # Emotional expression transformation AI
 │   ├── ai-background-changer/   # Natural language background replacement AI
-│   └── ai-coloring-book-for-kids/ # Educational AI coloring book
+│   ├── ai-coloring-book-for-kids/ # Educational AI coloring book
+│   └── coloring-book-generator/ # AI-powered PDF coloring book creation
 └── README.md                    # This comprehensive overview
 ```
 
@@ -248,6 +255,7 @@ All projects are production-deployed and accessible via live demos:
 | AI Expression Generator | [Launch App](https://ai-expression-generator-169218045868.us-west1.run.app/) | Creative AI |
 | AI Background Changer | [Launch App](https://ai-background-changer-169218045868.us-west1.run.app/) | Creative AI |
 | AI Coloring Book for Kids | [Launch App](https://ai-coloring-book-for-kids-662370080553.us-west1.run.app/) | Creative AI |
+| Coloring Book Generator | [Launch App](https://coloring-book-generator-662370080553.us-west1.run.app/) | Creative AI |
 
 ## 💼 Professional Highlights
 

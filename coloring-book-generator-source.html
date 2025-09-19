@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coloring Book Generator - Source Code</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #222;
+            background-color: #ffffff;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .back-nav {
+            margin-bottom: 20px;
+        }
+
+        .back-nav a {
+            color: #007BFF;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .back-nav a:hover {
+            text-decoration: underline;
+        }
+
+        .project-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #FF6B6B, #4ECDC4);
+            color: white;
+            border-radius: 10px;
+        }
+
+        .project-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .project-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .content-section {
+            margin: 40px 0;
+            padding: 30px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border-left: 5px solid #FF6B6B;
+        }
+
+        .content-section h2 {
+            color: #FF6B6B;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .content-section h3 {
+            color: #333;
+            margin: 20px 0 10px 0;
+            font-size: 1.3rem;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #FFF8E1, #FFF3C4);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #FF6B6B;
+            margin: 20px 0;
+        }
+
+        .code-container {
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        .code-header {
+            color: #569cd6;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .code-block {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #d4d4d4;
+        }
+
+        .code-comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+
+        .code-keyword {
+            color: #569cd6;
+        }
+
+        .code-string {
+            color: #ce9178;
+        }
+
+        .code-function {
+            color: #dcdcaa;
+        }
+
+        .code-number {
+            color: #b5cea8;
+        }
+
+        .demo-links {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .demo-btn {
+            display: inline-block;
+            background-color: #007BFF;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .demo-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .demo-btn.secondary {
+            background-color: #28a745;
+        }
+
+        .demo-btn.secondary:hover {
+            background-color: #218838;
+        }
+
+        @media (max-width: 768px) {
+            .project-header h1 {
+                font-size: 2rem;
+            }
+
+            .project-header p {
+                font-size: 1rem;
+            }
+
+            .demo-btn {
+                margin: 5px;
+                padding: 10px 20px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="coloring-book-generator.html">← Back to Project Overview</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>📚 Coloring Book Generator</h1>
+            <p>Core Source Code & AI-Powered PDF Generation Implementation</p>
+
+            <div class="badges">
+                <span class="badge">React 19.1+</span>
+                <span class="badge">TypeScript</span>
+                <span class="badge">Gemini AI</span>
+                <span class="badge">PDF Generation</span>
+                <span class="badge">Creative Technology</span>
+            </div>
+        </div>
+
+        <div class="highlight-box">
+            <h3>🔍 About This Code Showcase</h3>
+            <p><strong>This curated code demonstration showcases how the Coloring Book Generator creates printable PDF coloring books using advanced AI technology and modern React architecture.</strong></p>
+            <p>Full deployment configurations, API keys, and proprietary details are omitted for security. This showcase highlights the core creative generation algorithms and PDF compilation systems.</p>
+        </div>
+
+        <div class="content-section">
+            <h2>📚 Core Algorithm: Creative Book Generation Engine</h2>
+            <p>The foundation of the Coloring Book Generator is its intelligent theme interpretation and sequential page creation system that transforms any concept into complete, printable coloring books:</p>
+
+            <div class="code-container">
+                <div class="code-header">⚛️ App.tsx</div>
+                <div class="code-block">
+<span class="code-keyword">import</span> React, { useState, useCallback } <span class="code-keyword">from</span> <span class="code-string">'react'</span>;
+<span class="code-keyword">import</span> { Page, AgeGroup, DrawingStyle } <span class="code-keyword">from</span> <span class="code-string">'./types'</span>;
+<span class="code-keyword">import</span> { AGE_GROUPS, DRAWING_STYLES } <span class="code-keyword">from</span> <span class="code-string">'./constants'</span>;
+<span class="code-keyword">import</span> { generatePageIdeas, generateImage } <span class="code-keyword">from</span> <span class="code-string">'./services/geminiService'</span>;
+<span class="code-keyword">import</span> { generatePdf } <span class="code-keyword">from</span> <span class="code-string">'./services/pdfService'</span>;
+
+<span class="code-keyword">function</span> <span class="code-function">App</span>() {
+  <span class="code-comment">// Creative state management for book generation</span>
+  <span class="code-keyword">const</span> [theme, setTheme] = useState<string>(<span class="code-string">'Sea animals adventure'</span>);
+  <span class="code-keyword">const</span> [ageGroup, setAgeGroup] = useState<AgeGroup>(AGE_GROUPS[<span class="code-number">0</span>]);
+  <span class="code-keyword">const</span> [style, setStyle] = useState<DrawingStyle>(DRAWING_STYLES[<span class="code-number">0</span>]);
+  <span class="code-keyword">const</span> [pages, setPages] = useState<Page[]>([]);
+  <span class="code-keyword">const</span> [pageIdeas, setPageIdeas] = useState<string[]>([]);
+  <span class="code-keyword">const</span> [currentPageIndex, setCurrentPageIndex] = useState<number>(<span class="code-number">0</span>);
+
+  <span class="code-comment">// Intelligent page generation with age-appropriate customization</span>
+  <span class="code-keyword">const</span> <span class="code-function">generateSinglePage</span> = useCallback(<span class="code-keyword">async</span> (idea: string, id: string) => {
+    <span class="code-comment">// Generate coloring page with AI customization</span>
+    <span class="code-keyword">const</span> base64Image = <span class="code-keyword">await</span> generateImage(idea, ageGroup.prompt, style.prompt);
+    <span class="code-keyword">const</span> generatedPage: Page = {
+      id: id,
+      title: idea,
+      imageData: base64Image,
+    };
+    setPages([generatedPage]);
+  }, [ageGroup, style]);
+
+  <span class="code-comment">// Complete book generation workflow</span>
+  <span class="code-keyword">const</span> <span class="code-function">handleGenerate</span> = useCallback(<span class="code-keyword">async</span> () => {
+    <span class="code-keyword">if</span> (!theme) {
+      setError(<span class="code-string">'Please enter a theme.'</span>);
+      <span class="code-keyword">return</span>;
+    }
+    setIsLoading(<span class="code-keyword">true</span>);
+    setError(<span class="code-keyword">null</span>);
+    setPages([]);
+    setPageIdeas([]);
+
+    <span class="code-keyword">try</span> {
+      <span class="code-comment">// Step 1: AI generates 10 themed page concepts</span>
+      <span class="code-keyword">const</span> ideas = <span class="code-keyword">await</span> generatePageIdeas(theme);
+      setPageIdeas(ideas);
+      setCurrentPageIndex(<span class="code-number">0</span>);
+
+      <span class="code-comment">// Step 2: Create first page immediately</span>
+      <span class="code-keyword">if</span> (ideas.length > <span class="code-number">0</span>) {
+        <span class="code-keyword">await</span> generateSinglePage(ideas[<span class="code-number">0</span>], `page-<span class="code-number">0</span>`);
+      } <span class="code-keyword">else</span> {
+        <span class="code-keyword">throw</span> <span class="code-keyword">new</span> Error(<span class="code-string">"No ideas were generated for this theme."</span>);
+      }
+
+    } <span class="code-keyword">catch</span> (err) {
+      console.error(err);
+      setError(<span class="code-string">'Failed to generate coloring page. Please try again.'</span>);
+    } <span class="code-keyword">finally</span> {
+      setIsLoading(<span class="code-keyword">false</span>);
+    }
+  }, [theme, generateSinglePage]);
+
+  <span class="code-comment">// Sequential page navigation with on-demand generation</span>
+  <span class="code-keyword">const</span> <span class="code-function">handleGenerateNext</span> = useCallback(<span class="code-keyword">async</span> () => {
+    <span class="code-keyword">if</span> (isLoading || currentPageIndex >= pageIdeas.length - <span class="code-number">1</span>) {
+      <span class="code-keyword">return</span>;
+    }
+    setIsLoading(<span class="code-keyword">true</span>);
+    setError(<span class="code-keyword">null</span>);
+
+    <span class="code-keyword">const</span> nextIndex = currentPageIndex + <span class="code-number">1</span>;
+    <span class="code-keyword">try</span> {
+      <span class="code-comment">// Generate next page in sequence</span>
+      <span class="code-keyword">await</span> generateSinglePage(pageIdeas[nextIndex], `page-${nextIndex}`);
+      setCurrentPageIndex(nextIndex);
+    } <span class="code-keyword">catch</span> (err) {
+      console.error(err);
+      setError(<span class="code-string">'Failed to generate next page. Please try again.'</span>);
+    } <span class="code-keyword">finally</span> {
+      setIsLoading(<span class="code-keyword">false</span>);
+    }
+  }, [isLoading, currentPageIndex, pageIdeas, generateSinglePage]);
+
+  <span class="code-comment">// Professional PDF export for printing</span>
+  <span class="code-keyword">const</span> <span class="code-function">handleDownloadPdf</span> = <span class="code-keyword">async</span> () => {
+    <span class="code-keyword">if</span> (pages.length === <span class="code-number">0</span>) <span class="code-keyword">return</span>;
+    setIsLoading(<span class="code-keyword">true</span>);
+    setError(<span class="code-keyword">null</span>);
+    <span class="code-keyword">try</span> {
+      <span class="code-comment">// Generate printable PDF coloring book</span>
+      <span class="code-keyword">await</span> generatePdf(pages, theme);
+    } <span class="code-keyword">catch</span> (err) {
+      console.error(<span class="code-string">'PDF Generation Error:'</span>, err);
+      setError(<span class="code-string">'Could not generate PDF. Please try again.'</span>);
+    } <span class="code-keyword">finally</span> {
+      setIsLoading(<span class="code-keyword">false</span>);
+    }
+  };
+
+  <span class="code-keyword">return</span> (
+    <div className=<span class="code-string">"flex flex-col min-h-screen font-sans text-slate-800"</span>>
+      <main className=<span class="code-string">"flex-grow container mx-auto p-4 md:p-8"</span>>
+        <div className=<span class="code-string">"grid grid-cols-1 lg:grid-cols-12 gap-8"</span>>
+          <div className=<span class="code-string">"lg:col-span-4"</span>>
+            <ControlsPanel
+              theme={theme}
+              ageGroup={ageGroup}
+              style={style}
+              onGenerate={handleGenerate}
+              onDownload={handleDownloadPdf}
+              isLoading={isLoading}
+              pagesGenerated={pages.length > <span class="code-number">0</span>}
+            />
+          </div>
+          <div className=<span class="code-string">"lg:col-span-8"</span>>
+            <PreviewArea
+              pages={pages}
+              error={error}
+              onNext={handleGenerateNext}
+              hasNextPage={pageIdeas.length > <span class="code-number">0</span> && currentPageIndex < pageIdeas.length - <span class="code-number">1</span>}
+            />
+          </div>
+        </div>
+      </main>
+
+      <span class="code-comment">{/* Hidden print container for PDF generation */}</span>
+      {pages.length > <span class="code-number">0</span> && (
+        <div id=<span class="code-string">"print-container"</span> className=<span class="code-string">"hidden"</span>>
+          {pages.map((page) => (
+            <div key={page.id} className=<span class="code-string">"bg-white p-[20mm] w-[210mm] h-[297mm]"</span>>
+              <h2 className=<span class="code-string">"text-lg font-semibold mb-4"</span>>{page.title}</h2>
+              <div className=<span class="code-string">"flex-grow border-4 border-slate-400 rounded-lg"</span>>
+                <img src={`data:image/png;base64,${page.imageData}`} alt={page.title} />
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🧠 AI Content Generation: Two-Stage Creative Pipeline</h2>
+            <p>The AI generation system uses a sophisticated two-stage process: intelligent theme interpretation followed by visual creation, ensuring thematic consistency across all coloring pages:</p>
+
+            <div class="code-container">
+                <div class="code-header">🤖 geminiService.ts</div>
+                <div class="code-block">
+<span class="code-keyword">import</span> { GoogleGenAI, Type } <span class="code-keyword">from</span> <span class="code-string">"@google/genai"</span>;
+
+<span class="code-keyword">const</span> API_KEY = process.env.API_KEY;
+<span class="code-keyword">if</span> (!API_KEY) {
+  <span class="code-keyword">throw</span> <span class="code-keyword">new</span> Error(<span class="code-string">"API_KEY environment variable not set"</span>);
+}
+<span class="code-keyword">const</span> ai = <span class="code-keyword">new</span> GoogleGenAI({ apiKey: API_KEY });
+
+<span class="code-comment">// Stage 1: Intelligent Theme Interpretation & Idea Generation</span>
+<span class="code-keyword">export</span> <span class="code-keyword">async</span> <span class="code-keyword">function</span> <span class="code-function">generatePageIdeas</span>(theme: string): Promise<string[]> {
+  <span class="code-keyword">try</span> {
+    <span class="code-comment">// Advanced prompt engineering for creative consistency</span>
+    <span class="code-keyword">const</span> response = <span class="code-keyword">await</span> ai.models.generateContent({
+      model: <span class="code-string">"gemini-2.5-flash"</span>,
+      contents: `Generate a list of <span class="code-number">10</span> distinct, child-friendly subjects for coloring pages
+        with the theme <span class="code-string">"${theme}"</span>. The subjects should be single, simple concepts.
+        For example, for <span class="code-string">"sea animals"</span>, you could return [<span class="code-string">"A friendly dolphin"</span>,
+        <span class="code-string">"A curious sea turtle"</span>, <span class="code-string">"A starfish on the sand"</span>].`,
+      config: {
+        responseMimeType: <span class="code-string">"application/json"</span>,
+        responseSchema: {
+          type: Type.OBJECT,
+          properties: {
+            ideas: {
+              type: Type.ARRAY,
+              items: {
+                type: Type.STRING,
+                description: <span class="code-string">'A single coloring page subject or idea.'</span>,
+              },
+            },
+          },
+          required: [<span class="code-string">'ideas'</span>],
+        },
+      },
+    });
+
+    <span class="code-comment">// Structured JSON response validation</span>
+    <span class="code-keyword">const</span> jsonText = response.text.trim();
+    <span class="code-keyword">const</span> result = JSON.parse(jsonText);
+
+    <span class="code-keyword">if</span> (result.ideas && Array.isArray(result.ideas) && result.ideas.length >= <span class="code-number">10</span>) {
+      <span class="code-keyword">return</span> result.ideas.slice(<span class="code-number">0</span>, <span class="code-number">10</span>);
+    } <span class="code-keyword">else</span> {
+      <span class="code-keyword">throw</span> <span class="code-keyword">new</span> Error(<span class="code-string">"Invalid or insufficient ideas generated."</span>);
+    }
+  } <span class="code-keyword">catch</span> (error) {
+    console.error(<span class="code-string">"Error generating page ideas:"</span>, error);
+    <span class="code-keyword">throw</span> <span class="code-keyword">new</span> Error(<span class="code-string">"Failed to get ideas from AI. Please check the theme and try again."</span>);
+  }
+}
+
+<span class="code-comment">// Stage 2: Visual Generation with Age-Appropriate Optimization</span>
+<span class="code-keyword">export</span> <span class="code-keyword">async</span> <span class="code-keyword">function</span> <span class="code-function">generateImage</span>(
+  subject: string,
+  agePrompt: string,
+  stylePrompt: string
+): Promise<string> {
+  <span class="code-comment">// Advanced prompt engineering for print-optimized coloring pages</span>
+  <span class="code-keyword">const</span> prompt = `A black and white coloring book page for a child.
+    The style is ${stylePrompt} and ${agePrompt}.
+    The drawing is of: <span class="code-string">"${subject}"</span>.
+    It must have clean lines, no shading or color, on a pure white background.
+    The image should be centered and fill the space well.`;
+
+  <span class="code-keyword">try</span> {
+    <span class="code-comment">// Imagen 4.0 for high-quality line art generation</span>
+    <span class="code-keyword">const</span> response = <span class="code-keyword">await</span> ai.models.generateImages({
+      model: <span class="code-string">'imagen-4.0-generate-001'</span>,
+      prompt: prompt,
+      config: {
+        numberOfImages: <span class="code-number">1</span>,
+        outputMimeType: <span class="code-string">'image/png'</span>,
+        aspectRatio: <span class="code-string">'1:1'</span>, <span class="code-comment">// Perfect for coloring books</span>
+      },
+    });
+
+    <span class="code-keyword">if</span> (response.generatedImages && response.generatedImages.length > <span class="code-number">0</span>) {
+      <span class="code-keyword">return</span> response.generatedImages[<span class="code-number">0</span>].image.imageBytes;
+    } <span class="code-keyword">else</span> {
+      <span class="code-keyword">throw</span> <span class="code-keyword">new</span> Error(<span class="code-string">"No image was generated."</span>);
+    }
+  } <span class="code-keyword">catch</span> (error) {
+    console.error(`Error generating image for subject <span class="code-string">"${subject}"</span>:`, error);
+    <span class="code-comment">// Comprehensive error handling for production reliability</span>
+    <span class="code-keyword">throw</span> <span class="code-keyword">new</span> Error(`Failed to generate an image for <span class="code-string">"${subject}"</span>.`);
+  }
+}
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🎯 Age-Appropriate Design System</h2>
+            <p>The application includes a sophisticated age group customization system that automatically adjusts complexity, line thickness, and detail levels for optimal developmental appropriateness:</p>
+
+            <div class="code-container">
+                <div class="code-header">🎨 constants.ts - Age Group Configuration</div>
+                <div class="code-block">
+<span class="code-keyword">import</span> { AgeGroup, DrawingStyle } <span class="code-keyword">from</span> <span class="code-string">'./types'</span>;
+
+<span class="code-comment">// Age-appropriate complexity optimization</span>
+<span class="code-keyword">export</span> <span class="code-keyword">const</span> AGE_GROUPS: AgeGroup[] = [
+  {
+    label: <span class="code-string">'Toddler (3-5)'</span>,
+    prompt: <span class="code-string">'very simple with thick, bold outlines'</span>
+  },
+  {
+    label: <span class="code-string">'Kid (6-9)'</span>,
+    prompt: <span class="code-string">'simple with clear outlines'</span>
+  },
+  {
+    label: <span class="code-string">'Pre-teen (10-12)'</span>,
+    prompt: <span class="code-string">'detailed and intricate with fine lines'</span>
+  },
+];
+
+<span class="code-comment">// Artistic style customization for creative variety</span>
+<span class="code-keyword">export</span> <span class="code-keyword">const</span> DRAWING_STYLES: DrawingStyle[] = [
+  {
+    label: <span class="code-string">'Cartoonish'</span>,
+    prompt: <span class="code-string">'in a fun, friendly cartoon style'</span>
+  },
+  {
+    label: <span class="code-string">'Doodle'</span>,
+    prompt: <span class="code-string">'in a whimsical, hand-drawn doodle style'</span>
+  },
+  {
+    label: <span class="code-string">'Realistic'</span>,
+    prompt: <span class="code-string">'in a more realistic, detailed line art style'</span>
+  },
+];
+
+<span class="code-comment">// TypeScript interfaces for type safety</span>
+<span class="code-keyword">export</span> <span class="code-keyword">interface</span> <span class="code-function">Page</span> {
+  id: string;
+  title: string;
+  imageData: string; <span class="code-comment">// Base64 encoded PNG</span>
+}
+
+<span class="code-keyword">export</span> <span class="code-keyword">interface</span> <span class="code-function">AgeGroup</span> {
+  label: string;
+  prompt: string; <span class="code-comment">// AI prompt modifier for complexity</span>
+}
+
+<span class="code-keyword">export</span> <span class="code-keyword">interface</span> <span class="code-function">DrawingStyle</span> {
+  label: string;
+  prompt: string; <span class="code-comment">// AI prompt modifier for artistic style</span>
+}
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>📄 PDF Generation & Print Optimization</h2>
+            <p>The application includes a sophisticated PDF generation system that creates professional-quality, printable coloring books with proper A4 formatting and print optimization:</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 pdfService.ts - Professional PDF Generation</div>
+                <div class="code-block">
+<span class="code-comment">// Professional PDF generation with print optimization</span>
+<span class="code-keyword">export</span> <span class="code-keyword">async</span> <span class="code-keyword">function</span> <span class="code-function">generatePdf</span>(pages: Page[], theme: string): Promise<void> {
+  <span class="code-keyword">try</span> {
+    <span class="code-comment">// Dynamic import for optimal bundle size</span>
+    <span class="code-keyword">const</span> { jsPDF } = <span class="code-keyword">await</span> <span class="code-keyword">import</span>(<span class="code-string">'jspdf'</span>);
+    <span class="code-keyword">const</span> html2canvas = (<span class="code-keyword">await</span> <span class="code-keyword">import</span>(<span class="code-string">'html2canvas'</span>)).default;
+
+    <span class="code-comment">// A4 format configuration for optimal printing</span>
+    <span class="code-keyword">const</span> pdf = <span class="code-keyword">new</span> jsPDF({
+      orientation: <span class="code-string">'portrait'</span>,
+      unit: <span class="code-string">'mm'</span>,
+      format: <span class="code-string">'a4'</span>
+    });
+
+    <span class="code-keyword">for</span> (<span class="code-keyword">let</span> i = <span class="code-number">0</span>; i < pages.length; i++) {
+      <span class="code-keyword">const</span> page = pages[i];
+      <span class="code-keyword">const</span> element = document.getElementById(page.id);
+
+      <span class="code-keyword">if</span> (element) {
+        <span class="code-comment">// High-resolution canvas capture for crisp printing</span>
+        <span class="code-keyword">const</span> canvas = <span class="code-keyword">await</span> html2canvas(element, {
+          scale: <span class="code-number">2</span>, <span class="code-comment">// High DPI for print quality</span>
+          useCORS: <span class="code-keyword">true</span>,
+          backgroundColor: <span class="code-string">'#ffffff'</span>,
+          width: <span class="code-number">794</span>, <span class="code-comment">// A4 width in pixels at 96 DPI</span>
+          height: <span class="code-number">1123</span> <span class="code-comment">// A4 height in pixels at 96 DPI</span>
+        });
+
+        <span class="code-keyword">const</span> imageData = canvas.toDataURL(<span class="code-string">'image/png'</span>);
+
+        <span class="code-comment">// Add new page for each coloring page (except first)</span>
+        <span class="code-keyword">if</span> (i > <span class="code-number">0</span>) {
+          pdf.addPage();
+        }
+
+        <span class="code-comment">// Add image with proper margins and scaling</span>
+        pdf.addImage(imageData, <span class="code-string">'PNG'</span>, <span class="code-number">10</span>, <span class="code-number">10</span>, <span class="code-number">190</span>, <span class="code-number">277</span>);
+      }
+    }
+
+    <span class="code-comment">// Professional filename with theme and timestamp</span>
+    <span class="code-keyword">const</span> filename = `${theme.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_coloring_book.pdf`;
+    pdf.save(filename);
+
+  } <span class="code-keyword">catch</span> (error) {
+    console.error(<span class="code-string">'PDF Generation Error:'</span>, error);
+    <span class="code-keyword">throw</span> <span class="code-keyword">new</span> Error(<span class="code-string">'Failed to generate PDF. Please try again.'</span>);
+  }
+}
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>⚙️ Technical Architecture & Creative Innovation</h2>
+            <h3>Advanced Creative Generation Pipeline</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>Theme Intelligence:</strong> AI understands and expands on any creative concept with contextual awareness</li>
+                <li><strong>Sequential Consistency:</strong> Maintains thematic flow and variety across all 10 generated pages</li>
+                <li><strong>Age-Adaptive Prompting:</strong> Dynamic complexity adjustment based on developmental appropriateness</li>
+                <li><strong>Print Optimization:</strong> Images generated specifically for high-quality black & white printing</li>
+                <li><strong>Professional PDF Output:</strong> A4 format with proper margins and print-ready specifications</li>
+            </ul>
+
+            <h3>Creative Technology Innovation</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>Two-Stage AI Pipeline:</strong> Separate idea generation and visual creation for optimal results</li>
+                <li><strong>Structured AI Responses:</strong> JSON schema validation ensures reliable content generation</li>
+                <li><strong>On-Demand Generation:</strong> Pages created only when viewed, optimizing performance and costs</li>
+                <li><strong>Browser-Based PDF Creation:</strong> Client-side compilation for instant download without server load</li>
+            </ul>
+
+            <h3>Educational Technology Integration</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>Developmental Psychology:</strong> Age group configurations based on child development research</li>
+                <li><strong>Motor Skills Optimization:</strong> Line thickness and complexity tailored for fine motor development</li>
+                <li><strong>Creative Learning Support:</strong> Themes designed to encourage exploration and artistic expression</li>
+                <li><strong>Therapeutic Applications:</strong> Customizable content for occupational therapy and special education</li>
+            </ul>
+        </div>
+
+        <div class="demo-links">
+            <a href="https://coloring-book-generator-662370080553.us-west1.run.app/" target="_blank" class="demo-btn">🚀 Try Live Demo</a>
+            <a href="coloring-book-generator.html" class="demo-btn secondary">📖 View Full Project Details</a>
+        </div>
+
+        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+            <a href="index.html">← Back to Portfolio</a> |
+            <a href="coloring-book-generator.html">View Project Overview</a>
+        </nav>
+    </div>
+</body>
+</html>
