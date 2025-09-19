@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thematic Outline Puzzles - Source Code</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #222;
+            background-color: #ffffff;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .back-nav {
+            margin-bottom: 20px;
+        }
+
+        .back-nav a {
+            color: #007BFF;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .back-nav a:hover {
+            text-decoration: underline;
+        }
+
+        .project-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #4ECDC4, #44A08D);
+            color: white;
+            border-radius: 10px;
+        }
+
+        .project-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .project-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .content-section {
+            margin: 40px 0;
+            padding: 30px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border-left: 5px solid #4ECDC4;
+        }
+
+        .content-section h2 {
+            color: #4ECDC4;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .content-section h3 {
+            color: #333;
+            margin: 20px 0 10px 0;
+            font-size: 1.3rem;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #FFF8E1, #FFF3C4);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #4ECDC4;
+            margin: 20px 0;
+        }
+
+        .code-container {
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        .code-header {
+            color: #569cd6;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .code-block {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #d4d4d4;
+        }
+
+        .code-comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+
+        .code-keyword {
+            color: #569cd6;
+        }
+
+        .code-string {
+            color: #ce9178;
+        }
+
+        .code-function {
+            color: #dcdcaa;
+        }
+
+        .code-number {
+            color: #b5cea8;
+        }
+
+        .demo-links {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .demo-btn {
+            display: inline-block;
+            background-color: #007BFF;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .demo-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .demo-btn.secondary {
+            background-color: #28a745;
+        }
+
+        .demo-btn.secondary:hover {
+            background-color: #218838;
+        }
+
+        @media (max-width: 768px) {
+            .project-header h1 {
+                font-size: 2rem;
+            }
+
+            .project-header p {
+                font-size: 1rem;
+            }
+
+            .demo-btn {
+                margin: 5px;
+                padding: 10px 20px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="thematic-outline-puzzles.html">← Back to Project Overview</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>🧩 Thematic Outline Puzzles</h1>
+            <p>Core Source Code & AI-Powered Puzzle Generation Implementation</p>
+
+            <div class="badges">
+                <span class="badge">React 19.1+</span>
+                <span class="badge">TypeScript</span>
+                <span class="badge">Gemini AI</span>
+                <span class="badge">Imagen 4.0</span>
+                <span class="badge">Game Logic</span>
+            </div>
+        </div>
+
+        <div class="highlight-box">
+            <h3>🔍 About This Code Showcase</h3>
+            <p><strong>This curated code snippet demonstrates how the Thematic Outline Puzzles transforms any theme into interactive AI-generated puzzle experiences with advanced game mechanics.</strong></p>
+            <p>Full deployment scripts, API integrations, and proprietary details are omitted for clarity and security. This showcase highlights the core puzzle generation, AI integration, and interactive gameplay algorithms.</p>
+        </div>
+
+        <div class="content-section">
+            <h2>🎮 Core Algorithm: Interactive Puzzle Game Engine</h2>
+            <p>The foundation of Thematic Outline Puzzles is its ability to generate themed puzzle images using AI, create interactive puzzle pieces, and manage complex game state with smooth user interactions:</p>
+
+            <div class="code-container">
+                <div class="code-header">🧩 App.tsx - Main Puzzle Game Controller</div>
+                <div class="code-block">
+<span class="code-keyword">import</span> React, { useState, useCallback } <span class="code-keyword">from</span> <span class="code-string">'react'</span>;
+<span class="code-keyword">import</span> { PuzzleGenerator } <span class="code-keyword">from</span> <span class="code-string">'./components/PuzzleGenerator'</span>;
+<span class="code-keyword">import</span> { PuzzleBoard } <span class="code-keyword">from</span> <span class="code-string">'./components/PuzzleBoard'</span>;
+<span class="code-keyword">import</span> { generatePuzzleImage } <span class="code-keyword">from</span> <span class="code-string">'./services/geminiService'</span>;
+<span class="code-keyword">import</span> { Difficulty } <span class="code-keyword">from</span> <span class="code-string">'./types'</span>;
+
+<span class="code-keyword">type</span> AppState = <span class="code-string">'CONFIG'</span> | <span class="code-string">'LOADING'</span> | <span class="code-string">'PLAYING'</span>;
+
+<span class="code-keyword">export</span> <span class="code-keyword">default</span> <span class="code-keyword">function</span> <span class="code-function">App</span>() {
+  <span class="code-keyword">const</span> [appState, setAppState] = useState&lt;AppState&gt;(<span class="code-string">'CONFIG'</span>);
+  <span class="code-keyword">const</span> [puzzleImage, setPuzzleImage] = useState&lt;string | null&gt;(<span class="code-keyword">null</span>);
+  <span class="code-keyword">const</span> [gridSize, setGridSize] = useState&lt;Difficulty&gt;(Difficulty.EASY);
+  <span class="code-keyword">const</span> [theme, setTheme] = useState&lt;string&gt;(<span class="code-string">''</span>);
+
+  <span class="code-comment">// Generate AI-powered puzzle from any theme</span>
+  <span class="code-keyword">const</span> <span class="code-function">handleGeneratePuzzle</span> = useCallback(<span class="code-keyword">async</span> (
+    newTheme: string,
+    difficulty: Difficulty
+  ) => {
+    setAppState(<span class="code-string">'LOADING'</span>);
+    setError(<span class="code-keyword">null</span>);
+    setTheme(newTheme);
+    setGridSize(difficulty);
+
+    <span class="code-keyword">try</span> {
+      <span class="code-comment">// Create optimized prompt for puzzle-style imagery</span>
+      <span class="code-keyword">const</span> prompt = `A vibrant and clear, minimalist outline-style,
+cartoon illustration of ${newTheme}. The image should be very simple,
+with thick, bold outlines and distinct shapes, suitable for a children's
+puzzle. Centered subject, plain background, square aspect ratio.`;
+
+      <span class="code-comment">// Generate AI image using Imagen 4.0</span>
+      <span class="code-keyword">const</span> imageUrl = <span class="code-keyword">await</span> generatePuzzleImage(prompt);
+
+      setPuzzleImage(imageUrl);
+      setAppState(<span class="code-string">'PLAYING'</span>);
+    } <span class="code-keyword">catch</span> (err) {
+      setError(<span class="code-string">'Failed to generate image. Please try a different theme.'</span>);
+      setAppState(<span class="code-string">'CONFIG'</span>);
+      console.error(err);
+    }
+  }, []);
+
+  <span class="code-comment">// Reset game state for new puzzle</span>
+  <span class="code-keyword">const</span> <span class="code-function">handleNewPuzzle</span> = () => {
+    setAppState(<span class="code-string">'CONFIG'</span>);
+    setPuzzleImage(<span class="code-keyword">null</span>);
+    setError(<span class="code-keyword">null</span>);
+  };
+
+  <span class="code-comment">// Dynamic content rendering based on game state</span>
+  <span class="code-keyword">const</span> <span class="code-function">renderContent</span> = () => {
+    <span class="code-keyword">switch</span> (appState) {
+      <span class="code-keyword">case</span> <span class="code-string">'LOADING'</span>:
+        <span class="code-keyword">return</span> &lt;Spinner message={`Creating a puzzle about "${theme}"...`} /&gt;;
+
+      <span class="code-keyword">case</span> <span class="code-string">'PLAYING'</span>:
+        <span class="code-keyword">if</span> (puzzleImage) {
+          <span class="code-keyword">return</span> (
+            &lt;PuzzleBoard
+              imageSrc={puzzleImage}
+              gridSize={gridSize}
+              onNewPuzzle={handleNewPuzzle}
+              theme={theme}
+            /&gt;
+          );
+        }
+        <span class="code-comment">// Fallback to config if image is missing</span>
+        <span class="code-keyword">return</span> &lt;PuzzleGenerator onGenerate={handleGeneratePuzzle} error={error} /&gt;;
+
+      <span class="code-keyword">case</span> <span class="code-string">'CONFIG'</span>:
+      <span class="code-keyword">default</span>:
+        <span class="code-keyword">return</span> &lt;PuzzleGenerator onGenerate={handleGeneratePuzzle} error={error} /&gt;;
+    }
+  };
+
+  <span class="code-keyword">return</span> (
+    &lt;div className=<span class="code-string">"min-h-screen bg-slate-900 text-slate-100 flex flex-col"</span>&gt;
+      &lt;header className=<span class="code-string">"w-full max-w-4xl text-center mb-8"</span>&gt;
+        &lt;h1 className=<span class="code-string">"text-4xl md:text-5xl font-bold gradient-text"</span>&gt;
+          Thematic Outline Puzzles
+        &lt;/h1&gt;
+        &lt;p className=<span class="code-string">"text-slate-400 text-lg"</span>&gt;
+          Turn any theme into a fun, interactive puzzle.
+        &lt;/p&gt;
+      &lt;/header&gt;
+      &lt;main&gt;{renderContent()}&lt;/main&gt;
+    &lt;/div&gt;
+  );
+}
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🤖 AI Image Generation Service</h2>
+            <p>The AI service leverages Imagen 4.0 to create puzzle-optimized illustrations with specific prompting strategies for educational content:</p>
+
+            <div class="code-container">
+                <div class="code-header">🎨 geminiService.ts - AI Image Generation Pipeline</div>
+                <div class="code-block">
+<span class="code-keyword">import</span> { GoogleGenAI } <span class="code-keyword">from</span> <span class="code-string">"@google/genai"</span>;
+
+<span class="code-keyword">if</span> (!process.env.API_KEY) {
+  <span class="code-keyword">throw</span> <span class="code-keyword">new</span> Error(<span class="code-string">"API_KEY environment variable not set"</span>);
+}
+
+<span class="code-keyword">const</span> ai = <span class="code-keyword">new</span> GoogleGenAI({ apiKey: process.env.API_KEY });
+
+<span class="code-comment">// Generate puzzle-optimized images using Imagen 4.0</span>
+<span class="code-keyword">export</span> <span class="code-keyword">async</span> <span class="code-keyword">function</span> <span class="code-function">generatePuzzleImage</span>(prompt: string): Promise&lt;string&gt; {
+  <span class="code-keyword">try</span> {
+    <span class="code-comment">// Call Imagen 4.0 with puzzle-specific configuration</span>
+    <span class="code-keyword">const</span> response = <span class="code-keyword">await</span> ai.models.generateImages({
+        model: <span class="code-string">'imagen-4.0-generate-001'</span>,
+        prompt: prompt,
+        config: {
+          numberOfImages: <span class="code-number">1</span>,
+          outputMimeType: <span class="code-string">'image/png'</span>,
+          aspectRatio: <span class="code-string">'1:1'</span>, <span class="code-comment">// Square format for optimal puzzle pieces</span>
+          safetyFilterLevel: <span class="code-string">'BLOCK_MOST'</span>, <span class="code-comment">// Child-safe content</span>
+        },
+    });
+
+    <span class="code-comment">// Validate response and extract image data</span>
+    <span class="code-keyword">if</span> (response.generatedImages && response.generatedImages.length > <span class="code-number">0</span>) {
+      <span class="code-keyword">const</span> base64ImageBytes: string = response.generatedImages[<span class="code-number">0</span>].image.imageBytes;
+
+      <span class="code-comment">// Return base64 data URL for immediate canvas use</span>
+      <span class="code-keyword">return</span> `data:image/png;base64,${base64ImageBytes}`;
+    } <span class="code-keyword">else</span> {
+      <span class="code-keyword">throw</span> <span class="code-keyword">new</span> Error(<span class="code-string">"No images were generated by the API."</span>);
+    }
+  } <span class="code-keyword">catch</span> (error) {
+    console.error(<span class="code-string">"Error generating image with Gemini AI:"</span>, error);
+    <span class="code-keyword">throw</span> <span class="code-keyword">new</span> Error(<span class="code-string">"Failed to generate puzzle image."</span>);
+  }
+}
+
+<span class="code-comment">// Advanced prompt engineering for puzzle optimization</span>
+<span class="code-keyword">export</span> <span class="code-keyword">function</span> <span class="code-function">createPuzzlePrompt</span>(theme: string, difficulty: Difficulty): string {
+  <span class="code-keyword">const</span> basePrompt = `A vibrant and clear, minimalist outline-style,
+cartoon illustration of ${theme}`;
+
+  <span class="code-keyword">const</span> stylePrompts = {
+    [Difficulty.EASY]: <span class="code-string">"very simple with extra thick, bold outlines (4-5px),
+      large shapes, minimal detail, perfect for toddlers"</span>,
+    [Difficulty.MEDIUM]: <span class="code-string">"simple with clear, thick outlines (2-3px),
+      moderate detail, suitable for children"</span>,
+    [Difficulty.HARD]: <span class="code-string">"detailed with fine outlines (1-2px),
+      intricate patterns, suitable for adults"</span>
+  };
+
+  <span class="code-keyword">return</span> `${basePrompt}. The image should be ${stylePrompts[difficulty]}.
+Centered subject, plain white background, square aspect ratio.
+Black and white line art style, no shading or color fills.`;
+}
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🧩 Advanced Puzzle Board Logic</h2>
+            <p>The puzzle board implements sophisticated piece management, drag-and-drop mechanics, and real-time solution detection:</p>
+
+            <div class="code-container">
+                <div class="code-header">🎯 PuzzleBoard.tsx - Interactive Game Mechanics</div>
+                <div class="code-block">
+<span class="code-keyword">import</span> React, { useState, useEffect, useCallback } <span class="code-keyword">from</span> <span class="code-string">'react'</span>;
+<span class="code-keyword">import</span> { PuzzlePiece <span class="code-keyword">as</span> PuzzlePieceType } <span class="code-keyword">from</span> <span class="code-string">'../types'</span>;
+
+<span class="code-keyword">interface</span> <span class="code-function">PuzzleBoardProps</span> {
+  imageSrc: string;
+  gridSize: number;
+  theme: string;
+  onNewPuzzle: () => void;
+}
+
+<span class="code-keyword">export</span> <span class="code-keyword">function</span> <span class="code-function">PuzzleBoard</span>({
+  imageSrc,
+  gridSize,
+  theme,
+  onNewPuzzle
+}: PuzzleBoardProps) {
+  <span class="code-keyword">const</span> [pieces, setPieces] = useState&lt;PuzzlePieceType[]&gt;([]);
+  <span class="code-keyword">const</span> [isSolved, setIsSolved] = useState(<span class="code-keyword">false</span>);
+  <span class="code-keyword">const</span> [draggedItem, setDraggedItem] = useState&lt;PuzzlePieceType | null&gt;(<span class="code-keyword">null</span>);
+
+  <span class="code-comment">// Fisher-Yates shuffle algorithm for fair randomization</span>
+  <span class="code-keyword">const</span> <span class="code-function">shufflePieces</span> = useCallback((arr: PuzzlePieceType[]) => {
+    <span class="code-keyword">const</span> shuffled = [...arr];
+    <span class="code-keyword">for</span> (<span class="code-keyword">let</span> i = shuffled.length - <span class="code-number">1</span>; i > <span class="code-number">0</span>; i--) {
+        <span class="code-keyword">const</span> j = Math.floor(Math.random() * (i + <span class="code-number">1</span>));
+        <span class="code-comment">// Swap current indices to randomize positions</span>
+        [shuffled[i].currentIndex, shuffled[j].currentIndex] =
+        [shuffled[j].currentIndex, shuffled[i].currentIndex];
+    }
+    <span class="code-keyword">return</span> shuffled;
+  }, []);
+
+  <span class="code-comment">// Initialize puzzle with proper CSS background positioning</span>
+  <span class="code-keyword">const</span> <span class="code-function">initializePuzzle</span> = useCallback(() => {
+    <span class="code-keyword">const</span> newPieces: PuzzlePieceType[] = [];
+
+    <span class="code-keyword">for</span> (<span class="code-keyword">let</span> i = <span class="code-number">0</span>; i < gridSize * gridSize; i++) {
+      <span class="code-keyword">const</span> row = Math.floor(i / gridSize);
+      <span class="code-keyword">const</span> col = i % gridSize;
+
+      <span class="code-comment">// Calculate CSS background-position for seamless image display</span>
+      newPieces.push({
+        id: i,
+        originalIndex: i,
+        currentIndex: i,
+        style: {
+          backgroundPosition: `${(col * <span class="code-number">100</span>) / (gridSize - <span class="code-number">1</span>)}% ${(row * <span class="code-number">100</span>) / (gridSize - <span class="code-number">1</span>)}%`,
+          backgroundSize: `${gridSize * <span class="code-number">100</span>}% ${gridSize * <span class="code-number">100</span>}%`,
+        },
+      });
+    }
+
+    <span class="code-comment">// Apply smart shuffling and reset game state</span>
+    setPieces(shufflePieces(newPieces));
+    setIsSolved(<span class="code-keyword">false</span>);
+  }, [gridSize, shufflePieces]);
+
+  <span class="code-comment">// Real-time solution detection with O(n) efficiency</span>
+  useEffect(() => {
+    <span class="code-keyword">const</span> <span class="code-function">checkSolved</span> = () => {
+      <span class="code-keyword">if</span> (pieces.length === <span class="code-number">0</span>) <span class="code-keyword">return</span> <span class="code-keyword">false</span>;
+      <span class="code-keyword">return</span> pieces.every(p => p.currentIndex === p.originalIndex);
+    };
+
+    <span class="code-keyword">if</span> (checkSolved()) {
+        setIsSolved(<span class="code-keyword">true</span>);
+        <span class="code-comment">// Trigger celebration animation</span>
+        setTimeout(() => {
+            alert(`🎉 Congratulations! You solved the "${theme}" puzzle!`);
+        }, <span class="code-number">500</span>);
+    }
+  }, [pieces, theme]);
+
+  <span class="code-comment">// Advanced drag-and-drop with touch support</span>
+  <span class="code-keyword">const</span> <span class="code-function">handleDragStart</span> = (piece: PuzzlePieceType) => {
+    setDraggedItem(piece);
+  };
+
+  <span class="code-keyword">const</span> <span class="code-function">handleDrop</span> = (targetPiece: PuzzlePieceType) => {
+    <span class="code-keyword">if</span> (!draggedItem || draggedItem.id === targetPiece.id) <span class="code-keyword">return</span>;
+
+    <span class="code-comment">// Swap pieces with smooth state transition</span>
+    setPieces(currentPieces => {
+      <span class="code-keyword">const</span> newPieces = [...currentPieces];
+      <span class="code-keyword">const</span> draggedIndex = newPieces.findIndex(p => p.id === draggedItem.id);
+      <span class="code-keyword">const</span> targetIndex = newPieces.findIndex(p => p.id === targetPiece.id);
+
+      <span class="code-comment">// Swap current positions</span>
+      [newPieces[draggedIndex].currentIndex, newPieces[targetIndex].currentIndex] =
+      [newPieces[targetIndex].currentIndex, newPieces[draggedIndex].currentIndex];
+
+      <span class="code-keyword">return</span> newPieces;
+    });
+
+    setDraggedItem(<span class="code-keyword">null</span>);
+  };
+
+  <span class="code-comment">// Initialize puzzle on component mount and image change</span>
+  useEffect(() => {
+    initializePuzzle();
+  }, [initializePuzzle]);
+
+  <span class="code-keyword">return</span> (
+    &lt;div className=<span class="code-string">"puzzle-container"</span>&gt;
+      &lt;div
+        className={`puzzle-grid grid-${gridSize}`}
+        style={{
+          gridTemplateColumns: `repeat(${gridSize}, 1fr)`,
+          gridTemplateRows: `repeat(${gridSize}, 1fr)`
+        }}
+      &gt;
+        {pieces
+          .sort((a, b) => a.currentIndex - b.currentIndex)
+          .map(piece => (
+            &lt;PuzzlePiece
+              key={piece.id}
+              piece={piece}
+              imageSrc={imageSrc}
+              onDragStart={handleDragStart}
+              onDrop={handleDrop}
+              isDragging={draggedItem?.id === piece.id}
+            /&gt;
+          ))}
+      &lt;/div&gt;
+
+      {isSolved && (
+        &lt;div className=<span class="code-string">"celebration-overlay"</span>&gt;
+          &lt;h2&gt;🎉 Puzzle Complete! 🎉&lt;/h2&gt;
+          &lt;button onClick={onNewPuzzle}&gt;Create New Puzzle&lt;/button&gt;
+        &lt;/div&gt;
+      )}
+    &lt;/div&gt;
+  );
+}
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>⚙️ Technical Implementation Notes</h2>
+            <h3>Key Algorithms & Innovations</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>AI Prompt Engineering:</strong> Specialized prompts optimized for puzzle-suitable imagery generation</li>
+                <li><strong>Fisher-Yates Shuffling:</strong> Ensures fair randomization while guaranteeing solvable puzzle states</li>
+                <li><strong>CSS Background Positioning:</strong> Seamless image display across puzzle pieces using calculated offsets</li>
+                <li><strong>Real-Time Solution Detection:</strong> Efficient O(n) algorithm for instant completion recognition</li>
+                <li><strong>Touch-Optimized Interactions:</strong> Responsive drag-and-drop supporting both mouse and touch devices</li>
+                <li><strong>Dynamic Grid Sizing:</strong> Flexible grid system adapting to difficulty levels and screen sizes</li>
+            </ul>
+
+            <h3>Why This Approach Works</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>Educational Value:</strong> Combines AI technology with traditional puzzle-solving for cognitive development</li>
+                <li><strong>Infinite Content:</strong> AI generation provides unlimited themed puzzles without content creation costs</li>
+                <li><strong>Adaptive Difficulty:</strong> Age-appropriate complexity ensures engagement across developmental stages</li>
+                <li><strong>Performance Optimization:</strong> Efficient algorithms maintain smooth gameplay even on mobile devices</li>
+                <li><strong>Accessibility Design:</strong> Large touch targets and clear visual feedback support diverse users</li>
+            </ul>
+        </div>
+
+        <div class="demo-links">
+            <a href="https://thematic-outline-puzzles-169218045868.us-west1.run.app/" target="_blank" class="demo-btn">🚀 Try Live Demo</a>
+            <a href="thematic-outline-puzzles.html" class="demo-btn secondary">📖 View Full Project Details</a>
+        </div>
+
+        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+            <a href="index.html">← Back to Portfolio</a> |
+            <a href="thematic-outline-puzzles.html">View Project Overview</a>
+        </nav>
+    </div>
+</body>
+</html>
