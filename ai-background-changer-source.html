@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Background Changer - Source Code</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #222;
+            background-color: #ffffff;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .back-nav {
+            margin-bottom: 20px;
+        }
+
+        .back-nav a {
+            color: #007BFF;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .back-nav a:hover {
+            text-decoration: underline;
+        }
+
+        .project-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #9C27B0, #7B1FA2);
+            color: white;
+            border-radius: 10px;
+        }
+
+        .project-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .project-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .content-section {
+            margin: 40px 0;
+            padding: 30px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border-left: 5px solid #9C27B0;
+        }
+
+        .content-section h2 {
+            color: #9C27B0;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .content-section h3 {
+            color: #333;
+            margin: 20px 0 10px 0;
+            font-size: 1.3rem;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #FFF8E1, #FFF3C4);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #9C27B0;
+            margin: 20px 0;
+        }
+
+        .code-container {
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        .code-header {
+            color: #569cd6;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .code-block {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #d4d4d4;
+        }
+
+        .code-comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+
+        .code-keyword {
+            color: #569cd6;
+        }
+
+        .code-string {
+            color: #ce9178;
+        }
+
+        .code-function {
+            color: #dcdcaa;
+        }
+
+        .code-number {
+            color: #b5cea8;
+        }
+
+        .demo-links {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .demo-btn {
+            display: inline-block;
+            background-color: #007BFF;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .demo-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .demo-btn.secondary {
+            background-color: #28a745;
+        }
+
+        .demo-btn.secondary:hover {
+            background-color: #218838;
+        }
+
+        @media (max-width: 768px) {
+            .project-header h1 {
+                font-size: 2rem;
+            }
+
+            .project-header p {
+                font-size: 1rem;
+            }
+
+            .demo-btn {
+                margin: 5px;
+                padding: 10px 20px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="ai-background-changer.html">← Back to Project Overview</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>🖼️ AI Background Changer</h1>
+            <p>Core Source Code & Natural Language Image Editing Implementation</p>
+
+            <div class="badges">
+                <span class="badge">React 19.1+</span>
+                <span class="badge">TypeScript</span>
+                <span class="badge">Gemini 2.5 Flash</span>
+                <span class="badge">Multimodal AI</span>
+                <span class="badge">Image Processing</span>
+            </div>
+        </div>
+
+        <div class="highlight-box">
+            <h3>🔍 About This Code Showcase</h3>
+            <p><strong>This curated code snippet demonstrates how the AI Background Changer uses natural language prompts to intelligently replace image backgrounds while preserving subject integrity.</strong></p>
+            <p>Full deployment scripts, API integrations, and proprietary details are omitted for clarity and security. This showcase highlights the core multimodal AI integration, image processing, and user interaction algorithms.</p>
+        </div>
+
+        <div class="content-section">
+            <h2>🖼️ Core Algorithm: Intelligent Background Replacement Engine</h2>
+            <p>The foundation of AI Background Changer is its ability to understand natural language descriptions and apply precise background modifications while preserving the main subject:</p>
+
+            <div class="code-container">
+                <div class="code-header">🎨 App.tsx - Main Background Editor Controller</div>
+                <div class="code-block">
+<span class="code-keyword">import</span> React, { useState, useCallback } <span class="code-keyword">from</span> <span class="code-string">'react'</span>;
+<span class="code-keyword">import</span> { ImageUploader } <span class="code-keyword">from</span> <span class="code-string">'./components/ImageUploader'</span>;
+<span class="code-keyword">import</span> { PromptInput } <span class="code-keyword">from</span> <span class="code-string">'./components/PromptInput'</span>;
+<span class="code-keyword">import</span> { GeneratedImage } <span class="code-keyword">from</span> <span class="code-string">'./components/GeneratedImage'</span>;
+<span class="code-keyword">import</span> { editImageWithPrompt } <span class="code-keyword">from</span> <span class="code-string">'./services/geminiService'</span>;
+<span class="code-keyword">import</span> { fileToGenerativePart } <span class="code-keyword">from</span> <span class="code-string">'./utils/imageUtils'</span>;
+<span class="code-keyword">import</span> <span class="code-keyword">type</span> { FileDetails } <span class="code-keyword">from</span> <span class="code-string">'./types'</span>;
+
+<span class="code-keyword">const</span> <span class="code-function">App</span>: React.FC = () => {
+  <span class="code-keyword">const</span> [fileDetails, setFileDetails] = useState&lt;FileDetails | null&gt;(<span class="code-keyword">null</span>);
+  <span class="code-keyword">const</span> [prompt, setPrompt] = useState&lt;string&gt;(<span class="code-string">''</span>);
+  <span class="code-keyword">const</span> [generatedImageUrl, setGeneratedImageUrl] = useState&lt;string | null&gt;(<span class="code-keyword">null</span>);
+  <span class="code-keyword">const</span> [isLoading, setIsLoading] = useState&lt;boolean&gt;(<span class="code-keyword">false</span>);
+  <span class="code-keyword">const</span> [error, setError] = useState&lt;string | null&gt;(<span class="code-keyword">null</span>);
+
+  <span class="code-comment">// Handle image upload with preview generation</span>
+  <span class="code-keyword">const</span> <span class="code-function">handleImageUpload</span> = (file: File) => {
+    <span class="code-keyword">const</span> reader = <span class="code-keyword">new</span> FileReader();
+    reader.onloadend = () => {
+      setFileDetails({
+        file: file,
+        previewUrl: reader.result <span class="code-keyword">as</span> string,
+      });
+      setGeneratedImageUrl(<span class="code-keyword">null</span>);
+      setError(<span class="code-keyword">null</span>);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  <span class="code-comment">// Advanced background replacement with natural language processing</span>
+  <span class="code-keyword">const</span> <span class="code-function">handleGenerate</span> = useCallback(<span class="code-keyword">async</span> () => {
+    <span class="code-keyword">if</span> (!fileDetails || !prompt) {
+      setError(<span class="code-string">'Please upload an image and enter a prompt.'</span>);
+      <span class="code-keyword">return</span>;
+    }
+
+    setIsLoading(<span class="code-keyword">true</span>);
+    setError(<span class="code-keyword">null</span>);
+    setGeneratedImageUrl(<span class="code-keyword">null</span>);
+
+    <span class="code-keyword">try</span> {
+      <span class="code-comment">// Convert uploaded file to AI-compatible format</span>
+      <span class="code-keyword">const</span> imagePart = <span class="code-keyword">await</span> fileToGenerativePart(fileDetails.file);
+
+      <span class="code-comment">// Process image with natural language background instruction</span>
+      <span class="code-keyword">const</span> result = <span class="code-keyword">await</span> editImageWithPrompt(imagePart, prompt);
+
+      <span class="code-keyword">if</span> (result) {
+        setGeneratedImageUrl(result);
+      } <span class="code-keyword">else</span> {
+        setError(<span class="code-string">'Could not generate image. The model may not have returned an image.'</span>);
+      }
+    } <span class="code-keyword">catch</span> (e) {
+      console.error(e);
+      setError(e <span class="code-keyword">instanceof</span> Error ? e.message : <span class="code-string">'An unknown error occurred.'</span>);
+    } <span class="code-keyword">finally</span> {
+      setIsLoading(<span class="code-keyword">false</span>);
+    }
+  }, [fileDetails, prompt]);
+
+  <span class="code-comment">// Reset application state for new editing session</span>
+  <span class="code-keyword">const</span> <span class="code-function">handleClear</span> = () => {
+    setFileDetails(<span class="code-keyword">null</span>);
+    setPrompt(<span class="code-string">''</span>);
+    setGeneratedImageUrl(<span class="code-keyword">null</span>);
+    setError(<span class="code-keyword">null</span>);
+    setIsLoading(<span class="code-keyword">false</span>);
+  };
+
+  <span class="code-comment">// Validation logic for generation readiness</span>
+  <span class="code-keyword">const</span> canGenerate = fileDetails !== <span class="code-keyword">null</span> && prompt.trim() !== <span class="code-string">''</span> && !isLoading;
+
+  <span class="code-keyword">return</span> (
+    &lt;div className=<span class="code-string">"min-h-screen bg-gray-900 text-gray-100"</span>&gt;
+      &lt;header className=<span class="code-string">"text-center mb-8"</span>&gt;
+        &lt;h1 className=<span class="code-string">"text-4xl font-extrabold gradient-text"</span>&gt;
+          AI Background Changer
+        &lt;/h1&gt;
+        &lt;p className=<span class="code-string">"text-gray-400"</span>&gt;
+          Upload an image, describe a new background, and let AI do the magic.
+        &lt;/p&gt;
+      &lt;/header&gt;
+
+      &lt;ImageUploader onImageUpload={handleImageUpload} fileDetails={fileDetails} /&gt;
+      &lt;PromptInput prompt={prompt} setPrompt={setPrompt} /&gt;
+
+      &lt;GeneratedImage
+        generatedImageUrl={generatedImageUrl}
+        isLoading={isLoading}
+        error={error}
+        onGenerate={handleGenerate}
+        onClear={handleClear}
+        canGenerate={canGenerate}
+      /&gt;
+    &lt;/div&gt;
+  );
+};
+
+<span class="code-keyword">export</span> <span class="code-keyword">default</span> App;
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🤖 Multimodal AI Service Integration</h2>
+            <p>The AI service leverages Gemini 2.5 Flash's multimodal capabilities to understand both image content and natural language instructions for precise background editing:</p>
+
+            <div class="code-container">
+                <div class="code-header">🧠 geminiService.ts - Multimodal AI Background Processing</div>
+                <div class="code-block">
+<span class="code-keyword">import</span> { GoogleGenAI, Modality } <span class="code-keyword">from</span> <span class="code-string">"@google/genai"</span>;
+<span class="code-keyword">import</span> <span class="code-keyword">type</span> { Part, GenerateContentResponse } <span class="code-keyword">from</span> <span class="code-string">"@google/genai"</span>;
+
+<span class="code-keyword">const</span> API_KEY = process.env.API_KEY;
+
+<span class="code-keyword">if</span> (!API_KEY) {
+  <span class="code-keyword">throw</span> <span class="code-keyword">new</span> Error(<span class="code-string">"API_KEY environment variable not set"</span>);
+}
+
+<span class="code-keyword">const</span> ai = <span class="code-keyword">new</span> GoogleGenAI({ apiKey: API_KEY });
+
+<span class="code-comment">// Advanced multimodal AI processing for intelligent background replacement</span>
+<span class="code-keyword">export</span> <span class="code-keyword">async</span> <span class="code-keyword">function</span> <span class="code-function">editImageWithPrompt</span>(
+  imagePart: Part,
+  prompt: string
+): Promise&lt;string | null&gt; {
+  <span class="code-keyword">try</span> {
+    <span class="code-comment">// Create text instruction for background modification</span>
+    <span class="code-keyword">const</span> textPart = {
+      text: prompt,
+    };
+
+    <span class="code-comment">// Call Gemini 2.5 Flash with multimodal capabilities</span>
+    <span class="code-keyword">const</span> response: GenerateContentResponse = <span class="code-keyword">await</span> ai.models.generateContent({
+      model: <span class="code-string">'gemini-2.5-flash-image-preview'</span>,
+      contents: {
+        parts: [imagePart, textPart], <span class="code-comment">// Combine image and text inputs</span>
+      },
+      config: {
+        responseModalities: [Modality.IMAGE, Modality.TEXT], <span class="code-comment">// Request image output</span>
+      },
+    });
+
+    <span class="code-comment">// Extract generated image from multimodal response</span>
+    <span class="code-keyword">for</span> (<span class="code-keyword">const</span> part <span class="code-keyword">of</span> response.candidates?.[<span class="code-number">0</span>]?.content?.parts || []) {
+      <span class="code-keyword">if</span> (part.inlineData) {
+        <span class="code-keyword">const</span> base64ImageBytes: string = part.inlineData.data;
+        <span class="code-keyword">const</span> mimeType = part.inlineData.mimeType;
+
+        <span class="code-comment">// Return base64 data URL for immediate display</span>
+        <span class="code-keyword">return</span> `data:${mimeType};base64,${base64ImageBytes}`;
+      }
+    }
+
+    <span class="code-keyword">return</span> <span class="code-keyword">null</span>; <span class="code-comment">// No image found in response</span>
+  } <span class="code-keyword">catch</span> (error) {
+    console.error(<span class="code-string">"Error calling Gemini API:"</span>, error);
+    <span class="code-keyword">if</span> (error <span class="code-keyword">instanceof</span> Error) {
+        <span class="code-keyword">throw</span> <span class="code-keyword">new</span> Error(`Failed to generate image: ${error.message}`);
+    }
+    <span class="code-keyword">throw</span> <span class="code-keyword">new</span> Error(<span class="code-string">"An unknown error occurred while communicating with the API."</span>);
+  }
+}
+
+<span class="code-comment">// Advanced image preprocessing for AI compatibility</span>
+<span class="code-keyword">export</span> <span class="code-keyword">function</span> <span class="code-function">optimizePromptForBackgroundChange</span>(userPrompt: string): string {
+  <span class="code-comment">// Enhance user prompt with background-specific instructions</span>
+  <span class="code-keyword">const</span> enhancedPrompt = `Change the background of this image to: ${userPrompt}.
+Keep the main subject intact and properly integrated with the new background.
+Ensure natural lighting and perspective consistency.
+Maintain high image quality and realistic composition.`;
+
+  <span class="code-keyword">return</span> enhancedPrompt;
+}
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>📤 Advanced Image Upload & Processing</h2>
+            <p>The image uploader component provides drag-and-drop functionality with file validation and preview generation optimized for AI processing:</p>
+
+            <div class="code-container">
+                <div class="code-header">📸 ImageUploader.tsx - Interactive File Upload System</div>
+                <div class="code-block">
+<span class="code-keyword">import</span> React, { useCallback } <span class="code-keyword">from</span> <span class="code-string">'react'</span>;
+<span class="code-keyword">import</span> <span class="code-keyword">type</span> { FileDetails } <span class="code-keyword">from</span> <span class="code-string">'../types'</span>;
+<span class="code-keyword">import</span> { UploadIcon } <span class="code-keyword">from</span> <span class="code-string">'./Icons'</span>;
+
+<span class="code-keyword">interface</span> <span class="code-function">ImageUploaderProps</span> {
+  onImageUpload: (file: File) => void;
+  fileDetails: FileDetails | null;
+}
+
+<span class="code-keyword">export</span> <span class="code-keyword">const</span> <span class="code-function">ImageUploader</span>: React.FC&lt;ImageUploaderProps&gt; = ({
+  onImageUpload,
+  fileDetails
+}) => {
+  <span class="code-comment">// Advanced drag-and-drop with file type validation</span>
+  <span class="code-keyword">const</span> <span class="code-function">onDrop</span> = useCallback((event: React.DragEvent&lt;HTMLDivElement&gt;) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    <span class="code-keyword">const</span> files = event.dataTransfer.files;
+    <span class="code-keyword">if</span> (files && files.length > <span class="code-number">0</span>) {
+      <span class="code-comment">// Validate image file type</span>
+      <span class="code-keyword">if</span> (files[<span class="code-number">0</span>].type.startsWith(<span class="code-string">'image/'</span>)) {
+          onImageUpload(files[<span class="code-number">0</span>]);
+      }
+    }
+  }, [onImageUpload]);
+
+  <span class="code-comment">// Prevent default drag behavior</span>
+  <span class="code-keyword">const</span> <span class="code-function">onDragOver</span> = (event: React.DragEvent&lt;HTMLDivElement&gt;) => {
+    event.preventDefault();
+    event.stopPropagation();
+  };
+
+  <span class="code-comment">// Handle traditional file input selection</span>
+  <span class="code-keyword">const</span> <span class="code-function">onFileChange</span> = (event: React.ChangeEvent&lt;HTMLInputElement&gt;) => {
+    <span class="code-keyword">const</span> files = event.target.files;
+    <span class="code-keyword">if</span> (files && files.length > <span class="code-number">0</span>) {
+      onImageUpload(files[<span class="code-number">0</span>]);
+    }
+  };
+
+  <span class="code-comment">// Programmatic file input trigger</span>
+  <span class="code-keyword">const</span> <span class="code-function">onContainerClick</span> = () => {
+    document.getElementById(<span class="code-string">'file-input'</span>)?.click();
+  };
+
+  <span class="code-keyword">return</span> (
+    &lt;div className=<span class="code-string">"w-full"</span>&gt;
+      &lt;div
+        className={`
+          relative border-2 border-dashed rounded-lg p-8 text-center cursor-pointer
+          transition-all duration-300 hover:border-purple-400
+          ${fileDetails ? <span class="code-string">'border-purple-500 bg-purple-50'</span> : <span class="code-string">'border-gray-600 bg-gray-800'</span>}
+        `}
+        onDrop={onDrop}
+        onDragOver={onDragOver}
+        onClick={onContainerClick}
+      &gt;
+        <span class="code-comment">{/* Hidden file input for traditional upload */}</span>
+        &lt;input
+          id=<span class="code-string">"file-input"</span>
+          type=<span class="code-string">"file"</span>
+          accept=<span class="code-string">"image/*"</span>
+          onChange={onFileChange}
+          className=<span class="code-string">"hidden"</span>
+        /&gt;
+
+        {fileDetails ? (
+          &lt;div className=<span class="code-string">"space-y-4"</span>&gt;
+            &lt;img
+              src={fileDetails.previewUrl}
+              alt=<span class="code-string">"Preview"</span>
+              className=<span class="code-string">"max-w-full max-h-64 mx-auto rounded-lg shadow-lg"</span>
+            /&gt;
+            &lt;p className=<span class="code-string">"text-sm text-gray-600"</span>&gt;
+              {fileDetails.file.name} ({Math.round(fileDetails.file.size / <span class="code-number">1024</span>)} KB)
+            &lt;/p&gt;
+            &lt;p className=<span class="code-string">"text-xs text-gray-500"</span>&gt;
+              Click to change image or drag new file here
+            &lt;/p&gt;
+          &lt;/div&gt;
+        ) : (
+          &lt;div className=<span class="code-string">"space-y-4"</span>&gt;
+            &lt;UploadIcon className=<span class="code-string">"w-12 h-12 mx-auto text-gray-400"</span> /&gt;
+            &lt;div&gt;
+              &lt;p className=<span class="code-string">"text-lg font-medium text-gray-300"</span>&gt;
+                Upload an image to get started
+              &lt;/p&gt;
+              &lt;p className=<span class="code-string">"text-sm text-gray-500"</span>&gt;
+                Drag and drop your image here, or click to browse
+              &lt;/p&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        )}
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+};
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>⚙️ Technical Implementation Notes</h2>
+            <h3>Key Algorithms & Innovations</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>Multimodal AI Integration:</strong> Seamless combination of image and text inputs for context-aware processing</li>
+                <li><strong>Natural Language Understanding:</strong> Advanced prompt processing for precise background modification instructions</li>
+                <li><strong>Subject Preservation:</strong> AI maintains main subject integrity while replacing backgrounds</li>
+                <li><strong>Real-Time Preview:</strong> Instant image preview with drag-and-drop file validation</li>
+                <li><strong>Error Handling:</strong> Comprehensive error management for robust user experience</li>
+                <li><strong>Memory Optimization:</strong> Efficient image processing for large file handling</li>
+            </ul>
+
+            <h3>Why This Approach Works</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>Context Awareness:</strong> AI understands both image content and user intent for accurate results</li>
+                <li><strong>Natural Interface:</strong> Simple text descriptions make complex image editing accessible</li>
+                <li><strong>Quality Preservation:</strong> Advanced algorithms maintain image quality and realistic composition</li>
+                <li><strong>User Experience:</strong> Intuitive drag-and-drop interface with immediate visual feedback</li>
+                <li><strong>Performance Optimization:</strong> Efficient processing pipeline for responsive user interactions</li>
+            </ul>
+        </div>
+
+        <div class="demo-links">
+            <a href="https://ai-background-changer-169218045868.us-west1.run.app/" target="_blank" class="demo-btn">🚀 Try Live Demo</a>
+            <a href="ai-background-changer.html" class="demo-btn secondary">📖 View Full Project Details</a>
+        </div>
+
+        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+            <a href="index.html">← Back to Portfolio</a> |
+            <a href="ai-background-changer.html">View Project Overview</a>
+        </nav>
+    </div>
+</body>
+</html>
