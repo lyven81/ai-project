@@ -134,7 +134,7 @@ This repository contains **17 production-deployed AI applications** demonstratin
 
 #### [AI Coloring Book for Kids](./projects/ai-coloring-book-for-kids/)
 **Interactive educational coloring experience powered by AI with child-centered design and motor skill development**
-- **Live Demo:** [coloring-book-generator-662370080553.us-west1.run.app](https://coloring-book-generator-662370080553.us-west1.run.app/)
+- **Live Demo:** [ai-coloring-book-for-kids-662370080553.us-west1.run.app](https://ai-coloring-book-for-kids-662370080553.us-west1.run.app/)
 - **Tech Stack:** React 19.1+, TypeScript 5.8+, Gemini AI, Canvas API, Educational Technology
 - **AI Capabilities:** Theme-based coloring page generation, child-safe content filtering, educational AI prompts, interactive learning experiences
 
@@ -247,7 +247,7 @@ All projects are production-deployed and accessible via live demos:
 | AI Avatar Hairstyle Generator | [Launch App](https://ai-avatar-hairstyle-generator-169218045868.us-west1.run.app/) | Creative AI |
 | AI Expression Generator | [Launch App](https://ai-expression-generator-169218045868.us-west1.run.app/) | Creative AI |
 | AI Background Changer | [Launch App](https://ai-background-changer-169218045868.us-west1.run.app/) | Creative AI |
-| AI Coloring Book for Kids | [Launch App](https://coloring-book-generator-662370080553.us-west1.run.app/) | Creative AI |
+| AI Coloring Book for Kids | [Launch App](https://ai-coloring-book-for-kids-662370080553.us-west1.run.app/) | Creative AI |
 
 ## 💼 Professional Highlights
 
