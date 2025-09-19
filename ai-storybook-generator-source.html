@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Storybook Generator - Source Code</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #222;
+            background-color: #ffffff;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .back-nav {
+            margin-bottom: 20px;
+        }
+
+        .back-nav a {
+            color: #007BFF;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .back-nav a:hover {
+            text-decoration: underline;
+        }
+
+        .project-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #9B59B6, #3498DB);
+            color: white;
+            border-radius: 10px;
+        }
+
+        .project-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .project-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .content-section {
+            margin: 40px 0;
+            padding: 30px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border-left: 5px solid #9B59B6;
+        }
+
+        .content-section h2 {
+            color: #9B59B6;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .content-section h3 {
+            color: #333;
+            margin: 20px 0 10px 0;
+            font-size: 1.3rem;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #FFF8E1, #FFF3C4);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #9B59B6;
+            margin: 20px 0;
+        }
+
+        .code-container {
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        .code-header {
+            color: #569cd6;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .code-block {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #d4d4d4;
+        }
+
+        .code-comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+
+        .code-keyword {
+            color: #569cd6;
+        }
+
+        .code-string {
+            color: #ce9178;
+        }
+
+        .code-function {
+            color: #dcdcaa;
+        }
+
+        .code-number {
+            color: #b5cea8;
+        }
+
+        .demo-links {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .demo-btn {
+            display: inline-block;
+            background-color: #007BFF;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .demo-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .demo-btn.secondary {
+            background-color: #28a745;
+        }
+
+        .demo-btn.secondary:hover {
+            background-color: #218838;
+        }
+
+        @media (max-width: 768px) {
+            .project-header h1 {
+                font-size: 2rem;
+            }
+
+            .project-header p {
+                font-size: 1rem;
+            }
+
+            .demo-btn {
+                margin: 5px;
+                padding: 10px 20px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="ai-storybook-generator.html">← Back to Project Overview</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>📚 AI Storybook Generator</h1>
+            <p>Core Source Code & Interactive Storytelling Implementation</p>
+
+            <div class="badges">
+                <span class="badge">React 19.1+</span>
+                <span class="badge">TypeScript</span>
+                <span class="badge">Gemini 2.5 Flash</span>
+                <span class="badge">Imagen 4.0</span>
+                <span class="badge">Canvas API</span>
+            </div>
+        </div>
+
+        <div class="highlight-box">
+            <h3>🔍 About This Code Showcase</h3>
+            <p><strong>This curated code snippet demonstrates how the AI Storybook Generator creates interactive, multi-page storybooks with AI-generated narratives and coloring book illustrations.</strong></p>
+            <p>Full deployment scripts, API integrations, and proprietary details are omitted for clarity and security. This showcase highlights the core story generation, image creation, and interactive canvas algorithms.</p>
+        </div>
+
+        <div class="content-section">
+            <h2>📖 Core Algorithm: Interactive Storybook Engine</h2>
+            <p>The foundation of the AI Storybook Generator is its ability to create cohesive, multi-page narratives with matching illustrations, while providing interactive coloring and text editing capabilities:</p>
+
+            <div class="code-container">
+                <div class="code-header">📚 App.tsx - Main Storybook Controller</div>
+                <div class="code-block">
+<span class="code-keyword">import</span> React, { useState, useCallback } <span class="code-keyword">from</span> <span class="code-string">'react'</span>;
+<span class="code-keyword">import</span> { StoryPage } <span class="code-keyword">from</span> <span class="code-string">'./types'</span>;
+<span class="code-keyword">import</span> { generateStoryPage } <span class="code-keyword">from</span> <span class="code-string">'./services/geminiService'</span>;
+<span class="code-keyword">import</span> ColoringCanvas <span class="code-keyword">from</span> <span class="code-string">'./components/ColoringCanvas'</span>;
+
+<span class="code-keyword">const</span> <span class="code-number">MAX_PAGES</span> = <span class="code-number">8</span>; <span class="code-comment">// Maximum pages per storybook</span>
+
+<span class="code-keyword">function</span> <span class="code-function">App</span>() {
+  <span class="code-keyword">const</span> [theme, setTheme] = useState<span class="code-string">('')</span>;
+  <span class="code-keyword">const</span> [pages, setPages] = useState&lt;StoryPage[]&gt;([]);
+  <span class="code-keyword">const</span> [currentPageIndex, setCurrentPageIndex] = useState(<span class="code-number">0</span>);
+  <span class="code-keyword">const</span> [isLoading, setIsLoading] = useState(<span class="code-keyword">false</span>);
+
+  <span class="code-comment">// Generate the first page of a new storybook</span>
+  <span class="code-keyword">const</span> <span class="code-function">handleGenerateFirstPage</span> = <span class="code-keyword">async</span> (e: React.FormEvent) => {
+    e.preventDefault();
+    <span class="code-keyword">if</span> (!inputTheme.trim()) <span class="code-keyword">return</span>;
+
+    setIsLoading(<span class="code-keyword">true</span>);
+    setError(<span class="code-keyword">null</span>);
+    setPages([]);
+    setTheme(inputTheme);
+
+    <span class="code-keyword">try</span> {
+      <span class="code-comment">// Generate story text and illustration for first page</span>
+      <span class="code-keyword">const</span> { storyText, imageBase64 } = <span class="code-keyword">await</span> generateStoryPage(inputTheme, <span class="code-number">1</span>);
+
+      <span class="code-keyword">const</span> newPage: StoryPage = {
+        id: `page-${Date.now()}`,
+        pageNumber: <span class="code-number">1</span>,
+        storyText,
+        imageBase64,
+        textItems: [], <span class="code-comment">// Empty array for drag-and-drop text elements</span>
+      };
+
+      setPages([newPage]);
+      setCurrentPageIndex(<span class="code-number">0</span>);
+    } <span class="code-keyword">catch</span> (err) {
+      setError(<span class="code-string">'Oh no! Our storybook magic failed. Please try again.'</span>);
+      console.error(err);
+    } <span class="code-keyword">finally</span> {
+      setIsLoading(<span class="code-keyword">false</span>);
+    }
+  };
+
+  <span class="code-comment">// Generate sequential pages with narrative continuity</span>
+  <span class="code-keyword">const</span> <span class="code-function">handleGenerateNextPage</span> = useCallback(<span class="code-keyword">async</span> () => {
+    <span class="code-keyword">if</span> (pages.length >= MAX_PAGES) <span class="code-keyword">return</span>;
+
+    setIsLoading(<span class="code-keyword">true</span>);
+    setError(<span class="code-keyword">null</span>);
+
+    <span class="code-comment">// Pass previous story context for narrative continuity</span>
+    <span class="code-keyword">const</span> previousStory = pages.map(p => p.storyText);
+
+    <span class="code-keyword">try</span> {
+      <span class="code-comment">// Generate next page with story context</span>
+      <span class="code-keyword">const</span> { storyText, imageBase64 } = <span class="code-keyword">await</span> generateStoryPage(
+        theme,
+        pages.length + <span class="code-number">1</span>,
+        previousStory
+      );
+
+      <span class="code-keyword">const</span> newPage: StoryPage = {
+        id: `page-${Date.now()}`,
+        pageNumber: pages.length + <span class="code-number">1</span>,
+        storyText,
+        imageBase64,
+        textItems: [],
+      };
+
+      <span class="code-keyword">const</span> updatedPages = [...pages, newPage];
+      setPages(updatedPages);
+      setCurrentPageIndex(updatedPages.length - <span class="code-number">1</span>); <span class="code-comment">// Navigate to new page</span>
+    } <span class="code-keyword">catch</span> (err) {
+      setError(<span class="code-string">'Could not create the next page. Please try again.'</span>);
+      console.error(err);
+    } <span class="code-keyword">finally</span> {
+      setIsLoading(<span class="code-keyword">false</span>);
+    }
+  }, [pages, theme]);
+
+  <span class="code-comment">// Save page modifications (coloring, text positions)</span>
+  <span class="code-keyword">const</span> <span class="code-function">handleSavePage</span> = useCallback((pageData: Partial&lt;StoryPage&gt;) => {
+    setPages(currentPages =>
+      currentPages.map((p, index) =>
+        index === currentPageIndex ? { ...p, ...pageData } : p
+      )
+    );
+  }, [currentPageIndex]);
+
+  <span class="code-keyword">return</span> (
+    &lt;div className=<span class="code-string">"storybook-app"</span>&gt;
+      {pages.length > <span class="code-number">0</span> && (
+        &lt;ColoringCanvas
+          page={pages[currentPageIndex]}
+          onSavePage={handleSavePage}
+        /&gt;
+      )}
+    &lt;/div&gt;
+  );
+}
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🤖 Two-Stage AI Generation Pipeline</h2>
+            <p>The storybook generator uses a sophisticated two-stage AI pipeline that creates coherent narratives with matching visual illustrations:</p>
+
+            <div class="code-container">
+                <div class="code-header">🧠 geminiService.ts - AI Story & Image Generation</div>
+                <div class="code-block">
+<span class="code-keyword">import</span> { GoogleGenAI } <span class="code-keyword">from</span> <span class="code-string">"@google/genai"</span>;
+
+<span class="code-keyword">const</span> ai = <span class="code-keyword">new</span> GoogleGenAI({ apiKey: process.env.API_KEY });
+
+<span class="code-comment">// Stage 1: Generate contextual story text with narrative continuity</span>
+<span class="code-keyword">async</span> <span class="code-keyword">function</span> <span class="code-function">generateStoryText</span>(
+  theme: string,
+  pageNumber: number,
+  previousStory?: string[]
+): Promise&lt;string&gt; {
+
+  <span class="code-keyword">let</span> prompt = `You are a creative storyteller for children aged 3-6.
+Your task is to write a single page for a storybook.
+The main theme of the story is "${theme}".
+This is page ${pageNumber}. Each page must be a complete, self-contained story
+that doesn't end on a cliffhanger, but should logically follow previous pages.`;
+
+  <span class="code-comment">// Add story context for narrative continuity</span>
+  <span class="code-keyword">if</span> (previousStory && previousStory.length > <span class="code-number">0</span>) {
+    prompt += `\n\nHere is the story so far:\n`;
+    previousStory.forEach((pageText, index) => {
+      prompt += `Page ${index + <span class="code-number">1</span>}: ${pageText}\n`;
+    });
+    prompt += `\nNow, write the text for Page ${pageNumber}.
+Continue the adventure based on the theme and story so far,
+but make sure this new page also works as a standalone story.`;
+  } <span class="code-keyword">else</span> {
+    prompt += `\nThis is the first page. Please start the story.`;
+  }
+
+  prompt += `\n\nThe story for this new page should be very short and simple,
+just one or two sentences.`;
+
+  <span class="code-keyword">try</span> {
+    <span class="code-keyword">const</span> response = <span class="code-keyword">await</span> ai.models.generateContent({
+      model: <span class="code-string">'gemini-2.5-flash'</span>,
+      contents: prompt,
+    });
+    <span class="code-keyword">return</span> response.text.trim();
+  } <span class="code-keyword">catch</span> (error) {
+    console.error(<span class="code-string">"Error generating story text:"</span>, error);
+    <span class="code-keyword">throw</span> <span class="code-keyword">new</span> Error(<span class="code-string">"Failed to generate story text from AI."</span>);
+  }
+}
+
+<span class="code-comment">// Stage 2: Generate coloring book style illustration</span>
+<span class="code-keyword">async</span> <span class="code-keyword">function</span> <span class="code-function">generateStoryImage</span>(storyText: string): Promise&lt;string&gt; {
+  <span class="code-keyword">const</span> prompt = `Create a black and white, simple, bold outline coloring book
+illustration for a child. The style should be very clean with thick lines and
+large, easy-to-color areas, suitable for flood-fill coloring. Do not include
+any shading or complex details. The scene should depict: "${storyText}"`;
+
+  <span class="code-keyword">try</span> {
+    <span class="code-keyword">const</span> response = <span class="code-keyword">await</span> ai.models.generateImages({
+      model: <span class="code-string">'imagen-4.0-generate-001'</span>,
+      prompt: prompt,
+      config: {
+        numberOfImages: <span class="code-number">1</span>,
+        outputMimeType: <span class="code-string">'image/png'</span>,
+        aspectRatio: <span class="code-string">'1:1'</span>, <span class="code-comment">// Square format for consistent layout</span>
+        safetyFilterLevel: <span class="code-string">'BLOCK_MOST'</span>, <span class="code-comment">// Child-safe content</span>
+      },
+    });
+
+    <span class="code-comment">// Convert to base64 for canvas rendering</span>
+    <span class="code-keyword">const</span> imageBuffer = response.images[<span class="code-number">0</span>].data;
+    <span class="code-keyword">const</span> base64Image = btoa(
+      <span class="code-keyword">new</span> Uint8Array(imageBuffer).reduce(
+        (data, byte) => data + String.fromCharCode(byte), <span class="code-string">''</span>
+      )
+    );
+
+    <span class="code-keyword">return</span> `data:image/png;base64,${base64Image}`;
+  } <span class="code-keyword">catch</span> (error) {
+    console.error(<span class="code-string">"Error generating story image:"</span>, error);
+    <span class="code-keyword">throw</span> <span class="code-keyword">new</span> Error(<span class="code-string">"Failed to generate story image from AI."</span>);
+  }
+}
+
+<span class="code-comment">// Combined function: Generate complete story page</span>
+<span class="code-keyword">export</span> <span class="code-keyword">async</span> <span class="code-keyword">function</span> <span class="code-function">generateStoryPage</span>(
+  theme: string,
+  pageNumber: number,
+  previousStory?: string[]
+): Promise&lt;{ storyText: string; imageBase64: string; }&gt; {
+
+  <span class="code-comment">// Step 1: Generate contextual story text</span>
+  <span class="code-keyword">const</span> storyText = <span class="code-keyword">await</span> generateStoryText(theme, pageNumber, previousStory);
+
+  <span class="code-comment">// Step 2: Generate matching coloring book illustration</span>
+  <span class="code-keyword">const</span> imageBase64 = <span class="code-keyword">await</span> generateStoryImage(storyText);
+
+  <span class="code-keyword">return</span> { storyText, imageBase64 };
+}
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🎨 Interactive Coloring Canvas Engine</h2>
+            <p>The coloring canvas provides advanced interactive features including flood-fill coloring, drag-and-drop text editing, and touch-optimized controls:</p>
+
+            <div class="code-container">
+                <div class="code-header">🖍️ ColoringCanvas.tsx - Interactive Canvas Implementation</div>
+                <div class="code-block">
+<span class="code-keyword">import</span> React, { useRef, useEffect, useState, useCallback } <span class="code-keyword">from</span> <span class="code-string">'react'</span>;
+<span class="code-keyword">import</span> { StoryPage, DraggableTextItem } <span class="code-keyword">from</span> <span class="code-string">'../types'</span>;
+
+<span class="code-comment">// 16-color palette optimized for children</span>
+<span class="code-keyword">const</span> <span class="code-number">PALETTE_COLORS</span> = [
+  <span class="code-string">'#FF5733'</span>, <span class="code-string">'#33FF57'</span>, <span class="code-string">'#3357FF'</span>, <span class="code-string">'#FF33A1'</span>,
+  <span class="code-string">'#A133FF'</span>, <span class="code-string">'#33FFA1'</span>, <span class="code-string">'#FFFF33'</span>, <span class="code-string">'#FF8C33'</span>,
+  <span class="code-string">'#8C33FF'</span>, <span class="code-string">'#33FFEC'</span>, <span class="code-string">'#EC33FF'</span>, <span class="code-string">'#FFC300'</span>,
+  <span class="code-string">'#000000'</span>, <span class="code-string">'#FFFFFF'</span>, <span class="code-string">'#C7C7C7'</span>, <span class="code-string">'#8B4513'</span>
+];
+
+<span class="code-keyword">type</span> Tool = <span class="code-string">'brush'</span> | <span class="code-string">'text'</span>;
+
+<span class="code-keyword">const</span> <span class="code-function">ColoringCanvas</span>: React.FC&lt;{
+  page: StoryPage;
+  onSavePage: (pageData: Partial&lt;StoryPage&gt;) => void;
+}&gt; = ({ page, onSavePage }) => {
+  <span class="code-keyword">const</span> canvasRef = useRef&lt;HTMLCanvasElement&gt;(<span class="code-keyword">null</span>);
+  <span class="code-keyword">const</span> [currentTool, setCurrentTool] = useState&lt;Tool&gt;(<span class="code-string">'brush'</span>);
+  <span class="code-keyword">const</span> [selectedColor, setSelectedColor] = useState(<span class="code-number">PALETTE_COLORS</span>[<span class="code-number">0</span>]);
+  <span class="code-keyword">const</span> [textItems, setTextItems] = useState&lt;DraggableTextItem[]&gt;(page.textItems || []);
+
+  <span class="code-comment">// Advanced flood-fill algorithm for area coloring</span>
+  <span class="code-keyword">const</span> <span class="code-function">floodFill</span> = useCallback((
+    canvas: HTMLCanvasElement,
+    x: number,
+    y: number,
+    fillColor: string
+  ) => {
+    <span class="code-keyword">const</span> ctx = canvas.getContext(<span class="code-string">'2d'</span>);
+    <span class="code-keyword">if</span> (!ctx) <span class="code-keyword">return</span>;
+
+    <span class="code-keyword">const</span> imageData = ctx.getImageData(<span class="code-number">0</span>, <span class="code-number">0</span>, canvas.width, canvas.height);
+    <span class="code-keyword">const</span> data = imageData.data;
+
+    <span class="code-comment">// Get target color at click position</span>
+    <span class="code-keyword">const</span> targetColor = getColorAtPosition(data, x, y, canvas.width);
+    <span class="code-keyword">const</span> fillColorRgb = hexToRgb(fillColor);
+
+    <span class="code-comment">// Prevent unnecessary fills</span>
+    <span class="code-keyword">if</span> (colorsEqual(targetColor, fillColorRgb)) <span class="code-keyword">return</span>;
+
+    <span class="code-comment">// Optimized flood-fill using queue-based approach</span>
+    <span class="code-keyword">const</span> stack = [{ x, y }];
+    <span class="code-keyword">const</span> visited = <span class="code-keyword">new</span> Set&lt;string&gt;();
+
+    <span class="code-keyword">while</span> (stack.length > <span class="code-number">0</span>) {
+      <span class="code-keyword">const</span> { x: currentX, y: currentY } = stack.pop()!;
+      <span class="code-keyword">const</span> key = `${currentX},${currentY}`;
+
+      <span class="code-keyword">if</span> (visited.has(key)) <span class="code-keyword">continue</span>;
+      visited.add(key);
+
+      <span class="code-comment">// Boundary checks</span>
+      <span class="code-keyword">if</span> (currentX < <span class="code-number">0</span> || currentX >= canvas.width ||
+          currentY < <span class="code-number">0</span> || currentY >= canvas.height) <span class="code-keyword">continue</span>;
+
+      <span class="code-keyword">const</span> currentColor = getColorAtPosition(data, currentX, currentY, canvas.width);
+
+      <span class="code-comment">// Only fill if color matches target</span>
+      <span class="code-keyword">if</span> (!colorsEqual(currentColor, targetColor)) <span class="code-keyword">continue</span>;
+
+      <span class="code-comment">// Set new color</span>
+      setColorAtPosition(data, currentX, currentY, canvas.width, fillColorRgb);
+
+      <span class="code-comment">// Add neighboring pixels to stack</span>
+      stack.push(
+        { x: currentX + <span class="code-number">1</span>, y: currentY },
+        { x: currentX - <span class="code-number">1</span>, y: currentY },
+        { x: currentX, y: currentY + <span class="code-number">1</span> },
+        { x: currentX, y: currentY - <span class="code-number">1</span> }
+      );
+    }
+
+    <span class="code-comment">// Apply changes to canvas</span>
+    ctx.putImageData(imageData, <span class="code-number">0</span>, <span class="code-number">0</span>);
+    saveCanvasState();
+  }, [selectedColor]);
+
+  <span class="code-comment">// Handle canvas interactions (touch and mouse)</span>
+  <span class="code-keyword">const</span> <span class="code-function">handleCanvasInteraction</span> = useCallback((e: React.MouseEvent&lt;HTMLCanvasElement&gt;) => {
+    <span class="code-keyword">const</span> canvas = canvasRef.current;
+    <span class="code-keyword">if</span> (!canvas) <span class="code-keyword">return</span>;
+
+    <span class="code-keyword">const</span> rect = canvas.getBoundingClientRect();
+    <span class="code-keyword">const</span> scaleX = canvas.width / rect.width;
+    <span class="code-keyword">const</span> scaleY = canvas.height / rect.height;
+
+    <span class="code-keyword">const</span> x = Math.floor((e.clientX - rect.left) * scaleX);
+    <span class="code-keyword">const</span> y = Math.floor((e.clientY - rect.top) * scaleY);
+
+    <span class="code-keyword">if</span> (currentTool === <span class="code-string">'brush'</span>) {
+      <span class="code-comment">// Flood-fill coloring</span>
+      floodFill(canvas, x, y, selectedColor);
+    } <span class="code-keyword">else</span> <span class="code-keyword">if</span> (currentTool === <span class="code-string">'text'</span>) {
+      <span class="code-comment">// Add draggable text element</span>
+      addTextElement(x, y);
+    }
+  }, [currentTool, selectedColor, floodFill]);
+
+  <span class="code-comment">// Save canvas state and text positions</span>
+  <span class="code-keyword">const</span> <span class="code-function">saveCanvasState</span> = useCallback(() => {
+    <span class="code-keyword">const</span> canvas = canvasRef.current;
+    <span class="code-keyword">if</span> (!canvas) <span class="code-keyword">return</span>;
+
+    <span class="code-comment">// Convert canvas to base64 for storage</span>
+    <span class="code-keyword">const</span> coloredImageData = canvas.toDataURL(<span class="code-string">'image/png'</span>);
+
+    onSavePage({
+      coloredImage: coloredImageData,
+      textItems: textItems
+    });
+  }, [textItems, onSavePage]);
+
+  <span class="code-keyword">return</span> (
+    &lt;div className=<span class="code-string">"coloring-canvas-container"</span>&gt;
+      &lt;canvas
+        ref={canvasRef}
+        onClick={handleCanvasInteraction}
+        className=<span class="code-string">"interactive-canvas"</span>
+      /&gt;
+
+      <span class="code-comment">{/* Color Palette */}</span>
+      &lt;div className=<span class="code-string">"color-palette"</span>&gt;
+        {<span class="code-number">PALETTE_COLORS</span>.map(color => (
+          &lt;button
+            key={color}
+            onClick={() => setSelectedColor(color)}
+            style={{ backgroundColor: color }}
+            className={selectedColor === color ? <span class="code-string">'selected'</span> : <span class="code-string">''</span>}
+          /&gt;
+        ))}
+      &lt;/div&gt;
+
+      <span class="code-comment">{/* Draggable Text Elements */}</span>
+      {textItems.map(item => (
+        &lt;DraggableText
+          key={item.id}
+          item={item}
+          onUpdate={updateTextItem}
+          onDelete={() => deleteTextItem(item.id)}
+        /&gt;
+      ))}
+    &lt;/div&gt;
+  );
+};
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>⚙️ Technical Implementation Notes</h2>
+            <h3>Key Algorithms & Innovations</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>Narrative Continuity:</strong> AI context awareness maintains story coherence across multiple pages</li>
+                <li><strong>Flood-Fill Coloring:</strong> Optimized queue-based algorithm for smooth area filling on canvas</li>
+                <li><strong>Touch Optimization:</strong> Responsive canvas interactions supporting both mouse and touch devices</li>
+                <li><strong>Drag-and-Drop Text:</strong> Real-time text positioning with collision detection and boundaries</li>
+                <li><strong>Two-Stage AI Pipeline:</strong> Sequential story generation followed by matching illustration creation</li>
+                <li><strong>Canvas State Management:</strong> Efficient saving and restoration of coloring progress and text layouts</li>
+            </ul>
+
+            <h3>Why This Approach Works</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>Educational Value:</strong> Combines storytelling, art creation, and technology in one interactive experience</li>
+                <li><strong>Creative Freedom:</strong> Unlimited themes and personalization options encourage imagination</li>
+                <li><strong>Technical Innovation:</strong> Advanced canvas algorithms provide smooth, responsive user interactions</li>
+                <li><strong>Child-Centered Design:</strong> Age-appropriate interface with large touch targets and forgiving interactions</li>
+                <li><strong>Print-Ready Output:</strong> High-resolution canvas rendering suitable for physical storybook creation</li>
+            </ul>
+        </div>
+
+        <div class="demo-links">
+            <a href="https://ai-storybook-color-create-662370080553.us-west1.run.app/" target="_blank" class="demo-btn">🚀 Try Live Demo</a>
+            <a href="ai-storybook-generator.html" class="demo-btn secondary">📖 View Full Project Details</a>
+        </div>
+
+        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+            <a href="index.html">← Back to Portfolio</a> |
+            <a href="ai-storybook-generator.html">View Project Overview</a>
+        </nav>
+    </div>
+</body>
+</html>

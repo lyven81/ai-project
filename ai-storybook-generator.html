@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Storybook Generator - Interactive Creative AI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #222;
+            background-color: #ffffff;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .back-nav {
+            margin-bottom: 20px;
+        }
+
+        .back-nav a {
+            color: #007BFF;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .back-nav a:hover {
+            text-decoration: underline;
+        }
+
+        .project-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #9B59B6, #3498DB);
+            color: white;
+            border-radius: 10px;
+        }
+
+        .project-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .project-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .demo-links {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .demo-btn {
+            display: inline-block;
+            background-color: #007BFF;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .demo-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .demo-btn.secondary {
+            background-color: #28a745;
+        }
+
+        .demo-btn.secondary:hover {
+            background-color: #218838;
+        }
+
+        .content-section {
+            margin: 40px 0;
+            padding: 30px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border-left: 5px solid #9B59B6;
+        }
+
+        .content-section h2 {
+            color: #9B59B6;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .content-section h3 {
+            color: #333;
+            margin: 20px 0 10px 0;
+            font-size: 1.3rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .feature-item {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+
+        .feature-item h4 {
+            color: #9B59B6;
+            margin-bottom: 10px;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .tech-item {
+            background-color: #9B59B6;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .code-block {
+            background-color: #f4f4f4;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: monospace;
+            overflow-x: auto;
+        }
+
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .metric-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid #9B59B6;
+        }
+
+        .metric-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #9B59B6;
+        }
+
+        .metric-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .workflow-table {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .workflow-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .workflow-table th, .workflow-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .workflow-table th {
+            background-color: #9B59B6;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .project-header h1 {
+                font-size: 2rem;
+            }
+
+            .project-header p {
+                font-size: 1rem;
+            }
+
+            .badges {
+                justify-content: center;
+            }
+
+            .demo-btn {
+                margin: 5px;
+                padding: 10px 20px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="index.html">← Back to Portfolio</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>📚 AI Storybook Generator</h1>
+            <p>Interactive storybook creation with AI-generated narratives and coloring book illustrations</p>
+
+            <div class="badges">
+                <span class="badge">React 19.1+</span>
+                <span class="badge">TypeScript</span>
+                <span class="badge">Gemini 2.5 Flash</span>
+                <span class="badge">Imagen 4.0</span>
+                <span class="badge">Interactive Canvas</span>
+            </div>
+        </div>
+
+        <div class="demo-links">
+            <a href="https://ai-storybook-color-create-662370080553.us-west1.run.app/" target="_blank" class="demo-btn">🚀 Launch Live Demo</a>
+            <a href="ai-storybook-generator-source.html" class="demo-btn secondary">📁 View Source Code</a>
+        </div>
+
+        <div class="content-section">
+            <h2>📋 Project Overview & Creative Innovation</h2>
+            <p><strong>Challenge:</strong> Traditional storybook creation requires extensive artistic skills and time investment, while existing digital tools often lack personalization or interactive features for children's creative development.</p>
+
+            <p><strong>Solution:</strong> AI Storybook Generator combines cutting-edge AI narrative generation with interactive coloring capabilities, enabling users to create personalized, multi-page storybooks that blend storytelling with hands-on creative activities.</p>
+
+            <h3>Creative Benefits</h3>
+            <ul>
+                <li><strong>Personalized Storytelling:</strong> Generate unique narratives tailored to any theme or interest</li>
+                <li><strong>Interactive Learning:</strong> Combine reading, coloring, and text customization in one experience</li>
+                <li><strong>Artistic Development:</strong> Digital coloring tools with age-appropriate color palettes</li>
+                <li><strong>Narrative Continuity:</strong> AI maintains story coherence across multiple pages</li>
+                <li><strong>Print-Ready Output:</strong> Professional layout system for physical storybook creation</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>🤖 Two-Stage AI Content Generation Pipeline</h2>
+
+            <div class="features-grid">
+                <div class="feature-item">
+                    <h4>📖 Narrative Generation (Gemini 2.5 Flash)</h4>
+                    <p>Advanced language model creates compelling, age-appropriate stories with proper narrative structure and character development across multiple pages.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>🎨 Visual Illustration (Imagen 4.0)</h4>
+                    <p>State-of-the-art image generation creates coloring book style illustrations that perfectly match the story content and maintain visual consistency.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>🖍️ Interactive Coloring Canvas</h4>
+                    <p>Full-featured digital coloring system with flood-fill algorithms, 16-color palette, and smooth painting tools optimized for touch devices.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>📝 Drag-and-Drop Text Editor</h4>
+                    <p>Intuitive text overlay system allowing users to customize, reposition, and style story text directly on the illustrated pages.</p>
+                </div>
+            </div>
+
+            <h3>AI Generation Workflow</h3>
+            <div class="workflow-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Stage</th>
+                            <th>AI Model</th>
+                            <th>Output</th>
+                            <th>Processing Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Story Creation</td>
+                            <td>Gemini 2.5 Flash</td>
+                            <td>Themed narrative text</td>
+                            <td>2-3 seconds</td>
+                        </tr>
+                        <tr>
+                            <td>Visual Generation</td>
+                            <td>Imagen 4.0</td>
+                            <td>B&W coloring illustration</td>
+                            <td>8-10 seconds</td>
+                        </tr>
+                        <tr>
+                            <td>Context Continuity</td>
+                            <td>Gemini 2.5 Flash</td>
+                            <td>Story progression</td>
+                            <td>2-3 seconds</td>
+                        </tr>
+                        <tr>
+                            <td>Interactive Canvas</td>
+                            <td>Client-side</td>
+                            <td>Coloring interface</td>
+                            <td>Instant</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🛠️ Technical Architecture & Interactive Features</h2>
+
+            <h3>Frontend Framework</h3>
+            <div class="tech-stack">
+                <span class="tech-item">React 19.1+</span>
+                <span class="tech-item">TypeScript 5.8+</span>
+                <span class="tech-item">Vite 6.2+</span>
+                <span class="tech-item">Canvas API</span>
+                <span class="tech-item">Touch Support</span>
+            </div>
+
+            <h3>AI & Content Generation</h3>
+            <div class="tech-stack">
+                <span class="tech-item">Google Gemini 2.5 Flash</span>
+                <span class="tech-item">Imagen 4.0</span>
+                <span class="tech-item">Narrative Continuity</span>
+                <span class="tech-item">Content Safety</span>
+                <span class="tech-item">JSON Schema Validation</span>
+            </div>
+
+            <h3>Interactive Canvas Features</h3>
+            <div class="tech-stack">
+                <span class="tech-item">Flood-Fill Algorithm</span>
+                <span class="tech-item">16-Color Palette</span>
+                <span class="tech-item">Brush Tools</span>
+                <span class="tech-item">Undo/Redo System</span>
+                <span class="tech-item">Text Drag & Drop</span>
+            </div>
+
+            <h3>Advanced Technical Features</h3>
+            <div class="code-block">
+// Story continuity through context awareness
+export async function generateStoryPage(
+  theme: string,
+  pageNumber: number,
+  previousStory?: string[]
+): Promise<{ storyText: string; imageBase64: string; }> {
+
+  // Context-aware story generation
+  const contextPrompt = previousStory?.length
+    ? `Continue this story: ${previousStory.join(' ')}`
+    : `Start a new story about: ${theme}`;
+
+  // Sequential narrative generation
+  return await genAI.generateContent({
+    prompt: contextPrompt,
+    generationConfig: { responseSchema: storySchema }
+  });
+}
+
+// Interactive coloring with flood-fill
+const floodFill = (canvas: HTMLCanvasElement, x: number, y: number, color: string) => {
+  const ctx = canvas.getContext('2d');
+  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  // Advanced flood-fill algorithm implementation
+  fillArea(imageData, x, y, hexToRgb(color));
+  ctx.putImageData(imageData, 0, 0);
+};
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🎨 Interactive Creative Experience</h2>
+
+            <h3>Multi-Page Story Creation Workflow</h3>
+            <ol style="margin: 20px 0; padding-left: 20px;">
+                <li><strong>Theme Selection:</strong> Enter any creative theme (adventure, fantasy, educational topics)</li>
+                <li><strong>AI Story Generation:</strong> Gemini creates compelling narrative for first page</li>
+                <li><strong>Visual Illustration:</strong> Imagen generates matching coloring book illustration</li>
+                <li><strong>Interactive Coloring:</strong> Use digital tools to color the illustration</li>
+                <li><strong>Text Customization:</strong> Drag and reposition text elements on the page</li>
+                <li><strong>Page Progression:</strong> Generate up to 8 sequential story pages</li>
+                <li><strong>Complete Storybook:</strong> Create cohesive multi-page narrative experience</li>
+            </ol>
+
+            <h3>Coloring Canvas Features</h3>
+            <ul>
+                <li><strong>Flood-Fill Coloring:</strong> Click to fill areas with intelligent boundary detection</li>
+                <li><strong>16-Color Palette:</strong> Carefully selected colors including vibrant and natural tones</li>
+                <li><strong>Smooth Brush Tools:</strong> Variable brush sizes for detailed coloring work</li>
+                <li><strong>Undo/Redo System:</strong> Mistake-friendly editing with complete history</li>
+                <li><strong>Canvas Reset:</strong> Start over with original line art at any time</li>
+                <li><strong>Touch Optimization:</strong> Perfect for tablets and touch screen devices</li>
+            </ul>
+
+            <h3>Text Overlay System</h3>
+            <ul>
+                <li><strong>Drag-and-Drop Positioning:</strong> Move text anywhere on the illustration</li>
+                <li><strong>Font Customization:</strong> Adjust size, style, and color of text elements</li>
+                <li><strong>Background Options:</strong> Add text backgrounds for improved readability</li>
+                <li><strong>Story Integration:</strong> Text automatically updates with AI-generated content</li>
+                <li><strong>Print Layout:</strong> Text positioning optimized for physical printing</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>📖 Educational & Creative Applications</h2>
+
+            <h3>Educational Use Cases</h3>
+            <div class="code-block">
+# Learning Applications
+
+Language Arts:
+- Creative writing exercises with visual accompaniment
+- Story structure understanding through sequential pages
+- Reading comprehension through interactive engagement
+
+Art Education:
+- Digital art tool familiarity and confidence building
+- Color theory exploration through interactive coloring
+- Composition and layout understanding through text placement
+
+STEM Integration:
+- Technology literacy through AI interaction
+- Problem-solving through creative tool usage
+- Understanding of artificial intelligence in age-appropriate context
+
+Cross-Curricular Learning:
+- Subject-specific themes (history, science, geography)
+- Vocabulary development through themed content
+- Cultural awareness through diverse story themes
+            </div>
+
+            <h3>Creative Development Benefits</h3>
+            <ul>
+                <li><strong>Storytelling Skills:</strong> Exposure to narrative structure and character development</li>
+                <li><strong>Visual-Spatial Intelligence:</strong> Understanding of layout, composition, and design</li>
+                <li><strong>Technology Integration:</strong> Comfortable interaction with AI and digital creative tools</li>
+                <li><strong>Creative Confidence:</strong> Personal story creation builds artistic self-esteem</li>
+                <li><strong>Fine Motor Development:</strong> Digital coloring enhances precision and control</li>
+            </ul>
+
+            <h3>Professional Applications</h3>
+            <ul>
+                <li><strong>Educators:</strong> Custom educational materials and themed lesson supplements</li>
+                <li><strong>Therapists:</strong> Creative therapy tools for expression and communication</li>
+                <li><strong>Parents:</strong> Personalized bedtime stories and family activity projects</li>
+                <li><strong>Libraries:</strong> Interactive reading programs and digital literacy initiatives</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>📊 Performance Metrics & Technical Specifications</h2>
+
+            <div class="metrics">
+                <div class="metric-card">
+                    <div class="metric-number">8</div>
+                    <div class="metric-label">Maximum Story Pages</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">16</div>
+                    <div class="metric-label">Color Palette Options</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">∞</div>
+                    <div class="metric-label">Creative Themes</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">10s</div>
+                    <div class="metric-label">AI Generation Time</div>
+                </div>
+            </div>
+
+            <h3>Technical Performance</h3>
+            <ul>
+                <li><strong>Story Generation:</strong> 2-3 seconds per page using Gemini 2.5 Flash</li>
+                <li><strong>Image Creation:</strong> 8-10 seconds per illustration with Imagen 4.0</li>
+                <li><strong>Canvas Responsiveness:</strong> Real-time coloring with 60fps touch tracking</li>
+                <li><strong>Memory Efficiency:</strong> Optimized canvas operations for mobile devices</li>
+                <li><strong>Context Continuity:</strong> Story coherence maintained across all pages</li>
+                <li><strong>Print Quality:</strong> High-resolution output suitable for physical printing</li>
+            </ul>
+
+            <h3>Content Quality & Safety</h3>
+            <ul>
+                <li><strong>Age-Appropriate Content:</strong> AI filtering ensures suitable material for all ages</li>
+                <li><strong>Narrative Coherence:</strong> Story maintains logical progression and character consistency</li>
+                <li><strong>Visual Consistency:</strong> Illustrations match story content and maintain artistic style</li>
+                <li><strong>Educational Value:</strong> Content promotes learning and positive messaging</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>🎯 Innovation & Future Development</h2>
+
+            <h3>Unique Differentiators</h3>
+            <ul>
+                <li><strong>Integrated Experience:</strong> Combines story generation, illustration, and interactive coloring in one tool</li>
+                <li><strong>Narrative Continuity:</strong> AI maintains story coherence across multiple pages</li>
+                <li><strong>Print-Ready Output:</strong> Professional layout system for physical storybook creation</li>
+                <li><strong>Educational Focus:</strong> Designed specifically for learning and creative development</li>
+                <li><strong>Touch Optimization:</strong> Built for tablets and touch-screen interaction</li>
+            </ul>
+
+            <h3>Potential Enhancements</h3>
+            <ul>
+                <li><strong>Character Consistency:</strong> Maintain visual character appearance across pages</li>
+                <li><strong>Voice Narration:</strong> Text-to-speech integration for audio storybooks</li>
+                <li><strong>Animation Features:</strong> Simple animations for digital storybook viewing</li>
+                <li><strong>Collaborative Creation:</strong> Multi-user story creation and sharing</li>
+                <li><strong>Template System:</strong> Pre-designed layouts and story structures</li>
+            </ul>
+
+            <h3>Technical Roadmap</h3>
+            <ul>
+                <li><strong>Advanced AI Models:</strong> Integration of newer multimodal AI capabilities</li>
+                <li><strong>Enhanced Canvas:</strong> More sophisticated drawing and editing tools</li>
+                <li><strong>Cloud Synchronization:</strong> Save and access projects across devices</li>
+                <li><strong>Social Features:</strong> Story sharing and community galleries</li>
+            </ul>
+        </div>
+
+        <div class="demo-links">
+            <a href="https://ai.studio/apps/drive/1eYJ_9i8b--3uvtDyV3DdiW7ftqcFJaVo" target="_blank" class="demo-btn">🚀 Try Live Demo</a>
+            <a href="https://github.com/lyven81/ai-project/tree/main/projects/ai-storybook-generator/README.md" class="demo-btn secondary">📖 Full Documentation</a>
+        </div>
+
+        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+            <a href="index.html">← Back to Portfolio</a> |
+            <a href="project-categories.html">View All Categories</a>
+        </nav>
+    </div>
+</body>
+</html>

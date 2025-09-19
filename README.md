@@ -2,7 +2,7 @@
 
 [![Portfolio Website](https://img.shields.io/badge/Portfolio-Live-green?logo=vercel)](https://lyven81.github.io/ai-project/)
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-black?logo=github)](https://github.com/lyven81/ai-project)
-[![Projects](https://img.shields.io/badge/Projects-16-blue)](#-featured-projects)
+[![Projects](https://img.shields.io/badge/Projects-19-blue)](#-featured-projects)
 [![AI Powered](https://img.shields.io/badge/AI-Powered-orange?logo=tensorflow)](https://github.com/lyven81/ai-project)
 
 **Innovative AI Solutions for Modern Challenges** - A curated collection of production-ready AI applications showcasing expertise in computer vision, natural language processing, document processing, and creative AI technologies.
@@ -13,7 +13,7 @@
 
 ## 🌟 Portfolio Overview
 
-This repository contains **18 production-deployed AI applications** demonstrating proficiency across multiple AI domains. Each project includes comprehensive documentation, live demos, and complete source code with deployment configurations.
+This repository contains **19 production-deployed AI applications** demonstrating proficiency across multiple AI domains. Each project includes comprehensive documentation, live demos, and complete source code with deployment configurations.
 
 **🎯 Portfolio Highlights:**
 - **15+ AI Technologies** integrated across projects
@@ -138,6 +138,12 @@ This repository contains **18 production-deployed AI applications** demonstratin
 - **Tech Stack:** React 19.1+, TypeScript 5.8+, Gemini AI, Canvas API, Educational Technology
 - **AI Capabilities:** Theme-based coloring page generation, child-safe content filtering, educational AI prompts, interactive learning experiences
 
+#### [AI Storybook Generator](./projects/ai-storybook-generator/)
+**Interactive storybook creation with AI-generated narratives and coloring book illustrations for educational engagement**
+- **Live Demo:** [ai-storybook-color-create-662370080553.us-west1.run.app](https://ai-storybook-color-create-662370080553.us-west1.run.app/)
+- **Tech Stack:** React 19.1+, TypeScript 5.8+, Gemini 2.5 Flash, Imagen 4.0, Canvas API, Interactive Design
+- **AI Capabilities:** Multi-page story generation, narrative continuity, interactive coloring canvas, drag-and-drop text editing, flood-fill algorithms
+
 #### [Coloring Book Generator](./projects/coloring-book-generator/)
 **AI-powered coloring book generator that creates custom-themed, printable PDF coloring books with age-appropriate complexity**
 - **Live Demo:** [coloring-book-generator-662370080553.us-west1.run.app](https://coloring-book-generator-662370080553.us-west1.run.app/)
@@ -201,6 +207,7 @@ ai-project/
 │   ├── ai-expression-generator/ # Emotional expression transformation AI
 │   ├── ai-background-changer/   # Natural language background replacement AI
 │   ├── ai-coloring-book-for-kids/ # Educational AI coloring book
+│   ├── ai-storybook-generator/  # Interactive storybook creation with AI narratives
 │   └── coloring-book-generator/ # AI-powered PDF coloring book creation
 └── README.md                    # This comprehensive overview
 ```
@@ -255,6 +262,7 @@ All projects are production-deployed and accessible via live demos:
 | AI Expression Generator | [Launch App](https://ai-expression-generator-169218045868.us-west1.run.app/) | Creative AI |
 | AI Background Changer | [Launch App](https://ai-background-changer-169218045868.us-west1.run.app/) | Creative AI |
 | AI Coloring Book for Kids | [Launch App](https://ai-coloring-book-for-kids-662370080553.us-west1.run.app/) | Creative AI |
+| AI Storybook Generator | [Launch App](https://ai-storybook-color-create-662370080553.us-west1.run.app/) | Creative AI |
 | Coloring Book Generator | [Launch App](https://coloring-book-generator-662370080553.us-west1.run.app/) | Creative AI |
 
 ## 💼 Professional Highlights
