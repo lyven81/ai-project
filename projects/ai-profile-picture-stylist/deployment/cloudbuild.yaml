@@ -1,0 +1,38 @@
+steps:
+  # Build the Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'build',
+      '-t', 'gcr.io/$PROJECT_ID/ai-profile-picture-stylist:$BUILD_ID',
+      '-t', 'gcr.io/$PROJECT_ID/ai-profile-picture-stylist:latest',
+      '-f', 'deployment/Dockerfile',
+      '.'
+    ]
+
+  # Push the Docker image to Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/ai-profile-picture-stylist:$BUILD_ID']
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/ai-profile-picture-stylist:latest']
+
+  # Deploy to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args: [
+      'run', 'deploy', 'ai-profile-picture-stylist',
+      '--image', 'gcr.io/$PROJECT_ID/ai-profile-picture-stylist:$BUILD_ID',
+      '--region', 'us-central1',
+      '--platform', 'managed',
+      '--allow-unauthenticated',
+      '--memory', '1Gi',
+      '--cpu', '1',
+      '--max-instances', '10',
+      '--set-env-vars', 'NODE_ENV=production'
+    ]
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+  machineType: 'E2_HIGHCPU_8'
+
+timeout: '1200s'

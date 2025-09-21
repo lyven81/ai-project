@@ -1,0 +1,139 @@
+
+import React, { useState, useCallback } from 'react';
+import { Header } from './components/Header';
+import { ImageUploader } from './components/ImageUploader';
+import { ImageGrid } from './components/ImageGrid';
+import { Loader } from './components/Loader';
+import { Footer } from './components/Footer';
+import { generateStyledImages, countPeopleInImage } from './services/geminiService';
+import { GeneratedImage } from './types';
+import { SparklesIcon } from './components/icons/SparklesIcon';
+
+const App: React.FC = () => {
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [generatedImages, setGeneratedImages] = useState<GeneratedImage[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isVerifying, setIsVerifying] = useState<boolean>(false);
+  const [personCount, setPersonCount] = useState<number | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  const verifyImageContent = async (imageUrl: string) => {
+    setIsVerifying(true);
+    setError(null);
+    setPersonCount(null);
+    try {
+      const count = await countPeopleInImage(imageUrl);
+      setPersonCount(count);
+      if (count !== 1 && count !== 2) {
+        setError(`Please upload a photo with one or two people. Detected ${count}.`);
+      }
+    } catch (err) {
+      console.error(err);
+      setError("Could not analyze the image. Please try another one.");
+    } finally {
+      setIsVerifying(false);
+    }
+  };
+
+  const handleImageUpload = useCallback((file: File) => {
+    setUploadedFile(file);
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const result = reader.result as string;
+      setImagePreview(result);
+      verifyImageContent(result);
+    };
+    reader.readAsDataURL(file);
+    // Reset previous results
+    setGeneratedImages([]);
+    setError(null);
+    setPersonCount(null);
+  }, []);
+
+  const handleGenerate = async () => {
+    if (!uploadedFile || !imagePreview || !personCount) {
+      setError("Please upload a valid image first.");
+      return;
+    }
+     if (personCount !== 1 && personCount !== 2) {
+      setError(`Cannot generate images. Please upload a photo with one or two people. Detected ${personCount}.`);
+      return;
+    }
+
+    setIsLoading(true);
+    setError(null);
+    setGeneratedImages([]);
+
+    try {
+      const results = await generateStyledImages(imagePreview, personCount);
+      setGeneratedImages(results);
+    } catch (err) {
+      console.error(err);
+      setError("Failed to generate images. Please check your API key and try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleReset = () => {
+    setUploadedFile(null);
+    setImagePreview(null);
+    setGeneratedImages([]);
+    setIsLoading(false);
+    setError(null);
+    setPersonCount(null);
+    setIsVerifying(false);
+  };
+
+  const showUploader = !isLoading && generatedImages.length === 0;
+  const showResults = !isLoading && generatedImages.length > 0;
+  const canGenerate = imagePreview && !isVerifying && personCount !== null && (personCount === 1 || personCount === 2);
+
+  return (
+    <div className="min-h-screen bg-slate-900 text-slate-200 flex flex-col font-sans">
+      <Header />
+      <main className="flex-grow container mx-auto px-4 py-8 flex flex-col items-center">
+        {error && (
+          <div className="bg-red-500/20 border border-red-500 text-red-300 px-4 py-3 rounded-lg relative mb-6 w-full max-w-2xl text-center" role="alert">
+            <strong className="font-bold">Error: </strong>
+            <span className="block sm:inline">{error}</span>
+          </div>
+        )}
+
+        {showUploader && (
+          <div className="w-full max-w-2xl flex flex-col items-center gap-6">
+            <ImageUploader onImageUpload={handleImageUpload} imagePreviewUrl={imagePreview} isVerifying={isVerifying} />
+            {imagePreview && (
+              <button
+                onClick={handleGenerate}
+                disabled={!canGenerate || isLoading}
+                className="flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 px-8 rounded-full shadow-lg shadow-indigo-600/30 transition-all duration-300 ease-in-out transform hover:scale-105 disabled:bg-slate-700 disabled:cursor-not-allowed disabled:shadow-none disabled:scale-100"
+              >
+                <SparklesIcon />
+                Generate Styles
+              </button>
+            )}
+          </div>
+        )}
+
+        {isLoading && <Loader />}
+
+        {showResults && (
+           <div className="w-full flex flex-col items-center">
+             <ImageGrid images={generatedImages} />
+             <button
+               onClick={handleReset}
+               className="mt-12 bg-slate-700 hover:bg-slate-600 text-white font-bold py-3 px-8 rounded-full transition-colors duration-300"
+             >
+               Start Over
+             </button>
+           </div>
+        )}
+      </main>
+      <Footer />
+    </div>
+  );
+};
+
+export default App;

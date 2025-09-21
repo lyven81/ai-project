@@ -2,7 +2,7 @@
 
 [![Portfolio Website](https://img.shields.io/badge/Portfolio-Live-green?logo=vercel)](https://lyven81.github.io/ai-project/)
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-black?logo=github)](https://github.com/lyven81/ai-project)
-[![Projects](https://img.shields.io/badge/Projects-19-blue)](#-featured-projects)
+[![Projects](https://img.shields.io/badge/Projects-20-blue)](#-featured-projects)
 [![AI Powered](https://img.shields.io/badge/AI-Powered-orange?logo=tensorflow)](https://github.com/lyven81/ai-project)
 
 **Innovative AI Solutions for Modern Challenges** - A curated collection of production-ready AI applications showcasing expertise in computer vision, natural language processing, document processing, and creative AI technologies.
@@ -13,7 +13,7 @@
 
 ## 🌟 Portfolio Overview
 
-This repository contains **19 production-deployed AI applications** demonstrating proficiency across multiple AI domains. Each project includes comprehensive documentation, live demos, and complete source code with deployment configurations.
+This repository contains **20 production-deployed AI applications** demonstrating proficiency across multiple AI domains. Each project includes comprehensive documentation, live demos, and complete source code with deployment configurations.
 
 **🎯 Portfolio Highlights:**
 - **15+ AI Technologies** integrated across projects
@@ -126,6 +126,12 @@ This repository contains **19 production-deployed AI applications** demonstratin
 - **Tech Stack:** React, TypeScript, Gemini AI, Advanced Multi-Image Processing
 - **AI Capabilities:** Three-person group composition, story-driven pose generation, social dynamics modeling, vintage polaroid aesthetics
 
+#### [AI Profile Picture Stylist](./projects/ai-profile-picture-stylist/)
+**Transform single photos into 4 professional profile picture styles using Google Gemini AI**
+- **Live Demo:** [ai-profile-picture-stylist-662370080553.us-west1.run.app](https://ai-profile-picture-stylist-662370080553.us-west1.run.app/)
+- **Tech Stack:** React 19, TypeScript, Vite, Google Gemini AI, Tailwind CSS
+- **AI Capabilities:** Smart people detection, professional style generation, Classic B&W/Corporate/Lifestyle/Editorial styles, instant validation
+
 #### [AI Background Changer](./projects/ai-background-changer/)
 **Intelligent image background replacement using natural language prompts and Gemini AI**
 - **Live Demo:** [ai-background-changer-169218045868.us-west1.run.app](https://ai-background-changer-169218045868.us-west1.run.app/)
@@ -205,6 +211,7 @@ ai-project/
 │   ├── pdf-to-audio-reader/     # PDF to audio conversion with AI
 │   ├── ai-avatar-hairstyle-generator/ # Virtual hairstyle avatar generation
 │   ├── ai-expression-generator/ # Emotional expression transformation AI
+│   ├── ai-profile-picture-stylist/ # Professional profile picture styling AI
 │   ├── ai-background-changer/   # Natural language background replacement AI
 │   ├── ai-coloring-book-for-kids/ # Educational AI coloring book
 │   ├── ai-storybook-generator/  # Interactive storybook creation with AI narratives
@@ -260,6 +267,7 @@ All projects are production-deployed and accessible via live demos:
 | Polaroid Moments Generator 3 | [Launch App](https://polaroid-moments-generator-3-person-169218045868.us-west1.run.app/) | Creative AI |
 | AI Avatar Hairstyle Generator | [Launch App](https://ai-avatar-hairstyle-generator-169218045868.us-west1.run.app/) | Creative AI |
 | AI Expression Generator | [Launch App](https://ai-expression-generator-169218045868.us-west1.run.app/) | Creative AI |
+| AI Profile Picture Stylist | [Launch App](https://ai-profile-picture-stylist-662370080553.us-west1.run.app/) | Creative AI |
 | AI Background Changer | [Launch App](https://ai-background-changer-169218045868.us-west1.run.app/) | Creative AI |
 | AI Coloring Book for Kids | [Launch App](https://ai-coloring-book-for-kids-662370080553.us-west1.run.app/) | Creative AI |
 | AI Storybook Generator | [Launch App](https://ai-storybook-color-create-662370080553.us-west1.run.app/) | Creative AI |

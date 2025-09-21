@@ -1,0 +1,37 @@
+
+import { StyleDefinition } from './types';
+
+export const getPrompts = (personCount: number): StyleDefinition[] => {
+    const subject = personCount === 2 ? "the two people" : "the person";
+    const possessive = personCount === 2 ? "their" : "the person's";
+    const subjectCapitalized = personCount === 2 ? "The two people" : "The person";
+
+    const BASE_PROMPT = `Using the provided photo, generate a new profile image. Retain ${subject}'s core facial features and clothing but adjust ${possessive} pose, expression, and body language to fit the specified style. The final image must be a high-resolution photo in a 1:1 aspect ratio with a plain studio background. ${subjectCapitalized} should look natural and authentic.`;
+
+    return [
+        {
+            id: 'classic-bw',
+            title: 'Classic Black & White',
+            description: 'A refined, timeless, and professional portrait in high-resolution black and white.',
+            prompt: `${BASE_PROMPT} The style is 'Classic Black & White Elegance'. Create a high-resolution black-and-white portrait. ${subjectCapitalized} should have a classic, poised portrait posture—shoulders slightly angled, back straight, with a calm and composed demeanor. The background should be a soft, gray gradient studio background. The lighting must be even and flattering, highlighting facial features and hair texture without any harsh shadows. The face should appear clean, detailed, and natural—do not apply heavy filters. Ensure the eyes are bright and expressive, with a subtle, genuine smile. The overall atmosphere must feel refined, timeless, and professional.`
+        },
+        {
+            id: 'corporate',
+            title: 'Corporate Executive',
+            description: 'A crisp, detailed, and confident portrait suitable for LinkedIn or company websites.',
+            prompt: `${BASE_PROMPT} The style is 'Corporate Executive Portrait', inspired by Apple’s executive headshots. Adjust ${possessive} pose to be confident and professional, either seated or standing. The posture should be open and relaxed with a slight lean forward to convey engagement and focus. Hand gestures, if visible, should be natural and professional (e.g., gently clasped). The background must be plain light gray or white. The lighting should be soft and balanced, creating smooth transitions with no deep shadows. The expression must be approachable and confident, with a subtle hint of a smile. The final image should be crisp, detailed, and professional.`
+        },
+        {
+            id: 'lifestyle',
+            title: 'Natural Lifestyle',
+            description: 'An honest, approachable, and warm portrait with soft, natural-looking light.',
+            prompt: `${BASE_PROMPT} The style is 'Natural Lifestyle Portrait'. The pose should be relaxed and natural, as if caught in a candid moment. Avoid stiff or formal postures; instead, aim for a slight head tilt or a genuine, soft smile to create a sense of authenticity. The body language must be open and inviting. The background must be a clean, plain, neutral-colored studio background. Recreate the scene with soft, daylight-style studio lighting, as if illuminated by morning or gentle afternoon sun. This light should gently define the face’s natural contours while keeping the mood bright and open. ${possessive} expression should be relaxed, friendly, and warm. The overall effect should be honest, approachable, and simple.`
+        },
+        {
+            id: 'editorial',
+            title: 'Modern Editorial',
+            description: 'A creative, polished, and visually striking portrait with a modern, magazine-like quality.',
+            prompt: `${BASE_PROMPT} The style is 'Modern Editorial'. The pose should be stylish and dynamic, inspired by fashion editorials—composed but not rigid. It could be a confident standing pose or a thoughtful seated one, conveying quiet confidence and elegance. The background must be a plain, minimalist studio setting with subtle directional lighting that adds depth and character. The clothing should appear stylish yet simple, with clean lines. The atmosphere should have a contemporary, slightly dreamy feel, enhanced by a soft focus and a shallow depth of field. ${possessive} expression must be elegant and composed, with a modern, magazine-like quality. The final image should look creative, polished, and visually striking while remaining natural.`
+        }
+    ];
+}
