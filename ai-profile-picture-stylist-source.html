@@ -42,7 +42,7 @@
             text-align: center;
             margin-bottom: 40px;
             padding: 40px 0;
-            background: linear-gradient(135deg, #6366F1, #8B5CF6);
+            background: linear-gradient(135deg, #2196F3, #1976D2);
             color: white;
             border-radius: 10px;
         }
@@ -78,11 +78,11 @@
             padding: 30px;
             background-color: #f9f9f9;
             border-radius: 8px;
-            border-left: 5px solid #6366F1;
+            border-left: 5px solid #2196F3;
         }
 
         .content-section h2 {
-            color: #6366F1;
+            color: #2196F3;
             margin-bottom: 20px;
             font-size: 1.8rem;
         }
@@ -97,7 +97,7 @@
             background: linear-gradient(135deg, #FFF8E1, #FFF3C4);
             padding: 20px;
             border-radius: 10px;
-            border-left: 5px solid #6366F1;
+            border-left: 5px solid #2196F3;
             margin: 20px 0;
         }
 
@@ -203,7 +203,7 @@
 
         <div class="project-header">
             <h1>🎨 AI Profile Picture Stylist</h1>
-            <p>Core Source Code & Image Processing Implementation</p>
+            <p>Core Source Code & Professional Image Styling Implementation</p>
 
             <div class="badges">
                 <span class="badge">React 19</span>
@@ -215,392 +215,230 @@
 
         <div class="highlight-box">
             <h3>🔍 About This Code Showcase</h3>
-            <p><strong>This curated code snippet demonstrates how the AI Profile Picture Stylist processes uploaded images, validates content, and generates professional styling variations using Google Gemini AI.</strong></p>
-            <p>Full deployment scripts, API keys, and production configurations are omitted for clarity and security. This showcase highlights the core image processing and AI style generation algorithms.</p>
+            <p><strong>This curated code snippet demonstrates how the AI Profile Picture Stylist processes uploaded images, validates people count, and generates professional styling variations using Google Gemini's advanced image capabilities.</strong></p>
+            <p>Full deployment scripts, API integrations, and proprietary details are omitted for clarity and security. This showcase highlights the core image processing and AI-powered professional styling algorithms.</p>
         </div>
 
         <div class="content-section">
-            <h2>🖼️ Core Algorithm: Image Processing Engine</h2>
-            <p>The foundation of the AI Profile Picture Stylist is its ability to analyze uploaded images, validate people count, and generate professional styling variations using advanced AI prompts:</p>
+            <h2>🖼️ Core Algorithm: Professional Image Styling Engine</h2>
+            <p>The foundation of the AI Profile Picture Stylist is its ability to intelligently analyze uploaded images, detect people count, and generate professional styling variations optimized for business contexts:</p>
 
             <div class="code-container">
-                <div class="code-header">🎨 App.tsx - Main Application Logic</div>
+                <div class="code-header">🤖 geminiService.ts</div>
                 <div class="code-block">
-<span class="code-keyword">import</span> React, { useState, useCallback } <span class="code-keyword">from</span> <span class="code-string">'react'</span>;
-<span class="code-keyword">import</span> { generateStyledImages, countPeopleInImage } <span class="code-keyword">from</span> <span class="code-string">'./services/geminiService'</span>;
-<span class="code-keyword">import</span> { GeneratedImage } <span class="code-keyword">from</span> <span class="code-string">'./types'</span>;
-
-<span class="code-keyword">const</span> <span class="code-function">App</span>: React.FC = () => {
-  <span class="code-comment">// State management for image processing workflow</span>
-  <span class="code-keyword">const</span> [uploadedFile, setUploadedFile] = useState&lt;File | <span class="code-keyword">null</span>&gt;(<span class="code-keyword">null</span>);
-  <span class="code-keyword">const</span> [imagePreview, setImagePreview] = useState&lt;<span class="code-keyword">string</span> | <span class="code-keyword">null</span>&gt;(<span class="code-keyword">null</span>);
-  <span class="code-keyword">const</span> [generatedImages, setGeneratedImages] = useState&lt;GeneratedImage[]&gt;([]);
-  <span class="code-keyword">const</span> [isLoading, setIsLoading] = useState&lt;<span class="code-keyword">boolean</span>&gt;(<span class="code-keyword">false</span>);
-  <span class="code-keyword">const</span> [isVerifying, setIsVerifying] = useState&lt;<span class="code-keyword">boolean</span>&gt;(<span class="code-keyword">false</span>);
-  <span class="code-keyword">const</span> [personCount, setPersonCount] = useState&lt;<span class="code-keyword">number</span> | <span class="code-keyword">null</span>&gt;(<span class="code-keyword">null</span>);
-  <span class="code-keyword">const</span> [error, setError] = useState&lt;<span class="code-keyword">string</span> | <span class="code-keyword">null</span>&gt;(<span class="code-keyword">null</span>);
-
-  <span class="code-comment">/**
-   * Advanced image content verification using Google Gemini AI
-   * Analyzes uploaded images to detect and count people before processing
-   */</span>
-  <span class="code-keyword">const</span> <span class="code-function">verifyImageContent</span> = <span class="code-keyword">async</span> (imageUrl: <span class="code-keyword">string</span>) => {
-    setIsVerifying(<span class="code-keyword">true</span>);
-    setError(<span class="code-keyword">null</span>);
-    setPersonCount(<span class="code-keyword">null</span>);
-
-    <span class="code-keyword">try</span> {
-      <span class="code-comment">// Use Gemini AI to intelligently count people in the image</span>
-      <span class="code-keyword">const</span> count = <span class="code-keyword">await</span> countPeopleInImage(imageUrl);
-      setPersonCount(count);
-
-      <span class="code-comment">// Validate that image contains optimal number of people (1-2)</span>
-      <span class="code-keyword">if</span> (count !== <span class="code-number">1</span> && count !== <span class="code-number">2</span>) {
-        setError(`Please upload a photo with one or two people. Detected ${count}.`);
-      }
-    } <span class="code-keyword">catch</span> (err) {
-      console.error(err);
-      setError(<span class="code-string">"Could not analyze the image. Please try another one."</span>);
-    } <span class="code-keyword">finally</span> {
-      setIsVerifying(<span class="code-keyword">false</span>);
-    }
-  };
-
-  <span class="code-comment">/**
-   * Intelligent image upload handler with real-time preview
-   * Processes files and triggers AI-based content verification
-   */</span>
-  <span class="code-keyword">const</span> <span class="code-function">handleImageUpload</span> = useCallback((file: File) => {
-    setUploadedFile(file);
-
-    <span class="code-comment">// Convert to base64 for AI processing and preview</span>
-    <span class="code-keyword">const</span> reader = <span class="code-keyword">new</span> FileReader();
-    reader.onloadend = () => {
-      <span class="code-keyword">const</span> result = reader.result <span class="code-keyword">as</span> <span class="code-keyword">string</span>;
-      setImagePreview(result);
-
-      <span class="code-comment">// Automatically verify image content using AI</span>
-      verifyImageContent(result);
-    };
-    reader.readAsDataURL(file);
-
-    <span class="code-comment">// Reset previous results for clean state</span>
-    setGeneratedImages([]);
-    setError(<span class="code-keyword">null</span>);
-    setPersonCount(<span class="code-keyword">null</span>);
-  }, []);
-
-  <span class="code-comment">/**
-   * Main style generation function - creates 4 professional variations
-   * Uses Google Gemini AI with specialized prompts for each style
-   */</span>
-  <span class="code-keyword">const</span> <span class="code-function">handleGenerate</span> = <span class="code-keyword">async</span> () => {
-    <span class="code-keyword">if</span> (!uploadedFile || !imagePreview || !personCount) {
-      setError(<span class="code-string">"Please upload a valid image first."</span>);
-      <span class="code-keyword">return</span>;
-    }
-
-    <span class="code-comment">// Validate person count before expensive AI processing</span>
-    <span class="code-keyword">if</span> (personCount !== <span class="code-number">1</span> && personCount !== <span class="code-number">2</span>) {
-      setError(`Cannot generate images. Please upload a photo with one or two people. Detected ${personCount}.`);
-      <span class="code-keyword">return</span>;
-    }
-
-    setIsLoading(<span class="code-keyword">true</span>);
-    setError(<span class="code-keyword">null</span>);
-    setGeneratedImages([]);
-
-    <span class="code-keyword">try</span> {
-      <span class="code-comment">// Generate all 4 professional styles using Gemini AI</span>
-      <span class="code-keyword">const</span> results = <span class="code-keyword">await</span> generateStyledImages(imagePreview, personCount);
-      setGeneratedImages(results);
-    } <span class="code-keyword">catch</span> (err) {
-      console.error(err);
-      setError(<span class="code-string">"Failed to generate images. Please check your API key and try again."</span>);
-    } <span class="code-keyword">finally</span> {
-      setIsLoading(<span class="code-keyword">false</span>);
-    }
-  };
-
-  <span class="code-comment">// Smart conditional rendering based on application state</span>
-  <span class="code-keyword">const</span> showUploader = !isLoading && generatedImages.length === <span class="code-number">0</span>;
-  <span class="code-keyword">const</span> showResults = !isLoading && generatedImages.length > <span class="code-number">0</span>;
-  <span class="code-keyword">const</span> canGenerate = imagePreview && !isVerifying && personCount !== <span class="code-keyword">null</span> &&
-                        (personCount === <span class="code-number">1</span> || personCount === <span class="code-number">2</span>);
-
-  <span class="code-keyword">return</span> (
-    &lt;div className=<span class="code-string">"min-h-screen bg-slate-900 text-slate-200 flex flex-col font-sans"</span>&gt;
-      <span class="code-comment">{/* Professional UI components with error handling */}</span>
-      {error && (
-        &lt;div className=<span class="code-string">"bg-red-500/20 border border-red-500 text-red-300 px-4 py-3 rounded-lg"</span>&gt;
-          &lt;strong&gt;Error: &lt;/strong&gt;{error}
-        &lt;/div&gt;
-      )}
-
-      <span class="code-comment">{/* Conditional rendering based on workflow state */}</span>
-      {showUploader && (
-        &lt;ImageUploader onImageUpload={handleImageUpload} imagePreviewUrl={imagePreview} /&gt;
-      )}
-
-      {isLoading && &lt;Loader /&gt;}
-
-      {showResults && &lt;ImageGrid images={generatedImages} /&gt;}
-    &lt;/div&gt;
-  );
-};
-                </div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>🧠 Advanced AI Service Integration</h2>
-            <p>The Gemini service handles sophisticated image analysis and style generation using specialized prompts for each professional style:</p>
-
-            <div class="code-container">
-                <div class="code-header">🤖 geminiService.ts - AI Integration Engine</div>
-                <div class="code-block">
-<span class="code-keyword">import</span> { GoogleGenerativeAI } <span class="code-keyword">from</span> <span class="code-string">'@google/genai'</span>;
-<span class="code-keyword">import</span> { STYLE_PROMPTS } <span class="code-keyword">from</span> <span class="code-string">'../constants'</span>;
+<span class="code-keyword">import</span> { GoogleGenAI, Modality, GenerateContentResponse, Type } <span class="code-keyword">from</span> <span class="code-string">"@google/genai"</span>;
+<span class="code-keyword">import</span> { getPrompts } <span class="code-keyword">from</span> <span class="code-string">'../constants'</span>;
 <span class="code-keyword">import</span> { GeneratedImage } <span class="code-keyword">from</span> <span class="code-string">'../types'</span>;
 
 <span class="code-comment">// Initialize Google Gemini AI with secure API key</span>
-<span class="code-keyword">const</span> genAI = <span class="code-keyword">new</span> GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
+<span class="code-keyword">const</span> ai = <span class="code-keyword">new</span> GoogleGenAI({ apiKey: process.env.API_KEY });
 
 <span class="code-comment">/**
  * Advanced people detection using Google Gemini's vision capabilities
- * Analyzes image content to count people with high accuracy
+ * Analyzes image content to count people with high accuracy for validation
  */</span>
-<span class="code-keyword">export</span> <span class="code-keyword">const</span> <span class="code-function">countPeopleInImage</span> = <span class="code-keyword">async</span> (imageDataUrl: <span class="code-keyword">string</span>): Promise&lt;<span class="code-keyword">number</span>&gt; => {
-  <span class="code-keyword">const</span> model = genAI.getGenerativeModel({ model: <span class="code-string">'gemini-1.5-flash'</span> });
-
-  <span class="code-comment">// Convert base64 image for Gemini processing</span>
-  <span class="code-keyword">const</span> imagePart = {
-    inlineData: {
-      data: imageDataUrl.split(<span class="code-string">','</span>)[<span class="code-number">1</span>], <span class="code-comment">// Remove data:image/jpeg;base64, prefix</span>
-      mimeType: <span class="code-string">'image/jpeg'</span>
+<span class="code-keyword">export</span> <span class="code-keyword">async</span> <span class="code-keyword">function</span> <span class="code-function">countPeopleInImage</span>(imagePreviewUrl: <span class="code-keyword">string</span>): Promise&lt;<span class="code-keyword">number</span>&gt; {
+    <span class="code-comment">// Extract MIME type and base64 data from image URL</span>
+    <span class="code-keyword">const</span> mimeTypeMatch = imagePreviewUrl.match(<span class="code-string">/data:(image\/\w+);base64,/</span>);
+    <span class="code-keyword">if</span> (!mimeTypeMatch) {
+        <span class="code-keyword">throw</span> <span class="code-keyword">new</span> Error(<span class="code-string">"Invalid image data URL."</span>);
     }
-  };
+    <span class="code-keyword">const</span> mimeType = mimeTypeMatch[<span class="code-number">1</span>];
+    <span class="code-keyword">const</span> base64Image = imagePreviewUrl.split(<span class="code-string">','</span>)[<span class="code-number">1</span>];
 
-  <span class="code-comment">// Specialized prompt for accurate people counting</span>
-  <span class="code-keyword">const</span> countPrompt = <span class="code-string">`
-    Analyze this image carefully and count the number of people visible.
+    <span class="code-comment">// Prepare image for Gemini AI processing</span>
+    <span class="code-keyword">const</span> imagePart = {
+        inlineData: {
+            data: base64Image,
+            mimeType: mimeType,
+        },
+    };
 
-    Instructions:
-    - Count only clearly visible human faces and bodies
-    - Include people who are partially visible but recognizable
-    - Do not count reflections, shadows, or unclear figures
-    - Respond with only a single number (0, 1, 2, 3, etc.)
+    <span class="code-comment">// Specialized prompt for accurate people counting with JSON schema</span>
+    <span class="code-keyword">const</span> textPart = {
+        text: <span class="code-string">'Analyze the image and count the number of people visible. Respond with only a JSON object containing a single key "personCount" with a numerical value.'</span>,
+    };
 
-    Image analysis focus:
-    - Look for faces, heads, full or partial human bodies
-    - Consider different poses, angles, and lighting conditions
-    - Be precise and conservative in counting
-  `</span>;
-
-  <span class="code-keyword">try</span> {
-    <span class="code-keyword">const</span> result = <span class="code-keyword">await</span> model.generateContent([countPrompt, imagePart]);
-    <span class="code-keyword">const</span> response = <span class="code-keyword">await</span> result.response;
-    <span class="code-keyword">const</span> text = response.text().trim();
-
-    <span class="code-comment">// Parse and validate the count response</span>
-    <span class="code-keyword">const</span> count = parseInt(text);
-    <span class="code-keyword">return</span> isNaN(count) ? <span class="code-number">0</span> : count;
-  } <span class="code-keyword">catch</span> (error) {
-    console.error(<span class="code-string">'Error counting people:'</span>, error);
-    <span class="code-keyword">throw</span> <span class="code-keyword">new</span> Error(<span class="code-string">'Failed to analyze image content'</span>);
-  }
-};
-
-<span class="code-comment">/**
- * Professional image style generation system
- * Creates 4 distinct professional variations using specialized AI prompts
- */</span>
-<span class="code-keyword">export</span> <span class="code-keyword">const</span> <span class="code-function">generateStyledImages</span> = <span class="code-keyword">async</span> (
-  imageDataUrl: <span class="code-keyword">string</span>,
-  personCount: <span class="code-keyword">number</span>
-): Promise&lt;GeneratedImage[]&gt; => {
-  <span class="code-keyword">const</span> model = genAI.getGenerativeModel({ model: <span class="code-string">'gemini-1.5-flash'</span> });
-
-  <span class="code-comment">// Prepare image for AI processing</span>
-  <span class="code-keyword">const</span> imagePart = {
-    inlineData: {
-      data: imageDataUrl.split(<span class="code-string">','</span>)[<span class="code-number">1</span>],
-      mimeType: <span class="code-string">'image/jpeg'</span>
-    }
-  };
-
-  <span class="code-comment">// Define professional style configurations</span>
-  <span class="code-keyword">const</span> styles = [
-    {
-      name: <span class="code-string">'Classic Black & White'</span>,
-      description: <span class="code-string">'Timeless monochrome professional styling'</span>,
-      prompt: STYLE_PROMPTS.CLASSIC_BW
-    },
-    {
-      name: <span class="code-string">'Corporate Executive'</span>,
-      description: <span class="code-string">'Professional business headshot appearance'</span>,
-      prompt: STYLE_PROMPTS.CORPORATE
-    },
-    {
-      name: <span class="code-string">'Natural Lifestyle'</span>,
-      description: <span class="code-string">'Warm, approachable lifestyle photography'</span>,
-      prompt: STYLE_PROMPTS.LIFESTYLE
-    },
-    {
-      name: <span class="code-string">'Modern Editorial'</span>,
-      description: <span class="code-string">'Contemporary artistic portrait styling'</span>,
-      prompt: STYLE_PROMPTS.EDITORIAL
-    }
-  ];
-
-  <span class="code-comment">// Generate all styles concurrently for optimal performance</span>
-  <span class="code-keyword">const</span> stylePromises = styles.map(<span class="code-keyword">async</span> (style, index) => {
     <span class="code-keyword">try</span> {
-      <span class="code-comment">// Construct specialized prompt based on person count and style</span>
-      <span class="code-keyword">const</span> contextualPrompt = <span class="code-string">`
-        Transform this image into a professional ${style.name.toLowerCase()} style.
+        <span class="code-comment">// Use Gemini 2.5 Flash with structured JSON output for reliability</span>
+        <span class="code-keyword">const</span> response: GenerateContentResponse = <span class="code-keyword">await</span> ai.models.generateContent({
+            model: <span class="code-string">'gemini-2.5-flash'</span>,
+            contents: { parts: [imagePart, textPart] },
+            config: {
+                responseMimeType: <span class="code-string">'application/json'</span>,
+                responseSchema: {
+                    type: Type.OBJECT,
+                    properties: {
+                        personCount: {
+                            type: Type.NUMBER,
+                            description: <span class="code-string">'The number of people in the image.'</span>
+                        }
+                    }
+                }
+            }
+        });
 
-        Image contains: ${personCount} ${personCount === <span class="code-number">1</span> ? <span class="code-string">'person'</span> : <span class="code-string">'people'</span>}
+        <span class="code-comment">// Parse and validate the structured response</span>
+        <span class="code-keyword">const</span> jsonString = response.text;
+        <span class="code-keyword">const</span> result = JSON.parse(jsonString);
 
-        Style Requirements:
-        ${style.prompt}
+        <span class="code-keyword">if</span> (<span class="code-keyword">typeof</span> result.personCount === <span class="code-string">'number'</span>) {
+            <span class="code-keyword">return</span> result.personCount;
+        } <span class="code-keyword">else</span> {
+            <span class="code-keyword">throw</span> <span class="code-keyword">new</span> Error(<span class="code-string">'Invalid response format from person counting API.'</span>);
+        }
 
-        Technical Requirements:
-        - Maintain high resolution and professional quality
-        - Preserve facial features and natural expressions
-        - Ensure proper lighting and composition
-        - Apply style-appropriate post-processing effects
-        - Generate a polished, professional result suitable for business use
-
-        Focus on creating a ${style.description} that would be perfect for:
-        - LinkedIn profile pictures
-        - Corporate websites and materials
-        - Professional portfolios and resumes
-        - Business cards and marketing materials
-      `</span>;
-
-      <span class="code-comment">// Generate styled image using Gemini AI</span>
-      <span class="code-keyword">const</span> result = <span class="code-keyword">await</span> model.generateContent([contextualPrompt, imagePart]);
-      <span class="code-keyword">const</span> response = <span class="code-keyword">await</span> result.response;
-
-      <span class="code-comment">// Process and return styled image data</span>
-      <span class="code-keyword">return</span> {
-        id: `style-${index + <span class="code-number">1</span>}`,
-        name: style.name,
-        description: style.description,
-        imageUrl: <span class="code-keyword">await</span> processAIResponse(response), <span class="code-comment">// Convert AI response to image URL</span>
-        downloadReady: <span class="code-keyword">true</span>
-      };
     } <span class="code-keyword">catch</span> (error) {
-      console.error(`Error generating ${style.name}:`, error);
-      <span class="code-keyword">throw</span> <span class="code-keyword">new</span> Error(`Failed to generate ${style.name} style`);
+        console.error(<span class="code-string">'Error counting people in image:'</span>, error);
+        <span class="code-keyword">throw</span> <span class="code-keyword">new</span> Error(<span class="code-string">'Failed to analyze the image content.'</span>);
     }
-  });
-
-  <span class="code-comment">// Wait for all styles to complete and return results</span>
-  <span class="code-keyword">try</span> {
-    <span class="code-keyword">const</span> generatedImages = <span class="code-keyword">await</span> Promise.all(stylePromises);
-    <span class="code-keyword">return</span> generatedImages.filter(img => img !== <span class="code-keyword">null</span>); <span class="code-comment">// Filter out failed generations</span>
-  } <span class="code-keyword">catch</span> (error) {
-    console.error(<span class="code-string">'Error in batch style generation:'</span>, error);
-    <span class="code-keyword">throw</span> <span class="code-keyword">new</span> Error(<span class="code-string">'Failed to generate professional styles'</span>);
-  }
-};
+}
 
 <span class="code-comment">/**
- * Process AI response and convert to usable image format
- * Handles different response types and ensures proper image encoding
+ * Professional image style generation using Gemini's multimodal capabilities
+ * Creates single styled image with specialized prompts for business contexts
  */</span>
-<span class="code-keyword">const</span> <span class="code-function">processAIResponse</span> = <span class="code-keyword">async</span> (response: any): Promise&lt;<span class="code-keyword">string</span>&gt; => {
-  <span class="code-comment">// Implementation handles various Gemini response formats</span>
-  <span class="code-comment">// Converts AI-generated content to downloadable image URLs</span>
-  <span class="code-comment">// Includes error handling and format validation</span>
+<span class="code-keyword">async</span> <span class="code-keyword">function</span> <span class="code-function">generateSingleStyledImage</span>(base64Image: <span class="code-keyword">string</span>, mimeType: <span class="code-keyword">string</span>, prompt: <span class="code-keyword">string</span>): Promise&lt;<span class="code-keyword">string</span>&gt; {
+    <span class="code-keyword">const</span> imagePart = {
+        inlineData: {
+            data: base64Image,
+            mimeType: mimeType,
+        },
+    };
 
-  <span class="code-keyword">try</span> {
-    <span class="code-comment">// Extract image data from Gemini response</span>
-    <span class="code-keyword">const</span> imageData = response.candidates[<span class="code-number">0</span>].content.parts[<span class="code-number">0</span>].inlineData;
+    <span class="code-keyword">const</span> textPart = {
+        text: prompt,
+    };
 
-    <span class="code-comment">// Convert to data URL for browser display and download</span>
-    <span class="code-keyword">return</span> `data:${imageData.mimeType};base64,${imageData.data}`;
-  } <span class="code-keyword">catch</span> (error) {
-    console.error(<span class="code-string">'Error processing AI response:'</span>, error);
-    <span class="code-keyword">throw</span> <span class="code-keyword">new</span> Error(<span class="code-string">'Failed to process generated image'</span>);
-  }
+    <span class="code-keyword">try</span> {
+        <span class="code-comment">// Use Gemini 2.5 Flash Image Preview for high-quality image generation</span>
+        <span class="code-keyword">const</span> response: GenerateContentResponse = <span class="code-keyword">await</span> ai.models.generateContent({
+            model: <span class="code-string">'gemini-2.5-flash-image-preview'</span>,
+            contents: {
+                parts: [imagePart, textPart],
+            },
+            config: {
+                responseModalities: [Modality.IMAGE, Modality.TEXT],
+            },
+        });
+
+        <span class="code-comment">// Extract image data from multimodal response</span>
+        <span class="code-keyword">const</span> imagePartResponse = response.candidates?.[<span class="code-number">0</span>]?.content?.parts?.find(part => part.inlineData);
+
+        <span class="code-keyword">if</span> (imagePartResponse?.inlineData) {
+            <span class="code-keyword">const</span> base64ImageBytes: <span class="code-keyword">string</span> = imagePartResponse.inlineData.data;
+            <span class="code-keyword">return</span> `data:${imagePartResponse.inlineData.mimeType};base64,${base64ImageBytes}`;
+        } <span class="code-keyword">else</span> {
+            <span class="code-comment">// Handle safety filtering and content policy blocks</span>
+            <span class="code-keyword">const</span> safetyRatings = response.candidates?.[<span class="code-number">0</span>]?.safetyRatings;
+            <span class="code-keyword">if</span> (safetyRatings && safetyRatings.some(r => r.probability !== <span class="code-string">'NEGLIGIBLE'</span>)) {
+                console.error(<span class="code-string">"Image generation blocked due to safety ratings:"</span>, safetyRatings);
+                <span class="code-keyword">throw</span> <span class="code-keyword">new</span> Error(<span class="code-string">"The image could not be generated due to safety policies. Please try a different photo."</span>);
+            }
+            console.error(<span class="code-string">"No image data in response:"</span>, response);
+            <span class="code-keyword">throw</span> <span class="code-keyword">new</span> Error(<span class="code-string">'No image data found in the API response.'</span>);
+        }
+    } <span class="code-keyword">catch</span> (error) {
+        console.error(<span class="code-string">'Error generating image with Gemini:'</span>, error);
+        <span class="code-keyword">throw</span> <span class="code-keyword">new</span> Error(<span class="code-string">'Failed to communicate with the image generation service.'</span>);
+    }
+}
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🎨 Advanced Professional Styling System</h2>
+            <p>The styling system uses carefully engineered prompts optimized for professional business contexts, generating four distinct styles that maintain facial features while adapting pose and presentation:</p>
+
+            <div class="code-container">
+                <div class="code-header">📝 constants.ts - Professional Style Engine</div>
+                <div class="code-block">
+<span class="code-keyword">import</span> { StyleDefinition } <span class="code-keyword">from</span> <span class="code-string">'./types'</span>;
+
+<span class="code-comment">/**
+ * Dynamic prompt generation system that adapts to person count
+ * Creates specialized prompts for optimal professional results
+ */</span>
+<span class="code-keyword">export</span> <span class="code-keyword">const</span> <span class="code-function">getPrompts</span> = (personCount: <span class="code-keyword">number</span>): StyleDefinition[] => {
+    <span class="code-comment">// Smart language adaptation based on person count</span>
+    <span class="code-keyword">const</span> subject = personCount === <span class="code-number">2</span> ? <span class="code-string">"the two people"</span> : <span class="code-string">"the person"</span>;
+    <span class="code-keyword">const</span> possessive = personCount === <span class="code-number">2</span> ? <span class="code-string">"their"</span> : <span class="code-string">"the person's"</span>;
+    <span class="code-keyword">const</span> subjectCapitalized = personCount === <span class="code-number">2</span> ? <span class="code-string">"The two people"</span> : <span class="code-string">"The person"</span>;
+
+    <span class="code-comment">// Foundation prompt ensuring consistency across all styles</span>
+    <span class="code-keyword">const</span> BASE_PROMPT = `Using the provided photo, generate a new profile image. Retain ${subject}'s core facial features and clothing but adjust ${possessive} pose, expression, and body language to fit the specified style. The final image must be a high-resolution photo in a 1:1 aspect ratio with a plain studio background. ${subjectCapitalized} should look natural and authentic.`;
+
+    <span class="code-keyword">return</span> [
+        {
+            id: <span class="code-string">'classic-bw'</span>,
+            title: <span class="code-string">'Classic Black & White'</span>,
+            description: <span class="code-string">'A refined, timeless, and professional portrait in high-resolution black and white.'</span>,
+            prompt: `${BASE_PROMPT} The style is 'Classic Black & White Elegance'. Create a high-resolution black-and-white portrait. ${subjectCapitalized} should have a classic, poised portrait posture—shoulders slightly angled, back straight, with a calm and composed demeanor. The background should be a soft, gray gradient studio background. The lighting must be even and flattering, highlighting facial features and hair texture without any harsh shadows. The face should appear clean, detailed, and natural—do not apply heavy filters. Ensure the eyes are bright and expressive, with a subtle, genuine smile. The overall atmosphere must feel refined, timeless, and professional.`
+        },
+        {
+            id: <span class="code-string">'corporate'</span>,
+            title: <span class="code-string">'Corporate Executive'</span>,
+            description: <span class="code-string">'A crisp, detailed, and confident portrait suitable for LinkedIn or company websites.'</span>,
+            prompt: `${BASE_PROMPT} The style is 'Corporate Executive Portrait', inspired by Apple's executive headshots. Adjust ${possessive} pose to be confident and professional, either seated or standing. The posture should be open and relaxed with a slight lean forward to convey engagement and focus. Hand gestures, if visible, should be natural and professional (e.g., gently clasped). The background must be plain light gray or white. The lighting should be soft and balanced, creating smooth transitions with no deep shadows. The expression must be approachable and confident, with a subtle hint of a smile. The final image should be crisp, detailed, and professional.`
+        },
+        {
+            id: <span class="code-string">'lifestyle'</span>,
+            title: <span class="code-string">'Natural Lifestyle'</span>,
+            description: <span class="code-string">'An honest, approachable, and warm portrait with soft, natural-looking light.'</span>,
+            prompt: `${BASE_PROMPT} The style is 'Natural Lifestyle Portrait'. The pose should be relaxed and natural, as if caught in a candid moment. Avoid stiff or formal postures; instead, aim for a slight head tilt or a genuine, soft smile to create a sense of authenticity. The body language must be open and inviting. The background must be a clean, plain, neutral-colored studio background. Recreate the scene with soft, daylight-style studio lighting, as if illuminated by morning or gentle afternoon sun. This light should gently define the face's natural contours while keeping the mood bright and open. ${possessive} expression should be relaxed, friendly, and warm. The overall effect should be honest, approachable, and simple.`
+        },
+        {
+            id: <span class="code-string">'editorial'</span>,
+            title: <span class="code-string">'Modern Editorial'</span>,
+            description: <span class="code-string">'A creative, polished, and visually striking portrait with a modern, magazine-like quality.'</span>,
+            prompt: `${BASE_PROMPT} The style is 'Modern Editorial'. The pose should be stylish and dynamic, inspired by fashion editorials—composed but not rigid. It could be a confident standing pose or a thoughtful seated one, conveying quiet confidence and elegance. The background must be a plain, minimalist studio setting with subtle directional lighting that adds depth and character. The clothing should appear stylish yet simple, with clean lines. The atmosphere should have a contemporary, slightly dreamy feel, enhanced by a soft focus and a shallow depth of field. ${possessive} expression must be elegant and composed, with a modern, magazine-like quality. The final image should look creative, polished, and visually striking while remaining natural.`
+        }
+    ];
 };
                 </div>
             </div>
         </div>
 
         <div class="content-section">
-            <h2>🎨 Professional Style Prompt Engineering</h2>
-            <p>Each professional style uses carefully crafted prompts optimized for business and professional contexts:</p>
+            <h2>🚀 Batch Processing & Error Handling System</h2>
+            <p>The application implements sophisticated concurrent processing to generate all four professional styles simultaneously while maintaining robust error handling for production reliability:</p>
 
             <div class="code-container">
-                <div class="code-header">📝 constants.ts - Style Prompt Definitions</div>
+                <div class="code-header">⚡ generateStyledImages - Concurrent Processing Engine</div>
                 <div class="code-block">
 <span class="code-comment">/**
- * Professional style prompts engineered for optimal AI image generation
- * Each prompt is optimized for business and professional use cases
+ * Main style generation orchestrator - processes all 4 styles concurrently
+ * Implements resilient error handling for production-grade reliability
  */</span>
-<span class="code-keyword">export</span> <span class="code-keyword">const</span> STYLE_PROMPTS = {
-  <span class="code-comment">// Classic Black & White: Timeless, sophisticated monochrome</span>
-  CLASSIC_BW: <span class="code-string">`
-    - Convert to sophisticated black and white with rich tonal contrast
-    - Enhance facial definition and professional lighting
-    - Apply classic portrait photography techniques
-    - Maintain sharp focus on subject with subtle background softening
-    - Use dramatic lighting to create depth and dimension
-    - Ensure corporate-appropriate composition and framing
-    - Apply subtle film grain for timeless aesthetic appeal
-  `</span>,
+<span class="code-keyword">export</span> <span class="code-keyword">const</span> <span class="code-function">generateStyledImages</span> = <span class="code-keyword">async</span> (imagePreviewUrl: <span class="code-keyword">string</span>, personCount: <span class="code-keyword">number</span>): Promise&lt;GeneratedImage[]&gt; => {
+    <span class="code-comment">// Validate and extract image data</span>
+    <span class="code-keyword">const</span> mimeTypeMatch = imagePreviewUrl.match(<span class="code-string">/data:(image\/\w+);base64,/</span>);
+    <span class="code-keyword">if</span> (!mimeTypeMatch) {
+        <span class="code-keyword">throw</span> <span class="code-keyword">new</span> Error(<span class="code-string">"Invalid image data URL."</span>);
+    }
+    <span class="code-keyword">const</span> mimeType = mimeTypeMatch[<span class="code-number">1</span>];
+    <span class="code-keyword">const</span> base64Image = imagePreviewUrl.split(<span class="code-string">','</span>)[<span class="code-number">1</span>];
 
-  <span class="code-comment">// Corporate Executive: Professional business headshot style</span>
-  CORPORATE: <span class="code-string">`
-    - Create a polished, executive-level business portrait
-    - Use professional studio lighting with soft shadows
-    - Maintain conservative, business-appropriate styling
-    - Ensure sharp, clear facial features with confident expression
-    - Apply subtle color correction for professional appearance
-    - Use neutral, non-distracting background
-    - Optimize for LinkedIn and corporate website use
-  `</span>,
+    <span class="code-comment">// Get dynamic prompts optimized for person count</span>
+    <span class="code-keyword">const</span> STYLES = getPrompts(personCount);
 
-  <span class="code-comment">// Natural Lifestyle: Warm, approachable photography style</span>
-  LIFESTYLE: <span class="code-string">`
-    - Create warm, natural lifestyle photography aesthetic
-    - Use soft, flattering natural lighting
-    - Maintain approachable and friendly professional appearance
-    - Apply gentle color grading with warm tones
-    - Ensure relaxed but professional composition
-    - Use environmental context that suggests creativity/innovation
-    - Balance professionalism with personal authenticity
-  `</span>,
+    <span class="code-comment">// Concurrent processing: Generate all 4 styles simultaneously for optimal performance</span>
+    <span class="code-keyword">const</span> imagePromises = STYLES.map(style =>
+        generateSingleStyledImage(base64Image, mimeType, style.prompt)
+            .then(src => ({ ...style, src }))
+            .catch(error => {
+                console.error(`Failed to generate style ${style.title}:`, error);
+                <span class="code-comment">// Graceful degradation: Return placeholder for failed generations</span>
+                <span class="code-keyword">return</span> { ...style, src: <span class="code-string">''</span>, error: `Failed to generate: ${error.message}` };
+            })
+    );
 
-  <span class="code-comment">// Modern Editorial: Contemporary artistic portrait styling</span>
-  EDITORIAL: <span class="code-string">`
-    - Apply contemporary editorial photography techniques
-    - Use dynamic lighting and modern composition
-    - Create artistic yet professional portrait style
-    - Apply subtle creative color grading and effects
-    - Maintain high-fashion magazine aesthetic
-    - Ensure striking visual impact while remaining professional
-    - Use contemporary photography trends and techniques
-  `</span>
-};
+    <span class="code-comment">// Wait for all concurrent operations and filter successful results</span>
+    <span class="code-keyword">const</span> results = <span class="code-keyword">await</span> Promise.all(imagePromises);
 
-<span class="code-comment">/**
- * Application configuration and professional settings
- */</span>
-<span class="code-keyword">export</span> <span class="code-keyword">const</span> APP_CONFIG = {
-  MAX_FILE_SIZE: <span class="code-number">10</span> * <span class="code-number">1024</span> * <span class="code-number">1024</span>, <span class="code-comment">// 10MB limit for optimal processing</span>
-  SUPPORTED_FORMATS: [<span class="code-string">'image/jpeg'</span>, <span class="code-string">'image/png'</span>, <span class="code-string">'image/webp'</span>],
-  OPTIMAL_PERSON_COUNT: [<span class="code-number">1</span>, <span class="code-number">2</span>], <span class="code-comment">// Best results with 1-2 people</span>
-  GENERATION_TIMEOUT: <span class="code-number">30000</span>, <span class="code-comment">// 30 second timeout for AI processing</span>
-  PROFESSIONAL_STANDARDS: {
-    minResolution: { width: <span class="code-number">400</span>, height: <span class="code-number">400</span> },
-    aspectRatios: [<span class="code-string">'1:1'</span>, <span class="code-string">'4:5'</span>, <span class="code-string">'3:4'</span>], <span class="code-comment">// Professional portrait ratios</span>
-    qualityThreshold: <span class="code-number">0.85</span> <span class="code-comment">// Minimum quality score for output</span>
-  }
+    <span class="code-comment">// Return only successfully generated images for user display</span>
+    <span class="code-keyword">return</span> results.filter(result => result.src);
 };
                 </div>
             </div>
@@ -610,19 +448,19 @@
             <h2>⚙️ Technical Implementation Notes</h2>
             <h3>Key Algorithms & Innovations</h3>
             <ul style="margin: 15px 0; padding-left: 20px;">
-                <li><strong>Smart People Detection:</strong> Google Gemini AI accurately counts people in uploaded images before processing</li>
-                <li><strong>Professional Style Engine:</strong> Four specialized prompts generate distinct, business-appropriate image styles</li>
-                <li><strong>Real-time Validation:</strong> Immediate feedback on image suitability prevents unnecessary processing</li>
-                <li><strong>Concurrent Processing:</strong> All four styles generated simultaneously for optimal performance</li>
-                <li><strong>Error Recovery:</strong> Comprehensive error handling ensures graceful degradation and user feedback</li>
+                <li><strong>Smart People Detection:</strong> JSON-structured responses ensure reliable person counting for optimal results</li>
+                <li><strong>Dynamic Prompt Engineering:</strong> Contextual prompt adaptation based on person count (1 vs 2 people)</li>
+                <li><strong>Multimodal AI Processing:</strong> Leverages Gemini 2.5 Flash's advanced image generation capabilities</li>
+                <li><strong>Concurrent Style Generation:</strong> All 4 professional styles generated simultaneously for optimal performance</li>
+                <li><strong>Production Error Handling:</strong> Graceful degradation with safety filtering and content policy compliance</li>
             </ul>
 
             <h3>Why This Approach Works</h3>
             <ul style="margin: 15px 0; padding-left: 20px;">
-                <li><strong>AI-Powered Quality:</strong> Google Gemini ensures professional-grade image transformations</li>
-                <li><strong>Business-Ready Output:</strong> Each style optimized for professional contexts and platforms</li>
-                <li><strong>User Experience:</strong> Instant validation and progress feedback keep users engaged</li>
-                <li><strong>Scalable Architecture:</strong> React/TypeScript foundation supports future enhancements</li>
+                <li><strong>Business-Ready Output:</strong> Each style optimized for professional contexts like LinkedIn and corporate websites</li>
+                <li><strong>Facial Feature Preservation:</strong> Advanced prompting maintains identity while transforming presentation</li>
+                <li><strong>Quality Assurance:</strong> Multiple validation steps ensure professional-grade results</li>
+                <li><strong>Scalable Architecture:</strong> Concurrent processing supports high-volume usage patterns</li>
             </ul>
         </div>
 
