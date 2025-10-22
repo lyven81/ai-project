@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📊 Time Series Analysis Agent</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-chart-line"></i> Time Series Analysis Agent</h1>
+            <p>Upload your CSV data and ask questions in natural language to get AI-powered insights</p>
+        </header>
+
+        <main>
+            <form id="analysisForm" class="upload-form">
+                <!-- File Upload Section -->
+                <div class="upload-section">
+                    <div class="file-upload" id="fileUpload">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Click to upload CSV or drag & drop</p>
+                        <input type="file" id="csvFile" accept=".csv" required>
+                    </div>
+                    <div class="file-info" id="fileInfo" style="display: none;">
+                        <i class="fas fa-file-csv"></i>
+                        <span id="fileName"></span>
+                        <button type="button" id="removeFile" class="remove-btn">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Question Input Section -->
+                <div class="question-section">
+                    <div class="input-group">
+                        <label for="userQuestion">
+                            <i class="fas fa-question-circle"></i> Your Question
+                        </label>
+                        <textarea
+                            id="userQuestion"
+                            name="question"
+                            rows="3"
+                            placeholder="e.g., Show me the monthly revenue trend for Electronics category in 2024"
+                            required
+                        ></textarea>
+                    </div>
+                </div>
+
+                <!-- Sample Questions -->
+                <div class="samples-section">
+                    <h3><i class="fas fa-lightbulb"></i> Sample Questions</h3>
+                    <div class="sample-questions">
+                        <button type="button" class="sample-btn" data-question="Show me the monthly revenue trend for Electronics category in 2024">
+                            <i class="fas fa-chart-line"></i> Monthly Revenue Trend
+                        </button>
+                        <button type="button" class="sample-btn" data-question="What are the top 10 most profitable products?">
+                            <i class="fas fa-trophy"></i> Top Profitable Products
+                        </button>
+                        <button type="button" class="sample-btn" data-question="Compare Q4 2023 vs Q4 2024 revenue across all regions">
+                            <i class="fas fa-balance-scale"></i> Year-over-Year Comparison
+                        </button>
+                        <button type="button" class="sample-btn" data-question="Show scatter plot showing correlation between purchase frequency and value">
+                            <i class="fas fa-chart-scatter"></i> Correlation Analysis
+                        </button>
+                        <button type="button" class="sample-btn" data-question="Show top 10 repeat customers by profit in bar chart">
+                            <i class="fas fa-users"></i> Top Repeat Customers
+                        </button>
+                        <button type="button" class="sample-btn" data-question="Does profit margin fluctuate seasonally throughout the year?">
+                            <i class="fas fa-calendar-alt"></i> Seasonal Patterns
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Advanced Options -->
+                <div class="options-section">
+                    <h3><i class="fas fa-cog"></i> Advanced Options</h3>
+
+                    <div class="option-group">
+                        <label for="modelName">
+                            <i class="fas fa-robot"></i> AI Model
+                        </label>
+                        <select id="modelName" name="model">
+                            <option value="gemini-2.0-flash-exp">Gemini 2.0 Flash (Recommended)</option>
+                            <option value="gemini-1.5-pro">Gemini 1.5 Pro</option>
+                            <option value="gemini-1.5-flash">Gemini 1.5 Flash</option>
+                        </select>
+                    </div>
+
+                    <div class="option-group">
+                        <label for="temperature">
+                            <i class="fas fa-temperature-half"></i> Temperature: <span id="tempValue">0.2</span>
+                        </label>
+                        <input type="range" id="temperature" name="temperature" min="0" max="1" step="0.1" value="0.2">
+                        <small>Lower = more deterministic, Higher = more creative</small>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <label>
+                            <input type="checkbox" id="showCode" name="showCode" checked>
+                            <span>Show generated Python code</span>
+                        </label>
+                        <label>
+                            <input type="checkbox" id="showLogs" name="showLogs" checked>
+                            <span>Show execution logs</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    <i class="fas fa-play"></i> Analyze Data
+                </button>
+            </form>
+
+            <!-- Results Section -->
+            <div id="resultsSection" style="display: none;">
+                <div class="results-container">
+                    <h2><i class="fas fa-chart-pie"></i> Analysis Results</h2>
+
+                    <!-- Status -->
+                    <div id="statusMessage" class="status-message"></div>
+
+                    <!-- Generated Code -->
+                    <div id="codeSection" class="result-section" style="display: none;">
+                        <h3><i class="fas fa-code"></i> Generated Python Code</h3>
+                        <pre><code id="generatedCode"></code></pre>
+                    </div>
+
+                    <!-- Execution Logs -->
+                    <div id="logsSection" class="result-section" style="display: none;">
+                        <h3><i class="fas fa-terminal"></i> Execution Logs</h3>
+                        <pre id="executionLogs"></pre>
+                    </div>
+
+                    <!-- Answer Text -->
+                    <div id="answerSection" class="result-section">
+                        <h3><i class="fas fa-comment-dots"></i> Insights</h3>
+                        <div id="answerText"></div>
+                    </div>
+
+                    <!-- Visualization -->
+                    <div id="visualSection" class="result-section" style="display: none;">
+                        <h3><i class="fas fa-image"></i> Visualization</h3>
+                        <img id="visualImage" alt="Generated visualization">
+                    </div>
+
+                    <!-- Data Table -->
+                    <div id="tableSection" class="result-section" style="display: none;">
+                        <h3><i class="fas fa-table"></i> Detailed Data</h3>
+                        <div id="dataTable"></div>
+                    </div>
+
+                    <!-- Error -->
+                    <div id="errorSection" class="result-section error-section" style="display: none;">
+                        <h3><i class="fas fa-exclamation-triangle"></i> Error</h3>
+                        <pre id="errorMessage"></pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loading Spinner -->
+            <div id="loadingSpinner" style="display: none;">
+                <div class="spinner"></div>
+                <p>Analyzing your data with AI...</p>
+            </div>
+        </main>
+
+        <footer>
+            <p>Powered by <strong>Google Gemini AI</strong> | Built with ❤️ by Lee Yih Ven</p>
+            <div class="footer-links">
+                <a href="https://github.com/lyven81/ai-project" target="_blank">
+                    <i class="fab fa-github"></i> GitHub
+                </a>
+                <a href="../../index.html">
+                    <i class="fas fa-home"></i> Portfolio
+                </a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

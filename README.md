@@ -2,7 +2,7 @@
 
 [![Portfolio Website](https://img.shields.io/badge/Portfolio-Live-green?logo=vercel)](https://lyven81.github.io/ai-project/)
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-black?logo=github)](https://github.com/lyven81/ai-project)
-[![Projects](https://img.shields.io/badge/Projects-20-blue)](#-featured-projects)
+[![Projects](https://img.shields.io/badge/Projects-21-blue)](#-featured-projects)
 [![AI Powered](https://img.shields.io/badge/AI-Powered-orange?logo=tensorflow)](https://github.com/lyven81/ai-project)
 
 **Innovative AI Solutions for Modern Challenges** - A curated collection of production-ready AI applications showcasing expertise in computer vision, natural language processing, document processing, and creative AI technologies.
@@ -13,7 +13,7 @@
 
 ## 🌟 Portfolio Overview
 
-This repository contains **20 production-deployed AI applications** demonstrating proficiency across multiple AI domains. Each project includes comprehensive documentation, live demos, and complete source code with deployment configurations.
+This repository contains **21 production-deployed AI applications** demonstrating proficiency across multiple AI domains. Each project includes comprehensive documentation, live demos, and complete source code with deployment configurations.
 
 **🎯 Portfolio Highlights:**
 - **15+ AI Technologies** integrated across projects
@@ -73,6 +73,14 @@ This repository contains **20 production-deployed AI applications** demonstratin
 - **Live Demo:** [pdf-to-audio-reader-169218045868.us-west1.run.app](https://pdf-to-audio-reader-169218045868.us-west1.run.app/)
 - **Tech Stack:** React, TypeScript, Gemini AI, Web Speech API, PDF.js
 - **AI Capabilities:** Document structure analysis, text-to-speech conversion, synchronized highlighting, chapter navigation
+
+### 📊 Business Intelligence & Analytics Agents
+
+#### [Time Series Analysis Agent](./projects/time-series-analysis-agent/)
+**AI-powered data analytics through natural language queries using Google Gemini**
+- **Live Demo:** [Google Colab](https://colab.research.google.com/drive/1ZTfYPQZXObgxqk3hawGu9Sm33EjJX2xA)
+- **Tech Stack:** Python, Gemini 2.0 Flash, Pandas, NumPy, Matplotlib, Seaborn
+- **AI Capabilities:** Natural language to code generation, automated time series analysis, revenue trends, customer segmentation, profit margin analysis, correlation analysis, self-correcting with error handling
 
 ### 🤖 Conversational AI & Specialized Chatbots
 
@@ -161,6 +169,7 @@ This repository contains **20 production-deployed AI applications** demonstratin
 ### **AI & Machine Learning**
 - **Computer Vision:** Pose detection, facial recognition, image processing, AR/3D rendering
 - **Natural Language Processing:** Multi-language support, document summarization, conversational AI
+- **Data Analytics & BI:** Natural language to code generation, time series analysis, automated insights
 - **Image Generation:** AI-powered photo creation, style transfer, composition optimization
 - **Creative AI:** Content generation, recipe creation, vintage photo synthesis
 
@@ -202,13 +211,14 @@ ai-project/
 │   ├── ai-group-photo-generator/ # Group photo composition AI
 │   ├── claude-pdf-summarizer/   # Document processing & summarization
 │   ├── expense-tracker-ai/      # AI-powered expense tracking
+│   ├── pdf-to-audio-reader/     # PDF to audio conversion with AI
+│   ├── time-series-analysis-agent/ # Natural language data analytics
 │   ├── chinese-calender/        # Conversational AI traditional calendar
 │   ├── horoscope-chatbot/       # Astrology consultation AI
 │   ├── fengshui-chatbot/        # Feng Shui advisory AI
 │   ├── image-recipe-generator/  # Food image to recipe AI
 │   ├── polaroid-moments-generator/ # Vintage photo generation AI
 │   ├── polaroid-moments-generator-3/ # Three-person group photo AI
-│   ├── pdf-to-audio-reader/     # PDF to audio conversion with AI
 │   ├── ai-avatar-hairstyle-generator/ # Virtual hairstyle avatar generation
 │   ├── ai-expression-generator/ # Emotional expression transformation AI
 │   ├── ai-profile-picture-stylist/ # Professional profile picture styling AI
@@ -259,6 +269,7 @@ All projects are production-deployed and accessible via live demos:
 | Claude PDF Summarizer | [Launch App](https://summarizer-218391175125.asia-southeast1.run.app/) | Document Processing |
 | Expense Tracker AI | [Launch App](https://expense-tracker-ai-169218045868.us-west1.run.app/) | Document Processing |
 | PDF-to-Audio Reader | [Launch App](https://pdf-to-audio-reader-169218045868.us-west1.run.app/) | Document Processing |
+| Time Series Analysis Agent | [Launch in Colab](https://colab.research.google.com/drive/1ZTfYPQZXObgxqk3hawGu9Sm33EjJX2xA) | Business Intelligence |
 | Chinese Traditional Calendar | [Launch App](https://chinese-calender-169218045868.asia-southeast1.run.app/) | Conversational AI |
 | Astrology Consultant | [Launch App](https://horoscope-chatbot-218391175125.asia-southeast1.run.app/) | Conversational AI |
 | Feng Shui Consultant | [Launch App](https://fengshui-chatbot-218391175125.asia-southeast1.run.app/) | Conversational AI |

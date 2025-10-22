@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Series Analysis Agent - Source Code</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #222;
+            background-color: #ffffff;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .back-nav {
+            margin-bottom: 20px;
+        }
+
+        .back-nav a {
+            color: #007BFF;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .back-nav a:hover {
+            text-decoration: underline;
+        }
+
+        .project-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 10px;
+        }
+
+        .project-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .project-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .content-section {
+            margin: 40px 0;
+            padding: 30px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border-left: 5px solid #667eea;
+        }
+
+        .content-section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .content-section h3 {
+            color: #333;
+            margin: 20px 0 10px 0;
+            font-size: 1.3rem;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #FFF8E1, #FFF3C4);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #667eea;
+            margin: 20px 0;
+        }
+
+        .code-container {
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        .code-header {
+            color: #569cd6;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .code-block {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #d4d4d4;
+        }
+
+        .code-comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+
+        .code-keyword {
+            color: #569cd6;
+        }
+
+        .code-string {
+            color: #ce9178;
+        }
+
+        .code-function {
+            color: #dcdcaa;
+        }
+
+        .code-number {
+            color: #b5cea8;
+        }
+
+        .demo-links {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .demo-btn {
+            display: inline-block;
+            background-color: #007BFF;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .demo-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .demo-btn.secondary {
+            background-color: #28a745;
+        }
+
+        .demo-btn.secondary:hover {
+            background-color: #218838;
+        }
+
+        .demo-btn.colab {
+            background-color: #f9ab00;
+        }
+
+        .demo-btn.colab:hover {
+            background-color: #e09600;
+        }
+
+        @media (max-width: 768px) {
+            .project-header h1 {
+                font-size: 2rem;
+            }
+
+            .project-header p {
+                font-size: 1rem;
+            }
+
+            .demo-btn {
+                margin: 5px;
+                padding: 10px 20px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="time-series-analysis-agent.html">← Back to Project Overview</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>📊 Time Series Analysis Agent</h1>
+            <p>Core Source Code & Natural Language Analytics Implementation</p>
+
+            <div class="badges">
+                <span class="badge">Python 3.8+</span>
+                <span class="badge">Gemini 2.0 Flash</span>
+                <span class="badge">Pandas</span>
+                <span class="badge">Code Generation</span>
+            </div>
+        </div>
+
+        <div class="highlight-box">
+            <h3>🔍 About This Code Showcase</h3>
+            <p><strong>This curated code snippet demonstrates how the Time Series Analysis Agent converts natural language questions into executable Python/Pandas code using Google Gemini AI, performs sophisticated analytics, and generates business insights with visualizations.</strong></p>
+            <p>Full deployment scripts, API integrations, and proprietary details are omitted for clarity and security. This showcase highlights the core AI-powered code generation and time series analysis algorithms.</p>
+        </div>
+
+        <div class="content-section">
+            <h2>📖 Core Algorithm: Schema-Aware Prompt Engineering</h2>
+            <p>The foundation of the Time Series Analysis Agent is its ability to understand dataset structure and generate contextually accurate Pandas code from natural language:</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 schema_builder.py</div>
+                <div class="code-block">
+<span class="code-keyword">import</span> pandas <span class="code-keyword">as</span> pd
+<span class="code-keyword">import</span> numpy <span class="code-keyword">as</span> np
+<span class="code-keyword">from</span> datetime <span class="code-keyword">import</span> datetime, timedelta
+
+<span class="code-keyword">def</span> <span class="code-function">build_schema_block</span>(df: pd.DataFrame, sample_size: int = <span class="code-number">5</span>) -> str:
+    <span class="code-string">"""
+    Generate a comprehensive schema description for the LLM prompt.
+    Includes column info, data types, sample values, and available filters.
+    This context enables the AI to generate accurate, executable code.
+    """</span>
+    schema_parts = []
+
+    <span class="code-comment"># Dataset overview with critical metadata</span>
+    schema_parts.append(<span class="code-string">f"Dataset: E-Commerce Transactions"</span>)
+    schema_parts.append(<span class="code-string">f"Total Rows: {len(df):,}"</span>)
+    schema_parts.append(<span class="code-string">f"Date Range: {df['Order_Date'].min().strftime('%Y-%m-%d')} to {df['Order_Date'].max().strftime('%Y-%m-%d')}"</span>)
+    schema_parts.append(<span class="code-string">"\n--- COLUMN SCHEMA ---"</span>)
+
+    <span class="code-comment"># Column details with data types and statistics</span>
+    <span class="code-keyword">for</span> col <span class="code-keyword">in</span> df.columns:
+        dtype = str(df[col].dtype)
+        unique_count = df[col].nunique()
+
+        <span class="code-keyword">if</span> col == <span class="code-string">'Order_Date'</span>:
+            schema_parts.append(<span class="code-string">f"  {col} (datetime64): Order timestamp"</span>)
+        <span class="code-keyword">elif</span> col == <span class="code-string">'Order_ID'</span>:
+            schema_parts.append(<span class="code-string">f"  {col} (int): Unique order identifier"</span>)
+        <span class="code-keyword">elif</span> col <span class="code-keyword">in</span> [<span class="code-string">'Customer_Name'</span>, <span class="code-string">'City'</span>, <span class="code-string">'State'</span>, <span class="code-string">'Region'</span>, <span class="code-string">'Country'</span>]:
+            examples = df[col].dropna().unique()[:<span class="code-number">3</span>].tolist()
+            schema_parts.append(<span class="code-string">f"  {col} (string): {unique_count} unique values. Examples: {examples}"</span>)
+        <span class="code-keyword">elif</span> col <span class="code-keyword">in</span> [<span class="code-string">'Category'</span>, <span class="code-string">'Sub_Category'</span>, <span class="code-string">'Product_Name'</span>]:
+            examples = df[col].dropna().unique()[:<span class="code-number">3</span>].tolist()
+            schema_parts.append(<span class="code-string">f"  {col} (string): {unique_count} unique values. Examples: {examples}"</span>)
+        <span class="code-keyword">elif</span> col <span class="code-keyword">in</span> [<span class="code-string">'Quantity'</span>, <span class="code-string">'Unit_Price'</span>, <span class="code-string">'Revenue'</span>, <span class="code-string">'Profit'</span>]:
+            min_val = df[col].min()
+            max_val = df[col].max()
+            mean_val = df[col].mean()
+            schema_parts.append(<span class="code-string">f"  {col} (float): Range [{min_val:.2f}, {max_val:.2f}], Mean: {mean_val:.2f}"</span>)
+
+    <span class="code-comment"># Available categorical values for filtering</span>
+    schema_parts.append(<span class="code-string">"\n--- AVAILABLE FILTER VALUES ---"</span>)
+    schema_parts.append(<span class="code-string">f"Regions: {df['Region'].unique().tolist()}"</span>)
+    schema_parts.append(<span class="code-string">f"Categories: {df['Category'].unique().tolist()}"</span>)
+    schema_parts.append(<span class="code-string">f"Top 10 Products: {df['Product_Name'].value_counts().head(10).index.tolist()}"</span>)
+
+    <span class="code-comment"># Sample rows for pattern recognition</span>
+    schema_parts.append(<span class="code-string">f"\n--- SAMPLE DATA (first {sample_size} rows) ---"</span>)
+    sample_df = df.head(sample_size)[[<span class="code-string">'Order_Date'</span>, <span class="code-string">'Category'</span>, <span class="code-string">'Product_Name'</span>, <span class="code-string">'Region'</span>, <span class="code-string">'Revenue'</span>, <span class="code-string">'Profit'</span>]]
+    schema_parts.append(sample_df.to_string(index=<span class="code-keyword">False</span>))
+
+    <span class="code-keyword">return</span> <span class="code-string">"\n"</span>.join(schema_parts)
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🤖 AI Code Generation Engine</h2>
+            <p>The agent uses Google Gemini 2.0 Flash to convert natural language questions into executable Python/Pandas code with comprehensive error handling:</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 code_generator.py</div>
+                <div class="code-block">
+<span class="code-keyword">import</span> google.generativeai <span class="code-keyword">as</span> genai
+<span class="code-keyword">from</span> google.generativeai.types <span class="code-keyword">import</span> HarmCategory, HarmBlockThreshold
+
+<span class="code-keyword">def</span> <span class="code-function">generate_llm_code</span>(
+    question: str,
+    df: pd.DataFrame,
+    model_name: str = <span class="code-string">"gemini-2.0-flash-exp"</span>,
+    temperature: float = <span class="code-number">0.2</span>,
+) -> str:
+    <span class="code-string">"""
+    Ask Gemini to produce a plan-with-code response.
+    Returns the FULL assistant content (including <execute_python> tags).
+    """</span>
+
+    <span class="code-comment"># Build comprehensive schema with dataset context</span>
+    schema_block = build_schema_block(df)
+
+    <span class="code-comment"># Format prompt with planning instructions</span>
+    formatted_prompt = PROMPT.format(schema_block=schema_block, question=question)
+
+    <span class="code-comment"># Log prompt length for debugging</span>
+    print(<span class="code-string">f"📏 Prompt length: {len(formatted_prompt):,} characters"</span>)
+
+    <span class="code-keyword">try</span>:
+        <span class="code-comment"># Configure Gemini model with optimized settings</span>
+        model = genai.GenerativeModel(
+            model_name=model_name,
+            generation_config={
+                <span class="code-string">"temperature"</span>: temperature,        <span class="code-comment"># Lower = more deterministic</span>
+                <span class="code-string">"top_p"</span>: <span class="code-number">0.95</span>,                      <span class="code-comment"># Nucleus sampling</span>
+                <span class="code-string">"top_k"</span>: <span class="code-number">40</span>,                       <span class="code-comment"># Top-k sampling</span>
+                <span class="code-string">"max_output_tokens"</span>: <span class="code-number">8192</span>,        <span class="code-comment"># Allow complex code generation</span>
+            },
+            safety_settings={
+                HarmCategory.HARM_CATEGORY_HARASSMENT: HarmBlockThreshold.BLOCK_NONE,
+                HarmCategory.HARM_CATEGORY_HATE_SPEECH: HarmBlockThreshold.BLOCK_NONE,
+                HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT: HarmBlockThreshold.BLOCK_NONE,
+                HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: HarmBlockThreshold.BLOCK_NONE,
+            }
+        )
+
+        <span class="code-comment"># Generate response with schema context</span>
+        print(<span class="code-string">f"🔄 Calling Gemini model: {model_name}..."</span>)
+        response = model.generate_content(formatted_prompt)
+
+        <span class="code-comment"># Check for blocking or empty responses</span>
+        <span class="code-keyword">if</span> response.prompt_feedback.block_reason:
+            error_msg = <span class="code-string">f"Response blocked: {response.prompt_feedback.block_reason}"</span>
+            print(<span class="code-string">f"🚫 {error_msg}"</span>)
+            <span class="code-keyword">return</span> <span class="code-string">f"<execute_python>\nSTATUS='error'\nanswer_text='{error_msg}'\n</execute_python>"</span>
+
+        <span class="code-keyword">if</span> <span class="code-keyword">not</span> response.text:
+            <span class="code-comment"># Handle empty responses gracefully</span>
+            <span class="code-keyword">if</span> response.candidates:
+                candidate = response.candidates[<span class="code-number">0</span>]
+                finish_reason = candidate.finish_reason
+                safety_ratings = candidate.safety_ratings
+
+                <span class="code-keyword">return</span> <span class="code-string">f"""<execute_python>
+STATUS = 'error'
+answer_text = 'Gemini returned empty response. Finish reason: {finish_reason}. Try rephrasing your question or reducing complexity.'
+print('LOG: Empty response from Gemini')
+print('LOG: Finish reason: {finish_reason}')
+</execute_python>"""</span>
+
+        print(<span class="code-string">f"✅ Received response: {len(response.text):,} characters"</span>)
+        <span class="code-keyword">return</span> response.text
+
+    <span class="code-keyword">except</span> Exception <span class="code-keyword">as</span> e:
+        error_msg = <span class="code-string">f"Error calling Gemini API: {str(e)}"</span>
+        print(<span class="code-string">f"❌ {error_msg}"</span>)
+
+        <span class="code-comment"># Return fallback code with error details</span>
+        <span class="code-keyword">return</span> <span class="code-string">f"""<execute_python>
+STATUS = 'error'
+answer_text = 'API Error: {str(e).replace("'", "")}. Please check your API key and model name.'
+print('LOG: API call failed')
+print('LOG: Error: {str(e).replace("'", "")}')
+</execute_python>"""</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>⚙️ Safe Code Execution Engine</h2>
+            <p>The agent executes LLM-generated code in a controlled, sandboxed environment with helper functions and comprehensive error handling:</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 code_executor.py</div>
+                <div class="code-block">
+<span class="code-keyword">import</span> io
+<span class="code-keyword">import</span> sys
+<span class="code-keyword">import</span> traceback
+<span class="code-keyword">import</span> re
+<span class="code-keyword">from</span> typing <span class="code-keyword">import</span> Any, Dict, Optional
+
+<span class="code-keyword">def</span> <span class="code-function">execute_generated_code</span>(
+    code_or_content: str,
+    df: pd.DataFrame,
+    user_request: Optional[str] = <span class="code-keyword">None</span>,
+) -> Dict[str, Any]:
+    <span class="code-string">"""
+    Execute LLM-generated code in a controlled namespace.
+    Returns execution results including stdout, errors, and answer variables.
+    Never raises exceptions - always returns a result dictionary.
+    """</span>
+
+    <span class="code-comment"># Extract code from response (handles multiple formats)</span>
+    code = _extract_execute_block(code_or_content)
+
+    <span class="code-comment"># Prepare safe execution namespace with approved libraries</span>
+    SAFE_GLOBALS = {
+        <span class="code-string">"pd"</span>: pd,
+        <span class="code-string">"np"</span>: np,
+        <span class="code-string">"datetime"</span>: datetime,
+        <span class="code-string">"timedelta"</span>: timedelta,
+        <span class="code-string">"plt"</span>: plt,
+        <span class="code-string">"sns"</span>: sns,
+        <span class="code-string">"get_date_range"</span>: get_date_range,
+        <span class="code-string">"get_quarter_data"</span>: get_quarter_data,
+        <span class="code-string">"calculate_profit_margin"</span>: calculate_profit_margin,
+        <span class="code-string">"get_top_n"</span>: get_top_n,
+        <span class="code-string">"detect_outliers"</span>: detect_outliers,
+        <span class="code-string">"len"</span>: len,
+        <span class="code-string">"str"</span>: str,
+    }
+
+    SAFE_LOCALS = {
+        <span class="code-string">"df"</span>: df.copy(),  <span class="code-comment"># Work on a copy to prevent mutations</span>
+        <span class="code-string">"user_request"</span>: user_request <span class="code-keyword">or</span> <span class="code-string">""</span>,
+        <span class="code-string">"text"</span>: code_or_content,  <span class="code-comment"># Make original response available</span>
+    }
+
+    <span class="code-comment"># Capture stdout for logging and debugging</span>
+    stdout_buffer = io.StringIO()
+    old_stdout = sys.stdout
+    sys.stdout = stdout_buffer
+
+    error_text = <span class="code-keyword">None</span>
+
+    <span class="code-keyword">try</span>:
+        <span class="code-comment"># Execute generated code in sandboxed environment</span>
+        exec(code, SAFE_GLOBALS, SAFE_LOCALS)
+    <span class="code-keyword">except</span> Exception <span class="code-keyword">as</span> e:
+        <span class="code-comment"># Capture full traceback for debugging</span>
+        error_text = traceback.format_exc()
+
+        <span class="code-comment"># Set default error values if execution failed</span>
+        SAFE_LOCALS[<span class="code-string">"STATUS"</span>] = <span class="code-string">"error"</span>
+        SAFE_LOCALS[<span class="code-string">"answer_text"</span>] = <span class="code-string">f"Code execution failed: {str(e)}"</span>
+    <span class="code-keyword">finally</span>:
+        sys.stdout = old_stdout
+
+    printed_output = stdout_buffer.getvalue().strip()
+
+    <span class="code-comment"># Extract answer variables set by generated code</span>
+    answer_text = SAFE_LOCALS.get(<span class="code-string">"answer_text"</span>)
+    answer_json = SAFE_LOCALS.get(<span class="code-string">"answer_json"</span>)
+    answer_df = SAFE_LOCALS.get(<span class="code-string">"answer_df"</span>)
+    status = SAFE_LOCALS.get(<span class="code-string">"STATUS"</span>, <span class="code-string">"unknown"</span>)
+
+    <span class="code-keyword">return</span> {
+        <span class="code-string">"code"</span>: code,
+        <span class="code-string">"stdout"</span>: printed_output,
+        <span class="code-string">"error"</span>: error_text,
+        <span class="code-string">"answer_text"</span>: answer_text,
+        <span class="code-string">"answer_json"</span>: answer_json,
+        <span class="code-string">"answer_df"</span>: answer_df,
+        <span class="code-string">"status"</span>: status,
+    }
+
+
+<span class="code-keyword">def</span> <span class="code-function">_extract_execute_block</span>(text: str) -> str:
+    <span class="code-string">"""
+    Extract Python code from various formats.
+    Returns fallback error code if no executable code found.
+    """</span>
+
+    <span class="code-comment"># Handle None or empty string</span>
+    <span class="code-keyword">if</span> <span class="code-keyword">not</span> text <span class="code-keyword">or</span> text.strip() == <span class="code-string">""</span>:
+        <span class="code-keyword">return</span> <span class="code-string">"""
+STATUS = "error"
+answer_text = "The LLM returned an empty response. This may be due to API issues or model limitations."
+print("LOG: Empty LLM response received")
+"""</span>
+
+    <span class="code-comment"># Try to extract from <execute_python> tags</span>
+    match = re.search(<span class="code-string">r"<execute_python>(.*?)</execute_python>"</span>, text, re.DOTALL | re.IGNORECASE)
+    <span class="code-keyword">if</span> match:
+        code = match.group(<span class="code-number">1</span>).strip()
+        <span class="code-keyword">if</span> code:
+            <span class="code-keyword">return</span> code
+
+    <span class="code-comment"># Try to extract from ```python code blocks</span>
+    match = re.search(<span class="code-string">r"```python\n(.*?)\n```"</span>, text, re.DOTALL | re.IGNORECASE)
+    <span class="code-keyword">if</span> match:
+        code = match.group(<span class="code-number">1</span>).strip()
+        <span class="code-keyword">if</span> code:
+            <span class="code-keyword">return</span> code
+
+    <span class="code-comment"># Check if the entire text looks like Python code</span>
+    <span class="code-keyword">if</span> any(keyword <span class="code-keyword">in</span> text <span class="code-keyword">for</span> keyword <span class="code-keyword">in</span> [<span class="code-string">'import pandas'</span>, <span class="code-string">'pd.'</span>, <span class="code-string">'df['</span>, <span class="code-string">'try:'</span>]):
+        <span class="code-keyword">return</span> text.strip()
+
+    <span class="code-comment"># Return fallback error code</span>
+    <span class="code-keyword">return</span> <span class="code-string">"""
+STATUS = "error"
+answer_text = "The LLM response did not contain executable Python code. Please try rephrasing your question."
+print("LOG: No executable code found in LLM response")
+"""</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>📊 Time Series Helper Functions</h2>
+            <p>The agent provides specialized helper functions for common time series operations, accessible to the LLM-generated code:</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 time_series_helpers.py</div>
+                <div class="code-block">
+<span class="code-keyword">def</span> <span class="code-function">get_date_range</span>(df: pd.DataFrame, start: str, end: str) -> pd.DataFrame:
+    <span class="code-string">"""Filter DataFrame by date range (inclusive)."""</span>
+    <span class="code-keyword">return</span> df[(df[<span class="code-string">'Order_Date'</span>] >= start) & (df[<span class="code-string">'Order_Date'</span>] <= end)]
+
+
+<span class="code-keyword">def</span> <span class="code-function">get_quarter_data</span>(df: pd.DataFrame, year: int, quarter: int) -> pd.DataFrame:
+    <span class="code-string">"""Extract specific quarter (1-4) from a given year."""</span>
+    quarter_start = pd.Timestamp(year=year, month=(quarter-<span class="code-number">1</span>)*<span class="code-number">3</span>+<span class="code-number">1</span>, day=<span class="code-number">1</span>)
+    quarter_end = (quarter_start + pd.DateOffset(months=<span class="code-number">3</span>)) - pd.Timedelta(days=<span class="code-number">1</span>)
+    <span class="code-keyword">return</span> df[(df[<span class="code-string">'Order_Date'</span>] >= quarter_start) & (df[<span class="code-string">'Order_Date'</span>] <= quarter_end)]
+
+
+<span class="code-keyword">def</span> <span class="code-function">calculate_profit_margin</span>(df: pd.DataFrame) -> pd.Series:
+    <span class="code-string">"""Calculate profit margin percentage (Profit/Revenue * 100)."""</span>
+    <span class="code-keyword">return</span> (df[<span class="code-string">'Profit'</span>] / df[<span class="code-string">'Revenue'</span>] * <span class="code-number">100</span>).replace([np.inf, -np.inf], <span class="code-number">0</span>)
+
+
+<span class="code-keyword">def</span> <span class="code-function">get_top_n</span>(df: pd.DataFrame, column: str, metric: str = <span class="code-string">'Revenue'</span>, n: int = <span class="code-number">10</span>) -> pd.DataFrame:
+    <span class="code-string">"""Get top N items by a metric, grouped by a column."""</span>
+    <span class="code-keyword">return</span> df.groupby(column)[metric].sum().nlargest(n).reset_index()
+
+
+<span class="code-keyword">def</span> <span class="code-function">detect_outliers</span>(series: pd.Series, threshold: float = <span class="code-number">3.0</span>) -> pd.Series:
+    <span class="code-string">"""Detect outliers using z-score method."""</span>
+    z_scores = np.abs((series - series.mean()) / series.std())
+    <span class="code-keyword">return</span> z_scores > threshold
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🎯 End-to-End Analysis Workflow</h2>
+            <p>The complete agent orchestrates schema generation, code generation, execution, and result presentation:</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 time_series_agent.py</div>
+                <div class="code-block">
+<span class="code-keyword">def</span> <span class="code-function">time_series_agent</span>(
+    question: str,
+    df: pd.DataFrame,
+    model_name: str = <span class="code-string">"gemini-2.0-flash-exp"</span>,
+    temperature: float = <span class="code-number">0.2</span>,
+    show_code: bool = <span class="code-keyword">True</span>,
+    show_logs: bool = <span class="code-keyword">True</span>,
+) -> Dict[str, Any]:
+    <span class="code-string">"""
+    End-to-end time series analysis agent.
+
+    Args:
+        question: Natural language query
+        df: Pandas DataFrame with transaction data
+        model_name: Gemini model to use
+        temperature: LLM temperature (0.0-1.0)
+        show_code: Display generated code
+        show_logs: Display execution logs
+
+    Returns:
+        Dictionary with generated code, answer, and metadata
+    """</span>
+
+    <span class="code-comment"># Display question</span>
+    print_html(question, title=<span class="code-string">"📋 User Question"</span>)
+
+    <span class="code-comment"># Generate code using Gemini AI</span>
+    print(<span class="code-string">"\n🤖 Generating analysis plan..."</span>)
+    full_content = generate_llm_code(
+        question=question,
+        df=df,
+        model_name=model_name,
+        temperature=temperature,
+    )
+
+    <span class="code-comment"># Display full response (optional)</span>
+    <span class="code-keyword">if</span> show_code:
+        print_html(full_content, title=<span class="code-string">"💻 Generated Plan & Code"</span>)
+
+    <span class="code-comment"># Execute code in sandboxed environment</span>
+    print(<span class="code-string">"\n⚙️ Executing analysis..."</span>)
+    exec_result = execute_generated_code(
+        code_or_content=full_content,
+        df=df,
+        user_request=question,
+    )
+
+    <span class="code-comment"># Display logs</span>
+    <span class="code-keyword">if</span> show_logs <span class="code-keyword">and</span> exec_result[<span class="code-string">"stdout"</span>]:
+        print_html(exec_result[<span class="code-string">"stdout"</span>], title=<span class="code-string">"📊 Execution Logs"</span>)
+
+    <span class="code-comment"># Display errors if any</span>
+    <span class="code-keyword">if</span> exec_result[<span class="code-string">"error"</span>]:
+        print_html(exec_result[<span class="code-string">"error"</span>], title=<span class="code-string">"❌ Execution Error"</span>)
+
+    <span class="code-comment"># Display answer with status emoji</span>
+    status_emoji = {
+        <span class="code-string">"success"</span>: <span class="code-string">"✅"</span>,
+        <span class="code-string">"no_data"</span>: <span class="code-string">"⚠️"</span>,
+        <span class="code-string">"invalid_date"</span>: <span class="code-string">"⚠️"</span>,
+        <span class="code-string">"invalid_filter"</span>: <span class="code-string">"⚠️"</span>,
+        <span class="code-string">"ambiguous_request"</span>: <span class="code-string">"❓"</span>,
+        <span class="code-string">"error"</span>: <span class="code-string">"❌"</span>,
+    }.get(exec_result[<span class="code-string">"status"</span>], <span class="code-string">"ℹ️"</span>)
+
+    <span class="code-keyword">if</span> exec_result[<span class="code-string">"answer_text"</span>]:
+        print_html(
+            exec_result[<span class="code-string">"answer_text"</span>],
+            title=<span class="code-string">f"{status_emoji} Analysis Result (Status: {exec_result['status']})"</span>
+        )
+
+    <span class="code-comment"># Display structured data if available</span>
+    <span class="code-keyword">if</span> exec_result[<span class="code-string">"answer_df"</span>] <span class="code-keyword">is</span> <span class="code-keyword">not</span> <span class="code-keyword">None</span>:
+        print(<span class="code-string">"\n📈 Detailed Results:"</span>)
+        display(exec_result[<span class="code-string">"answer_df"</span>])
+
+    <span class="code-keyword">return</span> {
+        <span class="code-string">"question"</span>: question,
+        <span class="code-string">"full_response"</span>: full_content,
+        <span class="code-string">"execution"</span>: exec_result,
+    }
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>⚙️ Technical Implementation Notes</h2>
+            <h3>Key Algorithms & Innovations</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>Schema-Aware Prompting:</strong> Comprehensive dataset context enables accurate code generation</li>
+                <li><strong>Multi-Format Code Extraction:</strong> Handles various LLM response formats (<execute_python>, ```python, raw code)</li>
+                <li><strong>Sandboxed Execution:</strong> Controlled namespace prevents unsafe operations while providing necessary tools</li>
+                <li><strong>Error Recovery:</strong> Graceful fallback handling for API errors, empty responses, and execution failures</li>
+                <li><strong>Status System:</strong> Self-correcting with meaningful status codes (success, no_data, invalid_filter, etc.)</li>
+                <li><strong>Context Preservation:</strong> Original question and response available to generated code for context-aware analysis</li>
+            </ul>
+
+            <h3>Why This Approach Works</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>Rich Context:</strong> Schema with examples, ranges, and available values guides accurate code generation</li>
+                <li><strong>Low Temperature:</strong> 0.2 temperature ensures deterministic, reliable code generation</li>
+                <li><strong>Helper Functions:</strong> Pre-built time series operations reduce code complexity and errors</li>
+                <li><strong>Never Fails:</strong> Comprehensive error handling ensures always returns useful feedback</li>
+                <li><strong>Visualization Ready:</strong> Matplotlib/Seaborn available for automatic chart generation</li>
+            </ul>
+
+            <h3>Example Generated Code</h3>
+            <p>For question: "Show monthly revenue trend for Electronics in 2024"</p>
+            <div class="code-container">
+                <div class="code-block">
+<span class="code-comment"># Generated by Gemini AI</span>
+filtered = df[
+    (df[<span class="code-string">'Order_Date'</span>] >= <span class="code-string">'2024-01-01'</span>) &
+    (df[<span class="code-string">'Order_Date'</span>] <= <span class="code-string">'2024-12-31'</span>) &
+    (df[<span class="code-string">'Category'</span>] == <span class="code-string">'Electronics'</span>)
+]
+
+monthly = filtered.set_index(<span class="code-string">'Order_Date'</span>).resample(<span class="code-string">'ME'</span>)[<span class="code-string">'Revenue'</span>].sum()
+
+plt.figure(figsize=(<span class="code-number">12</span>, <span class="code-number">6</span>))
+monthly.plot(kind=<span class="code-string">'line'</span>, marker=<span class="code-string">'o'</span>)
+plt.title(<span class="code-string">'Monthly Revenue Trend - Electronics (2024)'</span>)
+plt.xlabel(<span class="code-string">'Month'</span>)
+plt.ylabel(<span class="code-string">'Revenue ($)'</span>)
+plt.xticks(rotation=<span class="code-number">45</span>)
+plt.tight_layout()
+plt.show()
+
+STATUS = <span class="code-string">"success"</span>
+answer_text = <span class="code-string">f"In 2024, Electronics generated ${monthly.sum():,.0f} in revenue..."</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-links">
+            <a href="https://colab.research.google.com/drive/1ZTfYPQZXObgxqk3hawGu9Sm33EjJX2xA" target="_blank" class="demo-btn colab">🚀 Try in Google Colab</a>
+            <a href="time-series-analysis-agent.html" class="demo-btn secondary">📖 View Full Project Details</a>
+        </div>
+
+        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+            <a href="index.html">← Back to Portfolio</a> |
+            <a href="time-series-analysis-agent.html">View Project Overview</a>
+        </nav>
+    </div>
+</body>
+</html>
