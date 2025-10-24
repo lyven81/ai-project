@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Consulting Business Analysis Agent - Source Code</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #222;
+            background-color: #ffffff;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .back-nav {
+            margin-bottom: 20px;
+        }
+
+        .back-nav a {
+            color: #007BFF;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .back-nav a:hover {
+            text-decoration: underline;
+        }
+
+        .project-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #a855f7, #9333ea);
+            color: white;
+            border-radius: 10px;
+        }
+
+        .project-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .project-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .content-section {
+            margin: 40px 0;
+            padding: 30px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border-left: 5px solid #a855f7;
+        }
+
+        .content-section h2 {
+            color: #a855f7;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .content-section h3 {
+            color: #333;
+            margin: 20px 0 10px 0;
+            font-size: 1.3rem;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #f3e8ff, #e9d5ff);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #a855f7;
+            margin: 20px 0;
+        }
+
+        .code-container {
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        .code-header {
+            color: #569cd6;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .code-block {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #d4d4d4;
+        }
+
+        .code-comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+
+        .code-keyword {
+            color: #569cd6;
+        }
+
+        .code-string {
+            color: #ce9178;
+        }
+
+        .code-function {
+            color: #dcdcaa;
+        }
+
+        .code-number {
+            color: #b5cea8;
+        }
+
+        .demo-links {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .demo-btn {
+            display: inline-block;
+            background-color: #a855f7;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .demo-btn:hover {
+            background-color: #9333ea;
+        }
+
+        .demo-btn.secondary {
+            background-color: #28a745;
+        }
+
+        .demo-btn.secondary:hover {
+            background-color: #218838;
+        }
+
+        @media (max-width: 768px) {
+            .project-header h1 {
+                font-size: 2rem;
+            }
+
+            .project-header p {
+                font-size: 1rem;
+            }
+
+            .demo-btn {
+                margin: 5px;
+                padding: 10px 20px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="index.html">← Back to Portfolio</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>💼 Data Consulting Business Analysis Agent</h1>
+            <p>AI-Powered Market Intelligence & Competitive Analysis System</p>
+
+            <div class="badges">
+                <span class="badge">Python 3.9+</span>
+                <span class="badge">Gemini 2.0 Flash</span>
+                <span class="badge">Tavily API</span>
+                <span class="badge">Matplotlib</span>
+                <span class="badge">NetworkX</span>
+            </div>
+        </div>
+
+        <div class="highlight-box">
+            <h3>🔍 About This Code Showcase</h3>
+            <p><strong>This curated code snippet demonstrates how the Data Consulting Business Analysis Agent performs automated market research, competitor intelligence gathering, and strategic opportunity identification for consulting firms.</strong></p>
+            <p>Full deployment scripts, API credentials, and proprietary details are omitted for clarity and security. This showcase highlights the core multi-agent orchestration and strategic analysis algorithms.</p>
+        </div>
+
+        <div class="content-section">
+            <h2>📖 Core Algorithm: Industry Research Agent</h2>
+            <p>The Industry Research Agent discovers market trends, demand signals, and emerging technologies using web-based intelligence:</p>
+
+            <div class="code-container">
+                <div class="code-header">🔍 industry_research_agent.py</div>
+                <div class="code-block">
+<span class="code-keyword">def</span> <span class="code-function">industry_research_agent</span>() -> dict:
+    <span class="code-string">"""
+    Researches current data analytics consulting industry trends.
+
+    This agent transforms days of manual research into 10-15 minutes of
+    automated intelligence gathering. It discovers:
+    - Market trends with growth rate estimation
+    - Key technologies driving demand
+    - Emerging service opportunities
+
+    Returns:
+        {
+            'summary': str,
+            'trends': list,
+            'growth_rates': dict,
+            'key_technologies': list,
+            'visualization_path': str
+        }
+    """</span>
+
+    log_agent_title(<span class="code-string">"Industry Research Agent"</span>, <span class="code-string">"🔍"</span>)
+    print_html(<span class="code-string">"Analyzing data analytics consulting market trends..."</span>, <span class="code-string">"Status"</span>, <span class="code-string">"blue"</span>)
+
+    <span class="code-comment"># Multi-angle search strategy for comprehensive coverage</span>
+    queries = [
+        <span class="code-string">"data analytics consulting trends 2024 2025 market growth"</span>,
+        <span class="code-string">"emerging data analytics services AI machine learning"</span>,
+        <span class="code-string">"data consulting demand business intelligence cloud analytics"</span>
+    ]
+
+    all_research = []
+    <span class="code-keyword">for</span> query <span class="code-keyword">in</span> queries:
+        print(f<span class="code-string">"🌐 Searching: {query}"</span>)
+        results = search_web(query, max_results=<span class="code-number">3</span>)
+        all_research.extend(results)
+
+    <span class="code-comment"># Compile research into structured text</span>
+    research_text = <span class="code-string">"\n\n"</span>.join([
+        f<span class="code-string">"Source: {r['title']}\n{r['content'][:400]}..."</span>
+        <span class="code-keyword">for</span> r <span class="code-keyword">in</span> all_research[:<span class="code-number">8</span>]
+    ])
+
+    <span class="code-comment"># Analyze with LLM to extract structured insights</span>
+    analysis_prompt = f<span class="code-string">"""You are a data analytics consulting industry analyst.
+
+Web Research Results:
+{research_text}
+
+Analyze the data analytics consulting industry and extract:
+
+1. TOP 8 MARKET TRENDS with growth rates (estimate based on research)
+2. KEY TECHNOLOGIES driving demand
+3. MARKET SUMMARY (3-4 sentences)
+
+Respond ONLY with valid JSON in this exact format:
+{{
+  "trends": [
+    {{"name": "AI/ML Analytics", "growth_rate": 85, "description": "..."}},
+    {{"name": "Real-time Analytics", "growth_rate": 70, "description": "..."}}
+  ],
+  "key_technologies": ["Python", "Spark", "Snowflake", "Power BI", "..."],
+  "summary": "Market summary here..."
+}}
+
+Ensure growth_rate is a number between 0-100.
+"""</span>
+
+    <span class="code-keyword">try</span>:
+        response = model.generate_content(analysis_prompt)
+        json_match = re.search(<span class="code-string">r'\{.*\}'</span>, response.text, re.DOTALL)
+
+        <span class="code-keyword">if</span> json_match:
+            analysis = json.loads(json_match.group(<span class="code-number">0</span>))
+
+            <span class="code-comment"># Extract data for visualization</span>
+            trend_names = [t[<span class="code-string">'name'</span>] <span class="code-keyword">for</span> t <span class="code-keyword">in</span> analysis.get(<span class="code-string">'trends'</span>, [])]
+            growth_rates = [t[<span class="code-string">'growth_rate'</span>] <span class="code-keyword">for</span> t <span class="code-keyword">in</span> analysis.get(<span class="code-string">'trends'</span>, [])]
+
+            <span class="code-comment"># Create trend growth visualization</span>
+            viz_path = <span class="code-string">""</span>
+            <span class="code-keyword">if</span> trend_names <span class="code-keyword">and</span> growth_rates:
+                viz_path = create_trend_chart({
+                    <span class="code-string">'trends'</span>: trend_names,
+                    <span class="code-string">'growth_rates'</span>: growth_rates
+                })
+
+            <span class="code-keyword">return</span> {
+                <span class="code-string">'summary'</span>: analysis.get(<span class="code-string">'summary'</span>, <span class="code-string">'No summary available'</span>),
+                <span class="code-string">'trends'</span>: analysis.get(<span class="code-string">'trends'</span>, []),
+                <span class="code-string">'key_technologies'</span>: analysis.get(<span class="code-string">'key_technologies'</span>, []),
+                <span class="code-string">'visualization_path'</span>: viz_path
+            }
+
+    <span class="code-keyword">except</span> Exception <span class="code-keyword">as</span> e:
+        <span class="code-keyword">return</span> {<span class="code-string">'summary'</span>: f<span class="code-string">"Analysis error: {str(e)}"</span>, <span class="code-string">'trends'</span>: []}
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🕵️ Competitor Intelligence Engine</h2>
+            <p>The Competitor Intelligence Agent maps the competitive landscape and identifies capability gaps:</p>
+
+            <div class="code-container">
+                <div class="code-header">🔎 competitor_intelligence_agent.py</div>
+                <div class="code-block">
+<span class="code-keyword">def</span> <span class="code-function">competitor_intelligence_agent</span>(industry_trends: list) -> dict:
+    <span class="code-string">"""
+    Analyzes competitors and identifies white-space opportunities.
+
+    This agent creates a competitive capability matrix showing:
+    - Who offers which services (capability mapping)
+    - Which capabilities are oversaturated (red ocean)
+    - Which capabilities are underserved (blue ocean)
+
+    Args:
+        industry_trends: List of trend objects from industry research
+
+    Returns:
+        {
+            'summary': str,
+            'competitors': list,
+            'capability_matrix': dict,
+            'gaps': list,  # WHITE-SPACE OPPORTUNITIES
+            'visualization_path': str
+        }
+    """</span>
+
+    log_agent_title(<span class="code-string">"Competitor Intelligence Agent"</span>, <span class="code-string">"🕵️"</span>)
+
+    <span class="code-comment"># Search for competitors across multiple angles</span>
+    queries = [
+        <span class="code-string">"top data analytics consulting firms 2024 services"</span>,
+        <span class="code-string">"leading business intelligence consulting companies capabilities"</span>,
+        <span class="code-string">"data science consulting firms AI ML offerings"</span>
+    ]
+
+    all_research = []
+    <span class="code-keyword">for</span> query <span class="code-keyword">in</span> queries:
+        results = search_web(query, max_results=<span class="code-number">3</span>)
+        all_research.extend(results)
+
+    research_text = <span class="code-string">"\n\n"</span>.join([
+        f<span class="code-string">"Source: {r['title']}\n{r['content'][:400]}..."</span>
+        <span class="code-keyword">for</span> r <span class="code-keyword">in</span> all_research[:<span class="code-number">8</span>]
+    ])
+
+    <span class="code-comment"># Extract key capabilities from trends</span>
+    trend_names = [t.get(<span class="code-string">'name'</span>, <span class="code-string">''</span>) <span class="code-keyword">for</span> t <span class="code-keyword">in</span> industry_trends[:<span class="code-number">6</span>]]
+
+    <span class="code-comment"># Analyze competitors and map capabilities</span>
+    competitor_prompt = f<span class="code-string">"""You are a competitive intelligence analyst for data analytics consulting.
+
+Web Research:
+{research_text}
+
+Key Industry Capabilities:
+{', '.join(trend_names)}
+
+Identify:
+1. TOP 10 COMPETITORS in data analytics consulting
+2. Map each competitor's capabilities (1=offers, 0=doesn't offer)
+3. Identify WHITE-SPACE GAPS (capabilities no one offers well)
+
+Respond ONLY with valid JSON:
+{{
+  "competitors": [
+    {{"name": "Deloitte Analytics", "size": "Large", "focus": "Enterprise AI"}},
+    {{"name": "McKinsey Analytics", "size": "Large", "focus": "Strategy + Data"}}
+  ],
+  "capabilities": ["AI/ML", "Cloud", "Real-time", "Visualization", "Governance", "Edge"],
+  "matrix": [
+    [1, 1, 1, 1, 0, 0],
+    [1, 1, 0, 1, 1, 0]
+  ],
+  "gaps": [
+    {{"capability": "AI Governance", "reason": "Most firms offer AI but not governance"}}
+  ],
+  "summary": "Competitive landscape summary..."
+}}
+
+Matrix rows = competitors, columns = capabilities.
+"""</span>
+
+    <span class="code-keyword">try</span>:
+        response = model.generate_content(competitor_prompt)
+        json_match = re.search(<span class="code-string">r'\{.*\}'</span>, response.text, re.DOTALL)
+
+        <span class="code-keyword">if</span> json_match:
+            analysis = json.loads(json_match.group(<span class="code-number">0</span>))
+
+            <span class="code-comment"># Create competitor matrix heatmap visualization</span>
+            viz_path = <span class="code-string">""</span>
+            <span class="code-keyword">if</span> analysis.get(<span class="code-string">'competitors'</span>) <span class="code-keyword">and</span> analysis.get(<span class="code-string">'matrix'</span>):
+                competitor_names = [c[<span class="code-string">'name'</span>] <span class="code-keyword">for</span> c <span class="code-keyword">in</span> analysis[<span class="code-string">'competitors'</span>]]
+                viz_path = create_competitor_matrix({
+                    <span class="code-string">'competitors'</span>: competitor_names,
+                    <span class="code-string">'capabilities'</span>: analysis[<span class="code-string">'capabilities'</span>],
+                    <span class="code-string">'matrix'</span>: analysis[<span class="code-string">'matrix'</span>]
+                })
+
+            <span class="code-comment"># Print white-space opportunities</span>
+            <span class="code-keyword">if</span> analysis.get(<span class="code-string">'gaps'</span>):
+                gaps_text = <span class="code-string">"\n"</span>.join([
+                    f<span class="code-string">"- {g['capability']}: {g['reason']}"</span>
+                    <span class="code-keyword">for</span> g <span class="code-keyword">in</span> analysis[<span class="code-string">'gaps'</span>][:<span class="code-number">5</span>]
+                ])
+                print_html(gaps_text, <span class="code-string">"🎯 White-Space Opportunities"</span>, <span class="code-string">"orange"</span>)
+
+            <span class="code-keyword">return</span> {
+                <span class="code-string">'summary'</span>: analysis.get(<span class="code-string">'summary'</span>, <span class="code-string">'No summary available'</span>),
+                <span class="code-string">'competitors'</span>: analysis.get(<span class="code-string">'competitors'</span>, []),
+                <span class="code-string">'gaps'</span>: analysis.get(<span class="code-string">'gaps'</span>, []),
+                <span class="code-string">'visualization_path'</span>: viz_path
+            }
+
+    <span class="code-keyword">except</span> Exception <span class="code-keyword">as</span> e:
+        <span class="code-keyword">return</span> {<span class="code-string">'summary'</span>: f<span class="code-string">"Analysis error: {str(e)}"</span>, <span class="code-string">'competitors'</span>: []}
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>💡 Opportunity Analyzer Agent</h2>
+            <p>The Opportunity Analyzer synthesizes insights to identify specific market entry opportunities:</p>
+
+            <div class="code-container">
+                <div class="code-header">🎯 opportunity_analyzer_agent.py</div>
+                <div class="code-block">
+<span class="code-keyword">def</span> <span class="code-function">opportunity_analyzer_agent</span>(industry_data: dict, competitor_data: dict) -> dict:
+    <span class="code-string">"""
+    Identifies specific opportunities using a 2x2 strategic matrix.
+
+    The opportunity map plots each service opportunity on:
+    - X-axis: Competitive Intensity (0=blue ocean, 1=red ocean)
+    - Y-axis: Market Attractiveness (0=low value, 1=high value)
+
+    Sweet Spot = High Attractiveness + Low Competition
+
+    Returns:
+        {
+            'summary': str,
+            'opportunities': list,
+            'recommendations': list,
+            'visualization_path': str  # 2x2 opportunity map
+        }
+    """</span>
+
+    log_agent_title(<span class="code-string">"Opportunity Analyzer Agent"</span>, <span class="code-string">"💡"</span>)
+
+    <span class="code-comment"># Compile intelligence from previous agents</span>
+    trends_summary = <span class="code-string">"\n"</span>.join([
+        f<span class="code-string">"- {t['name']} (Growth: {t['growth_rate']}%): {t.get('description', '')}"</span>
+        <span class="code-keyword">for</span> t <span class="code-keyword">in</span> industry_data.get(<span class="code-string">'trends'</span>, [])[:<span class="code-number">5</span>]
+    ])
+
+    gaps_summary = <span class="code-string">"\n"</span>.join([
+        f<span class="code-string">"- {g['capability']}: {g['reason']}"</span>
+        <span class="code-keyword">for</span> g <span class="code-keyword">in</span> competitor_data.get(<span class="code-string">'gaps'</span>, [])[:<span class="code-number">5</span>]
+    ])
+
+    <span class="code-comment"># Strategic synthesis prompt</span>
+    opportunity_prompt = f<span class="code-string">"""You are a strategy consultant for a NEW data analytics consulting firm.
+
+MARKET INTELLIGENCE:
+
+High-Growth Trends:
+{trends_summary}
+
+Competitor Gaps (White-Space):
+{gaps_summary}
+
+Identify 5-7 SPECIFIC OPPORTUNITIES for a new firm.
+
+For each opportunity, assess:
+- Market Attractiveness (0.0-1.0): Growth potential, pricing power
+- Competitive Intensity (0.0-1.0): How crowded? (0=blue ocean, 1=red ocean)
+
+Respond ONLY with valid JSON:
+{{
+  "opportunities": [
+    {{
+      "name": "AI Governance Consulting",
+      "attractiveness": 0.85,
+      "competition": 0.30,
+      "rationale": "High demand, few providers, regulatory tailwinds",
+      "target_clients": "Fortune 500 financial services",
+      "estimated_deal_size": "$150K-$500K"
+    }}
+  ],
+  "top_recommendations": [
+    "Focus on [niche] because...",
+    "Avoid [area] due to..."
+  ],
+  "summary": "Strategic opportunity summary..."
+}}
+
+Prioritize opportunities in the "sweet spot" (high attractiveness, low competition).
+"""</span>
+
+    <span class="code-keyword">try</span>:
+        response = model.generate_content(opportunity_prompt)
+        json_match = re.search(<span class="code-string">r'\{.*\}'</span>, response.text, re.DOTALL)
+
+        <span class="code-keyword">if</span> json_match:
+            analysis = json.loads(json_match.group(<span class="code-number">0</span>))
+
+            <span class="code-comment"># Create 2x2 opportunity map visualization</span>
+            viz_path = <span class="code-string">""</span>
+            <span class="code-keyword">if</span> analysis.get(<span class="code-string">'opportunities'</span>):
+                opp_names = [o[<span class="code-string">'name'</span>] <span class="code-keyword">for</span> o <span class="code-keyword">in</span> analysis[<span class="code-string">'opportunities'</span>]]
+                attractiveness = [o[<span class="code-string">'attractiveness'</span>] <span class="code-keyword">for</span> o <span class="code-keyword">in</span> analysis[<span class="code-string">'opportunities'</span>]]
+                competition = [o[<span class="code-string">'competition'</span>] <span class="code-keyword">for</span> o <span class="code-keyword">in</span> analysis[<span class="code-string">'opportunities'</span>]]
+
+                viz_path = create_opportunity_map({
+                    <span class="code-string">'opportunities'</span>: opp_names,
+                    <span class="code-string">'attractiveness'</span>: attractiveness,
+                    <span class="code-string">'competition'</span>: competition
+                })
+
+            <span class="code-keyword">return</span> {
+                <span class="code-string">'summary'</span>: analysis.get(<span class="code-string">'summary'</span>, <span class="code-string">'No summary'</span>),
+                <span class="code-string">'opportunities'</span>: analysis.get(<span class="code-string">'opportunities'</span>, []),
+                <span class="code-string">'recommendations'</span>: analysis.get(<span class="code-string">'top_recommendations'</span>, []),
+                <span class="code-string">'visualization_path'</span>: viz_path
+            }
+
+    <span class="code-keyword">except</span> Exception <span class="code-keyword">as</span> e:
+        <span class="code-keyword">return</span> {<span class="code-string">'summary'</span>: f<span class="code-string">"Analysis error: {str(e)}"</span>, <span class="code-string">'opportunities'</span>: []}
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>⚙️ Technical Implementation Notes</h2>
+            <h3>Key Algorithms & Innovations</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>4-Agent Architecture:</strong> Specialized agents for research, intelligence, analysis, and reporting</li>
+                <li><strong>Web-Powered Research:</strong> Real-time market data via Tavily API across multiple search angles</li>
+                <li><strong>Capability Matrix Mapping:</strong> Heatmap visualization showing competitor service portfolios</li>
+                <li><strong>White-Space Detection:</strong> Identifies underserved capabilities (blue ocean opportunities)</li>
+                <li><strong>2x2 Strategic Analysis:</strong> Opportunity map plotting attractiveness vs. competition</li>
+            </ul>
+
+            <h3>Why This Approach Works</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>100x Faster:</strong> 10-15 minutes vs. days of manual research</li>
+                <li><strong>Comprehensive Coverage:</strong> Industry trends + competitors + opportunities in one run</li>
+                <li><strong>Objective & Data-Driven:</strong> Removes confirmation bias from strategic decisions</li>
+                <li><strong>Repeatable:</strong> Run monthly to track market evolution</li>
+                <li><strong>Cost-Effective:</strong> ~$0.20 per analysis vs. $5,000+ for consulting reports</li>
+            </ul>
+
+            <h3>Output Package</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li>📋 <strong>1 Markdown Report:</strong> Executive-ready strategic analysis with embedded visuals</li>
+                <li>📊 <strong>3 Visualizations:</strong>
+                    <ul style="margin: 10px 0; padding-left: 20px;">
+                        <li>Trend growth chart (horizontal bars, color-coded by growth rate)</li>
+                        <li>Competitor capability matrix (heatmap showing who offers what)</li>
+                        <li>Opportunity map (2x2 matrix with sweet spot highlighting)</li>
+                    </ul>
+                </li>
+                <li>💡 <strong>Strategic Recommendations:</strong> Immediate actions, differentiation strategy, success metrics</li>
+            </ul>
+
+            <h3>Real-World Use Cases</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>New Market Entry:</strong> Evaluate opportunities before launching consulting practice</li>
+                <li><strong>Service Portfolio Planning:</strong> Identify high-growth capabilities to build</li>
+                <li><strong>Competitive Positioning:</strong> Find white-space differentiation angles</li>
+                <li><strong>Investment Decisions:</strong> Data-driven prioritization of initiatives</li>
+                <li><strong>Strategic Planning:</strong> Annual/quarterly market assessments</li>
+            </ul>
+        </div>
+
+        <div class="demo-links">
+            <a href="https://colab.research.google.com/drive/1BZ1m_XsI5q7CHvdopcCK53Wlw0sCt1-j" target="_blank" class="demo-btn">🚀 Try on Google Colab</a>
+            <a href="index.html" class="demo-btn secondary">📖 Back to Portfolio</a>
+        </div>
+
+        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+            <a href="index.html">← Back to Portfolio</a>
+        </nav>
+    </div>
+</body>
+</html>

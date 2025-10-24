@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Consulting Business Analysis Agent - Market Intelligence System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #222;
+            background-color: #ffffff;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .back-nav {
+            margin-bottom: 20px;
+        }
+
+        .back-nav a {
+            color: #007BFF;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .back-nav a:hover {
+            text-decoration: underline;
+        }
+
+        .project-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #a855f7, #9333ea);
+            color: white;
+            border-radius: 10px;
+        }
+
+        .project-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .project-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .demo-links {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .demo-btn {
+            display: inline-block;
+            background-color: #007BFF;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .demo-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .demo-btn.secondary {
+            background-color: #28a745;
+        }
+
+        .demo-btn.secondary:hover {
+            background-color: #218838;
+        }
+
+        .demo-btn.colab {
+            background-color: #f9ab00;
+        }
+
+        .demo-btn.colab:hover {
+            background-color: #e09600;
+        }
+
+        .content-section {
+            margin: 40px 0;
+            padding: 30px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border-left: 5px solid #a855f7;
+        }
+
+        .content-section h2 {
+            color: #a855f7;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .content-section h3 {
+            color: #333;
+            margin: 20px 0 10px 0;
+            font-size: 1.3rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .feature-item {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+
+        .feature-item h4 {
+            color: #a855f7;
+            margin-bottom: 10px;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .tech-item {
+            background-color: #a855f7;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .code-block {
+            background-color: #f4f4f4;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: monospace;
+            overflow-x: auto;
+        }
+
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .metric-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid #a855f7;
+        }
+
+        .metric-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #a855f7;
+        }
+
+        .metric-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #f3e8ff, #e9d5ff);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border-left: 5px solid #a855f7;
+        }
+
+        @media (max-width: 768px) {
+            .project-header h1 {
+                font-size: 2rem;
+            }
+
+            .project-header p {
+                font-size: 1rem;
+            }
+
+            .demo-btn {
+                margin: 5px;
+                padding: 10px 20px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="index.html">← Back to Portfolio</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>💼 Data Consulting Business Analysis Agent</h1>
+            <p>AI-powered market intelligence system for data analytics consulting firms</p>
+
+            <div class="badges">
+                <span class="badge">Python 3.9+</span>
+                <span class="badge">Gemini 2.0 Flash</span>
+                <span class="badge">Tavily Search API</span>
+                <span class="badge">Multi-Agent System</span>
+                <span class="badge">Strategic Analysis</span>
+            </div>
+        </div>
+
+        <div class="demo-links">
+            <a href="https://colab.research.google.com/drive/1BZ1m_XsI5q7CHvdopcCK53Wlw0sCt1-j" target="_blank" class="demo-btn colab">🚀 Launch in Google Colab</a>
+            <a href="data-consulting-agent-source.html" target="_blank" class="demo-btn secondary">📁 View Source Code</a>
+        </div>
+
+        <div class="content-section">
+            <h2>📋 Project Overview & Problem Statement</h2>
+            <p><strong>Challenge:</strong> New data analytics consulting firms face a critical information gap when entering the market. Traditional market research takes weeks of manual effort - analyzing industry reports, competitor websites, job postings, conference agendas - and costs $5,000-$50,000 for professional consulting reports. By the time research is complete, market dynamics have already shifted.</p>
+
+            <p><strong>Solution:</strong> Data Consulting Business Analysis Agent automates the entire market discovery process using a 4-agent AI system. It performs comprehensive industry research, competitive intelligence gathering, opportunity analysis, and strategic report generation - transforming weeks of manual work into 10-15 minutes of automated intelligence gathering.</p>
+
+            <div class="highlight-box">
+                <h4>🎯 What This System Delivers</h4>
+                <ul style="margin-top: 10px;">
+                    <li><strong>Industry Landscape:</strong> Market trends, growth rates, key technologies</li>
+                    <li><strong>Competitive Analysis:</strong> 10+ competitors mapped with capability matrices</li>
+                    <li><strong>White-Space Opportunities:</strong> Underserved capabilities with high growth potential</li>
+                    <li><strong>Strategic Recommendations:</strong> Data-driven market entry guidance</li>
+                    <li><strong>Professional Visualizations:</strong> 3 strategic charts (trends, matrix, opportunity map)</li>
+                </ul>
+            </div>
+
+            <h3>Key Benefits</h3>
+            <ul>
+                <li><strong>100x Faster:</strong> 10-15 minutes vs. weeks of manual research</li>
+                <li><strong>Comprehensive Coverage:</strong> Industry + competitors + opportunities in one run</li>
+                <li><strong>Objective & Data-Driven:</strong> Removes confirmation bias from strategic decisions</li>
+                <li><strong>Repeatable:</strong> Run monthly to track market evolution</li>
+                <li><strong>Cost-Effective:</strong> ~$0.20 per analysis vs. $5,000+ for consulting reports</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>🤖 AI Capabilities & 4-Agent Architecture</h2>
+
+            <div class="features-grid">
+                <div class="feature-item">
+                    <h4>🔍 Industry Research Agent</h4>
+                    <p>Discovers market trends, demand signals, and emerging technologies. Estimates growth rates and identifies key technology drivers.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>🕵️ Competitor Intelligence Agent</h4>
+                    <p>Maps competitive landscape across 10+ firms. Creates capability heatmap showing who offers which services. Identifies white-space gaps.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>💡 Opportunity Analyzer Agent</h4>
+                    <p>Synthesizes insights using 2x2 strategic matrix (attractiveness vs. competition). Highlights "sweet spot" opportunities with high value and low competition.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>📋 Strategic Report Agent</h4>
+                    <p>Packages all insights into executive-ready markdown report with embedded visualizations, actionable recommendations, and implementation timeline.</p>
+                </div>
+            </div>
+
+            <h3>AI Processing Pipeline</h3>
+            <ul>
+                <li><strong>Step 1:</strong> Multi-angle web research across industry publications and firm websites</li>
+                <li><strong>Step 2:</strong> LLM-powered trend extraction with growth rate estimation</li>
+                <li><strong>Step 3:</strong> Competitive capability mapping (who offers what)</li>
+                <li><strong>Step 4:</strong> White-space gap identification (underserved capabilities)</li>
+                <li><strong>Step 5:</strong> Strategic opportunity scoring (attractiveness vs. competition)</li>
+                <li><strong>Step 6:</strong> Professional visualization generation (3 charts)</li>
+                <li><strong>Step 7:</strong> Executive report packaging with recommendations</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>📊 Strategic Visualizations</h2>
+
+            <h3>1. Market Trend Growth Chart</h3>
+            <p>Horizontal bar chart showing growth rates for top 8 market trends. Color-coded by intensity:</p>
+            <ul>
+                <li>🟢 <strong>Green (>50%):</strong> High-growth opportunities (AI/ML Analytics, Real-time Analytics)</li>
+                <li>🟡 <strong>Orange (30-50%):</strong> Moderate growth (Cloud Analytics, Visualization)</li>
+                <li>🔴 <strong>Red (<30%):</strong> Lower growth (Traditional BI, On-premise solutions)</li>
+            </ul>
+
+            <h3>2. Competitor Capability Matrix</h3>
+            <p>Heatmap showing which firms offer which services. Quickly identifies:</p>
+            <ul>
+                <li><strong>Saturated capabilities:</strong> Many firms offering same service (red ocean)</li>
+                <li><strong>White-space gaps:</strong> High-demand capabilities with few providers (blue ocean)</li>
+                <li><strong>Competitor positioning:</strong> Which firms are generalists vs. specialists</li>
+            </ul>
+
+            <h3>3. Opportunity Map (2x2 Matrix)</h3>
+            <p>Strategic scatter plot with quadrants:</p>
+            <ul>
+                <li><strong>Sweet Spot (Top-Left):</strong> High attractiveness + Low competition → Priority targets</li>
+                <li><strong>Competitive (Top-Right):</strong> High attractiveness + High competition → Enter with differentiation</li>
+                <li><strong>Niche Play (Bottom-Left):</strong> Low attractiveness + Low competition → Specialized focus</li>
+                <li><strong>Avoid (Bottom-Right):</strong> Low attractiveness + High competition → Not recommended</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>🛠️ Technical Architecture & Implementation</h2>
+
+            <h3>AI & Analytics Stack</h3>
+            <div class="tech-stack">
+                <span class="tech-item">Google Gemini 2.0 Flash</span>
+                <span class="tech-item">Tavily Search API</span>
+                <span class="tech-item">Python 3.9+</span>
+                <span class="tech-item">Pandas & NumPy</span>
+                <span class="tech-item">Matplotlib</span>
+                <span class="tech-item">Seaborn</span>
+                <span class="tech-item">NetworkX</span>
+            </div>
+
+            <h3>Multi-Agent Framework</h3>
+            <div class="tech-stack">
+                <span class="tech-item">4 Specialized Agents</span>
+                <span class="tech-item">Web Search Integration</span>
+                <span class="tech-item">Competitive Intelligence</span>
+                <span class="tech-item">Strategic Synthesis</span>
+                <span class="tech-item">Auto Visualization</span>
+            </div>
+
+            <h3>Deployment Options</h3>
+            <div class="tech-stack">
+                <span class="tech-item">Google Colab</span>
+                <span class="tech-item">Jupyter Notebook</span>
+                <span class="tech-item">Local Python</span>
+                <span class="tech-item">Streamlit (Optional)</span>
+            </div>
+
+            <h3>System Architecture</h3>
+            <div class="code-block">
+Pipeline Flow:
+1. Industry Research → Web search + LLM trend extraction
+2. Competitor Intelligence → Capability mapping + white-space detection
+3. Opportunity Analysis → 2x2 matrix scoring (attractiveness × competition)
+4. Strategic Report → Markdown report + embedded visualizations
+
+Output Package:
+- 1 Markdown report (~10 pages)
+- 3 PNG visualizations
+- JSON data export (optional)
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>📖 Development Setup & Usage Guide</h2>
+
+            <h3>Quick Start with Google Colab (Recommended)</h3>
+            <ol>
+                <li><strong>Open Colab Notebook:</strong> Click "Launch in Google Colab" button above</li>
+                <li><strong>Add API Keys:</strong> Add GEMINI_API_KEY and TAVILY_API_KEY to Colab Secrets (🔑 icon)</li>
+                <li><strong>Run Setup Cells:</strong> Install dependencies and configure APIs</li>
+                <li><strong>Run Pipeline:</strong> Execute run_consulting_discovery_pipeline()</li>
+                <li><strong>Download Results:</strong> Get markdown report and 3 visualization charts</li>
+            </ol>
+
+            <h3>Example Usage</h3>
+            <div class="code-block">
+# Run the full 4-agent discovery pipeline
+results = run_consulting_discovery_pipeline(
+    output_path="data_analytics_consulting_report_20251024.md"
+)
+
+# The pipeline automatically:
+# 1. Researches industry trends (Agent 1)
+# 2. Maps competitive landscape (Agent 2)
+# 3. Identifies opportunities (Agent 3)
+# 4. Generates strategic report (Agent 4)
+
+# Output Files:
+# - data_analytics_consulting_report_20251024.md
+# - trends_chart_20251024.png
+# - competitor_matrix_20251024.png
+# - opportunity_map_20251024.png
+            </div>
+
+            <h3>Customization Options</h3>
+            <div class="code-block">
+# Modify search queries for your specific market
+queries = [
+    "healthcare data analytics consulting trends 2024",
+    "financial services BI consulting market",
+    "retail analytics firms capabilities"
+]
+
+# Adjust number of competitors to analyze
+num_competitors = 15  # Default: 10
+
+# Change visualization style
+sns.set_palette("viridis")  # Custom color scheme
+            </div>
+
+            <h3>Required API Keys</h3>
+            <ul>
+                <li><strong>Google AI Studio API:</strong> Get from <a href="https://aistudio.google.com/app/apikey" target="_blank">Google AI Studio</a> (free tier available)</li>
+                <li><strong>Tavily Search API:</strong> Get from <a href="https://tavily.com" target="_blank">Tavily</a> (free 1,000 searches/month)</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>📊 Performance Metrics & Business Impact</h2>
+
+            <div class="metrics">
+                <div class="metric-card">
+                    <div class="metric-number">10-15 min</div>
+                    <div class="metric-label">Full Analysis Time</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">4</div>
+                    <div class="metric-label">Specialized Agents</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">3</div>
+                    <div class="metric-label">Strategic Charts</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">~$0.20</div>
+                    <div class="metric-label">Cost Per Analysis</div>
+                </div>
+            </div>
+
+            <h3>Business Value Demonstration</h3>
+            <ul>
+                <li><strong>Speed:</strong> 100x faster than manual research (weeks → minutes)</li>
+                <li><strong>Comprehensive:</strong> Covers industry, competitors, and opportunities in one run</li>
+                <li><strong>Objective:</strong> Data-driven analysis removes confirmation bias</li>
+                <li><strong>Repeatable:</strong> Monthly tracking to monitor market evolution</li>
+                <li><strong>Actionable:</strong> Immediate recommendations with implementation timeline</li>
+            </ul>
+
+            <h3>Use Cases</h3>
+            <ul>
+                <li><strong>New Market Entry:</strong> Evaluate opportunities before launching consulting practice</li>
+                <li><strong>Service Portfolio Planning:</strong> Identify high-growth capabilities to build</li>
+                <li><strong>Competitive Positioning:</strong> Find white-space differentiation angles</li>
+                <li><strong>Investment Decisions:</strong> Data-driven prioritization of initiatives</li>
+                <li><strong>Strategic Planning:</strong> Annual/quarterly market assessments</li>
+                <li><strong>M&A Due Diligence:</strong> Quick market assessment for acquisition targets</li>
+            </ul>
+
+            <h3>Real-World Impact</h3>
+            <div class="code-block">
+Traditional Manual Approach:
+- Time: 2-4 weeks
+- Cost: $5,000-$50,000 (consultant fees)
+- Coverage: Limited by research budget
+- Freshness: Outdated by publication
+
+AI-Powered Approach:
+- Time: 10-15 minutes
+- Cost: ~$0.20 (API calls only)
+- Coverage: Comprehensive multi-angle search
+- Freshness: Real-time market data
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>📋 Sample Report Sections</h2>
+
+            <h3>Executive Summary Example</h3>
+            <div class="code-block">
+The data analytics consulting market is experiencing 25-35% annual growth
+driven by AI/ML adoption, cloud migration, and real-time analytics demand.
+Three white-space opportunities identified:
+
+1. AI Governance Consulting (Attractiveness: 85%, Competition: 30%)
+   - High demand from Fortune 500 compliance teams
+   - Few specialized providers
+
+2. Edge Analytics for IoT (Attractiveness: 80%, Competition: 25%)
+   - Manufacturing and logistics focus
+   - Requires specialized hardware knowledge
+
+3. Real-time Financial Analytics (Attractiveness: 75%, Competition: 40%)
+   - Trading firms and fintech startups
+   - Moderate competition but growing rapidly
+            </div>
+
+            <h3>Strategic Recommendations Example</h3>
+            <ul>
+                <li><strong>Focus Area:</strong> Specialize in AI Governance + Cloud Analytics (complementary capabilities)</li>
+                <li><strong>Target Market:</strong> Mid-market financial services firms ($100M-$1B revenue)</li>
+                <li><strong>Differentiation:</strong> Regulatory compliance expertise + modern tech stack</li>
+                <li><strong>Partnerships:</strong> AWS/Snowflake co-selling opportunities</li>
+                <li><strong>Timeline:</strong> 3-month foundation phase → 6-month market entry → 12-month scale</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>🎯 Advanced Features & Customization</h2>
+
+            <h3>Industry-Specific Variations</h3>
+            <p>Easily adapt the system for different industries:</p>
+            <ul>
+                <li><strong>Healthcare Analytics:</strong> Focus on HIPAA compliance, EHR integration</li>
+                <li><strong>Financial Services:</strong> Emphasize regulatory reporting, risk analytics</li>
+                <li><strong>Retail & E-commerce:</strong> Customer analytics, inventory optimization</li>
+                <li><strong>Manufacturing:</strong> IoT sensor analytics, predictive maintenance</li>
+            </ul>
+
+            <h3>Add-On Agents (Future Enhancements)</h3>
+            <ul>
+                <li><strong>Pricing Intelligence Agent:</strong> Analyze competitor pricing models</li>
+                <li><strong>Talent Market Agent:</strong> Research data science hiring trends and salaries</li>
+                <li><strong>Technology Stack Agent:</strong> Map tool adoption rates (Python, Tableau, Power BI)</li>
+                <li><strong>Case Study Agent:</strong> Extract success stories and ROI examples</li>
+            </ul>
+
+            <h3>Integration Options</h3>
+            <ul>
+                <li><strong>CRM Integration:</strong> Feed insights into Salesforce/HubSpot</li>
+                <li><strong>Slack Notifications:</strong> Auto-post weekly market updates</li>
+                <li><strong>Dashboard Embedding:</strong> Display charts in internal strategy portals</li>
+                <li><strong>Scheduled Runs:</strong> Cron job for monthly market pulse checks</li>
+            </ul>
+        </div>
+
+        <div class="demo-links">
+            <a href="https://colab.research.google.com/drive/1BZ1m_XsI5q7CHvdopcCK53Wlw0sCt1-j" target="_blank" class="demo-btn colab">🚀 Try in Google Colab</a>
+            <a href="data-consulting-agent-source.html" target="_blank" class="demo-btn secondary">📖 View Source Code</a>
+        </div>
+
+        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+            <a href="index.html">← Back to Portfolio</a> |
+            <a href="project-categories.html">View All Categories</a>
+        </nav>
+    </div>
+</body>
+</html>
