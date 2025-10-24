@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Intelligence Agent - Source Code | AI Project Portfolio</title>
+    <meta name="description" content="Explore the source code behind the Business Intelligence Agent - an AI-powered data analytics system that transforms natural language questions into executable insights with automatic visualizations.">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Navigation */
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: white;
+            color: #44A08D;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255,255,255,0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        /* Section */
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .section h2 {
+            color: #44A08D;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section h3 {
+            color: #333;
+            font-size: 1.4rem;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #4ECDC4;
+        }
+
+        .section p {
+            color: #555;
+            font-size: 1.05rem;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+
+        .section ul {
+            margin-left: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .section li {
+            color: #555;
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+
+        /* Code Block */
+        .code-block {
+            background: #1e1e1e;
+            border-radius: 8px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            border-left: 4px solid #4ECDC4;
+        }
+
+        .code-block pre {
+            margin: 0;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #d4d4d4;
+        }
+
+        /* Syntax Highlighting - VS Code Dark+ Theme */
+        .code-keyword { color: #569cd6; } /* def, class, import, return, if, try, except */
+        .code-function { color: #dcdcaa; } /* function names */
+        .code-string { color: #ce9178; } /* strings */
+        .code-comment { color: #6a9955; font-style: italic; } /* comments */
+        .code-number { color: #b5cea8; } /* numbers */
+        .code-variable { color: #9cdcfe; } /* variables */
+        .code-operator { color: #d4d4d4; } /* operators */
+        .code-builtin { color: #4ec9b0; } /* built-in types */
+        .code-param { color: #9cdcfe; } /* parameters */
+
+        /* Feature Grid */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .feature-card {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #4ECDC4;
+        }
+
+        .feature-card h4 {
+            color: #44A08D;
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+
+        .feature-card p {
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Badge */
+        .badge {
+            display: inline-block;
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .badge-tech { background: #e3f2fd; color: #1976d2; }
+        .badge-ai { background: #f3e5f5; color: #7b1fa2; }
+        .badge-feature { background: #e8f5e9; color: #388e3c; }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            color: #777;
+            font-size: 0.95rem;
+        }
+
+        .footer a {
+            color: #44A08D;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2rem; }
+            .header p { font-size: 1rem; }
+            .container { padding: 2rem 1rem; }
+            .section { padding: 1.5rem; }
+            .code-block { padding: 1rem; }
+            .code-block pre { font-size: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <h1>📊 Business Intelligence Agent</h1>
+        <p>Explore the source code behind an AI-powered data analytics system that transforms natural language into executable insights</p>
+
+        <div class="nav-buttons">
+            <a href="business-intelligent-agent.html" class="btn btn-secondary">← Project Overview</a>
+            <a href="https://colab.research.google.com/drive/10wkxsg7Crcdz9oa3rFKlJ6Jtez1CB3xf" class="btn btn-primary" target="_blank">🚀 Try Live Demo</a>
+            <a href="index.html" class="btn btn-secondary">🏠 Back to Portfolio</a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Introduction -->
+        <section class="section">
+            <h2>🎯 System Architecture</h2>
+            <p>
+                The Business Intelligence Agent is a three-layer AI system that combines schema intelligence,
+                code generation, and safe execution to answer complex business questions from any CSV dataset.
+            </p>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>🔍 Schema Intelligence</h4>
+                    <p>Automatically analyzes dataset structure, data types, value distributions, and statistical ranges</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🤖 Code Generation</h4>
+                    <p>Uses Gemini 2.0 Flash to convert natural language questions into executable Python/Pandas code</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🛡️ Safe Execution</h4>
+                    <p>Runs generated code in sandboxed environment with error handling and status tracking</p>
+                </div>
+                <div class="feature-card">
+                    <h4>📊 Auto Visualization</h4>
+                    <p>Automatically generates charts and graphs using Matplotlib/Seaborn when appropriate</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Code Section 1: Schema Intelligence -->
+        <section class="section">
+            <h2>💡 Core Components</h2>
+
+            <h3>1. Schema Intelligence & Auto-Detection Engine</h3>
+            <p>
+                The foundation of the system is its ability to understand your data automatically. This function
+                analyzes the dataset and creates a comprehensive schema description that helps the AI generate
+                accurate code.
+            </p>
+
+            <div class="code-block">
+                <pre><code><span class="code-keyword">def</span> <span class="code-function">build_schema_block</span>(<span class="code-param">df</span>: <span class="code-builtin">pd.DataFrame</span>) -> <span class="code-builtin">str</span>:
+    <span class="code-string">"""
+    Build a comprehensive schema description for the AI agent.
+    Includes column names, types, unique values, and sample data.
+
+    This function intelligently analyzes your dataset structure:
+    - For categorical columns: Shows value distribution
+    - For numeric columns: Shows min/max/mean statistics
+    - For high-cardinality columns: Shows sample values
+    """</span>
+    <span class="code-variable">schema_lines</span> = []
+    <span class="code-variable">schema_lines</span>.append(<span class="code-string">"DATASET SCHEMA:"</span>)
+    <span class="code-variable">schema_lines</span>.append(<span class="code-string">f"Total Rows: {len(df):,}"</span>)
+    <span class="code-variable">schema_lines</span>.append(<span class="code-string">f"Total Columns: {len(df.columns)}"</span>)
+    <span class="code-variable">schema_lines</span>.append(<span class="code-string">"\nCOLUMNS:"</span>)
+
+    <span class="code-keyword">for</span> <span class="code-variable">col</span> <span class="code-keyword">in</span> <span class="code-variable">df</span>.columns:
+        <span class="code-variable">dtype</span> = <span class="code-builtin">str</span>(<span class="code-variable">df</span>[<span class="code-variable">col</span>].dtype)
+        <span class="code-variable">unique_count</span> = <span class="code-variable">df</span>[<span class="code-variable">col</span>].nunique()
+        <span class="code-variable">null_count</span> = <span class="code-variable">df</span>[<span class="code-variable">col</span>].isnull().sum()
+
+        <span class="code-variable">schema_lines</span>.append(<span class="code-string">f"\n- {col}:"</span>)
+        <span class="code-variable">schema_lines</span>.append(<span class="code-string">f"  Type: {dtype}"</span>)
+        <span class="code-variable">schema_lines</span>.append(<span class="code-string">f"  Unique values: {unique_count:,}"</span>)
+        <span class="code-variable">schema_lines</span>.append(<span class="code-string">f"  Null values: {null_count:,}"</span>)
+
+        <span class="code-comment"># Show sample values for categorical/low-cardinality columns</span>
+        <span class="code-keyword">if</span> <span class="code-variable">unique_count</span> <= <span class="code-number">20</span>:
+            <span class="code-variable">samples</span> = <span class="code-variable">df</span>[<span class="code-variable">col</span>].value_counts().head(<span class="code-number">10</span>).to_dict()
+            <span class="code-variable">schema_lines</span>.append(<span class="code-string">f"  Sample values: {samples}"</span>)
+        <span class="code-keyword">else</span>:
+            <span class="code-comment"># For high-cardinality columns, show range or examples</span>
+            <span class="code-keyword">if</span> <span class="code-variable">dtype</span> <span class="code-keyword">in</span> [<span class="code-string">'int64'</span>, <span class="code-string">'float64'</span>]:
+                <span class="code-variable">min_val</span> = <span class="code-variable">df</span>[<span class="code-variable">col</span>].min()
+                <span class="code-variable">max_val</span> = <span class="code-variable">df</span>[<span class="code-variable">col</span>].max()
+                <span class="code-variable">mean_val</span> = <span class="code-variable">df</span>[<span class="code-variable">col</span>].mean()
+                <span class="code-variable">schema_lines</span>.append(<span class="code-string">f"  Range: {min_val:.2f} to {max_val:.2f} (mean: {mean_val:.2f})"</span>)
+            <span class="code-keyword">else</span>:
+                <span class="code-variable">samples</span> = <span class="code-variable">df</span>[<span class="code-variable">col</span>].dropna().sample(min(<span class="code-number">5</span>, len(<span class="code-variable">df</span>[<span class="code-variable">col</span>].dropna()))).tolist()
+                <span class="code-variable">schema_lines</span>.append(<span class="code-string">f"  Sample values: {samples}"</span>)
+
+    <span class="code-keyword">return</span> <span class="code-string">"\n"</span>.join(<span class="code-variable">schema_lines</span>)</code></pre>
+            </div>
+
+            <p><strong>Key Features:</strong></p>
+            <ul>
+                <li><strong>Automatic Type Detection:</strong> Identifies numeric vs categorical columns</li>
+                <li><strong>Statistical Analysis:</strong> Computes min/max/mean for numeric data</li>
+                <li><strong>Value Distribution:</strong> Shows frequency counts for categorical data</li>
+                <li><strong>Missing Data Detection:</strong> Tracks null values per column</li>
+                <li><strong>Smart Sampling:</strong> Provides relevant examples based on data type</li>
+            </ul>
+        </section>
+
+        <!-- Code Section 2: Code Generation -->
+        <section class="section">
+            <h3>2. Natural Language to Code Generation Engine</h3>
+            <p>
+                This is where the magic happens. The AI agent receives your question and the dataset schema,
+                then generates executable Python code that answers your question precisely.
+            </p>
+
+            <div class="code-block">
+                <pre><code><span class="code-keyword">def</span> <span class="code-function">generate_llm_code</span>(
+    <span class="code-param">query</span>: <span class="code-builtin">str</span>,
+    <span class="code-param">schema</span>: <span class="code-builtin">str</span>,
+    <span class="code-param">num_rows</span>: <span class="code-builtin">int</span>,
+    <span class="code-param">model_name</span>: <span class="code-builtin">str</span> = <span class="code-string">"gemini-2.0-flash-exp"</span>
+) -> <span class="code-builtin">str</span>:
+    <span class="code-string">"""
+    Generate executable Python code using Gemini LLM.
+
+    Example Transformation:
+    Input:  "Which product category is making loss because of discount?"
+    Output: Python code that:
+            1. Filters orders with discounts
+            2. Groups by category
+            3. Calculates profit margins
+            4. Identifies loss-making categories
+            5. Generates visualization
+
+    Args:
+        query: User's filtering/analysis question
+        schema: Dataset schema information (from build_schema_block)
+        num_rows: Number of rows in dataset
+        model_name: Gemini model to use
+
+    Returns:
+        Generated Python code as string
+    """</span>
+    <span class="code-comment"># Format the prompt with user query and schema</span>
+    <span class="code-variable">formatted_prompt</span> = <span class="code-variable">PROMPT</span>.format(
+        <span class="code-param">schema</span>=<span class="code-variable">schema</span>,
+        <span class="code-param">query</span>=<span class="code-variable">query</span>,
+        <span class="code-param">num_rows</span>=<span class="code-variable">num_rows</span>
+    )
+
+    <span class="code-builtin">print</span>(<span class="code-string">f"🤖 Generating code for query: '{query}'"</span>)
+    <span class="code-builtin">print</span>(<span class="code-string">f"📏 Prompt length: {len(formatted_prompt):,} characters"</span>)
+    <span class="code-builtin">print</span>(<span class="code-string">f"🔄 Calling Gemini model: {model_name}..."</span>)
+
+    <span class="code-keyword">try</span>:
+        <span class="code-comment"># Initialize the Gemini model</span>
+        <span class="code-variable">model</span> = <span class="code-variable">genai</span>.GenerativeModel(<span class="code-variable">model_name</span>)
+
+        <span class="code-comment"># Generate response</span>
+        <span class="code-variable">response</span> = <span class="code-variable">model</span>.generate_content(<span class="code-variable">formatted_prompt</span>)
+
+        <span class="code-comment"># Check for blocking or empty response</span>
+        <span class="code-keyword">if</span> <span class="code-builtin">hasattr</span>(<span class="code-variable">response</span>, <span class="code-string">'prompt_feedback'</span>) <span class="code-keyword">and</span> <span class="code-variable">response</span>.prompt_feedback.block_reason:
+            <span class="code-variable">block_reason</span> = <span class="code-variable">response</span>.prompt_feedback.block_reason
+            <span class="code-builtin">print</span>(<span class="code-string">f"🚫 Response blocked: {block_reason}"</span>)
+            <span class="code-keyword">return</span> <span class="code-string">f'STATUS = "error"\nanswer_text = "Response blocked: {block_reason}"'</span>
+
+        <span class="code-keyword">if</span> <span class="code-keyword">not</span> <span class="code-variable">response</span>.text <span class="code-keyword">or</span> <span class="code-variable">response</span>.text.strip() == <span class="code-string">""</span>:
+            <span class="code-builtin">print</span>(<span class="code-string">"⚠️ Empty response from LLM"</span>)
+            <span class="code-keyword">return</span> <span class="code-string">'STATUS = "error"\nanswer_text = "Empty response. Please rephrase."'</span>
+
+        <span class="code-variable">generated_code</span> = <span class="code-variable">response</span>.text.strip()
+        <span class="code-builtin">print</span>(<span class="code-string">f"✅ Code generated successfully ({len(generated_code)} characters)"</span>)
+
+        <span class="code-keyword">return</span> <span class="code-variable">generated_code</span>
+
+    <span class="code-keyword">except</span> <span class="code-builtin">Exception</span> <span class="code-keyword">as</span> <span class="code-variable">e</span>:
+        <span class="code-builtin">print</span>(<span class="code-string">f"❌ Error calling Gemini API: {str(e)}"</span>)
+        <span class="code-keyword">return</span> <span class="code-string">f'STATUS = "error"\nanswer_text = "API Error: {str(e)}"'</span></code></pre>
+            </div>
+
+            <p><strong>Code Generation Capabilities:</strong></p>
+            <ul>
+                <li><strong>Multi-Pattern Recognition:</strong> Handles filtering, aggregation, grouping, visualization</li>
+                <li><strong>Context-Aware:</strong> Uses schema information to generate accurate column references</li>
+                <li><strong>Error Resilient:</strong> Includes try-except blocks and status variables</li>
+                <li><strong>Safety Filters:</strong> Checks for blocked responses and empty outputs</li>
+                <li><strong>Transparent Logging:</strong> Prints progress updates for user visibility</li>
+            </ul>
+        </section>
+
+        <!-- Code Section 3: Safe Execution -->
+        <section class="section">
+            <h3>3. Safe Code Execution Environment</h3>
+            <p>
+                Security is paramount. This function executes the AI-generated code in a controlled, sandboxed
+                environment that prevents harmful operations while still allowing powerful data analysis.
+            </p>
+
+            <div class="code-block">
+                <pre><code><span class="code-keyword">def</span> <span class="code-function">execute_generated_code</span>(<span class="code-param">code_text</span>: <span class="code-builtin">str</span>, <span class="code-param">df</span>: <span class="code-builtin">pd.DataFrame</span>) -> <span class="code-builtin">Dict</span>[<span class="code-builtin">str</span>, <span class="code-builtin">Any</span>]:
+    <span class="code-string">"""
+    Execute generated Python code in a safe namespace.
+
+    Security Features:
+    1. Works on DataFrame COPY (original data never modified)
+    2. Limited namespace (only pandas, numpy, matplotlib, seaborn)
+    3. No file system access
+    4. No network operations
+    5. Comprehensive error handling
+
+    Args:
+        code_text: Python code to execute (may include markdown)
+        df: DataFrame to make available in execution context
+
+    Returns:
+        Dictionary with STATUS and answer_text
+    """</span>
+    <span class="code-comment"># Extract executable code (removes markdown if present)</span>
+    <span class="code-variable">code</span> = <span class="code-function">_extract_execute_block</span>(<span class="code-variable">code_text</span>)
+
+    <span class="code-keyword">if</span> <span class="code-keyword">not</span> <span class="code-variable">code</span>.strip():
+        <span class="code-keyword">return</span> {
+            <span class="code-string">"STATUS"</span>: <span class="code-string">"error"</span>,
+            <span class="code-string">"answer_text"</span>: <span class="code-string">"No executable code found in LLM response"</span>
+        }
+
+    <span class="code-builtin">print</span>(<span class="code-string">"\n"</span> + <span class="code-string">"="</span>*<span class="code-number">60</span>)
+    <span class="code-builtin">print</span>(<span class="code-string">"EXECUTING GENERATED CODE:"</span>)
+    <span class="code-builtin">print</span>(<span class="code-string">"="</span>*<span class="code-number">60</span>)
+    <span class="code-builtin">print</span>(<span class="code-variable">code</span>)
+    <span class="code-builtin">print</span>(<span class="code-string">"="</span>*<span class="code-number">60</span> + <span class="code-string">"\n"</span>)
+
+    <span class="code-comment"># Create safe execution namespace (sandboxed environment)</span>
+    <span class="code-variable">namespace</span> = {
+        <span class="code-string">"df"</span>: <span class="code-variable">df</span>.copy(),  <span class="code-comment"># Work on a copy to avoid modifying original</span>
+        <span class="code-string">"pd"</span>: <span class="code-variable">pd</span>,
+        <span class="code-string">"np"</span>: <span class="code-variable">np</span>,
+        <span class="code-string">"plt"</span>: <span class="code-variable">plt</span>,
+        <span class="code-string">"sns"</span>: <span class="code-variable">sns</span>,
+        <span class="code-string">"STATUS"</span>: <span class="code-string">"unknown"</span>,
+        <span class="code-string">"answer_text"</span>: <span class="code-string">"No answer generated"</span>
+    }
+
+    <span class="code-keyword">try</span>:
+        <span class="code-comment"># Execute the code in sandboxed namespace</span>
+        <span class="code-builtin">exec</span>(<span class="code-variable">code</span>, <span class="code-variable">namespace</span>)
+
+        <span class="code-comment"># Extract results from namespace</span>
+        <span class="code-variable">status</span> = <span class="code-variable">namespace</span>.get(<span class="code-string">"STATUS"</span>, <span class="code-string">"unknown"</span>)
+        <span class="code-variable">answer</span> = <span class="code-variable">namespace</span>.get(<span class="code-string">"answer_text"</span>, <span class="code-string">"No answer provided"</span>)
+
+        <span class="code-keyword">return</span> {
+            <span class="code-string">"STATUS"</span>: <span class="code-variable">status</span>,
+            <span class="code-string">"answer_text"</span>: <span class="code-variable">answer</span>
+        }
+
+    <span class="code-keyword">except</span> <span class="code-builtin">Exception</span> <span class="code-keyword">as</span> <span class="code-variable">e</span>:
+        <span class="code-variable">error_msg</span> = <span class="code-string">f"Execution error: {str(e)}"</span>
+        <span class="code-builtin">print</span>(<span class="code-string">f"❌ {error_msg}"</span>)
+        <span class="code-keyword">return</span> {
+            <span class="code-string">"STATUS"</span>: <span class="code-string">"error"</span>,
+            <span class="code-string">"answer_text"</span>: <span class="code-variable">error_msg</span>
+        }</code></pre>
+            </div>
+
+            <p><strong>Security & Safety Features:</strong></p>
+            <ul>
+                <li><strong>DataFrame Isolation:</strong> Works on copy of data to prevent accidental modifications</li>
+                <li><strong>Limited Namespace:</strong> Only exposes pandas, numpy, matplotlib, seaborn libraries</li>
+                <li><strong>No File Access:</strong> Prevents reading/writing files outside the sandbox</li>
+                <li><strong>No Network Access:</strong> Blocks HTTP requests and external connections</li>
+                <li><strong>Error Containment:</strong> Catches all exceptions and returns structured error messages</li>
+                <li><strong>Status Tracking:</strong> Every execution returns explicit success/error status</li>
+            </ul>
+        </section>
+
+        <!-- Technical Implementation -->
+        <section class="section">
+            <h2>⚙️ Technical Implementation Notes</h2>
+
+            <h3>System Workflow</h3>
+            <div class="code-block">
+                <pre><code><span class="code-comment"># High-level workflow of the Business Intelligence Agent</span>
+
+<span class="code-number">1</span>. <span class="code-comment">User uploads CSV dataset</span>
+   ↓
+<span class="code-number">2</span>. <span class="code-function">build_schema_block</span>(<span class="code-variable">df</span>) analyzes dataset structure
+   ↓
+<span class="code-number">3</span>. <span class="code-comment">User asks natural language question</span>
+   ↓
+<span class="code-number">4</span>. <span class="code-function">generate_llm_code</span>(<span class="code-variable">query</span>, <span class="code-variable">schema</span>) generates Python code
+   ↓
+<span class="code-number">5</span>. <span class="code-function">execute_generated_code</span>(<span class="code-variable">code</span>, <span class="code-variable">df</span>) runs code safely
+   ↓
+<span class="code-number">6</span>. <span class="code-comment">Return answer + visualization to user</span></code></pre>
+            </div>
+
+            <h3>Example Question Transformations</h3>
+
+            <div class="feature-card">
+                <h4>Question: "Which product category is making loss because of discount?"</h4>
+                <p><strong>Generated Code:</strong></p>
+                <ul>
+                    <li>Filter orders where discount > 0</li>
+                    <li>Group by category</li>
+                    <li>Calculate: profit_margin - discount for each category</li>
+                    <li>Identify categories with negative net profit</li>
+                    <li>Create bar chart showing profit loss by category</li>
+                </ul>
+            </div>
+
+            <div class="feature-card">
+                <h4>Question: "What is the average lifetime value by age group?"</h4>
+                <p><strong>Generated Code:</strong></p>
+                <ul>
+                    <li>Create age bins (18-29, 30-39, 40-49, etc.)</li>
+                    <li>Group customers by age range</li>
+                    <li>Calculate: SUM(total_amount) per customer</li>
+                    <li>Calculate: AVG(customer_lifetime_value) per age group</li>
+                    <li>Generate horizontal bar chart with sorted values</li>
+                </ul>
+            </div>
+
+            <div class="feature-card">
+                <h4>Question: "Show me the top 10 cash cow products in a bar chart"</h4>
+                <p><strong>Generated Code:</strong></p>
+                <ul>
+                    <li>Group by product_name</li>
+                    <li>Calculate: total revenue and total units sold</li>
+                    <li>Sort by profit_margin DESC</li>
+                    <li>Filter top 10</li>
+                    <li>Create bar chart with product names and profit margins</li>
+                </ul>
+            </div>
+
+            <h3>Key Design Patterns</h3>
+            <ul>
+                <li><strong>Code-as-Plan:</strong> AI generates executable code instead of trying to analyze data directly</li>
+                <li><strong>Self-Documenting:</strong> Generated code includes print statements for transparency</li>
+                <li><strong>Status Variables:</strong> Every code snippet returns STATUS and answer_text</li>
+                <li><strong>Error Recovery:</strong> Failed executions return helpful error messages, not crashes</li>
+                <li><strong>Automatic Visualization:</strong> Charts are generated when appropriate based on question type</li>
+            </ul>
+        </section>
+
+        <!-- Tech Stack -->
+        <section class="section">
+            <h2>🛠️ Technology Stack</h2>
+
+            <div>
+                <h4>AI & Machine Learning</h4>
+                <span class="badge badge-ai">Gemini 2.0 Flash</span>
+                <span class="badge badge-ai">Natural Language Processing</span>
+                <span class="badge badge-ai">Code Generation</span>
+            </div>
+
+            <div style="margin-top: 1rem;">
+                <h4>Data Processing</h4>
+                <span class="badge badge-tech">Python 3.8+</span>
+                <span class="badge badge-tech">Pandas</span>
+                <span class="badge badge-tech">NumPy</span>
+            </div>
+
+            <div style="margin-top: 1rem;">
+                <h4>Visualization</h4>
+                <span class="badge badge-tech">Matplotlib</span>
+                <span class="badge badge-tech">Seaborn</span>
+            </div>
+
+            <div style="margin-top: 1rem;">
+                <h4>Deployment</h4>
+                <span class="badge badge-feature">Google Colab</span>
+                <span class="badge badge-feature">Jupyter Notebook</span>
+                <span class="badge badge-feature">Cloud-Based</span>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="section" style="background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%); color: white;">
+            <h2 style="color: white;">🚀 Ready to Analyze Your Data?</h2>
+            <p style="color: white; opacity: 0.95;">
+                Try the Business Intelligence Agent with your own CSV dataset. Upload your data and start
+                asking questions in plain English. No coding required!
+            </p>
+            <div style="margin-top: 1.5rem;">
+                <a href="https://colab.research.google.com/drive/10wkxsg7Crcdz9oa3rFKlJ6Jtez1CB3xf" class="btn btn-primary" target="_blank">
+                    🚀 Open in Google Colab
+                </a>
+                <a href="business-intelligent-agent.html" class="btn btn-secondary">
+                    📖 Read Full Documentation
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>
+            Built with ❤️ using Gemini 2.0 Flash |
+            <a href="index.html">Back to Portfolio</a> |
+            <a href="https://github.com/lyven81/ai-project" target="_blank">View on GitHub</a>
+        </p>
+    </footer>
+</body>
+</html>

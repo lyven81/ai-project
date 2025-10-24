@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Segmentation Agent - Source Code</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #222;
+            background-color: #ffffff;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .back-nav {
+            margin-bottom: 20px;
+        }
+
+        .back-nav a {
+            color: #007BFF;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .back-nav a:hover {
+            text-decoration: underline;
+        }
+
+        .project-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #FF6B6B, #E74C3C);
+            color: white;
+            border-radius: 10px;
+        }
+
+        .project-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .project-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .content-section {
+            margin: 40px 0;
+            padding: 30px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border-left: 5px solid #FF6B6B;
+        }
+
+        .content-section h2 {
+            color: #FF6B6B;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .content-section h3 {
+            color: #333;
+            margin: 20px 0 10px 0;
+            font-size: 1.3rem;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #FFE5E5, #FFD0D0);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #FF6B6B;
+            margin: 20px 0;
+        }
+
+        .code-container {
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        .code-header {
+            color: #569cd6;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .code-block {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #d4d4d4;
+        }
+
+        .code-comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+
+        .code-keyword {
+            color: #569cd6;
+        }
+
+        .code-string {
+            color: #ce9178;
+        }
+
+        .code-function {
+            color: #dcdcaa;
+        }
+
+        .code-number {
+            color: #b5cea8;
+        }
+
+        .demo-links {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .demo-btn {
+            display: inline-block;
+            background-color: #007BFF;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .demo-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .demo-btn.secondary {
+            background-color: #28a745;
+        }
+
+        .demo-btn.secondary:hover {
+            background-color: #218838;
+        }
+
+        @media (max-width: 768px) {
+            .project-header h1 {
+                font-size: 2rem;
+            }
+
+            .project-header p {
+                font-size: 1rem;
+            }
+
+            .demo-btn {
+                margin: 5px;
+                padding: 10px 20px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="customer-segmentation-agent.html">← Back to Project Overview</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>👥 Customer Segmentation Agent</h1>
+            <p>Core Source Code & RFM Analysis Implementation</p>
+
+            <div class="badges">
+                <span class="badge">Python 3.9</span>
+                <span class="badge">Gemini 2.0 Flash</span>
+                <span class="badge">TinyDB</span>
+                <span class="badge">Pandas</span>
+            </div>
+        </div>
+
+        <div class="highlight-box">
+            <h3>🔍 About This Code Showcase</h3>
+            <p><strong>This curated code snippet demonstrates how the Customer Segmentation Agent converts natural language into executable TinyDB queries and performs automatic RFM analysis with customer profiling.</strong></p>
+            <p>Full deployment scripts, API integrations, and proprietary details are omitted for clarity and security. This showcase highlights the core natural language to code generation and customer intelligence algorithms.</p>
+        </div>
+
+        <div class="content-section">
+            <h2>📖 Core Algorithm: Natural Language to Code Engine</h2>
+            <p>The foundation of the Customer Segmentation Agent is its ability to convert business questions into executable Python code with TinyDB operations and RFM calculations:</p>
+
+            <div class="code-container">
+                <div class="code-header">🤖 marketing_agent.py - AI Code Generation</div>
+                <div class="code-block">
+<span class="code-keyword">def</span> <span class="code-function">generate_llm_code</span>(
+    prompt: str,
+    *,
+    orders_tbl,
+    customers_tbl,
+    campaigns_tbl,
+    model: str = <span class="code-string">"gemini-2.0-flash-exp"</span>,
+    temperature: float = <span class="code-number">0.3</span>,
+) -> str:
+    <span class="code-string">"""
+    Ask Gemini AI to convert natural language question into executable Python code.
+
+    This is the heart of the "code-as-plan" pattern where AI generates the
+    implementation strategy as Python code, then executes it safely.
+
+    Example Transformation:
+    Input:  "Who are our top 10 VIP customers by total spending?"
+    Output: Python code that queries customers_tbl, filters VIP segment,
+            sorts by total_spent, and generates a bar chart
+    """</span>
+
+    schema_block = build_schema_block(orders_tbl, customers_tbl, campaigns_tbl)
+
+    <span class="code-comment"># Comprehensive prompt engineering for code generation</span>
+    full_prompt = MARKETING_AGENT_PROMPT.format(
+        schema_block=schema_block,
+        question=prompt
+    )
+
+    generation_config = {
+        <span class="code-string">"temperature"</span>: temperature,  <span class="code-comment"># Low temperature for consistent code</span>
+        <span class="code-string">"top_p"</span>: <span class="code-number">0.95</span>,
+        <span class="code-string">"top_k"</span>: <span class="code-number">40</span>,
+        <span class="code-string">"max_output_tokens"</span>: <span class="code-number">8192</span>,
+    }
+
+    model_instance = genai.GenerativeModel(
+        model_name=model,
+        generation_config=generation_config,
+    )
+
+    response = model_instance.generate_content(full_prompt)
+    <span class="code-keyword">return</span> response.text
+
+
+<span class="code-comment"># The prompt template that guides AI code generation</span>
+MARKETING_AGENT_PROMPT = <span class="code-string">"""You are a senior customer intelligence analyst.
+PLAN BY WRITING PYTHON CODE USING TINYDB.
+
+Database Schema & Samples:
+{schema_block}
+
+CUSTOMER PROFILE RULES:
+When creating customer profiles:
+1. Use get_next_customer_id(customers_tbl) for new customer_id
+2. Calculate ALL metrics from orders_tbl
+3. Assign segment based on:
+   - VIP: total_spent > $2000 AND total_orders >= 5
+   - Regular: total_spent $500-$2000
+   - At-Risk: days_since_last_order > 180
+   - New: total_orders <= 2
+   - Churned: days_since_last_order > 365
+4. Set created_date and last_updated timestamps
+
+OUTPUT CONTRACT:
+Return ONLY executable Python between these tags:
+&lt;execute_python&gt;
+# your code here
+&lt;/execute_python&gt;
+
+User request:
+{question}
+"""</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🧠 RFM Analysis & Customer Profiling Engine</h2>
+            <p>The core RFM (Recency, Frequency, Monetary) analysis engine that creates comprehensive customer profiles from transaction data:</p>
+
+            <div class="code-container">
+                <div class="code-header">📊 customer_profiling.py - RFM Calculations</div>
+                <div class="code-block">
+<span class="code-keyword">def</span> <span class="code-function">create_customer_profile_from_orders</span>(customer_name: str, orders_tbl, customers_tbl) -> dict:
+    <span class="code-string">"""
+    Generate comprehensive customer profile with RFM analysis from order history.
+
+    This function transforms raw transaction data into actionable customer intelligence
+    by calculating key metrics that drive segmentation and marketing decisions.
+    """</span>
+
+    Item = Query()
+
+    <span class="code-comment"># Step 1: Retrieve all orders for this customer</span>
+    customer_orders = orders_tbl.search(Item.Customer_Name == customer_name)
+
+    <span class="code-keyword">if</span> <span class="code-keyword">not</span> customer_orders:
+        <span class="code-keyword">return</span> {<span class="code-string">'error'</span>: f<span class="code-string">'No orders found for {customer_name}'</span>}
+
+    <span class="code-comment"># Step 2: Calculate Monetary Value metrics</span>
+    total_spent = sum(order.get(<span class="code-string">'Revenue'</span>, <span class="code-number">0</span>) <span class="code-keyword">for</span> order <span class="code-keyword">in</span> customer_orders)
+    total_profit = sum(order.get(<span class="code-string">'Profit'</span>, <span class="code-number">0</span>) <span class="code-keyword">for</span> order <span class="code-keyword">in</span> customer_orders)
+
+    <span class="code-comment"># Step 3: Calculate Frequency metrics</span>
+    total_orders = len(customer_orders)
+    average_order_value = total_spent / total_orders <span class="code-keyword">if</span> total_orders > <span class="code-number">0</span> <span class="code-keyword">else</span> <span class="code-number">0</span>
+
+    <span class="code-comment"># Step 4: Calculate Recency metrics</span>
+    order_dates = [
+        datetime.strptime(order[<span class="code-string">'Order_Date'</span>], <span class="code-string">'%Y-%m-%d'</span>)
+        <span class="code-keyword">for</span> order <span class="code-keyword">in</span> customer_orders
+        <span class="code-keyword">if</span> order.get(<span class="code-string">'Order_Date'</span>)
+    ]
+    order_dates.sort()
+
+    first_order_date = order_dates[<span class="code-number">0</span>].strftime(<span class="code-string">'%Y-%m-%d'</span>)
+    last_order_date = order_dates[-<span class="code-number">1</span>].strftime(<span class="code-string">'%Y-%m-%d'</span>)
+    days_since_last_order = calculate_days_since(last_order_date)
+
+    <span class="code-comment"># Step 5: Identify favorite product category</span>
+    categories = [order.get(<span class="code-string">'Category'</span>) <span class="code-keyword">for</span> order <span class="code-keyword">in</span> customer_orders <span class="code-keyword">if</span> order.get(<span class="code-string">'Category'</span>)]
+    favorite_category = Counter(categories).most_common(<span class="code-number">1</span>)[<span class="code-number">0</span>][<span class="code-number">0</span>] <span class="code-keyword">if</span> categories <span class="code-keyword">else</span> <span class="code-string">'Unknown'</span>
+
+    <span class="code-comment"># Step 6: Assign customer segment based on RFM rules</span>
+    segment = assign_customer_segment(
+        total_spent=total_spent,
+        total_orders=total_orders,
+        days_since_last_order=days_since_last_order
+    )
+
+    <span class="code-comment"># Step 7: Generate complete customer profile</span>
+    profile = {
+        <span class="code-string">'customer_id'</span>: get_next_customer_id(customers_tbl),
+        <span class="code-string">'customer_name'</span>: customer_name,
+        <span class="code-string">'total_orders'</span>: total_orders,
+        <span class="code-string">'total_spent'</span>: round(total_spent, <span class="code-number">2</span>),
+        <span class="code-string">'total_profit_contributed'</span>: round(total_profit, <span class="code-number">2</span>),
+        <span class="code-string">'average_order_value'</span>: round(average_order_value, <span class="code-number">2</span>),
+        <span class="code-string">'first_order_date'</span>: first_order_date,
+        <span class="code-string">'last_order_date'</span>: last_order_date,
+        <span class="code-string">'days_since_last_order'</span>: days_since_last_order,
+        <span class="code-string">'favorite_category'</span>: favorite_category,
+        <span class="code-string">'segment'</span>: segment,
+        <span class="code-string">'tags'</span>: generate_customer_tags(total_spent, total_orders, favorite_category),
+        <span class="code-string">'created_date'</span>: datetime.now().strftime(<span class="code-string">'%Y-%m-%d'</span>),
+        <span class="code-string">'last_updated'</span>: datetime.now().strftime(<span class="code-string">'%Y-%m-%d'</span>)
+    }
+
+    <span class="code-comment"># Step 8: Insert profile into database</span>
+    customers_tbl.insert(profile)
+
+    <span class="code-keyword">return</span> profile
+
+
+<span class="code-keyword">def</span> <span class="code-function">assign_customer_segment</span>(total_spent: float, total_orders: int, days_since_last_order: int) -> str:
+    <span class="code-string">"""
+    Intelligent customer segmentation based on RFM analysis.
+
+    Priority order matters: Check churned/at-risk first (time-sensitive),
+    then VIP (high value), then regular/new (engagement level).
+    """</span>
+
+    <span class="code-comment"># Time-sensitive segments (highest priority)</span>
+    <span class="code-keyword">if</span> days_since_last_order > <span class="code-number">365</span>:
+        <span class="code-keyword">return</span> <span class="code-string">'Churned'</span>  <span class="code-comment"># Lost customer - win-back needed</span>
+
+    <span class="code-keyword">if</span> days_since_last_order > <span class="code-number">180</span>:
+        <span class="code-keyword">return</span> <span class="code-string">'At-Risk'</span>  <span class="code-comment"># Fading engagement - re-engagement needed</span>
+
+    <span class="code-comment"># Value-based segments</span>
+    <span class="code-keyword">if</span> total_spent > <span class="code-number">2000</span> <span class="code-keyword">and</span> total_orders >= <span class="code-number">5</span>:
+        <span class="code-keyword">return</span> <span class="code-string">'VIP'</span>  <span class="code-comment"># High-value loyal customer - premium treatment</span>
+
+    <span class="code-keyword">if</span> <span class="code-number">500</span> <= total_spent <= <span class="code-number">2000</span>:
+        <span class="code-keyword">return</span> <span class="code-string">'Regular'</span>  <span class="code-comment"># Solid customer - upsell opportunity</span>
+
+    <span class="code-comment"># Engagement-based segments</span>
+    <span class="code-keyword">if</span> total_orders <= <span class="code-number">2</span>:
+        <span class="code-keyword">return</span> <span class="code-string">'New'</span>  <span class="code-comment"># Early-stage customer - retention critical</span>
+
+    <span class="code-keyword">return</span> <span class="code-string">'Regular'</span>  <span class="code-comment"># Default segment</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🎯 Campaign Creation & Targeting Engine</h2>
+            <p>Automated campaign generation with precise customer targeting based on segment criteria and geographic filters:</p>
+
+            <div class="code-container">
+                <div class="code-header">📢 campaign_creator.py - Marketing Campaign Automation</div>
+                <div class="code-block">
+<span class="code-keyword">def</span> <span class="code-function">create_targeted_campaign</span>(
+    campaign_name: str,
+    target_segment: str,
+    additional_filters: dict,
+    customers_tbl,
+    campaigns_tbl
+) -> dict:
+    <span class="code-string">"""
+    Create marketing campaign with automatic customer targeting.
+
+    This function demonstrates how natural language requests like:
+    "Create a holiday campaign targeting VIP customers in the East region"
+
+    Get transformed into precise database operations with customer lists.
+    """</span>
+
+    Item = Query()
+
+    <span class="code-comment"># Step 1: Build TinyDB query from targeting criteria</span>
+    query_conditions = []
+
+    <span class="code-comment"># Primary segment filter</span>
+    <span class="code-keyword">if</span> target_segment:
+        query_conditions.append(Item.segment == target_segment)
+
+    <span class="code-comment"># Additional filters (region, spending thresholds, etc.)</span>
+    <span class="code-keyword">for</span> field, value <span class="code-keyword">in</span> additional_filters.items():
+        <span class="code-keyword">if</span> field == <span class="code-string">'min_spent'</span>:
+            query_conditions.append(Item.total_spent >= value)
+        <span class="code-keyword">elif</span> field == <span class="code-string">'max_spent'</span>:
+            query_conditions.append(Item.total_spent <= value)
+        <span class="code-keyword">elif</span> field == <span class="code-string">'region'</span>:
+            query_conditions.append(Item.region == value)
+        <span class="code-keyword">elif</span> field == <span class="code-string">'favorite_category'</span>:
+            query_conditions.append(Item.favorite_category == value)
+
+    <span class="code-comment"># Step 2: Execute compound query to find matching customers</span>
+    <span class="code-keyword">if</span> len(query_conditions) == <span class="code-number">1</span>:
+        matching_customers = customers_tbl.search(query_conditions[<span class="code-number">0</span>])
+    <span class="code-keyword">else</span>:
+        <span class="code-comment"># Combine multiple conditions with AND logic</span>
+        combined_query = query_conditions[<span class="code-number">0</span>]
+        <span class="code-keyword">for</span> condition <span class="code-keyword">in</span> query_conditions[<span class="code-number">1</span>:]:
+            combined_query = combined_query & condition
+        matching_customers = customers_tbl.search(combined_query)
+
+    <span class="code-comment"># Step 3: Extract customer IDs for CRM integration</span>
+    target_customer_ids = [c[<span class="code-string">'customer_id'</span>] <span class="code-keyword">for</span> c <span class="code-keyword">in</span> matching_customers]
+    target_customer_names = [c[<span class="code-string">'customer_name'</span>] <span class="code-keyword">for</span> c <span class="code-keyword">in</span> matching_customers]
+
+    <span class="code-comment"># Step 4: Calculate campaign potential value</span>
+    estimated_revenue = sum(c.get(<span class="code-string">'average_order_value'</span>, <span class="code-number">0</span>) <span class="code-keyword">for</span> c <span class="code-keyword">in</span> matching_customers)
+    avg_customer_value = estimated_revenue / len(matching_customers) <span class="code-keyword">if</span> matching_customers <span class="code-keyword">else</span> <span class="code-number">0</span>
+
+    <span class="code-comment"># Step 5: Create campaign record</span>
+    campaign = {
+        <span class="code-string">'campaign_id'</span>: get_next_campaign_id(campaigns_tbl),
+        <span class="code-string">'campaign_name'</span>: campaign_name,
+        <span class="code-string">'target_segment'</span>: target_segment,
+        <span class="code-string">'target_customer_count'</span>: len(target_customer_ids),
+        <span class="code-string">'target_customer_ids'</span>: target_customer_ids,
+        <span class="code-string">'target_customer_names'</span>: target_customer_names[:<span class="code-number">10</span>],  <span class="code-comment"># Sample for preview</span>
+        <span class="code-string">'estimated_reach_value'</span>: round(estimated_revenue, <span class="code-number">2</span>),
+        <span class="code-string">'avg_customer_value'</span>: round(avg_customer_value, <span class="code-number">2</span>),
+        <span class="code-string">'targeting_criteria'</span>: {
+            <span class="code-string">'segment'</span>: target_segment,
+            **additional_filters
+        },
+        <span class="code-string">'status'</span>: <span class="code-string">'draft'</span>,
+        <span class="code-string">'created_date'</span>: datetime.now().strftime(<span class="code-string">'%Y-%m-%d %H:%M:%S'</span>)
+    }
+
+    <span class="code-comment"># Step 6: Insert campaign into database</span>
+    campaigns_tbl.insert(campaign)
+
+    <span class="code-comment"># Step 7: Generate human-readable summary</span>
+    answer_text = f<span class="code-string">"""
+    ✅ Campaign Created: {campaign_name}
+
+    📊 Targeting:
+       - Segment: {target_segment}
+       - Matched Customers: {len(target_customer_ids)}
+       - Estimated Value: ${estimated_revenue:,.2f}
+       - Avg Customer Value: ${avg_customer_value:,.2f}
+
+    👥 Sample Targets: {', '.join(target_customer_names[:5])}...
+
+    Campaign ID: {campaign['campaign_id']} (Status: Draft)
+    """</span>
+
+    <span class="code-keyword">return</span> {
+        <span class="code-string">'campaign'</span>: campaign,
+        <span class="code-string">'answer_text'</span>: answer_text
+    }
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>⚙️ Technical Implementation Notes</h2>
+            <h3>Key Algorithms & Innovations</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>Code-as-Plan Pattern:</strong> AI generates implementation strategy as executable Python code</li>
+                <li><strong>RFM Analysis Engine:</strong> Automatic calculation of Recency, Frequency, Monetary metrics from raw orders</li>
+                <li><strong>Intelligent Segmentation:</strong> Priority-based classification (churned > at-risk > VIP > regular > new)</li>
+                <li><strong>Dynamic Query Building:</strong> TinyDB compound queries generated from natural language filters</li>
+                <li><strong>Campaign Automation:</strong> Precise customer targeting with estimated value calculations</li>
+            </ul>
+
+            <h3>Why This Approach Works</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>Zero Learning Curve:</strong> Marketers ask questions in English, no coding required</li>
+                <li><strong>Transparent Operations:</strong> Generated code is visible before execution for trust</li>
+                <li><strong>Actionable Intelligence:</strong> Direct CRM integration with customer ID lists for campaigns</li>
+                <li><strong>Real-Time Updates:</strong> Database mutations tracked with before/after snapshots</li>
+            </ul>
+
+            <h3>Database Architecture Benefits</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>3-Table Design:</strong> Separation of concerns (orders read-only, customers/campaigns mutable)</li>
+                <li><strong>TinyDB Performance:</strong> In-memory operations for sub-second query execution</li>
+                <li><strong>JSON Flexibility:</strong> Schema-less design adapts to diverse customer attributes</li>
+                <li><strong>Auto-Incrementing IDs:</strong> Unique customer/campaign identifiers for tracking</li>
+            </ul>
+        </div>
+
+        <div class="demo-links">
+            <a href="https://colab.research.google.com/drive/1PiZk0nmzKrAxvKdCEKNoeMOMETdrzr-4" target="_blank" class="demo-btn">🚀 Try Live Demo</a>
+            <a href="customer-segmentation-agent.html" class="demo-btn secondary">📖 View Full Project Details</a>
+        </div>
+
+        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+            <a href="index.html">← Back to Portfolio</a> |
+            <a href="customer-segmentation-agent.html">View Project Overview</a>
+        </nav>
+    </div>
+</body>
+</html>
