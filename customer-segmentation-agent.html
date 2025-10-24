@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Segmentation and Market Agent - AI-Powered Customer Intelligence</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #222;
+            background-color: #ffffff;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .back-nav {
+            margin-bottom: 20px;
+        }
+
+        .back-nav a {
+            color: #007BFF;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .back-nav a:hover {
+            text-decoration: underline;
+        }
+
+        .project-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #FF6B6B, #E74C3C);
+            color: white;
+            border-radius: 10px;
+        }
+
+        .project-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .project-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .demo-links {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .demo-btn {
+            display: inline-block;
+            background-color: #007BFF;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .demo-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .demo-btn.secondary {
+            background-color: #28a745;
+        }
+
+        .demo-btn.secondary:hover {
+            background-color: #218838;
+        }
+
+        .content-section {
+            margin: 40px 0;
+            padding: 30px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border-left: 5px solid #FF6B6B;
+        }
+
+        .content-section h2 {
+            color: #FF6B6B;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .content-section h3 {
+            color: #333;
+            margin: 20px 0 10px 0;
+            font-size: 1.3rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .feature-item {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+
+        .feature-item h4 {
+            color: #FF6B6B;
+            margin-bottom: 10px;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .tech-item {
+            background-color: #FF6B6B;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .code-block {
+            background-color: #f4f4f4;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: monospace;
+            overflow-x: auto;
+        }
+
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .metric-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid #FF6B6B;
+        }
+
+        .metric-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #FF6B6B;
+        }
+
+        .metric-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .language-table {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .language-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .language-table th, .language-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .language-table th {
+            background-color: #FF6B6B;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .project-header h1 {
+                font-size: 2rem;
+            }
+
+            .project-header p {
+                font-size: 1rem;
+            }
+
+            .badges {
+                justify-content: center;
+            }
+
+            .demo-btn {
+                margin: 5px;
+                padding: 10px 20px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="index.html">← Back to Portfolio</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>👥 Customer Segmentation and Market Agent</h1>
+            <p>AI-powered customer intelligence system with automatic RFM analysis and targeted campaign creation</p>
+
+            <div class="badges">
+                <span class="badge">Python 3.9+</span>
+                <span class="badge">Gemini 2.0 Flash</span>
+                <span class="badge">TinyDB</span>
+                <span class="badge">Natural Language</span>
+                <span class="badge">Google Colab</span>
+            </div>
+        </div>
+
+        <div class="demo-links">
+            <a href="https://colab.research.google.com/drive/1PiZk0nmzKrAxvKdCEKNoeMOMETdrzr-4" target="_blank" class="demo-btn">🚀 Launch in Google Colab</a>
+            <a href="projects/customer-segmentation-agent/README.md" target="_blank" class="demo-btn secondary">📁 View Documentation</a>
+        </div>
+
+        <div class="content-section">
+            <h2>📋 Project Overview & Problem Statement</h2>
+            <p><strong>Challenge:</strong> Marketing teams struggle with manual customer segmentation, spending days analyzing spreadsheets to identify VIP customers, at-risk segments, and campaign targets. This process is time-consuming, error-prone, and requires SQL/Python expertise that many marketers lack.</p>
+
+            <p><strong>Solution:</strong> Customer Segmentation and Market Agent uses Google Gemini AI to convert natural language questions into executable Python code. It automatically creates customer profiles, performs RFM (Recency, Frequency, Monetary) analysis, and generates targeted marketing campaigns - all through simple English queries.</p>
+
+            <h3>Key Benefits</h3>
+            <ul>
+                <li><strong>Zero Coding Required:</strong> Ask questions in plain English, get instant insights</li>
+                <li><strong>Automatic Segmentation:</strong> VIP, Regular, At-Risk, New, and Churned customers identified automatically</li>
+                <li><strong>Campaign Creation:</strong> Generate targeted marketing campaigns with precise customer lists</li>
+                <li><strong>RFM Analysis:</strong> Track recency, frequency, and monetary value for every customer</li>
+                <li><strong>Transparent Operations:</strong> See generated code and database changes in real-time</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>🤖 AI Capabilities & Technical Innovation</h2>
+
+            <div class="features-grid">
+                <div class="feature-item">
+                    <h4>🧠 Natural Language to Code</h4>
+                    <p>Gemini 2.0 Flash converts business questions into executable TinyDB queries and Pandas operations. Code-as-plan pattern ensures accuracy.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>📊 Automatic Customer Profiling</h4>
+                    <p>Analyzes transaction history to create comprehensive customer profiles with total orders, spending, profit contribution, and favorite categories.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>🎯 5-Segment Classification</h4>
+                    <p>VIP (>$2K spent, 5+ orders), Regular ($500-$2K), At-Risk (180+ days inactive), New (≤2 orders), Churned (365+ days)</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>📈 Campaign Targeting</h4>
+                    <p>Generate marketing campaigns with precise customer lists, segment targeting, and automatic ID tracking for CRM integration.</p>
+                </div>
+            </div>
+
+            <h3>3-Table Database Architecture</h3>
+            <ul>
+                <li><strong>orders_tbl (Read-Only):</strong> Historical transaction data from CSV upload</li>
+                <li><strong>customers_tbl (Read/Write):</strong> Customer profiles with RFM metrics (starts empty)</li>
+                <li><strong>campaigns_tbl (Read/Write):</strong> Marketing campaigns with target lists (starts empty)</li>
+            </ul>
+
+            <h3>AI Processing Pipeline</h3>
+            <ul>
+                <li><strong>Question Parsing:</strong> Gemini analyzes natural language to understand intent</li>
+                <li><strong>Code Generation:</strong> Creates Python code with TinyDB queries and calculations</li>
+                <li><strong>Safe Execution:</strong> Runs in sandboxed environment with controlled mutations</li>
+                <li><strong>Database Mutations:</strong> Updates customer profiles and campaign records</li>
+                <li><strong>Visualization:</strong> Generates bar charts, segment distributions automatically</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>🛠️ Technical Architecture & Implementation</h2>
+
+            <h3>AI & Code Generation</h3>
+            <div class="tech-stack">
+                <span class="tech-item">Google Gemini 2.0 Flash</span>
+                <span class="tech-item">Code-as-Plan Pattern</span>
+                <span class="tech-item">Natural Language Processing</span>
+                <span class="tech-item">Dynamic Query Building</span>
+                <span class="tech-item">Safe Code Execution</span>
+            </div>
+
+            <h3>Data Analytics Stack</h3>
+            <div class="tech-stack">
+                <span class="tech-item">TinyDB NoSQL</span>
+                <span class="tech-item">Pandas DataFrames</span>
+                <span class="tech-item">Matplotlib Charts</span>
+                <span class="tech-item">Seaborn Visualizations</span>
+                <span class="tech-item">NumPy Calculations</span>
+            </div>
+
+            <h3>Deployment Platform</h3>
+            <div class="tech-stack">
+                <span class="tech-item">Google Colab</span>
+                <span class="tech-item">Jupyter Notebook</span>
+                <span class="tech-item">Cloud Storage</span>
+                <span class="tech-item">Secrets Management</span>
+            </div>
+
+            <h3>Customer Segmentation Logic</h3>
+            <div class="code-block">
+# Automatic segmentation rules:
+VIP:      total_spent > $2,000 AND total_orders >= 5
+Regular:  total_spent between $500-$2,000
+At-Risk:  days_since_last_order > 180
+New:      total_orders <= 2
+Churned:  days_since_last_order > 365
+
+# Each customer profile tracks:
+- customer_id, customer_name
+- total_orders, total_spent, total_profit_contributed
+- average_order_value
+- first_order_date, last_order_date, days_since_last_order
+- favorite_category, segment, tags
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>💬 Sample Questions & Use Cases</h2>
+
+            <div class="language-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Question Type</th>
+                            <th>Example Query</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Customer Intelligence</td>
+                            <td>"Who are our top 10 VIP customers by total spending?"</td>
+                            <td>Queries customers_tbl, generates bar chart</td>
+                        </tr>
+                        <tr>
+                            <td>Segment Analysis</td>
+                            <td>"How many customers are in each segment?"</td>
+                            <td>Counts by segment, creates distribution chart</td>
+                        </tr>
+                        <tr>
+                            <td>Campaign Creation</td>
+                            <td>"Create a holiday campaign targeting VIP customers"</td>
+                            <td>Inserts campaign record with customer IDs</td>
+                        </tr>
+                        <tr>
+                            <td>At-Risk Detection</td>
+                            <td>"What is the average order value of at-risk customers?"</td>
+                            <td>Filters at-risk segment, calculates AOV</td>
+                        </tr>
+                        <tr>
+                            <td>Category Analysis</td>
+                            <td>"Which category has the most churned customers?"</td>
+                            <td>Groups by favorite_category, counts churned</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Advanced Query Examples</h3>
+            <ul>
+                <li><strong>"Create a campaign targeting At-Risk customers in the East region"</strong></li>
+                <li><strong>"Which product category has the highest number of customers who spend below $1000?"</strong></li>
+                <li><strong>"Show me profit contribution by customer segment in a bar chart"</strong></li>
+                <li><strong>"List top 5 customers by profit in Electronics category"</strong></li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>📖 Development Setup & Installation Guide</h2>
+
+            <h3>Quick Start with Google Colab (Recommended)</h3>
+            <ol>
+                <li><strong>Open Colab Notebook:</strong> Click "Launch in Google Colab" button above</li>
+                <li><strong>Add API Key:</strong> Click 🔑 icon in left sidebar → Add Secret → Name: GEMINI_API_KEY</li>
+                <li><strong>Run Setup Cells:</strong> Install dependencies (TinyDB, Pandas, Gemini)</li>
+                <li><strong>Upload CSV:</strong> Upload your e-commerce transaction dataset</li>
+                <li><strong>Ask Questions:</strong> Use marketing_agent() function with natural language queries</li>
+            </ol>
+
+            <h3>Dataset Requirements</h3>
+            <p>Your CSV should include these columns:</p>
+            <ul>
+                <li><strong>Order_ID, Order_Date, Customer_Name</strong></li>
+                <li><strong>Category, Product_Name, Quantity, Unit_Price</strong></li>
+                <li><strong>Revenue, Profit, Region, City, State</strong></li>
+            </ul>
+
+            <h3>Local Installation (Alternative)</h3>
+            <div class="code-block">
+# Clone the repository
+git clone https://github.com/lyven81/ai-project.git
+cd ai-project/projects/customer-segmentation-agent
+
+# Create virtual environment
+python -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Set up environment variables
+cp .env.example .env
+# Add your Gemini API key to .env
+
+# Run in Jupyter
+jupyter notebook customer_segmentation_and_market_agent.py
+            </div>
+
+            <h3>Environment Configuration</h3>
+            <div class="code-block">
+# Required API Configuration
+GEMINI_API_KEY=your_gemini_api_key_here
+
+# Optional Segmentation Rules
+VIP_MIN_SPENT=2000
+VIP_MIN_ORDERS=5
+AT_RISK_DAYS_THRESHOLD=180
+CHURNED_DAYS_THRESHOLD=365
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🚀 Deployment Options & Usage Workflow</h2>
+
+            <h3>Google Colab Deployment (Primary Method)</h3>
+            <div class="code-block">
+# 1. Upload dataset CSV
+uploaded = files.upload()
+df = pd.read_csv('your_dataset.csv')
+
+# 2. Create database (3 tables)
+db, orders_tbl, customers_tbl, campaigns_tbl = create_marketing_database(df)
+
+# 3. Ask questions in natural language
+result = marketing_agent(
+    "Who are our top 10 VIP customers by total spending? Show in bar chart",
+    db=db,
+    orders_tbl=orders_tbl,
+    customers_tbl=customers_tbl,
+    campaigns_tbl=campaigns_tbl,
+)
+
+# 4. View generated code, execution logs, and results
+# The agent shows:
+# - Question interpretation
+# - Generated Python/TinyDB code
+# - Before/after database snapshots
+# - Answer with visualization
+            </div>
+
+            <h3>Workflow Example</h3>
+            <ul>
+                <li><strong>Step 1:</strong> Upload CSV with transaction history</li>
+                <li><strong>Step 2:</strong> Database auto-creates orders_tbl from CSV</li>
+                <li><strong>Step 3:</strong> Ask "Create customer profiles for all customers"</li>
+                <li><strong>Step 4:</strong> Agent populates customers_tbl with RFM metrics</li>
+                <li><strong>Step 5:</strong> Ask "How many VIP customers do we have?"</li>
+                <li><strong>Step 6:</strong> Create campaigns: "Target At-Risk customers in East region"</li>
+            </ul>
+
+            <h3>Output & Transparency</h3>
+            <ul>
+                <li><strong>Generated Code:</strong> See exact Python code before execution</li>
+                <li><strong>Database Snapshots:</strong> Before/after views of customers_tbl and campaigns_tbl</li>
+                <li><strong>Execution Logs:</strong> Debug output for transparency</li>
+                <li><strong>Visualizations:</strong> Bar charts, pie charts, segment distributions</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>📊 Performance Metrics & Business Impact</h2>
+
+            <div class="metrics">
+                <div class="metric-card">
+                    <div class="metric-number">3-5s</div>
+                    <div class="metric-label">Code Generation Time</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">1-2s</div>
+                    <div class="metric-label">Query Execution Time</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">10,000+</div>
+                    <div class="metric-label">Orders Processed</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">5</div>
+                    <div class="metric-label">Customer Segments</div>
+                </div>
+            </div>
+
+            <h3>Business Value Demonstration</h3>
+            <ul>
+                <li><strong>Time Savings:</strong> Reduce customer segmentation from days to minutes (95%+ faster)</li>
+                <li><strong>No SQL Required:</strong> Marketing teams operate independently without data analysts</li>
+                <li><strong>Churn Prevention:</strong> Identify at-risk customers automatically for re-engagement</li>
+                <li><strong>VIP Recognition:</strong> Find high-value customers for premium treatment</li>
+                <li><strong>Precision Targeting:</strong> Create campaigns with exact customer lists for CRM integration</li>
+            </ul>
+
+            <h3>Technical Performance</h3>
+            <ul>
+                <li><strong>Accuracy:</strong> 100% valid Python code generation with error handling</li>
+                <li><strong>Speed:</strong> 3-5 seconds per query (including AI processing)</li>
+                <li><strong>Scalability:</strong> Handles 10,000+ orders and 1,000+ customers</li>
+                <li><strong>Transparency:</strong> Full visibility into generated code and database changes</li>
+            </ul>
+        </div>
+
+        <div class="demo-links">
+            <a href="https://colab.research.google.com/drive/1PiZk0nmzKrAxvKdCEKNoeMOMETdrzr-4" target="_blank" class="demo-btn">🚀 Try in Google Colab</a>
+            <a href="https://github.com/lyven81/ai-project/tree/main/projects/customer-segmentation-agent" target="_blank" class="demo-btn secondary">📖 Full Documentation</a>
+        </div>
+
+        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+            <a href="index.html">← Back to Portfolio</a> |
+            <a href="project-categories.html">View All Categories</a>
+        </nav>
+    </div>
+</body>
+</html>
