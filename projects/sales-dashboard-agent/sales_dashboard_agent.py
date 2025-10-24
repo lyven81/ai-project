@@ -27,7 +27,7 @@ import google.generativeai as genai
 print("✅ All libraries imported successfully!")
 
 # Option 1: Direct API key (for testing)
-GEMINI_API_KEY = "AIzaSyBc6_k7gWDAwo0n442rOOqY8UTn_u33ME0"  # Replace with your key
+GEMINI_API_KEY = "AIzaSyBc6_k7gWDAwo0n442rOOqY8UTn_u133ME0"  # Replace with your key
 
 def print_html(content: str, title: str = ""):
     """
