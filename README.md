@@ -2,7 +2,7 @@
 
 [![Portfolio Website](https://img.shields.io/badge/Portfolio-Live-green?logo=vercel)](https://lyven81.github.io/ai-project/)
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-black?logo=github)](https://github.com/lyven81/ai-project)
-[![Projects](https://img.shields.io/badge/Projects-21-blue)](#-featured-projects)
+[![Projects](https://img.shields.io/badge/Projects-24-blue)](#-featured-projects)
 [![AI Powered](https://img.shields.io/badge/AI-Powered-orange?logo=tensorflow)](https://github.com/lyven81/ai-project)
 
 **Innovative AI Solutions for Modern Challenges** - A curated collection of production-ready AI applications showcasing expertise in computer vision, natural language processing, document processing, and creative AI technologies.
@@ -13,7 +13,7 @@
 
 ## 🌟 Portfolio Overview
 
-This repository contains **21 production-deployed AI applications** demonstrating proficiency across multiple AI domains. Each project includes comprehensive documentation, live demos, and complete source code with deployment configurations.
+This repository contains **24 production-deployed AI applications** demonstrating proficiency across multiple AI domains. Each project includes comprehensive documentation, live demos, and complete source code with deployment configurations.
 
 **🎯 Portfolio Highlights:**
 - **15+ AI Technologies** integrated across projects
@@ -81,6 +81,24 @@ This repository contains **21 production-deployed AI applications** demonstratin
 - **Live Demo:** [Google Colab](https://colab.research.google.com/drive/1ZTfYPQZXObgxqk3hawGu9Sm33EjJX2xA)
 - **Tech Stack:** Python, Gemini 2.0 Flash, Pandas, NumPy, Matplotlib, Seaborn
 - **AI Capabilities:** Natural language to code generation, automated time series analysis, revenue trends, customer segmentation, profit margin analysis, correlation analysis, self-correcting with error handling
+
+#### [Stock Analysis Agent](./projects/stock-analysis-agent/)
+**Multi-agent investment research system with automated stock screening and fundamental analysis**
+- **Live Demo:** [Google Colab](https://colab.research.google.com/drive/1Wji69Sq-IqhtMEJTlxIkQ39ZZ5JAXR6w)
+- **Tech Stack:** Python, Gemini 2.0 Flash, Yahoo Finance API, Tavily API, Matplotlib
+- **AI Capabilities:** 5-agent architecture (screening, fundamentals, business moat, dividends, reporting), investment yardstick scoring (0-100 points), web-powered competitive analysis, automated report generation with visualizations, Malaysian stock market analysis
+
+#### [Sales Dashboard Agent](./projects/sales-dashboard-agent/)
+**Natural language to code analytics with automated visualizations using code-as-plan pattern**
+- **Live Demo:** [Google Colab](https://colab.research.google.com/drive/1ssz7RkCySo4fhzkLdCs5c7gCgkP7ypv7)
+- **Tech Stack:** Python, Gemini 2.0 Flash, TinyDB, Pandas, Matplotlib, Seaborn
+- **AI Capabilities:** Business question interpretation, Python code generation, safe execution sandbox, automated chart creation (bar/line/scatter), revenue/profit/customer analytics, read-only database security
+
+#### [Science Learning Materials Builder](./projects/science-learning-materials-builder/)
+**4-agent educational content generator for age-appropriate science lessons aligned with NGSS standards**
+- **Live Demo:** [Google Colab](https://colab.research.google.com/drive/1p390KHKMQ9xcaDQ7eQTQJjdlX1JTxpmn)
+- **Tech Stack:** Python, Gemini 2.0 Flash, Tavily API, WeasyPrint, Markdown Processing
+- **AI Capabilities:** Curriculum research (web search + NGSS validation), visual illustration prompts, 3rd-grade reading level content writing, quiz generation (5 MC + 2 SA), hands-on activities, markdown + PDF export
 
 ### 🤖 Conversational AI & Specialized Chatbots
 
@@ -213,6 +231,9 @@ ai-project/
 │   ├── expense-tracker-ai/      # AI-powered expense tracking
 │   ├── pdf-to-audio-reader/     # PDF to audio conversion with AI
 │   ├── time-series-analysis-agent/ # Natural language data analytics
+│   ├── stock-analysis-agent/    # Multi-agent stock analysis
+│   ├── sales-dashboard-agent/   # Natural language analytics
+│   ├── science-learning-materials-builder/ # Educational content generator
 │   ├── chinese-calender/        # Conversational AI traditional calendar
 │   ├── horoscope-chatbot/       # Astrology consultation AI
 │   ├── fengshui-chatbot/        # Feng Shui advisory AI
@@ -270,6 +291,9 @@ All projects are production-deployed and accessible via live demos:
 | Expense Tracker AI | [Launch App](https://expense-tracker-ai-169218045868.us-west1.run.app/) | Document Processing |
 | PDF-to-Audio Reader | [Launch App](https://pdf-to-audio-reader-169218045868.us-west1.run.app/) | Document Processing |
 | Time Series Analysis Agent | [Launch in Colab](https://colab.research.google.com/drive/1ZTfYPQZXObgxqk3hawGu9Sm33EjJX2xA) | Business Intelligence |
+| Stock Analysis Agent | [Launch in Colab](https://colab.research.google.com/drive/1Wji69Sq-IqhtMEJTlxIkQ39ZZ5JAXR6w) | Business Intelligence |
+| Sales Dashboard Agent | [Launch in Colab](https://colab.research.google.com/drive/1ssz7RkCySo4fhzkLdCs5c7gCgkP7ypv7) | Business Intelligence |
+| Science Learning Materials Builder | [Launch in Colab](https://colab.research.google.com/drive/1p390KHKMQ9xcaDQ7eQTQJjdlX1JTxpmn) | Business Intelligence |
 | Chinese Traditional Calendar | [Launch App](https://chinese-calender-169218045868.asia-southeast1.run.app/) | Conversational AI |
 | Astrology Consultant | [Launch App](https://horoscope-chatbot-218391175125.asia-southeast1.run.app/) | Conversational AI |
 | Feng Shui Consultant | [Launch App](https://fengshui-chatbot-218391175125.asia-southeast1.run.app/) | Conversational AI |

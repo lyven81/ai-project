@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Dashboard Agent - Source Code</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #222;
+            background-color: #ffffff;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .back-nav {
+            margin-bottom: 20px;
+        }
+
+        .back-nav a {
+            color: #007BFF;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .back-nav a:hover {
+            text-decoration: underline;
+        }
+
+        .project-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #F59E0B, #D97706);
+            color: white;
+            border-radius: 10px;
+        }
+
+        .project-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .project-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .content-section {
+            margin: 40px 0;
+            padding: 30px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border-left: 5px solid #F59E0B;
+        }
+
+        .content-section h2 {
+            color: #F59E0B;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .content-section h3 {
+            color: #333;
+            margin: 20px 0 10px 0;
+            font-size: 1.3rem;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #FFF8E1, #FFF3C4);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #F59E0B;
+            margin: 20px 0;
+        }
+
+        .code-container {
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        .code-header {
+            color: #569cd6;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .code-block {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #d4d4d4;
+        }
+
+        .code-comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+
+        .code-keyword {
+            color: #569cd6;
+        }
+
+        .code-string {
+            color: #ce9178;
+        }
+
+        .code-function {
+            color: #dcdcaa;
+        }
+
+        .code-number {
+            color: #b5cea8;
+        }
+
+        .demo-links {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .demo-btn {
+            display: inline-block;
+            background-color: #F59E0B;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .demo-btn:hover {
+            background-color: #D97706;
+        }
+
+        .demo-btn.secondary {
+            background-color: #3B82F6;
+        }
+
+        .demo-btn.secondary:hover {
+            background-color: #2563EB;
+        }
+
+        @media (max-width: 768px) {
+            .project-header h1 {
+                font-size: 2rem;
+            }
+
+            .project-header p {
+                font-size: 1rem;
+            }
+
+            .demo-btn {
+                margin: 5px;
+                padding: 10px 20px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="sales-dashboard-agent.html">← Back to Project Overview</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>📊 Sales Dashboard Agent</h1>
+            <p>Core Source Code & Natural Language to Code Implementation</p>
+
+            <div class="badges">
+                <span class="badge">Python 3.8+</span>
+                <span class="badge">Gemini 2.0 Flash</span>
+                <span class="badge">TinyDB</span>
+                <span class="badge">Code-as-Plan</span>
+            </div>
+        </div>
+
+        <div class="highlight-box">
+            <h3>🔍 About This Code Showcase</h3>
+            <p><strong>This curated code snippet demonstrates how the Sales Dashboard Agent converts natural language business questions into executable Python analytics code using the "code-as-plan" pattern.</strong></p>
+            <p>Full deployment scripts, API keys, and proprietary prompt engineering are omitted for security. This showcase highlights the core natural language processing, code generation, and safe execution sandbox.</p>
+        </div>
+
+        <div class="content-section">
+            <h2>📖 Core Algorithm: Natural Language to Code Engine</h2>
+            <p>The foundation of the Sales Dashboard Agent is its ability to understand business questions and generate executable Python code dynamically:</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 sales_dashboard_agent.py</div>
+                <div class="code-block">
+<span class="code-keyword">import</span> google.generativeai <span class="code-keyword">as</span> genai
+<span class="code-keyword">from</span> tinydb <span class="code-keyword">import</span> TinyDB, Query
+<span class="code-keyword">import</span> pandas <span class="code-keyword">as</span> pd
+<span class="code-keyword">import</span> matplotlib.pyplot <span class="code-keyword">as</span> plt
+<span class="code-keyword">import</span> seaborn <span class="code-keyword">as</span> sns
+<span class="code-keyword">from</span> typing <span class="code-keyword">import</span> Dict, Any
+<span class="code-keyword">import</span> re
+
+<span class="code-keyword">class</span> <span class="code-function">SalesDashboardAgent</span>:
+    <span class="code-string">"""
+    Natural language to code AI agent for business analytics.
+    Converts plain English questions into executable Python code
+    using TinyDB for data access and Matplotlib for visualizations.
+    """</span>
+
+    <span class="code-keyword">def</span> <span class="code-function">__init__</span>(self, gemini_api_key: str, db: TinyDB):
+        genai.configure(api_key=gemini_api_key)
+        self.model = genai.GenerativeModel(<span class="code-string">'gemini-2.0-flash-exp'</span>)
+        self.db = db
+        self.orders_tbl = db.table(<span class="code-string">'orders'</span>)
+
+        <span class="code-comment"># Get sample data for prompt context</span>
+        self.sample_records = self.orders_tbl.all()[:<span class="code-number">3</span>]
+
+        <span class="code-comment"># Safe execution namespace (read-only operations only)</span>
+        self.safe_globals = {
+            <span class="code-string">'Query'</span>: Query,
+            <span class="code-string">'orders_tbl'</span>: self.orders_tbl,
+            <span class="code-string">'sum'</span>: sum,
+            <span class="code-string">'len'</span>: len,
+            <span class="code-string">'max'</span>: max,
+            <span class="code-string">'min'</span>: min,
+            <span class="code-string">'sorted'</span>: sorted,
+            <span class="code-string">'defaultdict'</span>: <span class="code-keyword">lambda</span>: <span class="code-keyword">None</span>,  <span class="code-comment"># Import on demand</span>
+            <span class="code-string">'plt'</span>: plt,
+            <span class="code-string">'sns'</span>: sns,
+            <span class="code-string">'pd'</span>: pd
+        }
+
+    <span class="code-keyword">def</span> <span class="code-function">sales_dashboard_agent</span>(self, user_question: str) -> Dict[str, Any]:
+        <span class="code-string">"""
+        Main agent function that processes natural language queries.
+
+        Args:
+            user_question: Business question in plain English
+                          e.g., "What were total sales in November 2024?"
+
+        Returns:
+            Dictionary with answer, generated code, and visualization (if any)
+        """</span>
+
+        print(<span class="code-string">f"📊 Processing question: {user_question}"</span>)
+
+        <span class="code-comment"># Step 1: Generate Python code from natural language</span>
+        generated_code = self._generate_analytics_code(user_question)
+
+        print(<span class="code-string">f"\n🔧 Generated Code:\n{generated_code}\n"</span>)
+
+        <span class="code-comment"># Step 2: Execute code in sandboxed environment</span>
+        execution_result = self._execute_code_safely(generated_code)
+
+        <span class="code-comment"># Step 3: Extract answer and return results</span>
+        <span class="code-keyword">return</span> {
+            <span class="code-string">'question'</span>: user_question,
+            <span class="code-string">'generated_code'</span>: generated_code,
+            <span class="code-string">'answer'</span>: execution_result.get(<span class="code-string">'answer_text'</span>, <span class="code-string">'No answer generated'</span>),
+            <span class="code-string">'has_visualization'</span>: execution_result.get(<span class="code-string">'has_chart'</span>, <span class="code-keyword">False</span>),
+            <span class="code-string">'success'</span>: execution_result.get(<span class="code-string">'success'</span>, <span class="code-keyword">False</span>)
+        }
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🧠 Code Generation Engine (Prompt Engineering)</h2>
+            <p>The code generation engine uses carefully crafted prompts with data schema, examples, and constraints to guide Gemini AI:</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 code_generator.py</div>
+                <div class="code-block">
+<span class="code-keyword">def</span> <span class="code-function">_generate_analytics_code</span>(self, user_question: str) -> str:
+    <span class="code-string">"""
+    Generate executable Python code from natural language question.
+    Uses Gemini AI with structured prompt including schema and examples.
+    """</span>
+
+    <span class="code-comment"># Build comprehensive prompt with context</span>
+    prompt = f<span class="code-string">"""
+You are a Python code generator for sales data analytics using TinyDB.
+
+DATABASE SCHEMA:
+Table: orders_tbl
+Fields:
+- Order_ID (int): Unique order identifier
+- Order_Date (str): Date in YYYY-MM-DD format
+- Customer_Name (str): Customer name
+- City (str): Customer city
+- State (str): Customer state
+- Region (str): Geographic region (East, West, Centre, South)
+- Country (str): Country (e.g., "United States")
+- Category (str): Product category (Electronics, Clothing, Accessories, etc.)
+- Sub_Category (str): Detailed product sub-category
+- Product_Name (str): Specific product name
+- Quantity (int): Number of units ordered
+- Unit_Price (float): Price per unit in USD
+- Revenue (float): Total revenue (Quantity × Unit_Price)
+- Profit (float): Profit from order
+
+SAMPLE DATA:
+{self._format_sample_data(self.sample_records)}
+
+USER QUESTION:
+{user_question}
+
+AVAILABLE TOOLS:
+- TinyDB Query object: Query()
+- orders_tbl: TinyDB table with search(), all(), get() methods
+- Python builtins: sum(), len(), max(), min(), sorted()
+- collections.defaultdict for aggregations
+- matplotlib.pyplot (plt) for charts
+- seaborn (sns) for enhanced visualizations
+
+CODE GENERATION RULES:
+
+1. QUERY PATTERNS:
+   - Filter by date: Item.Order_Date >= '2024-11-01'
+   - Filter by category: Item.Category == 'Electronics'
+   - Multiple conditions: (Item.Region == 'West') & (Item.Revenue > 1000)
+
+2. AGGREGATION PATTERNS:
+   - Total revenue: sum(order['Revenue'] for order in orders_tbl.all())
+   - Count orders: len(orders_tbl.all())
+   - Group by category:
+     from collections import defaultdict
+     category_revenue = defaultdict(float)
+     for order in orders_tbl.all():
+         category_revenue[order['Category']] += order['Revenue']
+
+3. VISUALIZATION (if requested):
+   - Bar chart example:
+     plt.figure(figsize=(10, 6))
+     plt.bar(regions, revenues, color='steelblue')
+     plt.title('Revenue by Region', fontsize=14, fontweight='bold')
+     plt.xlabel('Region')
+     plt.ylabel('Revenue ($)')
+     plt.show()
+
+4. MANDATORY OUTPUT:
+   - ALWAYS set answer_text variable with human-friendly summary
+   - Example: answer_text = f"Total revenue in Nov 2024: ${{revenue:,.2f}}"
+   - Include relevant metrics and context
+
+5. SAFETY CONSTRAINTS:
+   - READ-ONLY operations only (no insert, update, delete)
+   - No file system access
+   - No network requests
+   - No dangerous imports
+
+GENERATE PYTHON CODE:
+Write clean, efficient code that answers the question.
+Remember to set answer_text with the final answer!
+"""</span>
+
+    <span class="code-comment"># Call Gemini to generate code</span>
+    response = self.model.generate_content(prompt)
+    generated_code = self._extract_code_from_response(response.text)
+
+    <span class="code-keyword">return</span> generated_code
+
+<span class="code-keyword">def</span> <span class="code-function">_extract_code_from_response</span>(self, response_text: str) -> str:
+    <span class="code-string">"""Extract Python code from markdown code blocks."""</span>
+
+    <span class="code-comment"># Look for ```python code blocks</span>
+    code_pattern = <span class="code-string">r'```python\n(.*?)\n```'</span>
+    matches = re.findall(code_pattern, response_text, re.DOTALL)
+
+    <span class="code-keyword">if</span> matches:
+        <span class="code-keyword">return</span> matches[<span class="code-number">0</span>].strip()
+
+    <span class="code-comment"># Fallback: return entire response if no code blocks found</span>
+    <span class="code-keyword">return</span> response_text.strip()
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🔒 Safe Code Execution Sandbox</h2>
+            <p>The execution sandbox ensures code runs safely with read-only access and controlled namespace:</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 safe_executor.py</div>
+                <div class="code-block">
+<span class="code-keyword">def</span> <span class="code-function">_execute_code_safely</span>(self, code: str) -> Dict[str, Any]:
+    <span class="code-string">"""
+    Execute generated code in sandboxed environment.
+
+    Security features:
+    - Controlled namespace (safe_globals only)
+    - No dangerous imports
+    - Read-only database access
+    - Exception handling
+    """</span>
+
+    <span class="code-comment"># Prepare safe execution namespace</span>
+    exec_namespace = self.safe_globals.copy()
+
+    <span class="code-comment"># Add defaultdict if needed</span>
+    <span class="code-keyword">if</span> <span class="code-string">'defaultdict'</span> <span class="code-keyword">in</span> code:
+        <span class="code-keyword">from</span> collections <span class="code-keyword">import</span> defaultdict
+        exec_namespace[<span class="code-string">'defaultdict'</span>] = defaultdict
+
+    <span class="code-comment"># Initialize result variables</span>
+    exec_namespace[<span class="code-string">'answer_text'</span>] = <span class="code-string">"No answer generated"</span>
+    has_chart = <span class="code-keyword">False</span>
+
+    <span class="code-keyword">try</span>:
+        <span class="code-comment"># Validate code safety before execution</span>
+        <span class="code-keyword">if</span> self._is_code_safe(code):
+            <span class="code-comment"># Execute code in controlled namespace</span>
+            exec(code, exec_namespace)
+
+            <span class="code-comment"># Check if visualization was created</span>
+            <span class="code-keyword">if</span> <span class="code-string">'plt.show()'</span> <span class="code-keyword">in</span> code:
+                has_chart = <span class="code-keyword">True</span>
+
+            <span class="code-keyword">return</span> {
+                <span class="code-string">'success'</span>: <span class="code-keyword">True</span>,
+                <span class="code-string">'answer_text'</span>: exec_namespace.get(<span class="code-string">'answer_text'</span>),
+                <span class="code-string">'has_chart'</span>: has_chart
+            }
+        <span class="code-keyword">else</span>:
+            <span class="code-keyword">return</span> {
+                <span class="code-string">'success'</span>: <span class="code-keyword">False</span>,
+                <span class="code-string">'answer_text'</span>: <span class="code-string">"⚠️ Code contains unsafe operations"</span>,
+                <span class="code-string">'has_chart'</span>: <span class="code-keyword">False</span>
+            }
+
+    <span class="code-keyword">except</span> Exception <span class="code-keyword">as</span> e:
+        print(<span class="code-string">f"❌ Execution error: {e}"</span>)
+        <span class="code-keyword">return</span> {
+            <span class="code-string">'success'</span>: <span class="code-keyword">False</span>,
+            <span class="code-string">'answer_text'</span>: f<span class="code-string">"Error executing code: {str(e)}"</span>,
+            <span class="code-string">'has_chart'</span>: <span class="code-keyword">False</span>
+        }
+
+<span class="code-keyword">def</span> <span class="code-function">_is_code_safe</span>(self, code: str) -> bool:
+    <span class="code-string">"""
+    Validate code for safety before execution.
+    Blocks dangerous operations like file I/O, network calls, etc.
+    """</span>
+
+    <span class="code-comment"># Blocked operations (blacklist)</span>
+    dangerous_patterns = [
+        <span class="code-string">'open('</span>,           <span class="code-comment"># File operations</span>
+        <span class="code-string">'import os'</span>,       <span class="code-comment"># OS access</span>
+        <span class="code-string">'import sys'</span>,      <span class="code-comment"># System access</span>
+        <span class="code-string">'import subprocess'</span>, <span class="code-comment"># Shell commands</span>
+        <span class="code-string">'eval('</span>,          <span class="code-comment"># Dynamic code execution</span>
+        <span class="code-string">'exec('</span>,          <span class="code-comment"># Dynamic code execution</span>
+        <span class="code-string">'__import__'</span>,     <span class="code-comment"># Dynamic imports</span>
+        <span class="code-string">'.insert('</span>,       <span class="code-comment"># Database mutations</span>
+        <span class="code-string">'.update('</span>,       <span class="code-comment"># Database mutations</span>
+        <span class="code-string">'.delete('</span>,       <span class="code-comment"># Database mutations</span>
+        <span class="code-string">'requests.'</span>,      <span class="code-comment"># Network requests</span>
+        <span class="code-string">'urllib'</span>,         <span class="code-comment"># Network requests</span>
+    ]
+
+    <span class="code-keyword">for</span> pattern <span class="code-keyword">in</span> dangerous_patterns:
+        <span class="code-keyword">if</span> pattern <span class="code-keyword">in</span> code:
+            print(<span class="code-string">f"⚠️ Blocked dangerous operation: {pattern}"</span>)
+            <span class="code-keyword">return</span> <span class="code-keyword">False</span>
+
+    <span class="code-keyword">return</span> <span class="code-keyword">True</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>📊 Example: Revenue Analysis Query</h2>
+            <p>Here's a complete example showing how the agent processes a business question:</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 example_query.py</div>
+                <div class="code-block">
+<span class="code-comment"># USER ASKS:</span>
+user_question = <span class="code-string">"What were our total sales in November 2024?"</span>
+
+<span class="code-comment"># AGENT GENERATES THIS CODE:</span>
+generated_code = <span class="code-string">"""
+Item = Query()
+
+# Filter orders for November 2024
+nov_orders = orders_tbl.search(
+    (Item.Order_Date >= '2024-11-01') &
+    (Item.Order_Date <= '2024-11-30')
+)
+
+# Calculate total revenue
+nov_revenue = sum(order['Revenue'] for order in nov_orders)
+order_count = len(nov_orders)
+
+# Format answer
+answer_text = f"November 2024: ${nov_revenue:,.2f} from {order_count} orders."
+"""</span>
+
+<span class="code-comment"># CODE EXECUTES SAFELY:</span>
+result = agent.sales_dashboard_agent(user_question)
+
+<span class="code-comment"># OUTPUT:</span>
+print(result[<span class="code-string">'answer'</span>])
+<span class="code-comment"># "November 2024: $1,234,567.89 from 2,845 orders."</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>📈 Example: Visualization Request</h2>
+            <p>When users request charts, the agent generates complete Matplotlib code:</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 visualization_example.py</div>
+                <div class="code-block">
+<span class="code-comment"># USER ASKS:</span>
+user_question = <span class="code-string">"Show me a bar chart of total revenue by region"</span>
+
+<span class="code-comment"># AGENT GENERATES THIS CODE:</span>
+generated_code = <span class="code-string">"""
+import matplotlib.pyplot as plt
+
+# Aggregate revenue by region
+region_revenue = {}
+for order in orders_tbl.all():
+    region = order['Region']
+    revenue = order['Revenue']
+    region_revenue[region] = region_revenue.get(region, 0) + revenue
+
+# Prepare data for plotting
+regions = list(region_revenue.keys())
+revenues = list(region_revenue.values())
+
+# Create bar chart
+plt.figure(figsize=(10, 6))
+plt.bar(regions, revenues, color=['#3B82F6', '#10B981', '#F59E0B', '#EF4444'])
+plt.title('Total Revenue by Region', fontsize=14, fontweight='bold')
+plt.xlabel('Region', fontsize=12)
+plt.ylabel('Revenue ($)', fontsize=12)
+plt.grid(axis='y', alpha=0.3)
+
+# Format y-axis as currency
+ax = plt.gca()
+ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda x, p: f'${x:,.0f}'))
+
+plt.tight_layout()
+plt.show()
+
+# Generate summary
+max_region = max(region_revenue.items(), key=lambda x: x[1])
+answer_text = f"West region leads with ${max_region[1]:,.2f} in total revenue."
+"""</span>
+
+<span class="code-comment"># CODE EXECUTES AND DISPLAYS CHART:</span>
+result = agent.sales_dashboard_agent(user_question)
+
+<span class="code-comment"># OUTPUT:</span>
+<span class="code-comment"># - Bar chart displayed in notebook</span>
+<span class="code-comment"># - Answer: "West region leads with $2,345,678.90 in total revenue."</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>⚙️ Technical Implementation Notes</h2>
+            <h3>Key Algorithms & Innovations</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>Code-as-Plan Pattern:</strong> AI generates executable code instead of just answers for full transparency</li>
+                <li><strong>Prompt Engineering:</strong> Comprehensive prompts with schema, examples, and constraints guide code generation</li>
+                <li><strong>Safe Execution Sandbox:</strong> Controlled namespace prevents dangerous operations (file I/O, network, mutations)</li>
+                <li><strong>TinyDB Integration:</strong> In-memory document database enables fast analytics on order data</li>
+                <li><strong>Auto-Visualization:</strong> Detects chart requests and generates complete Matplotlib code</li>
+                <li><strong>Error Handling:</strong> Robust exception handling with user-friendly error messages</li>
+            </ul>
+
+            <h3>Why This Approach Works</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>Transparency:</strong> Users see exact code generated, can verify and learn from it</li>
+                <li><strong>Flexibility:</strong> Handles arbitrary business questions without pre-defined queries</li>
+                <li><strong>Fast Iteration:</strong> 1-3 seconds from question to answer with visualization</li>
+                <li><strong>Safety First:</strong> Sandboxed execution prevents data corruption or security issues</li>
+                <li><strong>Educational Value:</strong> Users learn Python and data analytics from generated code</li>
+            </ul>
+
+            <h3>Supported Query Types</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>Aggregations:</strong> Total revenue, profit, quantity, average order value</li>
+                <li><strong>Filtering:</strong> By date range, region, category, customer, product</li>
+                <li><strong>Grouping:</strong> Revenue by region/category/product/customer</li>
+                <li><strong>Top N:</strong> Best-selling products, top customers, highest profit items</li>
+                <li><strong>Calculations:</strong> Profit margins, growth rates, percentage comparisons</li>
+                <li><strong>Visualizations:</strong> Bar charts, line charts, scatter plots, tables</li>
+            </ul>
+
+            <h3>Security Features</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>Blacklist Validation:</strong> Blocks dangerous operations before execution</li>
+                <li><strong>Read-Only Database:</strong> No insert, update, or delete operations allowed</li>
+                <li><strong>Controlled Imports:</strong> Only approved libraries (pandas, matplotlib, TinyDB)</li>
+                <li><strong>No File Access:</strong> Cannot read/write files or access filesystem</li>
+                <li><strong>No Network Access:</strong> Cannot make HTTP requests or external calls</li>
+                <li><strong>Exception Isolation:</strong> Errors don't crash main application</li>
+            </ul>
+        </div>
+
+        <div class="demo-links">
+            <a href="https://colab.research.google.com/drive/1ssz7RkCySo4fhzkLdCs5c7gCgkP7ypv7" target="_blank" class="demo-btn">🚀 Try Live Demo</a>
+            <a href="sales-dashboard-agent.html" class="demo-btn secondary">📖 View Full Project Details</a>
+        </div>
+
+        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+            <a href="index.html">← Back to Portfolio</a> |
+            <a href="sales-dashboard-agent.html">View Project Overview</a>
+        </nav>
+    </div>
+</body>
+</html>

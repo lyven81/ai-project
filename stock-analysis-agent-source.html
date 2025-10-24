@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Analysis Agent - Source Code</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #222;
+            background-color: #ffffff;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .back-nav {
+            margin-bottom: 20px;
+        }
+
+        .back-nav a {
+            color: #007BFF;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .back-nav a:hover {
+            text-decoration: underline;
+        }
+
+        .project-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #10B981, #059669);
+            color: white;
+            border-radius: 10px;
+        }
+
+        .project-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .project-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .content-section {
+            margin: 40px 0;
+            padding: 30px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border-left: 5px solid #10B981;
+        }
+
+        .content-section h2 {
+            color: #10B981;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .content-section h3 {
+            color: #333;
+            margin: 20px 0 10px 0;
+            font-size: 1.3rem;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #FFF8E1, #FFF3C4);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #10B981;
+            margin: 20px 0;
+        }
+
+        .code-container {
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        .code-header {
+            color: #569cd6;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .code-block {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #d4d4d4;
+        }
+
+        .code-comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+
+        .code-keyword {
+            color: #569cd6;
+        }
+
+        .code-string {
+            color: #ce9178;
+        }
+
+        .code-function {
+            color: #dcdcaa;
+        }
+
+        .code-number {
+            color: #b5cea8;
+        }
+
+        .demo-links {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .demo-btn {
+            display: inline-block;
+            background-color: #10B981;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .demo-btn:hover {
+            background-color: #059669;
+        }
+
+        .demo-btn.secondary {
+            background-color: #3B82F6;
+        }
+
+        .demo-btn.secondary:hover {
+            background-color: #2563EB;
+        }
+
+        @media (max-width: 768px) {
+            .project-header h1 {
+                font-size: 2rem;
+            }
+
+            .project-header p {
+                font-size: 1rem;
+            }
+
+            .demo-btn {
+                margin: 5px;
+                padding: 10px 20px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="stock-analysis-agent.html">← Back to Project Overview</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>📈 Stock Analysis Agent</h1>
+            <p>Core Source Code & Multi-Agent Investment Research Implementation</p>
+
+            <div class="badges">
+                <span class="badge">Python 3.8+</span>
+                <span class="badge">Gemini 2.0 Flash</span>
+                <span class="badge">Multi-Agent</span>
+                <span class="badge">Yahoo Finance</span>
+            </div>
+        </div>
+
+        <div class="highlight-box">
+            <h3>🔍 About This Code Showcase</h3>
+            <p><strong>This curated code snippet demonstrates how the Stock Analysis Agent coordinates 5 specialized AI agents to automate investment research, fundamental analysis, and report generation for Malaysian stocks.</strong></p>
+            <p>Full deployment scripts, API keys, and proprietary screening algorithms are omitted for security. This showcase highlights the core multi-agent orchestration and investment yardstick scoring system.</p>
+        </div>
+
+        <div class="content-section">
+            <h2>📖 Core Algorithm: Multi-Agent Orchestration Engine</h2>
+            <p>The foundation of the Stock Analysis Agent is its ability to coordinate 5 specialized AI agents that work sequentially to perform comprehensive stock analysis:</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 stock_analysis_pipeline.py</div>
+                <div class="code-block">
+<span class="code-keyword">import</span> google.generativeai <span class="code-keyword">as</span> genai
+<span class="code-keyword">import</span> yfinance <span class="code-keyword">as</span> yf
+<span class="code-keyword">from</span> tavily <span class="code-keyword">import</span> TavilyClient
+<span class="code-keyword">from</span> typing <span class="code-keyword">import</span> Dict, List, Optional
+<span class="code-keyword">import</span> json
+
+<span class="code-keyword">class</span> <span class="code-function">StockAnalysisPipeline</span>:
+    <span class="code-string">"""
+    Multi-agent orchestration system for comprehensive stock analysis.
+    Coordinates 5 specialized AI agents for screening, fundamental analysis,
+    business moat research, dividend evaluation, and report generation.
+    """</span>
+
+    <span class="code-keyword">def</span> <span class="code-function">__init__</span>(self, gemini_api_key: str, tavily_api_key: str):
+        genai.configure(api_key=gemini_api_key)
+        self.model = genai.GenerativeModel(<span class="code-string">'gemini-2.0-flash-exp'</span>)
+        self.tavily = TavilyClient(api_key=tavily_api_key)
+
+        <span class="code-comment"># Investment yardstick scoring criteria (7 categories, 100 points total)</span>
+        self.scoring_categories = {
+            <span class="code-string">'fundamentals_profitability'</span>: <span class="code-number">20</span>,  <span class="code-comment"># ROE, EPS, margins</span>
+            <span class="code-string">'financial_health'</span>: <span class="code-number">15</span>,           <span class="code-comment"># Debt, current ratio</span>
+            <span class="code-string">'valuation'</span>: <span class="code-number">20</span>,                  <span class="code-comment"># PE, P/B, P/S ratios</span>
+            <span class="code-string">'business_moat'</span>: <span class="code-number">15</span>,              <span class="code-comment"># Competitive advantages</span>
+            <span class="code-string">'dividends_cashflow'</span>: <span class="code-number">15</span>,         <span class="code-comment"># Dividend sustainability</span>
+            <span class="code-string">'management_outlook'</span>: <span class="code-number">10</span>,         <span class="code-comment"># Track record, governance</span>
+            <span class="code-string">'liquidity'</span>: <span class="code-number">5</span>                    <span class="code-comment"># Trading volume</span>
+        }
+
+    <span class="code-keyword">async</span> <span class="code-function">run_stock_analysis_pipeline</span>(self, ticker: str) -> Dict:
+        <span class="code-string">"""
+        Execute complete 5-agent analysis pipeline for a stock.
+
+        Args:
+            ticker: Stock symbol (e.g., '1818.KL' for Bursa Malaysia)
+
+        Returns:
+            Complete investment analysis with scoring and recommendation
+        """</span>
+
+        print(f<span class="code-string">"🔍 Starting analysis for {ticker}..."</span>)
+
+        <span class="code-comment"># Step 1: Fetch real-time financial data</span>
+        stock_data = self._fetch_stock_data(ticker)
+        <span class="code-keyword">if</span> <span class="code-keyword">not</span> stock_data[<span class="code-string">'valid'</span>]:
+            <span class="code-keyword">return</span> {<span class="code-string">'error'</span>: <span class="code-string">'Failed to fetch stock data'</span>}
+
+        <span class="code-comment"># Step 2: Agent 1 - Stock Screener (validate investment criteria)</span>
+        screening_result = <span class="code-keyword">await</span> self._agent_stock_screener(stock_data)
+        <span class="code-keyword">if</span> <span class="code-keyword">not</span> screening_result[<span class="code-string">'passed'</span>]:
+            <span class="code-keyword">return</span> {
+                <span class="code-string">'ticker'</span>: ticker,
+                <span class="code-string">'screening'</span>: screening_result,
+                <span class="code-string">'recommendation'</span>: <span class="code-string">'FAIL - Does not meet investment criteria'</span>
+            }
+
+        <span class="code-comment"># Step 3: Agent 2 - Fundamental Analyst (score 55 points)</span>
+        fundamental_analysis = <span class="code-keyword">await</span> self._agent_fundamental_analyst(stock_data)
+
+        <span class="code-comment"># Step 4: Agent 3 - Business Moat Analyst (score 15 points via web research)</span>
+        moat_analysis = <span class="code-keyword">await</span> self._agent_business_moat(ticker, stock_data)
+
+        <span class="code-comment"># Step 5: Agent 4 - Dividend & Cash Flow Analyst (score 15 points)</span>
+        dividend_analysis = <span class="code-keyword">await</span> self._agent_dividend_cashflow(stock_data)
+
+        <span class="code-comment"># Step 6: Calculate total yardstick score (0-100)</span>
+        total_score = self._calculate_total_score(
+            fundamental_analysis,
+            moat_analysis,
+            dividend_analysis
+        )
+
+        <span class="code-comment"># Step 7: Agent 5 - Investment Report Generator</span>
+        report = <span class="code-keyword">await</span> self._agent_report_generator(
+            ticker,
+            stock_data,
+            screening_result,
+            fundamental_analysis,
+            moat_analysis,
+            dividend_analysis,
+            total_score
+        )
+
+        <span class="code-keyword">return</span> {
+            <span class="code-string">'ticker'</span>: ticker,
+            <span class="code-string">'total_score'</span>: total_score,
+            <span class="code-string">'recommendation'</span>: self._get_recommendation(total_score),
+            <span class="code-string">'screening'</span>: screening_result,
+            <span class="code-string">'fundamental_analysis'</span>: fundamental_analysis,
+            <span class="code-string">'moat_analysis'</span>: moat_analysis,
+            <span class="code-string">'dividend_analysis'</span>: dividend_analysis,
+            <span class="code-string">'report_path'</span>: report[<span class="code-string">'markdown_path'</span>],
+            <span class="code-string">'chart_path'</span>: report[<span class="code-string">'chart_path'</span>]
+        }
+
+    <span class="code-keyword">def</span> <span class="code-function">_fetch_stock_data</span>(self, ticker: str) -> Dict:
+        <span class="code-string">"""
+        Fetch comprehensive stock data from Yahoo Finance.
+        Includes price, fundamentals, dividends, and financial statements.
+        """</span>
+
+        <span class="code-keyword">try</span>:
+            stock = yf.Ticker(ticker)
+            info = stock.info
+
+            <span class="code-keyword">return</span> {
+                <span class="code-string">'valid'</span>: <span class="code-keyword">True</span>,
+                <span class="code-string">'ticker'</span>: ticker,
+                <span class="code-string">'name'</span>: info.get(<span class="code-string">'longName'</span>, ticker),
+                <span class="code-string">'current_price'</span>: info.get(<span class="code-string">'currentPrice'</span>),
+                <span class="code-string">'market_cap'</span>: info.get(<span class="code-string">'marketCap'</span>),
+                <span class="code-string">'pe_ratio'</span>: info.get(<span class="code-string">'trailingPE'</span>),
+                <span class="code-string">'forward_pe'</span>: info.get(<span class="code-string">'forwardPE'</span>),
+                <span class="code-string">'roe'</span>: info.get(<span class="code-string">'returnOnEquity'</span>, <span class="code-number">0</span>) * <span class="code-number">100</span>,
+                <span class="code-string">'eps'</span>: info.get(<span class="code-string">'trailingEps'</span>),
+                <span class="code-string">'dividend_yield'</span>: info.get(<span class="code-string">'dividendYield'</span>, <span class="code-number">0</span>) * <span class="code-number">100</span>,
+                <span class="code-string">'payout_ratio'</span>: info.get(<span class="code-string">'payoutRatio'</span>, <span class="code-number">0</span>) * <span class="code-number">100</span>,
+                <span class="code-string">'debt_to_equity'</span>: info.get(<span class="code-string">'debtToEquity'</span>),
+                <span class="code-string">'current_ratio'</span>: info.get(<span class="code-string">'currentRatio'</span>),
+                <span class="code-string">'price_to_book'</span>: info.get(<span class="code-string">'priceToBook'</span>),
+                <span class="code-string">'volume'</span>: info.get(<span class="code-string">'volume'</span>),
+                <span class="code-string">'avg_volume'</span>: info.get(<span class="code-string">'averageVolume'</span>)
+            }
+        <span class="code-keyword">except</span> Exception <span class="code-keyword">as</span> e:
+            print(f<span class="code-string">"Error fetching data: {e}"</span>)
+            <span class="code-keyword">return</span> {<span class="code-string">'valid'</span>: <span class="code-keyword">False</span>}
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🤖 Agent 1: Stock Screener (Investment Criteria Validation)</h2>
+            <p>The Stock Screener agent validates whether a stock meets the predefined investment criteria for long-term dividend investing:</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 agent_stock_screener.py</div>
+                <div class="code-block">
+<span class="code-keyword">async</span> <span class="code-function">_agent_stock_screener</span>(self, stock_data: Dict) -> Dict:
+    <span class="code-string">"""
+    Agent 1: Validate stock against investment screening criteria.
+
+    Criteria:
+    - Price: Within budget (e.g., ≤ RM 1.00)
+    - PE Ratio: 4-15 (fair valuation, avoid loss-makers)
+    - ROE: ≥ 5% (profitability threshold)
+    - EPS: ≥ 0.01 (actual profit generation)
+    - Dividend Yield: ≥ 1% (passive income potential)
+    - Market Cap: ≥ RM 50M (stability filter)
+    - Volume: ≥ 50,000 shares/day (liquidity)
+    """</span>
+
+    criteria = {
+        <span class="code-string">'max_price'</span>: <span class="code-number">1.00</span>,
+        <span class="code-string">'min_pe'</span>: <span class="code-number">4</span>,
+        <span class="code-string">'max_pe'</span>: <span class="code-number">15</span>,
+        <span class="code-string">'min_roe'</span>: <span class="code-number">5</span>,
+        <span class="code-string">'min_eps'</span>: <span class="code-number">0.01</span>,
+        <span class="code-string">'min_dividend_yield'</span>: <span class="code-number">1</span>,
+        <span class="code-string">'min_market_cap'</span>: <span class="code-number">50_000_000</span>,
+        <span class="code-string">'min_volume'</span>: <span class="code-number">50_000</span>
+    }
+
+    <span class="code-comment"># Build screening prompt for AI validation</span>
+    screening_prompt = f<span class="code-string">"""
+    You are a stock screening agent. Validate this stock against investment criteria.
+
+    Stock Data:
+    - Ticker: {stock_data['ticker']}
+    - Price: RM {stock_data['current_price']}
+    - PE Ratio: {stock_data['pe_ratio']}
+    - ROE: {stock_data['roe']}%
+    - EPS: {stock_data['eps']}
+    - Dividend Yield: {stock_data['dividend_yield']}%
+    - Market Cap: RM {stock_data['market_cap']:,}
+    - Avg Volume: {stock_data['avg_volume']:,}
+
+    Criteria:
+    {json.dumps(criteria, indent=2)}
+
+    Return JSON:
+    {{
+        "passed": true/false,
+        "criteria_results": {{
+            "price": {{"passed": bool, "actual": value, "limit": value}},
+            "pe_ratio": {{"passed": bool, "actual": value, "range": [min, max]}},
+            ...
+        }},
+        "summary": "Brief explanation of pass/fail"
+    }}
+    """</span>
+
+    response = self.model.generate_content(screening_prompt)
+    screening_result = self._parse_json_response(response.text)
+
+    <span class="code-keyword">return</span> screening_result
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>📊 Agent 2: Fundamental Analyst (55-Point Scoring)</h2>
+            <p>The Fundamental Analyst agent scores stocks across 3 categories: profitability (20pts), financial health (15pts), and valuation (20pts):</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 agent_fundamental_analyst.py</div>
+                <div class="code-block">
+<span class="code-keyword">async</span> <span class="code-function">_agent_fundamental_analyst</span>(self, stock_data: Dict) -> Dict:
+    <span class="code-string">"""
+    Agent 2: Score fundamentals, financial health, and valuation.
+
+    Scoring breakdown:
+    1. Fundamentals & Profitability (20 points):
+       - ROE quality (0-10 points)
+       - EPS growth (0-5 points)
+       - Profit margins (0-5 points)
+
+    2. Financial Health & Solvency (15 points):
+       - Debt-to-equity ratio (0-7 points)
+       - Current ratio (0-5 points)
+       - Book value strength (0-3 points)
+
+    3. Valuation (20 points):
+       - PE ratio fairness (0-10 points)
+       - Price-to-book (0-5 points)
+       - Price-to-sales (0-5 points)
+    """</span>
+
+    fundamental_prompt = f<span class="code-string">"""
+    You are a fundamental analysis expert. Score this stock across 3 categories.
+
+    Stock: {stock_data['ticker']} - {stock_data['name']}
+
+    Financial Metrics:
+    - ROE: {stock_data['roe']:.2f}%
+    - EPS: {stock_data['eps']}
+    - PE Ratio: {stock_data['pe_ratio']}
+    - Price-to-Book: {stock_data['price_to_book']}
+    - Debt-to-Equity: {stock_data['debt_to_equity']}
+    - Current Ratio: {stock_data['current_ratio']}
+
+    Score each category (0-max points) and provide detailed reasoning:
+
+    1. Fundamentals & Profitability (0-20 points)
+       - Evaluate ROE quality, EPS strength, margins
+       - Higher ROE (>15%) = excellent, 5-15% = good, <5% = weak
+
+    2. Financial Health & Solvency (0-15 points)
+       - Assess debt levels, liquidity, balance sheet strength
+       - Low debt (<0.5 D/E) = strong, 0.5-1.5 = moderate, >1.5 = risky
+
+    3. Valuation (0-20 points)
+       - Compare PE to industry average and historical range
+       - PE 4-10 = undervalued, 10-15 = fair, >15 = expensive
+
+    Return JSON with scores and detailed analysis for each category.
+    """</span>
+
+    response = self.model.generate_content(fundamental_prompt)
+    analysis = self._parse_json_response(response.text)
+
+    <span class="code-keyword">return</span> {
+        <span class="code-string">'category_scores'</span>: {
+            <span class="code-string">'fundamentals_profitability'</span>: analysis[<span class="code-string">'fundamentals_score'</span>],
+            <span class="code-string">'financial_health'</span>: analysis[<span class="code-string">'health_score'</span>],
+            <span class="code-string">'valuation'</span>: analysis[<span class="code-string">'valuation_score'</span>]
+        },
+        <span class="code-string">'total_fundamental_score'</span>: sum(analysis[<span class="code-string">'category_scores'</span>].values()),
+        <span class="code-string">'detailed_analysis'</span>: analysis[<span class="code-string">'reasoning'</span>]
+    }
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🏰 Agent 3: Business Moat Analyst (Web-Powered Research)</h2>
+            <p>The Business Moat Analyst uses Tavily API to research competitive advantages and scores the company's economic moat (0-15 points):</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 agent_business_moat.py</div>
+                <div class="code-block">
+<span class="code-keyword">async</span> <span class="code-function">_agent_business_moat</span>(self, ticker: str, stock_data: Dict) -> Dict:
+    <span class="code-string">"""
+    Agent 3: Research business moat via web search and score competitive advantages.
+
+    Evaluates:
+    - Brand strength and recognition
+    - Network effects and switching costs
+    - Cost advantages and economies of scale
+    - Regulatory barriers and patents
+    - Competitive positioning
+    """</span>
+
+    <span class="code-comment"># Search for company competitive advantages</span>
+    search_query = f<span class="code-string">"{stock_data['name']} competitive advantages business moat Malaysia"</span>
+    search_results = self.tavily.search(
+        query=search_query,
+        search_depth=<span class="code-string">"advanced"</span>,
+        max_results=<span class="code-number">5</span>
+    )
+
+    <span class="code-comment"># Extract relevant information from search results</span>
+    research_content = <span class="code-string">"\n\n"</span>.join([
+        f<span class="code-string">"Source: {r['url']}\n{r['content']}"</span>
+        <span class="code-keyword">for</span> r <span class="code-keyword">in</span> search_results[<span class="code-string">'results'</span>]
+    ])
+
+    moat_prompt = f<span class="code-string">"""
+    You are a business moat analyst. Evaluate the competitive advantages of this company.
+
+    Company: {stock_data['name']} ({ticker})
+    Industry Research:
+    {research_content}
+
+    Analyze and score (0-15 points) based on:
+
+    1. Brand Strength (0-5 points):
+       - Market recognition, customer loyalty, brand premium
+
+    2. Competitive Barriers (0-5 points):
+       - Switching costs, network effects, regulatory moats
+
+    3. Cost/Scale Advantages (0-5 points):
+       - Economies of scale, proprietary technology, unique assets
+
+    Rate each dimension and provide total moat score (0-15).
+    Explain strengths and weaknesses clearly.
+
+    Return JSON with scores and detailed moat analysis.
+    """</span>
+
+    response = self.model.generate_content(moat_prompt)
+    moat_analysis = self._parse_json_response(response.text)
+
+    <span class="code-keyword">return</span> {
+        <span class="code-string">'moat_score'</span>: moat_analysis[<span class="code-string">'total_moat_score'</span>],
+        <span class="code-string">'moat_strength'</span>: self._classify_moat(moat_analysis[<span class="code-string">'total_moat_score'</span>]),
+        <span class="code-string">'key_advantages'</span>: moat_analysis[<span class="code-string">'strengths'</span>],
+        <span class="code-string">'vulnerabilities'</span>: moat_analysis[<span class="code-string">'weaknesses'</span>],
+        <span class="code-string">'research_sources'</span>: [r[<span class="code-string">'url'</span>] <span class="code-keyword">for</span> r <span class="code-keyword">in</span> search_results[<span class="code-string">'results'</span>]]
+    }
+
+<span class="code-keyword">def</span> <span class="code-function">_classify_moat</span>(self, score: float) -> str:
+    <span class="code-string">"""Classify moat strength based on score."""</span>
+    <span class="code-keyword">if</span> score >= <span class="code-number">12</span>: <span class="code-keyword">return</span> <span class="code-string">"Wide Moat"</span>
+    <span class="code-keyword">elif</span> score >= <span class="code-number">8</span>: <span class="code-keyword">return</span> <span class="code-string">"Narrow Moat"</span>
+    <span class="code-keyword">else</span>: <span class="code-keyword">return</span> <span class="code-string">"No Moat"</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>⚙️ Technical Implementation Notes</h2>
+            <h3>Key Algorithms & Innovations</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>Multi-Agent Orchestration:</strong> Sequential pipeline coordinates 5 specialized AI agents with clear handoffs</li>
+                <li><strong>Real-Time Data Integration:</strong> Yahoo Finance API provides live financial data for accurate analysis</li>
+                <li><strong>Web-Powered Research:</strong> Tavily API enables qualitative business moat analysis beyond raw financials</li>
+                <li><strong>Investment Yardstick Scoring:</strong> 7-category framework (100 points) provides objective stock evaluation</li>
+                <li><strong>Automated Report Generation:</strong> Markdown reports with visualizations for professional presentation</li>
+            </ul>
+
+            <h3>Why This Approach Works</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>Comprehensive Analysis:</strong> Combines quantitative fundamentals with qualitative moat research</li>
+                <li><strong>Objective Scoring:</strong> Standardized yardstick enables consistent stock comparison</li>
+                <li><strong>Domain Expertise:</strong> Each agent specializes in one aspect (screening, fundamentals, moat, dividends)</li>
+                <li><strong>Scalable Discovery:</strong> Batch screening can analyze 50+ stocks to find hidden opportunities</li>
+                <li><strong>Transparency:</strong> Clear scoring breakdown shows exactly why a stock received its rating</li>
+            </ul>
+
+            <h3>Investment Recommendations</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>80-100 points:</strong> Strong Buy 🟢 - Excellent fundamentals, wide moat, sustainable dividends</li>
+                <li><strong>60-79 points:</strong> Buy 🟡 - Good investment with solid potential and acceptable risks</li>
+                <li><strong>40-59 points:</strong> Hold ⚪ - Neutral outlook, monitor for changes before investing</li>
+                <li><strong>0-39 points:</strong> Avoid 🔴 - Significant concerns in fundamentals or business quality</li>
+            </ul>
+        </div>
+
+        <div class="demo-links">
+            <a href="https://colab.research.google.com/drive/1Wji69Sq-IqhtMEJTlxIkQ39ZZ5JAXR6w" target="_blank" class="demo-btn">🚀 Try Live Demo</a>
+            <a href="stock-analysis-agent.html" class="demo-btn secondary">📖 View Full Project Details</a>
+        </div>
+
+        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+            <a href="index.html">← Back to Portfolio</a> |
+            <a href="stock-analysis-agent.html">View Project Overview</a>
+        </nav>
+    </div>
+</body>
+</html>

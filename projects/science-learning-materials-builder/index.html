@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔬 Science Learning Materials Builder</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-microscope"></i> Science Learning Materials Builder</h1>
+            <p>AI-powered lesson plan generator for elementary school science topics</p>
+        </header>
+
+        <main>
+            <form id="lessonForm" class="lesson-form">
+                <!-- Topic Input Section -->
+                <div class="topic-section">
+                    <div class="input-group">
+                        <label for="scienceTopic">
+                            <i class="fas fa-lightbulb"></i> Science Topic or Question
+                        </label>
+                        <textarea
+                            id="scienceTopic"
+                            name="topic"
+                            rows="3"
+                            placeholder="e.g., How does photosynthesis work? or Why do seasons change?"
+                            required
+                        ></textarea>
+                    </div>
+                </div>
+
+                <!-- Sample Topics -->
+                <div class="samples-section">
+                    <h3><i class="fas fa-flask"></i> Sample Science Topics</h3>
+                    <div class="sample-topics">
+                        <button type="button" class="sample-btn" data-topic="How does photosynthesis work?">
+                            <i class="fas fa-leaf"></i> Photosynthesis
+                        </button>
+                        <button type="button" class="sample-btn" data-topic="What is the water cycle?">
+                            <i class="fas fa-cloud-rain"></i> Water Cycle
+                        </button>
+                        <button type="button" class="sample-btn" data-topic="What is the solar system?">
+                            <i class="fas fa-globe"></i> Solar System
+                        </button>
+                        <button type="button" class="sample-btn" data-topic="How do simple machines work?">
+                            <i class="fas fa-cog"></i> Simple Machines
+                        </button>
+                        <button type="button" class="sample-btn" data-topic="What are food chains?">
+                            <i class="fas fa-fish"></i> Food Chains
+                        </button>
+                        <button type="button" class="sample-btn" data-topic="What are the states of matter?">
+                            <i class="fas fa-vial"></i> States of Matter
+                        </button>
+                        <button type="button" class="sample-btn" data-topic="How does a cactus survive in the desert?">
+                            <i class="fas fa-sun"></i> Desert Adaptations
+                        </button>
+                        <button type="button" class="sample-btn" data-topic="Why do we have seasons?">
+                            <i class="fas fa-calendar-alt"></i> Seasons
+                        </button>
+                        <button type="button" class="sample-btn" data-topic="What causes earthquakes?">
+                            <i class="fas fa-mountain"></i> Earthquakes
+                        </button>
+                        <button type="button" class="sample-btn" data-topic="How does electricity work?">
+                            <i class="fas fa-bolt"></i> Electricity
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Grade Level Selection -->
+                <div class="grade-section">
+                    <h3><i class="fas fa-graduation-cap"></i> Grade Level Settings</h3>
+
+                    <div class="option-group">
+                        <label for="gradeLevel">
+                            <i class="fas fa-school"></i> Target Grade Level
+                        </label>
+                        <select id="gradeLevel" name="gradeLevel">
+                            <option value="3">Grade 3 (Ages 8-9)</option>
+                            <option value="4" selected>Grade 4 (Ages 9-10) - Recommended</option>
+                            <option value="5">Grade 5 (Ages 10-11)</option>
+                            <option value="6">Grade 6 (Ages 11-12)</option>
+                        </select>
+                    </div>
+
+                    <div class="option-group">
+                        <label for="lessonDuration">
+                            <i class="fas fa-clock"></i> Lesson Duration
+                        </label>
+                        <select id="lessonDuration" name="duration">
+                            <option value="30">30 minutes</option>
+                            <option value="45" selected>45 minutes</option>
+                            <option value="60">60 minutes</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Advanced Options -->
+                <div class="options-section">
+                    <h3><i class="fas fa-sliders-h"></i> Advanced Options</h3>
+
+                    <div class="option-group">
+                        <label for="modelName">
+                            <i class="fas fa-robot"></i> AI Model
+                        </label>
+                        <select id="modelName" name="model">
+                            <option value="gemini-2.0-flash-exp">Gemini 2.0 Flash (Recommended)</option>
+                            <option value="gemini-1.5-pro">Gemini 1.5 Pro</option>
+                            <option value="gemini-1.5-flash">Gemini 1.5 Flash</option>
+                        </select>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <label>
+                            <input type="checkbox" id="includeImages" name="includeImages" checked>
+                            <span>Generate visual materials (diagrams & illustrations)</span>
+                        </label>
+                        <label>
+                            <input type="checkbox" id="includeQuiz" name="includeQuiz" checked>
+                            <span>Include quiz questions and answer key</span>
+                        </label>
+                        <label>
+                            <input type="checkbox" id="includeActivity" name="includeActivity" checked>
+                            <span>Add hands-on activity or experiment</span>
+                        </label>
+                        <label>
+                            <input type="checkbox" id="webResearch" name="webResearch" checked>
+                            <span>Use web research (Tavily API) for latest info</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    <i class="fas fa-magic"></i> Generate Lesson Plan
+                </button>
+            </form>
+
+            <!-- Agent Progress Section -->
+            <div id="agentProgress" style="display: none;">
+                <div class="progress-container">
+                    <h2><i class="fas fa-tasks"></i> AI Agents Working...</h2>
+
+                    <div class="agent-status" id="agent1">
+                        <div class="agent-icon"><i class="fas fa-search"></i></div>
+                        <div class="agent-info">
+                            <h4>Curriculum Research Agent</h4>
+                            <p>Researching topic and validating age-appropriateness...</p>
+                        </div>
+                        <div class="agent-check"><i class="fas fa-spinner fa-spin"></i></div>
+                    </div>
+
+                    <div class="agent-status" id="agent2">
+                        <div class="agent-icon"><i class="fas fa-palette"></i></div>
+                        <div class="agent-info">
+                            <h4>Visual Illustrator Agent</h4>
+                            <p>Waiting...</p>
+                        </div>
+                        <div class="agent-check"><i class="fas fa-clock"></i></div>
+                    </div>
+
+                    <div class="agent-status" id="agent3">
+                        <div class="agent-icon"><i class="fas fa-pen"></i></div>
+                        <div class="agent-info">
+                            <h4>Content Writer Agent</h4>
+                            <p>Waiting...</p>
+                        </div>
+                        <div class="agent-check"><i class="fas fa-clock"></i></div>
+                    </div>
+
+                    <div class="agent-status" id="agent4">
+                        <div class="agent-icon"><i class="fas fa-box"></i></div>
+                        <div class="agent-info">
+                            <h4>Lesson Packaging Agent</h4>
+                            <p>Waiting...</p>
+                        </div>
+                        <div class="agent-check"><i class="fas fa-clock"></i></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div id="resultsSection" style="display: none;">
+                <div class="results-container">
+                    <h2><i class="fas fa-check-circle"></i> Lesson Plan Generated!</h2>
+
+                    <!-- Summary Card -->
+                    <div id="summaryCard" class="result-section">
+                        <h3><i class="fas fa-info-circle"></i> Lesson Summary</h3>
+                        <div id="summaryContent"></div>
+                    </div>
+
+                    <!-- Teacher Guide -->
+                    <div id="teacherGuide" class="result-section">
+                        <h3><i class="fas fa-chalkboard-teacher"></i> Teacher Guide</h3>
+                        <div id="teacherContent"></div>
+                    </div>
+
+                    <!-- Student Explanation -->
+                    <div id="studentLesson" class="result-section">
+                        <h3><i class="fas fa-book-reader"></i> Student Lesson</h3>
+                        <div id="studentContent"></div>
+                    </div>
+
+                    <!-- Visual Materials -->
+                    <div id="visualSection" class="result-section">
+                        <h3><i class="fas fa-images"></i> Visual Learning Materials</h3>
+                        <div id="visualContent"></div>
+                    </div>
+
+                    <!-- Vocabulary -->
+                    <div id="vocabularySection" class="result-section">
+                        <h3><i class="fas fa-spell-check"></i> Vocabulary</h3>
+                        <div id="vocabularyContent"></div>
+                    </div>
+
+                    <!-- Quiz Questions -->
+                    <div id="quizSection" class="result-section">
+                        <h3><i class="fas fa-question-circle"></i> Quiz Questions</h3>
+                        <div id="quizContent"></div>
+                    </div>
+
+                    <!-- Fun Challenge -->
+                    <div id="activitySection" class="result-section">
+                        <h3><i class="fas fa-star"></i> Fun Challenge</h3>
+                        <div id="activityContent"></div>
+                    </div>
+
+                    <!-- Download Section -->
+                    <div class="download-section">
+                        <button id="downloadMarkdown" class="download-btn">
+                            <i class="fas fa-file-download"></i> Download as Markdown
+                        </button>
+                        <button id="downloadPDF" class="download-btn">
+                            <i class="fas fa-file-pdf"></i> Download as PDF
+                        </button>
+                        <button id="printLesson" class="download-btn">
+                            <i class="fas fa-print"></i> Print Lesson
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loading Spinner -->
+            <div id="loadingSpinner" style="display: none;">
+                <div class="spinner"></div>
+                <p>Generating your science lesson plan...</p>
+            </div>
+        </main>
+
+        <footer>
+            <p>Powered by <strong>Google Gemini AI</strong> & <strong>Tavily Search</strong> | Built with ❤️ by Lee Yih Ven</p>
+            <div class="footer-links">
+                <a href="https://github.com/lyven81/ai-project" target="_blank">
+                    <i class="fab fa-github"></i> GitHub
+                </a>
+                <a href="https://colab.research.google.com/drive/1p390KHKMQ9xcaDQ7eQTQJjdlX1JTxpmn" target="_blank">
+                    <i class="fab fa-google"></i> Google Colab
+                </a>
+                <a href="../../index.html">
+                    <i class="fas fa-home"></i> Portfolio
+                </a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

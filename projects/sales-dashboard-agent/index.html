@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Dashboard Agent - AI-Powered Analytics</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1>📊 Sales Dashboard Agent</h1>
+                <p class="subtitle">AI-Powered Sales Analytics with Natural Language Queries</p>
+            </div>
+            <div class="header-badges">
+                <span class="badge">Python 3.8+</span>
+                <span class="badge">Gemini 2.0</span>
+                <span class="badge">TinyDB</span>
+                <span class="badge">Pandas</span>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Upload Section -->
+            <section class="section upload-section">
+                <h2>📁 Upload Sales Data</h2>
+                <div class="upload-area" id="uploadArea">
+                    <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="17 8 12 3 7 8"></polyline>
+                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+                    <p>Drag and drop your CSV file here or click to browse</p>
+                    <input type="file" id="fileInput" accept=".csv" hidden>
+                    <button class="btn btn-secondary" onclick="document.getElementById('fileInput').click()">
+                        Choose File
+                    </button>
+                </div>
+                <div id="fileInfo" class="file-info" style="display: none;">
+                    <p><strong>File:</strong> <span id="fileName"></span></p>
+                    <p><strong>Records:</strong> <span id="recordCount"></span></p>
+                    <p><strong>Date Range:</strong> <span id="dateRange"></span></p>
+                    <p><strong>Total Revenue:</strong> <span id="totalRevenue"></span></p>
+                </div>
+            </section>
+
+            <!-- Query Section -->
+            <section class="section query-section">
+                <h2>💬 Ask a Question</h2>
+                <div class="query-examples">
+                    <h3>Example Queries:</h3>
+                    <div class="example-buttons">
+                        <button class="example-btn" onclick="fillQuery('What were our total sales in November 2024?')">
+                            Total Sales Query
+                        </button>
+                        <button class="example-btn" onclick="fillQuery('Which region generated the most profit?')">
+                            Regional Profit
+                        </button>
+                        <button class="example-btn" onclick="fillQuery('Show me the top 5 best-selling products by revenue')">
+                            Top Products
+                        </button>
+                        <button class="example-btn" onclick="fillQuery('Show me a bar chart of total revenue by region')">
+                            Revenue Visualization
+                        </button>
+                        <button class="example-btn" onclick="fillQuery('What products have profit margins above 30%?')">
+                            Profit Margins
+                        </button>
+                        <button class="example-btn" onclick="fillQuery('Which customer has spent the most money?')">
+                            Top Customer
+                        </button>
+                    </div>
+                </div>
+                <div class="query-input-container">
+                    <textarea
+                        id="queryInput"
+                        placeholder="Ask a question about your sales data..."
+                        rows="3"
+                    ></textarea>
+                    <button class="btn btn-primary" id="submitQuery" onclick="submitQuery()">
+                        <span class="btn-text">Analyze</span>
+                        <span class="btn-loader" style="display: none;">⏳ Processing...</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Results Section -->
+            <section class="section results-section" id="resultsSection" style="display: none;">
+                <h2>✅ Results</h2>
+                <div class="results-content">
+                    <div class="result-box answer-box">
+                        <h3>📈 Answer</h3>
+                        <p id="answerText"></p>
+                    </div>
+                    <div class="result-box code-box">
+                        <h3>🤖 Generated Code</h3>
+                        <pre id="generatedCode"></pre>
+                    </div>
+                    <div class="result-box debug-box" id="debugBox" style="display: none;">
+                        <h3>📋 Debug Logs</h3>
+                        <pre id="debugLogs"></pre>
+                    </div>
+                    <div class="result-box error-box" id="errorBox" style="display: none;">
+                        <h3>❌ Error</h3>
+                        <pre id="errorText"></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Features Section -->
+            <section class="section features-section">
+                <h2>🚀 Key Features</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">💬</div>
+                        <h3>Natural Language Queries</h3>
+                        <p>Ask questions in plain English and get instant, actionable insights from your sales data.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📊</div>
+                        <h3>Automated Visualizations</h3>
+                        <p>Generate charts and graphs automatically based on your questions and data patterns.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">💰</div>
+                        <h3>Revenue & Profit Analysis</h3>
+                        <p>Track financial metrics, profit margins, and revenue trends across regions and categories.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">👥</div>
+                        <h3>Customer Analytics</h3>
+                        <p>Identify top customers, spending patterns, and purchasing behavior insights.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📦</div>
+                        <h3>Product Performance</h3>
+                        <p>Monitor best-selling products, inventory trends, and product category performance.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔒</div>
+                        <h3>Safe Execution</h3>
+                        <p>All queries run in a secure, read-only environment with no database modifications.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tech Stack Section -->
+            <section class="section tech-section">
+                <h2>🛠️ Technology Stack</h2>
+                <div class="tech-grid">
+                    <div class="tech-item">
+                        <strong>Python 3.8+</strong>
+                        <span>Core Language</span>
+                    </div>
+                    <div class="tech-item">
+                        <strong>Google Gemini 2.0</strong>
+                        <span>AI Model</span>
+                    </div>
+                    <div class="tech-item">
+                        <strong>TinyDB</strong>
+                        <span>Database</span>
+                    </div>
+                    <div class="tech-item">
+                        <strong>Pandas</strong>
+                        <span>Data Analysis</span>
+                    </div>
+                    <div class="tech-item">
+                        <strong>Matplotlib</strong>
+                        <span>Visualization</span>
+                    </div>
+                    <div class="tech-item">
+                        <strong>Seaborn</strong>
+                        <span>Statistical Plots</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- About Section -->
+            <section class="section about-section">
+                <h2>📖 About</h2>
+                <p>
+                    The Sales Dashboard Agent is an intelligent analytics tool that leverages Google Gemini AI
+                    to convert natural language questions into executable database queries. Simply upload your
+                    sales data, ask questions in plain English, and receive instant insights with visualizations.
+                </p>
+                <p>
+                    Built with modern AI technology, this agent understands context, generates safe Python code,
+                    and provides business-friendly answers. Whether you're analyzing revenue trends, identifying
+                    top customers, or evaluating product performance, the Sales Dashboard Agent makes data
+                    analysis accessible to everyone.
+                </p>
+                <div class="cta-buttons">
+                    <a href="https://colab.research.google.com/drive/1ssz7RkCySo4fhzkLdCs5c7gCgkP7ypv7"
+                       target="_blank"
+                       class="btn btn-primary">
+                        🚀 Try on Google Colab
+                    </a>
+                    <a href="https://github.com"
+                       target="_blank"
+                       class="btn btn-secondary">
+                        📚 View Documentation
+                    </a>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Built with Google Gemini AI | Sales Dashboard Agent</p>
+            <p class="footer-links">
+                <a href="#" target="_blank">GitHub</a>
+                <span>•</span>
+                <a href="#" target="_blank">Documentation</a>
+                <span>•</span>
+                <a href="#" target="_blank">API Reference</a>
+            </p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
