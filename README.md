@@ -2,7 +2,7 @@
 
 [![Portfolio Website](https://img.shields.io/badge/Portfolio-Live-green?logo=vercel)](https://lyven81.github.io/ai-project/)
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-black?logo=github)](https://github.com/lyven81/ai-project)
-[![Projects](https://img.shields.io/badge/Projects-24-blue)](#-featured-projects)
+[![Projects](https://img.shields.io/badge/Projects-26-blue)](#-featured-projects)
 [![AI Powered](https://img.shields.io/badge/AI-Powered-orange?logo=tensorflow)](https://github.com/lyven81/ai-project)
 
 **Innovative AI Solutions for Modern Challenges** - A curated collection of production-ready AI applications showcasing expertise in computer vision, natural language processing, document processing, and creative AI technologies.
@@ -13,7 +13,7 @@
 
 ## 🌟 Portfolio Overview
 
-This repository contains **24 production-deployed AI applications** demonstrating proficiency across multiple AI domains. Each project includes comprehensive documentation, live demos, and complete source code with deployment configurations.
+This repository contains **26 production-deployed AI applications** demonstrating proficiency across multiple AI domains. Each project includes comprehensive documentation, live demos, and complete source code with deployment configurations.
 
 **🎯 Portfolio Highlights:**
 - **15+ AI Technologies** integrated across projects
@@ -99,6 +99,18 @@ This repository contains **24 production-deployed AI applications** demonstratin
 - **Live Demo:** [Google Colab](https://colab.research.google.com/drive/1p390KHKMQ9xcaDQ7eQTQJjdlX1JTxpmn)
 - **Tech Stack:** Python, Gemini 2.0 Flash, Tavily API, WeasyPrint, Markdown Processing
 - **AI Capabilities:** Curriculum research (web search + NGSS validation), visual illustration prompts, 3rd-grade reading level content writing, quiz generation (5 MC + 2 SA), hands-on activities, markdown + PDF export
+
+#### [Public Sentiment Collection Agent](./projects/public-sentiment-collection-agent/)
+**AI-powered geographic sentiment analysis with credibility tracking and source diversity assessment**
+- **Live Demo:** [Google Colab](https://colab.research.google.com/drive/1On9i4SrYBVQqG-Fex5up9o3Eo1Y6mWls)
+- **Tech Stack:** Python, Gemini 2.0 Flash, Tavily API, Pandas, Matplotlib, Seaborn
+- **AI Capabilities:** 5-agent architecture (geographic listening, comparative sentiment analysis, visualization, data export, packaging), credibility scoring (0-100), source diversity tracking with bias detection, regional sentiment comparison, automatic quality warnings, 10 files per analysis (1 report, 4 charts, 5 CSV exports)
+
+#### [Data Consulting Business Analysis Agent](./projects/data-consulting-business-analyst/)
+**Automated market intelligence system for data analytics consulting firms - 100x faster than manual research**
+- **Live Demo:** [Google Colab](https://colab.research.google.com/drive/1BZ1m_XsI5q7CHvdopcCK53Wlw0sCt1-j)
+- **Tech Stack:** Python, Gemini 2.0 Flash, Tavily API, Matplotlib, Seaborn, NetworkX
+- **AI Capabilities:** 4-agent architecture (industry research, competitor intelligence, opportunity analysis, strategic reporting), web-powered trend discovery, competitive capability matrix mapping, white-space opportunity detection, 2x2 strategic opportunity maps, executive-ready markdown reports with embedded visualizations
 
 ### 🤖 Conversational AI & Specialized Chatbots
 
@@ -234,6 +246,8 @@ ai-project/
 │   ├── stock-analysis-agent/    # Multi-agent stock analysis
 │   ├── sales-dashboard-agent/   # Natural language analytics
 │   ├── science-learning-materials-builder/ # Educational content generator
+│   ├── public-sentiment-collection-agent/ # Geographic sentiment analysis
+│   ├── data-consulting-business-analyst/ # Market intelligence system
 │   ├── chinese-calender/        # Conversational AI traditional calendar
 │   ├── horoscope-chatbot/       # Astrology consultation AI
 │   ├── fengshui-chatbot/        # Feng Shui advisory AI
@@ -294,6 +308,8 @@ All projects are production-deployed and accessible via live demos:
 | Stock Analysis Agent | [Launch in Colab](https://colab.research.google.com/drive/1Wji69Sq-IqhtMEJTlxIkQ39ZZ5JAXR6w) | Business Intelligence |
 | Sales Dashboard Agent | [Launch in Colab](https://colab.research.google.com/drive/1ssz7RkCySo4fhzkLdCs5c7gCgkP7ypv7) | Business Intelligence |
 | Science Learning Materials Builder | [Launch in Colab](https://colab.research.google.com/drive/1p390KHKMQ9xcaDQ7eQTQJjdlX1JTxpmn) | Business Intelligence |
+| Public Sentiment Collection Agent | [Launch in Colab](https://colab.research.google.com/drive/1On9i4SrYBVQqG-Fex5up9o3Eo1Y6mWls) | Business Intelligence |
+| Data Consulting Business Analysis Agent | [Launch in Colab](https://colab.research.google.com/drive/1BZ1m_XsI5q7CHvdopcCK53Wlw0sCt1-j) | Business Intelligence |
 | Chinese Traditional Calendar | [Launch App](https://chinese-calender-169218045868.asia-southeast1.run.app/) | Conversational AI |
 | Astrology Consultant | [Launch App](https://horoscope-chatbot-218391175125.asia-southeast1.run.app/) | Conversational AI |
 | Feng Shui Consultant | [Launch App](https://fengshui-chatbot-218391175125.asia-southeast1.run.app/) | Conversational AI |
