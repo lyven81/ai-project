@@ -3,6 +3,7 @@ Badminton Court Booking Agent - FastAPI REST API
 Agentic AI workflow using code-as-action pattern
 """
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Optional
@@ -122,6 +123,12 @@ def execute_code(code, user_request):
 
 @app.get("/")
 async def root():
+    """Serve the chat interface"""
+    return FileResponse("index.html")
+
+@app.get("/api/status")
+async def status():
+    """API status endpoint"""
     return {
         "message": "Badminton Booking Agent API",
         "version": "1.0.0",
