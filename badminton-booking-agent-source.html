@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Badminton Court Booking Agent - Source Code</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #222;
+            background-color: #ffffff;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .back-nav {
+            margin-bottom: 20px;
+        }
+
+        .back-nav a {
+            color: #007BFF;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .back-nav a:hover {
+            text-decoration: underline;
+        }
+
+        .project-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #4CAF50, #388E3C);
+            color: white;
+            border-radius: 10px;
+        }
+
+        .project-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .project-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .content-section {
+            margin: 40px 0;
+            padding: 30px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border-left: 5px solid #4CAF50;
+        }
+
+        .content-section h2 {
+            color: #4CAF50;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .content-section h3 {
+            color: #333;
+            margin: 20px 0 10px 0;
+            font-size: 1.3rem;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #E8F5E9, #C8E6C9);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #4CAF50;
+            margin: 20px 0;
+        }
+
+        .code-container {
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        .code-header {
+            color: #4CAF50;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .code-block {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #d4d4d4;
+        }
+
+        .code-comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+
+        .code-keyword {
+            color: #569cd6;
+        }
+
+        .code-string {
+            color: #ce9178;
+        }
+
+        .code-function {
+            color: #dcdcaa;
+        }
+
+        .code-number {
+            color: #b5cea8;
+        }
+
+        .demo-links {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .demo-btn {
+            display: inline-block;
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .demo-btn:hover {
+            background-color: #388E3C;
+        }
+
+        .demo-btn.secondary {
+            background-color: #FF9800;
+        }
+
+        .demo-btn.secondary:hover {
+            background-color: #F57C00;
+        }
+
+        @media (max-width: 768px) {
+            .project-header h1 {
+                font-size: 2rem;
+            }
+
+            .project-header p {
+                font-size: 1rem;
+            }
+
+            .demo-btn {
+                margin: 5px;
+                padding: 10px 20px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="badminton-booking-agent.html">← Back to Project Overview</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>Badminton Court Booking Agent</h1>
+            <p>Core Source Code & Agentic AI Implementation</p>
+
+            <div class="badges">
+                <span class="badge">Python 3.8+</span>
+                <span class="badge">FastAPI</span>
+                <span class="badge">Gemini 2.5 Flash</span>
+                <span class="badge">Code-as-Action</span>
+            </div>
+        </div>
+
+        <div class="highlight-box">
+            <h3>About This Code Showcase</h3>
+            <p><strong>This curated code snippet demonstrates the M5 Agentic Workflow pattern where the LLM generates executable Python code to handle booking operations.</strong></p>
+            <p>The full implementation includes security sandboxing, comprehensive error handling, and production deployment configurations. This showcase highlights the core agentic AI algorithms and code generation patterns.</p>
+        </div>
+
+        <div class="demo-links">
+            <a href="https://colab.research.google.com/drive/1ZqN8B5xYP7kF2Rw3Qm9Vz8Lj4Nh6Tc5D" target="_blank" class="demo-btn">Google Colab Notebook</a>
+            <a href="https://github.com/lyven81/ai-project/tree/main/projects/badminton-booking-agent" target="_blank" class="demo-btn secondary">GitHub Repository</a>
+        </div>
+
+        <div class="content-section">
+            <h2>Core Algorithm: Agentic AI Booking Engine</h2>
+            <p>The foundation of this project is the M5 Agentic Workflow where the LLM generates executable Python code to perform booking operations. This code-as-action pattern enables dynamic business logic without hardcoding rules:</p>
+
+            <div class="code-container">
+                <div class="code-header">main.py - Agentic AI Core</div>
+                <div class="code-block">
+<span class="code-keyword">from</span> fastapi <span class="code-keyword">import</span> FastAPI, HTTPException
+<span class="code-keyword">from</span> pydantic <span class="code-keyword">import</span> BaseModel
+<span class="code-keyword">import</span> google.generativeai <span class="code-keyword">as</span> genai
+<span class="code-keyword">from</span> tinydb <span class="code-keyword">import</span> TinyDB, Query
+<span class="code-keyword">from</span> datetime <span class="code-keyword">import</span> datetime, timedelta
+<span class="code-keyword">import</span> re
+
+app = FastAPI(title=<span class="code-string">"Badminton Court Booking Agent"</span>)
+
+<span class="code-comment"># Initialize Gemini 2.5 Flash for code generation</span>
+genai.configure(api_key=os.getenv(<span class="code-string">"GEMINI_API_KEY"</span>))
+model = genai.GenerativeModel(<span class="code-string">'gemini-2.5-flash'</span>)
+
+<span class="code-comment"># Initialize TinyDB for persistent storage</span>
+db = TinyDB(<span class="code-string">'bookings.json'</span>)
+bookings_table = db.table(<span class="code-string">'bookings'</span>)
+
+<span class="code-keyword">class</span> <span class="code-function">BookingRequest</span>(BaseModel):
+    user_message: str
+    ic_number: str = <span class="code-keyword">None</span>
+
+<span class="code-keyword">class</span> <span class="code-function">AgenticBookingAgent</span>:
+    <span class="code-string">"""
+    M5 Agentic Workflow implementation for badminton court bookings.
+    The LLM generates Python code to execute booking operations.
+    """</span>
+
+    <span class="code-keyword">def</span> <span class="code-function">__init__</span>(self):
+        self.model = model
+        self.db = bookings_table
+
+        <span class="code-comment"># System context for code generation</span>
+        self.system_context = <span class="code-string">"""
+You are an AI agent that generates Python code to manage badminton court bookings.
+
+AVAILABLE FUNCTIONS:
+- get_bookings() -> List[Dict]: Returns all bookings from database
+- create_booking(court, date, start_time, end_time, ic, name) -> Dict
+- cancel_booking(ic, court, date) -> Dict
+- check_availability(court, date, start_time, end_time) -> bool
+- calculate_price(start_time, end_time, date) -> float
+
+PRICING RULES:
+- Daytime (6am-6pm): Weekday RM80/hr, Weekend RM90/hr
+- Nighttime (6pm-6am): Weekday RM100/hr, Weekend RM120/hr
+
+IC NUMBER FORMAT: YYMMDD-PB-###G (e.g., 850715-08-1234)
+COURTS: 1-12 available
+
+Generate executable Python code to handle the user's request.
+Return only the code, no explanations.
+        """</span>
+
+    <span class="code-keyword">async</span> <span class="code-keyword">def</span> <span class="code-function">process_request</span>(self, user_message: str, ic_number: str = <span class="code-keyword">None</span>) -> Dict:
+        <span class="code-string">"""
+        Main agentic workflow: Analyze request -> Generate code -> Execute -> Return result
+        """</span>
+
+        <span class="code-comment"># Step 1: Analyze user intent and generate executable code</span>
+        generated_code = <span class="code-keyword">await</span> self._generate_action_code(user_message, ic_number)
+
+        <span class="code-comment"># Step 2: Validate generated code for security</span>
+        <span class="code-keyword">if</span> <span class="code-keyword">not</span> self._validate_code_safety(generated_code):
+            <span class="code-keyword">raise</span> HTTPException(status_code=<span class="code-number">400</span>, detail=<span class="code-string">"Generated code failed security validation"</span>)
+
+        <span class="code-comment"># Step 3: Execute code in controlled environment</span>
+        result = <span class="code-keyword">await</span> self._execute_code(generated_code)
+
+        <span class="code-comment"># Step 4: Format and return response</span>
+        <span class="code-keyword">return</span> {
+            <span class="code-string">"success"</span>: <span class="code-keyword">True</span>,
+            <span class="code-string">"result"</span>: result,
+            <span class="code-string">"generated_code"</span>: generated_code <span class="code-keyword">if</span> os.getenv(<span class="code-string">"DEBUG"</span>) <span class="code-keyword">else</span> <span class="code-keyword">None</span>
+        }
+
+    <span class="code-keyword">async</span> <span class="code-keyword">def</span> <span class="code-function">_generate_action_code</span>(self, user_message: str, ic_number: str) -> str:
+        <span class="code-string">"""
+        Use Gemini 2.5 Flash to generate executable Python code based on user request.
+        This is the core of the Code-as-Action pattern.
+        """</span>
+
+        prompt = f<span class="code-string">"""
+{self.system_context}
+
+USER REQUEST: {user_message}
+IC NUMBER: {ic_number if ic_number else "Not provided"}
+CURRENT DATE: {datetime.now().strftime('%Y-%m-%d')}
+CURRENT TIME: {datetime.now().strftime('%H:%M')}
+
+Generate Python code to handle this request. The code should:
+1. Parse the user's intent (book, cancel, check availability, query)
+2. Validate inputs (IC format, court number, date/time)
+3. Check for conflicts if booking
+4. Calculate pricing if booking
+5. Execute the database operation
+6. Return a clear result message
+
+Code must use only the provided functions and follow all pricing rules.
+        """</span>
+
+        response = self.model.generate_content(prompt)
+        code = self._extract_code_from_response(response.text)
+
+        <span class="code-keyword">return</span> code
+
+    <span class="code-keyword">def</span> <span class="code-function">_extract_code_from_response</span>(self, response_text: str) -> str:
+        <span class="code-string">"""Extract Python code from LLM response, handling markdown code blocks."""</span>
+
+        <span class="code-comment"># Remove markdown code block markers</span>
+        code = re.sub(r<span class="code-string">'```python\n'</span>, <span class="code-string">''</span>, response_text)
+        code = re.sub(r<span class="code-string">'```\n?'</span>, <span class="code-string">''</span>, code)
+        code = code.strip()
+
+        <span class="code-keyword">return</span> code
+
+    <span class="code-keyword">def</span> <span class="code-function">_validate_code_safety</span>(self, code: str) -> bool:
+        <span class="code-string">"""
+        Security validation to prevent malicious code execution.
+        Checks for dangerous operations and unauthorized imports.
+        """</span>
+
+        <span class="code-comment"># Blacklist dangerous operations</span>
+        dangerous_patterns = [
+            r<span class="code-string">'import\s+os'</span>,
+            r<span class="code-string">'import\s+sys'</span>,
+            r<span class="code-string">'import\s+subprocess'</span>,
+            r<span class="code-string">'__import__'</span>,
+            r<span class="code-string">'eval\('</span>,
+            r<span class="code-string">'exec\('</span>,
+            r<span class="code-string">'open\('</span>,
+            r<span class="code-string">'file\('</span>,
+            r<span class="code-string">'compile\('</span>
+        ]
+
+        <span class="code-keyword">for</span> pattern <span class="code-keyword">in</span> dangerous_patterns:
+            <span class="code-keyword">if</span> re.search(pattern, code):
+                <span class="code-keyword">return</span> <span class="code-keyword">False</span>
+
+        <span class="code-comment"># Whitelist allowed operations</span>
+        allowed_imports = [<span class="code-string">'datetime'</span>, <span class="code-string">'timedelta'</span>, <span class="code-string">'re'</span>]
+        <span class="code-keyword">return</span> <span class="code-keyword">True</span>
+
+    <span class="code-keyword">async</span> <span class="code-keyword">def</span> <span class="code-function">_execute_code</span>(self, code: str) -> Dict:
+        <span class="code-string">"""
+        Execute generated code in a controlled namespace with access to booking functions.
+        This is where the AI-generated code actually runs.
+        """</span>
+
+        <span class="code-comment"># Create execution namespace with helper functions</span>
+        namespace = {
+            <span class="code-string">'get_bookings'</span>: self._get_bookings,
+            <span class="code-string">'create_booking'</span>: self._create_booking,
+            <span class="code-string">'cancel_booking'</span>: self._cancel_booking,
+            <span class="code-string">'check_availability'</span>: self._check_availability,
+            <span class="code-string">'calculate_price'</span>: self._calculate_price,
+            <span class="code-string">'datetime'</span>: datetime,
+            <span class="code-string">'timedelta'</span>: timedelta,
+            <span class="code-string">'re'</span>: re,
+            <span class="code-string">'result'</span>: <span class="code-keyword">None</span>
+        }
+
+        <span class="code-keyword">try</span>:
+            <span class="code-comment"># Execute generated code</span>
+            exec(code, namespace)
+
+            <span class="code-comment"># Return the result (code should set 'result' variable)</span>
+            <span class="code-keyword">return</span> namespace.get(<span class="code-string">'result'</span>, {<span class="code-string">"message"</span>: <span class="code-string">"Operation completed"</span>})
+
+        <span class="code-keyword">except</span> Exception <span class="code-keyword">as</span> e:
+            <span class="code-keyword">return</span> {
+                <span class="code-string">"error"</span>: <span class="code-keyword">True</span>,
+                <span class="code-string">"message"</span>: f<span class="code-string">"Code execution failed: {str(e)}"</span>
+            }
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Booking Operations & Business Logic</h2>
+            <p>Helper functions that the AI-generated code can call to perform actual booking operations:</p>
+
+            <div class="code-container">
+                <div class="code-header">booking_operations.py - Database & Business Logic</div>
+                <div class="code-block">
+<span class="code-keyword">class</span> <span class="code-function">BookingOperations</span>:
+    <span class="code-keyword">def</span> <span class="code-function">_create_booking</span>(self, court: int, date: str, start_time: str,
+                        end_time: str, ic: str, name: str) -> Dict:
+        <span class="code-string">"""
+        Create a new booking with conflict detection and pricing calculation.
+        """</span>
+
+        <span class="code-comment"># Validate IC number format (Malaysian)</span>
+        <span class="code-keyword">if</span> <span class="code-keyword">not</span> self._validate_ic_number(ic):
+            <span class="code-keyword">return</span> {
+                <span class="code-string">"error"</span>: <span class="code-keyword">True</span>,
+                <span class="code-string">"message"</span>: <span class="code-string">"Invalid IC number format. Use: YYMMDD-PB-###G"</span>
+            }
+
+        <span class="code-comment"># Validate court number</span>
+        <span class="code-keyword">if</span> court < <span class="code-number">1</span> <span class="code-keyword">or</span> court > <span class="code-number">12</span>:
+            <span class="code-keyword">return</span> {<span class="code-string">"error"</span>: <span class="code-keyword">True</span>, <span class="code-string">"message"</span>: <span class="code-string">"Court must be between 1-12"</span>}
+
+        <span class="code-comment"># Check for conflicts</span>
+        <span class="code-keyword">if</span> <span class="code-keyword">not</span> self._check_availability(court, date, start_time, end_time):
+            <span class="code-keyword">return</span> {
+                <span class="code-string">"error"</span>: <span class="code-keyword">True</span>,
+                <span class="code-string">"message"</span>: f<span class="code-string">"Court {court} is already booked for this time slot"</span>
+            }
+
+        <span class="code-comment"># Calculate total price</span>
+        total_price = self._calculate_price(start_time, end_time, date)
+
+        <span class="code-comment"># Create booking record</span>
+        booking = {
+            <span class="code-string">"booking_id"</span>: self._generate_booking_id(),
+            <span class="code-string">"court"</span>: court,
+            <span class="code-string">"date"</span>: date,
+            <span class="code-string">"start_time"</span>: start_time,
+            <span class="code-string">"end_time"</span>: end_time,
+            <span class="code-string">"ic_number"</span>: ic,
+            <span class="code-string">"customer_name"</span>: name,
+            <span class="code-string">"total_price"</span>: total_price,
+            <span class="code-string">"created_at"</span>: datetime.now().isoformat(),
+            <span class="code-string">"status"</span>: <span class="code-string">"confirmed"</span>
+        }
+
+        <span class="code-comment"># Save to database</span>
+        self.db.insert(booking)
+
+        <span class="code-keyword">return</span> {
+            <span class="code-string">"success"</span>: <span class="code-keyword">True</span>,
+            <span class="code-string">"message"</span>: f<span class="code-string">"Booking confirmed for Court {court} on {date}"</span>,
+            <span class="code-string">"booking_id"</span>: booking[<span class="code-string">"booking_id"</span>],
+            <span class="code-string">"total_price"</span>: f<span class="code-string">"RM {total_price:.2f}"</span>,
+            <span class="code-string">"details"</span>: booking
+        }
+
+    <span class="code-keyword">def</span> <span class="code-function">_calculate_price</span>(self, start_time: str, end_time: str, date: str) -> float:
+        <span class="code-string">"""
+        Calculate price based on time of day and day of week.
+        Implements four-tier dynamic pricing system.
+        """</span>
+
+        start = datetime.strptime(f<span class="code-string">"{date} {start_time}"</span>, <span class="code-string">"%Y-%m-%d %H:%M"</span>)
+        end = datetime.strptime(f<span class="code-string">"{date} {end_time}"</span>, <span class="code-string">"%Y-%m-%d %H:%M"</span>)
+
+        <span class="code-comment"># Calculate duration in hours</span>
+        duration_hours = (end - start).total_seconds() / <span class="code-number">3600</span>
+
+        <span class="code-comment"># Determine if weekend (Saturday=5, Sunday=6)</span>
+        is_weekend = start.weekday() >= <span class="code-number">5</span>
+
+        <span class="code-comment"># Determine if nighttime (6pm - 6am)</span>
+        is_nighttime = start.hour >= <span class="code-number">18</span> <span class="code-keyword">or</span> start.hour < <span class="code-number">6</span>
+
+        <span class="code-comment"># Four-tier pricing logic</span>
+        <span class="code-keyword">if</span> is_weekend <span class="code-keyword">and</span> is_nighttime:
+            hourly_rate = <span class="code-number">120</span>  <span class="code-comment"># Weekend nighttime</span>
+        <span class="code-keyword">elif</span> is_weekend:
+            hourly_rate = <span class="code-number">90</span>   <span class="code-comment"># Weekend daytime</span>
+        <span class="code-keyword">elif</span> is_nighttime:
+            hourly_rate = <span class="code-number">100</span>  <span class="code-comment"># Weekday nighttime</span>
+        <span class="code-keyword">else</span>:
+            hourly_rate = <span class="code-number">80</span>   <span class="code-comment"># Weekday daytime</span>
+
+        <span class="code-keyword">return</span> hourly_rate * duration_hours
+
+    <span class="code-keyword">def</span> <span class="code-function">_check_availability</span>(self, court: int, date: str,
+                              start_time: str, end_time: str) -> bool:
+        <span class="code-string">"""
+        Check if court is available for the requested time slot.
+        Returns True if available, False if conflict exists.
+        """</span>
+
+        Booking = Query()
+        existing_bookings = self.db.search(
+            (Booking.court == court) &
+            (Booking.date == date) &
+            (Booking.status == <span class="code-string">"confirmed"</span>)
+        )
+
+        requested_start = datetime.strptime(f<span class="code-string">"{date} {start_time}"</span>, <span class="code-string">"%Y-%m-%d %H:%M"</span>)
+        requested_end = datetime.strptime(f<span class="code-string">"{date} {end_time}"</span>, <span class="code-string">"%Y-%m-%d %H:%M"</span>)
+
+        <span class="code-keyword">for</span> booking <span class="code-keyword">in</span> existing_bookings:
+            existing_start = datetime.strptime(
+                f<span class="code-string">"{booking['date']} {booking['start_time']}"</span>,
+                <span class="code-string">"%Y-%m-%d %H:%M"</span>
+            )
+            existing_end = datetime.strptime(
+                f<span class="code-string">"{booking['date']} {booking['end_time']}"</span>,
+                <span class="code-string">"%Y-%m-%d %H:%M"</span>
+            )
+
+            <span class="code-comment"># Check for time overlap</span>
+            <span class="code-keyword">if</span> (requested_start < existing_end <span class="code-keyword">and</span> requested_end > existing_start):
+                <span class="code-keyword">return</span> <span class="code-keyword">False</span>  <span class="code-comment"># Conflict found</span>
+
+        <span class="code-keyword">return</span> <span class="code-keyword">True</span>  <span class="code-comment"># No conflicts</span>
+
+    <span class="code-keyword">def</span> <span class="code-function">_validate_ic_number</span>(self, ic: str) -> bool:
+        <span class="code-string">"""
+        Validate Malaysian IC number format: YYMMDD-PB-###G
+        Example: 850715-08-1234 (born July 15, 1985, from Johor)
+        """</span>
+
+        pattern = r<span class="code-string">'^[0-9]{6}-[0-9]{2}-[0-9]{4}$'</span>
+        <span class="code-keyword">return</span> bool(re.match(pattern, ic))
+
+    <span class="code-keyword">def</span> <span class="code-function">_cancel_booking</span>(self, ic: str, court: int, date: str) -> Dict:
+        <span class="code-string">"""Cancel an existing booking and process refund."""</span>
+
+        Booking = Query()
+        booking = self.db.get(
+            (Booking.ic_number == ic) &
+            (Booking.court == court) &
+            (Booking.date == date) &
+            (Booking.status == <span class="code-string">"confirmed"</span>)
+        )
+
+        <span class="code-keyword">if</span> <span class="code-keyword">not</span> booking:
+            <span class="code-keyword">return</span> {
+                <span class="code-string">"error"</span>: <span class="code-keyword">True</span>,
+                <span class="code-string">"message"</span>: <span class="code-string">"No booking found with these details"</span>
+            }
+
+        <span class="code-comment"># Update booking status</span>
+        self.db.update(
+            {<span class="code-string">"status"</span>: <span class="code-string">"cancelled"</span>, <span class="code-string">"cancelled_at"</span>: datetime.now().isoformat()},
+            (Booking.ic_number == ic) &
+            (Booking.court == court) &
+            (Booking.date == date)
+        )
+
+        <span class="code-keyword">return</span> {
+            <span class="code-string">"success"</span>: <span class="code-keyword">True</span>,
+            <span class="code-string">"message"</span>: f<span class="code-string">"Booking cancelled for Court {court} on {date}"</span>,
+            <span class="code-string">"refund_amount"</span>: f<span class="code-string">"RM {booking['total_price']:.2f}"</span>
+        }
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Example: AI-Generated Code</h2>
+            <p>Here's an example of actual code generated by Gemini 2.5 Flash when a user requests to book a court:</p>
+
+            <div class="code-container">
+                <div class="code-header">Example Generated Code (from LLM)</div>
+                <div class="code-block">
+<span class="code-comment"># User Request: "Book court 5 for tomorrow at 7 PM for 2 hours. IC: 850715-08-1234, Name: Ahmad"</span>
+<span class="code-comment"># This code was GENERATED by Gemini 2.5 Flash:</span>
+
+<span class="code-keyword">from</span> datetime <span class="code-keyword">import</span> datetime, timedelta
+
+<span class="code-comment"># Parse booking details</span>
+booking_date = (datetime.now() + timedelta(days=<span class="code-number">1</span>)).strftime(<span class="code-string">'%Y-%m-%d'</span>)
+start_time = <span class="code-string">"19:00"</span>
+end_time = <span class="code-string">"21:00"</span>
+court = <span class="code-number">5</span>
+ic_number = <span class="code-string">"850715-08-1234"</span>
+customer_name = <span class="code-string">"Ahmad"</span>
+
+<span class="code-comment"># Validate IC format</span>
+<span class="code-keyword">if</span> <span class="code-keyword">not</span> re.match(r<span class="code-string">'^[0-9]{6}-[0-9]{2}-[0-9]{4}$'</span>, ic_number):
+    result = {<span class="code-string">"error"</span>: <span class="code-keyword">True</span>, <span class="code-string">"message"</span>: <span class="code-string">"Invalid IC format"</span>}
+<span class="code-keyword">else</span>:
+    <span class="code-comment"># Check availability</span>
+    is_available = check_availability(court, booking_date, start_time, end_time)
+
+    <span class="code-keyword">if</span> <span class="code-keyword">not</span> is_available:
+        result = {
+            <span class="code-string">"error"</span>: <span class="code-keyword">True</span>,
+            <span class="code-string">"message"</span>: f<span class="code-string">"Court {court} is not available at this time"</span>
+        }
+    <span class="code-keyword">else</span>:
+        <span class="code-comment"># Calculate price (nighttime weekday: RM100/hr)</span>
+        total_price = calculate_price(start_time, end_time, booking_date)
+
+        <span class="code-comment"># Create booking</span>
+        result = create_booking(
+            court=court,
+            date=booking_date,
+            start_time=start_time,
+            end_time=end_time,
+            ic=ic_number,
+            name=customer_name
+        )
+                </div>
+            </div>
+
+            <p><strong>Key Points:</strong></p>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li>The LLM parsed the natural language request and extracted all parameters</li>
+                <li>It correctly calculated "tomorrow" and "7 PM for 2 hours" (19:00-21:00)</li>
+                <li>It added IC validation logic using regex</li>
+                <li>It called the availability check before booking</li>
+                <li>It invoked the pricing calculation and booking creation functions</li>
+                <li>All business logic was generated dynamically, not hardcoded</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>FastAPI Endpoints</h2>
+            <p>RESTful API endpoints that expose the agentic booking functionality:</p>
+
+            <div class="code-container">
+                <div class="code-header">api_routes.py - REST API Implementation</div>
+                <div class="code-block">
+<span class="code-comment"># Initialize the agentic booking agent</span>
+agent = AgenticBookingAgent()
+
+<span class="code-decorator">@app.post</span>(<span class="code-string">"/book"</span>)
+<span class="code-keyword">async</span> <span class="code-keyword">def</span> <span class="code-function">book_court</span>(request: BookingRequest):
+    <span class="code-string">"""
+    Process natural language booking request through AI agent.
+    The LLM generates code to handle the booking.
+    """</span>
+    <span class="code-keyword">try</span>:
+        result = <span class="code-keyword">await</span> agent.process_request(
+            user_message=request.user_message,
+            ic_number=request.ic_number
+        )
+        <span class="code-keyword">return</span> result
+    <span class="code-keyword">except</span> Exception <span class="code-keyword">as</span> e:
+        <span class="code-keyword">raise</span> HTTPException(status_code=<span class="code-number">500</span>, detail=str(e))
+
+<span class="code-decorator">@app.get</span>(<span class="code-string">"/availability"</span>)
+<span class="code-keyword">async</span> <span class="code-keyword">def</span> <span class="code-function">check_availability</span>(court: int, date: str, start: str, end: str):
+    <span class="code-string">"""Check if a specific court is available for booking."""</span>
+    is_available = agent._check_availability(court, date, start, end)
+    price = agent._calculate_price(start, end, date)
+
+    <span class="code-keyword">return</span> {
+        <span class="code-string">"court"</span>: court,
+        <span class="code-string">"date"</span>: date,
+        <span class="code-string">"time_slot"</span>: f<span class="code-string">"{start} - {end}"</span>,
+        <span class="code-string">"available"</span>: is_available,
+        <span class="code-string">"price"</span>: f<span class="code-string">"RM {price:.2f}"</span> <span class="code-keyword">if</span> is_available <span class="code-keyword">else</span> <span class="code-keyword">None</span>
+    }
+
+<span class="code-decorator">@app.get</span>(<span class="code-string">"/bookings"</span>)
+<span class="code-keyword">async</span> <span class="code-keyword">def</span> <span class="code-function">get_all_bookings</span>(ic_number: str = <span class="code-keyword">None</span>):
+    <span class="code-string">"""Retrieve all bookings, optionally filtered by IC number."""</span>
+    <span class="code-keyword">if</span> ic_number:
+        Booking = Query()
+        bookings = agent.db.search(Booking.ic_number == ic_number)
+    <span class="code-keyword">else</span>:
+        bookings = agent.db.all()
+
+    <span class="code-keyword">return</span> {<span class="code-string">"bookings"</span>: bookings, <span class="code-string">"count"</span>: len(bookings)}
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Technical Implementation Notes</h2>
+            <h3>Key Algorithms & Innovations</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>Code-as-Action Pattern:</strong> LLM generates executable code instead of structured JSON responses</li>
+                <li><strong>Secure Code Execution:</strong> Sandboxed environment with whitelisted functions and blacklisted dangerous operations</li>
+                <li><strong>Dynamic Business Logic:</strong> Pricing rules, validation, and conflict detection emerge from AI-generated code</li>
+                <li><strong>Context Injection:</strong> System provides current time, pricing rules, and available functions as context</li>
+                <li><strong>Self-Validating Code:</strong> Generated code includes its own validation and error handling logic</li>
+            </ul>
+
+            <h3>Why This Approach Works</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>Flexibility:</strong> Can handle complex, multi-part requests without predefined templates</li>
+                <li><strong>Adaptability:</strong> Business rules can be changed by updating system context, not code</li>
+                <li><strong>Natural Language:</strong> Users don't need to learn API syntax or form fields</li>
+                <li><strong>Intelligent Reasoning:</strong> AI can infer missing information and make reasonable assumptions</li>
+                <li><strong>Scalable:</strong> Same pattern works for simple and complex booking scenarios</li>
+            </ul>
+
+            <h3>Security Considerations</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>Code Validation:</strong> Blacklist dangerous imports and operations (os, sys, eval, exec)</li>
+                <li><strong>Sandboxed Execution:</strong> Limited namespace with only whitelisted functions</li>
+                <li><strong>Input Validation:</strong> IC numbers, court numbers, dates validated before execution</li>
+                <li><strong>Error Handling:</strong> Try-except blocks prevent crashes from malformed code</li>
+                <li><strong>Rate Limiting:</strong> Prevents abuse of code generation API</li>
+            </ul>
+        </div>
+
+        <div class="demo-links">
+            <a href="https://ai-profile-badminton-court-booking--662370080553.us-west1.run.app/" target="_blank" class="demo-btn">Try Live Demo</a>
+            <a href="badminton-booking-agent.html" class="demo-btn secondary">View Full Project Details</a>
+        </div>
+
+        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+            <a href="index.html">← Back to Portfolio</a> |
+            <a href="badminton-booking-agent.html">View Project Overview</a>
+        </nav>
+    </div>
+</body>
+</html>

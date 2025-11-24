@@ -124,6 +124,14 @@ This repository contains **28 production-deployed AI applications** demonstratin
 - **Tech Stack:** Python, Gemini 2.0 Flash, Pandas, NumPy, Matplotlib, Seaborn
 - **AI Capabilities:** Automatic schema detection and analysis, natural language to Pandas/NumPy code generation, safe sandboxed execution environment, automatic visualization generation, multi-pattern support (filtering, aggregation, grouping), error handling with status tracking, exploratory data analysis
 
+### 🤖 Business Automation & Booking Systems
+
+#### [Badminton Court Booking Agent](./projects/badminton-booking-agent/)
+**AI-powered agentic workflow for intelligent badminton court booking management using code-as-action pattern**
+- **Live Demo:** [ai-profile-badminton-court-booking--662370080553.us-west1.run.app](https://ai-profile-badminton-court-booking--662370080553.us-west1.run.app/)
+- **Tech Stack:** Python, FastAPI, Google Gemini 2.5 Flash, TinyDB, Pydantic, Docker
+- **AI Capabilities:** M5 pattern (code-as-action) for agentic workflows, LLM generates executable Python code for booking operations, dynamic time-based pricing (4 tiers: daytime/nighttime × weekday/weekend), multi-hour bookings with per-hour pricing breakdown, automatic conflict detection and double-booking prevention, 24/7 operations with midnight-crossing bookings, revenue tracking and financial analytics, Malaysian localization (IC numbers, RM currency), natural language processing for flexible date/time parsing, safe code execution in controlled namespace
+
 ### 🤖 Conversational AI & Specialized Chatbots
 
 #### [Chinese Traditional Calendar with AI Consultant (中華傳統日曆)](./projects/chinese-calender/)
