@@ -15,11 +15,14 @@ import re, io, sys, traceback
 
 load_dotenv()
 
-GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
-if not GOOGLE_API_KEY:
-    raise ValueError("GOOGLE_API_KEY not found")
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY", "")
 
-genai.configure(api_key=GOOGLE_API_KEY)
+# Only configure if API key is valid
+if GOOGLE_API_KEY and GOOGLE_API_KEY != "placeholder_key_to_update":
+    genai.configure(api_key=GOOGLE_API_KEY)
+    API_CONFIGURED = True
+else:
+    API_CONFIGURED = False
 
 app = FastAPI(title="Badminton Booking Agent API", version="1.0.0")
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
@@ -90,13 +93,14 @@ Output: Python code in markdown block
 Request: {question}"""
 
 def generate_code(prompt):
+    if not API_CONFIGURED:
+        raise HTTPException(500, "API key not configured. Please set GOOGLE_API_KEY environment variable.")
     model = genai.GenerativeModel("gemini-2.0-flash-exp", generation_config=genai.GenerationConfig(temperature=0.2))
     response = model.generate_content(prompt)
     return response.candidates[0].content.parts[0].text if response.candidates else ""
 
 def extract_code(text):
-    m = re.search(r'```python\s*
-(.*?)```', text, re.DOTALL | re.IGNORECASE)
+    m = re.search(r'```python\s*\n(.*?)```', text, re.DOTALL | re.IGNORECASE)
     return m.group(1).strip() if m else text.strip()
 
 def execute_code(code, user_request):
@@ -118,7 +122,13 @@ def execute_code(code, user_request):
 
 @app.get("/")
 async def root():
-    return {"message": "Badminton Booking Agent API", "version": "1.0.0", "docs": "/docs"}
+    return {
+        "message": "Badminton Booking Agent API",
+        "version": "1.0.0",
+        "docs": "/docs",
+        "api_configured": API_CONFIGURED,
+        "status": "API key required" if not API_CONFIGURED else "Ready"
+    }
 
 @app.post("/api/chat", response_model=ChatResponse)
 async def chat(request: ChatRequest):
@@ -158,4 +168,4 @@ async def startup():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=int(os.getenv("PORT", 8000)))
