@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kopitiam Digital Waiter - Real-Time Sales Tracker for Kopitiam Owners</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #222;
+            background-color: #ffffff;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .back-nav {
+            margin-bottom: 20px;
+        }
+
+        .back-nav a {
+            color: #007BFF;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .back-nav a:hover {
+            text-decoration: underline;
+        }
+
+        .project-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #059669, #047857);
+            color: white;
+            border-radius: 10px;
+        }
+
+        .project-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .project-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .demo-links {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .demo-btn {
+            display: inline-block;
+            background-color: #007BFF;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .demo-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .demo-btn.secondary {
+            background-color: #28a745;
+        }
+
+        .demo-btn.secondary:hover {
+            background-color: #218838;
+        }
+
+        .content-section {
+            margin: 40px 0;
+            padding: 30px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border-left: 5px solid #059669;
+        }
+
+        .content-section h2 {
+            color: #059669;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .content-section h3 {
+            color: #333;
+            margin: 20px 0 10px 0;
+            font-size: 1.3rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .feature-item {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+
+        .feature-item h4 {
+            color: #059669;
+            margin-bottom: 10px;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .tech-item {
+            background-color: #059669;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .code-block {
+            background-color: #f4f4f4;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: monospace;
+            overflow-x: auto;
+        }
+
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .metric-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid #059669;
+        }
+
+        .metric-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #059669;
+        }
+
+        .metric-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .menu-tag {
+            background-color: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            color: #166534;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .project-header h1 {
+                font-size: 2rem;
+            }
+
+            .project-header p {
+                font-size: 1rem;
+            }
+
+            .badges {
+                justify-content: center;
+            }
+
+            .demo-btn {
+                margin: 5px;
+                padding: 10px 20px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="index.html">← Back to Portfolio</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>☕ Kopitiam Digital Waiter</h1>
+            <p>Real-time sales tracker and digital logbook for Malaysian Kopitiam owners</p>
+
+            <div class="badges">
+                <span class="badge">React 19</span>
+                <span class="badge">TypeScript</span>
+                <span class="badge">Node.js / Express</span>
+                <span class="badge">SQLite</span>
+                <span class="badge">Gemini AI</span>
+                <span class="badge">Recharts</span>
+            </div>
+        </div>
+
+        <div class="demo-links">
+            <a href="https://kopitiam-digital-waiter-169218045868.us-west1.run.app" target="_blank" class="demo-btn">🚀 Launch Live Demo</a>
+            <a href="kopitiam-digital-waiter-source.html" class="demo-btn secondary">📁 View Source Code</a>
+        </div>
+
+        <div class="content-section">
+            <h2>📋 Project Overview & Problem Statement</h2>
+            <p><strong>Challenge:</strong> Small Malaysian Kopitiam operators typically track daily sales manually using pen and paper or basic spreadsheets. This approach is error-prone, time-consuming, and provides no real-time insight into which items are selling, when peak hours occur, or how revenue trends over time.</p>
+
+            <p><strong>Solution:</strong> Kopitiam Digital Waiter is a lightweight, mobile-friendly web application that lets Kopitiam owners record sales in seconds, monitor item performance, and view daily analytics — all from any browser, with no complex setup required.</p>
+
+            <h3>Key Benefits</h3>
+            <ul>
+                <li><strong>Instant Sales Recording:</strong> Tap to record sales with a +/- quantity selector — no typing required</li>
+                <li><strong>Live Dashboard:</strong> See today's revenue, items sold, and transaction count update in real time</li>
+                <li><strong>Item Performance Ranking:</strong> Know which dishes and drinks are your best sellers at a glance</li>
+                <li><strong>Analytics:</strong> Visualize peak selling hours and daily revenue trends over the past 7 days</li>
+                <li><strong>Smart Tips:</strong> AI-generated contextual tips remind owners to prepare for rush hours</li>
+                <li><strong>Milestone Alerts:</strong> Get notified when a menu item crosses a sales milestone today</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>🖥️ Application Features</h2>
+
+            <div class="features-grid">
+                <div class="feature-item">
+                    <h4>📊 Dashboard</h4>
+                    <p>At-a-glance view of today's total revenue (RM), items sold, and transactions. Includes milestone alerts and an AI-powered quick tip based on current sales activity.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>📋 Sales Logbook</h4>
+                    <p>Interactive menu grid with +/- quantity controls. Tap the green button to record a sale. Shows live top-selling items and today's running sales total in the header bar.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>📈 Item Performance</h4>
+                    <p>Horizontal progress bar chart ranking all menu items by total quantity sold. Top 3 items highlighted in emerald; remaining in grey. Shows "X sold" for each item.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>📉 Sales Analytics</h4>
+                    <p>Two charts: an Area Chart showing busy hours (total order volume by hour) and a Bar Chart showing daily revenue trends for the last 7 days. Powered by Recharts.</p>
+                </div>
+            </div>
+
+            <h3>Full Menu (23 Items)</h3>
+            <div class="menu-grid">
+                <div class="menu-tag">Nasi Lemak</div>
+                <div class="menu-tag">Roti Bakar</div>
+                <div class="menu-tag">Kaya Butter Toast</div>
+                <div class="menu-tag">Kopi O</div>
+                <div class="menu-tag">Mee Goreng</div>
+                <div class="menu-tag">Teh Tarik Kaw</div>
+                <div class="menu-tag">Char Kuey Teow</div>
+                <div class="menu-tag">Milo Ais</div>
+                <div class="menu-tag">Roti Canai</div>
+                <div class="menu-tag">Mee Rebus</div>
+                <div class="menu-tag">Nasi Goreng</div>
+                <div class="menu-tag">Maggi Goreng</div>
+                <div class="menu-tag">Teh O</div>
+                <div class="menu-tag">Karipap</div>
+                <div class="menu-tag">Pulut Panggang</div>
+                <div class="menu-tag">Tau Fu Fah</div>
+                <div class="menu-tag">Sirap Bandung</div>
+                <div class="menu-tag">Rojak</div>
+                <div class="menu-tag">Popiah</div>
+                <div class="menu-tag">Neslo</div>
+                <div class="menu-tag">Teh O Ais</div>
+                <div class="menu-tag">Ayam Goreng</div>
+                <div class="menu-tag">Kuih Lapis</div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🤖 AI Integration & Intelligence</h2>
+
+            <div class="features-grid">
+                <div class="feature-item">
+                    <h4>💡 AI Quick Tips (Gemini AI)</h4>
+                    <p>Powered by Google Gemini AI, the dashboard generates context-aware tips for the owner. If sales are live today, it references the top-selling item. Otherwise it uses historical best-seller data to suggest preparation priorities.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>🔔 Milestone Alerts</h4>
+                    <p>The server automatically detects when a menu item crosses significant sales milestones during the day (e.g. 10+ orders) and surfaces a congratulatory alert on the dashboard.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>📊 Data-Seeded Insights</h4>
+                    <p>The app seeds from a real Kopitiam dataset (CSV) on first launch, giving owners instant analytics from day one without needing to enter historical data manually.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>⏱️ Peak Hours Detection</h4>
+                    <p>The analytics engine automatically groups all historical sales by hour using SQLite queries, surfacing which hours of the day see the highest order volumes — no manual analysis needed.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🛠️ Technical Architecture & Implementation</h2>
+
+            <h3>Frontend Stack</h3>
+            <div class="tech-stack">
+                <span class="tech-item">React 19</span>
+                <span class="tech-item">TypeScript 5.8</span>
+                <span class="tech-item">Vite 6</span>
+                <span class="tech-item">Tailwind CSS 4</span>
+                <span class="tech-item">Recharts</span>
+                <span class="tech-item">Framer Motion</span>
+                <span class="tech-item">Lucide React Icons</span>
+            </div>
+
+            <h3>Backend Stack</h3>
+            <div class="tech-stack">
+                <span class="tech-item">Node.js</span>
+                <span class="tech-item">Express.js</span>
+                <span class="tech-item">TypeScript (tsx)</span>
+                <span class="tech-item">better-sqlite3</span>
+                <span class="tech-item">csv-parse</span>
+                <span class="tech-item">Google Gemini AI</span>
+            </div>
+
+            <h3>Deployment & Infrastructure</h3>
+            <div class="tech-stack">
+                <span class="tech-item">Google Cloud Run</span>
+                <span class="tech-item">Docker</span>
+                <span class="tech-item">Vite Build (SPA)</span>
+                <span class="tech-item">Express Static Serving</span>
+            </div>
+
+            <h3>System Architecture</h3>
+            <ul>
+                <li><strong>Single-Server Architecture:</strong> Express serves both the REST API and the compiled React SPA from the same process</li>
+                <li><strong>SQLite Database:</strong> Lightweight embedded database storing all sales records with datetime, item, quantity, and totals</li>
+                <li><strong>CSV Seeding:</strong> On first run, the server reads <code>Kopitiam_dataset.csv</code> and populates the database with historical sales data</li>
+                <li><strong>REST API:</strong> Four endpoints — <code>/api/menu</code>, <code>/api/sales</code> (POST), <code>/api/stats/today</code>, <code>/api/stats/performance</code>, <code>/api/stats/analytics</code></li>
+                <li><strong>Vite Dev Mode:</strong> In development, Express uses Vite middleware for hot module replacement (HMR)</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>📖 Development Setup & Installation Guide</h2>
+
+            <h3>Prerequisites</h3>
+            <ul>
+                <li><strong>Node.js 18+</strong> with npm</li>
+                <li><strong>Gemini API Key</strong> from Google AI Studio</li>
+            </ul>
+
+            <h3>Quick Start Installation</h3>
+            <div class="code-block">
+# Clone the repository
+git clone https://github.com/lyven81/ai-project.git
+cd ai-project/projects/kopitiam-digital-waiter
+
+# Install dependencies
+npm install
+
+# Set up environment variables
+cp .env.example .env.local
+# Add your GEMINI_API_KEY to .env.local
+
+# Run the app in development mode
+npm run dev
+            </div>
+
+            <h3>Environment Configuration</h3>
+            <div class="code-block">
+# Required API Configuration
+GEMINI_API_KEY=your_gemini_api_key_here
+            </div>
+
+            <h3>Available Scripts</h3>
+            <ul>
+                <li><code>npm run dev</code> — Start development server with Vite HMR</li>
+                <li><code>npm run build</code> — Build the React SPA to <code>dist/</code></li>
+                <li><code>npm run start</code> — Run production server (requires built dist)</li>
+                <li><code>npm run lint</code> — TypeScript type checking</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>🚀 Deployment on Google Cloud Run</h2>
+
+            <div class="code-block">
+# Build and deploy to Cloud Run
+gcloud run deploy kopitiam-digital-waiter \
+  --source . \
+  --platform managed \
+  --region us-west1 \
+  --set-env-vars GEMINI_API_KEY=your_api_key
+            </div>
+
+            <h3>Production Notes</h3>
+            <ul>
+                <li>In production mode, Express serves the compiled <code>dist/</code> folder and handles all API routes</li>
+                <li>SQLite database is ephemeral on Cloud Run — for persistent storage, consider mounting a volume or using Cloud SQL</li>
+                <li>The app is fully containerizable via Docker for any cloud provider</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>📊 Key Metrics</h2>
+
+            <div class="metrics">
+                <div class="metric-card">
+                    <div class="metric-number">23</div>
+                    <div class="metric-label">Menu Items Pre-Loaded</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">4</div>
+                    <div class="metric-label">Dashboard Tabs</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">5</div>
+                    <div class="metric-label">REST API Endpoints</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">Real-Time</div>
+                    <div class="metric-label">Dashboard Updates</div>
+                </div>
+            </div>
+
+            <h3>Business Value</h3>
+            <ul>
+                <li><strong>Operational Efficiency:</strong> Replaces pen-and-paper logbooks with a tap-to-record digital system</li>
+                <li><strong>Inventory Planning:</strong> Item performance data helps owners anticipate ingredient needs before peak hours</li>
+                <li><strong>Revenue Visibility:</strong> Real-time revenue tracking provides instant financial awareness throughout the day</li>
+                <li><strong>Data-Driven Decisions:</strong> Busy hour analytics help optimize staffing and ingredient preparation schedules</li>
+                <li><strong>Zero Learning Curve:</strong> Designed for non-technical Kopitiam owners with a simple, icon-based interface</li>
+            </ul>
+        </div>
+
+        <div class="demo-links">
+            <a href="https://kopitiam-digital-waiter-169218045868.us-west1.run.app" target="_blank" class="demo-btn">🚀 Try Live Demo</a>
+            <a href="https://github.com/lyven81/ai-project/tree/main/projects/kopitiam-digital-waiter" class="demo-btn secondary">📖 Full Source Code</a>
+        </div>
+
+        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+            <a href="index.html">← Back to Portfolio</a> |
+            <a href="project-categories.html">View All Categories</a>
+        </nav>
+    </div>
+</body>
+</html>

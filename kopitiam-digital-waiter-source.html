@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kopitiam Digital Waiter - Source Code</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #222;
+            background-color: #ffffff;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .back-nav {
+            margin-bottom: 20px;
+        }
+
+        .back-nav a {
+            color: #007BFF;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .back-nav a:hover {
+            text-decoration: underline;
+        }
+
+        .project-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #059669, #047857);
+            color: white;
+            border-radius: 10px;
+        }
+
+        .project-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .project-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .content-section {
+            margin: 40px 0;
+            padding: 30px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border-left: 5px solid #059669;
+        }
+
+        .content-section h2 {
+            color: #059669;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .content-section h3 {
+            color: #333;
+            margin: 20px 0 10px 0;
+            font-size: 1.3rem;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #059669;
+            margin: 20px 0;
+        }
+
+        .code-container {
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        .code-header {
+            color: #4ade80;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .code-block {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #d4d4d4;
+        }
+
+        .code-comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+
+        .code-keyword {
+            color: #569cd6;
+        }
+
+        .code-string {
+            color: #ce9178;
+        }
+
+        .code-function {
+            color: #dcdcaa;
+        }
+
+        .code-number {
+            color: #b5cea8;
+        }
+
+        .demo-links {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .demo-btn {
+            display: inline-block;
+            background-color: #007BFF;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .demo-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .demo-btn.secondary {
+            background-color: #28a745;
+        }
+
+        .demo-btn.secondary:hover {
+            background-color: #218838;
+        }
+
+        @media (max-width: 768px) {
+            .project-header h1 {
+                font-size: 2rem;
+            }
+
+            .project-header p {
+                font-size: 1rem;
+            }
+
+            .demo-btn {
+                margin: 5px;
+                padding: 10px 20px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="kopitiam-digital-waiter.html">← Back to Project Overview</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>☕ Kopitiam Digital Waiter</h1>
+            <p>Core Source Code & Sales Tracking Implementation</p>
+
+            <div class="badges">
+                <span class="badge">React 19</span>
+                <span class="badge">TypeScript</span>
+                <span class="badge">Express.js</span>
+                <span class="badge">SQLite</span>
+                <span class="badge">Gemini AI</span>
+            </div>
+        </div>
+
+        <div class="highlight-box">
+            <h3>🔍 About This Code Showcase</h3>
+            <p><strong>This curated code snippet demonstrates how the Kopitiam Digital Waiter records sales, queries real-time statistics, and surfaces AI-powered business tips for Malaysian Kopitiam owners.</strong></p>
+            <p>Deployment scripts and proprietary configuration details are omitted for clarity. This showcase highlights the core backend API logic and the React frontend sales recording flow.</p>
+        </div>
+
+        <div class="content-section">
+            <h2>🗄️ Core Algorithm: Sales API & Statistics Engine</h2>
+            <p>The backend is a single Express.js server that manages SQLite sales data and exposes REST endpoints for the React frontend. Here is the core of the statistics engine:</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 server.ts — Today's Stats Endpoint</div>
+                <div class="code-block">
+<span class="code-keyword">app</span>.get(<span class="code-string">"/api/stats/today"</span>, (req, res) =&gt; {
+  <span class="code-comment">// Aggregate today's revenue, item count, and transaction count</span>
+  <span class="code-keyword">const</span> stats = db.prepare(<span class="code-string">`
+    SELECT
+      SUM(total_cents) as totalRevenue,
+      SUM(quantity) as totalItems,
+      COUNT(DISTINCT id) as totalTransactions
+    FROM sales
+    WHERE date(datetime) = date('now')
+  `</span>).get();
+
+  <span class="code-comment">// Detect milestone: any item sold 10+ times today</span>
+  <span class="code-keyword">const</span> topItem = db.prepare(<span class="code-string">`
+    SELECT item_name, SUM(quantity) as qty
+    FROM sales
+    WHERE date(datetime) = date('now')
+    GROUP BY item_name
+    ORDER BY qty DESC
+    LIMIT 1
+  `</span>).get();
+
+  <span class="code-keyword">const</span> alerts = [];
+  <span class="code-keyword">if</span> (topItem &amp;&amp; topItem.qty &gt;= <span class="code-number">10</span>) {
+    <span class="code-keyword">const</span> item = MENU_ITEMS.find(i =&gt; i.id === topItem.item_name);
+    alerts.push(<span class="code-string">`You just hit ${topItem.qty} ${item?.name} orders!`</span>);
+  }
+
+  <span class="code-comment">// AI-aware quick tip: reference today's top seller or all-time best seller</span>
+  <span class="code-keyword">const</span> topItemAllTime = db.prepare(<span class="code-string">`
+    SELECT item_name, SUM(quantity) as qty
+    FROM sales GROUP BY item_name ORDER BY qty DESC LIMIT 1
+  `</span>).get();
+
+  <span class="code-keyword">let</span> quickTip = <span class="code-string">"Boss, start recording sales to see tips here!"</span>;
+  <span class="code-keyword">if</span> (topItem &amp;&amp; topItem.qty &gt; <span class="code-number">0</span>) {
+    <span class="code-keyword">const</span> item = MENU_ITEMS.find(i =&gt; i.id === topItem.item_name);
+    quickTip = <span class="code-string">`Boss, ${item?.name} is moving fast today! Check your inventory.`</span>;
+  } <span class="code-keyword">else if</span> (topItemAllTime) {
+    <span class="code-keyword">const</span> item = MENU_ITEMS.find(i =&gt; i.id === topItemAllTime.item_name);
+    quickTip = <span class="code-string">`Boss, ${item?.name} is usually your best seller. Ready for the rush?`</span>;
+  }
+
+  <span class="code-comment">// Top 3 items today for the live mini-analytics in logbook</span>
+  <span class="code-keyword">const</span> topItemsToday = db.prepare(<span class="code-string">`
+    SELECT item_name as id, SUM(quantity) as value
+    FROM sales WHERE date(datetime) = date('now')
+    GROUP BY item_name ORDER BY value DESC LIMIT 3
+  `</span>).all().map(row =&gt; ({
+    ...row,
+    name: MENU_ITEMS.find(i =&gt; i.id === row.id)?.name || row.id
+  }));
+
+  res.json({
+    revenue: stats.totalRevenue || <span class="code-number">0</span>,
+    items: stats.totalItems || <span class="code-number">0</span>,
+    transactions: stats.totalTransactions || <span class="code-number">0</span>,
+    alerts,
+    quickTip,
+    topItems: topItemsToday
+  });
+});
+                </div>
+            </div>
+
+            <div class="code-container">
+                <div class="code-header">📄 server.ts — Analytics Endpoint (Busy Hours + Daily Trends)</div>
+                <div class="code-block">
+<span class="code-keyword">app</span>.get(<span class="code-string">"/api/stats/analytics"</span>, (req, res) =&gt; {
+  <span class="code-comment">// Group all sales by hour-of-day to find peak selling periods</span>
+  <span class="code-keyword">const</span> busyHours = db.prepare(<span class="code-string">`
+    SELECT strftime('%H', datetime) as hour, SUM(quantity) as count
+    FROM sales
+    GROUP BY hour
+    ORDER BY hour ASC
+  `</span>).all();
+
+  <span class="code-comment">// Last 7 days of daily revenue for trend chart</span>
+  <span class="code-keyword">const</span> dailyTrends = db.prepare(<span class="code-string">`
+    SELECT date(datetime) as date, SUM(total_cents) as revenue
+    FROM sales
+    GROUP BY date
+    ORDER BY date DESC
+    LIMIT 7
+  `</span>).all().reverse(); <span class="code-comment">// Reverse so oldest is leftmost on chart</span>
+
+  res.json({ busyHours, dailyTrends });
+});
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>⚛️ Frontend: Sales Logbook Component</h2>
+            <p>The Logbook tab is where Kopitiam owners record sales. It features a menu grid with quantity selectors and a one-tap record button per item:</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 src/App.tsx — Logbook Component</div>
+                <div class="code-block">
+<span class="code-keyword">function</span> <span class="code-function">Logbook</span>({ menu, onRecord, stats }) {
+  <span class="code-keyword">const</span> [quantities, setQuantities] = useState&lt;Record&lt;string, number&gt;&gt;({});
+  <span class="code-keyword">const</span> [recording, setRecording] = useState&lt;string | null&gt;(null);
+
+  <span class="code-keyword">const</span> <span class="code-function">updateQty</span> = (id: string, delta: number) =&gt; {
+    setQuantities(prev =&gt; ({
+      ...prev,
+      [id]: Math.max(<span class="code-number">0</span>, (prev[id] || <span class="code-number">0</span>) + delta)
+    }));
+  };
+
+  <span class="code-keyword">const</span> <span class="code-function">handleRecord</span> = async (id: string) =&gt; {
+    <span class="code-keyword">const</span> qty = quantities[id] || <span class="code-number">1</span>;
+    setRecording(id);
+    <span class="code-keyword">await</span> onRecord(id, qty); <span class="code-comment">// POST to /api/sales</span>
+    setQuantities(prev =&gt; ({ ...prev, [id]: <span class="code-number">0</span> })); <span class="code-comment">// Reset qty after recording</span>
+    setTimeout(() =&gt; setRecording(null), <span class="code-number">1000</span>);
+  };
+
+  <span class="code-keyword">return</span> (
+    &lt;div className=<span class="code-string">"space-y-6"</span>&gt;
+      <span class="code-comment">{/* Today's Summary Bar at top of logbook */}</span>
+      {stats &amp;&amp; (
+        &lt;div className=<span class="code-string">"grid grid-cols-1 gap-4 lg:grid-cols-3"</span>&gt;
+          &lt;div className=<span class="code-string">"flex items-center justify-between rounded-2xl bg-emerald-600 p-4 text-white lg:col-span-2"</span>&gt;
+            &lt;div&gt;
+              &lt;p className=<span class="code-string">"text-xs font-medium opacity-80"</span>&gt;Today's Sales&lt;/p&gt;
+              &lt;p className=<span class="code-string">"text-xl font-black"</span>&gt;RM {(stats.revenue / <span class="code-number">100</span>).toFixed(<span class="code-number">2</span>)}&lt;/p&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+          <span class="code-comment">{/* Live mini top-items panel */}</span>
+          &lt;TopItemsPanel items={stats.topItems} /&gt;
+        &lt;/div&gt;
+      )}
+
+      <span class="code-comment">{/* Menu grid — one card per item */}</span>
+      &lt;div className=<span class="code-string">"grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4"</span>&gt;
+        {menu.map(item =&gt; (
+          &lt;MenuCard
+            key={item.id}
+            item={item}
+            quantity={quantities[item.id] || <span class="code-number">0</span>}
+            onDecrease={() =&gt; updateQty(item.id, -<span class="code-number">1</span>)}
+            onIncrease={() =&gt; updateQty(item.id, <span class="code-number">1</span>)}
+            onRecord={() =&gt; handleRecord(item.id)}
+            isRecording={recording === item.id}
+          /&gt;
+        ))}
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+}
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🗃️ Database Schema & CSV Seeding</h2>
+            <p>The app uses SQLite for lightweight, zero-config data storage. On first launch it seeds from historical Kopitiam sales data:</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 server.ts — Database Initialization & CSV Seeding</div>
+                <div class="code-block">
+<span class="code-comment">// Create sales table if it doesn't exist</span>
+db.exec(<span class="code-string">`
+  CREATE TABLE IF NOT EXISTS sales (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    datetime DATETIME DEFAULT CURRENT_TIMESTAMP,
+    item_name TEXT,
+    quantity INTEGER,
+    price_cents INTEGER,
+    total_cents INTEGER
+  )
+`</span>);
+
+<span class="code-comment">// Seed from CSV only if the database is empty</span>
+<span class="code-keyword">const</span> count = db.prepare(<span class="code-string">"SELECT COUNT(*) as count FROM sales"</span>).get();
+<span class="code-keyword">if</span> (count.count === <span class="code-number">0</span>) {
+  <span class="code-keyword">const</span> csvContent = fs.readFileSync(<span class="code-string">"Kopitiam_dataset.csv"</span>, <span class="code-string">"utf-8"</span>);
+  <span class="code-keyword">const</span> records = parse(csvContent, { columns: <span class="code-keyword">true</span>, skip_empty_lines: <span class="code-keyword">true</span> });
+
+  <span class="code-keyword">const</span> insert = db.prepare(<span class="code-string">`
+    INSERT INTO sales (datetime, item_name, quantity, price_cents, total_cents)
+    VALUES (?, ?, ?, ?, ?)
+  `</span>);
+
+  <span class="code-comment">// Use a transaction for fast bulk insert</span>
+  db.transaction(() =&gt; {
+    <span class="code-keyword">for</span> (<span class="code-keyword">const</span> record <span class="code-keyword">of</span> records) {
+      <span class="code-comment">// Parse datetime format: "11/7/2019 15:35" → ISO string</span>
+      <span class="code-keyword">const</span> [datePart, timePart] = record.datetime.split(<span class="code-string">" "</span>);
+      <span class="code-keyword">const</span> [day, month, year] = datePart.split(<span class="code-string">"/"</span>);
+      <span class="code-keyword">const</span> isoDate = <span class="code-string">`${year}-${month.padStart(2,'0')}-${day.padStart(2,'0')}T${timePart}:00`</span>;
+
+      <span class="code-keyword">for</span> (<span class="code-keyword">const</span> item <span class="code-keyword">of</span> MENU_ITEMS) {
+        <span class="code-keyword">const</span> qty = parseInt(record[item.id]);
+        <span class="code-keyword">if</span> (qty &gt; <span class="code-number">0</span>) {
+          insert.run(isoDate, item.id, qty, item.price, qty * item.price);
+        }
+      }
+    }
+  })();
+}
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>⚙️ Technical Implementation Notes</h2>
+            <h3>Key Design Decisions</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>Single-process architecture:</strong> Express serves both the API and the compiled React app, simplifying Cloud Run deployment to one container</li>
+                <li><strong>Prices stored in cents:</strong> All monetary values use integers (cents) to avoid floating-point rounding errors in financial calculations</li>
+                <li><strong>CSV seeding on startup:</strong> Owners get immediate analytics from historical data without any manual import step</li>
+                <li><strong>Transactional bulk insert:</strong> SQLite transaction wraps the entire CSV seed for 10–100x faster initial load</li>
+                <li><strong>Optimistic UI updates:</strong> Frontend refreshes all stats after each sale recording to keep the dashboard in sync</li>
+                <li><strong>Framer Motion animations:</strong> Smooth tab transitions and button feedback give the app a polished, native-app feel</li>
+            </ul>
+
+            <h3>Why SQLite?</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>Zero configuration:</strong> No database server to provision — ideal for a single-owner small business tool</li>
+                <li><strong>Fast reads:</strong> All analytics queries run in milliseconds on typical Kopitiam sales volumes</li>
+                <li><strong>Portable:</strong> The entire database is a single file, making backups trivial</li>
+            </ul>
+        </div>
+
+        <div class="demo-links">
+            <a href="https://kopitiam-digital-waiter-169218045868.us-west1.run.app" target="_blank" class="demo-btn">🚀 Try Live Demo</a>
+            <a href="kopitiam-digital-waiter.html" class="demo-btn secondary">📖 View Full Project Details</a>
+        </div>
+
+        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+            <a href="index.html">← Back to Portfolio</a> |
+            <a href="kopitiam-digital-waiter.html">View Project Overview</a>
+        </nav>
+    </div>
+</body>
+</html>
