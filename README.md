@@ -2,7 +2,7 @@
 
 [![Portfolio Website](https://img.shields.io/badge/Portfolio-Live-green?logo=vercel)](https://lyven81.github.io/ai-project/)
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-black?logo=github)](https://github.com/lyven81/ai-project)
-[![Projects](https://img.shields.io/badge/Projects-29-blue)](#-featured-projects)
+[![Projects](https://img.shields.io/badge/Projects-30-blue)](#-featured-projects)
 [![AI Powered](https://img.shields.io/badge/AI-Powered-orange?logo=tensorflow)](https://github.com/lyven81/ai-project)
 
 **Innovative AI Solutions for Modern Challenges** - A curated collection of production-ready AI applications showcasing expertise in computer vision, natural language processing, document processing, and creative AI technologies.
@@ -13,7 +13,7 @@
 
 ## 🌟 Portfolio Overview
 
-This repository contains **29 production-deployed AI applications** demonstrating proficiency across multiple AI domains. Each project includes comprehensive documentation, live demos, and complete source code with deployment configurations.
+This repository contains **30 production-deployed AI applications** demonstrating proficiency across multiple AI domains. Each project includes comprehensive documentation, live demos, and complete source code with deployment configurations.
 
 **🎯 Portfolio Highlights:**
 - **15+ AI Technologies** integrated across projects
@@ -158,6 +158,12 @@ This repository contains **29 production-deployed AI applications** demonstratin
 - **Tech Stack:** Python, Streamlit, Claude API, Cultural Knowledge Processing
 - **AI Capabilities:** Space optimization recommendations, traditional wisdom integration, personalized advice
 
+#### [Skyread](./projects/skyread/)
+**Daily horoscope app that explains the planetary movements behind every reading for grounded, credible insights**
+- **Live Demo:** [ais-dev-m2gjhpuvdrj3c3mly7e6rr-168381537832.asia-east1.run.app](https://ais-dev-m2gjhpuvdrj3c3mly7e6rr-168381537832.asia-east1.run.app)
+- **Tech Stack:** React, TypeScript, Vite, Gemini AI, Framer Motion, Tailwind CSS
+- **AI Capabilities:** Schema-enforced structured horoscope generation, bilingual EN/ZH AI output, real planetary movement explanations (Sky Explainer), Sky Snapshot panel, smart daily caching with localStorage
+
 ### 🎨 Creative AI & Content Generation
 
 #### [AI Recipe Generator](./projects/image-recipe-generator/)
@@ -280,6 +286,7 @@ ai-project/
 │   ├── chinese-calender/        # Conversational AI traditional calendar
 │   ├── horoscope-chatbot/       # Astrology consultation AI
 │   ├── fengshui-chatbot/        # Feng Shui advisory AI
+│   ├── skyread/                 # Daily horoscope with planetary insights
 │   ├── image-recipe-generator/  # Food image to recipe AI
 │   ├── polaroid-moments-generator/ # Vintage photo generation AI
 │   ├── polaroid-moments-generator-3/ # Three-person group photo AI
@@ -345,6 +352,7 @@ All projects are production-deployed and accessible via live demos:
 | Chinese Traditional Calendar | [Launch App](https://chinese-calender-169218045868.asia-southeast1.run.app/) | Conversational AI |
 | Astrology Consultant | [Launch App](https://horoscope-chatbot-218391175125.asia-southeast1.run.app/) | Conversational AI |
 | Feng Shui Consultant | [Launch App](https://fengshui-chatbot-218391175125.asia-southeast1.run.app/) | Conversational AI |
+| Skyread | [Launch App](https://ais-dev-m2gjhpuvdrj3c3mly7e6rr-168381537832.asia-east1.run.app) | Conversational AI |
 | AI Recipe Generator | [Launch App](https://image-recipe-generator-218391175125.us-central1.run.app/) | Creative AI |
 | Polaroid Moments Generator | [Launch App](https://polaroid-moments-generator-169218045868.us-west1.run.app/) | Creative AI |
 | Polaroid Moments Generator 3 | [Launch App](https://polaroid-moments-generator-3-person-169218045868.us-west1.run.app/) | Creative AI |

@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skyread - Source Code</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #222;
+            background-color: #ffffff;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .back-nav {
+            margin-bottom: 20px;
+        }
+
+        .back-nav a {
+            color: #007BFF;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .back-nav a:hover {
+            text-decoration: underline;
+        }
+
+        .project-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+            border-radius: 10px;
+        }
+
+        .project-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .project-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .content-section {
+            margin: 40px 0;
+            padding: 30px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border-left: 5px solid #4f46e5;
+        }
+
+        .content-section h2 {
+            color: #4f46e5;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .content-section h3 {
+            color: #333;
+            margin: 20px 0 10px 0;
+            font-size: 1.3rem;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #ede9fe, #ddd6fe);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #4f46e5;
+            margin: 20px 0;
+        }
+
+        .code-container {
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        .code-header {
+            color: #a78bfa;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .code-block {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #d4d4d4;
+        }
+
+        .code-comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+
+        .code-keyword {
+            color: #569cd6;
+        }
+
+        .code-string {
+            color: #ce9178;
+        }
+
+        .code-function {
+            color: #dcdcaa;
+        }
+
+        .code-number {
+            color: #b5cea8;
+        }
+
+        .code-type {
+            color: #4ec9b0;
+        }
+
+        .demo-links {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .demo-btn {
+            display: inline-block;
+            background-color: #007BFF;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .demo-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .demo-btn.secondary {
+            background-color: #7c3aed;
+        }
+
+        .demo-btn.secondary:hover {
+            background-color: #5b21b6;
+        }
+
+        @media (max-width: 768px) {
+            .project-header h1 {
+                font-size: 2rem;
+            }
+
+            .project-header p {
+                font-size: 1rem;
+            }
+
+            .demo-btn {
+                margin: 5px;
+                padding: 10px 20px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="skyread.html">← Back to Project Overview</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>✨ Skyread</h1>
+            <p>Core Source Code & AI Horoscope Generation</p>
+
+            <div class="badges">
+                <span class="badge">React + TypeScript</span>
+                <span class="badge">Gemini AI</span>
+                <span class="badge">Framer Motion</span>
+                <span class="badge">Vite</span>
+            </div>
+        </div>
+
+        <div class="highlight-box">
+            <h3>🔍 About This Code Showcase</h3>
+            <p><strong>This curated code walkthrough demonstrates how Skyread generates daily horoscope readings using Google Gemini AI with structured JSON schema output, manages bilingual support, and caches readings in localStorage for a fast return-visit experience.</strong></p>
+            <p>This showcase focuses on the two most important parts of the codebase: the Gemini AI service layer (<code>geminiService.ts</code>) and the main app logic (<code>App.tsx</code>).</p>
+        </div>
+
+        <div class="content-section">
+            <h2>🗂️ Project File Structure</h2>
+            <div class="code-container">
+                <div class="code-header">📁 projects/skyread/</div>
+                <div class="code-block">
+skyread/
+├── src/
+│   ├── App.tsx               <span class="code-comment"># Main app — screens, state, language toggle</span>
+│   ├── constants.ts          <span class="code-comment"># 12 zodiac signs with symbols and date ranges</span>
+│   ├── main.tsx              <span class="code-comment"># React entry point</span>
+│   ├── index.css             <span class="code-comment"># Tailwind + celestial background animations</span>
+│   └── services/
+│       └── geminiService.ts  <span class="code-comment"># Gemini AI integration — structured horoscope output</span>
+├── index.html                <span class="code-comment"># Vite HTML entry point</span>
+├── package.json              <span class="code-comment"># Dependencies: React, Framer Motion, Lucide, Gemini SDK</span>
+├── vite.config.ts            <span class="code-comment"># Vite configuration</span>
+├── tsconfig.json             <span class="code-comment"># TypeScript configuration</span>
+└── .env.example              <span class="code-comment"># Environment variable template (GEMINI_API_KEY)</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🤖 Core AI Layer: geminiService.ts</h2>
+            <p>This is the heart of the app — the Gemini AI service that generates a structured horoscope for a given zodiac sign and language. It uses schema-enforced JSON output to guarantee consistent, typed responses.</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 src/services/geminiService.ts — Structured Horoscope Generation</div>
+                <div class="code-block">
+<span class="code-keyword">import</span> { GoogleGenAI, Type, ThinkingLevel } <span class="code-keyword">from</span> <span class="code-string">"@google/genai"</span>;
+
+<span class="code-keyword">const</span> ai = <span class="code-keyword">new</span> <span class="code-function">GoogleGenAI</span>({ apiKey: process.env.<span class="code-type">GEMINI_API_KEY</span> || <span class="code-string">""</span> });
+
+<span class="code-comment">// Shape of the structured response returned by Gemini</span>
+<span class="code-keyword">export interface</span> <span class="code-type">HoroscopeData</span> {
+  date: <span class="code-type">string</span>;
+  reading: <span class="code-type">string</span>;       <span class="code-comment">// ~100-word daily horoscope</span>
+  skyExplainer: <span class="code-type">string</span>;  <span class="code-comment">// Plain-language planetary movement explanation</span>
+  snapshot: {            <span class="code-comment">// 3 key planets with positions + influences</span>
+    planet: <span class="code-type">string</span>;
+    position: <span class="code-type">string</span>;
+    influence: <span class="code-type">string</span>;
+  }[];
+}
+
+<span class="code-keyword">export async function</span> <span class="code-function">generateDailyHoroscope</span>(
+  sign: <span class="code-type">string</span>,
+  language: <span class="code-string">'en'</span> | <span class="code-string">'zh'</span> = <span class="code-string">'en'</span>
+): <span class="code-type">Promise</span>&lt;<span class="code-type">HoroscopeData</span>&gt; {
+  <span class="code-keyword">const</span> today = <span class="code-keyword">new</span> <span class="code-type">Date</span>().<span class="code-function">toISOString</span>().<span class="code-function">split</span>(<span class="code-string">'T'</span>)[<span class="code-number">0</span>];
+  <span class="code-keyword">const</span> langPrompt = language === <span class="code-string">'zh'</span>
+    ? <span class="code-string">"in Mandarin Chinese (Simplified)"</span>
+    : <span class="code-string">"in English"</span>;
+
+  <span class="code-keyword">const</span> response = <span class="code-keyword">await</span> ai.models.<span class="code-function">generateContent</span>({
+    model: <span class="code-string">"gemini-3-flash-preview"</span>,
+    contents: <span class="code-string">`Generate a daily horoscope for ${sign} for the date ${today} ${langPrompt}.
+    Include:
+    1. A personalized daily reading (about 100 words).
+    2. A "Sky Explainer" that identifies 2-3 real planetary movements happening today
+       and explains in plain language why they affect ${sign}.
+    3. A "Sky Snapshot" — list of 3 key planets, their current astrological position
+       (e.g., "Mars in Leo"), and their brief influence.
+    The tone should be grounded, credible, and atmospheric.`</span>,
+    config: {
+      thinkingConfig: { thinkingLevel: ThinkingLevel.<span class="code-type">LOW</span> }, <span class="code-comment">// Speed over depth</span>
+      responseMimeType: <span class="code-string">"application/json"</span>,
+      responseSchema: {                               <span class="code-comment">// Enforce exact output shape</span>
+        type: Type.<span class="code-type">OBJECT</span>,
+        properties: {
+          date:         { type: Type.<span class="code-type">STRING</span> },
+          reading:      { type: Type.<span class="code-type">STRING</span> },
+          skyExplainer: { type: Type.<span class="code-type">STRING</span> },
+          snapshot: {
+            type: Type.<span class="code-type">ARRAY</span>,
+            items: {
+              type: Type.<span class="code-type">OBJECT</span>,
+              properties: {
+                planet:    { type: Type.<span class="code-type">STRING</span> },
+                position:  { type: Type.<span class="code-type">STRING</span> },
+                influence: { type: Type.<span class="code-type">STRING</span> }
+              },
+              required: [<span class="code-string">"planet"</span>, <span class="code-string">"position"</span>, <span class="code-string">"influence"</span>]
+            }
+          }
+        },
+        required: [<span class="code-string">"date"</span>, <span class="code-string">"reading"</span>, <span class="code-string">"skyExplainer"</span>, <span class="code-string">"snapshot"</span>]
+      }
+    }
+  });
+
+  <span class="code-keyword">return</span> <span class="code-type">JSON</span>.<span class="code-function">parse</span>(response.text); <span class="code-comment">// Safe — schema guarantees valid JSON</span>
+}
+                </div>
+            </div>
+
+            <p style="margin-top: 15px;"><strong>Why this approach works:</strong> By passing a <code>responseSchema</code> to Gemini, the API guarantees the response will always conform to the declared shape. This eliminates defensive JSON parsing, removes the need for fallback logic, and ensures the TypeScript types match reality at runtime.</p>
+        </div>
+
+        <div class="content-section">
+            <h2>⚛️ App State & Screen Management: App.tsx</h2>
+            <p>The main app manages three screens (welcome → home → archive), user preferences, reading caching, and language toggling — all via React state and localStorage.</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 src/App.tsx — Core State & Caching Logic</div>
+                <div class="code-block">
+<span class="code-comment">// Screen and language types</span>
+<span class="code-keyword">type</span> <span class="code-type">Screen</span> = <span class="code-string">'welcome'</span> | <span class="code-string">'home'</span> | <span class="code-string">'archive'</span>;
+<span class="code-keyword">type</span> <span class="code-type">Language</span> = <span class="code-string">'en'</span> | <span class="code-string">'zh'</span>;
+
+<span class="code-keyword">export default function</span> <span class="code-function">App</span>() {
+  <span class="code-comment">// Persist sign and language across sessions via localStorage</span>
+  <span class="code-keyword">const</span> [userSign, setUserSign] = <span class="code-function">useState</span>&lt;<span class="code-type">string</span> | <span class="code-keyword">null</span>&gt;(
+    localStorage.<span class="code-function">getItem</span>(<span class="code-string">'skyread_sign'</span>)
+  );
+  <span class="code-keyword">const</span> [language, setLanguage] = <span class="code-function">useState</span>&lt;<span class="code-type">Language</span>&gt;(
+    () =&gt; (localStorage.<span class="code-function">getItem</span>(<span class="code-string">'skyread_lang'</span>) <span class="code-keyword">as</span> <span class="code-type">Language</span>) || <span class="code-string">'en'</span>
+  );
+  <span class="code-keyword">const</span> [todayReading, setTodayReading] = <span class="code-function">useState</span>&lt;<span class="code-type">HoroscopeData</span> | <span class="code-keyword">null</span>&gt;(<span class="code-keyword">null</span>);
+  <span class="code-keyword">const</span> [archive, setArchive] = <span class="code-function">useState</span>&lt;<span class="code-type">HoroscopeData</span>[]&gt;(() =&gt; {
+    <span class="code-keyword">const</span> saved = localStorage.<span class="code-function">getItem</span>(<span class="code-string">'skyread_archive'</span>);
+    <span class="code-keyword">return</span> saved ? <span class="code-type">JSON</span>.<span class="code-function">parse</span>(saved) : [];
+  });
+
+  <span class="code-comment">// Fetch a new reading — skip if today's reading in this language is cached</span>
+  <span class="code-keyword">const</span> <span class="code-function">fetchDailyReading</span> = <span class="code-keyword">async</span> (sign: <span class="code-type">string</span>, lang: <span class="code-type">Language</span>) =&gt; {
+    <span class="code-keyword">const</span> today = <span class="code-keyword">new</span> <span class="code-type">Date</span>().<span class="code-function">toISOString</span>().<span class="code-function">split</span>(<span class="code-string">'T'</span>)[<span class="code-number">0</span>];
+
+    <span class="code-comment">// Detect language of cached reading via CJK Unicode range</span>
+    <span class="code-keyword">const</span> isCachedInLang = todayReading?.date === today && (
+      lang === <span class="code-string">'zh'</span>
+        ? /[\u4e00-\u9fa5]/.<span class="code-function">test</span>(todayReading.reading)
+        : !/[\u4e00-\u9fa5]/.<span class="code-function">test</span>(todayReading.reading)
+    );
+    <span class="code-keyword">if</span> (isCachedInLang) <span class="code-keyword">return</span>; <span class="code-comment">// Already have today's reading in this language</span>
+
+    setLoading(<span class="code-keyword">true</span>);
+    <span class="code-keyword">try</span> {
+      <span class="code-keyword">const</span> data = <span class="code-keyword">await</span> <span class="code-function">generateDailyHoroscope</span>(sign, lang);
+      setTodayReading(data);
+
+      <span class="code-comment">// Add to archive, keep last 30 days, avoid duplicates</span>
+      <span class="code-keyword">const</span> newArchive = [
+        data,
+        ...archive.<span class="code-function">filter</span>(item =&gt; item.date !== today || item.reading !== data.reading)
+      ].<span class="code-function">slice</span>(<span class="code-number">0</span>, <span class="code-number">30</span>);
+      setArchive(newArchive);
+      localStorage.<span class="code-function">setItem</span>(<span class="code-string">'skyread_archive'</span>, <span class="code-type">JSON</span>.<span class="code-function">stringify</span>(newArchive));
+    } <span class="code-keyword">finally</span> {
+      setLoading(<span class="code-keyword">false</span>);
+    }
+  };
+
+  <span class="code-comment">// Toggle language and force a fresh reading in the new language</span>
+  <span class="code-keyword">const</span> <span class="code-function">toggleLanguage</span> = () =&gt; {
+    <span class="code-keyword">const</span> newLang = language === <span class="code-string">'en'</span> ? <span class="code-string">'zh'</span> : <span class="code-string">'en'</span>;
+    setLanguage(newLang);
+    localStorage.<span class="code-function">setItem</span>(<span class="code-string">'skyread_lang'</span>, newLang);
+    setTodayReading(<span class="code-keyword">null</span>); <span class="code-comment">// Clears cache → triggers re-fetch in new language</span>
+  };
+}
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🌟 Animated Loading State</h2>
+            <p>During AI generation, the app cycles through themed loading messages every 2.5 seconds to create an immersive "consulting the stars" experience rather than a generic spinner.</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 src/App.tsx — Rotating Loading Messages</div>
+                <div class="code-block">
+<span class="code-keyword">const</span> TRANSLATIONS = {
+  en: {
+    loadingMessages: [
+      <span class="code-string">"Consulting the celestial charts..."</span>,
+      <span class="code-string">"Tracing planetary alignments..."</span>,
+      <span class="code-string">"Decoding cosmic vibrations..."</span>,
+      <span class="code-string">"Mapping the current sky..."</span>,
+      <span class="code-string">"Translating the language of stars..."</span>,
+      <span class="code-string">"Gleaning insights from the void..."</span>
+    ]
+  },
+  zh: {
+    loadingMessages: [
+      <span class="code-string">"正在查阅天体图..."</span>,
+      <span class="code-string">"正在追踪行星排列..."</span>,
+      <span class="code-string">"正在解码宇宙共振..."</span>,
+      <span class="code-string">"正在绘制当前星空..."</span>,
+      <span class="code-string">"正在翻译星之语言..."</span>,
+      <span class="code-string">"正在从虚空中获取洞见..."</span>
+    ]
+  }
+};
+
+<span class="code-comment">// Cycle messages every 2.5s while loading — stops when loading ends</span>
+<span class="code-function">useEffect</span>(() =&gt; {
+  <span class="code-keyword">let</span> interval: <span class="code-type">NodeJS.Timeout</span>;
+  <span class="code-keyword">if</span> (loading) {
+    <span class="code-keyword">let</span> i = <span class="code-number">0</span>;
+    interval = <span class="code-function">setInterval</span>(() =&gt; {
+      <span class="code-function">setLoadingMessage</span>(t.loadingMessages[i % t.loadingMessages.length]);
+      i++;
+    }, <span class="code-number">2500</span>);
+  }
+  <span class="code-keyword">return</span> () =&gt; <span class="code-function">clearInterval</span>(interval);
+}, [loading, language]);
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>⚙️ Technical Implementation Notes</h2>
+            <h3>Key Design Decisions</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>Schema-enforced AI output:</strong> Passing a <code>responseSchema</code> to Gemini ensures the response is always a valid, typed JSON object — no defensive parsing or try/catch needed for schema mismatches</li>
+                <li><strong>CJK range for language detection:</strong> Rather than storing a language tag alongside each cached reading, the app detects language via <code>/[\u4e00-\u9fa5]/</code> Unicode range check — simpler and backwards-compatible</li>
+                <li><strong>localStorage for everything:</strong> Zero backend required — user sign, language, and up to 30 days of readings are all stored client-side, making the app fully offline-capable after first load</li>
+                <li><strong>ThinkingLevel.LOW:</strong> Horoscope generation is creative, not analytical. Low thinking mode reduces latency without sacrificing output quality for this use case</li>
+                <li><strong>Framer Motion AnimatePresence:</strong> Screen transitions use <code>AnimatePresence</code> with <code>mode="wait"</code> for smooth, sequential fade-and-slide animations between welcome, home, and archive screens</li>
+            </ul>
+        </div>
+
+        <div class="demo-links">
+            <a href="https://ais-dev-m2gjhpuvdrj3c3mly7e6rr-168381537832.asia-east1.run.app" target="_blank" class="demo-btn">🚀 Try Live Demo</a>
+            <a href="skyread.html" class="demo-btn secondary">📖 View Full Project Details</a>
+        </div>
+
+        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+            <a href="index.html">← Back to Portfolio</a> |
+            <a href="skyread.html">View Project Overview</a>
+        </nav>
+    </div>
+</body>
+</html>
