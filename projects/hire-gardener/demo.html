@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hire Gardener — Live Demo</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, sans-serif;
+      background: #111b21;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* ── Stage bar ── */
+    #stage-bar {
+      background: #075E54;
+      color: white;
+      padding: 9px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    #stage-label { font-size: 0.82rem; font-weight: 500; }
+    .stage-steps { display: flex; gap: 5px; align-items: center; }
+    .step { width: 32px; height: 5px; border-radius: 3px; background: rgba(255,255,255,0.25); transition: background 0.4s; }
+    .step.done { background: rgba(255,255,255,0.6); }
+    .step.active { background: #25D366; }
+
+    /* ── WhatsApp shell ── */
+    #whatsapp { display: flex; flex: 1; overflow: hidden; }
+
+    /* ── Sidebar ── */
+    #sidebar { width: 340px; min-width: 260px; background: #111b21; border-right: 1px solid #2a3942; display: flex; flex-direction: column; }
+    #sidebar-header { background: #202c33; padding: 14px 18px; display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+    .app-logo { font-size: 1.6rem; }
+    .app-title { color: #e9edef; font-size: 0.95rem; font-weight: 600; }
+    .app-sub { color: #8696a0; font-size: 0.72rem; margin-top: 1px; }
+    #search-wrap { padding: 8px 14px; background: #111b21; flex-shrink: 0; }
+    #search-wrap input { width: 100%; background: #202c33; border: none; border-radius: 8px; padding: 7px 12px; color: #e9edef; font-size: 0.83rem; outline: none; }
+    #search-wrap input::placeholder { color: #8696a0; }
+    #vendor-list { flex: 1; overflow-y: auto; }
+
+    .vi { display: flex; align-items: center; gap: 12px; padding: 11px 18px; cursor: pointer; border-bottom: 1px solid #1a2529; transition: background 0.15s; }
+    .vi:hover { background: #202c33; }
+    .vi.active { background: #2a3942; }
+    .vi-avatar { width: 46px; height: 46px; border-radius: 50%; background: #2a3942; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0; }
+    .vi-info { flex: 1; min-width: 0; }
+    .vi-name { color: #e9edef; font-size: 0.9rem; font-weight: 500; margin-bottom: 2px; }
+    .vi-prev { color: #8696a0; font-size: 0.77rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .vi-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+    .vi-time { color: #8696a0; font-size: 0.69rem; }
+    .badge { background: #25D366; color: white; border-radius: 50%; width: 19px; height: 19px; display: flex; align-items: center; justify-content: center; font-size: 0.68rem; font-weight: 700; }
+
+    /* ── Chat area ── */
+    #chat-area { flex: 1; display: flex; flex-direction: column; background: #0b141a; overflow: hidden; }
+    #chat-header { background: #202c33; padding: 9px 18px; display: flex; align-items: center; gap: 12px; flex-shrink: 0; border-bottom: 1px solid #2a3942; }
+    #chat-av { width: 40px; height: 40px; border-radius: 50%; background: #2a3942; display: flex; align-items: center; justify-content: center; font-size: 1.15rem; }
+    #chat-name { color: #e9edef; font-size: 0.9rem; font-weight: 500; }
+    #chat-status { color: #8696a0; font-size: 0.74rem; }
+
+    /* ── Messages ── */
+    #msg-box {
+      flex: 1;
+      overflow-y: auto;
+      padding: 14px 60px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      background-color: #0b141a;
+      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23182229' fill-opacity='0.5'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    .date-div { text-align: center; margin: 10px 0; }
+    .date-div span { background: #182229; color: #8696a0; font-size: 0.7rem; padding: 4px 10px; border-radius: 6px; }
+
+    .mw { display: flex; margin: 1px 0; }
+    .mw.sent { justify-content: flex-end; }
+    .mw.received { justify-content: flex-start; }
+
+    .bubble { max-width: 62%; padding: 6px 10px 4px; border-radius: 7.5px; word-wrap: break-word; }
+    .sent .bubble { background: #005c4b; border-top-right-radius: 0; color: #e9edef; }
+    .received .bubble { background: #202c33; border-top-left-radius: 0; color: #e9edef; }
+    .b-text { font-size: 0.855rem; line-height: 1.45; }
+    .b-meta { display: flex; align-items: center; gap: 3px; justify-content: flex-end; margin-top: 2px; }
+    .b-time { font-size: 0.66rem; color: #8696a0; }
+    .tick { font-size: 0.68rem; color: #53bdeb; }
+
+    .media-card { background: #1a2529; border-radius: 8px; padding: 8px 10px; display: flex; align-items: center; gap: 9px; margin-top: 5px; }
+    .media-ico { font-size: 1.5rem; width: 40px; height: 40px; background: #2a3942; border-radius: 7px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .media-n { font-size: 0.78rem; color: #e9edef; }
+    .media-s { font-size: 0.69rem; color: #8696a0; }
+
+    .typing-w { display: flex; justify-content: flex-start; margin: 3px 0; }
+    .typing-b { background: #202c33; border-radius: 7.5px; border-top-left-radius: 0; padding: 9px 13px; display: flex; gap: 4px; align-items: center; }
+    .dot { width: 6px; height: 6px; border-radius: 50%; background: #8696a0; animation: bounce 1.2s infinite; }
+    .dot:nth-child(2) { animation-delay: 0.2s; }
+    .dot:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes bounce { 0%,60%,100% { transform:translateY(0); opacity:0.5; } 30% { transform:translateY(-5px); opacity:1; } }
+
+    .banner { text-align: center; margin: 10px 0; }
+    .banner span { background: #182229; color: #8696a0; font-size: 0.7rem; padding: 4px 12px; border-radius: 6px; }
+
+    /* ── Action bar ── */
+    #action-bar { background: #202c33; padding: 11px 18px; border-top: 1px solid #2a3942; flex-shrink: 0; }
+    .abtn { background: #25D366; color: white; border: none; padding: 10px 20px; border-radius: 22px; font-size: 0.855rem; font-weight: 600; cursor: pointer; width: 100%; transition: background 0.2s; }
+    .abtn:hover:not(:disabled) { background: #1ebe5d; }
+    .abtn:disabled { background: #2a3942; color: #8696a0; cursor: not-allowed; }
+
+    /* ── Modals ── */
+    .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 100; align-items: center; justify-content: center; padding: 20px; }
+    .overlay.show { display: flex; }
+    .modal { background: #202c33; border-radius: 12px; padding: 22px; width: 480px; max-width: 100%; color: #e9edef; }
+    .modal h3 { font-size: 1.05rem; margin-bottom: 14px; color: #25D366; }
+
+    .qt { width: 100%; border-collapse: collapse; margin-bottom: 14px; }
+    .qt th { text-align: left; padding: 7px 9px; font-size: 0.74rem; color: #8696a0; border-bottom: 1px solid #2a3942; }
+    .qt td { padding: 10px 9px; font-size: 0.845rem; border-bottom: 1px solid #2a3942; }
+    .qt tr:last-child td { border-bottom: none; }
+    .rec { background: #0d2b22; }
+    .rec-badge { background: #25D366; color: white; font-size: 0.62rem; padding: 1px 5px; border-radius: 3px; margin-left: 5px; }
+    .sel-btn { background: #25D366; color: white; border: none; padding: 6px 13px; border-radius: 6px; cursor: pointer; font-size: 0.78rem; }
+    .sel-btn:hover { background: #1ebe5d; }
+    .q-note { font-size: 0.76rem; color: #e9b44c; margin-bottom: 12px; background: #2a2200; padding: 8px 10px; border-radius: 6px; }
+
+    .vr-box { background: #0d2b22; border-radius: 8px; padding: 12px; font-size: 0.845rem; line-height: 1.6; color: #e9edef; margin-bottom: 14px; }
+    .pay-box { background: #1a2529; padding: 12px; border-radius: 8px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; }
+    .pay-name { color: #e9edef; font-size: 0.9rem; font-weight: 600; }
+    .pay-num { color: #8696a0; font-size: 0.74rem; margin-top: 2px; }
+    .pay-amt { color: #25D366; font-size: 1.25rem; font-weight: 700; }
+
+    /* ── Intro screen ── */
+    #intro {
+      position: fixed; inset: 0; background: #111b21;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      z-index: 200; gap: 18px; text-align: center; padding: 30px;
+    }
+    .i-logo { font-size: 4rem; }
+    .i-title { color: #e9edef; font-size: 2rem; font-weight: 700; }
+    .i-sub { color: #8696a0; font-size: 0.95rem; max-width: 420px; line-height: 1.6; }
+    .i-features { display: flex; flex-direction: column; gap: 6px; margin: 4px 0; }
+    .i-feat { color: #8696a0; font-size: 0.82rem; }
+    .i-feat span { color: #25D366; margin-right: 6px; }
+    .start-btn { background: #25D366; color: white; border: none; padding: 13px 40px; border-radius: 30px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background 0.2s; }
+    .start-btn:hover { background: #1ebe5d; }
+    .i-note { color: #8696a0; font-size: 0.74rem; }
+
+    /* ── Celebration ── */
+    #celebrate { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.88); z-index: 300; align-items: center; justify-content: center; flex-direction: column; gap: 14px; text-align: center; padding: 20px; }
+    #celebrate.show { display: flex; }
+    .c-icon { font-size: 4rem; }
+    .c-title { color: #e9edef; font-size: 1.6rem; font-weight: 700; }
+    .c-sub { color: #8696a0; font-size: 0.9rem; line-height: 1.6; }
+    .c-detail { background: #202c33; border-radius: 10px; padding: 14px 24px; color: #e9edef; font-size: 0.875rem; }
+    .c-restart { background: #25D366; color: white; border: none; padding: 11px 28px; border-radius: 20px; font-size: 0.875rem; cursor: pointer; margin-top: 6px; }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #2a3942; border-radius: 3px; }
+  </style>
+</head>
+<body>
+
+<!-- ── Intro ── -->
+<div id="intro">
+  <div class="i-logo">🌿</div>
+  <div class="i-title">Hire Gardener</div>
+  <div class="i-sub">Watch your AI find, negotiate with, and hire a real grass cutting service — all on WhatsApp, without you typing a single message.</div>
+  <div class="i-features">
+    <div class="i-feat"><span>✓</span> AI contacts 3 providers on your behalf</div>
+    <div class="i-feat"><span>✓</span> Sends your area photo and video automatically</div>
+    <div class="i-feat"><span>✓</span> Collects quotes and confirms the booking</div>
+    <div class="i-feat"><span>✓</span> Verifies job completion before you pay</div>
+  </div>
+  <button class="start-btn" onclick="startDemo()">▶ Start Demo</button>
+  <div class="i-note">Simulated demo · No real WhatsApp account needed</div>
+</div>
+
+<!-- ── Stage bar ── -->
+<div id="stage-bar">
+  <div id="stage-label">🌿 Hire Gardener — AI Vendor Communication Demo</div>
+  <div class="stage-steps">
+    <div class="step" id="s1"></div>
+    <div class="step" id="s2"></div>
+    <div class="step" id="s3"></div>
+    <div class="step" id="s4"></div>
+    <div class="step" id="s5"></div>
+    <div class="step" id="s6"></div>
+  </div>
+</div>
+
+<!-- ── WhatsApp shell ── -->
+<div id="whatsapp">
+
+  <!-- Sidebar -->
+  <div id="sidebar">
+    <div id="sidebar-header">
+      <div class="app-logo">🌿</div>
+      <div>
+        <div class="app-title">Hire Gardener</div>
+        <div class="app-sub">AI Outreach · TTDI, Kuala Lumpur</div>
+      </div>
+    </div>
+    <div id="search-wrap"><input type="text" placeholder="🔍  Search vendors" readonly></div>
+    <div id="vendor-list"></div>
+  </div>
+
+  <!-- Chat -->
+  <div id="chat-area">
+    <div id="chat-header">
+      <div id="chat-av">🌿</div>
+      <div>
+        <div id="chat-name">Select a vendor to view conversation</div>
+        <div id="chat-status">—</div>
+      </div>
+    </div>
+    <div id="msg-box">
+      <div class="date-div"><span>Today</span></div>
+    </div>
+    <div id="action-bar">
+      <button class="abtn" id="abtn" disabled>Initialising...</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Quote modal ── -->
+<div class="overlay" id="quote-overlay">
+  <div class="modal">
+    <h3>📊 Quote Comparison</h3>
+    <div class="q-note">⚠️ Pak Razif Garden cannot take this job — area is too far from their base in Shah Alam.</div>
+    <table class="qt">
+      <thead><tr><th>Provider</th><th>Rate</th><th>Available</th><th></th></tr></thead>
+      <tbody>
+        <tr class="rec">
+          <td>Ahmad Landscaping <span class="rec-badge">Best Value</span></td>
+          <td><strong>RM 160</strong></td>
+          <td>Monday next week</td>
+          <td><button class="sel-btn" onclick="selectVendor('ahmad')">Select</button></td>
+        </tr>
+        <tr>
+          <td>Green Garden KL</td>
+          <td><strong>RM 210</strong></td>
+          <td>This Saturday</td>
+          <td><button class="sel-btn" onclick="selectVendor('green')">Select</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ── Verification modal ── -->
+<div class="overlay" id="verify-overlay">
+  <div class="modal">
+    <h3>✅ AI Verification Report</h3>
+    <div class="vr-box" id="vr-text"></div>
+    <div class="pay-box">
+      <div>
+        <div class="pay-name" id="pay-name"></div>
+        <div class="pay-num" id="pay-num"></div>
+      </div>
+      <div class="pay-amt" id="pay-amt"></div>
+    </div>
+    <button class="abtn" onclick="confirmPayment()">💰 Payment Sent — Close Job</button>
+  </div>
+</div>
+
+<!-- ── Celebration ── -->
+<div id="celebrate">
+  <div class="c-icon">🎉</div>
+  <div class="c-title">Job Complete!</div>
+  <div class="c-sub">Payment confirmed. Workflow closed successfully.</div>
+  <div class="c-detail" id="c-detail"></div>
+  <div class="c-sub" style="font-size:0.78rem; margin-top:4px;">Service providers never knew they were talking to an AI.</div>
+  <button class="c-restart" onclick="location.reload()">↺ Run Demo Again</button>
+</div>
+
+<script>
+  // ── State ─────────────────────────────────────────────────────────────────
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
+  let activeId = 'v1';
+  let unread = {v1: 0, v2: 0, v3: 0};
+  let chosenVendor = null;
+
+  const vendors = [
+    {id:'v1', name:'Ahmad Landscaping',  number:'+6011-2847-3921', av:'🌿', rate:'RM 160', date:'Monday next week'},
+    {id:'v2', name:'Green Garden KL',    number:'+6012-5534-8876', av:'🌱', rate:'RM 210', date:'This Saturday'},
+    {id:'v3', name:'Pak Razif Garden',   number:'+6013-7723-4455', av:'🪴', rate:null,     date:null}
+  ];
+
+  const convos = {v1:[], v2:[], v3:[]};
+  const previews = {v1:'No messages yet', v2:'No messages yet', v3:'No messages yet'};
+  const lastTimes = {v1:'', v2:'', v3:''};
+
+  // ── Vendor list ──────────────────────────────────────────────────────────
+  function renderList() {
+    document.getElementById('vendor-list').innerHTML = vendors.map(v => `
+      <div class="vi ${v.id===activeId?'active':''}" onclick="switchTo('${v.id}')">
+        <div class="vi-avatar">${v.av}</div>
+        <div class="vi-info">
+          <div class="vi-name">${v.name}</div>
+          <div class="vi-prev" id="pv-${v.id}">${previews[v.id]}</div>
+        </div>
+        <div class="vi-meta">
+          <div class="vi-time">${lastTimes[v.id]}</div>
+          ${unread[v.id]>0 ? `<div class="badge">${unread[v.id]}</div>` : ''}
+        </div>
+      </div>`).join('');
+  }
+
+  function switchTo(id) {
+    activeId = id;
+    unread[id] = 0;
+    const v = vendors.find(x=>x.id===id);
+    document.getElementById('chat-av').textContent = v.av;
+    document.getElementById('chat-name').textContent = v.name;
+    document.getElementById('chat-status').textContent = v.number;
+    rebuildChat(id);
+    renderList();
+  }
+
+  // ── Chat rendering ────────────────────────────────────────────────────────
+  function rebuildChat(id) {
+    const box = document.getElementById('msg-box');
+    box.innerHTML = '<div class="date-div"><span>Today</span></div>';
+    convos[id].forEach(m => {
+      if (m.type==='banner') appendBanner(m.text);
+      else appendBubble(m.role, m.text, m.time, m.media, m.mtype);
+    });
+    box.scrollTop = box.scrollHeight;
+  }
+
+  function appendBanner(text) {
+    const box = document.getElementById('msg-box');
+    const el = document.createElement('div');
+    el.className = 'banner';
+    el.innerHTML = `<span>${text}</span>`;
+    box.appendChild(el);
+    box.scrollTop = box.scrollHeight;
+  }
+
+  function appendBubble(role, text, time, media, mtype) {
+    const box = document.getElementById('msg-box');
+    const w = document.createElement('div');
+    w.className = `mw ${role==='agent'?'sent':'received'}`;
+
+    let mediaHtml = '';
+    if (media==='sent') {
+      mediaHtml = `
+        <div class="media-card"><div class="media-ico">📸</div><div><div class="media-n">area-photo.jpg</div><div class="media-s">1.2 MB · Photo</div></div></div>
+        <div class="media-card" style="margin-top:4px"><div class="media-ico">🎬</div><div><div class="media-n">area-video.mp4</div><div class="media-s">8.4 MB · Video</div></div></div>`;
+    } else if (media==='completion') {
+      mediaHtml = `<div class="media-card" style="margin-top:5px"><div class="media-ico">📷</div><div><div class="media-n">completion-photos.zip</div><div class="media-s">4 photos · 3.6 MB</div></div></div>`;
+    }
+
+    w.innerHTML = `<div class="bubble">
+      <div class="b-text">${text}</div>
+      ${mediaHtml}
+      <div class="b-meta">
+        <span class="b-time">${time}</span>
+        ${role==='agent'?'<span class="tick">✓✓</span>':''}
+      </div>
+    </div>`;
+
+    box.appendChild(w);
+    box.scrollTop = box.scrollHeight;
+  }
+
+  // ── Typing indicator ──────────────────────────────────────────────────────
+  function showTyping() {
+    const box = document.getElementById('msg-box');
+    const el = document.createElement('div');
+    el.className='typing-w'; el.id='typing';
+    el.innerHTML=`<div class="typing-b"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>`;
+    box.appendChild(el);
+    box.scrollTop = box.scrollHeight;
+  }
+
+  function hideTyping() {
+    const el = document.getElementById('typing');
+    if (el) el.remove();
+  }
+
+  // ── Add message (with typing simulation) ─────────────────────────────────
+  async function addMsg(id, role, text, time, media=null) {
+    if (role==='vendor') {
+      if (id===activeId) showTyping();
+      await sleep(1500);
+      if (id===activeId) hideTyping();
+    }
+
+    const m = {role, text, time, media, mtype:media};
+    convos[id].push(m);
+
+    if (id===activeId) appendBubble(role, text, time, media);
+    else if (role==='vendor') unread[id]++;
+
+    previews[id] = text.length>42 ? text.substring(0,42)+'…' : text;
+    lastTimes[id] = time;
+    renderList();
+  }
+
+  async function addBan(id, text) {
+    convos[id].push({type:'banner', text});
+    if (id===activeId) appendBanner(text);
+  }
+
+  // ── Action button ─────────────────────────────────────────────────────────
+  function setBtn(label, fn, off=false) {
+    const b = document.getElementById('abtn');
+    b.textContent = label;
+    b.disabled = off;
+    b.onclick = fn || null;
+  }
+
+  // ── Stage bar ─────────────────────────────────────────────────────────────
+  function setStage(n, label) {
+    document.getElementById('stage-label').textContent = label;
+    for (let i=1;i<=6;i++) {
+      const el = document.getElementById(`s${i}`);
+      el.className = 'step' + (i<n?' done':i===n?' active':'');
+    }
+  }
+
+  // ── DEMO FLOW ─────────────────────────────────────────────────────────────
+
+  async function startDemo() {
+    document.getElementById('intro').style.display = 'none';
+    renderList();
+    switchTo('v1');
+
+    setStage(1, '🔍 Stage 1 — Searching for grass cutting providers in TTDI, KL...');
+    setBtn('Searching for providers...', null, true);
+    await sleep(2200);
+
+    setStage(1, '✅ Stage 1 — 3 providers found near Taman Tun Dr Ismail');
+    setBtn('📤 Send Initial Outreach to All 3 Providers', stage2);
+  }
+
+  async function stage2() {
+    setBtn('Sending outreach messages...', null, true);
+    setStage(2, '📤 Stage 2 — Sending initial outreach to all 3 providers...');
+
+    const msg = 'Hi, saya tengah cari service potong rumput di kawasan Taman Tun Dr Ismail, KL. Adakah anda provide service kat situ? Terima kasih 🌿';
+
+    for (const v of vendors) {
+      await addBan(v.id, '— Initial outreach sent —');
+      await addMsg(v.id, 'agent', msg, '10:23');
+      await sleep(250);
+    }
+
+    await sleep(700);
+    setStage(2, '💬 Stage 2 — Waiting for vendor replies...');
+
+    await addMsg('v1','vendor','Ya boleh, ada service kat TTDI! Nak buat bila? 😊','10:31');
+    await sleep(500);
+    await addMsg('v2','vendor','Yes, we cover TTDI! We provide professional grass cutting. What\'s the approximate size of the area?','10:34');
+    await sleep(500);
+    await addMsg('v3','vendor','Ok boleh, kawasan mana kat TTDI tu exactly? Saya tengok dulu location dia.','10:38');
+
+    await sleep(700);
+    setStage(2, '✅ Stage 2 — All 3 providers replied. Ready to request quotes.');
+    setBtn('📎 Send Area Photo & Video — Request Quotes from All', stage3);
+  }
+
+  async function stage3() {
+    setBtn('Sending photo, video and quote request...', null, true);
+    setStage(3, '📎 Stage 3 — Sharing area photo and video with all providers...');
+
+    const msg = 'Bagus! Saya attach gambar dan video kawasan yang perlu dipotong. Boleh bagi rate dan bila anda available?';
+
+    for (const v of vendors) {
+      await addBan(v.id, '— Area photo & video sent —');
+      await addMsg(v.id, 'agent', msg, '10:42', 'sent');
+      await sleep(250);
+    }
+
+    await sleep(700);
+    setStage(3, '💬 Stage 3 — Collecting quotes from providers...');
+
+    await addMsg('v1','vendor','Ok noted, dah tengok gambar dan video tu. Kawasan dalam 2,000 sqft kan? Boleh buat RM160. InsyaAllah Isnin minggu depan free. Kerja kemas-kemas 👍','10:48');
+    await sleep(500);
+    await addMsg('v2','vendor','Thank you for sharing! The area looks about 2,000–2,500 sqft. Our rate is RM210. Available this Saturday from 9am. Professional service guaranteed 🌿','10:52');
+    await sleep(500);
+    await addMsg('v3','vendor','Eh maaf sangat... dah tengok location tu. Jauh la dari kawasan saya kat Shah Alam. Tak boleh ambik job ni. Sorry ya 🙏','10:55');
+
+    await sleep(700);
+    setStage(3, '✅ Stage 3 — Quotes received. 1 provider unable to cover the area.');
+    setBtn('📊 View Quote Comparison & Select Provider', () => {
+      document.getElementById('quote-overlay').classList.add('show');
+    });
+  }
+
+  async function selectVendor(who) {
+    document.getElementById('quote-overlay').classList.remove('show');
+    chosenVendor = who==='ahmad' ? vendors[0] : vendors[1];
+    switchTo(chosenVendor.id);
+
+    setStage(5, `✅ Stage 4 — ${chosenVendor.name} selected. Sending confirmation...`);
+    setBtn('Sending confirmation and job scope...', null, true);
+
+    const name = who==='ahmad' ? 'Ahmad' : 'Sarah';
+    const rate = chosenVendor.rate;
+    const date = chosenVendor.date;
+
+    await sleep(900);
+    await addBan(chosenVendor.id, '— Booking confirmation sent —');
+    await addMsg(
+      chosenVendor.id, 'agent',
+      `Hi ${name}, saya nak confirm booking. ${rate}, tarikh ${date}. Scope kerja: potong semua rumput dalam kawasan yang ditandakan dalam gambar dan video yang dihantar. Boleh confirm? 🙏`,
+      '11:03'
+    );
+
+    await sleep(600);
+
+    const reply = who==='ahmad'
+      ? 'Ok confirmed bro! Isnin minggu depan ya. Saya akan sampai sekitar 8am pagi. Kalau ada apa-apa boleh whatsapp. Terima kasih! 🙏'
+      : 'Confirmed! We will be there Saturday morning at 9am sharp. Thank you for choosing Green Garden KL! 🌿';
+
+    await addMsg(chosenVendor.id, 'vendor', reply, '11:06');
+
+    await sleep(800);
+    setStage(5, `✅ Stage 5 — Booking confirmed with ${chosenVendor.name} at ${chosenVendor.rate}`);
+    setBtn('⏳ Simulate: Provider Reports Job Done — Verify', stage6);
+  }
+
+  async function stage6() {
+    setBtn('Receiving completion report...', null, true);
+    setStage(6, '📸 Stage 6 — Job completion report received. Running AI verification...');
+
+    await sleep(1400);
+    await addBan(chosenVendor.id, '— Job completion report —');
+    await addMsg(
+      chosenVendor.id, 'vendor',
+      'Hi, kerja dah siap! Semua rumput dalam kawasan yang ditandakan dah dipotong habis dan kemas. Gambar completion dah attach untuk semakan. Terima kasih! 😊',
+      '14:30',
+      'completion'
+    );
+
+    await sleep(1200);
+    setStage(6, '✅ Stage 6 — AI verification complete. Ready for payment.');
+
+    // Populate verify modal
+    const rate = chosenVendor.rate;
+    const name = chosenVendor.name;
+    document.getElementById('vr-text').innerHTML =
+      `<strong>${name}</strong> has reported the grass cutting job as complete and submitted 4 completion photos. ` +
+      `Based on the evidence provided, all grass within the circled area has been cut cleanly and thoroughly, ` +
+      `matching the agreed job scope. No outstanding areas were identified. ` +
+      `<strong style="color:#25D366">Payment of ${rate} is recommended.</strong>`;
+    document.getElementById('pay-name').textContent = name;
+    document.getElementById('pay-num').textContent = chosenVendor.number;
+    document.getElementById('pay-amt').textContent = rate;
+
+    setBtn('📋 View Verification Report & Approve Payment', () => {
+      document.getElementById('verify-overlay').classList.add('show');
+    });
+  }
+
+  function confirmPayment() {
+    document.getElementById('verify-overlay').classList.remove('show');
+    const v = chosenVendor;
+    document.getElementById('c-detail').innerHTML =
+      `Job done by <strong>${v.name}</strong> &nbsp;·&nbsp; ${v.date} &nbsp;·&nbsp; <strong>${v.rate}</strong>`;
+    document.getElementById('celebrate').classList.add('show');
+  }
+</script>
+</body>
+</html>

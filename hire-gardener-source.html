@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hire Gardener - Source Code</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #222; background-color: #ffffff; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        .back-nav { margin-bottom: 20px; }
+        .back-nav a { color: #007BFF; text-decoration: none; font-size: 1rem; }
+        .back-nav a:hover { text-decoration: underline; }
+        .project-header {
+            text-align: center; margin-bottom: 40px; padding: 40px 0;
+            background: linear-gradient(135deg, #075E54, #128C7E);
+            color: white; border-radius: 10px;
+        }
+        .project-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        .project-header p { font-size: 1.2rem; opacity: 0.9; }
+        .badges { display: flex; justify-content: center; gap: 10px; margin: 20px 0; flex-wrap: wrap; }
+        .badge { background-color: rgba(255,255,255,0.2); color: white; padding: 5px 12px; border-radius: 15px; font-size: 0.9rem; }
+        .content-section { margin: 40px 0; padding: 30px; background-color: #f9f9f9; border-radius: 8px; border-left: 5px solid #075E54; }
+        .content-section h2 { color: #075E54; margin-bottom: 20px; font-size: 1.8rem; }
+        .content-section h3 { color: #333; margin: 20px 0 10px 0; font-size: 1.3rem; }
+        .highlight-box { background: linear-gradient(135deg, #f0fdf4, #dcfce7); padding: 20px; border-radius: 10px; border-left: 5px solid #075E54; margin: 20px 0; }
+        .code-container { background-color: #1e1e1e; border-radius: 8px; padding: 20px; margin: 20px 0; overflow-x: auto; }
+        .code-header { color: #4ade80; font-weight: bold; margin-bottom: 15px; font-size: 1.05rem; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        .code-block { font-family: 'Consolas', 'Monaco', 'Courier New', monospace; font-size: 13px; line-height: 1.55; color: #d4d4d4; white-space: pre; }
+        .cm { color: #6a9955; font-style: italic; }
+        .ck { color: #569cd6; }
+        .cs { color: #ce9178; }
+        .cf { color: #dcdcaa; }
+        .cn { color: #b5cea8; }
+        .cv { color: #9cdcfe; }
+        .demo-links { text-align: center; margin: 30px 0; }
+        .demo-btn { display: inline-block; background-color: #007BFF; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; margin: 0 10px; font-weight: bold; transition: background-color 0.3s; }
+        .demo-btn:hover { background-color: #0056b3; }
+        .demo-btn.secondary { background-color: #25D366; }
+        .demo-btn.secondary:hover { background-color: #1ebe5d; }
+        .file-tree { font-family: monospace; font-size: 0.9rem; background: #f4f4f4; padding: 16px; border-radius: 8px; line-height: 1.8; }
+        @media (max-width: 768px) {
+            .project-header h1 { font-size: 2rem; }
+            .demo-btn { margin: 5px; padding: 10px 20px; }
+            .container { padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <nav class="back-nav"><a href="hire-gardener.html">← Back to Project Overview</a></nav>
+
+    <div class="project-header">
+        <h1>🌿 Hire Gardener</h1>
+        <p>Core Source Code — AI Vendor Communication Workflow</p>
+        <div class="badges">
+            <span class="badge">Python</span>
+            <span class="badge">Streamlit</span>
+            <span class="badge">Ollama · Llama3</span>
+            <span class="badge">WhatsApp Cloud API</span>
+        </div>
+    </div>
+
+    <div class="highlight-box">
+        <h3>🔍 About This Code Showcase</h3>
+        <p><strong>This showcase highlights the four core modules that power Hire Gardener's AI vendor communication workflow.</strong></p>
+        <p style="margin-top:8px">The key design principle is a pluggable messaging layer — one config flag switches the entire app between simulation mode (Llama3 plays vendor roles) and live mode (real WhatsApp API). The workflow logic never changes.</p>
+    </div>
+
+    <div class="content-section">
+        <h2>🗃️ Project File Structure</h2>
+        <div class="file-tree">
+hire-gardener/
+├── ui.py                  ← Streamlit app (main entry point)
+├── workflow.py            ← 6-stage orchestration logic
+├── agent.py               ← Llama3 message composition
+├── config.py              ← MODE flag + all settings
+├── requirements.txt
+├── .env.example
+├── README.md
+└── messaging/
+    ├── __init__.py        ← Auto-loads mock or real mode
+    ├── mock.py            ← Llama3 vendor simulation
+    └── whatsapp.py        ← Meta WhatsApp Cloud API
+        </div>
+    </div>
+
+    <div class="content-section">
+        <h2>⚙️ Core Design: The Mode Switch</h2>
+        <p>The entire mock/live switch lives in two files. <code>config.py</code> reads the environment, and <code>messaging/__init__.py</code> loads the correct module automatically.</p>
+
+        <div class="code-container">
+            <div class="code-header">📄 config.py — Single source of truth for all settings</div>
+            <div class="code-block"><span class="ck">import</span> os
+<span class="ck">from</span> dotenv <span class="ck">import</span> load_dotenv
+
+load_dotenv()
+
+<span class="cm"># Switch between "mock" (Llama3 simulation) and "real" (WhatsApp API)</span>
+MODE = os.getenv(<span class="cs">"MODE"</span>, <span class="cs">"mock"</span>)
+
+<span class="cm"># Ollama — local LLM running on your machine</span>
+OLLAMA_BASE_URL = os.getenv(<span class="cs">"OLLAMA_BASE_URL"</span>, <span class="cs">"http://127.0.0.1:11434"</span>)
+OLLAMA_MODEL    = os.getenv(<span class="cs">"OLLAMA_MODEL"</span>, <span class="cs">"llama3:latest"</span>)
+
+<span class="cm"># WhatsApp Cloud API — only used when MODE=real</span>
+WHATSAPP_API_TOKEN      = os.getenv(<span class="cs">"WHATSAPP_API_TOKEN"</span>, <span class="cs">""</span>)
+WHATSAPP_PHONE_NUMBER_ID = os.getenv(<span class="cs">"WHATSAPP_PHONE_NUMBER_ID"</span>, <span class="cs">""</span>)</div>
+        </div>
+
+        <div class="code-container">
+            <div class="code-header">📄 messaging/__init__.py — Pluggable messaging layer</div>
+            <div class="code-block"><span class="ck">from</span> config <span class="ck">import</span> MODE
+
+<span class="ck">if</span> MODE == <span class="cs">"real"</span>:
+    <span class="ck">from</span> .whatsapp <span class="ck">import</span> get_vendor_response  <span class="cm"># Real WhatsApp API</span>
+<span class="ck">else</span>:
+    <span class="ck">from</span> .mock <span class="ck">import</span> get_vendor_response      <span class="cm"># Llama3 simulation</span>
+
+<span class="cm"># Same function signature in both modules — workflow never needs to change</span>
+__all__ = [<span class="cs">"get_vendor_response"</span>]</div>
+        </div>
+    </div>
+
+    <div class="content-section">
+        <h2>🤖 Agent Module — Message Composition</h2>
+        <p>All outbound messages are composed by Llama3 with a persona system prompt. Every function has a hardcoded fallback so the app keeps working even if Ollama is offline.</p>
+
+        <div class="code-container">
+            <div class="code-header">📄 agent.py — Persona prompt + LLM call with fallback</div>
+            <div class="code-block">AGENT_SYSTEM = <span class="cs">"""You are a personal assistant helping a property owner find
+a grass cutting service in Malaysia. You communicate naturally,
+like a real person sending WhatsApp messages. Keep messages short
+and conversational — 2 to 4 sentences maximum. Use a natural mix
+of English and Malay where appropriate (e.g. "boleh", "terima kasih").
+Never reveal you are an AI."""</span>
+
+
+<span class="ck">def</span> <span class="cf">call_llm</span>(prompt, system=AGENT_SYSTEM):
+    <span class="ck">try</span>:
+        response = requests.post(
+            <span class="cs">f"</span>{OLLAMA_BASE_URL}<span class="cs">/api/generate"</span>,
+            json={
+                <span class="cs">"model"</span>:   OLLAMA_MODEL,
+                <span class="cs">"prompt"</span>:  prompt,
+                <span class="cs">"system"</span>:  system,
+                <span class="cs">"stream"</span>:  <span class="ck">False</span>,
+                <span class="cs">"options"</span>: {<span class="cs">"temperature"</span>: <span class="cn">0.7</span>}
+            },
+            timeout=<span class="cn">60</span>
+        )
+        <span class="ck">return</span> response.json().get(<span class="cs">"response"</span>, <span class="cs">""</span>).strip()
+    <span class="ck">except</span> Exception:
+        <span class="ck">return</span> <span class="ck">None</span>  <span class="cm"># Caller uses fallback text if None</span>
+
+
+<span class="ck">def</span> <span class="cf">compose_outreach</span>(area):
+    result = call_llm(
+        <span class="cs">f"Write a short WhatsApp message asking a grass cutting service "</span>
+        <span class="cs">f"if they cover </span>{area}<span class="cs">. Friendly, casual, 2–3 sentences."</span>
+    )
+    <span class="cm"># Fallback if Ollama is offline</span>
+    <span class="ck">return</span> result <span class="ck">or</span> (
+        <span class="cs">f"Hi, I'm looking for a grass cutting service in </span>{area}<span class="cs">. "</span>
+        <span class="cs">"Do you provide this service in the area? Thanks!"</span>
+    )</div>
+        </div>
+    </div>
+
+    <div class="content-section">
+        <h2>🎭 Vendor Simulation — Mock Mode</h2>
+        <p>Each vendor has a persona system prompt that drives Llama3's responses. Vendor 3 (Pak Razif) is programmed to decline at the quoting stage — adding realism to the simulation.</p>
+
+        <div class="code-container">
+            <div class="code-header">📄 messaging/mock.py — Vendor personas and reply logic</div>
+            <div class="code-block">PERSONAS = {
+    <span class="cn">1</span>: {
+        <span class="cs">"system"</span>: (
+            <span class="cs">"You are Ahmad, owner of Ahmad Landscaping in KL. "</span>
+            <span class="cs">"Speak in friendly Malay-English mix — use 'boleh', 'ok bro', 'insyaAllah'. "</span>
+            <span class="cs">"Charge RM150–180. Available Monday or Tuesday next week."</span>
+        ),
+        <span class="cs">"rate"</span>: <span class="cs">"160"</span>, <span class="cs">"availability"</span>: <span class="cs">"Monday next week"</span>, <span class="cs">"declines"</span>: <span class="ck">False</span>
+    },
+    <span class="cn">2</span>: {
+        <span class="cs">"system"</span>: (
+            <span class="cs">"You are Sarah from Green Garden KL. Professional English. "</span>
+            <span class="cs">"Charge RM200–220. Available this Saturday morning."</span>
+        ),
+        <span class="cs">"rate"</span>: <span class="cs">"210"</span>, <span class="cs">"availability"</span>: <span class="cs">"This Saturday"</span>, <span class="cs">"declines"</span>: <span class="ck">False</span>
+    },
+    <span class="cn">3</span>: {
+        <span class="cs">"system"</span>: (
+            <span class="cs">"You are Razif, a solo gardener based in Shah Alam. "</span>
+            <span class="cs">"For outreach: reply positively. For quoting: apologise and "</span>
+            <span class="cs">"say the area is too far from Shah Alam."</span>
+        ),
+        <span class="cs">"rate"</span>: <span class="ck">None</span>, <span class="cs">"availability"</span>: <span class="ck">None</span>, <span class="cs">"declines"</span>: <span class="ck">True</span>
+    }
+}
+
+
+<span class="ck">def</span> <span class="cf">get_vendor_response</span>(vendor: dict, message: str, stage: str) -> tuple:
+    <span class="cs">"""Returns (reply_text, quote_data | None)"""</span>
+    persona_id = vendor.get(<span class="cs">"persona_id"</span>, <span class="cn">1</span>)
+    persona    = PERSONAS[persona_id]
+
+    <span class="ck">if</span> stage == <span class="cs">"quoting"</span> <span class="ck">and</span> persona[<span class="cs">"declines"</span>]:
+        prompt = (
+            <span class="cs">f"Reply politely saying the area is too far from Shah Alam: '</span>{message}<span class="cs">'"</span>
+        )
+    <span class="ck">else</span>:
+        prompt = <span class="cs">f"Reply naturally to this WhatsApp message in character: '</span>{message}<span class="cs">'"</span>
+
+    reply = call_llm(prompt, persona[<span class="cs">"system"</span>]) <span class="ck">or</span> persona[<span class="cs">"fallbacks"</span>].get(stage, <span class="cs">"Ok, noted."</span>)
+
+    <span class="ck">if</span> stage == <span class="cs">"quoting"</span>:
+        quote_data = {
+            <span class="cs">"declined"</span>:     persona[<span class="cs">"declines"</span>],
+            <span class="cs">"rate"</span>:         persona[<span class="cs">"rate"</span>],
+            <span class="cs">"availability"</span>: persona[<span class="cs">"availability"</span>]
+        }
+        <span class="ck">return</span> reply, quote_data
+
+    <span class="ck">return</span> reply, <span class="ck">None</span></div>
+        </div>
+    </div>
+
+    <div class="content-section">
+        <h2>🔄 Workflow Engine — 6-Stage Orchestration</h2>
+        <p>The workflow module calls agent functions and the messaging layer in sequence. It never imports from WhatsApp or mock directly — only through the pluggable <code>messaging</code> module.</p>
+
+        <div class="code-container">
+            <div class="code-header">📄 workflow.py — Stage 3: Quote request with media</div>
+            <div class="code-block"><span class="ck">def</span> <span class="cf">stage_3_quote</span>(vendors: list, conversations: dict) -> tuple:
+    <span class="cs">"""Send quote request + media to all vendors. Returns (conversations, quotes)."""</span>
+    quotes = []
+
+    <span class="ck">for</span> vendor <span class="ck">in</span> vendors:
+        msg = compose_quote_request()
+
+        <span class="cm"># Display version shows media indicators in the UI</span>
+        display_msg = msg + <span class="cs">"\n\n📷 [Area photo attached]\n🎥 [Area video attached]"</span>
+        conversations[vendor[<span class="cs">"id"</span>]].append({
+            <span class="cs">"role"</span>: <span class="cs">"agent"</span>, <span class="cs">"text"</span>: display_msg, <span class="cs">"has_media"</span>: <span class="ck">True</span>
+        })
+
+        <span class="cm"># LLM gets the clean message (no UI indicators)</span>
+        reply, quote_data = get_vendor_response(vendor, msg, <span class="cs">"quoting"</span>)
+        conversations[vendor[<span class="cs">"id"</span>]].append({<span class="cs">"role"</span>: <span class="cs">"vendor"</span>, <span class="cs">"text"</span>: reply})
+
+        quotes.append({
+            **quote_data,
+            <span class="cs">"vendor_id"</span>:   vendor[<span class="cs">"id"</span>],
+            <span class="cs">"vendor_name"</span>: vendor[<span class="cs">"name"</span>],
+            <span class="cs">"number"</span>:      vendor[<span class="cs">"number"</span>],
+            <span class="cs">"persona_id"</span>:  vendor.get(<span class="cs">"persona_id"</span>, <span class="cn">1</span>)
+        })
+
+    <span class="ck">return</span> conversations, quotes</div>
+        </div>
+    </div>
+
+    <div class="content-section">
+        <h2>⚙️ Technical Implementation Notes</h2>
+        <h3>Key Design Decisions</h3>
+        <ul style="margin:15px 0; padding-left:20px">
+            <li><strong>Single mode flag:</strong> The entire mock/live behaviour is controlled by one environment variable — no branching logic spread across multiple files</li>
+            <li><strong>Identical function signatures:</strong> <code>mock.py</code> and <code>whatsapp.py</code> both export <code>get_vendor_response(vendor, message, stage)</code> — the workflow imports from neither directly</li>
+            <li><strong>Hardcoded fallbacks:</strong> Every LLM call returns a sensible fallback string if Ollama is unreachable — the demo never crashes</li>
+            <li><strong>Streamlit session state:</strong> All workflow state (conversations, quotes, selected vendor) is persisted in <code>st.session_state</code> so the UI can rerun without losing progress</li>
+            <li><strong>Dedicated WhatsApp number:</strong> Real mode is designed for a separate business SIM — personal numbers are never used with automation tools to avoid bans</li>
+        </ul>
+    </div>
+
+    <div class="demo-links">
+        <a href="projects/hire-gardener/demo.html" class="demo-btn">▶ Try Live Demo</a>
+        <a href="hire-gardener.html" class="demo-btn secondary">📖 View Project Overview</a>
+    </div>
+
+    <nav class="back-nav" style="text-align:center; margin-top:40px;">
+        <a href="index.html">← Back to Portfolio</a> |
+        <a href="hire-gardener.html">View Project Overview</a>
+    </nav>
+
+</div>
+</body>
+</html>

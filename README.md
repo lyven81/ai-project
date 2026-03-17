@@ -132,6 +132,12 @@ This repository contains **30 production-deployed AI applications** demonstratin
 
 ### 🤖 Business Automation & Booking Systems
 
+#### [Hire Gardener](./projects/hire-gardener/)
+**AI agent that finds, negotiates with, and hires a grass cutting service entirely via WhatsApp**
+- **Live Demo:** [Try Demo](https://lyven81.github.io/ai-project/projects/hire-gardener/demo.html)
+- **Tech Stack:** Python, Streamlit, Ollama, Llama3, Meta WhatsApp Cloud API
+- **AI Capabilities:** 6-stage vendor communication workflow, Llama3 vendor persona simulation, pluggable mock/live mode switch, natural Malaysian English/Malay conversation, AI job completion verification
+
 #### [Badminton Court Booking Agent](./projects/badminton-booking-agent/)
 **AI-powered agentic workflow for intelligent badminton court booking management using code-as-action pattern**
 - **Live Demo:** [ai-profile-badminton-court-booking--662370080553.us-west1.run.app](https://ai-profile-badminton-court-booking--662370080553.us-west1.run.app/)
@@ -349,6 +355,7 @@ All projects are production-deployed and accessible via live demos:
 | Customer Segmentation Agent | [Launch in Colab](https://colab.research.google.com/drive/1UfEqslRGbYY4qOcv2SCDrj1e0dC5jqJl) | Business Intelligence |
 | Business Intelligence Agent | [Launch in Colab](https://colab.research.google.com/drive/10wkxsg7Crcdz9oa3rFKlJ6Jtez1CB3xf) | Business Intelligence |
 | Kopitiam Digital Waiter | [Launch App](https://kopitiam-digital-waiter-169218045868.us-west1.run.app/) | Business Intelligence |
+| Hire Gardener | [Launch Demo](https://lyven81.github.io/ai-project/projects/hire-gardener/demo.html) | Business Automation |
 | Chinese Traditional Calendar | [Launch App](https://chinese-calender-169218045868.asia-southeast1.run.app/) | Conversational AI |
 | Astrology Consultant | [Launch App](https://horoscope-chatbot-218391175125.asia-southeast1.run.app/) | Conversational AI |
 | Feng Shui Consultant | [Launch App](https://fengshui-chatbot-218391175125.asia-southeast1.run.app/) | Conversational AI |
