@@ -2,7 +2,7 @@
 
 [![Portfolio Website](https://img.shields.io/badge/Portfolio-Live-green?logo=vercel)](https://lyven81.github.io/ai-project/)
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-black?logo=github)](https://github.com/lyven81/ai-project)
-[![Projects](https://img.shields.io/badge/Projects-30-blue)](#-featured-projects)
+[![Projects](https://img.shields.io/badge/Projects-32-blue)](#-featured-projects)
 [![AI Powered](https://img.shields.io/badge/AI-Powered-orange?logo=tensorflow)](https://github.com/lyven81/ai-project)
 
 **Innovative AI Solutions for Modern Challenges** - A curated collection of production-ready AI applications showcasing expertise in computer vision, natural language processing, document processing, and creative AI technologies.
@@ -13,7 +13,7 @@
 
 ## 🌟 Portfolio Overview
 
-This repository contains **30 production-deployed AI applications** demonstrating proficiency across multiple AI domains. Each project includes comprehensive documentation, live demos, and complete source code with deployment configurations.
+This repository contains **32 production-deployed AI applications** demonstrating proficiency across multiple AI domains. Each project includes comprehensive documentation, live demos, and complete source code with deployment configurations.
 
 **🎯 Portfolio Highlights:**
 - **15+ AI Technologies** integrated across projects
@@ -129,6 +129,18 @@ This repository contains **30 production-deployed AI applications** demonstratin
 - **Live Demo:** [kopitiam-digital-waiter-169218045868.us-west1.run.app](https://kopitiam-digital-waiter-169218045868.us-west1.run.app/)
 - **Tech Stack:** React 19, TypeScript, Express.js, SQLite, Vite, Tailwind CSS, Recharts, Gemini AI
 - **AI Capabilities:** AI-powered contextual quick tips, milestone sales alerts, busy hour analytics, daily revenue trend visualization, real-time item performance ranking
+
+#### [MyPropLex](./projects/myproplex/)
+**AI-powered Malaysian property law research assistant for lawyers and conveyancers**
+- **Live Demo:** [Launch Demo](https://lyven81.github.io/ai-project/projects/myproplex/demo.html)
+- **Tech Stack:** Python, Claude Sonnet 4.6, Tavily Search API, Streamlit
+- **AI Capabilities:** ReAct agent loop with web search, Malaysian property law specialist (NLC, HDA, STA, RPGT, RERA), 3-sentence cited answers, 10 preset questions, conversation memory
+
+#### [TrendMate](./projects/trendmate/)
+**AI market research assistant for Malaysian online fashion sellers on Shopee, Lazada, and TikTok Shop**
+- **Live Demo:** [Launch Demo](https://lyven81.github.io/ai-project/projects/trendmate/demo.html)
+- **Tech Stack:** Python, Claude Sonnet 4.6, Tavily Search API, Streamlit
+- **AI Capabilities:** ReAct agent loop with web search, Malaysian fashion market specialist, trend/pricing/supplier/seasonal research, 3-sentence actionable answers, 10 preset questions
 
 ### 🤖 Business Automation & Booking Systems
 
@@ -289,6 +301,8 @@ ai-project/
 │   ├── customer-segmentation-agent/ # RFM analysis & targeted campaigns
 │   ├── business-intelligence-agent/ # Natural language data analytics
 │   ├── kopitiam-digital-waiter/ # Real-time Kopitiam sales tracker & analytics
+│   ├── myproplex/               # Malaysian property law research assistant
+│   ├── trendmate/               # Malaysian fashion market research assistant
 │   ├── chinese-calender/        # Conversational AI traditional calendar
 │   ├── horoscope-chatbot/       # Astrology consultation AI
 │   ├── fengshui-chatbot/        # Feng Shui advisory AI
@@ -355,6 +369,8 @@ All projects are production-deployed and accessible via live demos:
 | Customer Segmentation Agent | [Launch in Colab](https://colab.research.google.com/drive/1UfEqslRGbYY4qOcv2SCDrj1e0dC5jqJl) | Business Intelligence |
 | Business Intelligence Agent | [Launch in Colab](https://colab.research.google.com/drive/10wkxsg7Crcdz9oa3rFKlJ6Jtez1CB3xf) | Business Intelligence |
 | Kopitiam Digital Waiter | [Launch App](https://kopitiam-digital-waiter-169218045868.us-west1.run.app/) | Business Intelligence |
+| MyPropLex | [Launch Demo](https://lyven81.github.io/ai-project/projects/myproplex/demo.html) | Business Intelligence |
+| TrendMate | [Launch Demo](https://lyven81.github.io/ai-project/projects/trendmate/demo.html) | Business Intelligence |
 | Hire Gardener | [Launch Demo](https://lyven81.github.io/ai-project/projects/hire-gardener/demo.html) | Business Automation |
 | Chinese Traditional Calendar | [Launch App](https://chinese-calender-169218045868.asia-southeast1.run.app/) | Conversational AI |
 | Astrology Consultant | [Launch App](https://horoscope-chatbot-218391175125.asia-southeast1.run.app/) | Conversational AI |

@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrendMate - Malaysian Fashion Seller Research Assistant</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #222; background-color: #ffffff; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        .back-nav { margin-bottom: 20px; }
+        .back-nav a { color: #007BFF; text-decoration: none; font-size: 1rem; }
+        .back-nav a:hover { text-decoration: underline; }
+        .project-header {
+            text-align: center; margin-bottom: 40px; padding: 40px 0;
+            background: linear-gradient(135deg, #2D1B4E, #6B21A8);
+            color: white; border-radius: 10px;
+        }
+        .project-header h1 { font-size: 2.5rem; margin-bottom: 10px; color: #F9A8D4; }
+        .project-header p { font-size: 1.2rem; opacity: 0.9; }
+        .badges { display: flex; justify-content: center; gap: 10px; margin: 20px 0; flex-wrap: wrap; }
+        .badge { background-color: rgba(214,51,132,0.2); color: #F9A8D4; padding: 5px 12px; border-radius: 15px; font-size: 0.9rem; border: 1px solid rgba(214,51,132,0.4); }
+        .demo-links { text-align: center; margin: 30px 0; }
+        .demo-btn {
+            display: inline-block; background-color: #D63384; color: white;
+            padding: 12px 25px; text-decoration: none; border-radius: 5px;
+            margin: 0 10px; font-weight: bold; transition: background-color 0.3s;
+        }
+        .demo-btn:hover { background-color: #B02060; }
+        .demo-btn.secondary { background-color: #6B21A8; color: white; }
+        .demo-btn.secondary:hover { background-color: #581C87; }
+        .content-section {
+            margin: 40px 0; padding: 30px; background-color: #f9f9f9;
+            border-radius: 8px; border-left: 5px solid #D63384;
+        }
+        .content-section h2 { color: #D63384; margin-bottom: 20px; font-size: 1.8rem; }
+        .content-section h3 { color: #333; margin: 20px 0 10px 0; font-size: 1.3rem; }
+        .content-section p { margin-bottom: 12px; }
+        .content-section ul { padding-left: 20px; }
+        .content-section ul li { margin-bottom: 8px; }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin: 20px 0; }
+        .feature-item { background: white; padding: 20px; border-radius: 8px; border: 1px solid #ddd; }
+        .feature-item h4 { color: #D63384; margin-bottom: 10px; }
+        .tech-stack { display: flex; flex-wrap: wrap; gap: 10px; margin: 15px 0; }
+        .tech-item { background-color: #D63384; color: white; padding: 5px 12px; border-radius: 15px; font-size: 0.9rem; }
+        .code-block {
+            background-color: #f4f4f4; border: 1px solid #ddd; border-radius: 5px;
+            padding: 15px; margin: 15px 0; font-family: monospace; overflow-x: auto;
+        }
+        .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin: 20px 0; }
+        .metric-card { background: white; padding: 20px; border-radius: 8px; text-align: center; border: 2px solid #D63384; }
+        .metric-number { font-size: 2rem; font-weight: bold; color: #D63384; }
+        .metric-label { color: #666; font-size: 0.9rem; }
+        .platform-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin: 15px 0; }
+        .platform-tag { background-color: #FDF5F8; border: 1px solid #F9A8D4; color: #6B21A8; padding: 6px 12px; border-radius: 6px; font-size: 0.85rem; text-align: center; font-weight: 500; }
+        @media (max-width: 768px) {
+            .project-header h1 { font-size: 2rem; }
+            .demo-btn { margin: 5px; padding: 10px 20px; }
+            .container { padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <nav class="back-nav"><a href="index.html">← Back to Portfolio</a></nav>
+
+    <div class="project-header">
+        <h1>👗 TrendMate</h1>
+        <p>AI Market Research Assistant for Malaysian Online Fashion Sellers</p>
+        <div class="badges">
+            <span class="badge">Python</span>
+            <span class="badge">Claude Sonnet 4.6</span>
+            <span class="badge">Tavily Search</span>
+            <span class="badge">Streamlit</span>
+            <span class="badge">E-commerce Intelligence</span>
+        </div>
+    </div>
+
+    <div class="demo-links">
+        <a href="projects/trendmate/demo.html" target="_blank" class="demo-btn">🚀 Launch Live Demo</a>
+        <a href="trendmate-source.html" class="demo-btn secondary">📁 View Source Code</a>
+    </div>
+
+    <div class="content-section">
+        <h2>📋 Project Overview & Problem Statement</h2>
+        <p><strong>Challenge:</strong> Malaysian online fashion sellers on Shopee, Lazada, and TikTok Shop make most of their product, pricing, and restocking decisions based on gut feel. They have no dedicated analyst, no market research tool built for their scale, and no time to monitor competitors, trends, and platform changes every day.</p>
+        <p><strong>Solution:</strong> TrendMate is an AI-powered market research assistant that gives fashion sellers fast, data-backed answers on what to stock, how to price it, and when to promote — in plain, actionable language that busy sellers can act on immediately.</p>
+        <h3>Key Benefits</h3>
+        <ul>
+            <li><strong>Catches trends early</strong> — searches TikTok, Shopee, Lazada, and fashion media to surface what's gaining momentum now</li>
+            <li><strong>Actionable 3-sentence answers</strong> — every response includes a recommendation, evidence, and one action to take right now</li>
+            <li><strong>Covers the full seller workflow</strong> — trends, pricing, sourcing, platform updates, and seasonal planning in one tool</li>
+            <li><strong>Malaysian market specific</strong> — tuned for Shopee MY, Lazada MY, TikTok Shop Malaysia, and local seasonal events</li>
+            <li><strong>10 preset questions</strong> — sellers can get instant answers on the most common business questions with one click</li>
+        </ul>
+    </div>
+
+    <div class="content-section">
+        <h2>🖥️ Application Features</h2>
+        <div class="features-grid">
+            <div class="feature-item">
+                <h4>📈 Trend Spotter</h4>
+                <p>Searches TikTok Malaysia, Shopee trending pages, and local fashion media to identify what clothing styles, colours, and silhouettes are gaining momentum this week.</p>
+            </div>
+            <div class="feature-item">
+                <h4>💰 Pricing Intelligence</h4>
+                <p>Checks competitor listings and current market prices on Shopee and Lazada to give sellers a recommended price range for any product category.</p>
+            </div>
+            <div class="feature-item">
+                <h4>🏭 Supplier Research</h4>
+                <p>Finds wholesale sourcing options — both local Malaysian suppliers and China sourcing via Alibaba/1688 — with typical MOQs and landed cost estimates.</p>
+            </div>
+            <div class="feature-item">
+                <h4>📅 Seasonal Planner</h4>
+                <p>Flags upcoming Malaysian sale events (Raya, CNY, 11.11, 12.12) and advises on stocking timelines, top-selling styles, and promotional strategies for each season.</p>
+            </div>
+            <div class="feature-item">
+                <h4>📋 10 Preset Questions</h4>
+                <p>Sidebar includes 10 common seller questions — from trending styles to hashtag strategy to profit margins. One click sends the question with no typing required.</p>
+            </div>
+            <div class="feature-item">
+                <h4>📥 Copy & Download</h4>
+                <p>Every answer has a copy button for quick use. Full conversation can be downloaded as a .txt file — useful for sharing research with business partners.</p>
+            </div>
+        </div>
+
+        <h3>Platforms & Sources Covered</h3>
+        <div class="platform-grid">
+            <div class="platform-tag">Shopee Malaysia</div>
+            <div class="platform-tag">Lazada Malaysia</div>
+            <div class="platform-tag">TikTok Shop MY</div>
+            <div class="platform-tag">Alibaba / 1688</div>
+            <div class="platform-tag">Google Trends MY</div>
+            <div class="platform-tag">TikTok Hashtags</div>
+            <div class="platform-tag">Instagram Malaysia</div>
+            <div class="platform-tag">Local Fashion Media</div>
+        </div>
+    </div>
+
+    <div class="content-section">
+        <h2>🤖 AI Integration & Intelligence</h2>
+        <div class="features-grid">
+            <div class="feature-item">
+                <h4>🧠 Claude Sonnet 4.6 (Anthropic)</h4>
+                <p>The reasoning engine. Claude reads Tavily search results across multiple sources, identifies the most relevant market signals, and synthesises a 3-sentence actionable recommendation with evidence.</p>
+            </div>
+            <div class="feature-item">
+                <h4>🔎 Agentic Search Loop</h4>
+                <p>Claude uses the Anthropic tool-use API in a ReAct loop — it decides what to search, calls Tavily, reads results, and iterates until confident. Typically 1–3 searches per question.</p>
+            </div>
+            <div class="feature-item">
+                <h4>📝 Niche System Prompt</h4>
+                <p>The system prompt restricts Claude to the Malaysian fashion market, enforces the 3-sentence format with evidence + action structure, and requires price ranges to be in RM and platform-specific.</p>
+            </div>
+            <div class="feature-item">
+                <h4>🗓️ Seasonal Awareness</h4>
+                <p>The system prompt is aware of the Malaysian seasonal sales calendar — Hari Raya, Chinese New Year, 11.11, 12.12, school holidays — and flags urgency when a prep window is approaching.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-section">
+        <h2>🛠️ Technical Architecture & Implementation</h2>
+        <h3>Frontend Stack</h3>
+        <div class="tech-stack">
+            <span class="tech-item">Streamlit 1.32+</span>
+            <span class="tech-item">Custom CSS (Rose + Purple theme)</span>
+            <span class="tech-item">HTML Components</span>
+        </div>
+        <h3>Backend Stack</h3>
+        <div class="tech-stack">
+            <span class="tech-item">Python 3.10+</span>
+            <span class="tech-item">Anthropic SDK</span>
+            <span class="tech-item">Tavily Python SDK</span>
+            <span class="tech-item">python-dotenv</span>
+        </div>
+        <h3>Deployment</h3>
+        <div class="tech-stack">
+            <span class="tech-item">Streamlit Community Cloud</span>
+            <span class="tech-item">Local (Windows .bat launcher)</span>
+        </div>
+        <h3>System Architecture</h3>
+        <ul>
+            <li><strong>Agent loop:</strong> User question → Claude API (tool use) → Tavily searches Malaysian market sources → Claude synthesises → actionable answer returned</li>
+            <li><strong>Session state:</strong> Streamlit session_state keeps display messages and API conversation history in sync throughout the session</li>
+            <li><strong>Secret management:</strong> Reads from Streamlit secrets on Cloud; falls back to .env file locally</li>
+            <li><strong>Dual interface:</strong> CLI version (app.py) and web version (web_app.py) share the same agent and search logic</li>
+        </ul>
+    </div>
+
+    <div class="content-section">
+        <h2>📖 Development Setup & Installation Guide</h2>
+        <h3>Prerequisites</h3>
+        <ul>
+            <li><strong>Python 3.10+</strong> with pip</li>
+            <li><strong>Anthropic API Key</strong> from console.anthropic.com</li>
+            <li><strong>Tavily API Key</strong> from app.tavily.com (free tier: 1,000 searches/month)</li>
+        </ul>
+        <h3>Quick Start</h3>
+        <div class="code-block">
+# Clone from portfolio
+git clone https://github.com/lyven81/ai-project.git
+cd ai-project/projects/trendmate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Set up API keys
+copy .env.example .env
+# Edit .env and add your ANTHROPIC_API_KEY and TAVILY_API_KEY
+
+# Run web interface
+streamlit run web_app.py
+
+# Or run CLI version
+python app.py
+        </div>
+        <h3>Environment Configuration</h3>
+        <div class="code-block">
+ANTHROPIC_API_KEY=your_anthropic_api_key_here
+TAVILY_API_KEY=your_tavily_api_key_here
+        </div>
+        <h3>Windows One-Click Launch</h3>
+        <ul>
+            <li>Double-click <code>run_web.bat</code> to launch the web interface in your browser</li>
+            <li>Double-click <code>run.bat</code> to launch the CLI terminal version</li>
+            <li>Both bat files auto-install required packages on first run</li>
+        </ul>
+    </div>
+
+    <div class="content-section">
+        <h2>🚀 Deployment on Streamlit Community Cloud</h2>
+        <div class="code-block">
+# 1. Push project to GitHub
+# 2. Go to share.streamlit.io and connect your repo
+# 3. Set main file as: web_app.py
+# 4. Add secrets in the Streamlit dashboard:
+#    ANTHROPIC_API_KEY = "your_key"
+#    TAVILY_API_KEY = "your_key"
+# 5. Deploy — live URL generated automatically
+        </div>
+        <h3>Production Notes</h3>
+        <ul>
+            <li>Free tier on Streamlit Community Cloud is sufficient for demos and early subscribers</li>
+            <li>API costs are approximately RM0.03–RM0.10 per research session (Claude + Tavily)</li>
+            <li>For commercial deployment at scale, consider caching common trend queries to reduce API costs</li>
+        </ul>
+    </div>
+
+    <div class="content-section">
+        <h2>📊 Key Metrics</h2>
+        <div class="metrics">
+            <div class="metric-card">
+                <div class="metric-number">8</div>
+                <div class="metric-label">Platforms & Sources Covered</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-number">10</div>
+                <div class="metric-label">Preset Questions</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-number">3</div>
+                <div class="metric-label">Sentences Max Per Answer</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-number">RM50–150</div>
+                <div class="metric-label">Target Monthly Price</div>
+            </div>
+        </div>
+        <h3>Business Value</h3>
+        <ul>
+            <li><strong>Catches trends early:</strong> Sellers who stock trending products 2–3 weeks ahead of peak see 2–3x the sales volume</li>
+            <li><strong>Prevents dead stock:</strong> Pricing and demand research before buying reduces the risk of overstocking slow-moving items</li>
+            <li><strong>Seasonal prep:</strong> Raya and 11.11 planning guidance helps sellers stock and list at the optimal time</li>
+            <li><strong>Accessible pricing:</strong> RM50–150/month is within reach for solo sellers, with clear ROI from even one good sourcing decision</li>
+        </ul>
+    </div>
+
+    <div class="demo-links">
+        <a href="projects/trendmate/demo.html" target="_blank" class="demo-btn">🚀 Try Live Demo</a>
+        <a href="trendmate-source.html" class="demo-btn secondary">📁 View Source Code</a>
+    </div>
+
+    <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+        <a href="index.html">← Back to Portfolio</a> |
+        <a href="project-categories.html">View All Categories</a>
+    </nav>
+</div>
+</body>
+</html>

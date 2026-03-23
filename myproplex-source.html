@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyPropLex - Source Code</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #222; background-color: #ffffff; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        .back-nav { margin-bottom: 20px; }
+        .back-nav a { color: #007BFF; text-decoration: none; font-size: 1rem; }
+        .back-nav a:hover { text-decoration: underline; }
+        .project-header {
+            text-align: center; margin-bottom: 40px; padding: 40px 0;
+            background: linear-gradient(135deg, #1B3A6B, #2A5298); color: white; border-radius: 10px;
+        }
+        .project-header h1 { font-size: 2.5rem; margin-bottom: 10px; color: #C9A84C; }
+        .project-header p { font-size: 1.2rem; opacity: 0.9; }
+        .content-section { margin: 40px 0; padding: 30px; background-color: #f9f9f9; border-radius: 8px; border-left: 5px solid #1B3A6B; }
+        .content-section h2 { color: #1B3A6B; margin-bottom: 20px; font-size: 1.8rem; }
+        .content-section h3 { color: #333; margin: 20px 0 10px 0; font-size: 1.3rem; }
+        .content-section p { margin-bottom: 12px; }
+        .content-section ul { padding-left: 20px; }
+        .content-section ul li { margin-bottom: 6px; }
+        .code-block { background-color: #1a1a2e; color: #e0e0e0; border-radius: 8px; padding: 20px; margin: 15px 0; font-family: monospace; font-size: 0.88rem; overflow-x: auto; line-height: 1.6; }
+        .code-block .comment { color: #6B9A6B; }
+        .code-block .keyword { color: #C9A84C; }
+        .code-block .string { color: #A8D8A8; }
+        .file-tree { background: #f4f4f4; border: 1px solid #ddd; border-radius: 8px; padding: 20px; font-family: monospace; font-size: 0.9rem; line-height: 1.8; }
+        .file-tree .folder { color: #1B3A6B; font-weight: bold; }
+        .file-tree .file { color: #444; }
+        .file-tree .desc { color: #888; font-size: 0.8rem; margin-left: 8px; }
+        .demo-links { text-align: center; margin: 30px 0; }
+        .demo-btn { display: inline-block; background-color: #1B3A6B; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; margin: 0 10px; font-weight: bold; }
+        .demo-btn:hover { background-color: #2A5298; }
+        .demo-btn.secondary { background-color: #C9A84C; color: #1B3A6B; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <nav class="back-nav"><a href="myproplex.html">← Back to MyPropLex Showcase</a></nav>
+
+    <div class="project-header">
+        <h1>⚖️ MyPropLex</h1>
+        <p>Source Code — Malaysian Property Law Research Assistant</p>
+    </div>
+
+    <div class="content-section">
+        <h2>📁 File Structure</h2>
+        <div class="file-tree">
+            <div><span class="folder">projects/myproplex/</span></div>
+            <div>&nbsp;&nbsp;├── <span class="file">app.py</span><span class="desc">— CLI terminal version of the research assistant</span></div>
+            <div>&nbsp;&nbsp;├── <span class="file">web_app.py</span><span class="desc">— Streamlit web interface (main app)</span></div>
+            <div>&nbsp;&nbsp;├── <span class="file">system-prompt.txt</span><span class="desc">— Agent persona, legal focus, and 3-sentence format rules</span></div>
+            <div>&nbsp;&nbsp;├── <span class="file">requirements.txt</span><span class="desc">— Python dependencies</span></div>
+            <div>&nbsp;&nbsp;├── <span class="file">.env.example</span><span class="desc">— API key template</span></div>
+            <div>&nbsp;&nbsp;├── <span class="file">demo.html</span><span class="desc">— Static interactive demo page</span></div>
+            <div>&nbsp;&nbsp;├── <span class="file">user-guide.md</span><span class="desc">— Plain language setup and usage guide</span></div>
+            <div>&nbsp;&nbsp;├── <span class="file">problem-statement.md</span><span class="desc">— Problem definition and target users</span></div>
+            <div>&nbsp;&nbsp;└── <span class="file">project-outline.md</span><span class="desc">— App name, features, tech stack, roadmap</span></div>
+        </div>
+    </div>
+
+    <div class="content-section">
+        <h2>🔑 Key Code: Agent Loop (web_app.py)</h2>
+        <p>The core of the app is a ReAct-style agent loop. Claude decides whether to search the web, calls the Tavily tool, reads results, and iterates until ready to answer. This loop runs inside Streamlit's chat interface.</p>
+        <div class="code-block">
+<span class="keyword">def</span> run_agent(user_message, history, client, tavily, system_prompt):
+    <span class="comment"># Add user message to conversation history</span>
+    history.append({<span class="string">"role"</span>: <span class="string">"user"</span>, <span class="string">"content"</span>: user_message})
+
+    <span class="keyword">while</span> True:
+        <span class="comment"># Call Claude with tools available</span>
+        response = client.messages.create(
+            model=<span class="string">"claude-sonnet-4-6"</span>,
+            max_tokens=2048,
+            system=system_prompt,
+            tools=TOOLS,
+            messages=history
+        )
+
+        <span class="keyword">if</span> response.stop_reason == <span class="string">"end_turn"</span>:
+            <span class="comment"># Claude is done — extract and return the text answer</span>
+            text = <span class="string">"\n"</span>.join(b.text <span class="keyword">for</span> b <span class="keyword">in</span> response.content <span class="keyword">if</span> hasattr(b, <span class="string">"text"</span>))
+            history.append({<span class="string">"role"</span>: <span class="string">"assistant"</span>, <span class="string">"content"</span>: response.content})
+            <span class="keyword">return</span> text
+
+        <span class="keyword">elif</span> response.stop_reason == <span class="string">"tool_use"</span>:
+            <span class="comment"># Claude wants to search — execute the tool and feed results back</span>
+            history.append({<span class="string">"role"</span>: <span class="string">"assistant"</span>, <span class="string">"content"</span>: response.content})
+            tool_results = []
+            <span class="keyword">for</span> block <span class="keyword">in</span> response.content:
+                <span class="keyword">if</span> block.type == <span class="string">"tool_use"</span> <span class="keyword">and</span> block.name == <span class="string">"search_web"</span>:
+                    tool_results.append({
+                        <span class="string">"type"</span>: <span class="string">"tool_result"</span>,
+                        <span class="string">"tool_use_id"</span>: block.id,
+                        <span class="string">"content"</span>: search_web(block.input[<span class="string">"query"</span>], tavily)
+                    })
+            history.append({<span class="string">"role"</span>: <span class="string">"user"</span>, <span class="string">"content"</span>: tool_results})
+        </div>
+        <p>The <code>history</code> list is stored in <code>st.session_state.conv_history</code> and persists across turns, giving the agent memory within a session.</p>
+    </div>
+
+    <div class="content-section">
+        <h2>🔑 Key Code: API Secret Handling</h2>
+        <p>The app reads API keys from Streamlit secrets when deployed on Streamlit Cloud, and falls back to a local .env file when running locally. This means the same code works in both environments with no changes.</p>
+        <div class="code-block">
+<span class="keyword">@st.cache_resource</span>
+<span class="keyword">def</span> init_clients():
+    <span class="comment"># Try Streamlit Cloud secrets first (production)</span>
+    <span class="keyword">try</span>:
+        ak = st.secrets[<span class="string">"ANTHROPIC_API_KEY"</span>]
+        tk = st.secrets[<span class="string">"TAVILY_API_KEY"</span>]
+    <span class="keyword">except</span> (KeyError, FileNotFoundError):
+        <span class="comment"># Fall back to .env file (local development)</span>
+        ak = os.getenv(<span class="string">"ANTHROPIC_API_KEY"</span>)
+        tk = os.getenv(<span class="string">"TAVILY_API_KEY"</span>)
+    <span class="keyword">if not</span> ak <span class="keyword">or not</span> tk:
+        <span class="keyword">return</span> None, None
+    <span class="keyword">return</span> Anthropic(api_key=ak), TavilyClient(api_key=tk)
+        </div>
+    </div>
+
+    <div class="content-section">
+        <h2>🔑 Key Code: System Prompt (system-prompt.txt)</h2>
+        <p>The system prompt is what turns a general AI into a specialist legal research tool. The 3-sentence format rule is the most impactful instruction — it forces Claude to be concise and structured on every answer.</p>
+        <div class="code-block">
+<span class="comment">FORMAT OF YOUR ANSWERS</span>
+- Maximum 3 sentences per answer. No exceptions.
+- Sentence 1: The direct answer in plain, everyday language.
+- Sentence 2: The legal basis — act name and section number, stated simply.
+- Sentence 3: One important caveat, exception, or next step if needed.
+- Never use bullet points, headers, or lists. Write in plain sentences only.
+
+<span class="comment">TONE</span>
+Short, clear, and simple. Write as if explaining to a smart person
+who is not a lawyer. No jargon. No long sentences.
+        </div>
+    </div>
+
+    <div class="content-section">
+        <h2>📦 Dependencies (requirements.txt)</h2>
+        <div class="code-block">
+anthropic&gt;=0.40.0      <span class="comment"># Claude API SDK</span>
+tavily-python&gt;=0.3.0   <span class="comment"># Web search API</span>
+python-dotenv&gt;=1.0.0   <span class="comment"># Load .env files locally</span>
+streamlit&gt;=1.32.0      <span class="comment"># Web interface framework</span>
+        </div>
+    </div>
+
+    <div class="demo-links">
+        <a href="myproplex.html" class="demo-btn">← Back to Showcase</a>
+        <a href="projects/myproplex/demo.html" target="_blank" class="demo-btn secondary">🚀 Try Live Demo</a>
+    </div>
+
+    <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+        <a href="index.html">← Back to Portfolio</a> |
+        <a href="project-categories.html">View All Categories</a>
+    </nav>
+</div>
+</body>
+</html>

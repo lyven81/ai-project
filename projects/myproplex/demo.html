@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MyPropLex — Malaysian Property Law Research Assistant</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #EEF2F7; display: flex; height: 100vh; overflow: hidden; }
+
+    /* Sidebar */
+    .sidebar {
+      width: 300px; min-width: 300px; background: #1B3A6B;
+      display: flex; flex-direction: column; padding: 0; overflow-y: auto;
+    }
+    .sidebar-header { padding: 20px 18px 12px; border-bottom: 1px solid #2E4F8A; }
+    .sidebar-header h2 { color: #C9A84C; font-size: 1.1rem; font-weight: 700; }
+    .sidebar-header p { color: #8899BB; font-size: 0.72rem; margin-top: 3px; }
+    .sidebar-section { padding: 14px 18px 0; }
+    .sidebar-label { color: #C9A84C; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 8px; display: block; }
+    .preset-btn {
+      display: block; width: 100%; background: rgba(201,168,76,0.1);
+      border: 1px solid rgba(201,168,76,0.3); color: #E0D4B0;
+      border-radius: 7px; padding: 8px 11px; margin-bottom: 6px;
+      font-size: 0.76rem; line-height: 1.4; text-align: left; cursor: pointer;
+      transition: background 0.18s;
+    }
+    .preset-btn:hover { background: rgba(201,168,76,0.25); border-color: #C9A84C; color: #F5EDD0; }
+    .sidebar-divider { border: none; border-top: 1px solid #2E4F8A; margin: 14px 18px; }
+    .action-btn {
+      display: block; width: calc(100% - 36px); margin: 0 18px 8px;
+      padding: 9px 14px; border-radius: 7px; font-size: 0.8rem;
+      font-weight: 600; cursor: pointer; border: none; text-align: center;
+    }
+    .action-btn.clear { background: rgba(255,255,255,0.08); color: #C8D5E8; }
+    .action-btn.download { background: #C9A84C; color: #1B3A6B; }
+    .sidebar-footer { padding: 12px 18px 18px; margin-top: auto; }
+
+    /* Main */
+    .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+    .app-header {
+      background: linear-gradient(135deg, #1B3A6B, #2A5298);
+      padding: 14px 22px; border-left: 5px solid #C9A84C;
+      flex-shrink: 0;
+    }
+    .app-header h1 { color: #C9A84C; font-size: 1.25rem; font-weight: 700; }
+    .app-header p { color: #A8BBCE; font-size: 0.78rem; margin-top: 2px; }
+    .app-header .badges { margin-top: 7px; display: flex; gap: 6px; flex-wrap: wrap; }
+    .app-header .badge {
+      background: rgba(201,168,76,0.2); color: #C9A84C;
+      border: 1px solid rgba(201,168,76,0.35); border-radius: 20px;
+      padding: 2px 9px; font-size: 0.68rem;
+    }
+
+    /* Chat area */
+    .chat-area { flex: 1; overflow-y: auto; padding: 18px 22px; display: flex; flex-direction: column; gap: 12px; }
+
+    .welcome-box {
+      background: white; border: 1px solid #DDE5F0; border-left: 4px solid #C9A84C;
+      border-radius: 10px; padding: 13px 16px; color: #3A4A6B; font-size: 0.85rem; line-height: 1.5;
+    }
+
+    .msg { display: flex; gap: 10px; align-items: flex-start; max-width: 90%; }
+    .msg.user { align-self: flex-end; flex-direction: row-reverse; }
+    .msg-avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
+    .msg.bot .msg-avatar { background: #1B3A6B; }
+    .msg.user .msg-avatar { background: #C9A84C; }
+    .msg-bubble { padding: 11px 15px; border-radius: 12px; font-size: 0.84rem; line-height: 1.55; }
+    .msg.bot .msg-bubble { background: white; border: 1px solid #DDE5F0; box-shadow: 0 1px 4px rgba(27,58,107,0.07); color: #222; }
+    .msg.user .msg-bubble { background: #1B3A6B; color: white; }
+
+    .copy-row { margin-top: 6px; padding-left: 42px; }
+    .copy-btn {
+      background: none; border: 1px solid #CBD5E8; border-radius: 5px;
+      color: #6B7C9B; font-size: 0.72rem; padding: 3px 10px; cursor: pointer;
+      transition: all 0.15s;
+    }
+    .copy-btn:hover { background: #EEF2F7; border-color: #1B3A6B; color: #1B3A6B; }
+
+    .typing { display: flex; align-items: center; gap: 6px; padding: 10px 15px; background: white; border: 1px solid #DDE5F0; border-radius: 12px; width: fit-content; }
+    .dot { width: 7px; height: 7px; background: #1B3A6B; border-radius: 50%; animation: bounce 1.2s infinite; }
+    .dot:nth-child(2) { animation-delay: 0.2s; }
+    .dot:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-6px)} }
+
+    /* Input */
+    .input-area { padding: 12px 22px 16px; background: #EEF2F7; border-top: 1px solid #DDE5F0; flex-shrink: 0; }
+    .input-row { display: flex; gap: 8px; }
+    .input-row input {
+      flex: 1; padding: 11px 15px; border: 2px solid #C9A84C; border-radius: 10px;
+      font-size: 0.85rem; outline: none; background: white;
+    }
+    .input-row input:focus { border-color: #1B3A6B; }
+    .send-btn {
+      background: #1B3A6B; color: white; border: none; border-radius: 10px;
+      padding: 11px 18px; font-size: 0.85rem; font-weight: 600; cursor: pointer;
+    }
+    .send-btn:hover { background: #2A5298; }
+
+    @media (max-width: 640px) {
+      .sidebar { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar">
+  <div class="sidebar-header">
+    <h2>⚖️ MyPropLex</h2>
+    <p>Malaysian Property Law Research</p>
+  </div>
+  <div class="sidebar-section">
+    <span class="sidebar-label">Quick Questions</span>
+    <button class="preset-btn" onclick="selectQ(this)">1. What are the steps in a standard property transfer under the National Land Code?</button>
+    <button class="preset-btn" onclick="selectQ(this)">2. What are a housing developer's obligations under the HDA?</button>
+    <button class="preset-btn" onclick="selectQ(this)">3. What is the current RPGT rate in Malaysia and how is it calculated?</button>
+    <button class="preset-btn" onclick="selectQ(this)">4. What does the Strata Titles Act say about strata unit owners' rights?</button>
+    <button class="preset-btn" onclick="selectQ(this)">5. What is the legal process if a buyer wants to back out after signing the SPA?</button>
+    <button class="preset-btn" onclick="selectQ(this)">6. What are the legal remedies if a developer abandons a housing project?</button>
+    <button class="preset-btn" onclick="selectQ(this)">7. What is the difference between freehold and leasehold land in Malaysia?</button>
+    <button class="preset-btn" onclick="selectQ(this)">8. What are the stamp duty rates for property transactions in Malaysia?</button>
+    <button class="preset-btn" onclick="selectQ(this)">9. What conditions must be met for a valid Memorandum of Transfer (MOT)?</button>
+    <button class="preset-btn" onclick="selectQ(this)">10. What are the legal requirements for a valid tenancy agreement in Malaysia?</button>
+  </div>
+  <hr class="sidebar-divider">
+  <button class="action-btn clear" onclick="clearChat()">🗑️ Clear Conversation</button>
+  <button class="action-btn download" onclick="downloadChat()">⬇️ Download Conversation</button>
+</div>
+
+<!-- Main -->
+<div class="main">
+  <div class="app-header">
+    <h1>⚖️ MyPropLex</h1>
+    <p>Malaysian Property Law Research Assistant</p>
+    <div class="badges">
+      <span class="badge">NLC</span>
+      <span class="badge">HDA</span>
+      <span class="badge">STA</span>
+      <span class="badge">RPGT</span>
+      <span class="badge">RERA</span>
+    </div>
+  </div>
+
+  <div class="chat-area" id="chatArea">
+    <div class="welcome-box">
+      👋 Welcome. Pick a question from the sidebar or type your own below.<br>
+      I cover Malaysian property law — the National Land Code, HDA, Strata Titles Act, RPGT, and more.
+    </div>
+  </div>
+
+  <div class="input-area">
+    <div class="input-row">
+      <input type="text" id="userInput" placeholder="Type your property law question here..." onkeydown="if(event.key==='Enter') sendMsg()" />
+      <button class="send-btn" onclick="sendMsg()">Send →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const DEMO_ANSWERS = {
+  "1": "Under the National Land Code (NLC), a standard property transfer involves three main stages: the signing of the Sale & Purchase Agreement (SPA), followed by the application and stamping of the Memorandum of Transfer (Form 14A), and finally the presentation of the transfer at the Land Office for registration. Section 215 of the NLC governs the instrument of dealing and requires the transaction to be in the prescribed form. Buyers should note that the transfer is only legally complete upon registration at the Land Registry — an unstamped or unregistered transfer does not confer title.",
+
+  "2": "Under the Housing Development (Control & Licensing) Act 1966 (HDA), a developer must complete and deliver the property within the timeline stipulated in the statutory SPA — 24 months for landed property and 36 months for strata property under Schedule G and H respectively. Developers are also obligated to maintain a Housing Development Account (HDA Account) where 70% of all purchase payments must be held to protect buyers' funds. Failure to deliver on time entitles the buyer to Liquidated Ascertained Damages (LAD) calculated at 10% per annum on the purchase price.",
+
+  "3": "The Real Property Gains Tax (RPGT) rate in Malaysia depends on how long you held the property before selling — for citizens, the rate is 30% if sold within 3 years, 20% in year 4, 15% in year 5, and 0% after 5 years. The tax is calculated on the chargeable gain, which is the disposal price minus the acquisition price and allowable expenses, under the Real Property Gains Tax Act 1976. Citizens are also entitled to a one-time private residence exemption, which exempts gains from the sale of one residential home from RPGT.",
+
+  "4": "Under the Strata Titles Act 1985 (STA), strata unit owners have the right to exclusive possession of their parcel and shared use of common property, but are obligated to pay maintenance charges and sinking fund contributions set by the Joint Management Body (JMB) or Management Corporation (MC). Section 41 of the STA empowers the MC to impose and recover outstanding charges as a civil debt, meaning persistent non-payment can result in legal action. Owners are also bound by House Rules and by-laws, and the MC has the power to enforce these rules against non-compliant owners.",
+
+  "5": "If a buyer wishes to withdraw after signing the Sale & Purchase Agreement (SPA), they will forfeit the earnest deposit paid — typically 10% of the purchase price — as liquidated damages under the terms of the SPA. The developer or vendor is not required to refund any portion of this deposit unless the withdrawal is due to the vendor's own breach. If the buyer was induced to sign through misrepresentation, they may have a cause of action under the Contracts Act 1950 (Section 17–19) to rescind the agreement and recover losses.",
+
+  "6": "Under the HDA, a buyer whose developer has abandoned a project may lodge a complaint with the Ministry of Housing and Local Government (KPKT), which can appoint a Rehabilitation Manager to take over and complete the project. Section 8F of the HDA and the Housing Development (Control & Licensing) Regulations 1989 provide the legal framework for project rehabilitation. In parallel, buyers may sue the developer for breach of contract under the SPA and claim LAD plus damages — though enforcement is practically difficult if the developer is insolvent.",
+
+  "7": "Freehold land (Hak Milik Kekal) under the National Land Code grants perpetual ownership to the registered owner with no expiry, while leasehold land is granted for a fixed term — typically 99 years — after which ownership reverts to the state unless renewed. Section 76 of the NLC governs state land disposals and empowers states to impose conditions and restrictions on both categories. From a practical standpoint, banks generally treat freehold and leasehold properties similarly for financing purposes, but leasehold properties with fewer than 30 years remaining may face difficulties securing loans.",
+
+  "8": "Stamp duty on a property transfer in Malaysia is paid by the buyer on the Memorandum of Transfer under the Stamp Act 1949 — the rate is 1% on the first RM100,000, 2% on RM100,001–RM500,000, 3% on RM500,001–RM1,000,000, and 4% on amounts above RM1,000,000. The loan agreement (Memorandum of Charge) attracts a separate stamp duty of 0.5% on the loan amount. First-time homebuyers purchasing properties priced at RM500,000 and below are currently exempted from stamp duty on the transfer instrument under various government exemption orders.",
+
+  "9": "A Memorandum of Transfer (Form 14A under the NLC) is valid only if it is executed by the registered proprietor, properly stamped at the Inland Revenue Board, and presented for registration at the Land Office within the stipulated timeframe. Section 215 of the NLC requires the instrument to be in the prescribed form, and an adjudicator must assess the duty payable before stamping. A defective MOT — for example, one executed by an unauthorised person or with insufficient stamp duty — will be rejected by the Land Registry and does not effect a valid transfer of title.",
+
+  "10": "A valid tenancy agreement in Malaysia must identify the parties, clearly describe the property, state the rental amount and duration, and be signed by both landlord and tenant — there is no specific statutory form required under Malaysian law, but the Contracts Act 1950 governs its enforceability. Tenancy agreements exceeding one year must be stamped at the Inland Revenue Board under the Stamp Act 1949, otherwise they are inadmissible as evidence in court. Landlords and tenants should note that Malaysia currently has no Residential Tenancy Act, so disputes are resolved primarily through the Courts based on the terms of the written agreement."
+};
+
+const chatArea = document.getElementById('chatArea');
+let msgCount = 0;
+
+function selectQ(btn) {
+  const text = btn.textContent.replace(/^\d+\.\s*/, '');
+  document.getElementById('userInput').value = text;
+  sendMsg();
+}
+
+function sendMsg() {
+  const input = document.getElementById('userInput');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+
+  appendUser(text);
+  const typing = appendTyping();
+
+  const num = Object.keys(DEMO_ANSWERS).find(k =>
+    text.toLowerCase().includes(DEMO_ANSWERS[k].toLowerCase().slice(0,20).toLowerCase()) ||
+    text === document.querySelector(`.preset-btn:nth-child(${k})`)?.textContent.replace(/^\d+\.\s*/,'')
+  );
+
+  // Match preset by number prefix in text
+  const matchNum = text.match(/^(\d+)\./);
+  const key = matchNum ? matchNum[1] : Object.keys(DEMO_ANSWERS).find(k => {
+    const presets = document.querySelectorAll('.preset-btn');
+    return presets[k-1] && presets[k-1].textContent.replace(/^\d+\.\s*/,'').toLowerCase() === text.toLowerCase();
+  });
+
+  const answer = DEMO_ANSWERS[key] || "This is a demo interface for MyPropLex. In the live app, I would search Malaysian legal databases, case law, and legislation to give you a cited answer in plain language. Please run the app locally using the instructions in the portfolio to get real answers.";
+
+  setTimeout(() => {
+    typing.remove();
+    appendBot(answer);
+  }, 1800);
+}
+
+function appendUser(text) {
+  const div = document.createElement('div');
+  div.className = 'msg user';
+  div.innerHTML = `<div class="msg-avatar">👤</div><div class="msg-bubble">${text}</div>`;
+  chatArea.appendChild(div);
+  chatArea.scrollTop = chatArea.scrollHeight;
+}
+
+function appendTyping() {
+  const wrap = document.createElement('div');
+  wrap.className = 'msg bot';
+  wrap.innerHTML = `<div class="msg-avatar">⚖️</div><div class="typing"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>`;
+  chatArea.appendChild(wrap);
+  chatArea.scrollTop = chatArea.scrollHeight;
+  return wrap;
+}
+
+function appendBot(text) {
+  msgCount++;
+  const id = 'msg-' + msgCount;
+  const div = document.createElement('div');
+  div.className = 'msg bot';
+  div.innerHTML = `<div class="msg-avatar">⚖️</div><div class="msg-bubble" id="${id}">${text}</div>`;
+  chatArea.appendChild(div);
+  const copyRow = document.createElement('div');
+  copyRow.className = 'copy-row';
+  copyRow.innerHTML = `<button class="copy-btn" onclick="copyAnswer('${id}')">📋 Copy this answer</button>`;
+  chatArea.appendChild(copyRow);
+  chatArea.scrollTop = chatArea.scrollHeight;
+}
+
+function copyAnswer(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  navigator.clipboard.writeText(el.textContent).then(() => {
+    const btns = document.querySelectorAll('.copy-btn');
+    btns.forEach(b => { if (b.onclick.toString().includes(id)) { b.textContent = '✓ Copied!'; setTimeout(() => b.textContent = '📋 Copy this answer', 2000); } });
+  });
+}
+
+function clearChat() {
+  chatArea.innerHTML = `<div class="welcome-box">👋 Welcome. Pick a question from the sidebar or type your own below.<br>I cover Malaysian property law — the National Land Code, HDA, Strata Titles Act, RPGT, and more.</div>`;
+}
+
+function downloadChat() {
+  const msgs = chatArea.querySelectorAll('.msg');
+  let text = 'MyPropLex — Conversation Export\n' + new Date().toLocaleString() + '\n' + '='.repeat(50) + '\n\n';
+  msgs.forEach(m => {
+    const role = m.classList.contains('user') ? 'You' : 'MyPropLex';
+    const bubble = m.querySelector('.msg-bubble');
+    if (bubble) text += `[${role}]\n${bubble.textContent}\n\n`;
+  });
+  const a = document.createElement('a');
+  a.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(text);
+  a.download = 'myproplex-conversation.txt';
+  a.click();
+}
+</script>
+</body>
+</html>
