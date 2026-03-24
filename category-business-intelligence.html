@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Business Intelligence & Analytics Agents | Lee Yih Ven</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      line-height: 1.6;
+      background-color: #ffffff;
+      color: #222;
+    }
+
+    header {
+      text-align: center;
+      padding: 50px 20px 30px;
+      background: #f9f9f9;
+      border-bottom: 1px solid #eee;
+      margin-bottom: 40px;
+    }
+
+    header h1 {
+      font-size: 2.2rem;
+      font-weight: 600;
+      color: #222;
+      margin-bottom: 8px;
+    }
+
+    header p {
+      font-size: 1rem;
+      color: #555;
+      max-width: 620px;
+      margin: 0 auto;
+    }
+
+    nav {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    nav a {
+      color: #007BFF;
+      text-decoration: none;
+      margin: 0 15px;
+      font-size: 1rem;
+    }
+
+    nav a:hover { text-decoration: underline; }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 20px 60px;
+    }
+
+    .category-section {
+      margin-bottom: 50px;
+    }
+
+    .category-header {
+      border-left: 4px solid #E91E63;
+      padding-left: 16px;
+      margin-bottom: 24px;
+    }
+
+    .category-header h2 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #222;
+      margin-bottom: 4px;
+    }
+
+    .category-header p {
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    .project-card {
+      background: #f9f9f9;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .project-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+    }
+
+    .project-visual {
+      height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+    }
+
+    .project-body {
+      padding: 20px;
+    }
+
+    .project-name {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #222;
+      margin-bottom: 8px;
+    }
+
+    .project-desc {
+      font-size: 0.85rem;
+      color: #666;
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+
+    .project-buttons {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn-demo, .btn-details {
+      display: inline-block;
+      padding: 7px 14px;
+      border-radius: 4px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      flex: 1;
+      text-align: center;
+      min-width: 100px;
+    }
+
+    .btn-demo {
+      background-color: #f5f5dc;
+      color: #333;
+    }
+
+    .btn-demo:hover {
+      background-color: #daa520;
+      color: white;
+    }
+
+    .btn-details {
+      background-color: transparent;
+      color: #007BFF;
+      border: 1px solid #007BFF;
+    }
+
+    .btn-details:hover {
+      background-color: #007BFF;
+      color: white;
+    }
+
+    /* Tech Stack Strip */
+    .tech-stack {
+      background: #f9f9f9;
+      border-top: 1px solid #eee;
+      border-bottom: 1px solid #eee;
+      padding: 28px 20px;
+      text-align: center;
+    }
+
+    .tech-stack-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #999;
+      margin-bottom: 14px;
+    }
+
+    .tech-stack-items {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .tech-tag {
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 0.82rem;
+      color: #444;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #222;
+      color: white;
+      font-size: 0.9rem;
+    }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 0.5s ease forwards;
+    }
+
+    @keyframes fadeInUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+      header h1 { font-size: 1.8rem; }
+      .projects-grid { grid-template-columns: 1fr; }
+      .tech-stack-items { gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 class="fade-in">Business Intelligence & Analytics Agents</h1>
+  <p class="fade-in">AI-powered analytics agents that turn raw data into decisions — from stock screening to customer segmentation.</p>
+</header>
+
+<nav>
+  <a href="index.html">Home</a>
+  <a href="project-categories.html">Project Categories</a>
+  <a href="contact.html">Contact</a>
+</nav>
+
+<div class="container">
+
+  <section class="category-section fade-in">
+    <div class="category-header">
+      <h2>📊 All Projects — Business Intelligence & Analytics Agents</h2>
+      <p>11 production-deployed analytics agents and intelligence tools.</p>
+    </div>
+    <div class="projects-grid">
+
+      <div class="project-card">
+        <div class="project-visual" style="background: linear-gradient(135deg, #2D1B4E, #6B21A8);">📊</div>
+        <div class="project-body">
+          <h3 class="project-name">TrendMate</h3>
+          <p class="project-desc">Malaysian fashion market specialist providing trend, pricing, supplier, and seasonal research in 3 actionable sentences for Shopee, Lazada, and TikTok Shop sellers.</p>
+          <div class="project-buttons">
+            <a href="projects/trendmate/demo.html" target="_blank" class="btn-demo">Live Demo</a>
+            <a href="trendmate.html" class="btn-details">View Details</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-visual" style="background: linear-gradient(135deg, #111827, #1f3a5c);">🌍</div>
+        <div class="project-body">
+          <h3 class="project-name">Long View · Crucix</h3>
+          <p class="project-desc">OSINT intelligence aggregator pulling 27 data sources every 15 minutes — delta engine, 3D globe visualization, multi-LLM briefings, and Telegram/Discord push alerts.</p>
+          <div class="project-buttons">
+            <a href="projects/long-view/demo.html" target="_blank" class="btn-demo">Live Demo</a>
+            <a href="long-view.html" class="btn-details">View Details</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-visual" style="background: linear-gradient(135deg, #1e3a5f, #2563eb);">🏠</div>
+        <div class="project-body">
+          <h3 class="project-name">MyPropLex</h3>
+          <p class="project-desc">AI-powered Malaysian property law research assistant for lawyers and conveyancers. ReAct agent with web search, covering NLC, HDA, STA, RPGT, and RERA — cited 3-sentence answers.</p>
+          <div class="project-buttons">
+            <a href="projects/myproplex/demo.html" target="_blank" class="btn-demo">Live Demo</a>
+            <a href="https://github.com/lyven81/ai-project/tree/main/projects/myproplex" target="_blank" class="btn-details">View on GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-visual" style="background: linear-gradient(135deg, #059669, #047857);">☕</div>
+        <div class="project-body">
+          <h3 class="project-name">Kopitiam Digital Waiter</h3>
+          <p class="project-desc">Real-time sales tracker and digital logbook for Malaysian kopitiam owners with AI-powered business tips, milestone alerts, and daily revenue trend visualization.</p>
+          <div class="project-buttons">
+            <a href="https://kopitiam-digital-waiter-169218045868.us-west1.run.app/" target="_blank" class="btn-demo">Launch App</a>
+            <a href="kopitiam-digital-waiter.html" class="btn-details">View Details</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-visual" style="background: linear-gradient(135deg, #0f766e, #0891b2);">📈</div>
+        <div class="project-body">
+          <h3 class="project-name">Time Series Analysis Agent</h3>
+          <p class="project-desc">Natural language data analytics powered by Gemini 2.0 Flash. Ask business questions in plain English and get automated time series analysis, revenue trends, and profit margin insights.</p>
+          <div class="project-buttons">
+            <a href="https://colab.research.google.com/drive/1ZTfYPQZXObgxqk3hawGu9Sm33EjJX2xA" target="_blank" class="btn-demo">Open in Colab</a>
+            <a href="https://github.com/lyven81/ai-project/tree/main/projects/time-series-analysis-agent" target="_blank" class="btn-details">View on GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-visual" style="background: linear-gradient(135deg, #064e3b, #059669);">💹</div>
+        <div class="project-body">
+          <h3 class="project-name">Stock Analysis Agent</h3>
+          <p class="project-desc">Multi-agent investment research system with automated stock screening and fundamental analysis. 5-agent architecture covering screening, moat analysis, dividends, and reporting — Malaysian market focused.</p>
+          <div class="project-buttons">
+            <a href="https://colab.research.google.com/drive/1Wji69Sq-IqhtMEJTlxIkQ39ZZ5JAXR6w" target="_blank" class="btn-demo">Open in Colab</a>
+            <a href="https://github.com/lyven81/ai-project/tree/main/projects/stock-analysis-agent" target="_blank" class="btn-details">View on GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-visual" style="background: linear-gradient(135deg, #92400e, #d97706);">🗂️</div>
+        <div class="project-body">
+          <h3 class="project-name">Sales Dashboard Agent</h3>
+          <p class="project-desc">Natural language to code analytics with automated visualizations using the code-as-plan pattern. Ask revenue and customer questions — the agent writes, executes, and charts the answer.</p>
+          <div class="project-buttons">
+            <a href="https://colab.research.google.com/drive/1ssz7RkCySo4fhzkLdCs5c7gCgkP7ypv7" target="_blank" class="btn-demo">Open in Colab</a>
+            <a href="https://github.com/lyven81/ai-project/tree/main/projects/sales-dashboard-agent" target="_blank" class="btn-details">View on GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-visual" style="background: linear-gradient(135deg, #14532d, #15803d);">🔬</div>
+        <div class="project-body">
+          <h3 class="project-name">Science Learning Materials Builder</h3>
+          <p class="project-desc">4-agent educational content generator for age-appropriate science lessons aligned with NGSS standards. Produces curriculum, illustrations, quizzes, and hands-on activities as markdown and PDF.</p>
+          <div class="project-buttons">
+            <a href="https://colab.research.google.com/drive/1p390KHKMQ9xcaDQ7eQTQJjdlX1JTxpmn" target="_blank" class="btn-demo">Open in Colab</a>
+            <a href="https://github.com/lyven81/ai-project/tree/main/projects/science-learning-materials-builder" target="_blank" class="btn-details">View on GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-visual" style="background: linear-gradient(135deg, #1e1b4b, #4338ca);">🗺️</div>
+        <div class="project-body">
+          <h3 class="project-name">Public Sentiment Collection Agent</h3>
+          <p class="project-desc">AI-powered geographic sentiment analysis with credibility tracking and source diversity assessment. 5-agent architecture producing 10 files per run — report, charts, and CSV exports.</p>
+          <div class="project-buttons">
+            <a href="https://colab.research.google.com/drive/1On9i4SrYBVQqG-Fex5up9o3Eo1Y6mWls" target="_blank" class="btn-demo">Open in Colab</a>
+            <a href="https://github.com/lyven81/ai-project/tree/main/projects/public-sentiment-collection-agent" target="_blank" class="btn-details">View on GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-visual" style="background: linear-gradient(135deg, #1e3a5f, #3b82f6);">🏢</div>
+        <div class="project-body">
+          <h3 class="project-name">Data Consulting Business Analysis Agent</h3>
+          <p class="project-desc">Automated market intelligence system for data analytics consulting firms — 100× faster than manual research. 4-agent system for industry research, competitor mapping, and strategic opportunity detection.</p>
+          <div class="project-buttons">
+            <a href="https://colab.research.google.com/drive/1BZ1m_XsI5q7CHvdopcCK53Wlw0sCt1-j" target="_blank" class="btn-demo">Open in Colab</a>
+            <a href="https://github.com/lyven81/ai-project/tree/main/projects/data-consulting-business-analyst" target="_blank" class="btn-details">View on GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-visual" style="background: linear-gradient(135deg, #7c2d12, #ea580c);">👥</div>
+        <div class="project-body">
+          <h3 class="project-name">Customer Segmentation Agent</h3>
+          <p class="project-desc">AI-powered RFM analysis and targeted campaign creation. Classifies customers into 5 segments (VIP, Regular, At-Risk, New, Churned) and generates campaign targeting strategies in natural language.</p>
+          <div class="project-buttons">
+            <a href="https://colab.research.google.com/drive/1UfEqslRGbYY4qOcv2SCDrj1e0dC5jqJl" target="_blank" class="btn-demo">Open in Colab</a>
+            <a href="https://github.com/lyven81/ai-project/tree/main/projects/customer-segmentation-agent" target="_blank" class="btn-details">View on GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-visual" style="background: linear-gradient(135deg, #1a1a2e, #4a4e8f);">🤖</div>
+        <div class="project-body">
+          <h3 class="project-name">Business Intelligence Agent</h3>
+          <p class="project-desc">General-purpose data analytics agent that answers business questions from any CSV dataset using natural language. Auto schema detection, safe sandboxed execution, and automatic chart generation.</p>
+          <div class="project-buttons">
+            <a href="https://colab.research.google.com/drive/10wkxsg7Crcdz9oa3rFKlJ6Jtez1CB3xf" target="_blank" class="btn-demo">Open in Colab</a>
+            <a href="https://github.com/lyven81/ai-project/tree/main/projects/business-intelligence-agent" target="_blank" class="btn-details">View on GitHub</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</div>
+
+<!-- Tech Stack Strip -->
+<div class="tech-stack">
+  <div class="tech-stack-label">Built with</div>
+  <div class="tech-stack-items">
+    <span class="tech-tag">Python</span>
+    <span class="tech-tag">Google Gemini 2.0 Flash</span>
+    <span class="tech-tag">Claude API</span>
+    <span class="tech-tag">Tavily Search API</span>
+    <span class="tech-tag">Pandas + NumPy</span>
+    <span class="tech-tag">Matplotlib + Seaborn</span>
+    <span class="tech-tag">Streamlit</span>
+    <span class="tech-tag">TinyDB</span>
+    <span class="tech-tag">Google Colab</span>
+  </div>
+</div>
+
+<footer>
+  <p>&copy; 2026 Lee Yih Ven | AI Project Portfolio</p>
+</footer>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const els = document.querySelectorAll('.fade-in');
+    els.forEach((el, i) => {
+      el.style.animationDelay = `${i * 0.1}s`;
+    });
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Conversational AI & Specialized Chatbots | Lee Yih Ven</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      line-height: 1.6;
+      background-color: #ffffff;
+      color: #222;
+    }
+
+    header {
+      text-align: center;
+      padding: 50px 20px 30px;
+      background: #f9f9f9;
+      border-bottom: 1px solid #eee;
+      margin-bottom: 40px;
+    }
+
+    header h1 {
+      font-size: 2.2rem;
+      font-weight: 600;
+      color: #222;
+      margin-bottom: 8px;
+    }
+
+    header p {
+      font-size: 1rem;
+      color: #555;
+      max-width: 620px;
+      margin: 0 auto;
+    }
+
+    nav {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    nav a {
+      color: #007BFF;
+      text-decoration: none;
+      margin: 0 15px;
+      font-size: 1rem;
+    }
+
+    nav a:hover { text-decoration: underline; }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 20px 60px;
+    }
+
+    .category-section {
+      margin-bottom: 50px;
+    }
+
+    .category-header {
+      border-left: 4px solid #9C27B0;
+      padding-left: 16px;
+      margin-bottom: 24px;
+    }
+
+    .category-header h2 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #222;
+      margin-bottom: 4px;
+    }
+
+    .category-header p {
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    .project-card {
+      background: #f9f9f9;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .project-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+    }
+
+    .project-visual {
+      height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+    }
+
+    .project-body {
+      padding: 20px;
+    }
+
+    .project-name {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #222;
+      margin-bottom: 8px;
+    }
+
+    .project-desc {
+      font-size: 0.85rem;
+      color: #666;
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+
+    .project-buttons {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn-demo, .btn-details {
+      display: inline-block;
+      padding: 7px 14px;
+      border-radius: 4px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      flex: 1;
+      text-align: center;
+      min-width: 100px;
+    }
+
+    .btn-demo {
+      background-color: #f5f5dc;
+      color: #333;
+    }
+
+    .btn-demo:hover {
+      background-color: #daa520;
+      color: white;
+    }
+
+    .btn-details {
+      background-color: transparent;
+      color: #007BFF;
+      border: 1px solid #007BFF;
+    }
+
+    .btn-details:hover {
+      background-color: #007BFF;
+      color: white;
+    }
+
+    .tech-stack {
+      background: #f9f9f9;
+      border-top: 1px solid #eee;
+      border-bottom: 1px solid #eee;
+      padding: 28px 20px;
+      text-align: center;
+    }
+
+    .tech-stack-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #999;
+      margin-bottom: 14px;
+    }
+
+    .tech-stack-items {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .tech-tag {
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 0.82rem;
+      color: #444;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #222;
+      color: white;
+      font-size: 0.9rem;
+    }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 0.5s ease forwards;
+    }
+
+    @keyframes fadeInUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+      header h1 { font-size: 1.8rem; }
+      .projects-grid { grid-template-columns: 1fr; }
+      .tech-stack-items { gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 class="fade-in">Conversational AI & Specialized Chatbots</h1>
+  <p class="fade-in">AI conversations that go beyond Q&A — cultural wisdom, cosmic readings, and intelligence briefings in natural language.</p>
+</header>
+
+<nav>
+  <a href="index.html">Home</a>
+  <a href="project-categories.html">Project Categories</a>
+  <a href="contact.html">Contact</a>
+</nav>
+
+<div class="container">
+
+  <section class="category-section fade-in">
+    <div class="category-header">
+      <h2>💬 All Projects — Conversational AI & Specialized Chatbots</h2>
+      <p>8 production-deployed conversational AI apps across astrology, divination, intelligence, and cultural wisdom.</p>
+    </div>
+    <div class="projects-grid">
+
+      <div class="project-card">
+        <div class="project-visual" style="background: linear-gradient(135deg, #4f46e5, #7c3aed);">✨</div>
+        <div class="project-body">
+          <h3 class="project-name">Skyread</h3>
+          <p class="project-desc">Daily horoscope app that explains the planetary movements behind every reading for grounded, credible insights. Bilingual EN/ZH with Sky Explainer and Sky Snapshot panels, smart daily caching, and Framer Motion animations.</p>
+          <div class="project-buttons">
+            <a href="projects/skyread/demo.html" target="_blank" class="btn-demo">Live Demo</a>
+            <a href="skyread.html" class="btn-details">View Details</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-visual" style="background: linear-gradient(135deg, #0f2744, #1e40af);">🌌</div>
+        <div class="project-body">
+          <h3 class="project-name">Wiseman · 智者</h3>
+          <p class="project-desc">Daily cosmic reading in Mandarin combining 八字, 星座, 行星天象, and 生肖 into one unified 5-panel dashboard. Personalized to your birth date and zodiac — one reading per day cached for instant reload, with floating follow-up chat.</p>
+          <div class="project-buttons">
+            <a href="projects/wiseman/demo.html" target="_blank" class="btn-demo">Live Demo</a>
+            <a href="wiseman.html" class="btn-details">View Details</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-visual" style="background: linear-gradient(135deg, #1a0533, #6B21A8);">🔮</div>
+        <div class="project-body">
+          <h3 class="project-name">Tarot Guru</h3>
+          <p class="project-desc">Personal AI tarot reading app that uses cards as a mirror for reflection and clarity. Context-aware spread recommendation (Single / 3-Card / Celtic Cross), narrative readings tied to your specific question, and session archive.</p>
+          <div class="project-buttons">
+            <a href="projects/tarot-guru/demo.html" target="_blank" class="btn-demo">Live Demo</a>
+            <a href="tarot-guru.html" class="btn-details">View Details</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-visual" style="background: linear-gradient(135deg, #7f1d1d, #b91c1c);">☯</div>
+        <div class="project-body">
+          <h3 class="project-name">Master Wong · 王师父</h3>
+          <p class="project-desc">Personal I Ching oracle powered by Claude AI — readings in plain conversational Mandarin. Traditional three-coin casting mechanic, AI-recommended reading type (单卦/变卦/对比卦), changing line analysis, and follow-up chat with hexagram context.</p>
+          <div class="project-buttons">
+            <a href="projects/master-wong/demo.html" target="_blank" class="btn-demo">Live Demo</a>
+            <a href="master-wong.html" class="btn-details">View Details</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-visual" style="background: linear-gradient(135deg, #111827, #1f3a5c);">🌍</div>
+        <div class="project-body">
+          <h3 class="project-name">Long View · Crucix</h3>
+          <p class="project-desc">OSINT intelligence aggregator with 27 data sources, delta alerting engine, and multi-LLM synthesis. 3D globe dashboard, Telegram/Discord push alerts, configurable 15-minute sweep cycle, and Docker-ready deployment.</p>
+          <div class="project-buttons">
+            <a href="projects/long-view/demo.html" target="_blank" class="btn-demo">Live Demo</a>
+            <a href="long-view.html" class="btn-details">View Details</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-visual" style="background: linear-gradient(135deg, #7c1c1c, #c0392b);">🧧</div>
+        <div class="project-body">
+          <h3 class="project-name">Chinese Traditional Calendar · 中華傳統日曆</h3>
+          <p class="project-desc">Revolutionary conversational AI-powered traditional Chinese lunar calendar with personalized auspicious date consultation. Natural language calendar queries, cultural education, and real-time chat — bridging ancient wisdom with modern AI.</p>
+          <div class="project-buttons">
+            <a href="https://chinese-calender-169218045868.asia-southeast1.run.app/" target="_blank" class="btn-demo">Launch App</a>
+            <a href="https://github.com/lyven81/ai-project/tree/main/projects/chinese-calender" target="_blank" class="btn-details">View on GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-visual" style="background: linear-gradient(135deg, #1a103c, #5b21b6);">⭐</div>
+        <div class="project-body">
+          <h3 class="project-name">Professional Astrology Consultant · 專業星座顧問</h3>
+          <p class="project-desc">AI-powered personalized horoscope readings and astrological insights in Traditional Chinese. Deep cultural context understanding and astrological analysis — tailored to your sign and life situation.</p>
+          <div class="project-buttons">
+            <a href="https://horoscope-chatbot-218391175125.asia-southeast1.run.app/" target="_blank" class="btn-demo">Launch App</a>
+            <a href="https://github.com/lyven81/ai-project/tree/main/projects/horoscope-chatbot" target="_blank" class="btn-details">View on GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-visual" style="background: linear-gradient(135deg, #14401a, #166534);">🌿</div>
+        <div class="project-body">
+          <h3 class="project-name">Professional Feng Shui Consultant · 專業風水顧問</h3>
+          <p class="project-desc">Expert Feng Shui consultation combining AI assistance with traditional wisdom. Space optimization recommendations, directional analysis, and personalized advice rooted in classical Feng Shui principles.</p>
+          <div class="project-buttons">
+            <a href="https://fengshui-chatbot-218391175125.asia-southeast1.run.app/" target="_blank" class="btn-demo">Launch App</a>
+            <a href="https://github.com/lyven81/ai-project/tree/main/projects/fengshui-chatbot" target="_blank" class="btn-details">View on GitHub</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</div>
+
+<!-- Tech Stack Strip -->
+<div class="tech-stack">
+  <div class="tech-stack-label">Built with</div>
+  <div class="tech-stack-items">
+    <span class="tech-tag">Claude Opus / Sonnet API</span>
+    <span class="tech-tag">Node.js + Express</span>
+    <span class="tech-tag">React + TypeScript</span>
+    <span class="tech-tag">Python + Streamlit</span>
+    <span class="tech-tag">Gemini AI</span>
+    <span class="tech-tag">Framer Motion</span>
+    <span class="tech-tag">FastAPI</span>
+    <span class="tech-tag">Google Cloud Run</span>
+  </div>
+</div>
+
+<footer>
+  <p>&copy; 2026 Lee Yih Ven | AI Project Portfolio</p>
+</footer>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const els = document.querySelectorAll('.fade-in');
+    els.forEach((el, i) => {
+      el.style.animationDelay = `${i * 0.1}s`;
+    });
+  });
+</script>
+
+</body>
+</html>
