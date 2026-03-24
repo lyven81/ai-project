@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Creative AI & Content Generation | Lee Yih Ven</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      line-height: 1.6;
+      background-color: #ffffff;
+      color: #222;
+    }
+
+    header {
+      text-align: center;
+      padding: 50px 20px 30px;
+      background: #f9f9f9;
+      border-bottom: 1px solid #eee;
+      margin-bottom: 40px;
+    }
+
+    header h1 {
+      font-size: 2.2rem;
+      font-weight: 600;
+      color: #222;
+      margin-bottom: 8px;
+    }
+
+    header p {
+      font-size: 1rem;
+      color: #555;
+      max-width: 620px;
+      margin: 0 auto;
+    }
+
+    nav {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    nav a {
+      color: #007BFF;
+      text-decoration: none;
+      margin: 0 15px;
+      font-size: 1rem;
+    }
+
+    nav a:hover { text-decoration: underline; }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 20px 60px;
+    }
+
+    .category-section {
+      margin-bottom: 50px;
+    }
+
+    .category-header {
+      border-left: 4px solid #FF5722;
+      padding-left: 16px;
+      margin-bottom: 24px;
+    }
+
+    .category-header h2 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #222;
+      margin-bottom: 4px;
+    }
+
+    .category-header p {
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    .project-card {
+      background: #f9f9f9;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .project-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+    }
+
+    .project-visual {
+      height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+    }
+
+    .project-body {
+      padding: 20px;
+    }
+
+    .project-name {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #222;
+      margin-bottom: 8px;
+    }
+
+    .project-desc {
+      font-size: 0.85rem;
+      color: #666;
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+
+    .project-buttons {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn-demo, .btn-details {
+      display: inline-block;
+      padding: 7px 14px;
+      border-radius: 4px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      flex: 1;
+      text-align: center;
+      min-width: 100px;
+    }
+
+    .btn-demo {
+      background-color: #f5f5dc;
+      color: #333;
+    }
+
+    .btn-demo:hover {
+      background-color: #daa520;
+      color: white;
+    }
+
+    .btn-details {
+      background-color: transparent;
+      color: #007BFF;
+      border: 1px solid #007BFF;
+    }
+
+    .btn-details:hover {
+      background-color: #007BFF;
+      color: white;
+    }
+
+    .tech-stack {
+      background: #f9f9f9;
+      border-top: 1px solid #eee;
+      border-bottom: 1px solid #eee;
+      padding: 28px 20px;
+      text-align: center;
+    }
+
+    .tech-stack-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #999;
+      margin-bottom: 14px;
+    }
+
+    .tech-stack-items {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .tech-tag {
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 0.82rem;
+      color: #444;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #222;
+      color: white;
+      font-size: 0.9rem;
+    }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 0.5s ease forwards;
+    }
+
+    @keyframes fadeInUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+      header h1 { font-size: 1.8rem; }
+      .projects-grid { grid-template-columns: 1fr; }
+      .tech-stack-items { gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 class="fade-in">Creative AI & Content Generation</h1>
+  <p class="fade-in">AI that creates art, photos, and stories.</p>
+</header>
+
+<nav>
+  <a href="index.html">Home</a>
+  <a href="project-categories.html">Project Categories</a>
+  <a href="contact.html">Contact</a>
+</nav>
+
+<div class="container">
+
+  <section class="category-section fade-in">
+    <div class="category-header">
+      <h2>🎨 All Projects — Creative AI & Content Generation</h2>
+      <p>10 production-deployed apps for AI-generated images, avatars, stories, and coloring content.</p>
+    </div>
+    <div class="projects-grid">
+
+      <div class="project-card">
+        <div class="project-visual" style="background: linear-gradient(135deg, #1a1a2e, #334155);">📸</div>
+        <div class="project-body">
+          <h3 class="project-name">AI Profile Picture Stylist</h3>
+          <p class="project-desc">Transform a single photo into 4 professional profile picture styles using Google Gemini AI. Smart people detection with Classic B&W, Corporate, Lifestyle, and Editorial styles — instant validation and one-click download.</p>
+          <div class="project-buttons">
+            <a href="https://ai-profile-picture-stylist-662370080553.us-west1.run.app/" target="_blank" class="btn-demo">Launch App</a>
+            <a href="https://github.com/lyven81/ai-project/tree/main/projects/ai-profile-picture-stylist" target="_blank" class="btn-details">View on GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-visual" style="background: linear-gradient(135deg, #4a0e8f, #7b2ff7);">📖</div>
+        <div class="project-body">
+          <h3 class="project-name">AI Storybook Generator</h3>
+          <p class="project-desc">Interactive storybook creation with AI-generated narratives and coloring book illustrations. Multi-page story generation with narrative continuity, Gemini 2.5 Flash text and Imagen 4.0 art — plus interactive coloring canvas and drag-and-drop editing.</p>
+          <div class="project-buttons">
+            <a href="https://ai-storybook-color-create-662370080553.us-west1.run.app/" target="_blank" class="btn-demo">Launch App</a>
+            <a href="https://github.com/lyven81/ai-project/tree/main/projects/ai-storybook-generator" target="_blank" class="btn-details">View on GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-visual" style="background: linear-gradient(135deg, #7c2d12, #ea580c);">🍜</div>
+        <div class="project-body">
+          <h3 class="project-name">AI Recipe Generator</h3>
+          <p class="project-desc">Transform food images into detailed recipes with computer vision and NLP. Upload a photo of any dish and get an instant step-by-step recipe — ingredient recognition, portion estimates, and cooking instructions from a single image.</p>
+          <div class="project-buttons">
+            <a href="https://image-recipe-generator-218391175125.us-central1.run.app/" target="_blank" class="btn-demo">Launch App</a>
+            <a href="https://github.com/lyven81/ai-project/tree/main/projects/image-recipe-generator" target="_blank" class="btn-details">View on GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-visual" style="background: linear-gradient(135deg, #1c1c1c, #c9a96e);">📷</div>
+        <div class="project-body">
+          <h3 class="project-name">Polaroid Moments Generator</h3>
+          <p class="project-desc">Create nostalgic retro-style photos by blending personal images with AI. Upload two images and AI synthesises a shared memory in vintage polaroid style — dual image blending, pose synthesis, and facial preservation.</p>
+          <div class="project-buttons">
+            <a href="https://polaroid-moments-generator-169218045868.us-west1.run.app/" target="_blank" class="btn-demo">Launch App</a>
+            <a href="https://github.com/lyven81/ai-project/tree/main/projects/polaroid-moments-generator" target="_blank" class="btn-details">View on GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-visual" style="background: linear-gradient(135deg, #1c1c1c, #8b6914);">🤳</div>
+        <div class="project-body">
+          <h3 class="project-name">Polaroid Moments Generator 3</h3>
+          <p class="project-desc">Create nostalgic three-person group photos with AI-powered storytelling and vintage aesthetics. Three-person group composition with story-driven pose generation, social dynamics modelling, and polaroid-frame output.</p>
+          <div class="project-buttons">
+            <a href="https://polaroid-moments-generator-3-person-169218045868.us-west1.run.app/" target="_blank" class="btn-demo">Launch App</a>
+            <a href="https://github.com/lyven81/ai-project/tree/main/projects/polaroid-moments-generator-3" target="_blank" class="btn-details">View on GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-visual" style="background: linear-gradient(135deg, #1a0533, #9333ea);">💇</div>
+        <div class="project-body">
+          <h3 class="project-name">AI Avatar Hairstyle Generator</h3>
+          <p class="project-desc">Transform single photos into 9 different hairstyle avatars with AI-powered virtual styling. Face extraction and hairstyle application with identity preservation — photorealistic avatars across short, medium, and long styles.</p>
+          <div class="project-buttons">
+            <a href="https://ai-avatar-hairstyle-generator-169218045868.us-west1.run.app/" target="_blank" class="btn-demo">Launch App</a>
+            <a href="https://github.com/lyven81/ai-project/tree/main/projects/ai-avatar-hairstyle-generator" target="_blank" class="btn-details">View on GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-visual" style="background: linear-gradient(135deg, #831843, #e11d48);">😊</div>
+        <div class="project-body">
+          <h3 class="project-name">AI Expression Generator</h3>
+          <p class="project-desc">Generate 9 different emotional expressions from a single photo using Gemini 2.5 Flash. Facial expression transformation with identity preservation — joy, surprise, contemplation, and more in photorealistic quality.</p>
+          <div class="project-buttons">
+            <a href="https://ai-expression-generator-169218045868.us-west1.run.app/" target="_blank" class="btn-demo">Launch App</a>
+            <a href="https://github.com/lyven81/ai-project/tree/main/projects/ai-expression-generator" target="_blank" class="btn-details">View on GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-visual" style="background: linear-gradient(135deg, #0c1445, #1d4ed8);">🌄</div>
+        <div class="project-body">
+          <h3 class="project-name">AI Background Changer</h3>
+          <p class="project-desc">Intelligent image background replacement using natural language prompts and Gemini AI. Describe the background you want — AI detects the subject, preserves it, and generates a seamless new scene in seconds.</p>
+          <div class="project-buttons">
+            <a href="https://ai-background-changer-169218045868.us-west1.run.app/" target="_blank" class="btn-demo">Launch App</a>
+            <a href="https://github.com/lyven81/ai-project/tree/main/projects/ai-background-changer" target="_blank" class="btn-details">View on GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-visual" style="background: linear-gradient(135deg, #14532d, #16a34a);">🎨</div>
+        <div class="project-body">
+          <h3 class="project-name">AI Coloring Book for Kids</h3>
+          <p class="project-desc">Interactive educational coloring experience powered by AI with child-centred design and motor skill development. Theme-based coloring page generation, child-safe content filtering, and educational AI prompts — built for learning through play.</p>
+          <div class="project-buttons">
+            <a href="https://ai-coloring-book-for-kids-662370080553.us-west1.run.app/" target="_blank" class="btn-demo">Launch App</a>
+            <a href="https://github.com/lyven81/ai-project/tree/main/projects/ai-coloring-book-for-kids" target="_blank" class="btn-details">View on GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-visual" style="background: linear-gradient(135deg, #7c2d12, #c2410c);">📚</div>
+        <div class="project-body">
+          <h3 class="project-name">Coloring Book Generator</h3>
+          <p class="project-desc">AI-powered coloring book generator that creates custom-themed, printable PDF coloring books with age-appropriate complexity. Two-stage AI pipeline — Gemini 2.5 Flash for themes and Imagen 4.0 for art — with print-optimised PDF export.</p>
+          <div class="project-buttons">
+            <a href="https://coloring-book-generator-662370080553.us-west1.run.app/" target="_blank" class="btn-demo">Launch App</a>
+            <a href="https://github.com/lyven81/ai-project/tree/main/projects/coloring-book-generator" target="_blank" class="btn-details">View on GitHub</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</div>
+
+<!-- Tech Stack Strip -->
+<div class="tech-stack">
+  <div class="tech-stack-label">Built with</div>
+  <div class="tech-stack-items">
+    <span class="tech-tag">React 19 + TypeScript</span>
+    <span class="tech-tag">Google Gemini 2.5 Flash</span>
+    <span class="tech-tag">Imagen 4.0</span>
+    <span class="tech-tag">Canvas API</span>
+    <span class="tech-tag">Computer Vision</span>
+    <span class="tech-tag">PDF Generation</span>
+    <span class="tech-tag">Tailwind CSS</span>
+    <span class="tech-tag">Google Cloud Run</span>
+  </div>
+</div>
+
+<footer>
+  <p>&copy; 2026 Lee Yih Ven | AI Project Portfolio</p>
+</footer>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const els = document.querySelectorAll('.fade-in');
+    els.forEach((el, i) => {
+      el.style.animationDelay = `${i * 0.1}s`;
+    });
+  });
+</script>
+
+</body>
+</html>
