@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Long View · Crucix — Intelligence Demo</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Courier New', monospace;
+      background: #050810;
+      color: #a8c8e8;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .demo-banner {
+      background: linear-gradient(135deg, #0a1020, #0d2040);
+      padding: 8px 16px;
+      text-align: center;
+      font-size: 0.78rem;
+      color: #7fa8d8;
+      border-bottom: 1px solid #0d2040;
+      font-family: Arial, sans-serif;
+    }
+    .demo-banner a { color: #4a90d9; text-decoration: none; }
+    .demo-banner a:hover { text-decoration: underline; }
+    .layout { display: flex; flex: 1; overflow: hidden; }
+    .sidebar {
+      width: 260px; background: #030610;
+      border-right: 1px solid #0d1a30;
+      padding: 20px 14px;
+      display: flex; flex-direction: column;
+      overflow-y: auto; flex-shrink: 0;
+    }
+    .sidebar-title { font-size: 1rem; font-weight: 700; color: #4a90d9; margin-bottom: 2px; font-family: Arial, sans-serif; }
+    .sidebar-sub { font-size: 0.7rem; color: #2d5080; margin-bottom: 16px; font-family: Arial, sans-serif; }
+    .q-label { font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #1e4080; margin-bottom: 8px; }
+    .q-btn {
+      display: block; background: #07101c; border: 1px solid #0d1a30;
+      border-radius: 4px; padding: 9px 12px; margin-bottom: 8px;
+      font-size: 0.78rem; color: #7fa8d8; cursor: pointer;
+      text-align: left; transition: all 0.2s; width: 100%;
+      font-family: Arial, sans-serif; line-height: 1.4;
+    }
+    .q-btn:hover, .q-btn.active { background: #0d1a30; border-color: #1e4080; color: #c0d8f0; }
+    .src-badge { display: inline-block; font-size: 0.6rem; background: #0d1a30; color: #4a90d9; border-radius: 3px; padding: 1px 6px; margin-bottom: 4px; letter-spacing: 0.5px; }
+    .back-link { margin-top: auto; padding-top: 16px; border-top: 1px solid #0d1a30; font-size: 0.75rem; font-family: Arial, sans-serif; }
+    .back-link a { color: #1e4080; text-decoration: none; }
+    .back-link a:hover { text-decoration: underline; }
+    .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+    .chat-header {
+      padding: 12px 20px; border-bottom: 1px solid #0d1a30;
+      background: #030610; display: flex; align-items: center; gap: 12px;
+    }
+    .header-status {
+      display: flex; align-items: center; gap: 8px;
+    }
+    .pulse { width: 8px; height: 8px; border-radius: 50%; background: #22c55e; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+    .chat-header-text { font-family: Arial, sans-serif; }
+    .chat-header-text h2 { font-size: 0.95rem; color: #4a90d9; }
+    .chat-header-text p { font-size: 0.72rem; color: #2d5080; }
+    .chat-body { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; }
+    .welcome-msg {
+      background: linear-gradient(135deg, #07101c, #0d1a30);
+      border: 1px solid #1e4080; border-radius: 8px; padding: 20px; text-align: center;
+      font-family: Arial, sans-serif;
+    }
+    .welcome-msg h3 { color: #4a90d9; font-size: 1rem; margin-bottom: 8px; }
+    .welcome-msg p { font-size: 0.82rem; color: #4a7aad; line-height: 1.6; }
+    .message { display: flex; gap: 10px; max-width: 900px; }
+    .message.user { flex-direction: row-reverse; align-self: flex-end; }
+    .msg-avatar {
+      width: 30px; height: 30px; border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.9rem; flex-shrink: 0; font-family: Arial;
+    }
+    .msg-avatar.ai { background: linear-gradient(135deg, #0d1a30, #1e4080); color: #4a90d9; font-weight: 700; font-size: 0.7rem; }
+    .msg-avatar.user { background: #0d1a30; color: #7fa8d8; }
+    .msg-bubble {
+      border-radius: 6px; padding: 12px 14px;
+      font-size: 0.82rem; line-height: 1.6; max-width: 720px;
+    }
+    .msg-bubble.ai { background: #07101c; border: 1px solid #0d1a30; color: #a8c8e8; }
+    .msg-bubble.user { background: #0d1a30; border: 1px solid #1e4080; color: #c0d8f0; font-family: Arial; font-size: 0.85rem; }
+    .intel-block {
+      background: #030610; border: 1px solid #0d2040;
+      border-radius: 6px; padding: 12px 14px; margin: 8px 0;
+    }
+    .intel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .intel-source { color: #4a90d9; font-weight: 700; font-size: 0.78rem; }
+    .intel-time { color: #2d5080; font-size: 0.7rem; }
+    .intel-body { color: #90b8d8; font-size: 0.8rem; line-height: 1.5; }
+    .delta-tag { display: inline-block; font-size: 0.65rem; padding: 1px 7px; border-radius: 3px; margin-left: 8px; }
+    .delta-up { background: #14532d; color: #4ade80; }
+    .delta-down { background: #7f1d1d; color: #f87171; }
+    .delta-alert { background: #78350f; color: #fbbf24; }
+    .briefing-section { border-left: 2px solid #1e4080; padding-left: 12px; margin: 10px 0; }
+    .briefing-label { color: #2d5080; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+    .briefing-text { color: #a8c8e8; font-size: 0.82rem; line-height: 1.6; font-family: Arial; }
+    .section-label { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #1e4080; margin: 10px 0 6px; }
+    .typing { display: none; }
+    .typing.show { display: flex; gap: 4px; align-items: center; padding: 10px 0; }
+    .dot { width: 6px; height: 6px; border-radius: 50%; background: #1e4080; animation: bounce 1.2s infinite; }
+    .dot:nth-child(2) { animation-delay: 0.2s; }
+    .dot:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes bounce { 0%,80%,100% { transform: translateY(0); } 40% { transform: translateY(-6px); } }
+    @media (max-width: 700px) { .sidebar { width: 200px; } .chat-body { padding: 12px; } }
+  </style>
+</head>
+<body>
+  <div class="demo-banner">
+    [DEMO MODE] Simulated intelligence sweep — 27 sources | <a href="../../long-view.html">View Project Details</a>
+  </div>
+  <div class="layout">
+    <div class="sidebar">
+      <div class="sidebar-title">🌍 Long View · Crucix</div>
+      <div class="sidebar-sub">Select an intelligence query</div>
+      <div class="q-label">Sample Queries</div>
+
+      <div class="src-badge">FULL SWEEP</div>
+      <button class="q-btn" onclick="showReading(0)">Run daily intelligence briefing — summarize what changed in the last 24 hours.</button>
+
+      <div class="src-badge">FINANCIAL</div>
+      <button class="q-btn" onclick="showReading(1)">What are the key market signals right now? Any delta alerts?</button>
+
+      <div class="src-badge">GEOPOLITICAL</div>
+      <button class="q-btn" onclick="showReading(2)">What's the current geopolitical risk picture? Any new escalation vectors?</button>
+
+      <div class="src-badge">CLIMATE</div>
+      <button class="q-btn" onclick="showReading(3)">Any significant climate or weather signals in the last sweep?</button>
+
+      <div class="src-badge">CYBER + HEALTH</div>
+      <button class="q-btn" onclick="showReading(4)">Give me the cyber threat and health surveillance update.</button>
+
+      <div class="back-link">
+        <a href="../../index.html">← Back to Portfolio</a>
+      </div>
+    </div>
+
+    <div class="main">
+      <div class="chat-header">
+        <div class="header-status">
+          <div class="pulse"></div>
+        </div>
+        <div class="chat-header-text">
+          <h2>CRUCIX INTELLIGENCE — LONG VIEW</h2>
+          <p>27 sources · 15-min sweep cycle · Delta engine active · Multi-LLM briefing</p>
+        </div>
+      </div>
+      <div class="chat-body" id="chatBody">
+        <div class="welcome-msg">
+          <h3>Intelligence Aggregator — Demo Mode</h3>
+          <p>Select a query from the left panel to see a simulated intelligence sweep output.<br>
+          In production, Crucix pulls from 27 OSINT sources every 15 minutes and alerts on meaningful delta changes.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const readings = [
+      {
+        q: "Run daily intelligence briefing — summarize what changed in the last 24 hours.",
+        sweep: "FULL-SWEEP · 27 sources · Completed 14:23 UTC",
+        intel: [
+          { source: "FINANCIAL MARKETS", time: "14:22 UTC", body: "VIX closed at 18.4, up 2.1 points intraday. S&P 500 -0.8%. USD/JPY approaching 155 resistance. Gold +1.2% on safe-haven flows.", delta: "alert", deltaText: "VIX MOVE" },
+          { source: "GEOPOLITICAL RISK", time: "14:18 UTC", body: "Elevated tension signals in Eastern Europe. Three G7 emergency consultations in past 48h. UN Security Council session called for 09:00 tomorrow.", delta: "down", deltaText: "RISK ↑" },
+          { source: "ENERGY MARKETS", time: "14:15 UTC", body: "Brent crude +2.3% on supply disruption reports. OPEC+ production cut compliance at 94%. Natural gas futures flat.", delta: "up", deltaText: "+2.3%" },
+          { source: "HEALTH SURVEILLANCE", time: "14:10 UTC", body: "WHO monitoring cluster of atypical pneumonia cases in Southeast Asia. No PHEIC trigger at current count. 14-day trend: stable.", delta: null }
+        ],
+        briefing: "24-hour picture shows elevated risk-off sentiment with VIX spike, geopolitical pressure building in Eastern Europe, and energy markets tightening on supply concerns. No single systemic shock, but four concurrent pressure vectors suggest a risk-elevated environment. Recommend increased monitoring frequency on geopolitical feed and financial volatility indices for next 48 hours."
+      },
+      {
+        q: "What are the key market signals right now? Any delta alerts?",
+        sweep: "FINANCIAL-SWEEP · 8 sources · Completed 14:23 UTC",
+        intel: [
+          { source: "VOLATILITY INDEX (VIX)", time: "14:22 UTC", body: "VIX: 18.4 (+2.1 from previous sweep). Threshold: ±3. Sub-threshold but approaching alert zone. Sustained reading above 20 would trigger Telegram/Discord alert.", delta: "alert", deltaText: "WATCH" },
+          { source: "EQUITY MARKETS", time: "14:20 UTC", body: "S&P 500: -0.8% | NASDAQ: -1.1% | Hang Seng: -0.3% | FTSE: +0.2%. Tech sector leading decline on rate sensitivity.", delta: "down", deltaText: "BROAD SELL" },
+          { source: "CURRENCIES", time: "14:19 UTC", body: "USD Index (DXY): 104.8, up 0.4%. USD/JPY: 154.6 approaching 155 resistance. EUR/USD: 1.083. EM currencies under mild pressure.", delta: null },
+          { source: "COMMODITIES", time: "14:18 UTC", body: "Gold: $2,318/oz (+1.2%). Silver: +0.8%. Brent Crude: $87.4 (+2.3%). WTI: $82.9 (+1.9%). Copper -0.4% on China demand signals.", delta: "up", deltaText: "GOLD SAFE HAVEN" }
+        ],
+        briefing: "Market signals are risk-off but not panic-level. VIX sub-threshold, equity decline is orderly. Gold and crude divergence is interesting — safe-haven buying alongside energy tightening suggests supply-side inflation concern rather than demand recession narrative. Dollar strength is the dominant theme. No delta alerts triggered in current sweep."
+      },
+      {
+        q: "What's the current geopolitical risk picture? Any new escalation vectors?",
+        sweep: "GEO-SWEEP · 6 sources · Completed 14:23 UTC",
+        intel: [
+          { source: "CONFLICT TRACKER", time: "14:17 UTC", body: "Active conflict zones: 6 tracked. New escalation signal in Eastern Europe — cross-border shelling incidents +40% over 7-day average. Horn of Africa: stable. Middle East: sustained but no new vectors.", delta: "down", deltaText: "ESCALATION" },
+          { source: "DIPLOMATIC SIGNALS", time: "14:15 UTC", body: "G7 emergency consultations: 3 in past 48h (unusual frequency). UN Security Council emergency session scheduled. Ambassadors recalled in 2 bilateral relationships.", delta: "alert", deltaText: "DIPLOMATIC STRESS" },
+          { source: "SANCTIONS TRACKER", time: "14:12 UTC", body: "New sanctions package under discussion — 6th tranche targeting secondary market actors. Implementation timeline: 2-3 weeks based on legislative tracking.", delta: null },
+          { source: "SUPPLY CHAIN RISK", time: "14:10 UTC", body: "Shipping route diversions detected in Red Sea corridor — 12% of global container shipping now rerouting via Cape of Good Hope. Lead time impact: +14-18 days.", delta: "down", deltaText: "ROUTE DISRUPTION" }
+        ],
+        briefing: "Geopolitical risk is the primary systemic concern in current sweep. The combination of cross-border conflict escalation, unusual G7 consultation frequency, and supply chain disruption in shipping corridors represents a connected risk cluster rather than isolated events. The sanctions pipeline adds a forward-looking pressure vector. Recommend elevating geopolitical feed to 5-minute monitoring for next 72 hours."
+      },
+      {
+        q: "Any significant climate or weather signals in the last sweep?",
+        sweep: "CLIMATE-SWEEP · 5 sources · Completed 14:22 UTC",
+        intel: [
+          { source: "EXTREME WEATHER TRACKER", time: "14:20 UTC", body: "Category 4 typhoon forming in Western Pacific — projected landfall Philippines/Taiwan corridor in 72-96 hours. Wind speeds: 185km/h. Evacuations advisory issued.", delta: "alert", deltaText: "TYPHOON WARNING" },
+          { source: "THERMAL ANOMALY DETECTION", time: "14:18 UTC", body: "Wildfire hotspot detected: Northern Alberta (+3,400 thermal signatures vs 7-day average). BC and Washington state on pre-evacuation watch. Air quality index: hazardous in 3 cities.", delta: "down", deltaText: "WILDFIRE ↑" },
+          { source: "DROUGHT INDEX", time: "14:15 UTC", body: "Yangtze River basin: drought index elevated. Agricultural output forecast revised -4% for summer wheat crop. Soybean futures reacting (+1.8%).", delta: null },
+          { source: "ARCTIC MONITORING", time: "14:12 UTC", body: "Sea ice extent: 2.1% below 30-year average for this date. Polar vortex stability: nominal. No disruption signals for next 14 days.", delta: null }
+        ],
+        briefing: "Climate sweep flagged two high-priority signals: a developing typhoon with landfall potential in a high-density corridor, and wildfire escalation in Canadian boreal zone. The typhoon warrants business continuity monitoring for any operations in the Philippines/Taiwan region. Drought-driven agricultural commodity pressure is a medium-term inflation input worth tracking. No polar disruption signals in current window."
+      },
+      {
+        q: "Give me the cyber threat and health surveillance update.",
+        sweep: "CYBER + HEALTH · 4 sources · Completed 14:23 UTC",
+        intel: [
+          { source: "CYBER THREAT INTEL", time: "14:21 UTC", body: "Active campaign detected targeting financial sector SWIFT infrastructure — attributed to nation-state actor. CISA advisory issued 3 hours ago. Phishing lures mimicking central bank communications.", delta: "alert", deltaText: "ACTIVE CAMPAIGN" },
+          { source: "RANSOMWARE TRACKER", time: "14:19 UTC", body: "New ransomware variant (LockBit 4.1 successor) targeting healthcare sector. 3 confirmed incidents in past 72 hours — US, Germany, Australia. Lateral movement technique: Kerberoasting.", delta: "down", deltaText: "HEALTHCARE TARGET" },
+          { source: "HEALTH SURVEILLANCE", time: "14:16 UTC", body: "WHO monitoring: atypical pneumonia cluster (n=47) in Southeast Asia. Causative agent under investigation. No human-to-human transmission confirmed. 14-day trend: contained.", delta: null },
+          { source: "OUTBREAK RISK INDEX", time: "14:14 UTC", body: "Global outbreak risk index: 2.1/10 (low). Influenza season tracking below 5-year average in Northern Hemisphere. Dengue fever elevated in Bangladesh, Thailand.", delta: null }
+        ],
+        briefing: "Cyber threat landscape is the high-priority signal this sweep. The nation-state SWIFT targeting campaign is significant — financial sector operators should validate CISA advisory against current posture. The healthcare ransomware wave follows a known seasonal pattern (Q2 spike). Health surveillance shows no systemic outbreak risk — the pneumonia cluster remains small and geographically contained. Monitor for causative agent identification in next 48h."
+      }
+    ];
+
+    function showReading(idx) {
+      const r = readings[idx];
+      document.querySelectorAll('.q-btn').forEach((b, i) => b.classList.toggle('active', i === idx));
+      const body = document.getElementById('chatBody');
+      body.innerHTML = '';
+
+      const userMsg = document.createElement('div');
+      userMsg.className = 'message user';
+      userMsg.innerHTML = `<div class="msg-avatar user">▶</div><div class="msg-bubble user">${r.q}</div>`;
+      body.appendChild(userMsg);
+
+      const typing = document.createElement('div');
+      typing.className = 'message';
+      typing.innerHTML = `<div class="msg-avatar ai">CRX</div><div class="typing show"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>`;
+      body.appendChild(typing);
+
+      setTimeout(() => {
+        body.removeChild(typing);
+
+        const deltaClass = { alert: 'delta-alert', up: 'delta-up', down: 'delta-down' };
+        const intelHTML = r.intel.map(i =>
+          `<div class="intel-block">
+            <div class="intel-header">
+              <span class="intel-source">${i.source}${i.delta ? `<span class="delta-tag ${deltaClass[i.delta]}">${i.deltaText}</span>` : ''}</span>
+              <span class="intel-time">${i.time}</span>
+            </div>
+            <div class="intel-body">${i.body}</div>
+          </div>`
+        ).join('');
+
+        const aiMsg = document.createElement('div');
+        aiMsg.className = 'message';
+        aiMsg.innerHTML = `
+          <div class="msg-avatar ai">CRX</div>
+          <div class="msg-bubble ai">
+            <div class="section-label">SWEEP: ${r.sweep}</div>
+            ${intelHTML}
+            <div class="briefing-section">
+              <div class="briefing-label">LLM SYNTHESIS</div>
+              <div class="briefing-text">${r.briefing}</div>
+            </div>
+          </div>`;
+        body.appendChild(aiMsg);
+        body.scrollTop = body.scrollHeight;
+      }, 1200);
+      body.scrollTop = body.scrollHeight;
+    }
+  </script>
+</body>
+</html>

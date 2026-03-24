@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Skyread — Daily Horoscope Demo</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #1a1035; display: flex; height: 100vh; overflow: hidden; }
+
+    /* Sidebar */
+    .sidebar {
+      width: 300px; min-width: 300px; background: #12092b;
+      display: flex; flex-direction: column; padding: 0; overflow-y: auto;
+    }
+    .sidebar-header { padding: 20px 18px 12px; border-bottom: 1px solid #2a1a5e; }
+    .sidebar-header h2 { color: #a78bfa; font-size: 1.1rem; font-weight: 700; }
+    .sidebar-header p { color: #6b5fa0; font-size: 0.72rem; margin-top: 3px; }
+    .sidebar-section { padding: 14px 18px 0; }
+    .sidebar-label { color: #a78bfa; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 8px; display: block; }
+    .preset-btn {
+      display: block; width: 100%; background: rgba(167,139,250,0.08);
+      border: 1px solid rgba(167,139,250,0.25); color: #c4b5fd;
+      border-radius: 7px; padding: 8px 11px; margin-bottom: 6px;
+      font-size: 0.76rem; line-height: 1.4; text-align: left; cursor: pointer;
+      transition: background 0.18s;
+    }
+    .preset-btn:hover { background: rgba(167,139,250,0.2); border-color: #a78bfa; color: #ede9fe; }
+    .sidebar-divider { border: none; border-top: 1px solid #2a1a5e; margin: 14px 18px; }
+    .action-btn {
+      display: block; width: calc(100% - 36px); margin: 0 18px 8px;
+      padding: 9px 14px; border-radius: 7px; font-size: 0.8rem;
+      font-weight: 600; cursor: pointer; border: none; text-align: center;
+    }
+    .action-btn.clear { background: rgba(255,255,255,0.06); color: #9b8ec4; }
+    .action-btn.download { background: #7c3aed; color: white; }
+    .action-btn.download:hover { background: #6d28d9; }
+    .sidebar-footer { padding: 12px 18px 18px; margin-top: auto; }
+
+    /* Main */
+    .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+    .app-header {
+      background: linear-gradient(135deg, #4f46e5, #7c3aed);
+      padding: 14px 22px; flex-shrink: 0;
+    }
+    .app-header h1 { color: white; font-size: 1.25rem; font-weight: 700; }
+    .app-header p { color: rgba(255,255,255,0.8); font-size: 0.78rem; margin-top: 2px; }
+    .app-header .badges { margin-top: 7px; display: flex; gap: 6px; flex-wrap: wrap; }
+    .app-header .badge {
+      background: rgba(255,255,255,0.15); color: white;
+      border: 1px solid rgba(255,255,255,0.25); border-radius: 20px;
+      padding: 2px 9px; font-size: 0.68rem;
+    }
+
+    /* Chat area */
+    .chat-area { flex: 1; overflow-y: auto; padding: 18px 22px; display: flex; flex-direction: column; gap: 12px; background: #1a1035; }
+
+    .welcome-box {
+      background: #231a47; border: 1px solid #3b2d6e; border-left: 4px solid #7c3aed;
+      border-radius: 10px; padding: 13px 16px; color: #c4b5fd; font-size: 0.85rem; line-height: 1.5;
+    }
+
+    .msg { display: flex; gap: 10px; align-items: flex-start; max-width: 90%; }
+    .msg.user { align-self: flex-end; flex-direction: row-reverse; }
+    .msg-avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
+    .msg.bot .msg-avatar { background: #4f46e5; }
+    .msg.user .msg-avatar { background: #7c3aed; }
+    .msg-bubble { padding: 11px 15px; border-radius: 12px; font-size: 0.84rem; line-height: 1.6; }
+    .msg.bot .msg-bubble { background: #231a47; border: 1px solid #3b2d6e; color: #e2d9f3; }
+    .msg.user .msg-bubble { background: #4f46e5; color: white; }
+
+    .copy-row { margin-top: 6px; padding-left: 42px; }
+    .copy-btn {
+      background: none; border: 1px solid #3b2d6e; border-radius: 5px;
+      color: #7c6dab; font-size: 0.72rem; padding: 3px 10px; cursor: pointer;
+      transition: all 0.15s;
+    }
+    .copy-btn:hover { background: #231a47; border-color: #7c3aed; color: #a78bfa; }
+
+    .typing { display: flex; align-items: center; gap: 6px; padding: 10px 15px; background: #231a47; border: 1px solid #3b2d6e; border-radius: 12px; width: fit-content; }
+    .dot { width: 7px; height: 7px; background: #7c3aed; border-radius: 50%; animation: bounce 1.2s infinite; }
+    .dot:nth-child(2) { animation-delay: 0.2s; }
+    .dot:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-6px)} }
+
+    /* Input */
+    .input-area { padding: 12px 22px 16px; background: #12092b; border-top: 1px solid #2a1a5e; flex-shrink: 0; }
+    .input-row { display: flex; gap: 8px; }
+    .input-row input {
+      flex: 1; padding: 11px 15px; border: 2px solid #3b2d6e; border-radius: 10px;
+      font-size: 0.85rem; outline: none; background: #1a1035; color: #e2d9f3;
+    }
+    .input-row input::placeholder { color: #6b5fa0; }
+    .input-row input:focus { border-color: #7c3aed; }
+    .send-btn {
+      background: #7c3aed; color: white; border: none; border-radius: 10px;
+      padding: 11px 18px; font-size: 0.85rem; font-weight: 600; cursor: pointer;
+    }
+    .send-btn:hover { background: #6d28d9; }
+
+    @media (max-width: 640px) { .sidebar { display: none; } }
+  </style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar">
+  <div class="sidebar-header">
+    <h2>✨ Skyread</h2>
+    <p>Daily Horoscope & Planetary Insights</p>
+  </div>
+  <div class="sidebar-section">
+    <span class="sidebar-label">Quick Questions</span>
+    <button class="preset-btn" onclick="selectQ(this)">1. What is Aries' horoscope for today?</button>
+    <button class="preset-btn" onclick="selectQ(this)">2. What planetary movements affect Taurus this week?</button>
+    <button class="preset-btn" onclick="selectQ(this)">3. How does Mercury retrograde impact Gemini?</button>
+    <button class="preset-btn" onclick="selectQ(this)">4. What does Venus reveal for Cancer's relationships?</button>
+    <button class="preset-btn" onclick="selectQ(this)">5. What career opportunities await Leo this month?</button>
+    <button class="preset-btn" onclick="selectQ(this)">6. What financial insights does Jupiter offer Virgo?</button>
+    <button class="preset-btn" onclick="selectQ(this)">7. What creative energy surrounds Libra today?</button>
+    <button class="preset-btn" onclick="selectQ(this)">8. What challenges should Scorpio prepare for?</button>
+    <button class="preset-btn" onclick="selectQ(this)">9. What new beginnings are coming for Sagittarius?</button>
+    <button class="preset-btn" onclick="selectQ(this)">10. How can Capricorn use today's planetary energy?</button>
+  </div>
+  <hr class="sidebar-divider">
+  <button class="action-btn clear" onclick="clearChat()">🗑️ Clear Conversation</button>
+  <button class="action-btn download" onclick="downloadChat()">⬇️ Download Reading</button>
+</div>
+
+<!-- Main -->
+<div class="main">
+  <div class="app-header">
+    <h1>✨ Skyread</h1>
+    <p>Daily Horoscope — Planetary Movements Explained</p>
+    <div class="badges">
+      <span class="badge">12 Signs</span>
+      <span class="badge">EN / ZH</span>
+      <span class="badge">Sky Explainer</span>
+      <span class="badge">Sky Snapshot</span>
+      <span class="badge">30-Day Archive</span>
+    </div>
+  </div>
+
+  <div class="chat-area" id="chatArea">
+    <div class="welcome-box">
+      ✨ Welcome to Skyread. Pick a zodiac question from the sidebar or type your own.<br>
+      I explain the planetary movements behind every horoscope reading — not just what's happening, but <em>why</em>.
+    </div>
+  </div>
+
+  <div class="input-area">
+    <div class="input-row">
+      <input type="text" id="userInput" placeholder="Ask about your sign or any planetary influence..." onkeydown="if(event.key==='Enter') sendMsg()" />
+      <button class="send-btn" onclick="sendMsg()">Send →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const DEMO_ANSWERS = {
+  "1": "🌟 Sky Explainer: Mars, your ruling planet, is in a favorable trine with Jupiter today — an alignment that amplifies your natural drive and confidence. This occurs roughly every two years, making today an unusually high-energy window.\n\n⚡ Sky Snapshot: Today favors starting something new — a project, a conversation, or a decision you've been delaying. The planetary energy supports momentum over caution. Act before this window shifts mid-week.\n\n今日提示 (Today's Tip): 行动胜过等待。火星与木星的三合相为你提供了少见的推动力。",
+
+  "2": "🌟 Sky Explainer: Venus, Taurus' ruling planet, moves into a conjunction with the Sun this week — a rare 'cazimi' alignment where Venus sits at the heart of the Sun. This happens once every 18 months and marks a reset of Venusian themes: money, beauty, and relationships.\n\n⚡ Sky Snapshot: This week resets the energy around finances and close relationships. Old patterns are releasing — it's an ideal time to renegotiate a financial arrangement or have an honest conversation about what you truly value.\n\n今日提示 (Today's Tip): 重置金牛座的财务和关系模式的最佳时机已到来。",
+
+  "3": "🌟 Sky Explainer: Mercury retrograde occurs when Mercury appears to move backward from Earth's perspective — roughly three times yearly for about three weeks. As Gemini's ruling planet, Mercury's retrograde periods affect you more directly than other signs, slowing your natural speed of thought and communication.\n\n⚡ Sky Snapshot: Expect delays in messages, contracts, and decisions. Back up files, re-read emails before sending, and avoid signing new agreements. Use this period to review rather than initiate — it's one of the best windows for completing unfinished projects.\n\n今日提示 (Today's Tip): 水逆期间，复盘胜于开始。完成未竟之事，而非启动新项目。",
+
+  "4": "🌟 Sky Explainer: Venus is transiting through Cancer's 7th house of partnerships this month — the house most directly linked to committed relationships and close collaborators. This annual transit lasts three to four weeks and softens tensions in one-on-one dynamics.\n\n⚡ Sky Snapshot: This month is unusually good for deepening a relationship or mending one that has been strained. If you've wanted to raise something difficult with a partner, the Venus transit creates a more receptive atmosphere than usual. Single Cancers may find unexpected chemistry with someone already in their social circle.\n\n今日提示 (Today's Tip): 金星过境七宫，是修复和深化关系的绝佳时机。",
+
+  "5": "🌟 Sky Explainer: The Sun, Leo's ruling planet, is in a supportive sextile with Saturn this month — a grounding aspect that connects your identity and vitality with structure and long-term planning. This aspect favors work with visible, lasting results.\n\n⚡ Sky Snapshot: This month rewards organized, strategic effort — not spontaneous moves. If you've been working on something behind the scenes, it's ready to be presented. Leadership opportunities may arise. Your visibility is higher than usual, so the work you put in now will be noticed.\n\n今日提示 (Today's Tip): 太阳与土星六分相，努力与结构将带来持久的职业成果。",
+
+  "6": "🌟 Sky Explainer: Jupiter is transiting through Virgo's 2nd house of personal finances and material resources. Jupiter expands whatever house it occupies, and in the 2nd house this typically manifests as increased income opportunities, better financial judgment, or unexpected gains. This transit lasts approximately 12 months.\n\n⚡ Sky Snapshot: This is one of the better windows in your 12-year cycle for building financial security. The expansion is real but still requires your effort — Jupiter opens doors, it doesn't walk through them for you. Focus on increasing primary income over speculative investments, and the gains will compound.\n\n今日提示 (Today's Tip): 木星过境二宫，是建立财务安全感的12年难得机遇。",
+
+  "7": "🌟 Sky Explainer: Neptune is in a harmonious trine with Libra's natal Venus today — activating a flow between your aesthetic sensibility and Neptune's domain of imagination and intuition. Neptune trines are subtle but powerful; they dissolve mental blocks and allow creative insight to surface naturally.\n\n⚡ Sky Snapshot: Today is one of the best days of the month for creative work — writing, design, music, or any task that requires imagination over logic. Ideas may arrive without effort, especially in the morning. Capture them immediately — Neptune's window closes tomorrow.\n\n今日提示 (Today's Tip): 海王星三合金星，今天是灵感迸发的最佳时机。清晨捕捉想法。",
+
+  "8": "🌟 Sky Explainer: Mars and Saturn are in a square aspect this week — a tense 90-degree angle that creates friction between drive and restriction. For Scorpio, a Mars-ruled sign, this manifests as blocked ambition or frustrating obstacles precisely where you're pushing hardest.\n\n⚡ Sky Snapshot: Expect resistance in your most ambitious area this week — not because you're failing, but because the planetary pressure is testing whether your structure is strong enough. The most effective response is to slow down and fortify, not push harder. What breaks under this transit needed to be rebuilt anyway.\n\n今日提示 (Today's Tip): 火星与土星四分相，这周放慢脚步、巩固基础，而非强行推进。",
+
+  "9": "🌟 Sky Explainer: Jupiter, Sagittarius' ruling planet, is stationing direct after a four-month retrograde. When Jupiter stations direct, the energy that was turned inward begins moving outward again — opportunities that felt stalled start moving, and decisions that felt premature suddenly have clarity.\n\n⚡ Sky Snapshot: The next six weeks are one of the most forward-moving periods of your year. Something that felt stuck — a plan, a relationship, a creative project — will start gaining momentum. What begins now under Jupiter direct has the expansive quality of a genuine new chapter, not a false start.\n\n今日提示 (Today's Tip): 木星顺行，停滞的计划将重新启动。接下来六周是属于你的黄金时期。",
+
+  "10": "🌟 Sky Explainer: The Moon is in Capricorn today, forming a conjunction with your sign and amplifying your instincts and personal authority. The Moon also forms a trine with Uranus today, adding an element of unexpected insight to your already sharp practical judgment.\n\n⚡ Sky Snapshot: Your instincts are sharper than usual today — trust them. This is a strong day for practical decisions requiring both logic and gut feeling: hiring, negotiating, or assessing whether a project is worth continuing. Something unexpected may surface; treat it as information worth acting on, not noise to dismiss.\n\n今日提示 (Today's Tip): 月亮合相摩羯，今天直觉与理性并重，是做出重要决定的理想时机。"
+};
+
+const chatArea = document.getElementById('chatArea');
+let msgCount = 0;
+
+function selectQ(btn) {
+  const text = btn.textContent.replace(/^\d+\.\s*/, '');
+  document.getElementById('userInput').value = text;
+  sendMsg();
+}
+
+function sendMsg() {
+  const input = document.getElementById('userInput');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+
+  appendUser(text);
+  const typing = appendTyping();
+
+  const presets = document.querySelectorAll('.preset-btn');
+  const key = Array.from(presets).reduce((found, btn, i) => {
+    if (found) return found;
+    const clean = btn.textContent.replace(/^\d+\.\s*/, '').trim().toLowerCase();
+    return clean === text.toLowerCase() ? String(i + 1) : null;
+  }, null);
+
+  const answer = DEMO_ANSWERS[key] ||
+    "This is a demo interface for Skyread. In the live app, planetary positions are calculated in real time and horoscopes are generated fresh each day using Google Gemini. To experience live daily readings with bilingual EN/ZH support and 30-day archive, launch the full app from the project details page.";
+
+  setTimeout(() => {
+    typing.remove();
+    appendBot(answer.replace(/\n/g, '<br>'));
+  }, 1800);
+}
+
+function appendUser(text) {
+  const div = document.createElement('div');
+  div.className = 'msg user';
+  div.innerHTML = `<div class="msg-avatar">👤</div><div class="msg-bubble">${text}</div>`;
+  chatArea.appendChild(div);
+  chatArea.scrollTop = chatArea.scrollHeight;
+}
+
+function appendTyping() {
+  const wrap = document.createElement('div');
+  wrap.className = 'msg bot';
+  wrap.innerHTML = `<div class="msg-avatar">✨</div><div class="typing"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>`;
+  chatArea.appendChild(wrap);
+  chatArea.scrollTop = chatArea.scrollHeight;
+  return wrap;
+}
+
+function appendBot(html) {
+  msgCount++;
+  const id = 'msg-' + msgCount;
+  const div = document.createElement('div');
+  div.className = 'msg bot';
+  div.innerHTML = `<div class="msg-avatar">✨</div><div class="msg-bubble" id="${id}">${html}</div>`;
+  chatArea.appendChild(div);
+  const copyRow = document.createElement('div');
+  copyRow.className = 'copy-row';
+  copyRow.innerHTML = `<button class="copy-btn" data-target="${id}">📋 Copy this reading</button>`;
+  copyRow.querySelector('.copy-btn').onclick = () => copyAnswer(id, copyRow.querySelector('.copy-btn'));
+  chatArea.appendChild(copyRow);
+  chatArea.scrollTop = chatArea.scrollHeight;
+}
+
+function copyAnswer(id, btn) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  navigator.clipboard.writeText(el.innerText).then(() => {
+    btn.textContent = '✓ Copied!';
+    setTimeout(() => btn.textContent = '📋 Copy this reading', 2000);
+  });
+}
+
+function clearChat() {
+  chatArea.innerHTML = `<div class="welcome-box">✨ Welcome to Skyread. Pick a zodiac question from the sidebar or type your own.<br>I explain the planetary movements behind every horoscope reading — not just what's happening, but <em>why</em>.</div>`;
+}
+
+function downloadChat() {
+  const msgs = chatArea.querySelectorAll('.msg');
+  let text = 'Skyread — Horoscope Reading Export\n' + new Date().toLocaleString() + '\n' + '='.repeat(50) + '\n\n';
+  msgs.forEach(m => {
+    const role = m.classList.contains('user') ? 'You' : 'Skyread';
+    const bubble = m.querySelector('.msg-bubble');
+    if (bubble) text += `[${role}]\n${bubble.innerText}\n\n`;
+  });
+  const a = document.createElement('a');
+  a.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(text);
+  a.download = 'skyread-reading.txt';
+  a.click();
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tarot Guru — Live Demo</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Arial', sans-serif;
+      background: #0d0618;
+      color: #e8d5ff;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .demo-banner {
+      background: linear-gradient(135deg, #2d1052, #6B21A8);
+      padding: 8px 16px;
+      text-align: center;
+      font-size: 0.8rem;
+      color: #e8d5ff;
+      border-bottom: 1px solid #4c1d95;
+    }
+    .demo-banner a { color: #c084fc; text-decoration: none; }
+    .demo-banner a:hover { text-decoration: underline; }
+    .layout {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+    .sidebar {
+      width: 280px;
+      background: #120824;
+      border-right: 1px solid #2d1052;
+      padding: 20px 16px;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      flex-shrink: 0;
+    }
+    .sidebar-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #c084fc;
+      margin-bottom: 4px;
+    }
+    .sidebar-sub {
+      font-size: 0.75rem;
+      color: #9d6ec4;
+      margin-bottom: 16px;
+    }
+    .q-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #7c3aed;
+      margin-bottom: 8px;
+    }
+    .q-btn {
+      display: block;
+      background: #1a0d2e;
+      border: 1px solid #3b0764;
+      border-radius: 6px;
+      padding: 9px 12px;
+      margin-bottom: 8px;
+      font-size: 0.82rem;
+      color: #d8b4fe;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.2s;
+      width: 100%;
+    }
+    .q-btn:hover, .q-btn.active {
+      background: #2d1052;
+      border-color: #7c3aed;
+      color: #f0e0ff;
+    }
+    .spread-badge {
+      display: inline-block;
+      font-size: 0.65rem;
+      background: #3b0764;
+      color: #c084fc;
+      border-radius: 10px;
+      padding: 1px 7px;
+      margin-bottom: 4px;
+    }
+    .back-link {
+      margin-top: auto;
+      padding-top: 16px;
+      border-top: 1px solid #2d1052;
+      font-size: 0.8rem;
+    }
+    .back-link a { color: #7c3aed; text-decoration: none; }
+    .back-link a:hover { text-decoration: underline; }
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .chat-header {
+      padding: 16px 24px;
+      border-bottom: 1px solid #2d1052;
+      background: #120824;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .chat-header-icon { font-size: 1.8rem; }
+    .chat-header-text h2 { font-size: 1rem; color: #c084fc; }
+    .chat-header-text p { font-size: 0.75rem; color: #7c3aed; }
+    .chat-body {
+      flex: 1;
+      padding: 24px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .welcome-msg {
+      background: linear-gradient(135deg, #1a0d2e, #2d1052);
+      border: 1px solid #3b0764;
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+    }
+    .welcome-msg h3 { color: #c084fc; font-size: 1.1rem; margin-bottom: 8px; }
+    .welcome-msg p { font-size: 0.85rem; color: #b89fd4; line-height: 1.6; }
+    .message { display: flex; gap: 12px; max-width: 820px; }
+    .message.user { flex-direction: row-reverse; align-self: flex-end; }
+    .msg-avatar {
+      width: 34px; height: 34px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; flex-shrink: 0;
+    }
+    .msg-avatar.ai { background: linear-gradient(135deg, #4c1d95, #6B21A8); }
+    .msg-avatar.user { background: #1e1b4b; }
+    .msg-bubble {
+      border-radius: 10px;
+      padding: 14px 16px;
+      font-size: 0.88rem;
+      line-height: 1.6;
+      max-width: 680px;
+    }
+    .msg-bubble.ai { background: #1a0d2e; border: 1px solid #3b0764; color: #e8d5ff; }
+    .msg-bubble.user { background: #2d1052; border: 1px solid #4c1d95; color: #f0e0ff; }
+    .card-reveal {
+      background: #0f0520;
+      border: 1px solid #4c1d95;
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin: 10px 0;
+      font-size: 0.82rem;
+    }
+    .card-reveal .card-name { color: #c084fc; font-weight: 700; font-size: 0.9rem; }
+    .card-reveal .card-meta { color: #7c3aed; font-size: 0.75rem; }
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #7c3aed;
+      margin: 10px 0 4px;
+    }
+    .typing { display: none; }
+    .typing.show { display: flex; gap: 4px; align-items: center; padding: 10px 0; }
+    .dot { width: 7px; height: 7px; border-radius: 50%; background: #7c3aed; animation: bounce 1.2s infinite; }
+    .dot:nth-child(2) { animation-delay: 0.2s; }
+    .dot:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes bounce { 0%,80%,100% { transform: translateY(0); } 40% { transform: translateY(-6px); } }
+    @media (max-width: 700px) {
+      .sidebar { width: 220px; }
+      .chat-body { padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="demo-banner">
+    🔮 Demo Mode — Pre-loaded readings | <a href="../../tarot-guru.html">View Project Details</a>
+  </div>
+  <div class="layout">
+    <div class="sidebar">
+      <div class="sidebar-title">🔮 Tarot Guru</div>
+      <div class="sidebar-sub">Click a question to see a sample reading</div>
+      <div class="q-label">Sample Readings</div>
+
+      <div class="spread-badge">3-Card Spread</div>
+      <button class="q-btn" onclick="showReading(0)">I'm deciding whether to leave my job for a new opportunity. What does the Guru see?</button>
+
+      <div class="spread-badge">Single Card</div>
+      <button class="q-btn" onclick="showReading(1)">What energy should I bring into today?</button>
+
+      <div class="spread-badge">3-Card Spread</div>
+      <button class="q-btn" onclick="showReading(2)">I've been feeling stuck in my relationship for months. What am I missing?</button>
+
+      <div class="spread-badge">Celtic Cross</div>
+      <button class="q-btn" onclick="showReading(3)">I'm at a major crossroads — career, home, and relationship are all shifting at once.</button>
+
+      <div class="spread-badge">Single Card</div>
+      <button class="q-btn" onclick="showReading(4)">What do I need to let go of right now?</button>
+
+      <div class="spread-badge">3-Card Spread</div>
+      <button class="q-btn" onclick="showReading(5)">I'm starting a business. What should I know about the path ahead?</button>
+
+      <div class="back-link">
+        <a href="../../index.html">← Back to Portfolio</a>
+      </div>
+    </div>
+
+    <div class="main">
+      <div class="chat-header">
+        <div class="chat-header-icon">🔮</div>
+        <div class="chat-header-text">
+          <h2>Tarot Guru</h2>
+          <p>Personal AI tarot reading — reflection, not prediction</p>
+        </div>
+      </div>
+      <div class="chat-body" id="chatBody">
+        <div class="welcome-msg">
+          <h3>Welcome to Tarot Guru</h3>
+          <p>Select a sample reading from the left panel to see how the Guru responds to real situations.<br>
+          Each reading is written specifically for the question — not a generic card definition.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const readings = [
+      {
+        q: "I'm deciding whether to leave my job for a new opportunity. What does the Guru see?",
+        spread: "Three-Card Spread (Past · Present · Future)",
+        cards: [
+          { name: "The Eight of Pentacles", pos: "Past", orient: "Upright", keywords: "diligence, skill-building, apprenticeship" },
+          { name: "The Tower", pos: "Present", orient: "Upright", keywords: "sudden change, disruption, revelation" },
+          { name: "The Ace of Wands", pos: "Future", orient: "Upright", keywords: "new beginning, creative spark, initiative" }
+        ],
+        reading: `The Eight of Pentacles in your Past position speaks to years of quietly building your craft — putting in the work, often without much external recognition. You've built real competence in the current role, perhaps more than you give yourself credit for.\n\nThe Tower in the Present is striking, and honest: something structural has already shifted. This isn't about whether to leave — it's about acknowledging that the old foundation has cracked. The Tower rarely means catastrophe; it means that what was held together by convention or inertia is now visibly unstable. The disruption is already in motion. You're feeling it as the restlessness that brought you here.\n\nThe Ace of Wands in the Future is unambiguous. The opportunity isn't just a job change — it's a genuine spark of creative energy that's been waiting for permission. Aces in the future position represent beginnings that are available but not guaranteed. You have to reach for it.\n\nThe reading doesn't tell you to leave — it tells you that staying because it feels safe is not the same as staying because it's right. The Tower has already come. The Ace is waiting.`
+      },
+      {
+        q: "What energy should I bring into today?",
+        spread: "Single Card",
+        cards: [
+          { name: "The Star", pos: "Today", orient: "Upright", keywords: "hope, renewal, quiet confidence, healing" }
+        ],
+        reading: `The Star is a card of quiet, steady optimism — not the loud enthusiasm of the Ace of Wands, but something calmer and more sustainable. It follows the Tower in the Major Arcana, which is significant: The Star appears after the wreckage, not before it. It's the card of the person who has been through something and found, against expectations, that they are still here.\n\nBring that energy today. Not performance. Not urgency. Just the quiet knowledge that things are moving in the right direction, even when you can't see exactly where. The Star's posture is open — arms and eyes toward the sky — not grasping or controlling.\n\nPractically: give yourself a moment this morning to simply notice what you're grateful for. Not a list. Just one thing. Let the day have some softness in it.`
+      },
+      {
+        q: "I've been feeling stuck in my relationship for months. What am I missing?",
+        spread: "Three-Card Spread (Past · Present · Future)",
+        cards: [
+          { name: "The Two of Cups", pos: "Past", orient: "Upright", keywords: "partnership, mutual attraction, connection" },
+          { name: "The Four of Cups", pos: "Present", orient: "Reversed", keywords: "apathy, disengagement, missed opportunity (reversed)" },
+          { name: "The Six of Wands", pos: "Future", orient: "Upright", keywords: "recognition, momentum, shared success" }
+        ],
+        reading: `The Two of Cups in the Past reminds you this relationship was built on genuine connection — something real was established here. That foundation hasn't disappeared. It matters to name it before looking at what's happened since.\n\nThe Four of Cups Reversed in the Present is where your question lives. Reversed, this card speaks to someone emerging from a period of withdrawal or disengagement — but not quite there yet. You've been half in, half out: noticing the relationship from a distance, feeling disconnected from it, maybe telling yourself it's fine while privately knowing something is dull. The reversal suggests you're starting to feel the pull back, but haven't acted on it yet.\n\nWhat you may be missing: the relationship isn't stuck — you are. The Four of Cups Reversed points to a pattern of waiting for the other person to reignite something that you yourself have dimmed by going quiet.\n\nThe Six of Wands in the Future shows a return of momentum and shared recognition — but it requires you to move first. Not dramatically. Just honestly. Say the thing you've been holding. Name the dullness instead of enduring it. That move is what unlocks the Six.`
+      },
+      {
+        q: "I'm at a major crossroads — career, home, and relationship are all shifting at once.",
+        spread: "Celtic Cross (10 Cards)",
+        cards: [
+          { name: "The Chariot", pos: "Core", orient: "Upright", keywords: "will, direction, control through uncertainty" },
+          { name: "The Ten of Swords", pos: "Crossing", orient: "Upright", keywords: "painful ending, finality, release" },
+          { name: "The High Priestess", pos: "Foundation", orient: "Upright", keywords: "intuition, inner knowing, the unseen" },
+          { name: "The Five of Pentacles", pos: "Recent Past", orient: "Upright", keywords: "hardship, isolation, scarcity mindset" },
+          { name: "The Ace of Swords", pos: "Possible Outcome", orient: "Upright", keywords: "clarity, breakthrough, truth" },
+          { name: "The Moon", pos: "Near Future", orient: "Upright", keywords: "confusion, illusion, unconscious fear" }
+        ],
+        reading: `At the core of this moment sits The Chariot — a card of directed will in the middle of turbulent motion. You are not being swept away. You are holding the reins, even if it doesn't feel that way.\n\nThe Ten of Swords crossing you is the simultaneous ending of multiple chapters at once. This is not failure — it is the natural completion of a cycle that has outlasted itself. The ten swords are already in the ground. The worst is not coming. It has been.\n\nThe High Priestess at your foundation tells me your intuition already knows which direction is right in each of these situations. You've been filtering it through practicality and other people's expectations. Stop. The quiet voice is accurate.\n\nThe Five of Pentacles in the recent past shows real depletion — financial, emotional, or both. You have been running on reserves for a while. This context matters: you are making major decisions while tired.\n\nThe Moon in the near future suggests a period of confusion and illusion still ahead. Not everything will be clear immediately. Some of what you think is true about one of these situations is being distorted by fear. Slow down before making final decisions in the area that feels most urgent.\n\nThe Ace of Swords as a possible outcome is powerful: mental clarity is available to you if you cut through the noise. The crossroads resolves not with a grand plan but with one honest decision at a time. Start with the one you most want to avoid making.`
+      },
+      {
+        q: "What do I need to let go of right now?",
+        spread: "Single Card",
+        cards: [
+          { name: "The Five of Cups", pos: "Release", orient: "Reversed", keywords: "moving on, acceptance, grief ending (reversed)" }
+        ],
+        reading: `The Five of Cups Reversed speaks directly to what you're carrying: grief or disappointment that has become a habit rather than a feeling. In its upright position, this card shows someone staring at what was lost, unable to turn and see what remains. Reversed, the turn is beginning — but incompletely.\n\nWhat you need to let go of is the story you're still telling about a loss or failure that has already passed. Not by pretending it didn't matter — it did. But by recognizing that revisiting it is no longer processing; it's patterning.\n\nPractically: notice when you're recounting an old hurt, internally or to others, without it leading anywhere new. That's the signal. You don't have to force forgiveness. You just have to stop rehearsing the ending of a story that's already over.`
+      },
+      {
+        q: "I'm starting a business. What should I know about the path ahead?",
+        spread: "Three-Card Spread (Past · Present · Future)",
+        cards: [
+          { name: "The Page of Pentacles", pos: "Past", orient: "Upright", keywords: "study, early ambition, groundwork" },
+          { name: "The Seven of Wands", pos: "Present", orient: "Upright", keywords: "defensiveness, holding ground, competition" },
+          { name: "The King of Pentacles", pos: "Future", orient: "Upright", keywords: "mastery, financial stability, long-term authority" }
+        ],
+        reading: `The Page of Pentacles in your Past is the student and the planner — you've been learning, researching, preparing, perhaps longer than you've acted. There's diligence in this card and also a readiness that has finally reached its limit. The planning phase is done.\n\nThe Seven of Wands in the Present is honest: you will face competition and skepticism. People who got there first. Potential clients who aren't sure. Your own internal voice that questions whether this is really the right time. The Seven of Wands doesn't promise an easy path — it shows someone on the high ground, holding their position against pressure. The key is to stop arguing for yourself to yourself. The position is sound. Hold it.\n\nThe King of Pentacles in the Future is the destination. This is the card of someone who has built something durable — not just successful, but authoritative in their domain. Financially stable, respected, grounded. The King didn't get there by moving fast; he got there by moving right.\n\nWhat you should know: this is a long game, and it rewards consistency over cleverness. The business idea is solid enough. The thing that will determine whether you reach the King is whether you stay in the Seven of Wands long enough when it gets uncomfortable.`
+      }
+    ];
+
+    function showReading(idx) {
+      const r = readings[idx];
+      document.querySelectorAll('.q-btn').forEach((b, i) => b.classList.toggle('active', i === idx));
+      const body = document.getElementById('chatBody');
+      body.innerHTML = '';
+
+      // User message
+      const userMsg = document.createElement('div');
+      userMsg.className = 'message user';
+      userMsg.innerHTML = `<div class="msg-avatar user">🧑</div><div class="msg-bubble user">${r.q}</div>`;
+      body.appendChild(userMsg);
+
+      // Typing indicator
+      const typing = document.createElement('div');
+      typing.className = 'message';
+      typing.innerHTML = `<div class="msg-avatar ai">🔮</div><div class="typing show"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>`;
+      body.appendChild(typing);
+
+      setTimeout(() => {
+        body.removeChild(typing);
+
+        // Cards
+        const cardHTML = r.cards.map(c =>
+          `<div class="card-reveal"><div class="card-name">${c.name}</div><div class="card-meta">${c.pos} · ${c.orient} · ${c.keywords}</div></div>`
+        ).join('');
+
+        const aiMsg = document.createElement('div');
+        aiMsg.className = 'message';
+        aiMsg.innerHTML = `
+          <div class="msg-avatar ai">🔮</div>
+          <div class="msg-bubble ai">
+            <div class="section-label">Spread: ${r.spread}</div>
+            ${cardHTML}
+            <div class="section-label" style="margin-top:14px">Reading</div>
+            ${r.reading.split('\n\n').map(p => `<p style="margin-bottom:10px">${p}</p>`).join('')}
+          </div>`;
+        body.appendChild(aiMsg);
+        body.scrollTop = body.scrollHeight;
+      }, 1400);
+
+      body.scrollTop = body.scrollHeight;
+    }
+  </script>
+</body>
+</html>

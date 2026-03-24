@@ -158,6 +158,30 @@ This repository contains **32 production-deployed AI applications** demonstratin
 
 ### 🤖 Conversational AI & Specialized Chatbots
 
+#### [Tarot Guru](./projects/tarot-guru/)
+**AI-powered personal tarot reading app that uses cards as a mirror for reflection and clarity**
+- **Live Demo:** [Launch Demo](https://lyven81.github.io/ai-project/projects/tarot-guru/demo.html)
+- **Tech Stack:** Node.js, Express, Claude Opus API, Vanilla JS, Local JSON Storage
+- **AI Capabilities:** Context-aware spread recommendation (1 / 3-card / Celtic Cross), narrative reading connected to user's specific question, follow-up chat with session memory, session archive as timestamped JSON files
+
+#### [Wiseman · 智者](./projects/wiseman/)
+**Daily cosmic reading in Mandarin Chinese combining Bazi, Western horoscope, planetary astrology, and Chinese zodiac**
+- **Live Demo:** [Launch Demo](https://lyven81.github.io/ai-project/projects/wiseman/demo.html)
+- **Tech Stack:** Node.js, Express, Claude Opus API, Vanilla JS, Daily JSON Cache
+- **AI Capabilities:** 5-panel dashboard (八字/星座/行星/生肖/综合解读), personalized to birth date and zodiac signs, one reading per day cached for instant reload, floating chat for follow-up questions in Mandarin
+
+#### [Master Wong · 王师父](./projects/master-wong/)
+**Personal I Ching oracle powered by Claude AI — readings in plain conversational Mandarin Chinese**
+- **Live Demo:** [Launch Demo](https://lyven81.github.io/ai-project/projects/master-wong/demo.html)
+- **Tech Stack:** Node.js, Express, Claude Sonnet API, Vanilla JS, Three-Coin Casting Engine
+- **AI Capabilities:** Traditional three-coin casting mechanic, AI-recommended reading type (单卦/变卦/对比卦), situation-specific interpretation in plain Mandarin, changing line analysis, follow-up chat with hexagram context
+
+#### [Long View · Crucix](./projects/long-view/)
+**OSINT intelligence aggregator with 27 data sources, 3D globe visualization, and multi-LLM briefings**
+- **Live Demo:** [Launch Demo](https://lyven81.github.io/ai-project/projects/long-view/demo.html)
+- **Tech Stack:** Node.js 22+, Express, Multi-LLM (Claude/OpenAI/Gemini/Codex), WebGL/Three.js, Telegram Bot, Discord Bot, Docker
+- **AI Capabilities:** 27 OSINT source aggregation, delta engine for meaningful change detection, provider-agnostic LLM synthesis, 3D globe visualization, Telegram/Discord push alerts, configurable 15-minute sweep cycle
+
 #### [Chinese Traditional Calendar with AI Consultant (中華傳統日曆)](./projects/chinese-calender/)
 **Revolutionary conversational AI-powered traditional Chinese lunar calendar with personalized auspicious date consultation**
 - **Live Demo:** [chinese-calender-169218045868.asia-southeast1.run.app](https://chinese-calender-169218045868.asia-southeast1.run.app/)

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Master Wong 王师父 — Live Demo</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Arial', sans-serif;
+      background: #0c0305;
+      color: #f0d8c0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .demo-banner {
+      background: linear-gradient(135deg, #3b0a0a, #7f1d1d);
+      padding: 8px 16px;
+      text-align: center;
+      font-size: 0.8rem;
+      color: #f0d8c0;
+      border-bottom: 1px solid #7f1d1d;
+    }
+    .demo-banner a { color: #f87171; text-decoration: none; }
+    .demo-banner a:hover { text-decoration: underline; }
+    .layout { display: flex; flex: 1; overflow: hidden; }
+    .sidebar {
+      width: 270px; background: #080205;
+      border-right: 1px solid #3b0a0a;
+      padding: 20px 16px;
+      display: flex; flex-direction: column;
+      overflow-y: auto; flex-shrink: 0;
+    }
+    .sidebar-title { font-size: 1.1rem; font-weight: 700; color: #f87171; margin-bottom: 4px; }
+    .sidebar-sub { font-size: 0.75rem; color: #9c4040; margin-bottom: 16px; }
+    .q-label { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; color: #7f1d1d; margin-bottom: 8px; }
+    .q-btn {
+      display: block; background: #110408; border: 1px solid #3b0a0a;
+      border-radius: 6px; padding: 9px 12px; margin-bottom: 8px;
+      font-size: 0.82rem; color: #e0b8a0; cursor: pointer;
+      text-align: left; transition: all 0.2s; width: 100%;
+    }
+    .q-btn:hover, .q-btn.active { background: #3b0a0a; border-color: #7f1d1d; color: #f0d8c0; }
+    .type-badge { display: inline-block; font-size: 0.65rem; background: #3b0a0a; color: #f87171; border-radius: 10px; padding: 1px 7px; margin-bottom: 4px; }
+    .back-link { margin-top: auto; padding-top: 16px; border-top: 1px solid #3b0a0a; font-size: 0.8rem; }
+    .back-link a { color: #7f1d1d; text-decoration: none; }
+    .back-link a:hover { text-decoration: underline; }
+    .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+    .chat-header {
+      padding: 16px 24px; border-bottom: 1px solid #3b0a0a;
+      background: #080205; display: flex; align-items: center; gap: 12px;
+    }
+    .chat-header-icon { font-size: 1.8rem; }
+    .chat-header-text h2 { font-size: 1rem; color: #f87171; }
+    .chat-header-text p { font-size: 0.75rem; color: #7f1d1d; }
+    .chat-body { flex: 1; padding: 24px; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; }
+    .welcome-msg {
+      background: linear-gradient(135deg, #110408, #3b0a0a);
+      border: 1px solid #7f1d1d; border-radius: 10px; padding: 20px; text-align: center;
+    }
+    .welcome-msg h3 { color: #f87171; font-size: 1.1rem; margin-bottom: 8px; }
+    .welcome-msg p { font-size: 0.85rem; color: #b07060; line-height: 1.6; }
+    .message { display: flex; gap: 12px; max-width: 860px; }
+    .message.user { flex-direction: row-reverse; align-self: flex-end; }
+    .msg-avatar {
+      width: 34px; height: 34px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; flex-shrink: 0;
+    }
+    .msg-avatar.ai { background: linear-gradient(135deg, #3b0a0a, #7f1d1d); }
+    .msg-avatar.user { background: #3b0a0a; }
+    .msg-bubble {
+      border-radius: 10px; padding: 14px 16px;
+      font-size: 0.88rem; line-height: 1.7; max-width: 700px;
+    }
+    .msg-bubble.ai { background: #110408; border: 1px solid #3b0a0a; color: #f0d8c0; }
+    .msg-bubble.user { background: #3b0a0a; border: 1px solid #7f1d1d; color: #f5e0d0; }
+    .hexagram-block {
+      background: #0c0305; border: 1px solid #7f1d1d;
+      border-radius: 8px; padding: 14px 16px; margin: 10px 0;
+      font-family: monospace;
+    }
+    .hex-lines { font-size: 1.3rem; letter-spacing: 3px; color: #f87171; margin-bottom: 6px; }
+    .hex-changing { color: #fbbf24; }
+    .hex-name { color: #f87171; font-weight: 700; font-size: 1rem; font-family: Arial; }
+    .hex-number { color: #7f1d1d; font-size: 0.8rem; font-family: Arial; }
+    .section-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #7f1d1d; margin: 10px 0 4px; }
+    .typing { display: none; }
+    .typing.show { display: flex; gap: 4px; align-items: center; padding: 10px 0; }
+    .dot { width: 7px; height: 7px; border-radius: 50%; background: #7f1d1d; animation: bounce 1.2s infinite; }
+    .dot:nth-child(2) { animation-delay: 0.2s; }
+    .dot:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes bounce { 0%,80%,100% { transform: translateY(0); } 40% { transform: translateY(-6px); } }
+    @media (max-width: 700px) { .sidebar { width: 220px; } .chat-body { padding: 16px; } }
+  </style>
+</head>
+<body>
+  <div class="demo-banner">
+    ☯ 演示模式 — 预设示例 | <a href="../../master-wong.html">查看项目详情</a>
+  </div>
+  <div class="layout">
+    <div class="sidebar">
+      <div class="sidebar-title">☯ 王师父 · 易经</div>
+      <div class="sidebar-sub">点击问题查看示例解读</div>
+      <div class="q-label">示例占卜</div>
+
+      <div class="type-badge">变卦</div>
+      <button class="q-btn" onclick="showReading(0)">我在考虑换工作，一直犹豫不决，不知道时机对不对。</button>
+
+      <div class="type-badge">单卦</div>
+      <button class="q-btn" onclick="showReading(1)">今天我需要做一个重要的汇报，请帮我看看今天的能量。</button>
+
+      <div class="type-badge">对比卦</div>
+      <button class="q-btn" onclick="showReading(2)">我有两个选择：留在现在的公司，或者接受一个创业邀请。</button>
+
+      <div class="type-badge">变卦</div>
+      <button class="q-btn" onclick="showReading(3)">我和伴侣最近关系有些紧张，不知道该怎么处理。</button>
+
+      <div class="type-badge">单卦</div>
+      <button class="q-btn" onclick="showReading(4)">我想开始一个新项目，请问时机如何？</button>
+
+      <div class="back-link">
+        <a href="../../index.html">← 返回作品集</a>
+      </div>
+    </div>
+
+    <div class="main">
+      <div class="chat-header">
+        <div class="chat-header-icon">☯</div>
+        <div class="chat-header-text">
+          <h2>王师父 · I Ching Sifu</h2>
+          <p>传统三枚铜钱起卦 · 易经解读 · 中文</p>
+        </div>
+      </div>
+      <div class="chat-body" id="chatBody">
+        <div class="welcome-msg">
+          <h3>欢迎请教王师父</h3>
+          <p>从左侧选择一个问题，查看王师父的易经解读示例。<br>每个解读使用传统三枚铜钱起卦，以浅显日常的中文解析卦象。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const readings = [
+      {
+        q: "我在考虑换工作，一直犹豫不决，不知道时机对不对。",
+        type: "变卦",
+        hexagram1: { lines: "━━━ ━━━ ━ ━ ━━━ ━━━", name: "第三十二卦 · 恒卦", sub: "震上巽下，长久持恒", changing: "第三爻为变爻（老阳变阴）" },
+        hexagram2: { lines: "━━━ ━━━ ━ ━ ━ ━ ━━━", name: "第四十卦 · 解卦", sub: "震上坎下，解难化困" },
+        reading: `王师父看了你的卦，缓缓开口说：\n\n恒卦说的是"持恒"，但你问的是要不要离开。这看起来矛盾，其实不然。恒卦提醒的不是"不要动"，而是"你的行动必须出于内在的清晰，而不是外在的压力"。你目前的犹豫，很可能是因为这个内在的清晰还没到位。\n\n第三爻是变爻，这条爻的爻辞说的是：不能持守自己的方向，心里不安定，这会带来羞耻。这个"羞耻"不是别人的评判，是你自己内心深处知道自己还没真正想清楚，就要行动时的那种不踏实感。\n\n变到解卦，解卦是"解困、解难"的意思。这说明这次转变本身是可以解脱困境的——前提是你等到内在清晰的时候再动。解卦的智慧是：不必急，时机到了，一切会自然解开。\n\n王师父的建议是：再等一个月。用这一个月，不是继续比较两份工作，而是问自己一个更深的问题——你真正想要的是什么样的工作生活？当你能清楚地回答这个问题，换与不换的答案自然会浮现。`
+      },
+      {
+        q: "今天我需要做一个重要的汇报，请帮我看看今天的能量。",
+        type: "单卦",
+        hexagram1: { lines: "━━━ ━━━ ━ ━ ━━━ ━ ━", name: "第五十七卦 · 巽卦", sub: "巽上巽下，风行无阻", changing: "无变爻" },
+        reading: `王师父点点头，说：\n\n巽卦是风的卦象，风无形却无处不在，渗透力极强。这是一个善于渗透、感化、影响的能量——不是靠强力压制，而是靠持续、温和、有条理的输出。\n\n今天做汇报，巽卦的能量对你非常有利。它告诉你：不必大声，不必咄咄逼人。你只需要把你想传递的东西，像风一样，清晰而自然地吹进去。\n\n巽卦也提醒：风要有方向。所以汇报前，先想清楚你最想让听众带走的一个核心信息是什么。其他的都是支撑，这一个才是风的方向。\n\n王师父说：今天是你的好日子，去做吧。`
+      },
+      {
+        q: "我有两个选择：留在现在的公司，或者接受一个创业邀请。",
+        type: "对比卦",
+        hexagram1: { lines: "━━━ ━━━ ━━━ ━━━ ━ ━ ━━━", name: "第十一卦 · 泰卦（留守）", sub: "坤上乾下，天地交泰，和顺亨通" },
+        hexagram2: { lines: "━ ━ ━ ━ ━━━ ━━━ ━ ━", name: "第二十九卦 · 坎卦（创业）", sub: "坎上坎下，险中有险，需要坚守" },
+        reading: `王师父看了两卦，沉默了片刻。\n\n留守的卦是泰卦。泰者，通也。这是一个很好的卦——天地交泰，说明你现在的环境里有足够的资源、稳定感和发展空间。留下来，近期的路是顺的。泰卦提醒：不要因为"感觉平静就没有进步"而轻易离开一个其实很健康的环境。\n\n创业的卦是坎卦，坎为水，为险。这是一个重复出现的险境卦象——不是说不能走，而是说这条路确实充满了未知的坑。坎卦的智慧是：如果你已经做好了心理准备面对险境，并且有清晰的内心信念支撑你，险境是可以穿越的。但如果你只是因为厌倦了平静而想要刺激，坎卦会让你付出沉重的代价。\n\n王师父直接说：两条路都可以走，但问自己一个问题——你对"失败"的承受能力准备好了多少？泰卦的环境，你失去的代价很低；坎卦的路，你失去的代价可能很高。答案在你这里，不在卦里。`
+      },
+      {
+        q: "我和伴侣最近关系有些紧张，不知道该怎么处理。",
+        type: "变卦",
+        hexagram1: { lines: "━ ━ ━━━ ━━━ ━ ━ ━━━", name: "第三十八卦 · 睽卦", sub: "离上兑下，两心相违，目标相悖", changing: "第四爻为变爻（老阴变阳）" },
+        hexagram2: { lines: "━ ━ ━━━ ━━━ ━━━ ━━━", name: "第四十九卦 · 革卦", sub: "兑上离下，革故鼎新，改变既成" },
+        reading: `王师父认真看了你的卦。\n\n睽卦说的是"两心相违"——不是仇视，而是方向感不一致，目标和期待之间有一道裂缝。这个裂缝不是新出现的，它可能已经存在了一段时间，只是最近开始让你们都感到不舒服。\n\n第四爻的变爻说的是：在分离和对立中，能找到一个志同道合的人。这个人是你的伴侣——卦在提醒你，你们之间的根本联结还在，只是当下的模式出了问题。\n\n变到革卦，革是"改变、革新"。这说明这段关系需要一个真实的改变，不是表面上的和好，而是真正谈清楚一件一直没谈清楚的事。\n\n王师父说：紧张的根源，往往是双方都在等对方先开口。革卦给你的任务是：你先开口。不是抱怨，不是指责，而是说：我想好好谈一件事。革不是破坏，是更新。`
+      },
+      {
+        q: "我想开始一个新项目，请问时机如何？",
+        type: "单卦",
+        hexagram1: { lines: "━━━ ━ ━ ━━━ ━━━ ━━━", name: "第三卦 · 屯卦", sub: "坎上震下，万物草创，艰难起步", changing: "无变爻" },
+        reading: `王师父看到屯卦，微微一笑。\n\n屯卦是《易经》第三卦，紧接在乾坤两卦之后，是万物刚刚开始生长的状态。草木破土而出，艰难，但充满生命力。这个卦告诉你：时机是对的，但路不会一开始就平坦。\n\n屯卦的卦辞说：元亨利贞，勿用有攸往，利建侯。翻译成日常语言：有大的可能性，但不要一开始就四面出击，先稳住根基，找到你的核心支柱。\n\n这个项目的开始，最重要的不是跑得快，而是先把核心的一件事做稳——核心用户是谁、核心价值是什么、最小可行版本是什么。屯卦的坚韧在于：哪怕现在很艰难，只要方向对，就继续。\n\n王师父说：可以开始，但请你先写下这个项目最核心的一句话是什么。如果你能写出来，就动手。`
+      }
+    ];
+
+    function showReading(idx) {
+      const r = readings[idx];
+      document.querySelectorAll('.q-btn').forEach((b, i) => b.classList.toggle('active', i === idx));
+      const body = document.getElementById('chatBody');
+      body.innerHTML = '';
+
+      const userMsg = document.createElement('div');
+      userMsg.className = 'message user';
+      userMsg.innerHTML = `<div class="msg-avatar user">🧑</div><div class="msg-bubble user">${r.q}</div>`;
+      body.appendChild(userMsg);
+
+      const typing = document.createElement('div');
+      typing.className = 'message';
+      typing.innerHTML = `<div class="msg-avatar ai">☯</div><div class="typing show"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>`;
+      body.appendChild(typing);
+
+      setTimeout(() => {
+        body.removeChild(typing);
+
+        let hexHTML = `<div class="section-label">起卦类型：${r.type}</div>
+          <div class="hexagram-block">
+            <div class="hex-lines">${r.hexagram1.lines}</div>
+            <div class="hex-name">${r.hexagram1.name}</div>
+            <div class="hex-number">${r.hexagram1.sub}</div>
+            ${r.hexagram1.changing ? `<div class="hex-changing" style="font-size:0.78rem;margin-top:4px">⚡ ${r.hexagram1.changing}</div>` : ''}
+          </div>`;
+
+        if (r.hexagram2) {
+          hexHTML += `<div class="section-label">→ 变至</div>
+            <div class="hexagram-block">
+              <div class="hex-lines">${r.hexagram2.lines}</div>
+              <div class="hex-name">${r.hexagram2.name}</div>
+              <div class="hex-number">${r.hexagram2.sub}</div>
+            </div>`;
+        }
+
+        const aiMsg = document.createElement('div');
+        aiMsg.className = 'message';
+        aiMsg.innerHTML = `
+          <div class="msg-avatar ai">☯</div>
+          <div class="msg-bubble ai">
+            ${hexHTML}
+            <div class="section-label" style="margin-top:14px">王师父的解读</div>
+            ${r.reading.split('\n\n').map(p => `<p style="margin-bottom:10px">${p}</p>`).join('')}
+          </div>`;
+        body.appendChild(aiMsg);
+        body.scrollTop = body.scrollHeight;
+      }, 1600);
+      body.scrollTop = body.scrollHeight;
+    }
+  </script>
+</body>
+</html>

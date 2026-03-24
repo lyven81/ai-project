@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wiseman 智者 — Live Demo</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Arial', sans-serif;
+      background: #070d1f;
+      color: #c8daf0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .demo-banner {
+      background: linear-gradient(135deg, #0a1628, #1e3a6e);
+      padding: 8px 16px;
+      text-align: center;
+      font-size: 0.8rem;
+      color: #c8daf0;
+      border-bottom: 1px solid #1e3a6e;
+    }
+    .demo-banner a { color: #7fb3f5; text-decoration: none; }
+    .demo-banner a:hover { text-decoration: underline; }
+    .layout { display: flex; flex: 1; overflow: hidden; }
+    .sidebar {
+      width: 260px; background: #050c1c;
+      border-right: 1px solid #0e2040;
+      padding: 20px 16px;
+      display: flex; flex-direction: column;
+      overflow-y: auto; flex-shrink: 0;
+    }
+    .sidebar-title { font-size: 1.1rem; font-weight: 700; color: #7fb3f5; margin-bottom: 4px; }
+    .sidebar-sub { font-size: 0.75rem; color: #4a7aad; margin-bottom: 16px; }
+    .q-label { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; color: #1e60b3; margin-bottom: 8px; }
+    .q-btn {
+      display: block; background: #0a1628; border: 1px solid #0e2040;
+      border-radius: 6px; padding: 9px 12px; margin-bottom: 8px;
+      font-size: 0.82rem; color: #a8c8f0; cursor: pointer;
+      text-align: left; transition: all 0.2s; width: 100%;
+    }
+    .q-btn:hover, .q-btn.active { background: #0e2040; border-color: #1e60b3; color: #e0f0ff; }
+    .panel-badge { display: inline-block; font-size: 0.65rem; background: #0e2040; color: #7fb3f5; border-radius: 10px; padding: 1px 7px; margin-bottom: 4px; }
+    .back-link { margin-top: auto; padding-top: 16px; border-top: 1px solid #0e2040; font-size: 0.8rem; }
+    .back-link a { color: #1e60b3; text-decoration: none; }
+    .back-link a:hover { text-decoration: underline; }
+    .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+    .chat-header {
+      padding: 16px 24px; border-bottom: 1px solid #0e2040;
+      background: #050c1c; display: flex; align-items: center; gap: 12px;
+    }
+    .chat-header-icon { font-size: 1.8rem; }
+    .chat-header-text h2 { font-size: 1rem; color: #7fb3f5; }
+    .chat-header-text p { font-size: 0.75rem; color: #4a7aad; }
+    .chat-body { flex: 1; padding: 24px; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; }
+    .welcome-msg {
+      background: linear-gradient(135deg, #0a1628, #0e2040);
+      border: 1px solid #1e3a6e; border-radius: 10px; padding: 20px; text-align: center;
+    }
+    .welcome-msg h3 { color: #7fb3f5; font-size: 1.1rem; margin-bottom: 8px; }
+    .welcome-msg p { font-size: 0.85rem; color: #6a9fd0; line-height: 1.6; }
+    .message { display: flex; gap: 12px; max-width: 860px; }
+    .message.user { flex-direction: row-reverse; align-self: flex-end; }
+    .msg-avatar {
+      width: 34px; height: 34px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; flex-shrink: 0;
+    }
+    .msg-avatar.ai { background: linear-gradient(135deg, #0e2040, #1e40af); }
+    .msg-avatar.user { background: #0e2040; }
+    .msg-bubble {
+      border-radius: 10px; padding: 14px 16px;
+      font-size: 0.88rem; line-height: 1.7; max-width: 700px;
+    }
+    .msg-bubble.ai { background: #0a1628; border: 1px solid #0e2040; color: #c8daf0; }
+    .msg-bubble.user { background: #0e2040; border: 1px solid #1e3a6e; color: #e0f0ff; }
+    .panel-block {
+      background: #070d1f; border: 1px solid #1e3a6e;
+      border-radius: 8px; padding: 14px 16px; margin: 10px 0;
+    }
+    .panel-title { color: #7fb3f5; font-weight: 700; font-size: 0.9rem; margin-bottom: 8px; }
+    .panel-universal { color: #4a7aad; font-size: 0.8rem; font-style: italic; margin-bottom: 6px; }
+    .panel-personal { color: #c8daf0; font-size: 0.85rem; border-left: 2px solid #cba135; padding-left: 10px; margin-top: 6px; }
+    .section-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #1e60b3; margin: 10px 0 4px; }
+    .typing { display: none; }
+    .typing.show { display: flex; gap: 4px; align-items: center; padding: 10px 0; }
+    .dot { width: 7px; height: 7px; border-radius: 50%; background: #1e60b3; animation: bounce 1.2s infinite; }
+    .dot:nth-child(2) { animation-delay: 0.2s; }
+    .dot:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes bounce { 0%,80%,100% { transform: translateY(0); } 40% { transform: translateY(-6px); } }
+    @media (max-width: 700px) { .sidebar { width: 220px; } .chat-body { padding: 16px; } }
+  </style>
+</head>
+<body>
+  <div class="demo-banner">
+    🌌 演示模式 — 预设示例 | <a href="../../wiseman.html">查看项目详情</a>
+  </div>
+  <div class="layout">
+    <div class="sidebar">
+      <div class="sidebar-title">🌌 Wiseman · 智者</div>
+      <div class="sidebar-sub">点击问题查看示例解读</div>
+      <div class="q-label">示例解读</div>
+
+      <div class="panel-badge">五面板综合</div>
+      <button class="q-btn" onclick="showReading(0)">今天适合做重大决定吗？</button>
+
+      <div class="panel-badge">个人解读</div>
+      <button class="q-btn" onclick="showReading(1)">我最近感情运势怎么样？</button>
+
+      <div class="panel-badge">八字命理</div>
+      <button class="q-btn" onclick="showReading(2)">今天的八字对我来说有什么特别的含义？</button>
+
+      <div class="panel-badge">行星天象</div>
+      <button class="q-btn" onclick="showReading(3)">现在的行星位置对工作有什么影响？</button>
+
+      <div class="panel-badge">生肖运势</div>
+      <button class="q-btn" onclick="showReading(4)">我的生肖今天运势如何？</button>
+
+      <div class="back-link">
+        <a href="../../index.html">← 返回作品集</a>
+      </div>
+    </div>
+
+    <div class="main">
+      <div class="chat-header">
+        <div class="chat-header-icon">🌌</div>
+        <div class="chat-header-text">
+          <h2>Wiseman · 智者</h2>
+          <p>每日宇宙综合解读 · 中文 · 八字 星座 行星 生肖</p>
+        </div>
+      </div>
+      <div class="chat-body" id="chatBody">
+        <div class="welcome-msg">
+          <h3>欢迎使用智者</h3>
+          <p>从左侧选择一个问题，查看综合每日解读示例。<br>每个解读结合八字、星座、行星天象和生肖四大体系，用简单日常的中文呈现。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const readings = [
+      {
+        q: "今天适合做重大决定吗？",
+        panels: [
+          {
+            title: "✦ 今日综合解读",
+            universal: "天象宏观：今日月亮进入天蝎座，强调深层直觉与情绪洞察。水星与土星形成调和相位，思维清晰但步调偏慢。",
+            personal: "个人解读：今天是思考、整理、深化认知的好日子，但不是仓促行动的时机。如果你正面临一个重大决定，今天适合把所有考量写下来——不是做决定，而是把脑子里散乱的东西整理清楚。月亮在天蝎给你更强的直觉感知：有没有什么一直被理性压住的感受？今天可以让它浮出来看一看。"
+          },
+          {
+            title: "🀄 八字命理",
+            universal: "天象宏观：今日天干为甲木，地支丑土。甲木克土，主克制、突破；丑中藏癸水，暗流情绪在土的压制下积蓄。",
+            personal: "个人解读：甲木之日，你的行动力和开创欲望会比平时强，但丑土提醒你，地基还需要稳固。重大决定最好先问自己：基础准备好了吗？如果答案是是，那今天的木性能量支持你迈出第一步。"
+          }
+        ]
+      },
+      {
+        q: "我最近感情运势怎么样？",
+        panels: [
+          {
+            title: "♌ 星座运势",
+            universal: "天象宏观：金星目前行经双鱼座，强调浪漫、理想化与情感的细腻感知。本周金星与海王星形成合相，梦想与现实之间的边界变得模糊。",
+            personal: "个人解读：感情方面，你最近可能对关系有更深的感知和渴望——这是好事，也是需要注意的事。金星在双鱼的影响会让你更容易理想化眼前的人，把对方投射成你希望他们成为的样子，而不是他们本来的样子。建议：这段时间不急着做任何判断，允许关系自然展开，但保持清醒的眼睛。"
+          },
+          {
+            title: "🐓 生肖运势",
+            universal: "天象宏观：今日地支丑土，鸡与丑的关系为六合，主和谐、顺遂。",
+            personal: "个人解读：对你来说，今天的人际与感情能量偏向融合与协调。如果有想说但一直没说的话，今天是开口的好时机——丑鸡六合给这段对话提供了顺畅的底气。不必等到完美的时机，今天就是相对好的时机。"
+          }
+        ]
+      },
+      {
+        q: "今天的八字对我来说有什么特别的含义？",
+        panels: [
+          {
+            title: "🀄 八字命理",
+            universal: "天象宏观：年柱乙巳，月柱丁卯，日柱甲辰，时柱癸未。今日地支辰土，天干甲木克土，天地之间存在克制与突破的张力。",
+            personal: "个人解读：甲辰日，龙在中国文化里代表变化与机遇，辰土强调落地和执行。你的八字中今天有一种"想法已经成熟，等待落地"的能量。如果你有一个计划已经在脑子里盘旋很久了，甲辰日适合把它从想法变成哪怕一个具体的行动。不需要全部落地，迈出第一步就好。"
+          },
+          {
+            title: "✦ 今日综合解读",
+            universal: "天象宏观：四大系统今日共同指向：执行力与清晰度都在线，但节奏上偏慢而扎实，不宜急于求成。",
+            personal: "个人解读：综合来看，今天是一个适合把模糊变清晰的日子——无论是计划、想法还是一段关系。不是最好的冲刺日，但是一个很好的整合日。把散落的东西收拾好，为下一步行动做准备。"
+          }
+        ]
+      },
+      {
+        q: "现在的行星位置对工作有什么影响？",
+        panels: [
+          {
+            title: "🪐 行星天象",
+            universal: "天象宏观：水星顺行于金牛座，土星在双鱼座，木星刚刚进入双子座。水星金牛强调稳健、实际、一步一个脚印；木星双子带来多线并进的机会与信息流动的加速。",
+            personal: "个人解读：工作上，现在的行星配置说的是：信息和机会在流动（木星双子），但你的执行节奏需要保持稳健（水星金牛）。如果你最近感到信息过载或任务太多，这不是意外——这是当下宇宙能量的写照。建议：每天早上选出今天最重要的一件事，先把它做完。木星给你灵感，水星金牛帮你着陆。"
+          },
+          {
+            title: "♌ 星座运势",
+            universal: "天象宏观：太阳目前在金牛座，强调物质基础、资源积累和身体感知。",
+            personal: "个人解读：职业方面，太阳金牛提醒你关注自己真正的资源在哪里——技能、人脉、时间、精力。现在不是最好的跳跃时机，而是评估和强化基础的时机。问自己：我现在最稳固的竞争优势是什么？把资源集中在那里。"
+          }
+        ]
+      },
+      {
+        q: "我的生肖今天运势如何？",
+        panels: [
+          {
+            title: "🐓 生肖运势",
+            universal: "天象宏观：今日地支丑土，鸡（酉金）与丑土有相生关系（土生金），整体能量对鸡友好；丑中藏辛金，与酉金同类，有内在共鸣。",
+            personal: "个人解读：今天对你来说是一个能量相对顺畅的日子。土生金，丑土在供给你所需的养分。这不是运势最旺盛的类型，但稳定感很强——适合做需要耐心和持续投入的事，而不是需要爆发力的事。如果有什么拖延已久的整理或系统性工作，今天动手效率会不错。"
+          },
+          {
+            title: "✦ 今日综合解读",
+            universal: "天象宏观：整体能量偏向稳定、积累与深思，不是爆发型的日子，但扎实感强。",
+            personal: "个人解读：作为鸡的你，今天最大的优势是清醒的判断力和条理性。用好这两点：理清一件你一直在回避的事，或者和一个重要的人说一句一直没说出口的话。稳中有进，这是今天最好的姿态。"
+          }
+        ]
+      }
+    ];
+
+    function showReading(idx) {
+      const r = readings[idx];
+      document.querySelectorAll('.q-btn').forEach((b, i) => b.classList.toggle('active', i === idx));
+      const body = document.getElementById('chatBody');
+      body.innerHTML = '';
+
+      const userMsg = document.createElement('div');
+      userMsg.className = 'message user';
+      userMsg.innerHTML = `<div class="msg-avatar user">🧑</div><div class="msg-bubble user">${r.q}</div>`;
+      body.appendChild(userMsg);
+
+      const typing = document.createElement('div');
+      typing.className = 'message';
+      typing.innerHTML = `<div class="msg-avatar ai">🌌</div><div class="typing show"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>`;
+      body.appendChild(typing);
+
+      setTimeout(() => {
+        body.removeChild(typing);
+        const panelHTML = r.panels.map(p => `
+          <div class="panel-block">
+            <div class="panel-title">${p.title}</div>
+            <div class="panel-universal">${p.universal}</div>
+            <div class="panel-personal">${p.personal}</div>
+          </div>`).join('');
+
+        const aiMsg = document.createElement('div');
+        aiMsg.className = 'message';
+        aiMsg.innerHTML = `<div class="msg-avatar ai">🌌</div><div class="msg-bubble ai">${panelHTML}</div>`;
+        body.appendChild(aiMsg);
+        body.scrollTop = body.scrollHeight;
+      }, 1400);
+      body.scrollTop = body.scrollHeight;
+    }
+  </script>
+</body>
+</html>
