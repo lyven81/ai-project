@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Business Intelligence Agent</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+      background: #f0f2f5;
+      color: #1a1a2e;
+      min-height: 100vh;
+    }
+
+    /* API Key Bar */
+    #apiBar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      background: #7C3AED;
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.85rem;
+      z-index: 100;
+    }
+    #apiBar label { white-space: nowrap; font-weight: 500; }
+    #apiKeyInput {
+      flex: 1;
+      max-width: 320px;
+      padding: 6px 10px;
+      border-radius: 6px;
+      border: none;
+      font-size: 0.85rem;
+      background: rgba(255,255,255,0.15);
+      color: white;
+    }
+    #apiKeyInput::placeholder { color: rgba(255,255,255,0.6); }
+    #apiKeyInput:focus { outline: none; background: rgba(255,255,255,0.25); }
+    #saveKeyBtn {
+      padding: 6px 14px;
+      background: white;
+      color: #7C3AED;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    #saveKeyBtn:hover { background: #ede9fe; }
+    .key-status { font-size: 0.8rem; opacity: 0.85; }
+
+    /* Back link */
+    #backLink {
+      position: fixed;
+      top: 52px;
+      left: 16px;
+      font-size: 0.82rem;
+      color: #7C3AED;
+      text-decoration: none;
+      z-index: 99;
+      background: white;
+      padding: 4px 10px;
+      border-radius: 20px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+    #backLink:hover { text-decoration: underline; }
+
+    /* Main container */
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 100px 20px 40px;
+    }
+
+    /* Cards */
+    .card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+
+    /* Header card */
+    .header-card {
+      text-align: center;
+      padding: 32px 20px;
+      background: linear-gradient(135deg, #7C3AED 0%, #9333ea 100%);
+      color: white;
+    }
+    .header-card h1 { font-size: 1.6rem; font-weight: 700; margin-bottom: 8px; }
+    .header-card p { font-size: 0.95rem; opacity: 0.88; }
+
+    /* Upload section */
+    .upload-zone {
+      border: 2px dashed #c4b5fd;
+      border-radius: 10px;
+      padding: 36px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: #faf5ff;
+    }
+    .upload-zone:hover, .upload-zone.dragover { border-color: #7C3AED; background: #ede9fe; }
+    .upload-zone .upload-icon { font-size: 2.2rem; margin-bottom: 8px; }
+    .upload-zone p { color: #555; font-size: 0.9rem; }
+    .upload-zone span { color: #7C3AED; font-weight: 600; cursor: pointer; }
+    #fileInput { display: none; }
+
+    /* Dataset Intelligence card */
+    .intel-card {
+      background: #faf5ff;
+      border: 1px solid #e9d5ff;
+      border-radius: 10px;
+      padding: 16px;
+      margin-top: 14px;
+    }
+    .intel-stats {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 14px;
+    }
+    .intel-stat {
+      text-align: center;
+    }
+    .intel-stat .num { font-size: 1.6rem; font-weight: 700; color: #7C3AED; }
+    .intel-stat .lbl { font-size: 0.75rem; color: #6b7280; text-transform: uppercase; letter-spacing: 0.04em; }
+    .col-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+    .col-tag {
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 500;
+    }
+    .col-tag.number { background: #dbeafe; color: #1d4ed8; }
+    .col-tag.date { background: #dcfce7; color: #15803d; }
+    .col-tag.text { background: #f3f4f6; color: #374151; }
+    .intel-ready {
+      font-size: 0.85rem;
+      color: #7C3AED;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Chat section */
+    #chatSection { display: none; }
+    .chat-history {
+      min-height: 200px;
+      max-height: 500px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 4px 0 12px;
+    }
+
+    /* Messages */
+    .msg-user {
+      background: #f0f4ff;
+      border-radius: 12px 12px 2px 12px;
+      padding: 12px 16px;
+      margin-bottom: 4px;
+      align-self: flex-end;
+      max-width: 75%;
+      font-size: 0.9rem;
+      color: #1e3a5f;
+    }
+    .msg-assistant {
+      background: white;
+      border: 1px solid #e9ecef;
+      border-radius: 12px 12px 12px 2px;
+      padding: 12px 16px;
+      margin-bottom: 4px;
+      align-self: flex-start;
+      max-width: 85%;
+      font-size: 0.9rem;
+      color: #1a1a2e;
+    }
+    .msg-answer { margin-bottom: 8px; line-height: 1.6; }
+    .msg-insight {
+      font-size: 0.82rem;
+      color: #64748b;
+      border-top: 1px solid #f1f5f9;
+      padding-top: 8px;
+      margin-top: 4px;
+      line-height: 1.5;
+    }
+    .msg-insight strong { color: #7C3AED; }
+
+    /* Action item box */
+    .action-item {
+      background: #fef3c7;
+      border-left: 4px solid #f59e0b;
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      margin-top: 10px;
+      line-height: 1.5;
+      color: #78350f;
+    }
+    .action-item strong { color: #b45309; }
+
+    /* Error message */
+    .msg-error {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 12px 12px 12px 2px;
+      padding: 12px 16px;
+      align-self: flex-start;
+      max-width: 85%;
+      font-size: 0.88rem;
+      color: #b91c1c;
+    }
+
+    /* Typing indicator */
+    .typing-indicator {
+      display: flex;
+      gap: 4px;
+      padding: 14px 18px;
+      background: white;
+      border: 1px solid #e9ecef;
+      border-radius: 12px 12px 12px 2px;
+      align-self: flex-start;
+      width: fit-content;
+    }
+    .typing-indicator span {
+      width: 7px; height: 7px;
+      background: #94a3b8;
+      border-radius: 50%;
+      animation: bounce 1.2s infinite;
+    }
+    .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+    .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes bounce {
+      0%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-6px); }
+    }
+
+    /* Chart container */
+    .chart-container {
+      position: relative;
+      margin-top: 14px;
+      max-height: 260px;
+    }
+    .chart-container canvas { max-height: 260px; }
+
+    /* Input row */
+    .input-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 14px;
+      align-items: flex-end;
+    }
+    #queryInput {
+      flex: 1;
+      padding: 10px 14px;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-family: inherit;
+      resize: none;
+      min-height: 44px;
+      max-height: 120px;
+      line-height: 1.5;
+    }
+    #queryInput:focus { outline: none; border-color: #7C3AED; box-shadow: 0 0 0 3px rgba(124,58,237,0.1); }
+    #sendBtn {
+      padding: 10px 22px;
+      background: #7C3AED;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      height: 44px;
+    }
+    #sendBtn:hover { background: #9333ea; }
+    #sendBtn:disabled { background: #94a3b8; cursor: not-allowed; }
+
+    /* Analysis type chips */
+    #analysisChips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .chip {
+      padding: 6px 14px;
+      background: #faf5ff;
+      border: 1px solid #ddd6fe;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      color: #7C3AED;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .chip:hover { background: #ede9fe; border-color: #7C3AED; }
+
+    /* Section label */
+    .section-label {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 10px;
+    }
+
+    /* Placeholder cycling */
+    #queryInput::placeholder { color: #94a3b8; }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 24px;
+      color: #888;
+      font-size: 0.82rem;
+    }
+  </style>
+</head>
+<body>
+
+<!-- API Key Bar -->
+<div id="apiBar">
+  <label for="apiKeyInput">Gemini API Key:</label>
+  <input type="password" id="apiKeyInput" placeholder="Paste your API key here…">
+  <button id="saveKeyBtn" onclick="saveApiKey()">Save</button>
+  <span class="key-status" id="keyStatus"></span>
+</div>
+
+<!-- Back link -->
+<a href="../index.html" id="backLink">← Back</a>
+
+<div class="container">
+
+  <!-- Header -->
+  <div class="card header-card">
+    <h1>Business Intelligence Agent</h1>
+    <p>AI analytics for any dataset — discounts, returns, customer LTV, logistics</p>
+  </div>
+
+  <!-- Upload section -->
+  <div class="card" id="uploadCard">
+    <div class="section-label">Dataset</div>
+    <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
+      <div class="upload-icon">🧠</div>
+      <p>Drop your CSV file here or <span>browse to upload</span></p>
+      <p style="margin-top:6px; font-size:0.78rem; color:#94a3b8;">Any business dataset — sales, customers, logistics, returns</p>
+    </div>
+    <input type="file" id="fileInput" accept=".csv">
+    <div id="schemaDisplay" style="display:none; margin-top:14px;"></div>
+  </div>
+
+  <!-- Chat section -->
+  <div class="card" id="chatSection">
+    <div class="section-label">Intelligence Chat</div>
+    <div class="chat-history" id="chatHistory"></div>
+    <div class="input-row">
+      <textarea id="queryInput" placeholder="What is the impact of discounts on profit margin?" rows="1"></textarea>
+      <button id="sendBtn" onclick="sendMessage()">Analyse</button>
+    </div>
+    <div id="analysisChips">
+      <div class="chip" onclick="fillChip(this)">Discount impact analysis</div>
+      <div class="chip" onclick="fillChip(this)">Customer lifetime value</div>
+      <div class="chip" onclick="fillChip(this)">Product performance</div>
+      <div class="chip" onclick="fillChip(this)">Returns &amp; refunds analysis</div>
+      <div class="chip" onclick="fillChip(this)">Logistics &amp; delivery trends</div>
+    </div>
+  </div>
+
+  <footer>© 2025 Lee Yih Ven | AI Project Portfolio</footer>
+</div>
+
+<script>
+  // ─── Globals ───────────────────────────────────────────────
+  let parsedData = [];
+  let detectedSchema = {};
+  let chartCount = 0;
+  let firstMessageSent = false;
+
+  // Placeholder cycling
+  const placeholders = [
+    'What is the impact of discounts on profit margin?',
+    'Who are the top 10 customers by lifetime value?',
+    'Which product categories have the highest return rates?'
+  ];
+  let placeholderIdx = 0;
+  let placeholderInterval;
+
+  function startPlaceholderCycle() {
+    placeholderInterval = setInterval(() => {
+      placeholderIdx = (placeholderIdx + 1) % placeholders.length;
+      document.getElementById('queryInput').placeholder = placeholders[placeholderIdx];
+    }, 3000);
+  }
+
+  // ─── API Key ───────────────────────────────────────────────
+  function getKey() { return sessionStorage.getItem('gemini_key') || ''; }
+  function saveKey(k) { sessionStorage.setItem('gemini_key', k); }
+
+  function saveApiKey() {
+    const k = document.getElementById('apiKeyInput').value.trim();
+    if (!k) return;
+    saveKey(k);
+    document.getElementById('keyStatus').textContent = '✓ Key saved';
+    setTimeout(() => document.getElementById('keyStatus').textContent = '', 2000);
+  }
+
+  window.onload = () => {
+    const k = getKey();
+    if (k) {
+      document.getElementById('apiKeyInput').value = k;
+      document.getElementById('keyStatus').textContent = '✓ Key loaded';
+    }
+    startPlaceholderCycle();
+  };
+
+  // ─── Gemini API ────────────────────────────────────────────
+  async function callGemini(prompt, apiKey) {
+    const res = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: { temperature: 0.4, maxOutputTokens: 8192 }
+        })
+      }
+    );
+    const data = await res.json();
+    if (data.error) throw new Error(data.error.message);
+    return data.candidates[0].content.parts[0].text;
+  }
+
+  function extractJSON(text) {
+    const m = text.match(/```json\n?([\s\S]*?)\n?```/) || text.match(/(\{[\s\S]*\}|\[[\s\S]*\])/s);
+    if (!m) throw new Error('No JSON in response');
+    return JSON.parse(m[1] || m[0]);
+  }
+
+  // ─── Schema & Summary ──────────────────────────────────────
+  function detectSchema(data) {
+    if (!data.length) return {};
+    const cols = Object.keys(data[0]);
+    const schema = {};
+    cols.forEach(col => {
+      const vals = data.slice(0, 20).map(r => r[col]).filter(Boolean);
+      const numVals = vals.filter(v => !isNaN(parseFloat(v)));
+      const dateVals = vals.filter(v => !isNaN(Date.parse(v)));
+      if (numVals.length > vals.length * 0.7) schema[col] = 'number';
+      else if (dateVals.length > vals.length * 0.7) schema[col] = 'date';
+      else schema[col] = 'text';
+    });
+    return schema;
+  }
+
+  function buildDataSummary(data, schema) {
+    const cols = Object.keys(schema);
+    const summary = { row_count: data.length, columns: {} };
+    cols.forEach(col => {
+      const vals = data.map(r => r[col]).filter(v => v !== null && v !== '');
+      if (schema[col] === 'number') {
+        const nums = vals.map(Number).filter(n => !isNaN(n));
+        summary.columns[col] = { type: 'number', min: Math.min(...nums), max: Math.max(...nums), mean: (nums.reduce((a,b)=>a+b,0)/nums.length).toFixed(2) };
+      } else if (schema[col] === 'date') {
+        const dates = vals.map(v => new Date(v)).filter(d => !isNaN(d));
+        summary.columns[col] = { type: 'date', earliest: new Date(Math.min(...dates)).toISOString().split('T')[0], latest: new Date(Math.max(...dates)).toISOString().split('T')[0] };
+      } else {
+        const unique = [...new Set(vals)];
+        summary.columns[col] = { type: 'text', unique_count: unique.length, sample_values: unique.slice(0, 5) };
+      }
+    });
+    return summary;
+  }
+
+  function getSampleRows(data, n=20) {
+    return JSON.stringify(data.slice(0, n));
+  }
+
+  // ─── CSV Upload ────────────────────────────────────────────
+  const uploadZone = document.getElementById('uploadZone');
+  const fileInput = document.getElementById('fileInput');
+
+  uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.classList.add('dragover'); });
+  uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('dragover'));
+  uploadZone.addEventListener('drop', e => {
+    e.preventDefault();
+    uploadZone.classList.remove('dragover');
+    const file = e.dataTransfer.files[0];
+    if (file && file.name.endsWith('.csv')) parseFile(file);
+  });
+  fileInput.addEventListener('change', e => {
+    if (e.target.files[0]) parseFile(e.target.files[0]);
+  });
+
+  function parseFile(file) {
+    Papa.parse(file, {
+      header: true,
+      skipEmptyLines: true,
+      dynamicTyping: true,
+      complete: result => {
+        parsedData = result.data;
+        detectedSchema = detectSchema(parsedData);
+        showIntelligenceCard(file.name, parsedData.length);
+        document.getElementById('chatSection').style.display = 'block';
+        document.getElementById('chatSection').scrollIntoView({ behavior: 'smooth' });
+      },
+      error: err => alert('Error parsing CSV: ' + err.message)
+    });
+  }
+
+  function showIntelligenceCard(filename, rowCount) {
+    const sd = document.getElementById('schemaDisplay');
+    sd.style.display = 'block';
+    document.getElementById('uploadZone').style.display = 'none';
+
+    const colCount = Object.keys(detectedSchema).length;
+    const numCols = Object.values(detectedSchema).filter(t => t === 'number').length;
+    const dateCols = Object.values(detectedSchema).filter(t => t === 'date').length;
+    const textCols = Object.values(detectedSchema).filter(t => t === 'text').length;
+
+    let tags = '';
+    Object.entries(detectedSchema).forEach(([col, type]) => {
+      tags += `<span class="col-tag ${type}">${col}</span>`;
+    });
+
+    sd.innerHTML = `
+      <div class="intel-card">
+        <div class="intel-stats">
+          <div class="intel-stat">
+            <div class="num">${rowCount.toLocaleString()}</div>
+            <div class="lbl">Rows</div>
+          </div>
+          <div class="intel-stat">
+            <div class="num">${colCount}</div>
+            <div class="lbl">Columns</div>
+          </div>
+          <div class="intel-stat">
+            <div class="num">${numCols}</div>
+            <div class="lbl">Numeric</div>
+          </div>
+          <div class="intel-stat">
+            <div class="num">${dateCols}</div>
+            <div class="lbl">Date</div>
+          </div>
+          <div class="intel-stat">
+            <div class="num">${textCols}</div>
+            <div class="lbl">Text</div>
+          </div>
+        </div>
+        <div class="col-tags">${tags}</div>
+        <div class="intel-ready">✓ Dataset ready. Ask any business question below.</div>
+      </div>`;
+  }
+
+  // ─── Chat ──────────────────────────────────────────────────
+  function fillChip(el) {
+    clearInterval(placeholderInterval);
+    const txt = el.textContent.replace(/&amp;/g, '&');
+    document.getElementById('queryInput').placeholder = txt;
+    document.getElementById('queryInput').value = txt;
+    document.getElementById('queryInput').focus();
+  }
+
+  document.getElementById('queryInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+
+  function appendMessage(html, type) {
+    const chat = document.getElementById('chatHistory');
+    const div = document.createElement('div');
+    div.className = type === 'user' ? 'msg-user' : type === 'error' ? 'msg-error' : 'msg-assistant';
+    div.innerHTML = html;
+    chat.appendChild(div);
+    chat.scrollTop = chat.scrollHeight;
+    return div;
+  }
+
+  function showTyping() {
+    const chat = document.getElementById('chatHistory');
+    const div = document.createElement('div');
+    div.className = 'typing-indicator';
+    div.id = 'typingIndicator';
+    div.innerHTML = '<span></span><span></span><span></span>';
+    chat.appendChild(div);
+    chat.scrollTop = chat.scrollHeight;
+  }
+
+  function removeTyping() {
+    const el = document.getElementById('typingIndicator');
+    if (el) el.remove();
+  }
+
+  async function sendMessage() {
+    const input = document.getElementById('queryInput');
+    const question = input.value.trim();
+    if (!question || !parsedData.length) return;
+
+    const apiKey = getKey();
+    if (!apiKey) { alert('Please enter and save your Gemini API key first.'); return; }
+
+    if (!firstMessageSent) {
+      document.getElementById('analysisChips').style.display = 'none';
+      clearInterval(placeholderInterval);
+      firstMessageSent = true;
+    }
+
+    input.value = '';
+    input.style.height = 'auto';
+    document.getElementById('sendBtn').disabled = true;
+    appendMessage(question, 'user');
+    showTyping();
+
+    const summary = buildDataSummary(parsedData, detectedSchema);
+    const sampleRows = getSampleRows(parsedData);
+
+    const prompt = `You are a business intelligence analyst. The user has uploaded a dataset with the following schema:
+${JSON.stringify(summary, null, 2)}
+
+Sample data (first 20 rows):
+${sampleRows}
+
+User question: "${question}"
+
+Analyse the data and answer the question. Be specific with numbers where possible.
+Focus on business intelligence insights. Highlight anomalies, patterns, and actionable findings.
+
+Return ONLY valid JSON:
+{
+  "answer": "string (clear, direct answer in 2-4 sentences with specific numbers)",
+  "insight": "string (1-2 additional insights the user might find valuable)",
+  "has_chart": true|false,
+  "chart": {
+    "type": "bar|line|pie|doughnut",
+    "title": "string",
+    "labels": ["string array"],
+    "datasets": [
+      {
+        "label": "string",
+        "data": [number array],
+        "backgroundColor": "string or array of strings"
+      }
+    ]
+  },
+  "action_item": "string (one specific business action the user should take based on this analysis)"
+}`;
+
+    try {
+      const raw = await callGemini(prompt, apiKey);
+      removeTyping();
+      const parsed = extractJSON(raw);
+      renderAssistantMessage(parsed);
+    } catch (err) {
+      removeTyping();
+      appendMessage('Error: ' + err.message, 'error');
+    } finally {
+      document.getElementById('sendBtn').disabled = false;
+    }
+  }
+
+  const BAR_COLORS = ['#3B82F6','#10B981','#F59E0B','#EF4444','#8B5CF6','#06B6D4'];
+  const PIE_COLORS = ['#3B82F6','#10B981','#F59E0B','#EF4444','#8B5CF6','#06B6D4','#F97316','#84CC16'];
+
+  function renderAssistantMessage(data) {
+    const chat = document.getElementById('chatHistory');
+    const div = document.createElement('div');
+    div.className = 'msg-assistant';
+
+    let html = `<div class="msg-answer">${data.answer}</div>`;
+    if (data.insight) {
+      html += `<div class="msg-insight"><strong>Also worth noting:</strong> ${data.insight}</div>`;
+    }
+
+    if (data.has_chart && data.chart) {
+      chartCount++;
+      const cid = `chart_${chartCount}`;
+      html += `<div class="chart-container"><canvas id="${cid}"></canvas></div>`;
+    }
+
+    if (data.action_item) {
+      html += `<div class="action-item"><strong>💡 Recommended Action:</strong> ${data.action_item}</div>`;
+    }
+
+    div.innerHTML = html;
+    chat.appendChild(div);
+    chat.scrollTop = chat.scrollHeight;
+
+    if (data.has_chart && data.chart) {
+      const cid = `chart_${chartCount}`;
+      const ctx = document.getElementById(cid).getContext('2d');
+      const cfg = data.chart;
+
+      const isPie = cfg.type === 'pie' || cfg.type === 'doughnut';
+      const ds = cfg.datasets.map((d, i) => ({
+        ...d,
+        backgroundColor: isPie ? PIE_COLORS : (d.backgroundColor || BAR_COLORS[i % BAR_COLORS.length]),
+        borderColor: isPie ? 'white' : (d.backgroundColor || BAR_COLORS[i % BAR_COLORS.length]),
+        borderWidth: isPie ? 2 : 1.5,
+        fill: false,
+        tension: 0.35,
+        pointRadius: cfg.type === 'line' ? 3 : undefined
+      }));
+
+      new Chart(ctx, {
+        type: cfg.type,
+        data: { labels: cfg.labels, datasets: ds },
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          plugins: {
+            legend: { display: true, position: 'top', labels: { font: { size: 11 } } },
+            title: { display: !!cfg.title, text: cfg.title, font: { size: 13, weight: '600' } }
+          },
+          scales: isPie ? {} : {
+            x: { ticks: { font: { size: 10 } } },
+            y: { ticks: { font: { size: 10 } } }
+          }
+        }
+      });
+    }
+  }
+
+  // Auto-resize textarea
+  document.getElementById('queryInput').addEventListener('input', function() {
+    this.style.height = 'auto';
+    this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+  });
+</script>
+</body>
+</html>

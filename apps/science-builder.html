@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Science Lesson Builder</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+      background: #f0f2f5;
+      color: #222;
+      line-height: 1.6;
+      padding-top: 56px;
+    }
+
+    /* API Key Bar */
+    #apiBar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      background: #1a1a2e;
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.85rem;
+      z-index: 1000;
+    }
+    #apiBar label { white-space: nowrap; }
+    #apiKeyInput {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: white;
+      padding: 6px 10px;
+      border-radius: 6px;
+      width: 280px;
+      font-size: 0.85rem;
+    }
+    #apiKeyInput::placeholder { color: rgba(255,255,255,0.5); }
+    #saveKeyBtn {
+      background: #2196F3;
+      color: white;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      cursor: pointer;
+    }
+    #keyStatus { font-size: 0.78rem; color: #81c784; }
+    .back-link { color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.82rem; margin-right: 8px; }
+    .back-link:hover { color: white; }
+
+    /* Container */
+    .container { max-width: 860px; margin: 0 auto; padding: 24px 16px; }
+
+    /* Cards */
+    .card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+
+    .card h1 { font-size: 1.6rem; color: #1a1a2e; margin-bottom: 6px; }
+    .card .subtitle { color: #666; font-size: 0.95rem; }
+
+    /* Form elements */
+    .form-row { display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap; margin-top: 16px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 200px; }
+    .form-group label { font-size: 0.85rem; font-weight: 600; color: #444; }
+    .form-group input, .form-group select {
+      padding: 10px 14px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .form-group input:focus, .form-group select:focus { border-color: #2196F3; }
+
+    /* Primary Button */
+    .btn-primary {
+      background: #2196F3;
+      color: white;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      white-space: nowrap;
+    }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-primary:hover:not(:disabled) { opacity: 0.85; }
+
+    .btn-secondary {
+      background: #f0f2f5;
+      color: #444;
+      border: 1px solid #ddd;
+      padding: 10px 22px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-secondary:hover { background: #e0e3e8; }
+
+    /* Progress steps */
+    .progress-row {
+      display: flex;
+      gap: 8px;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+    .step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      flex: 1;
+      min-width: 60px;
+    }
+    .step-circle {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #e9ecef;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #999;
+      transition: background 0.3s, color 0.3s;
+    }
+    .step.active .step-circle { background: #2196F3; color: white; }
+    .step.done .step-circle { background: #4caf50; color: white; }
+    .step-label { font-size: 0.72rem; color: #666; text-align: center; }
+    .step.active .step-label { color: #2196F3; font-weight: 600; }
+    .step.done .step-label { color: #4caf50; }
+
+    /* Connector */
+    .step-connector { flex: 0.2; height: 2px; background: #e9ecef; align-self: center; margin-bottom: 18px; }
+
+    /* Error */
+    .error-box {
+      background: #ffebee;
+      border: 1px solid #ef9a9a;
+      color: #c62828;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      margin-top: 12px;
+      display: none;
+    }
+
+    /* Collapsible */
+    .collapsible {
+      border: 1px solid #e9ecef;
+      border-radius: 8px;
+      margin-top: 16px;
+    }
+    .collapsible-header {
+      padding: 12px 16px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 600;
+      color: #1a1a2e;
+      user-select: none;
+    }
+    .collapsible-header:hover { background: #f8f9fa; border-radius: 8px 8px 0 0; }
+    .collapsible-arrow { transition: transform 0.2s; font-size: 0.9rem; color: #999; }
+    .collapsible-arrow.open { transform: rotate(180deg); }
+    .collapsible-body {
+      padding: 16px;
+      border-top: 1px solid #e9ecef;
+    }
+
+    /* Output area */
+    #outputArea { display: none; }
+
+    /* Research section */
+    .objectives-list { list-style: decimal; padding-left: 20px; }
+    .objectives-list li { margin-bottom: 6px; font-size: 0.92rem; }
+    .facts-list { list-style: disc; padding-left: 20px; }
+    .facts-list li { margin-bottom: 5px; font-size: 0.92rem; }
+    .tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+    .tag {
+      background: #e3f2fd;
+      color: #1565c0;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .section-label { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; color: #999; letter-spacing: 0.05em; margin: 14px 0 6px; }
+
+    /* Illustration cards */
+    .illustration-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; margin-top: 8px; }
+    .illustration-card {
+      border: 1px solid #e3f2fd;
+      border-radius: 8px;
+      padding: 14px;
+      background: #f8fbff;
+    }
+    .illustration-card .title { font-weight: 700; color: #1565c0; margin-bottom: 6px; font-size: 0.92rem; }
+    .illustration-card .desc { font-size: 0.87rem; color: #444; margin-bottom: 8px; }
+    .edu-focus-tag { background: #2196F3; color: white; padding: 3px 8px; border-radius: 20px; font-size: 0.73rem; }
+
+    /* Lesson content */
+    .student-intro-box {
+      background: #e8f5e9;
+      border-left: 4px solid #4caf50;
+      padding: 14px 16px;
+      border-radius: 0 8px 8px 0;
+      font-size: 0.92rem;
+      color: #2e7d32;
+      margin-bottom: 16px;
+    }
+    .lesson-paragraphs p { margin-bottom: 12px; font-size: 0.92rem; }
+    .vocab-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.88rem; }
+    .vocab-table th { background: #2196F3; color: white; padding: 8px 12px; text-align: left; }
+    .vocab-table td { padding: 8px 12px; border-bottom: 1px solid #e9ecef; }
+    .vocab-table tr:last-child td { border-bottom: none; }
+    .vocab-table tr:nth-child(even) td { background: #f8fbff; }
+
+    .quiz-list { list-style: decimal; padding-left: 20px; }
+    .quiz-list li { margin-bottom: 12px; font-size: 0.92rem; }
+    details summary {
+      cursor: pointer;
+      color: #2196F3;
+      font-size: 0.83rem;
+      margin-top: 4px;
+      user-select: none;
+    }
+    details p { background: #e3f2fd; padding: 6px 10px; border-radius: 6px; font-size: 0.85rem; margin-top: 4px; }
+
+    /* Teacher package */
+    .lesson-summary-list { list-style: none; padding: 0; }
+    .lesson-summary-list li { padding: 6px 0 6px 20px; position: relative; font-size: 0.92rem; }
+    .lesson-summary-list li::before { content: "•"; position: absolute; left: 4px; color: #2196F3; font-weight: 700; }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 24px;
+      color: #888;
+      font-size: 0.82rem;
+      margin-top: 40px;
+    }
+
+    /* Loading spinner inline */
+    .spinner {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 2px solid rgba(255,255,255,0.5);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+      vertical-align: middle;
+      margin-right: 6px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @media (max-width: 600px) {
+      .form-row { flex-direction: column; }
+      #apiKeyInput { width: 180px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- API Key Bar -->
+<div id="apiBar">
+  <a href="../index.html" class="back-link">← Back</a>
+  <label for="apiKeyInput">Gemini API Key:</label>
+  <input type="password" id="apiKeyInput" placeholder="Paste your API key here...">
+  <button id="saveKeyBtn" onclick="saveApiKey()">Save</button>
+  <span id="keyStatus"></span>
+</div>
+
+<div class="container">
+  <!-- Header -->
+  <div class="card">
+    <h1>Science Lesson Builder</h1>
+    <p class="subtitle">AI-powered Grade K-5 lesson plans in minutes</p>
+  </div>
+
+  <!-- Input -->
+  <div class="card">
+    <div class="form-row">
+      <div class="form-group" style="flex:2">
+        <label for="topicInput">Science Topic</label>
+        <input type="text" id="topicInput" placeholder="e.g. How does a cactus survive in the desert?" />
+      </div>
+      <div class="form-group" style="flex:1">
+        <label for="gradeSelect">Grade Level</label>
+        <select id="gradeSelect">
+          <option value="Grade K">Grade K</option>
+          <option value="Grade 1">Grade 1</option>
+          <option value="Grade 2">Grade 2</option>
+          <option value="Grade 3">Grade 3</option>
+          <option value="Grade 4" selected>Grade 4</option>
+          <option value="Grade 5">Grade 5</option>
+        </select>
+      </div>
+      <div class="form-group" style="flex:0">
+        <label>&nbsp;</label>
+        <button class="btn-primary" id="buildBtn" onclick="buildLesson()">Build Lesson</button>
+      </div>
+    </div>
+    <div id="errorBox" class="error-box"></div>
+  </div>
+
+  <!-- Progress -->
+  <div class="card" id="progressCard" style="display:none;">
+    <div class="progress-row" id="progressRow">
+      <div class="step" id="step1">
+        <div class="step-circle">1</div>
+        <div class="step-label">Research</div>
+      </div>
+      <div class="step-connector"></div>
+      <div class="step" id="step2">
+        <div class="step-circle">2</div>
+        <div class="step-label">Visuals</div>
+      </div>
+      <div class="step-connector"></div>
+      <div class="step" id="step3">
+        <div class="step-circle">3</div>
+        <div class="step-label">Content</div>
+      </div>
+      <div class="step-connector"></div>
+      <div class="step" id="step4">
+        <div class="step-circle">4</div>
+        <div class="step-label">Package</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Output -->
+  <div id="outputArea">
+    <!-- Research Findings -->
+    <div class="card">
+      <div class="collapsible">
+        <div class="collapsible-header" onclick="toggleSection('researchBody', this)">
+          Research Findings <span class="collapsible-arrow open">▼</span>
+        </div>
+        <div class="collapsible-body" id="researchBody"></div>
+      </div>
+    </div>
+
+    <!-- Illustration Prompts -->
+    <div class="card">
+      <div class="collapsible">
+        <div class="collapsible-header" onclick="toggleSection('visualsBody', this)">
+          Illustration Prompts <span class="collapsible-arrow open">▼</span>
+        </div>
+        <div class="collapsible-body" id="visualsBody"></div>
+      </div>
+    </div>
+
+    <!-- Lesson Content -->
+    <div class="card">
+      <div class="collapsible">
+        <div class="collapsible-header" onclick="toggleSection('contentBody', this)">
+          Lesson Content <span class="collapsible-arrow open">▼</span>
+        </div>
+        <div class="collapsible-body" id="contentBody"></div>
+      </div>
+    </div>
+
+    <!-- Teacher Package -->
+    <div class="card">
+      <div class="collapsible">
+        <div class="collapsible-header" onclick="toggleSection('packageBody', this)">
+          Teacher Package <span class="collapsible-arrow open">▼</span>
+        </div>
+        <div class="collapsible-body" id="packageBody"></div>
+      </div>
+    </div>
+
+    <div style="text-align:center; margin-bottom: 20px;">
+      <button class="btn-secondary" onclick="copyAll()">📋 Copy All as Plain Text</button>
+    </div>
+  </div>
+
+  <footer>© 2025 Lee Yih Ven | AI Project Portfolio</footer>
+</div>
+
+<script>
+  // ---- Shared Gemini helpers ----
+  async function callGemini(prompt, apiKey) {
+    const res = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: { temperature: 0.7, maxOutputTokens: 8192 }
+        })
+      }
+    );
+    const data = await res.json();
+    if (data.error) throw new Error(data.error.message);
+    return data.candidates[0].content.parts[0].text;
+  }
+
+  function extractJSON(text) {
+    const m = text.match(/```json\n?([\s\S]*?)\n?```/) || text.match(/(\{[\s\S]*\}|\[[\s\S]*\])/);
+    if (!m) throw new Error('No JSON found in response');
+    return JSON.parse(m[1] || m[0]);
+  }
+
+  function getKey() { return sessionStorage.getItem('gemini_key') || ''; }
+  function saveKey(k) { sessionStorage.setItem('gemini_key', k); }
+
+  // ---- API Key ----
+  window.addEventListener('load', () => {
+    const k = getKey();
+    if (k) {
+      document.getElementById('apiKeyInput').value = k;
+      document.getElementById('keyStatus').textContent = 'Key loaded';
+    }
+  });
+
+  function saveApiKey() {
+    const k = document.getElementById('apiKeyInput').value.trim();
+    if (k) { saveKey(k); document.getElementById('keyStatus').textContent = '✓ Saved'; }
+  }
+
+  document.getElementById('apiKeyInput').addEventListener('blur', () => {
+    const k = document.getElementById('apiKeyInput').value.trim();
+    if (k) { saveKey(k); document.getElementById('keyStatus').textContent = '✓ Saved'; }
+  });
+
+  // ---- Progress helpers ----
+  function setStepActive(n) {
+    const el = document.getElementById('step' + n);
+    el.classList.remove('done');
+    el.classList.add('active');
+    el.querySelector('.step-circle').textContent = n;
+  }
+  function setStepDone(n) {
+    const el = document.getElementById('step' + n);
+    el.classList.remove('active');
+    el.classList.add('done');
+    el.querySelector('.step-circle').textContent = '✓';
+  }
+
+  // ---- Toggle collapsible ----
+  function toggleSection(bodyId, header) {
+    const body = document.getElementById(bodyId);
+    const arrow = header.querySelector('.collapsible-arrow');
+    if (body.style.display === 'none') {
+      body.style.display = 'block';
+      arrow.classList.add('open');
+    } else {
+      body.style.display = 'none';
+      arrow.classList.remove('open');
+    }
+  }
+
+  // ---- Show error ----
+  function showError(msg) {
+    const box = document.getElementById('errorBox');
+    box.textContent = 'Error: ' + msg;
+    box.style.display = 'block';
+  }
+  function clearError() {
+    document.getElementById('errorBox').style.display = 'none';
+  }
+
+  // ---- Lesson builder ----
+  let lessonData = {};
+
+  async function buildLesson() {
+    clearError();
+    const apiKey = getKey() || document.getElementById('apiKeyInput').value.trim();
+    if (!apiKey) { showError('Please enter your Gemini API key first.'); return; }
+    saveKey(apiKey);
+
+    const topic = document.getElementById('topicInput').value.trim();
+    const grade = document.getElementById('gradeSelect').value;
+    if (!topic) { showError('Please enter a science topic.'); return; }
+
+    const btn = document.getElementById('buildBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>Running...';
+
+    document.getElementById('progressCard').style.display = 'block';
+    document.getElementById('outputArea').style.display = 'none';
+    lessonData = {};
+
+    try {
+      // Step 1 — Research
+      setStepActive(1);
+      const researchPrompt = `You are a curriculum research agent. Research "${topic}" for ${grade} science, NGSS-aligned.
+Return ONLY valid JSON (no markdown):
+{
+  "learning_objectives": ["string x3"],
+  "key_facts": ["string x5"],
+  "ngss_standards": ["string x2"],
+  "real_world_connections": ["string x3"]
+}`;
+      const r1text = await callGemini(researchPrompt, apiKey);
+      lessonData.research = extractJSON(r1text);
+      setStepDone(1);
+
+      // Step 2 — Visuals
+      setStepActive(2);
+      const visualsPrompt = `Based on this science research: ${JSON.stringify(lessonData.research)}
+Generate 3 educational illustration prompts for ${grade} students.
+Return ONLY valid JSON:
+{
+  "illustrations": [
+    {"title": "string", "description": "string (2-3 sentences)", "educational_focus": "string"}
+  ]
+}`;
+      const r2text = await callGemini(visualsPrompt, apiKey);
+      lessonData.visuals = extractJSON(r2text);
+      setStepDone(2);
+
+      // Step 3 — Content
+      setStepActive(3);
+      const contentPrompt = `Write a complete ${grade} science lesson about "${topic}".
+Use simple language appropriate for ${grade}.
+Include exactly 5 vocabulary words and exactly 7 quiz questions (mix of multiple choice and short answer).
+Return ONLY valid JSON:
+{
+  "main_content": "string (300-400 words, paragraphs separated by \\n\\n)",
+  "vocabulary": [{"word": "string", "definition": "string"}],
+  "quiz": [{"question": "string", "answer": "string", "type": "multiple_choice|short_answer"}]
+}`;
+      const r3text = await callGemini(contentPrompt, apiKey);
+      lessonData.content = extractJSON(r3text);
+      setStepDone(3);
+
+      // Step 4 — Packager
+      setStepActive(4);
+      const packagePrompt = `Package this lesson on "${topic}" for ${grade} into a teacher guide.
+Research context: ${JSON.stringify(lessonData.research)}
+Return ONLY valid JSON:
+{
+  "teacher_guide": "string (preparation notes, discussion prompts, 150-200 words)",
+  "student_intro": "string (engaging hook for students, 50-80 words)",
+  "lesson_summary": "string (3 key takeaways as bullet points)"
+}`;
+      const r4text = await callGemini(packagePrompt, apiKey);
+      lessonData.pkg = extractJSON(r4text);
+      setStepDone(4);
+
+      renderOutput(topic, grade);
+      document.getElementById('outputArea').style.display = 'block';
+
+    } catch (err) {
+      showError(err.message);
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Build Lesson';
+    }
+  }
+
+  function renderOutput(topic, grade) {
+    const r = lessonData.research;
+    const v = lessonData.visuals;
+    const c = lessonData.content;
+    const p = lessonData.pkg;
+
+    // Research
+    document.getElementById('researchBody').innerHTML = `
+      <div class="section-label">Learning Objectives</div>
+      <ol class="objectives-list">${r.learning_objectives.map(o => `<li>${o}</li>`).join('')}</ol>
+      <div class="section-label">Key Facts</div>
+      <ul class="facts-list">${r.key_facts.map(f => `<li>${f}</li>`).join('')}</ul>
+      <div class="section-label">NGSS Standards</div>
+      <div class="tag-row">${r.ngss_standards.map(s => `<span class="tag">${s}</span>`).join('')}</div>
+      <div class="section-label">Real-World Connections</div>
+      <ul class="facts-list">${r.real_world_connections.map(c => `<li>${c}</li>`).join('')}</ul>
+    `;
+
+    // Visuals
+    document.getElementById('visualsBody').innerHTML = `
+      <div class="illustration-cards">
+        ${v.illustrations.map(il => `
+          <div class="illustration-card">
+            <div class="title">${il.title}</div>
+            <div class="desc">${il.description}</div>
+            <span class="edu-focus-tag">${il.educational_focus}</span>
+          </div>
+        `).join('')}
+      </div>
+    `;
+
+    // Content
+    const paragraphs = c.main_content.split('\n\n').map(p => `<p>${p}</p>`).join('');
+    const vocabRows = c.vocabulary.map(v => `<tr><td><strong>${v.word}</strong></td><td>${v.definition}</td></tr>`).join('');
+    const quizItems = c.quiz.map((q, i) => `
+      <li>
+        ${q.question}
+        <details><summary>Show answer</summary><p>${q.answer}</p></details>
+      </li>
+    `).join('');
+
+    document.getElementById('contentBody').innerHTML = `
+      <div class="student-intro-box">${p.student_intro}</div>
+      <div class="lesson-paragraphs">${paragraphs}</div>
+      <div class="section-label">Vocabulary</div>
+      <table class="vocab-table">
+        <thead><tr><th>Word</th><th>Definition</th></tr></thead>
+        <tbody>${vocabRows}</tbody>
+      </table>
+      <div class="section-label" style="margin-top:16px">Quiz Questions</div>
+      <ol class="quiz-list">${quizItems}</ol>
+    `;
+
+    // Teacher Package
+    const summaryLines = p.lesson_summary.split('\n').filter(l => l.trim()).map(l => {
+      const clean = l.replace(/^[\•\-\*]\s*/, '').trim();
+      return clean ? `<li>${clean}</li>` : '';
+    }).join('');
+
+    document.getElementById('packageBody').innerHTML = `
+      <div class="section-label">Teacher Guide</div>
+      ${p.teacher_guide.split('\n\n').map(para => `<p style="margin-bottom:10px;font-size:0.92rem">${para}</p>`).join('')}
+      <div class="section-label">Lesson Summary (Key Takeaways)</div>
+      <ul class="lesson-summary-list">${summaryLines}</ul>
+    `;
+  }
+
+  function copyAll() {
+    if (!lessonData.research) { alert('Please build a lesson first.'); return; }
+    const r = lessonData.research;
+    const v = lessonData.visuals;
+    const c = lessonData.content;
+    const p = lessonData.pkg;
+
+    let text = `SCIENCE LESSON PLAN\n${'='.repeat(50)}\n\n`;
+    text += `LEARNING OBJECTIVES\n${r.learning_objectives.map((o,i)=>`${i+1}. ${o}`).join('\n')}\n\n`;
+    text += `KEY FACTS\n${r.key_facts.map(f=>`• ${f}`).join('\n')}\n\n`;
+    text += `NGSS STANDARDS\n${r.ngss_standards.join(', ')}\n\n`;
+    text += `REAL-WORLD CONNECTIONS\n${r.real_world_connections.map(c=>`• ${c}`).join('\n')}\n\n`;
+    text += `ILLUSTRATION PROMPTS\n${v.illustrations.map(i=>`${i.title}: ${i.description} [Focus: ${i.educational_focus}]`).join('\n')}\n\n`;
+    text += `STUDENT INTRO\n${p.student_intro}\n\n`;
+    text += `MAIN CONTENT\n${c.main_content}\n\n`;
+    text += `VOCABULARY\n${c.vocabulary.map(v=>`${v.word}: ${v.definition}`).join('\n')}\n\n`;
+    text += `QUIZ\n${c.quiz.map((q,i)=>`${i+1}. ${q.question}\n   Answer: ${q.answer}`).join('\n')}\n\n`;
+    text += `TEACHER GUIDE\n${p.teacher_guide}\n\n`;
+    text += `LESSON SUMMARY\n${p.lesson_summary}`;
+
+    navigator.clipboard.writeText(text).then(() => alert('Lesson copied to clipboard!')).catch(() => alert('Copy failed. Please manually select and copy.'));
+  }
+</script>
+</body>
+</html>

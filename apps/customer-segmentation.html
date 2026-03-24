@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer Segmentation Agent</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+      background: #f0f2f5;
+      color: #222;
+      line-height: 1.6;
+      padding-top: 56px;
+    }
+
+    #apiBar {
+      position: fixed; top: 0; left: 0; right: 0;
+      background: #1a1a2e; color: white;
+      padding: 10px 20px;
+      display: flex; align-items: center; gap: 12px;
+      font-size: 0.85rem; z-index: 1000;
+    }
+    #apiBar label { white-space: nowrap; }
+    #apiKeyInput {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: white; padding: 6px 10px; border-radius: 6px;
+      width: 280px; font-size: 0.85rem;
+    }
+    #apiKeyInput::placeholder { color: rgba(255,255,255,0.5); }
+    #saveKeyBtn {
+      background: #E91E63; color: white; border: none;
+      padding: 6px 14px; border-radius: 6px; font-size: 0.82rem; cursor: pointer;
+    }
+    #keyStatus { font-size: 0.78rem; color: #f48fb1; }
+    .back-link { color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.82rem; margin-right: 8px; }
+    .back-link:hover { color: white; }
+
+    .container { max-width: 860px; margin: 0 auto; padding: 24px 16px; }
+
+    .card {
+      background: white; border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      padding: 24px; margin-bottom: 20px;
+    }
+    .card h1 { font-size: 1.6rem; color: #1a1a2e; margin-bottom: 6px; }
+    .card .subtitle { color: #666; font-size: 0.95rem; }
+
+    /* Drop zone */
+    #dropZone {
+      border: 2px dashed #ccc; border-radius: 10px;
+      padding: 36px 24px; text-align: center;
+      cursor: pointer; transition: border-color 0.2s, background 0.2s;
+      margin-top: 16px;
+    }
+    #dropZone:hover, #dropZone.dragover { border-color: #E91E63; background: #fff0f5; }
+    #dropZone .drop-icon { font-size: 2.2rem; margin-bottom: 8px; }
+    #dropZone .drop-text { font-size: 0.95rem; color: #555; }
+    #dropZone .drop-hint { font-size: 0.8rem; color: #999; margin-top: 4px; }
+    #fileInput { display: none; }
+
+    .file-info {
+      background: #e8f5e9; border-radius: 8px; padding: 12px 16px;
+      margin-top: 12px; font-size: 0.88rem; color: #2e7d32;
+      display: none;
+    }
+    .schema-hint { font-size: 0.8rem; color: #999; margin-top: 8px; }
+
+    .btn-primary {
+      background: #E91E63; color: white; border: none;
+      padding: 12px 28px; border-radius: 8px; font-size: 1rem;
+      cursor: pointer; transition: opacity 0.2s; margin-top: 16px;
+    }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-primary:hover:not(:disabled) { opacity: 0.85; }
+
+    .btn-secondary {
+      background: #f0f2f5; color: #444; border: 1px solid #ddd;
+      padding: 10px 22px; border-radius: 8px; font-size: 0.9rem; cursor: pointer;
+    }
+    .btn-secondary:hover { background: #e0e3e8; }
+
+    .error-box {
+      background: #ffebee; border: 1px solid #ef9a9a; color: #c62828;
+      padding: 12px 16px; border-radius: 8px; font-size: 0.9rem; margin-top: 12px; display: none;
+    }
+
+    #outputArea { display: none; }
+
+    /* Segment cards */
+    .segment-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; margin-bottom: 20px; }
+    .seg-card {
+      background: white; border-radius: 10px;
+      padding: 14px 16px; border-left: 5px solid #ccc;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+    }
+    .seg-card .seg-name { font-weight: 700; font-size: 0.9rem; margin-bottom: 4px; }
+    .seg-card .seg-count { font-size: 1.4rem; font-weight: 800; color: #1a1a2e; }
+    .seg-card .seg-pct { font-size: 0.75rem; color: #888; }
+    .seg-card .seg-stats { font-size: 0.75rem; color: #777; margin-top: 6px; line-height: 1.5; }
+
+    /* Chart */
+    .chart-wrap { position: relative; max-height: 300px; margin-bottom: 20px; }
+
+    /* RFM table */
+    .rfm-table { width: 100%; border-collapse: collapse; font-size: 0.87rem; }
+    .rfm-table th { background: #fce4ec; color: #880e4f; padding: 8px 12px; text-align: left; }
+    .rfm-table td { padding: 8px 12px; border-bottom: 1px solid #f5f5f5; }
+    .rfm-table tr:last-child td { border-bottom: none; }
+    .rfm-table tr:nth-child(even) td { background: #fef9fb; }
+
+    /* Campaign accordion */
+    .accordion { margin-top: 16px; }
+    .acc-item { border: 1px solid #e9ecef; border-radius: 8px; margin-bottom: 8px; overflow: hidden; }
+    .acc-header {
+      padding: 12px 16px; cursor: pointer;
+      display: flex; justify-content: space-between; align-items: center;
+      font-weight: 600; font-size: 0.92rem; user-select: none;
+      background: #fafafa;
+    }
+    .acc-header:hover { background: #f5f5f5; }
+    .acc-arrow { transition: transform 0.2s; font-size: 0.85rem; color: #999; }
+    .acc-arrow.open { transform: rotate(180deg); }
+    .acc-body { padding: 16px; border-top: 1px solid #e9ecef; display: none; }
+    .acc-body.open { display: block; }
+
+    .channel-badge {
+      display: inline-block; padding: 2px 10px; border-radius: 20px;
+      font-size: 0.75rem; font-weight: 700;
+      background: #E91E63; color: white; margin-left: 6px;
+    }
+
+    .camp-detail { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 0.85rem; }
+    .camp-detail .cd-label { font-size: 0.73rem; font-weight: 700; text-transform: uppercase; color: #999; margin-bottom: 2px; }
+    .camp-detail .cd-val { color: #333; }
+    .camp-message { background: #f8f9fa; padding: 10px 14px; border-radius: 6px; font-size: 0.85rem; color: #555; margin: 10px 0; font-style: italic; }
+
+    .section-label { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; color: #999; letter-spacing: 0.05em; margin: 14px 0 6px; }
+
+    .spinner {
+      display: inline-block; width: 14px; height: 14px;
+      border: 2px solid rgba(255,255,255,0.5); border-top-color: white;
+      border-radius: 50%; animation: spin 0.6s linear infinite;
+      vertical-align: middle; margin-right: 6px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    footer { text-align: center; padding: 24px; color: #888; font-size: 0.82rem; margin-top: 40px; }
+
+    @media (max-width: 600px) {
+      .camp-detail { grid-template-columns: 1fr; }
+      .segment-grid { grid-template-columns: repeat(2,1fr); }
+      #apiKeyInput { width: 160px; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="apiBar">
+  <a href="../index.html" class="back-link">← Back</a>
+  <label for="apiKeyInput">Gemini API Key:</label>
+  <input type="password" id="apiKeyInput" placeholder="Paste your API key here...">
+  <button id="saveKeyBtn" onclick="saveApiKey()">Save</button>
+  <span id="keyStatus"></span>
+</div>
+
+<div class="container">
+  <div class="card">
+    <h1>Customer Segmentation Agent</h1>
+    <p class="subtitle">RFM analysis and targeted campaign builder</p>
+  </div>
+
+  <div class="card">
+    <div id="dropZone" onclick="document.getElementById('fileInput').click()">
+      <div class="drop-icon">📂</div>
+      <div class="drop-text">Drop CSV here or click to browse</div>
+      <div class="drop-hint">Accepts any CSV file</div>
+    </div>
+    <input type="file" id="fileInput" accept=".csv" onchange="handleFile(this.files[0])">
+    <div class="schema-hint">Expected columns: customer_id, order_date, order_amount (or similar)</div>
+    <div class="file-info" id="fileInfo"></div>
+    <div id="errorBox" class="error-box"></div>
+    <button class="btn-primary" id="runBtn" disabled onclick="runSegmentation()">Run RFM Analysis</button>
+  </div>
+
+  <div id="outputArea">
+    <!-- Segment cards -->
+    <div class="card">
+      <div style="font-weight:700;font-size:1.05rem;margin-bottom:16px">Customer Segments</div>
+      <div class="segment-grid" id="segmentGrid"></div>
+      <div class="chart-wrap"><canvas id="segChart"></canvas></div>
+    </div>
+
+    <!-- RFM Stats table -->
+    <div class="card">
+      <div class="section-label">RFM Statistics by Segment</div>
+      <table class="rfm-table" id="rfmTable">
+        <thead><tr><th>Segment</th><th>Avg Recency (days)</th><th>Avg Frequency</th><th>Avg Monetary</th><th>Count</th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn-secondary" onclick="exportCSV()">⬇ Download Segment CSV</button>
+      </div>
+    </div>
+
+    <!-- Campaign Recommendations -->
+    <div class="card">
+      <div style="font-weight:700;font-size:1.05rem;margin-bottom:4px">Campaign Recommendations</div>
+      <p style="font-size:0.85rem;color:#888;margin-bottom:16px">AI-generated targeted campaigns per segment</p>
+      <div class="accordion" id="campaignAccordion"></div>
+    </div>
+  </div>
+
+  <footer>© 2025 Lee Yih Ven | AI Project Portfolio</footer>
+</div>
+
+<script>
+  // ---- Gemini helpers ----
+  async function callGemini(prompt, apiKey) {
+    const res = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: { temperature: 0.7, maxOutputTokens: 8192 }
+        })
+      }
+    );
+    const data = await res.json();
+    if (data.error) throw new Error(data.error.message);
+    return data.candidates[0].content.parts[0].text;
+  }
+
+  function extractJSON(text) {
+    const m = text.match(/```json\n?([\s\S]*?)\n?```/) || text.match(/(\{[\s\S]*\}|\[[\s\S]*\])/);
+    if (!m) throw new Error('No JSON found in response');
+    return JSON.parse(m[1] || m[0]);
+  }
+
+  function getKey() { return sessionStorage.getItem('gemini_key') || ''; }
+  function saveKey(k) { sessionStorage.setItem('gemini_key', k); }
+
+  window.addEventListener('load', () => {
+    const k = getKey();
+    if (k) { document.getElementById('apiKeyInput').value = k; document.getElementById('keyStatus').textContent = 'Key loaded'; }
+  });
+  function saveApiKey() {
+    const k = document.getElementById('apiKeyInput').value.trim();
+    if (k) { saveKey(k); document.getElementById('keyStatus').textContent = '✓ Saved'; }
+  }
+  document.getElementById('apiKeyInput').addEventListener('blur', () => {
+    const k = document.getElementById('apiKeyInput').value.trim();
+    if (k) { saveKey(k); document.getElementById('keyStatus').textContent = '✓ Saved'; }
+  });
+
+  function showError(msg) { const b = document.getElementById('errorBox'); b.textContent = 'Error: ' + msg; b.style.display = 'block'; }
+  function clearError() { document.getElementById('errorBox').style.display = 'none'; }
+
+  // ---- Drag and drop ----
+  const dropZone = document.getElementById('dropZone');
+  dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
+  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+  dropZone.addEventListener('drop', e => {
+    e.preventDefault();
+    dropZone.classList.remove('dragover');
+    const f = e.dataTransfer.files[0];
+    if (f && f.name.endsWith('.csv')) handleFile(f);
+    else showError('Please drop a CSV file.');
+  });
+
+  // ---- CSV handling ----
+  let parsedData = [];
+  let customerSegments = [];
+  let segmentColors = {
+    'VIP': '#FFD700',
+    'Regular': '#4CAF50',
+    'At-Risk': '#FF9800',
+    'New Customer': '#2196F3',
+    'Churned': '#9E9E9E',
+    'Occasional Buyer': '#9C27B0'
+  };
+
+  function handleFile(file) {
+    clearError();
+    if (!file) return;
+    Papa.parse(file, {
+      header: true,
+      skipEmptyLines: true,
+      complete: (results) => {
+        parsedData = results.data;
+        if (parsedData.length < 2) { showError('CSV appears to be empty or has too few rows.'); return; }
+
+        const cols = Object.keys(parsedData[0]);
+        const fi = document.getElementById('fileInfo');
+        fi.innerHTML = `<strong>✓ ${file.name}</strong> — ${parsedData.length} rows detected<br>Columns: ${cols.join(', ')}`;
+        fi.style.display = 'block';
+        document.getElementById('runBtn').disabled = false;
+
+        // Update drop zone
+        dropZone.querySelector('.drop-text').textContent = file.name;
+        dropZone.querySelector('.drop-hint').textContent = `${parsedData.length} rows`;
+      },
+      error: (err) => showError('Could not parse CSV: ' + err.message)
+    });
+  }
+
+  // ---- Column detection ----
+  function detectColumns(row) {
+    const keys = Object.keys(row);
+    const lower = keys.map(k => k.toLowerCase());
+
+    const customerCol = keys[lower.findIndex(k => k.includes('customer') || k.includes('_id') || k === 'id' || k.includes('user'))] || keys[0];
+    const dateCol = keys[lower.findIndex(k => k.includes('date') || k.includes('time') || k.includes('created') || k.includes('purchased'))] || keys[1];
+    const amountCol = keys[lower.findIndex(k =>
+      k.includes('amount') || k.includes('value') || k.includes('total') ||
+      k.includes('price') || k.includes('revenue') || k.includes('sales') || k.includes('spend')
+    )] || keys[2] || keys[1];
+
+    return { customerCol, dateCol, amountCol };
+  }
+
+  // ---- RFM Calculation ----
+  function percentile(arr, p) {
+    const sorted = [...arr].sort((a, b) => a - b);
+    const idx = Math.floor((p / 100) * sorted.length);
+    return sorted[Math.min(idx, sorted.length - 1)];
+  }
+
+  function calculateRFM(data) {
+    const { customerCol, dateCol, amountCol } = detectColumns(data[0]);
+
+    // Parse and group by customer
+    const customers = {};
+    const allDates = [];
+
+    data.forEach(row => {
+      const cid = row[customerCol];
+      if (!cid) return;
+      const dateStr = row[dateCol];
+      const amount = parseFloat(row[amountCol]) || 0;
+      const dateObj = new Date(dateStr);
+      if (isNaN(dateObj)) return;
+
+      if (!customers[cid]) customers[cid] = { dates: [], amounts: [] };
+      customers[cid].dates.push(dateObj);
+      customers[cid].amounts.push(amount);
+      allDates.push(dateObj);
+    });
+
+    if (Object.keys(customers).length === 0) throw new Error('Could not parse customer data. Check column names.');
+
+    const maxDate = new Date(Math.max(...allDates));
+    const rfmData = [];
+
+    Object.entries(customers).forEach(([cid, d]) => {
+      const lastDate = new Date(Math.max(...d.dates));
+      const recency = Math.round((maxDate - lastDate) / (1000 * 60 * 60 * 24));
+      const frequency = d.dates.length;
+      const monetary = d.amounts.reduce((a, b) => a + b, 0);
+      rfmData.push({ customer_id: cid, recency, frequency, monetary });
+    });
+
+    // Calculate percentiles
+    const monetaryVals = rfmData.map(r => r.monetary);
+    const p75 = percentile(monetaryVals, 75);
+    const p40 = percentile(monetaryVals, 40);
+
+    // Assign segments
+    rfmData.forEach(r => {
+      if (r.monetary > p75 && r.frequency >= 5) {
+        r.segment = 'VIP';
+      } else if (r.recency > 365) {
+        r.segment = 'Churned';
+      } else if (r.recency > 180 && r.frequency >= 2) {
+        r.segment = 'At-Risk';
+      } else if (r.frequency <= 2 && r.recency <= 90) {
+        r.segment = 'New Customer';
+      } else if (r.monetary >= p40 && r.monetary <= p75 && r.frequency >= 3) {
+        r.segment = 'Regular';
+      } else {
+        r.segment = 'Occasional Buyer';
+      }
+    });
+
+    return rfmData;
+  }
+
+  function calcSegmentStats(rfmData) {
+    const segments = {};
+    rfmData.forEach(r => {
+      if (!segments[r.segment]) segments[r.segment] = { count: 0, recencySum: 0, freqSum: 0, monSum: 0 };
+      segments[r.segment].count++;
+      segments[r.segment].recencySum += r.recency;
+      segments[r.segment].freqSum += r.frequency;
+      segments[r.segment].monSum += r.monetary;
+    });
+    const total = rfmData.length;
+    return Object.entries(segments).map(([name, s]) => ({
+      name,
+      count: s.count,
+      percentage: ((s.count / total) * 100).toFixed(1),
+      avgRecency: Math.round(s.recencySum / s.count),
+      avgFrequency: (s.freqSum / s.count).toFixed(1),
+      avgMonetary: (s.monSum / s.count).toFixed(2)
+    }));
+  }
+
+  let segChart = null;
+
+  async function runSegmentation() {
+    clearError();
+    const apiKey = getKey() || document.getElementById('apiKeyInput').value.trim();
+    if (!apiKey) { showError('Please enter your Gemini API key.'); return; }
+    saveKey(apiKey);
+
+    if (parsedData.length === 0) { showError('Please upload a CSV file first.'); return; }
+
+    const btn = document.getElementById('runBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>Running...';
+
+    try {
+      customerSegments = calculateRFM(parsedData);
+      const stats = calcSegmentStats(customerSegments);
+
+      renderSegmentCards(stats);
+      renderRFMTable(stats);
+
+      // Gemini call for campaigns
+      const segSummary = stats.map(s => ({
+        segment: s.name,
+        count: s.count,
+        percentage: s.percentage + '%',
+        avg_recency_days: s.avgRecency,
+        avg_frequency: s.avgFrequency,
+        avg_monetary: s.avgMonetary
+      }));
+
+      const campText = await callGemini(`You are a marketing strategist. Based on this customer segmentation analysis:
+${JSON.stringify(segSummary, null, 2)}
+
+Generate targeted campaign recommendations for each segment.
+Return ONLY valid JSON:
+{
+  "campaigns": [
+    {
+      "segment": "string",
+      "campaign_name": "string",
+      "objective": "string (1 sentence)",
+      "message": "string (sample message, 2-3 sentences)",
+      "channel": "Email|SMS|WhatsApp|Push|Social",
+      "offer": "string",
+      "timing": "string (e.g. Within 3 days of segmentation)"
+    }
+  ]
+}`, apiKey);
+      const campData = extractJSON(campText);
+
+      renderCampaigns(campData.campaigns, stats);
+      document.getElementById('outputArea').style.display = 'block';
+
+    } catch (err) {
+      showError(err.message);
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Run RFM Analysis';
+    }
+  }
+
+  function renderSegmentCards(stats) {
+    document.getElementById('segmentGrid').innerHTML = stats.map(s => `
+      <div class="seg-card" style="border-left-color:${segmentColors[s.name] || '#999'}">
+        <div class="seg-name">${s.name}</div>
+        <div class="seg-count">${s.count}</div>
+        <div class="seg-pct">${s.percentage}% of customers</div>
+        <div class="seg-stats">
+          Recency: ${s.avgRecency}d<br>
+          Frequency: ${s.avgFrequency} orders<br>
+          Monetary: ${parseFloat(s.avgMonetary).toLocaleString()}
+        </div>
+      </div>
+    `).join('');
+
+    if (segChart) segChart.destroy();
+    const ctx = document.getElementById('segChart').getContext('2d');
+    segChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: stats.map(s => s.name),
+        datasets: [{
+          label: 'Customer Count',
+          data: stats.map(s => s.count),
+          backgroundColor: stats.map(s => segmentColors[s.name] || '#E91E63'),
+          borderRadius: 6
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: { x: { beginAtZero: true } }
+      }
+    });
+  }
+
+  function renderRFMTable(stats) {
+    document.getElementById('rfmTable').querySelector('tbody').innerHTML = stats.map(s => `
+      <tr>
+        <td><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${segmentColors[s.name]||'#999'};margin-right:6px"></span>${s.name}</td>
+        <td>${s.avgRecency} days</td>
+        <td>${s.avgFrequency}</td>
+        <td>${parseFloat(s.avgMonetary).toLocaleString()}</td>
+        <td>${s.count}</td>
+      </tr>
+    `).join('');
+  }
+
+  function renderCampaigns(campaigns, stats) {
+    const segOrder = stats.map(s => s.name);
+    const sorted = [...campaigns].sort((a, b) => segOrder.indexOf(a.segment) - segOrder.indexOf(b.segment));
+
+    document.getElementById('campaignAccordion').innerHTML = sorted.map((c, i) => `
+      <div class="acc-item">
+        <div class="acc-header" onclick="toggleAcc(${i}, this)">
+          <span>
+            <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${segmentColors[c.segment]||'#999'};margin-right:8px"></span>
+            ${c.segment} — ${c.campaign_name}
+          </span>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="channel-badge">${c.channel}</span>
+            <span class="acc-arrow open" id="arrow-${i}">▼</span>
+          </div>
+        </div>
+        <div class="acc-body open" id="accBody-${i}">
+          <p style="font-size:0.82rem;color:#888;margin-bottom:10px">${c.objective}</p>
+          <div class="camp-message">"${c.message}"</div>
+          <div class="camp-detail">
+            <div><div class="cd-label">Offer</div><div class="cd-val">${c.offer}</div></div>
+            <div><div class="cd-label">Timing</div><div class="cd-val">${c.timing}</div></div>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function toggleAcc(i, header) {
+    const body = document.getElementById('accBody-' + i);
+    const arrow = document.getElementById('arrow-' + i);
+    if (body.classList.contains('open')) { body.classList.remove('open'); arrow.classList.remove('open'); }
+    else { body.classList.add('open'); arrow.classList.add('open'); }
+  }
+
+  function exportCSV() {
+    if (!customerSegments.length) { alert('Run analysis first.'); return; }
+    const headers = ['customer_id', 'recency_days', 'frequency', 'monetary', 'segment'];
+    const rows = customerSegments.map(r =>
+      [r.customer_id, r.recency, r.frequency, r.monetary.toFixed(2), r.segment].join(',')
+    );
+    const csv = [headers.join(','), ...rows].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'customer_segments.csv';
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+</script>
+</body>
+</html>

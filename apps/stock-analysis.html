@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stock Analysis Agent</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+      background: #f0f2f5;
+      color: #222;
+      line-height: 1.6;
+      padding-top: 56px;
+    }
+
+    #apiBar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      background: #1a1a2e;
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.85rem;
+      z-index: 1000;
+    }
+    #apiBar label { white-space: nowrap; }
+    #apiKeyInput {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: white;
+      padding: 6px 10px;
+      border-radius: 6px;
+      width: 280px;
+      font-size: 0.85rem;
+    }
+    #apiKeyInput::placeholder { color: rgba(255,255,255,0.5); }
+    #saveKeyBtn {
+      background: #E91E63;
+      color: white;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      cursor: pointer;
+    }
+    #keyStatus { font-size: 0.78rem; color: #f48fb1; }
+    .back-link { color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.82rem; margin-right: 8px; }
+    .back-link:hover { color: white; }
+
+    .container { max-width: 860px; margin: 0 auto; padding: 24px 16px; }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+    .card h1 { font-size: 1.6rem; color: #1a1a2e; margin-bottom: 6px; }
+    .card .subtitle { color: #666; font-size: 0.95rem; }
+
+    .form-row { display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap; margin-top: 16px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 180px; }
+    .form-group label { font-size: 0.85rem; font-weight: 600; color: #444; }
+    .form-group input, .form-group select {
+      padding: 10px 14px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .form-group input:focus, .form-group select:focus { border-color: #E91E63; }
+
+    .btn-primary {
+      background: #E91E63;
+      color: white;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      white-space: nowrap;
+    }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-primary:hover:not(:disabled) { opacity: 0.85; }
+
+    .progress-row { display: flex; gap: 8px; margin: 20px 0; flex-wrap: wrap; }
+    .step { display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; min-width: 55px; }
+    .step-circle {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: #e9ecef;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 700; color: #999;
+      transition: background 0.3s, color 0.3s;
+    }
+    .step.active .step-circle { background: #E91E63; color: white; }
+    .step.done .step-circle { background: #4caf50; color: white; }
+    .step-label { font-size: 0.7rem; color: #666; text-align: center; }
+    .step.active .step-label { color: #E91E63; font-weight: 600; }
+    .step.done .step-label { color: #4caf50; }
+    .step-connector { flex: 0.2; height: 2px; background: #e9ecef; align-self: center; margin-bottom: 18px; }
+
+    .error-box {
+      background: #ffebee; border: 1px solid #ef9a9a; color: #c62828;
+      padding: 12px 16px; border-radius: 8px; font-size: 0.9rem;
+      margin-top: 12px; display: none;
+    }
+
+    #outputArea { display: none; }
+
+    /* Recommendation badge */
+    .rec-badge {
+      display: inline-block;
+      padding: 14px 32px;
+      border-radius: 40px;
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: white;
+      margin: 8px auto;
+    }
+    .rec-center { text-align: center; margin-bottom: 16px; }
+
+    /* Score cards */
+    .score-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+    .score-card {
+      background: #f8f9fa;
+      border-radius: 10px;
+      padding: 14px 10px;
+      text-align: center;
+      border: 1px solid #e9ecef;
+    }
+    .score-card .score-val { font-size: 1.7rem; font-weight: 800; color: #E91E63; }
+    .score-card .score-label { font-size: 0.75rem; color: #888; margin-top: 2px; }
+
+    /* Chart */
+    .chart-wrap { max-height: 300px; position: relative; margin: 0 auto 20px; width: 300px; }
+
+    /* Screening table */
+    .screen-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    .screen-table th { background: #fce4ec; color: #880e4f; padding: 8px 12px; text-align: left; }
+    .screen-table td { padding: 8px 12px; border-bottom: 1px solid #f8f9fa; }
+    .screen-table tr:last-child td { border-bottom: none; }
+    .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; }
+    .dot-pass { background: #4caf50; }
+    .dot-fail { background: #f44336; }
+    .dot-uncertain { background: #ff9800; }
+
+    /* Collapsible */
+    .collapsible { border: 1px solid #e9ecef; border-radius: 8px; margin-top: 16px; }
+    .collapsible-header {
+      padding: 12px 16px; cursor: pointer;
+      display: flex; justify-content: space-between; align-items: center;
+      font-weight: 600; color: #1a1a2e; user-select: none;
+    }
+    .collapsible-header:hover { background: #f8f9fa; border-radius: 8px 8px 0 0; }
+    .collapsible-arrow { transition: transform 0.2s; font-size: 0.9rem; color: #999; }
+    .collapsible-arrow.open { transform: rotate(180deg); }
+    .collapsible-body { padding: 16px; border-top: 1px solid #e9ecef; }
+
+    .section-label { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; color: #999; letter-spacing: 0.05em; margin: 14px 0 6px; }
+
+    .risk-list { list-style: none; padding: 0; }
+    .risk-list li { padding: 5px 0 5px 20px; position: relative; font-size: 0.88rem; }
+    .risk-list li::before { content: "⚠"; position: absolute; left: 0; font-size: 0.8rem; }
+
+    .strength-list { list-style: none; padding: 0; }
+    .strength-list li { padding: 5px 0 5px 20px; position: relative; font-size: 0.88rem; }
+    .strength-list li::before { content: "✓"; position: absolute; left: 0; color: #4caf50; font-weight: 700; }
+
+    .disclaimer {
+      font-size: 0.78rem;
+      color: #999;
+      text-align: center;
+      padding: 12px;
+      border-top: 1px solid #f0f0f0;
+      margin-top: 16px;
+    }
+
+    .spinner {
+      display: inline-block; width: 14px; height: 14px;
+      border: 2px solid rgba(255,255,255,0.5); border-top-color: white;
+      border-radius: 50%; animation: spin 0.6s linear infinite;
+      vertical-align: middle; margin-right: 6px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    footer { text-align: center; padding: 24px; color: #888; font-size: 0.82rem; margin-top: 40px; }
+
+    @media (max-width: 600px) {
+      .score-cards { grid-template-columns: repeat(2,1fr); }
+      #apiKeyInput { width: 160px; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="apiBar">
+  <a href="../index.html" class="back-link">← Back</a>
+  <label for="apiKeyInput">Gemini API Key:</label>
+  <input type="password" id="apiKeyInput" placeholder="Paste your API key here...">
+  <button id="saveKeyBtn" onclick="saveApiKey()">Save</button>
+  <span id="keyStatus"></span>
+</div>
+
+<div class="container">
+  <div class="card">
+    <h1>Stock Analysis Agent</h1>
+    <p class="subtitle">AI-powered investment research for Malaysian &amp; regional stocks</p>
+  </div>
+
+  <div class="card">
+    <div class="form-row">
+      <div class="form-group" style="flex:2">
+        <label for="tickerInput">Stock / Ticker</label>
+        <input type="text" id="tickerInput" placeholder="e.g. Maybank, CIMB, 1155.KL, AAPL">
+      </div>
+      <div class="form-group" style="flex:1">
+        <label for="marketSelect">Market</label>
+        <select id="marketSelect">
+          <option value="Bursa Malaysia">Bursa Malaysia</option>
+          <option value="US Market">US Market</option>
+          <option value="Singapore Exchange">Singapore Exchange</option>
+          <option value="Hong Kong">Hong Kong</option>
+        </select>
+      </div>
+      <div class="form-group" style="flex:0">
+        <label>&nbsp;</label>
+        <button class="btn-primary" id="analyseBtn" onclick="analyseStock()">Analyse Stock</button>
+      </div>
+    </div>
+    <div id="errorBox" class="error-box"></div>
+  </div>
+
+  <div class="card" id="progressCard" style="display:none;">
+    <div class="progress-row">
+      <div class="step" id="step1"><div class="step-circle">1</div><div class="step-label">Screen</div></div>
+      <div class="step-connector"></div>
+      <div class="step" id="step2"><div class="step-circle">2</div><div class="step-label">Fundamentals</div></div>
+      <div class="step-connector"></div>
+      <div class="step" id="step3"><div class="step-circle">3</div><div class="step-label">Moat</div></div>
+      <div class="step-connector"></div>
+      <div class="step" id="step4"><div class="step-circle">4</div><div class="step-label">Dividends</div></div>
+      <div class="step-connector"></div>
+      <div class="step" id="step5"><div class="step-circle">5</div><div class="step-label">Report</div></div>
+    </div>
+  </div>
+
+  <div id="outputArea">
+    <div class="card">
+      <div class="rec-center">
+        <div style="font-size:0.85rem;color:#888;margin-bottom:6px">Investment Recommendation</div>
+        <span class="rec-badge" id="recBadge">—</span>
+      </div>
+      <div class="score-cards">
+        <div class="score-card"><div class="score-val" id="fundScore">—</div><div class="score-label">Fundamentals /100</div></div>
+        <div class="score-card"><div class="score-val" id="moatScore">—</div><div class="score-label">Moat /25</div></div>
+        <div class="score-card"><div class="score-val" id="divScore">—</div><div class="score-label">Dividends /25</div></div>
+        <div class="score-card"><div class="score-val" id="totalScore">—</div><div class="score-label">Total Score</div></div>
+      </div>
+      <div class="chart-wrap">
+        <canvas id="radarChart"></canvas>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style="font-weight:600;margin-bottom:12px">Screening Results</div>
+      <table class="screen-table" id="screenTable">
+        <thead><tr><th>Criterion</th><th>Result</th><th>Note</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="collapsible">
+        <div class="collapsible-header" onclick="toggleSection('fundBody', this)">Fundamentals Detail <span class="collapsible-arrow open">▼</span></div>
+        <div class="collapsible-body" id="fundBody"></div>
+      </div>
+      <div class="collapsible">
+        <div class="collapsible-header" onclick="toggleSection('moatBody', this)">Moat Analysis <span class="collapsible-arrow open">▼</span></div>
+        <div class="collapsible-body" id="moatBody"></div>
+      </div>
+      <div class="collapsible">
+        <div class="collapsible-header" onclick="toggleSection('divBody', this)">Dividend Profile <span class="collapsible-arrow open">▼</span></div>
+        <div class="collapsible-body" id="divBody"></div>
+      </div>
+      <div class="collapsible">
+        <div class="collapsible-header" onclick="toggleSection('reportBody', this)">Executive Summary <span class="collapsible-arrow open">▼</span></div>
+        <div class="collapsible-body" id="reportBody"></div>
+      </div>
+      <div class="disclaimer">This analysis is AI-generated for educational purposes only. Not financial advice.</div>
+    </div>
+  </div>
+
+  <footer>© 2025 Lee Yih Ven | AI Project Portfolio</footer>
+</div>
+
+<script>
+  async function callGemini(prompt, apiKey) {
+    const res = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: { temperature: 0.7, maxOutputTokens: 8192 }
+        })
+      }
+    );
+    const data = await res.json();
+    if (data.error) throw new Error(data.error.message);
+    return data.candidates[0].content.parts[0].text;
+  }
+
+  function extractJSON(text) {
+    const m = text.match(/```json\n?([\s\S]*?)\n?```/) || text.match(/(\{[\s\S]*\}|\[[\s\S]*\])/);
+    if (!m) throw new Error('No JSON found in response');
+    return JSON.parse(m[1] || m[0]);
+  }
+
+  function getKey() { return sessionStorage.getItem('gemini_key') || ''; }
+  function saveKey(k) { sessionStorage.setItem('gemini_key', k); }
+
+  window.addEventListener('load', () => {
+    const k = getKey();
+    if (k) { document.getElementById('apiKeyInput').value = k; document.getElementById('keyStatus').textContent = 'Key loaded'; }
+  });
+  function saveApiKey() {
+    const k = document.getElementById('apiKeyInput').value.trim();
+    if (k) { saveKey(k); document.getElementById('keyStatus').textContent = '✓ Saved'; }
+  }
+  document.getElementById('apiKeyInput').addEventListener('blur', () => {
+    const k = document.getElementById('apiKeyInput').value.trim();
+    if (k) { saveKey(k); document.getElementById('keyStatus').textContent = '✓ Saved'; }
+  });
+
+  function setStepActive(n) {
+    const el = document.getElementById('step' + n);
+    el.classList.remove('done'); el.classList.add('active');
+    el.querySelector('.step-circle').textContent = n;
+  }
+  function setStepDone(n) {
+    const el = document.getElementById('step' + n);
+    el.classList.remove('active'); el.classList.add('done');
+    el.querySelector('.step-circle').textContent = '✓';
+  }
+
+  function toggleSection(bodyId, header) {
+    const body = document.getElementById(bodyId);
+    const arrow = header.querySelector('.collapsible-arrow');
+    if (body.style.display === 'none') { body.style.display = 'block'; arrow.classList.add('open'); }
+    else { body.style.display = 'none'; arrow.classList.remove('open'); }
+  }
+
+  function showError(msg) { const b = document.getElementById('errorBox'); b.textContent = 'Error: ' + msg; b.style.display = 'block'; }
+  function clearError() { document.getElementById('errorBox').style.display = 'none'; }
+
+  let radarChartInst = null;
+  let stockData = {};
+
+  async function analyseStock() {
+    clearError();
+    const apiKey = getKey() || document.getElementById('apiKeyInput').value.trim();
+    if (!apiKey) { showError('Please enter your Gemini API key.'); return; }
+    saveKey(apiKey);
+
+    const ticker = document.getElementById('tickerInput').value.trim();
+    const market = document.getElementById('marketSelect').value;
+    if (!ticker) { showError('Please enter a stock ticker or company name.'); return; }
+
+    const btn = document.getElementById('analyseBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>Running...';
+    document.getElementById('progressCard').style.display = 'block';
+    document.getElementById('outputArea').style.display = 'none';
+    stockData = {};
+
+    try {
+      // Step 1
+      setStepActive(1);
+      const s1text = await callGemini(`You are a stock screening agent. Analyse "${ticker}" on ${market}.
+Using your knowledge of this company, assess these basic screening criteria:
+1. Is it a profitable business (positive earnings)?
+2. Does it have manageable debt levels?
+3. Is it in a growing or stable industry?
+4. Does it have positive revenue trend over 3 years?
+5. Is it a well-established company (>5 years listed)?
+Return ONLY valid JSON:
+{
+  "company_name": "string",
+  "ticker": "string",
+  "exchange": "string",
+  "sector": "string",
+  "screening_results": [
+    {"criterion": "string", "result": "pass|fail|uncertain", "note": "string"}
+  ],
+  "overall_screen": "pass|fail|uncertain",
+  "screen_note": "string (1-2 sentences)"
+}`, apiKey);
+      stockData.screen = extractJSON(s1text);
+      setStepDone(1);
+
+      const company = stockData.screen.company_name;
+
+      // Step 2
+      setStepActive(2);
+      const s2text = await callGemini(`Analyse the fundamentals of ${company} (${ticker}).
+Based on publicly available information and your knowledge, assess:
+Return ONLY valid JSON:
+{
+  "revenue_trend": {"score": 0, "analysis": "string (2-3 sentences)"},
+  "profitability": {"score": 0, "analysis": "string"},
+  "debt_management": {"score": 0, "analysis": "string"},
+  "valuation": {"score": 0, "analysis": "string"},
+  "financial_health": {"score": 0, "analysis": "string"},
+  "total_fundamental_score": 0,
+  "key_risks": ["string","string","string"]
+}
+Scores are 0-20 each (total 0-100).`, apiKey);
+      stockData.fund = extractJSON(s2text);
+      setStepDone(2);
+
+      // Step 3
+      setStepActive(3);
+      const s3text = await callGemini(`Analyse the competitive moat of ${company} (${ticker}).
+Return ONLY valid JSON:
+{
+  "moat_score": 0,
+  "moat_type": "string (e.g. Cost Advantage, Network Effect, Brand)",
+  "moat_analysis": "string (3-4 sentences)",
+  "competitive_advantages": ["string","string","string"],
+  "threats": ["string","string"]
+}
+moat_score is 0-25.`, apiKey);
+      stockData.moat = extractJSON(s3text);
+      setStepDone(3);
+
+      // Step 4
+      setStepActive(4);
+      const s4text = await callGemini(`Analyse the dividend profile of ${company} (${ticker}).
+Return ONLY valid JSON:
+{
+  "dividend_score": 0,
+  "estimated_yield": "string (e.g. ~4.5% or Not available)",
+  "dividend_consistency": "consistent|irregular|none",
+  "payout_analysis": "string (2-3 sentences)",
+  "dividend_outlook": "positive|neutral|negative"
+}
+dividend_score is 0-25.`, apiKey);
+      stockData.div = extractJSON(s4text);
+      setStepDone(4);
+
+      // Step 5
+      setStepActive(5);
+      const fundScore = stockData.fund.total_fundamental_score;
+      const moatScore = stockData.moat.moat_score;
+      const divScore = stockData.div.dividend_score;
+      const s5text = await callGemini(`Generate an investment report summary for ${company} (${ticker}).
+Fundamental score: ${fundScore}/100
+Moat score: ${moatScore}/25
+Dividend score: ${divScore}/25
+Return ONLY valid JSON:
+{
+  "total_score": 0,
+  "recommendation": "Strong Buy|Buy|Hold|Avoid|Strong Avoid",
+  "recommendation_color": "#22c55e|#84cc16|#f59e0b|#ef4444|#dc2626",
+  "executive_summary": "string (4-5 sentences)",
+  "key_strengths": ["string","string","string"],
+  "key_concerns": ["string","string"],
+  "suitable_for": "string (investor profile)"
+}
+total_score is 0-100 (map sum of 150 max to 100).`, apiKey);
+      stockData.report = extractJSON(s5text);
+      setStepDone(5);
+
+      renderOutput();
+      document.getElementById('outputArea').style.display = 'block';
+
+    } catch (err) {
+      showError(err.message);
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Analyse Stock';
+    }
+  }
+
+  function renderOutput() {
+    const sc = stockData.screen;
+    const fu = stockData.fund;
+    const mo = stockData.moat;
+    const di = stockData.div;
+    const rp = stockData.report;
+
+    // Badge
+    const badge = document.getElementById('recBadge');
+    badge.textContent = rp.recommendation;
+    badge.style.background = rp.recommendation_color || '#f59e0b';
+
+    // Scores
+    document.getElementById('fundScore').textContent = fu.total_fundamental_score;
+    document.getElementById('moatScore').textContent = mo.moat_score;
+    document.getElementById('divScore').textContent = di.dividend_score;
+    document.getElementById('totalScore').textContent = rp.total_score;
+
+    // Radar chart
+    const labels = ['Revenue', 'Profitability', 'Debt', 'Valuation', 'Health', 'Moat', 'Dividends'];
+    const chartData = [
+      fu.revenue_trend.score,
+      fu.profitability.score,
+      fu.debt_management.score,
+      fu.valuation.score,
+      fu.financial_health.score,
+      mo.moat_score / 25 * 20,
+      di.dividend_score / 25 * 20
+    ];
+
+    if (radarChartInst) radarChartInst.destroy();
+    const ctx = document.getElementById('radarChart').getContext('2d');
+    radarChartInst = new Chart(ctx, {
+      type: 'radar',
+      data: {
+        labels,
+        datasets: [{
+          label: sc.company_name,
+          data: chartData,
+          backgroundColor: 'rgba(233,30,99,0.2)',
+          borderColor: '#E91E63',
+          pointBackgroundColor: '#E91E63',
+          borderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: { r: { min: 0, max: 20, ticks: { stepSize: 5 } } },
+        plugins: { legend: { display: true, position: 'bottom' } }
+      }
+    });
+
+    // Screening table
+    const tbody = document.getElementById('screenTable').querySelector('tbody');
+    tbody.innerHTML = sc.screening_results.map(r => {
+      const dot = r.result === 'pass' ? 'dot-pass' : r.result === 'fail' ? 'dot-fail' : 'dot-uncertain';
+      const label = r.result.charAt(0).toUpperCase() + r.result.slice(1);
+      return `<tr><td>${r.criterion}</td><td><span class="dot ${dot}"></span>${label}</td><td style="font-size:0.82rem;color:#666">${r.note}</td></tr>`;
+    }).join('');
+
+    // Fundamentals
+    const fundDims = ['revenue_trend','profitability','debt_management','valuation','financial_health'];
+    const fundLabels = ['Revenue Trend','Profitability','Debt Management','Valuation','Financial Health'];
+    document.getElementById('fundBody').innerHTML = `
+      ${fundDims.map((d,i) => `
+        <div style="margin-bottom:14px">
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+            <span style="font-weight:600;font-size:0.88rem">${fundLabels[i]}</span>
+            <span style="font-weight:700;color:#E91E63">${fu[d].score}/20</span>
+          </div>
+          <div style="background:#e9ecef;border-radius:4px;height:6px;margin-bottom:6px">
+            <div style="background:#E91E63;width:${fu[d].score/20*100}%;height:6px;border-radius:4px"></div>
+          </div>
+          <p style="font-size:0.85rem;color:#555">${fu[d].analysis}</p>
+        </div>
+      `).join('')}
+      <div class="section-label">Key Risks</div>
+      <ul class="risk-list">${fu.key_risks.map(r=>`<li>${r}</li>`).join('')}</ul>
+    `;
+
+    // Moat
+    const outlookColors = { positive:'#4caf50', neutral:'#ff9800', negative:'#f44336' };
+    document.getElementById('moatBody').innerHTML = `
+      <div style="display:flex;gap:16px;align-items:center;margin-bottom:12px;flex-wrap:wrap">
+        <div style="font-size:2rem;font-weight:800;color:#E91E63">${mo.moat_score}<span style="font-size:1rem;color:#999">/25</span></div>
+        <span style="background:#fce4ec;color:#880e4f;padding:4px 12px;border-radius:20px;font-size:0.82rem;font-weight:600">${mo.moat_type}</span>
+      </div>
+      <p style="font-size:0.88rem;color:#444;margin-bottom:12px">${mo.moat_analysis}</p>
+      <div class="section-label">Competitive Advantages</div>
+      <ul class="strength-list">${mo.competitive_advantages.map(a=>`<li>${a}</li>`).join('')}</ul>
+      <div class="section-label">Threats</div>
+      <ul class="risk-list">${mo.threats.map(t=>`<li>${t}</li>`).join('')}</ul>
+    `;
+
+    // Dividends
+    document.getElementById('divBody').innerHTML = `
+      <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:12px">
+        <div style="background:#f8f9fa;padding:12px 20px;border-radius:8px;text-align:center;flex:1">
+          <div style="font-size:1.4rem;font-weight:800;color:#E91E63">${di.estimated_yield}</div>
+          <div style="font-size:0.75rem;color:#888">Estimated Yield</div>
+        </div>
+        <div style="background:#f8f9fa;padding:12px 20px;border-radius:8px;text-align:center;flex:1">
+          <div style="font-size:1rem;font-weight:700;color:${outlookColors[di.dividend_outlook]||'#888'};text-transform:capitalize">${di.dividend_outlook}</div>
+          <div style="font-size:0.75rem;color:#888">Outlook</div>
+        </div>
+        <div style="background:#f8f9fa;padding:12px 20px;border-radius:8px;text-align:center;flex:1">
+          <div style="font-size:1rem;font-weight:700;color:#444;text-transform:capitalize">${di.dividend_consistency}</div>
+          <div style="font-size:0.75rem;color:#888">Consistency</div>
+        </div>
+      </div>
+      <p style="font-size:0.88rem;color:#444">${di.payout_analysis}</p>
+    `;
+
+    // Report
+    document.getElementById('reportBody').innerHTML = `
+      <p style="font-size:0.9rem;color:#444;margin-bottom:14px">${rp.executive_summary}</p>
+      <div class="section-label">Key Strengths</div>
+      <ul class="strength-list">${rp.key_strengths.map(s=>`<li>${s}</li>`).join('')}</ul>
+      <div class="section-label">Key Concerns</div>
+      <ul class="risk-list">${rp.key_concerns.map(c=>`<li>${c}</li>`).join('')}</ul>
+      <div class="section-label">Suitable For</div>
+      <p style="font-size:0.88rem;color:#555;background:#f8f9fa;padding:10px 14px;border-radius:6px">${rp.suitable_for}</p>
+    `;
+  }
+</script>
+</body>
+</html>

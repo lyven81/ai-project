@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Consulting Intelligence Agent</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+      background: #f0f2f5;
+      color: #222;
+      line-height: 1.6;
+      padding-top: 56px;
+    }
+
+    #apiBar {
+      position: fixed; top: 0; left: 0; right: 0;
+      background: #1a1a2e; color: white;
+      padding: 10px 20px;
+      display: flex; align-items: center; gap: 12px;
+      font-size: 0.85rem; z-index: 1000;
+    }
+    #apiBar label { white-space: nowrap; }
+    #apiKeyInput {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: white; padding: 6px 10px; border-radius: 6px;
+      width: 280px; font-size: 0.85rem;
+    }
+    #apiKeyInput::placeholder { color: rgba(255,255,255,0.5); }
+    #saveKeyBtn {
+      background: #7C3AED; color: white; border: none;
+      padding: 6px 14px; border-radius: 6px; font-size: 0.82rem; cursor: pointer;
+    }
+    #keyStatus { font-size: 0.78rem; color: #c4b5fd; }
+    .back-link { color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.82rem; margin-right: 8px; }
+    .back-link:hover { color: white; }
+
+    .container { max-width: 860px; margin: 0 auto; padding: 24px 16px; }
+
+    .card {
+      background: white; border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      padding: 24px; margin-bottom: 20px;
+    }
+    .card h1 { font-size: 1.6rem; color: #1a1a2e; margin-bottom: 6px; }
+    .card .subtitle { color: #666; font-size: 0.95rem; }
+
+    .form-row { display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap; margin-top: 16px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 180px; }
+    .form-group label { font-size: 0.85rem; font-weight: 600; color: #444; }
+    .form-group input, .form-group select {
+      padding: 10px 14px; border: 1px solid #ddd; border-radius: 8px;
+      font-size: 0.95rem; font-family: inherit; outline: none; transition: border-color 0.2s;
+    }
+    .form-group input:focus, .form-group select:focus { border-color: #7C3AED; }
+
+    .btn-primary {
+      background: #7C3AED; color: white; border: none;
+      padding: 12px 28px; border-radius: 8px; font-size: 1rem;
+      cursor: pointer; transition: opacity 0.2s; white-space: nowrap;
+    }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-primary:hover:not(:disabled) { opacity: 0.85; }
+
+    .progress-row { display: flex; gap: 8px; margin: 20px 0; flex-wrap: wrap; }
+    .step { display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; min-width: 60px; }
+    .step-circle {
+      width: 28px; height: 28px; border-radius: 50%; background: #e9ecef;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 700; color: #999; transition: background 0.3s, color 0.3s;
+    }
+    .step.active .step-circle { background: #7C3AED; color: white; }
+    .step.done .step-circle { background: #4caf50; color: white; }
+    .step-label { font-size: 0.72rem; color: #666; text-align: center; }
+    .step.active .step-label { color: #7C3AED; font-weight: 600; }
+    .step.done .step-label { color: #4caf50; }
+    .step-connector { flex: 0.2; height: 2px; background: #e9ecef; align-self: center; margin-bottom: 18px; }
+
+    .error-box {
+      background: #ffebee; border: 1px solid #ef9a9a; color: #c62828;
+      padding: 12px 16px; border-radius: 8px; font-size: 0.9rem; margin-top: 12px; display: none;
+    }
+
+    /* Tabs */
+    #outputArea { display: none; }
+    .tab-bar {
+      display: flex; gap: 4px; background: white;
+      border-radius: 12px 12px 0 0; padding: 16px 16px 0;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      overflow-x: auto;
+    }
+    .tab-btn {
+      padding: 10px 18px; border: none; background: none;
+      font-size: 0.9rem; font-family: inherit; cursor: pointer; color: #666;
+      border-bottom: 3px solid transparent; white-space: nowrap; transition: color 0.2s;
+    }
+    .tab-btn.active { color: #7C3AED; border-bottom-color: #7C3AED; font-weight: 700; }
+    .tab-btn:hover { color: #7C3AED; }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .tab-content-card {
+      background: white; border-radius: 0 0 12px 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      padding: 24px; margin-bottom: 20px;
+    }
+
+    .section-label { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; color: #999; letter-spacing: 0.05em; margin: 14px 0 6px; }
+
+    /* Stat cards */
+    .stat-cards { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 20px; }
+    .stat-card { background: #f8f9fa; border-radius: 10px; padding: 16px; text-align: center; border: 1px solid #e9ecef; }
+    .stat-card .val { font-size: 1.3rem; font-weight: 800; color: #7C3AED; }
+    .stat-card .lbl { font-size: 0.75rem; color: #888; margin-top: 2px; }
+
+    /* Chart */
+    .chart-wrap { position: relative; max-height: 300px; margin-bottom: 20px; }
+
+    /* Trend items */
+    .trend-item { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f0f0f0; align-items: flex-start; }
+    .trend-item:last-child { border-bottom: none; }
+    .impact-badge { padding: 2px 8px; border-radius: 20px; font-size: 0.72rem; font-weight: 700; white-space: nowrap; }
+    .impact-high { background: #ffebee; color: #c62828; }
+    .impact-medium { background: #fff8e1; color: #f57f17; }
+    .impact-low { background: #e8f5e9; color: #2e7d32; }
+
+    /* Two-column */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+    .list-plain { list-style: none; padding: 0; }
+    .list-plain li { padding: 5px 0 5px 20px; position: relative; font-size: 0.88rem; }
+    .list-plain li::before { content: "•"; position: absolute; left: 4px; color: #7C3AED; font-weight: 700; }
+
+    /* Competitor cards */
+    .comp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
+    .comp-card { border: 1px solid #e9ecef; border-radius: 10px; padding: 14px; background: #fafafa; }
+    .comp-card .comp-name { font-weight: 700; font-size: 0.95rem; margin-bottom: 6px; }
+    .type-tag { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 0.72rem; font-weight: 600; margin-right: 4px; }
+    .type-local { background: #ede9fe; color: #5b21b6; }
+    .type-regional { background: #fce7f3; color: #9d174d; }
+    .type-global { background: #e0f2fe; color: #0369a1; }
+    .pos-leader { background: #d1fae5; color: #065f46; }
+    .pos-challenger { background: #fef3c7; color: #92400e; }
+    .pos-niche { background: #e0e7ff; color: #3730a3; }
+    .pos-emerging { background: #fce7f3; color: #9d174d; }
+
+    .strength-list { list-style: none; padding: 0; }
+    .strength-list li { padding: 4px 0 4px 18px; position: relative; font-size: 0.83rem; color: #2e7d32; }
+    .strength-list li::before { content: "✓"; position: absolute; left: 0; font-weight: 700; }
+    .weak-list { list-style: none; padding: 0; }
+    .weak-list li { padding: 4px 0 4px 18px; position: relative; font-size: 0.83rem; color: #c62828; }
+    .weak-list li::before { content: "✗"; position: absolute; left: 0; font-weight: 700; }
+
+    /* Opportunity scatter */
+    .opp-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; margin-top: 16px; }
+    .opp-card { border: 1px solid #e9ecef; border-radius: 10px; padding: 14px; }
+    .opp-card .opp-name { font-weight: 700; font-size: 0.92rem; margin-bottom: 6px; }
+    .opp-meta { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+    .opp-tag { padding: 2px 8px; border-radius: 20px; font-size: 0.72rem; font-weight: 600; background: #ede9fe; color: #5b21b6; }
+    .highlighted-box { background: #ede9fe; border-left: 4px solid #7C3AED; padding: 14px 16px; border-radius: 0 8px 8px 0; font-size: 0.9rem; color: #3b0764; margin-bottom: 16px; }
+
+    .entry-barriers { list-style: none; padding: 0; }
+    .entry-barriers li { padding: 6px 0 6px 22px; position: relative; font-size: 0.88rem; }
+    .entry-barriers li::before { content: "🔒"; position: absolute; left: 0; font-size: 0.78rem; }
+
+    /* Strategy */
+    .rec-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; margin-top: 16px; }
+    .rec-card { border-radius: 10px; padding: 16px; border: 1px solid #e9ecef; position: relative; }
+    .priority-badge {
+      position: absolute; top: 12px; right: 12px;
+      width: 24px; height: 24px; border-radius: 50%;
+      background: #7C3AED; color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 700;
+    }
+    .rec-title { font-weight: 700; font-size: 0.92rem; margin-bottom: 6px; padding-right: 30px; }
+    .rec-rational { font-size: 0.83rem; color: #555; margin-bottom: 8px; }
+    .timeline-tag { background: #f3e8ff; color: #6b21a8; padding: 3px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+
+    .checklist { list-style: none; padding: 0; }
+    .checklist li { padding: 6px 0 6px 24px; position: relative; font-size: 0.88rem; }
+    .checklist li::before { content: "☐"; position: absolute; left: 0; color: #7C3AED; }
+
+    .metrics-list { list-style: none; padding: 0; }
+    .metrics-list li { padding: 6px 0 6px 22px; position: relative; font-size: 0.88rem; }
+    .metrics-list li::before { content: "📊"; position: absolute; left: 0; font-size: 0.78rem; }
+
+    /* Intensity badge */
+    .intensity-high { background: #ffebee; color: #c62828; padding: 4px 12px; border-radius: 20px; font-size: 0.82rem; font-weight: 600; }
+    .intensity-medium { background: #fff8e1; color: #f57f17; padding: 4px 12px; border-radius: 20px; font-size: 0.82rem; font-weight: 600; }
+    .intensity-low { background: #e8f5e9; color: #2e7d32; padding: 4px 12px; border-radius: 20px; font-size: 0.82rem; font-weight: 600; }
+
+    .spinner {
+      display: inline-block; width: 14px; height: 14px;
+      border: 2px solid rgba(255,255,255,0.5); border-top-color: white;
+      border-radius: 50%; animation: spin 0.6s linear infinite;
+      vertical-align: middle; margin-right: 6px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    footer { text-align: center; padding: 24px; color: #888; font-size: 0.82rem; margin-top: 40px; }
+
+    @media (max-width: 600px) {
+      .stat-cards, .two-col { grid-template-columns: 1fr; }
+      #apiKeyInput { width: 160px; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="apiBar">
+  <a href="../index.html" class="back-link">← Back</a>
+  <label for="apiKeyInput">Gemini API Key:</label>
+  <input type="password" id="apiKeyInput" placeholder="Paste your API key here...">
+  <button id="saveKeyBtn" onclick="saveApiKey()">Save</button>
+  <span id="keyStatus"></span>
+</div>
+
+<div class="container">
+  <div class="card">
+    <h1>Data Consulting Intelligence</h1>
+    <p class="subtitle">AI market research, competitive analysis and opportunity mapping</p>
+  </div>
+
+  <div class="card">
+    <div class="form-row">
+      <div class="form-group" style="flex:2">
+        <label for="industryInput">Industry / Niche</label>
+        <input type="text" id="industryInput" placeholder="e.g. Data Analytics Consulting, Malaysia">
+      </div>
+      <div class="form-group" style="flex:1">
+        <label for="geoInput">Geography</label>
+        <input type="text" id="geoInput" placeholder="e.g. Malaysia, Southeast Asia">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group" style="flex:2">
+        <label for="focusSelect">Analysis Focus</label>
+        <select id="focusSelect">
+          <option value="Market Entry Analysis">Market Entry Analysis</option>
+          <option value="Competitive Landscape">Competitive Landscape</option>
+          <option value="Growth Opportunities">Growth Opportunities</option>
+          <option value="Full Analysis" selected>Full Analysis</option>
+        </select>
+      </div>
+      <div class="form-group" style="flex:0">
+        <label>&nbsp;</label>
+        <button class="btn-primary" id="runBtn" onclick="runAnalysis()">Run Analysis</button>
+      </div>
+    </div>
+    <div id="errorBox" class="error-box"></div>
+  </div>
+
+  <div class="card" id="progressCard" style="display:none;">
+    <div class="progress-row">
+      <div class="step" id="step1"><div class="step-circle">1</div><div class="step-label">Research</div></div>
+      <div class="step-connector"></div>
+      <div class="step" id="step2"><div class="step-circle">2</div><div class="step-label">Competitors</div></div>
+      <div class="step-connector"></div>
+      <div class="step" id="step3"><div class="step-circle">3</div><div class="step-label">Opportunities</div></div>
+      <div class="step-connector"></div>
+      <div class="step" id="step4"><div class="step-circle">4</div><div class="step-label">Report</div></div>
+    </div>
+  </div>
+
+  <div id="outputArea">
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="switchTab('tab-trends', this)">Market Trends</button>
+      <button class="tab-btn" onclick="switchTab('tab-competitors', this)">Competitors</button>
+      <button class="tab-btn" onclick="switchTab('tab-opportunities', this)">Opportunities</button>
+      <button class="tab-btn" onclick="switchTab('tab-strategy', this)">Strategy Report</button>
+    </div>
+    <div class="tab-content-card">
+      <!-- Tab 1: Market Trends -->
+      <div class="tab-panel active" id="tab-trends">
+        <div class="stat-cards" id="trendStats"></div>
+        <div class="chart-wrap"><canvas id="trendChart"></canvas></div>
+        <div class="section-label">Key Trends</div>
+        <div id="trendList"></div>
+        <div class="two-col">
+          <div><div class="section-label">Market Drivers</div><ul class="list-plain" id="driversList"></ul></div>
+          <div><div class="section-label">Market Challenges</div><ul class="list-plain" id="challengesList"></ul></div>
+        </div>
+      </div>
+
+      <!-- Tab 2: Competitors -->
+      <div class="tab-panel" id="tab-competitors">
+        <div style="margin-bottom:16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          <div style="font-weight:600">Competitive Intensity:</div>
+          <span id="intensityBadge"></span>
+          <span id="concentrationText" style="font-size:0.85rem;color:#555"></span>
+        </div>
+        <div class="section-label">Top 3 Competitors — Score Radar</div>
+        <div class="chart-wrap" style="max-width:340px;margin:0 auto 20px"><canvas id="compChart"></canvas></div>
+        <div class="section-label">All Competitors</div>
+        <div class="comp-grid" id="compGrid"></div>
+      </div>
+
+      <!-- Tab 3: Opportunities -->
+      <div class="tab-panel" id="tab-opportunities">
+        <div class="section-label">Opportunity Map (Attractiveness vs Competition)</div>
+        <div class="chart-wrap"><canvas id="oppChart"></canvas></div>
+        <div class="section-label">Recommended Focus</div>
+        <div class="highlighted-box" id="recFocus"></div>
+        <div class="section-label">All Opportunities</div>
+        <div class="opp-cards" id="oppCards"></div>
+        <div class="section-label" style="margin-top:20px">Entry Barriers</div>
+        <ul class="entry-barriers" id="entryBarriers"></ul>
+      </div>
+
+      <!-- Tab 4: Strategy Report -->
+      <div class="tab-panel" id="tab-strategy">
+        <div class="section-label">Executive Summary</div>
+        <p id="execSummary" style="font-size:0.92rem;color:#444;margin-bottom:16px"></p>
+        <div class="section-label">Strategic Recommendations</div>
+        <div class="rec-cards" id="recCards"></div>
+        <div class="section-label" style="margin-top:20px">Quick Wins</div>
+        <ul class="checklist" id="quickWins"></ul>
+        <div class="section-label" style="margin-top:12px">Resource Requirements</div>
+        <p id="resourceReqs" style="font-size:0.88rem;color:#555;background:#f8f9fa;padding:10px 14px;border-radius:6px"></p>
+        <div class="section-label" style="margin-top:12px">Success Metrics</div>
+        <ul class="metrics-list" id="successMetrics"></ul>
+      </div>
+    </div>
+  </div>
+
+  <footer>© 2025 Lee Yih Ven | AI Project Portfolio</footer>
+</div>
+
+<script>
+  async function callGemini(prompt, apiKey) {
+    const res = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: { temperature: 0.7, maxOutputTokens: 8192 }
+        })
+      }
+    );
+    const data = await res.json();
+    if (data.error) throw new Error(data.error.message);
+    return data.candidates[0].content.parts[0].text;
+  }
+
+  function extractJSON(text) {
+    const m = text.match(/```json\n?([\s\S]*?)\n?```/) || text.match(/(\{[\s\S]*\}|\[[\s\S]*\])/);
+    if (!m) throw new Error('No JSON found in response');
+    return JSON.parse(m[1] || m[0]);
+  }
+
+  function getKey() { return sessionStorage.getItem('gemini_key') || ''; }
+  function saveKey(k) { sessionStorage.setItem('gemini_key', k); }
+
+  window.addEventListener('load', () => {
+    const k = getKey();
+    if (k) { document.getElementById('apiKeyInput').value = k; document.getElementById('keyStatus').textContent = 'Key loaded'; }
+  });
+  function saveApiKey() {
+    const k = document.getElementById('apiKeyInput').value.trim();
+    if (k) { saveKey(k); document.getElementById('keyStatus').textContent = '✓ Saved'; }
+  }
+  document.getElementById('apiKeyInput').addEventListener('blur', () => {
+    const k = document.getElementById('apiKeyInput').value.trim();
+    if (k) { saveKey(k); document.getElementById('keyStatus').textContent = '✓ Saved'; }
+  });
+
+  function setStepActive(n) {
+    const el = document.getElementById('step' + n);
+    el.classList.remove('done'); el.classList.add('active');
+    el.querySelector('.step-circle').textContent = n;
+  }
+  function setStepDone(n) {
+    const el = document.getElementById('step' + n);
+    el.classList.remove('active'); el.classList.add('done');
+    el.querySelector('.step-circle').textContent = '✓';
+  }
+
+  function switchTab(id, btn) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  function showError(msg) { const b = document.getElementById('errorBox'); b.textContent = 'Error: ' + msg; b.style.display = 'block'; }
+  function clearError() { document.getElementById('errorBox').style.display = 'none'; }
+
+  let charts = {};
+  let analysisData = {};
+
+  async function runAnalysis() {
+    clearError();
+    const apiKey = getKey() || document.getElementById('apiKeyInput').value.trim();
+    if (!apiKey) { showError('Please enter your Gemini API key.'); return; }
+    saveKey(apiKey);
+
+    const industry = document.getElementById('industryInput').value.trim();
+    const geo = document.getElementById('geoInput').value.trim();
+    const focus = document.getElementById('focusSelect').value;
+    if (!industry) { showError('Please enter an industry or niche.'); return; }
+    const geography = geo || 'the region';
+
+    const btn = document.getElementById('runBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>Running...';
+    document.getElementById('progressCard').style.display = 'block';
+    document.getElementById('outputArea').style.display = 'none';
+    analysisData = {};
+
+    // Destroy old charts
+    Object.values(charts).forEach(c => { if (c) c.destroy(); });
+    charts = {};
+
+    try {
+      // Step 1
+      setStepActive(1);
+      const r1 = await callGemini(`You are an industry research agent. Analyse the ${industry} industry in ${geography}.
+Focus: ${focus}
+Return ONLY valid JSON:
+{
+  "market_overview": "string (3-4 sentences)",
+  "market_size": "string (estimated, e.g. ~RM 500M annually)",
+  "growth_rate": "string (e.g. 12-15% YoY)",
+  "key_trends": [{"trend": "string", "impact": "high|medium|low", "description": "string"}],
+  "market_drivers": ["string","string","string","string"],
+  "market_challenges": ["string","string","string"],
+  "trend_chart_data": {
+    "labels": ["2020","2021","2022","2023","2024","2025"],
+    "values": [100, 115, 128, 143, 162, 185]
+  }
+}
+Provide 5 key_trends.`, apiKey);
+      analysisData.research = extractJSON(r1);
+      setStepDone(1);
+
+      // Step 2
+      setStepActive(2);
+      const r2 = await callGemini(`Identify and analyse the key competitors in ${industry} in ${geography}.
+Return ONLY valid JSON:
+{
+  "competitors": [
+    {
+      "name": "string",
+      "type": "local|regional|global",
+      "strengths": ["string","string"],
+      "weaknesses": ["string"],
+      "market_position": "leader|challenger|niche|emerging",
+      "scores": {
+        "brand": 0,
+        "technical": 0,
+        "pricing": 0,
+        "reach": 0,
+        "innovation": 0
+      }
+    }
+  ],
+  "competitive_intensity": "high|medium|low",
+  "market_concentration": "string (1-2 sentences)"
+}
+Provide 5-7 competitors. Scores are 0-10.`, apiKey);
+      analysisData.competitors = extractJSON(r2);
+      setStepDone(2);
+
+      // Step 3
+      setStepActive(3);
+      const step1Summary = `Market: ${analysisData.research.market_size}, Growth: ${analysisData.research.growth_rate}, Key trends: ${analysisData.research.key_trends.map(t=>t.trend).join(', ')}`;
+      const step2Summary = `Competitors: ${analysisData.competitors.competitors.map(c=>c.name).join(', ')}, Intensity: ${analysisData.competitors.competitive_intensity}`;
+      const r3 = await callGemini(`Based on this market research for ${industry} in ${geography}:
+Trends: ${step1Summary}
+Competitive landscape: ${step2Summary}
+Identify the top strategic opportunities.
+Return ONLY valid JSON:
+{
+  "opportunities": [
+    {
+      "name": "string",
+      "description": "string (2 sentences)",
+      "attractiveness": 8,
+      "competition_level": 4,
+      "time_to_capture": "short|medium|long",
+      "investment_required": "low|medium|high"
+    }
+  ],
+  "recommended_focus": "string (the single best opportunity with reasoning, 2-3 sentences)",
+  "entry_barriers": ["string","string","string"]
+}
+Provide 5-6 opportunities. attractiveness and competition_level are 1-10.`, apiKey);
+      analysisData.opportunities = extractJSON(r3);
+      setStepDone(3);
+
+      // Step 4
+      setStepActive(4);
+      const r4 = await callGemini(`Write a strategic report for entering/growing in ${industry} in ${geography}.
+Market size: ${analysisData.research.market_size}, Growth: ${analysisData.research.growth_rate}
+Top opportunity: ${analysisData.opportunities.recommended_focus}
+Return ONLY valid JSON:
+{
+  "executive_summary": "string (4-5 sentences)",
+  "strategic_recommendations": [
+    {"priority": 1, "recommendation": "string", "rationale": "string", "timeline": "string"},
+    {"priority": 2, "recommendation": "string", "rationale": "string", "timeline": "string"},
+    {"priority": 3, "recommendation": "string", "rationale": "string", "timeline": "string"}
+  ],
+  "quick_wins": ["string","string","string"],
+  "resource_requirements": "string (2-3 sentences)",
+  "success_metrics": ["string","string","string"]
+}`, apiKey);
+      analysisData.strategy = extractJSON(r4);
+      setStepDone(4);
+
+      renderOutput(industry, geography);
+      document.getElementById('outputArea').style.display = 'block';
+
+    } catch (err) {
+      showError(err.message);
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Run Analysis';
+    }
+  }
+
+  function renderOutput(industry, geography) {
+    const rd = analysisData.research;
+    const cp = analysisData.competitors;
+    const op = analysisData.opportunities;
+    const st = analysisData.strategy;
+
+    // --- Tab 1: Trends ---
+    document.getElementById('trendStats').innerHTML = `
+      <div class="stat-card"><div class="val">${rd.market_size}</div><div class="lbl">Market Size</div></div>
+      <div class="stat-card"><div class="val">${rd.growth_rate}</div><div class="lbl">Growth Rate</div></div>
+      <div class="stat-card"><div class="val">${rd.key_trends.length}</div><div class="lbl">Key Trends Identified</div></div>
+    `;
+
+    const tCtx = document.getElementById('trendChart').getContext('2d');
+    charts.trend = new Chart(tCtx, {
+      type: 'line',
+      data: {
+        labels: rd.trend_chart_data.labels,
+        datasets: [{
+          label: 'Market Growth Index',
+          data: rd.trend_chart_data.values,
+          borderColor: '#7C3AED',
+          backgroundColor: 'rgba(124,58,237,0.12)',
+          fill: true,
+          tension: 0.3,
+          pointBackgroundColor: '#7C3AED'
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { position: 'bottom' } },
+        scales: { y: { beginAtZero: false } }
+      }
+    });
+
+    const impactClass = { high: 'impact-high', medium: 'impact-medium', low: 'impact-low' };
+    document.getElementById('trendList').innerHTML = rd.key_trends.map(t => `
+      <div class="trend-item">
+        <span class="impact-badge ${impactClass[t.impact] || 'impact-medium'}">${t.impact.toUpperCase()}</span>
+        <div><strong style="font-size:0.88rem">${t.trend}</strong><br><span style="font-size:0.83rem;color:#555">${t.description}</span></div>
+      </div>
+    `).join('');
+
+    document.getElementById('driversList').innerHTML = rd.market_drivers.map(d => `<li>${d}</li>`).join('');
+    document.getElementById('challengesList').innerHTML = rd.market_challenges.map(c => `<li>${c}</li>`).join('');
+
+    // --- Tab 2: Competitors ---
+    const intClass = { high: 'intensity-high', medium: 'intensity-medium', low: 'intensity-low' };
+    document.getElementById('intensityBadge').innerHTML = `<span class="${intClass[cp.competitive_intensity] || 'intensity-medium'}">${cp.competitive_intensity.toUpperCase()}</span>`;
+    document.getElementById('concentrationText').textContent = cp.market_concentration;
+
+    // Radar for top 3
+    const top3 = cp.competitors.slice(0, 3);
+    const radarLabels = ['Brand', 'Technical', 'Pricing', 'Reach', 'Innovation'];
+    const colors = ['rgba(124,58,237,0.3)', 'rgba(233,30,99,0.3)', 'rgba(33,150,243,0.3)'];
+    const borderColors = ['#7C3AED', '#E91E63', '#2196F3'];
+    const cCtx = document.getElementById('compChart').getContext('2d');
+    charts.comp = new Chart(cCtx, {
+      type: 'radar',
+      data: {
+        labels: radarLabels,
+        datasets: top3.map((c, i) => ({
+          label: c.name,
+          data: [c.scores.brand, c.scores.technical, c.scores.pricing, c.scores.reach, c.scores.innovation],
+          backgroundColor: colors[i],
+          borderColor: borderColors[i],
+          pointBackgroundColor: borderColors[i],
+          borderWidth: 2
+        }))
+      },
+      options: {
+        responsive: true,
+        scales: { r: { min: 0, max: 10, ticks: { stepSize: 2 } } },
+        plugins: { legend: { position: 'bottom' } }
+      }
+    });
+
+    const posClass = { leader: 'pos-leader', challenger: 'pos-challenger', niche: 'pos-niche', emerging: 'pos-emerging' };
+    const typeClass = { local: 'type-local', regional: 'type-regional', global: 'type-global' };
+    document.getElementById('compGrid').innerHTML = cp.competitors.map(c => `
+      <div class="comp-card">
+        <div class="comp-name">${c.name}</div>
+        <div style="margin-bottom:8px">
+          <span class="type-tag ${typeClass[c.type] || 'type-local'}">${c.type}</span>
+          <span class="type-tag ${posClass[c.market_position] || 'pos-niche'}">${c.market_position}</span>
+        </div>
+        <div style="font-size:0.75rem;font-weight:700;text-transform:uppercase;color:#999;margin-bottom:4px">Strengths</div>
+        <ul class="strength-list">${c.strengths.map(s => `<li>${s}</li>`).join('')}</ul>
+        <div style="font-size:0.75rem;font-weight:700;text-transform:uppercase;color:#999;margin:6px 0 4px">Weaknesses</div>
+        <ul class="weak-list">${c.weaknesses.map(w => `<li>${w}</li>`).join('')}</ul>
+      </div>
+    `).join('');
+
+    // --- Tab 3: Opportunities ---
+    const investSize = { low: 8, medium: 14, high: 22 };
+    const oCtx = document.getElementById('oppChart').getContext('2d');
+    charts.opp = new Chart(oCtx, {
+      type: 'bubble',
+      data: {
+        datasets: [{
+          label: 'Opportunities',
+          data: op.opportunities.map(o => ({
+            x: o.competition_level,
+            y: o.attractiveness,
+            r: investSize[o.investment_required] || 12
+          })),
+          backgroundColor: 'rgba(124,58,237,0.5)',
+          borderColor: '#7C3AED'
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: (ctx) => {
+                const o = op.opportunities[ctx.dataIndex];
+                return `${o.name} | Attract: ${o.attractiveness} | Comp: ${o.competition_level}`;
+              }
+            }
+          }
+        },
+        scales: {
+          x: { title: { display: true, text: 'Competition Level (lower = better)' }, min: 0, max: 11 },
+          y: { title: { display: true, text: 'Attractiveness (higher = better)' }, min: 0, max: 11 }
+        }
+      }
+    });
+
+    document.getElementById('recFocus').textContent = op.recommended_focus;
+
+    document.getElementById('oppCards').innerHTML = op.opportunities.map(o => `
+      <div class="opp-card">
+        <div class="opp-name">${o.name}</div>
+        <p style="font-size:0.83rem;color:#555">${o.description}</p>
+        <div class="opp-meta">
+          <span class="opp-tag">Time: ${o.time_to_capture}</span>
+          <span class="opp-tag">Investment: ${o.investment_required}</span>
+          <span class="opp-tag">Attract: ${o.attractiveness}/10</span>
+        </div>
+      </div>
+    `).join('');
+
+    document.getElementById('entryBarriers').innerHTML = op.entry_barriers.map(b => `<li>${b}</li>`).join('');
+
+    // --- Tab 4: Strategy ---
+    document.getElementById('execSummary').textContent = st.executive_summary;
+
+    document.getElementById('recCards').innerHTML = st.strategic_recommendations.map(r => `
+      <div class="rec-card">
+        <div class="priority-badge">${r.priority}</div>
+        <div class="rec-title">${r.recommendation}</div>
+        <div class="rec-rational">${r.rationale}</div>
+        <span class="timeline-tag">${r.timeline}</span>
+      </div>
+    `).join('');
+
+    document.getElementById('quickWins').innerHTML = st.quick_wins.map(w => `<li>${w}</li>`).join('');
+    document.getElementById('resourceReqs').textContent = st.resource_requirements;
+    document.getElementById('successMetrics').innerHTML = st.success_metrics.map(m => `<li>${m}</li>`).join('');
+  }
+</script>
+</body>
+</html>
