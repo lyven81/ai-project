@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>專業風水顧問 — 五行・八卦・居家風水諮詢</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #0f0f1a;
+      color: #e2e8f0;
+      min-height: 100vh;
+      padding-top: 56px;
+    }
+
+    /* ── API Key Bar ── */
+    #api-bar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: #1a1a2e;
+      border-bottom: 1px solid #2d2d4e;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      gap: 12px;
+    }
+    #api-bar label {
+      font-size: 0.82rem;
+      color: #94a3b8;
+      white-space: nowrap;
+    }
+    #api-bar input[type="password"] {
+      flex: 1;
+      max-width: 420px;
+      background: #0f0f1a;
+      border: 1px solid #2d2d4e;
+      border-radius: 6px;
+      color: #e2e8f0;
+      padding: 6px 12px;
+      font-size: 0.85rem;
+      outline: none;
+    }
+    #api-bar input[type="password"]:focus { border-color: #16a34a; }
+    #api-bar button {
+      background: #166534;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 6px 16px;
+      font-size: 0.82rem;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    #api-bar button:hover { background: #15803d; }
+    #api-status {
+      font-size: 0.78rem;
+      color: #4ade80;
+    }
+
+    /* ── Back link ── */
+    #back-link {
+      display: inline-block;
+      color: #86efac;
+      text-decoration: none;
+      font-size: 0.82rem;
+      padding: 14px 20px 0;
+      opacity: 0.8;
+    }
+    #back-link:hover { opacity: 1; }
+
+    /* ── Page wrapper ── */
+    .page-wrap {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 16px 60px;
+    }
+
+    /* ── Header ── */
+    header {
+      background: linear-gradient(135deg, #14401a, #166534);
+      border-radius: 16px;
+      text-align: center;
+      padding: 40px 24px 36px;
+      margin: 16px 0 28px;
+      box-shadow: 0 8px 32px rgba(22,101,52,0.35);
+    }
+    header .icon { font-size: 3rem; margin-bottom: 10px; }
+    header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      color: #f0fdf4;
+    }
+    header p {
+      margin-top: 8px;
+      font-size: 1rem;
+      color: #bbf7d0;
+      letter-spacing: 0.08em;
+    }
+
+    /* ── Card ── */
+    .card {
+      background: #1a1a2e;
+      border: 1px solid #2d2d4e;
+      border-radius: 14px;
+      padding: 28px;
+      margin-bottom: 20px;
+    }
+    .card-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #86efac;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* ── Form ── */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 560px) { .form-grid { grid-template-columns: 1fr; } }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .form-group.full { grid-column: 1 / -1; }
+
+    label {
+      font-size: 0.82rem;
+      color: #94a3b8;
+      font-weight: 500;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    select,
+    textarea {
+      background: #0f0f1a;
+      border: 1px solid #2d2d4e;
+      border-radius: 8px;
+      color: #e2e8f0;
+      padding: 10px 13px;
+      font-size: 0.92rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s;
+      width: 100%;
+    }
+    input[type="text"]:focus,
+    input[type="date"]:focus,
+    select:focus,
+    textarea:focus { border-color: #16a34a; }
+    textarea { resize: vertical; min-height: 100px; }
+    select option { background: #1a1a2e; }
+
+    /* ── Collapsible advanced ── */
+    .advanced-toggle {
+      background: none;
+      border: none;
+      color: #4ade80;
+      font-size: 0.85rem;
+      cursor: pointer;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 4px;
+    }
+    .advanced-toggle:hover { color: #86efac; }
+    .advanced-section { overflow: hidden; }
+    .advanced-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 14px;
+    }
+    @media (max-width: 560px) { .advanced-inner { grid-template-columns: 1fr; } }
+
+    /* ── Submit button ── */
+    #submitBtn {
+      background: linear-gradient(135deg, #16a34a, #166534);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 14px 24px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 8px;
+      letter-spacing: 0.05em;
+      transition: opacity 0.2s, transform 0.1s;
+    }
+    #submitBtn:hover { opacity: 0.9; }
+    #submitBtn:active { transform: scale(0.98); }
+    #submitBtn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* ── API warning ── */
+    #api-warning {
+      background: #1c1a14;
+      border: 1px solid #a16207;
+      border-radius: 10px;
+      padding: 12px 16px;
+      color: #fbbf24;
+      font-size: 0.85rem;
+      margin-bottom: 16px;
+      display: none;
+    }
+
+    /* ── Loading ── */
+    #loadingSection {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      padding: 40px 20px;
+    }
+    .spinner {
+      width: 52px; height: 52px;
+      border: 4px solid #2d2d4e;
+      border-top-color: #16a34a;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    #loadingSection p { color: #86efac; font-size: 0.95rem; letter-spacing: 0.05em; }
+
+    /* ── Result ── */
+    #resultCard { display: none; }
+
+    /* Element panel */
+    .element-panel {
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .element-char {
+      font-size: 4rem;
+      font-weight: 800;
+      line-height: 1;
+    }
+    .element-name {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-top: 6px;
+    }
+    .element-desc {
+      font-size: 0.85rem;
+      margin-top: 10px;
+      opacity: 0.85;
+      line-height: 1.6;
+    }
+
+    /* Reply sections */
+    .reply-body {
+      line-height: 1.75;
+      font-size: 0.93rem;
+      color: #cbd5e1;
+    }
+    .reply-section-header {
+      font-weight: 700;
+      color: #86efac;
+      margin-top: 16px;
+      margin-bottom: 4px;
+      font-size: 0.95rem;
+    }
+
+    /* Tips */
+    .tips-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 6px;
+    }
+    .tips-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.9rem;
+      color: #cbd5e1;
+      line-height: 1.55;
+    }
+    .tips-list li::before {
+      content: "✓";
+      color: #4ade80;
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* Lucky grid */
+    .lucky-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 8px;
+    }
+    @media (max-width: 560px) { .lucky-grid { grid-template-columns: repeat(2, 1fr); } }
+    .lucky-item {
+      background: #0f0f1a;
+      border: 1px solid #2d2d4e;
+      border-radius: 10px;
+      padding: 14px 10px;
+      text-align: center;
+    }
+    .lucky-item .lucky-icon { font-size: 1.4rem; margin-bottom: 6px; }
+    .lucky-item .lucky-label {
+      font-size: 0.72rem;
+      color: #64748b;
+      margin-bottom: 4px;
+    }
+    .lucky-item .lucky-value {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #e2e8f0;
+    }
+    .color-dot {
+      display: inline-block;
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      vertical-align: middle;
+      margin-right: 4px;
+    }
+
+    /* Timing box */
+    .timing-box {
+      background: #1c1a14;
+      border: 1px solid #713f12;
+      border-radius: 10px;
+      padding: 14px 16px;
+      color: #fde68a;
+      font-size: 0.88rem;
+      line-height: 1.6;
+      margin-top: 8px;
+    }
+
+    /* Affirmation box */
+    .affirmation-box {
+      border-radius: 10px;
+      padding: 14px 18px;
+      font-size: 0.92rem;
+      font-weight: 500;
+      line-height: 1.6;
+      margin-top: 8px;
+      background: #111827;
+    }
+
+    /* Harmony meter */
+    .harmony-wrap { margin-top: 8px; }
+    .harmony-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.82rem;
+      color: #94a3b8;
+      margin-bottom: 6px;
+    }
+    .harmony-bar-bg {
+      background: #0f0f1a;
+      border-radius: 999px;
+      height: 10px;
+      overflow: hidden;
+    }
+    .harmony-bar-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #16a34a, #4ade80);
+      transition: width 1s ease;
+    }
+
+    /* Reset button */
+    #resetBtn {
+      background: transparent;
+      border: 1px solid #16a34a;
+      color: #4ade80;
+      border-radius: 8px;
+      padding: 10px 24px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+    #resetBtn:hover { background: rgba(22,163,74,0.1); }
+
+    /* Section label above card */
+    .section-label {
+      font-size: 0.78rem;
+      color: #4b5563;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 8px;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      color: #4b5563;
+      font-size: 0.8rem;
+      padding: 32px 0 20px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- API Key Bar -->
+<div id="api-bar">
+  <label for="apiKeyInput">Gemini API Key:</label>
+  <input type="password" id="apiKeyInput" placeholder="AIza..." autocomplete="off" />
+  <button onclick="saveApiKey()">儲存</button>
+  <span id="api-status"></span>
+</div>
+
+<!-- Back link -->
+<a id="back-link" href="../../category-conversational-ai.html">← 返回列表</a>
+
+<div class="page-wrap">
+
+  <!-- Header -->
+  <header>
+    <div class="icon">☯</div>
+    <h1>專業風水顧問</h1>
+    <p>五行・八卦・居家風水諮詢</p>
+  </header>
+
+  <!-- API warning -->
+  <div id="api-warning">⚠ 請輸入 Gemini API 金鑰以使用完整功能。</div>
+
+  <!-- Consultation Form -->
+  <div class="card" id="formCard">
+    <div class="card-title">☰ 諮詢資料填寫</div>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="nameInput">您的姓名</label>
+        <input type="text" id="nameInput" placeholder="您的姓名" />
+      </div>
+      <div class="form-group">
+        <label for="birthInput">出生日期</label>
+        <input type="date" id="birthInput" />
+      </div>
+      <div class="form-group">
+        <label for="categorySelect">問題類型</label>
+        <select id="categorySelect">
+          <option value="感情">感情</option>
+          <option value="事業">事業</option>
+          <option value="財運">財運</option>
+          <option value="健康">健康</option>
+          <option value="居家環境">居家環境</option>
+          <option value="綜合">綜合</option>
+        </select>
+      </div>
+      <div class="form-group full">
+        <label for="questionInput">諮詢問題</label>
+        <textarea id="questionInput" placeholder="請描述您想諮詢的問題..."></textarea>
+      </div>
+    </div>
+
+    <!-- Advanced options -->
+    <button class="advanced-toggle" onclick="toggleAdvanced()" id="advToggle">
+      <span id="advArrow">▶</span> 進階選項
+    </button>
+    <div class="advanced-section" id="advancedSection" style="max-height:0; transition: max-height 0.3s ease;">
+      <div class="advanced-inner">
+        <div class="form-group">
+          <label for="partnerElement">伴侶五行</label>
+          <select id="partnerElement">
+            <option value="">無</option>
+            <option value="木">木</option>
+            <option value="火">火</option>
+            <option value="土">土</option>
+            <option value="金">金</option>
+            <option value="水">水</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="homeDirection">住宅方位</label>
+          <input type="text" id="homeDirection" placeholder="例：坐北朝南" />
+        </div>
+      </div>
+    </div>
+
+    <button id="submitBtn" onclick="submitConsultation()">開始諮詢</button>
+  </div>
+
+  <!-- Loading -->
+  <div id="loadingSection" class="card">
+    <div class="spinner"></div>
+    <p>玄機老師正在為您推算中...</p>
+  </div>
+
+  <!-- Result -->
+  <div id="resultCard">
+
+    <!-- Element Panel -->
+    <div class="section-label">您的五行命格</div>
+    <div class="element-panel card" id="elementPanel">
+      <div class="element-char" id="elementChar">木</div>
+      <div class="element-name" id="elementName"></div>
+      <div class="element-desc" id="elementDesc"></div>
+    </div>
+
+    <!-- Main reading -->
+    <div class="card">
+      <div class="card-title">☯ 玄機老師的諮詢回覆</div>
+      <div class="reply-body" id="replyBody"></div>
+    </div>
+
+    <!-- Tips -->
+    <div class="card">
+      <div class="card-title">✦ 具體建議</div>
+      <ul class="tips-list" id="tipsList"></ul>
+    </div>
+
+    <!-- Lucky elements -->
+    <div class="card">
+      <div class="card-title">★ 今日幸運元素</div>
+      <div class="lucky-grid">
+        <div class="lucky-item">
+          <div class="lucky-icon">🎨</div>
+          <div class="lucky-label">幸運色</div>
+          <div class="lucky-value" id="luckyColor">—</div>
+        </div>
+        <div class="lucky-item">
+          <div class="lucky-icon">🔢</div>
+          <div class="lucky-label">幸運數字</div>
+          <div class="lucky-value" id="luckyNumber">—</div>
+        </div>
+        <div class="lucky-item">
+          <div class="lucky-icon">🧭</div>
+          <div class="lucky-label">幸運方位</div>
+          <div class="lucky-value" id="luckyDirection">—</div>
+        </div>
+        <div class="lucky-item">
+          <div class="lucky-icon">⏰</div>
+          <div class="lucky-label">幸運時段</div>
+          <div class="lucky-value" id="luckyTime">—</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Timing advice -->
+    <div class="card">
+      <div class="card-title">📅 時機指導</div>
+      <div class="timing-box" id="timingBox"></div>
+    </div>
+
+    <!-- Affirmation -->
+    <div class="card">
+      <div class="card-title">✨ 能量肯定語</div>
+      <div class="affirmation-box" id="affirmationBox"></div>
+    </div>
+
+    <!-- Harmony (conditional) -->
+    <div class="card" id="harmonyCard" style="display:none;">
+      <div class="card-title">♾ 五行和諧度</div>
+      <div class="harmony-wrap">
+        <div class="harmony-label">
+          <span>與伴侶的五行契合度</span>
+          <span id="harmonyScore">0%</span>
+        </div>
+        <div class="harmony-bar-bg">
+          <div class="harmony-bar-fill" id="harmonyFill" style="width:0%"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reset -->
+    <div style="text-align:center;">
+      <button id="resetBtn" onclick="resetForm()">再次諮詢</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- Footer -->
+<footer>
+  © 2025 Lee Yih Ven | AI Project Portfolio
+</footer>
+
+<script>
+  /* ── Element config ── */
+  const ELEMENT_CONFIG = {
+    "木": { color: "#16a34a", bg: "rgba(22,163,74,0.12)", name: "木元素", icon: "🌳" },
+    "火": { color: "#dc2626", bg: "rgba(220,38,38,0.12)", name: "火元素", icon: "🔥" },
+    "土": { color: "#ca8a04", bg: "rgba(202,138,4,0.12)", name: "土元素", icon: "🌏" },
+    "金": { color: "#9ca3af", bg: "rgba(156,163,175,0.12)", name: "金元素", icon: "⚙️" },
+    "水": { color: "#2563eb", bg: "rgba(37,99,235,0.12)", name: "水元素", icon: "💧" },
+  };
+
+  /* ── API Key ── */
+  window.addEventListener("load", () => {
+    const saved = sessionStorage.getItem("gemini_api_key");
+    if (saved) {
+      document.getElementById("apiKeyInput").value = saved;
+      document.getElementById("api-status").textContent = "已儲存";
+    }
+  });
+
+  function saveApiKey() {
+    const key = document.getElementById("apiKeyInput").value.trim();
+    if (!key) return;
+    sessionStorage.setItem("gemini_api_key", key);
+    document.getElementById("api-status").textContent = "✓ 已儲存";
+    document.getElementById("api-warning").style.display = "none";
+    setTimeout(() => { document.getElementById("api-status").textContent = ""; }, 2000);
+  }
+
+  /* ── Advanced toggle ── */
+  let advOpen = false;
+  function toggleAdvanced() {
+    advOpen = !advOpen;
+    const sec = document.getElementById("advancedSection");
+    sec.style.maxHeight = advOpen ? sec.scrollHeight + 200 + "px" : "0";
+    document.getElementById("advArrow").textContent = advOpen ? "▼" : "▶";
+  }
+
+  /* ── Submit ── */
+  async function submitConsultation() {
+    const apiKey = sessionStorage.getItem("gemini_api_key") || document.getElementById("apiKeyInput").value.trim();
+    if (!apiKey) {
+      document.getElementById("api-warning").style.display = "block";
+      return;
+    }
+
+    const name = document.getElementById("nameInput").value.trim() || "匿名";
+    const birth = document.getElementById("birthInput").value;
+    const category = document.getElementById("categorySelect").value;
+    const question = document.getElementById("questionInput").value.trim();
+    const partner = document.getElementById("partnerElement").value;
+    const homeDir = document.getElementById("homeDirection").value.trim();
+
+    if (!birth) { alert("請填寫出生日期"); return; }
+    if (!question) { alert("請描述您的諮詢問題"); return; }
+
+    const today = new Date().toLocaleDateString("zh-TW", { year:"numeric", month:"2-digit", day:"2-digit" });
+    const partnerLine = partner ? `- 伴侶五行：${partner}` : "";
+    const homeLine = homeDir ? `- 住宅方位：${homeDir}` : "";
+
+    const prompt = `你是「玄機老師」，一位擁有20年豐富經驗的專業風水師，精通五行學說、八卦方位和居家風水（繁體中文）。
+
+求問者資訊：
+- 姓名：${name}
+- 出生日期：${birth}
+- 今日日期：${today}
+- 問題類型：${category}
+- 諮詢問題：${question}
+${partnerLine}
+${homeLine}
+
+請根據出生日期推算五行元素，並提供專業風水建議。
+
+返回ONLY有效JSON（無markdown）：
+{
+  "user_element": "木|火|土|金|水",
+  "element_explanation": "根據出生日期${birth}推算，您的主要五行為X元素。（1-2句）",
+  "daily_element": "當日五行：X元素",
+  "reply": "詳細諮詢回覆，使用繁體中文，按以下結構：\\n【當日五行】...\\n【深度解析】...\\n【具體建議】...\\n【時機指導】...\\n【能量祝福】...",
+  "tips": ["建議1", "建議2", "建議3", "建議4"],
+  "timing_advice": "時機建議（1-2句）",
+  "affirmation": "正向肯定語（1句）",
+  "lucky_color": "顏色名稱",
+  "lucky_number": 8,
+  "lucky_direction": "方位",
+  "lucky_time": "時段（例：下午15-17時）",
+  "harmony_score": ${partner ? "0-100的數字" : "null"}
+}`;
+
+    // Show loading
+    document.getElementById("formCard").style.display = "none";
+    document.getElementById("resultCard").style.display = "none";
+    document.getElementById("loadingSection").style.display = "flex";
+    document.getElementById("submitBtn").disabled = true;
+
+    try {
+      const res = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: prompt }] }],
+            generationConfig: { temperature: 0.8, maxOutputTokens: 2048 }
+          })
+        }
+      );
+
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error?.message || `HTTP ${res.status}`);
+      }
+
+      const data = await res.json();
+      const rawText = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+      const jsonMatch = rawText.match(/\{[\s\S]*\}/);
+      if (!jsonMatch) throw new Error("回覆格式錯誤，請重試");
+      const result = JSON.parse(jsonMatch[0]);
+      renderResult(result, name);
+
+    } catch (e) {
+      document.getElementById("loadingSection").style.display = "none";
+      document.getElementById("formCard").style.display = "block";
+      document.getElementById("submitBtn").disabled = false;
+      alert("發生錯誤：" + e.message);
+    }
+  }
+
+  /* ── Render ── */
+  function renderResult(r, name) {
+    const el = r.user_element || "木";
+    const cfg = ELEMENT_CONFIG[el] || ELEMENT_CONFIG["木"];
+
+    // Element panel
+    const panel = document.getElementById("elementPanel");
+    panel.style.background = cfg.bg;
+    panel.style.borderColor = cfg.color + "55";
+
+    document.getElementById("elementChar").textContent = el;
+    document.getElementById("elementChar").style.color = cfg.color;
+    document.getElementById("elementName").textContent = cfg.icon + " " + cfg.name;
+    document.getElementById("elementName").style.color = cfg.color;
+    document.getElementById("elementDesc").textContent = r.element_explanation || "";
+
+    // Reply body
+    const replyRaw = r.reply || "";
+    const replyHtml = replyRaw
+      .split("\n")
+      .map(line => {
+        if (line.match(/^【.*】/)) {
+          return `<div class="reply-section-header">${escHtml(line)}</div>`;
+        }
+        return line ? `<p style="margin-bottom:6px;">${escHtml(line)}</p>` : "<br/>";
+      })
+      .join("");
+    document.getElementById("replyBody").innerHTML = replyHtml;
+
+    // Tips
+    const tipsList = document.getElementById("tipsList");
+    tipsList.innerHTML = "";
+    (r.tips || []).forEach(tip => {
+      const li = document.createElement("li");
+      li.textContent = tip;
+      tipsList.appendChild(li);
+    });
+
+    // Lucky elements
+    const colorDot = `<span class="color-dot" style="background:${cfg.color}"></span>`;
+    document.getElementById("luckyColor").innerHTML = colorDot + escHtml(r.lucky_color || "—");
+    document.getElementById("luckyNumber").textContent = r.lucky_number ?? "—";
+    document.getElementById("luckyDirection").textContent = r.lucky_direction || "—";
+    document.getElementById("luckyTime").textContent = r.lucky_time || "—";
+
+    // Timing
+    document.getElementById("timingBox").textContent = r.timing_advice || "";
+
+    // Affirmation
+    const affBox = document.getElementById("affirmationBox");
+    affBox.textContent = r.affirmation || "";
+    affBox.style.borderLeft = `4px solid ${cfg.color}`;
+    affBox.style.paddingLeft = "16px";
+    affBox.style.color = cfg.color;
+
+    // Harmony
+    const harmonyCard = document.getElementById("harmonyCard");
+    if (r.harmony_score !== null && r.harmony_score !== undefined) {
+      harmonyCard.style.display = "block";
+      const score = Math.max(0, Math.min(100, Number(r.harmony_score)));
+      document.getElementById("harmonyScore").textContent = score + "%";
+      setTimeout(() => {
+        document.getElementById("harmonyFill").style.width = score + "%";
+      }, 200);
+    } else {
+      harmonyCard.style.display = "none";
+    }
+
+    // Show result
+    document.getElementById("loadingSection").style.display = "none";
+    document.getElementById("resultCard").style.display = "block";
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  /* ── Reset ── */
+  function resetForm() {
+    document.getElementById("resultCard").style.display = "none";
+    document.getElementById("formCard").style.display = "block";
+    document.getElementById("submitBtn").disabled = false;
+    document.getElementById("questionInput").value = "";
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  /* ── Util ── */
+  function escHtml(str) {
+    return String(str)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+</script>
+</body>
+</html>
