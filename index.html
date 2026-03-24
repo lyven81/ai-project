@@ -64,15 +64,15 @@
 
         .apps-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 30px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
             padding: 20px 0;
         }
 
         .app-card {
             background: #f9f9f9;
             border-radius: 6px;
-            padding: 30px;
+            padding: 24px;
             box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
             transition: all 0.3s ease;
             position: relative;
@@ -94,32 +94,33 @@
         }
 
         .card-visual {
-            height: 120px;
-            margin: -30px -30px 20px -30px;
+            height: 110px;
+            margin: -24px -24px 18px -24px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 3rem;
+            font-size: 2.6rem;
             border-radius: 6px 6px 0 0;
         }
 
         .app-title {
-            font-size: 1.4em;
+            font-size: 1.2em;
             color: #007BFF;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             font-weight: bold;
         }
 
         .app-description {
             color: #555;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
             line-height: 1.6;
+            font-size: 0.9rem;
         }
 
         .app-buttons {
             display: flex;
-            gap: 10px;
-            margin-top: 20px;
+            gap: 8px;
+            margin-top: 16px;
             flex-wrap: wrap;
         }
 
@@ -128,13 +129,14 @@
             background-color: #f5f5dc;
             color: #333;
             text-decoration: none;
-            padding: 8px 16px;
+            padding: 8px 14px;
             border-radius: 4px;
             transition: all 0.2s ease;
             font-weight: 500;
             flex: 1;
             text-align: center;
-            min-width: 140px;
+            min-width: 100px;
+            font-size: 0.88rem;
         }
 
         .app-link:hover {
@@ -149,6 +151,7 @@
         .category-creative::before { background: #E91E63; }
         .category-memory::before   { background: #9C27B0; }
         .category-coming::before   { background: #9E9E9E; }
+        .category-intel::before    { background: #0ea5e9; }
 
         .coming-soon-card {
             background: #f5f5f5;
@@ -172,29 +175,46 @@
             margin-top: 40px;
         }
 
-        @media (max-width: 768px) {
-            .apps-grid {
-                grid-template-columns: 1fr;
-            }
-
-            header h1 {
-                font-size: 2rem;
-            }
-
-            header p, nav a {
-                font-size: 1rem;
-            }
-
-            .container {
-                padding: 10px;
-            }
-        }
-
-        @media (min-width: 769px) and (max-width: 1024px) {
+        /* Tablet: 2 columns */
+        @media (min-width: 601px) and (max-width: 1024px) {
             .apps-grid {
                 grid-template-columns: repeat(2, 1fr);
                 gap: 20px;
             }
+
+            .app-title { font-size: 1.25em; }
+            .app-description { font-size: 0.88rem; }
+        }
+
+        /* Mobile: 1 column */
+        @media (max-width: 600px) {
+            .apps-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .app-card { padding: 20px; }
+
+            .card-visual {
+                height: 100px;
+                margin: -20px -20px 16px -20px;
+                font-size: 2.2rem;
+            }
+
+            .app-title { font-size: 1.2em; }
+            .app-description { font-size: 0.88rem; }
+
+            .app-link {
+                min-width: 0;
+                padding: 10px 12px;
+                font-size: 0.9rem;
+            }
+
+            header h1 { font-size: 2rem; }
+            header p { font-size: 1rem; }
+            nav a { font-size: 1rem; }
+
+            .container { padding: 12px; }
         }
 
         .fade-in {
@@ -228,63 +248,65 @@
         <main>
             <div class="apps-grid">
 
-                <div class="app-card category-memory fade-in">
-                    <div class="card-visual" style="background: linear-gradient(135deg, #4f46e5, #7c3aed);">✨</div>
-                    <h2 class="app-title">Skyread</h2>
-                    <p class="app-description">Daily horoscope app that explains planetary movements behind every reading. Bilingual EN/ZH with Sky Explainer and Sky Snapshot panels for grounded, credible insights.</p>
+                <!-- Row 1: Hire Gardener | Kopitiam | Long View -->
+                <div class="app-card category-chat fade-in">
+                    <div class="card-visual" style="background: linear-gradient(135deg, #075E54, #128C7E);">🌿</div>
+                    <h2 class="app-title">Hire Gardener</h2>
+                    <p class="app-description">AI agent that contacts grass cutting vendors via WhatsApp, collects quotes, compares prices, and confirms the best deal — without you typing a single message.</p>
                     <div class="app-buttons">
-                        <a href="projects/skyread/demo.html" target="_blank" class="app-link primary">Live Demo</a>
-                        <a href="skyread.html" class="app-link">View Project Details</a>
-                    </div>
-                </div>
-
-                <div class="app-card category-creative fade-in">
-                    <div class="card-visual" style="background: linear-gradient(135deg, #2D1B4E, #6B21A8);">📊</div>
-                    <h2 class="app-title">TrendMate</h2>
-                    <p class="app-description">AI market research assistant for Malaysian online fashion sellers on Shopee, Lazada, and TikTok Shop. Get trend, pricing, sourcing, and seasonal insights in 3 actionable sentences.</p>
-                    <div class="app-buttons">
-                        <a href="projects/trendmate/demo.html" target="_blank" class="app-link primary">Live Demo</a>
-                        <a href="trendmate.html" class="app-link">View Project Details</a>
+                        <a href="projects/hire-gardener/demo.html" target="_blank" class="app-link">Live Demo</a>
+                        <a href="hire-gardener.html" class="app-link">View Details</a>
                     </div>
                 </div>
 
                 <div class="app-card category-vision fade-in">
                     <div class="card-visual" style="background: linear-gradient(135deg, #059669, #047857);">☕</div>
                     <h2 class="app-title">Kopitiam Digital Waiter</h2>
-                    <p class="app-description">Real-time sales tracker and digital logbook for Malaysian kopitiam owners. Track menu performance, get AI-powered tips, and monitor daily revenue — all in one dashboard.</p>
+                    <p class="app-description">Real-time sales tracker and digital logbook for Malaysian kopitiam owners. Track menu performance, get AI-powered tips, and monitor daily revenue.</p>
                     <div class="app-buttons">
-                        <a href="https://kopitiam-digital-waiter-169218045868.us-west1.run.app/" target="_blank" class="app-link primary">Launch App</a>
-                        <a href="kopitiam-digital-waiter.html" class="app-link">View Project Details</a>
+                        <a href="https://kopitiam-digital-waiter-169218045868.us-west1.run.app/" target="_blank" class="app-link">Launch App</a>
+                        <a href="kopitiam-digital-waiter.html" class="app-link">View Details</a>
+                    </div>
+                </div>
+
+                <div class="app-card category-intel fade-in">
+                    <div class="card-visual" style="background: linear-gradient(135deg, #111827, #1f3a5c);">🌍</div>
+                    <h2 class="app-title">Long View</h2>
+                    <p class="app-description">OSINT intelligence aggregator — 27 data sources, 15-minute sweep cycle, delta alerting engine, 3D globe dashboard, and multi-LLM briefings pushed to Telegram and Discord.</p>
+                    <div class="app-buttons">
+                        <a href="projects/long-view/demo.html" target="_blank" class="app-link">Live Demo</a>
+                        <a href="long-view.html" class="app-link">View Details</a>
+                    </div>
+                </div>
+
+                <!-- Row 2: TrendMate | Expense Tracker AI | Skyread -->
+                <div class="app-card category-creative fade-in">
+                    <div class="card-visual" style="background: linear-gradient(135deg, #2D1B4E, #6B21A8);">📊</div>
+                    <h2 class="app-title">TrendMate</h2>
+                    <p class="app-description">AI market research assistant for Malaysian online fashion sellers on Shopee, Lazada, and TikTok Shop. Trend, pricing, sourcing, and seasonal insights in 3 sentences.</p>
+                    <div class="app-buttons">
+                        <a href="projects/trendmate/demo.html" target="_blank" class="app-link">Live Demo</a>
+                        <a href="trendmate.html" class="app-link">View Details</a>
                     </div>
                 </div>
 
                 <div class="app-card category-document fade-in">
                     <div class="card-visual" style="background: linear-gradient(135deg, #4F46E5, #7C3AED);">🧾</div>
                     <h2 class="app-title">Expense Tracker AI</h2>
-                    <p class="app-description">Snap a receipt and let AI extract, categorize, and track your expenses automatically. Local-first privacy with real-time analytics dashboard and 8 smart expense categories.</p>
+                    <p class="app-description">Snap a receipt and let AI extract, categorize, and track your expenses automatically. Local-first privacy with real-time analytics and 8 smart expense categories.</p>
                     <div class="app-buttons">
-                        <a href="https://expense-tracker-ai-169218045868.us-west1.run.app/" target="_blank" class="app-link primary">Launch App</a>
-                        <a href="expense-tracker-ai.html" class="app-link">View Project Details</a>
-                    </div>
-                </div>
-
-                <div class="app-card category-chat fade-in">
-                    <div class="card-visual" style="background: linear-gradient(135deg, #075E54, #128C7E);">🌿</div>
-                    <h2 class="app-title">Hire Gardener</h2>
-                    <p class="app-description">AI agent that contacts grass cutting vendors on your behalf via WhatsApp, collects quotes, compares prices, and confirms the best deal — without you typing a single message.</p>
-                    <div class="app-buttons">
-                        <a href="projects/hire-gardener/demo.html" target="_blank" class="app-link primary">Live Demo</a>
-                        <a href="hire-gardener.html" class="app-link">View Project Details</a>
+                        <a href="https://expense-tracker-ai-169218045868.us-west1.run.app/" target="_blank" class="app-link">Launch App</a>
+                        <a href="expense-tracker-ai.html" class="app-link">View Details</a>
                     </div>
                 </div>
 
                 <div class="app-card category-memory fade-in">
-                    <div class="card-visual" style="background: linear-gradient(135deg, #1a0533, #6B21A8);">🔮</div>
-                    <h2 class="app-title">Tarot Guru</h2>
-                    <p class="app-description">Personal AI tarot reading app that draws cards and writes a narrative interpretation for your specific situation — not generic definitions. Three spread types, follow-up chat, and full session memory.</p>
+                    <div class="card-visual" style="background: linear-gradient(135deg, #4f46e5, #7c3aed);">✨</div>
+                    <h2 class="app-title">Skyread</h2>
+                    <p class="app-description">Daily horoscope app that explains the planetary movements behind every reading. Bilingual EN/ZH with Sky Explainer and Sky Snapshot panels for grounded insights.</p>
                     <div class="app-buttons">
-                        <a href="projects/tarot-guru/demo.html" target="_blank" class="app-link primary">Live Demo</a>
-                        <a href="tarot-guru.html" class="app-link">View Project Details</a>
+                        <a href="projects/skyread/demo.html" target="_blank" class="app-link">Live Demo</a>
+                        <a href="skyread.html" class="app-link">View Details</a>
                     </div>
                 </div>
 
