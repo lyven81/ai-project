@@ -543,12 +543,12 @@
   <div class="apikey-card">
     <div class="logo">🎨</div>
     <h1>Unusual Coloring Book</h1>
-    <p>Enter your Gemini API key to start. Your key is stored only in your browser session and never sent anywhere except Google's API.</p>
-    <input type="password" id="api-key-input" placeholder="AIza..." autocomplete="off" />
+    <p>Illustrations are generated for free — no API key needed. Optionally add a Gemini API key (paid) to unlock the <strong>edit illustration</strong> feature.</p>
+    <input type="password" id="api-key-input" placeholder="AIza... (optional)" autocomplete="off" />
     <div class="apikey-error" id="apikey-error"></div>
     <button class="btn-primary" onclick="startWithKey()">Start Creating →</button>
     <p class="apikey-note">
-      Get a free key at <a href="https://aistudio.google.com/app/apikey" target="_blank">aistudio.google.com</a>
+      Or <a href="#" onclick="skipKey(); return false;" style="color:#FF6B6B;">skip and start without a key</a> · Get a key at <a href="https://aistudio.google.com/app/apikey" target="_blank">aistudio.google.com</a>
     </p>
   </div>
 </div>
@@ -852,14 +852,19 @@ function showScreen(id) {
 function startWithKey() {
   const input = document.getElementById('api-key-input').value.trim();
   const errEl = document.getElementById('apikey-error');
-  if (!input || !input.startsWith('AIza')) {
-    errEl.textContent = 'Please enter a valid Gemini API key (starts with AIza).';
+  if (input && !input.startsWith('AIza')) {
+    errEl.textContent = 'Gemini API key should start with AIza, or leave blank to skip.';
     errEl.style.display = 'block';
     return;
   }
   errEl.style.display = 'none';
   apiKey = input;
-  sessionStorage.setItem('ucb_api_key', apiKey);
+  if (apiKey) sessionStorage.setItem('ucb_api_key', apiKey);
+  goToCover();
+}
+
+function skipKey() {
+  apiKey = '';
   goToCover();
 }
 
@@ -949,29 +954,19 @@ async function handleOptionSelect(option, chapterTitle) {
 
 async function generateImage(prompt) {
   const fullPrompt = COLORING_STYLE + ' Scene: ' + prompt;
-  const model = 'gemini-2.0-flash-exp';
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+  const url = 'https://image.pollinations.ai/prompt/' + encodeURIComponent(fullPrompt) +
+    '?width=700&height=700&nologo=true&model=flux';
 
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      contents: [{ parts: [{ text: fullPrompt }] }],
-      generationConfig: { responseModalities: ['IMAGE', 'TEXT'] }
-    })
+  const res = await fetch(url);
+  if (!res.ok) throw new Error('Image generation failed: HTTP ' + res.status);
+
+  const blob = await res.blob();
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => resolve(reader.result.split(',')[1]);
+    reader.onerror = () => reject(new Error('Failed to read image data'));
+    reader.readAsDataURL(blob);
   });
-
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    throw new Error(err?.error?.message || `HTTP ${res.status}`);
-  }
-
-  const data = await res.json();
-  const parts = data?.candidates?.[0]?.content?.parts || [];
-  for (const part of parts) {
-    if (part?.inlineData?.data) return part.inlineData.data;
-  }
-  throw new Error('No image returned from Gemini. Check your API key and model access.');
 }
 
 // ============================================================
@@ -1170,6 +1165,10 @@ function clearCanvas() {
 async function handleEdit() {
   const instruction = document.getElementById('edit-input').value.trim();
   if (!instruction || isEditing) return;
+  if (!apiKey) {
+    alert('The edit feature requires a paid Gemini API key. Add your key on the start screen.');
+    return;
+  }
 
   const page = completedPages[viewingIndex];
   if (!page) return;
