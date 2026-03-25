@@ -2,7 +2,7 @@
 
 [![Portfolio Website](https://img.shields.io/badge/Portfolio-Live-green?logo=vercel)](https://lyven81.github.io/ai-project/)
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-black?logo=github)](https://github.com/lyven81/ai-project)
-[![Projects](https://img.shields.io/badge/Projects-38-blue)](#-featured-projects)
+[![Projects](https://img.shields.io/badge/Projects-40-blue)](#-featured-projects)
 [![AI Powered](https://img.shields.io/badge/AI-Powered-orange?logo=tensorflow)](https://github.com/lyven81/ai-project)
 
 **Innovative AI Solutions for Modern Challenges** - A curated collection of production-ready AI applications showcasing expertise in computer vision, natural language processing, document processing, and creative AI technologies.
@@ -268,6 +268,18 @@ This repository contains **38 production-deployed AI applications** demonstratin
 - **Tech Stack:** React 19.1+, TypeScript 5.8+, Gemini 2.5 Flash, Imagen 4.0, PDF Generation, Tailwind CSS
 - **AI Capabilities:** Two-stage AI pipeline, theme interpretation, sequential page creation, age-adaptive complexity, print optimization
 
+#### [Sarawak Laksa](./projects/sarawak-laksa/)
+**Interactive curated reference on Kuching's most iconic dish — ingredients, recipe, where to eat, and cultural context**
+- **Live Demo:** [lyven81.github.io/ai-project/projects/sarawak-laksa/](https://lyven81.github.io/ai-project/projects/sarawak-laksa/)
+- **Tech Stack:** HTML5, CSS3, Vanilla JS, IntersectionObserver, Google Fonts
+- **Features:** 7-section reference site — origin, ingredients, 4-phase recipe, 5 regional variations, 6 Kuching stalls, food culture, notable people
+
+#### [Nine Year Plan 2022–2031](./projects/nine-year-plan/)
+**Interactive reference guide to the Bahá'í Nine Year Plan — overview, core activities, institutions, statistics, and key messages**
+- **Live Demo:** [lyven81.github.io/ai-project/projects/nine-year-plan/](https://lyven81.github.io/ai-project/projects/nine-year-plan/)
+- **Tech Stack:** HTML5, CSS3, Vanilla JS, requestAnimationFrame, IntersectionObserver, Google Fonts
+- **Features:** 8-section reference site — plan overview, history, core activities, framework, institutions, social action, animated stat counters, key messages
+
 ## 🛠️ Technical Skills Demonstrated
 
 ### **AI & Machine Learning**
@@ -410,6 +422,8 @@ All projects are production-deployed and accessible via live demos:
 | AI Coloring Book for Kids | [Launch App](https://ai-coloring-book-for-kids-662370080553.us-west1.run.app/) | Creative AI |
 | AI Storybook Generator | [Launch App](https://ai-storybook-color-create-662370080553.us-west1.run.app/) | Creative AI |
 | Coloring Book Generator | [Launch App](https://coloring-book-generator-662370080553.us-west1.run.app/) | Creative AI |
+| Sarawak Laksa | [Launch Demo](https://lyven81.github.io/ai-project/projects/sarawak-laksa/) | Creative AI |
+| Nine Year Plan 2022–2031 | [Launch Demo](https://lyven81.github.io/ai-project/projects/nine-year-plan/) | Creative AI |
 
 ## 💼 Professional Highlights
 

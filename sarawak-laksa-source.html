@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sarawak Laksa - Source Code</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #222; background-color: #ffffff; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        .back-nav { margin-bottom: 20px; }
+        .back-nav a { color: #007BFF; text-decoration: none; font-size: 1rem; }
+        .back-nav a:hover { text-decoration: underline; }
+        .project-header {
+            text-align: center; margin-bottom: 40px; padding: 40px 0;
+            background: linear-gradient(135deg, #FF5722, #E64A19);
+            color: white; border-radius: 10px;
+        }
+        .project-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        .project-header p { font-size: 1.2rem; opacity: 0.9; }
+        .content-section {
+            margin: 40px 0; padding: 30px; background-color: #f9f9f9;
+            border-radius: 8px; border-left: 5px solid #FF5722;
+        }
+        .content-section h2 { color: #FF5722; margin-bottom: 20px; font-size: 1.8rem; }
+        .content-section h3 { color: #333; margin: 20px 0 10px 0; font-size: 1.3rem; }
+        .highlight-box {
+            background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+            padding: 20px; border-radius: 10px;
+            border-left: 5px solid #FF5722; margin: 20px 0;
+        }
+        .code-container { background-color: #1e1e1e; border-radius: 8px; padding: 20px; margin: 20px 0; overflow-x: auto; }
+        .code-header { color: #ff8a65; font-weight: bold; margin-bottom: 15px; font-size: 1.1rem; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        .code-container pre { color: #d4d4d4; font-family: 'Courier New', monospace; font-size: 0.9rem; white-space: pre-wrap; }
+        .file-tree { background-color: #1e1e1e; border-radius: 8px; padding: 20px; margin: 20px 0; }
+        .file-tree pre { color: #4ec9b0; font-family: 'Courier New', monospace; font-size: 0.9rem; }
+        @media (max-width: 768px) {
+            .project-header h1 { font-size: 2rem; }
+            .container { padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="sarawak-laksa.html">← Back to Showcase</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>🍜 Sarawak Laksa — Source Code</h1>
+            <p>File structure and key code explained</p>
+        </div>
+
+        <div class="content-section">
+            <h2>📁 File Structure</h2>
+            <div class="file-tree">
+<pre>projects/sarawak-laksa/
+├── index.html          ← Main app (all content embedded)
+├── css/
+│   └── style.css       ← All styles, variables, animations, responsive
+├── js/
+│   └── app.js          ← Scroll nav, fade-in observer, smooth scroll
+└── knowledge/
+    ├── what-is-sarawak-laksa.md
+    ├── ingredients.md
+    ├── recipe.md
+    ├── variations.md
+    ├── where-to-eat.md
+    ├── food-culture.md
+    └── people.md</pre>
+            </div>
+            <div class="highlight-box">
+                <strong>Design principle:</strong> All visible content is embedded directly in <code>index.html</code>. The <code>knowledge/</code> folder contains the Markdown source documents used to author the HTML content — they are not loaded at runtime.
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🔑 Key Code: Fade-in on Scroll</h2>
+            <p>Cards fade in as they enter the viewport using the IntersectionObserver API. Each observed element gets a <code>fade-in</code> class immediately, then <code>visible</code> once it enters the viewport.</p>
+            <div class="code-container">
+                <div class="code-header">js/app.js — Fade-in observer</div>
+<pre>const fadeEls = document.querySelectorAll(
+  '.ingredient-card, .variation-card, .stall-card, ' +
+  '.culture-item, .person-card, .recipe-phase'
+);
+
+fadeEls.forEach(el => el.classList.add('fade-in'));
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+fadeEls.forEach(el => observer.observe(el));</pre>
+            </div>
+            <div class="code-container">
+                <div class="code-header">css/style.css — Fade-in transition</div>
+<pre>.fade-in {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}</pre>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🔑 Key Code: Active Nav on Scroll</h2>
+            <p>The sticky navigation highlights the current section as the user scrolls. It tracks which <code>section[id]</code> is currently in view and adds an <code>active</code> class to the matching nav link.</p>
+            <div class="code-container">
+                <div class="code-header">js/app.js — Active nav tracking</div>
+<pre>const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-links a');
+
+function updateActiveNav() {
+  let current = '';
+  sections.forEach(section => {
+    const sectionTop = section.offsetTop - 100;
+    if (window.scrollY >= sectionTop) {
+      current = section.getAttribute('id');
+    }
+  });
+  navLinks.forEach(link => {
+    link.classList.remove('active');
+    if (link.getAttribute('href') === '#' + current) {
+      link.classList.add('active');
+    }
+  });
+}
+
+window.addEventListener('scroll', updateActiveNav, { passive: true });</pre>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🔑 Key Code: CSS Design Tokens</h2>
+            <p>The site uses CSS custom properties for a consistent colour scheme and spacing across all sections.</p>
+            <div class="code-container">
+                <div class="code-header">css/style.css — Root variables</div>
+<pre>:root {
+  --brown:       #5C3D2E;
+  --brown-light: #7A5243;
+  --cream:       #FDF6EC;
+  --cream-mid:   #F5ECD7;
+  --gold:        #C8973E;
+  --gold-light:  #E8B96A;
+  --text-dark:   #2C1810;
+  --text-mid:    #4A3728;
+  --text-light:  #7A6558;
+  --section-light: #FDF6EC;
+  --section-mid:   #F5ECD7;
+  --section-dark:  #3D2415;
+  --radius:      8px;
+  --shadow-sm:   0 2px 8px rgba(0,0,0,0.08);
+  --shadow-md:   0 4px 16px rgba(0,0,0,0.12);
+  --transition:  0.3s ease;
+}</pre>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>📄 Knowledge Source Files</h2>
+            <p>Each section of the site was authored from a corresponding Markdown file in <code>knowledge/</code>. These files contain the raw facts, quotes, and structured data that were used to write the HTML content.</p>
+            <h3>Example: knowledge/where-to-eat.md</h3>
+            <div class="code-container">
+                <div class="code-header">knowledge/where-to-eat.md (excerpt)</div>
+<pre>---
+title: "Where to Eat Sarawak Laksa"
+tags: ["stalls", "kuching", "hawker", "halal"]
+---
+
+## Top Picks
+
+### Chong Choon Cafe
+- Location: Jalan Wan Alwi, Kuching
+- Hours: 7:00am – 11:30am
+- Halal: No
+- One of Kuching's most celebrated laksa stalls.
+  Queue starts at 7am. Usually sold out by 10am.</pre>
+            </div>
+        </div>
+
+        <nav class="back-nav" style="margin-top: 30px; text-align: center;">
+            <a href="sarawak-laksa.html">← Back to Showcase</a> &nbsp;|&nbsp;
+            <a href="index.html">← Back to Portfolio</a>
+        </nav>
+    </div>
+</body>
+</html>

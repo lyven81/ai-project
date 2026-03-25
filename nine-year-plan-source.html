@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nine Year Plan - Source Code</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #222; background-color: #ffffff; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        .back-nav { margin-bottom: 20px; }
+        .back-nav a { color: #007BFF; text-decoration: none; font-size: 1rem; }
+        .back-nav a:hover { text-decoration: underline; }
+        .project-header {
+            text-align: center; margin-bottom: 40px; padding: 40px 0;
+            background: linear-gradient(135deg, #FF5722, #E64A19);
+            color: white; border-radius: 10px;
+        }
+        .project-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        .project-header p { font-size: 1.2rem; opacity: 0.9; }
+        .content-section {
+            margin: 40px 0; padding: 30px; background-color: #f9f9f9;
+            border-radius: 8px; border-left: 5px solid #FF5722;
+        }
+        .content-section h2 { color: #FF5722; margin-bottom: 20px; font-size: 1.8rem; }
+        .content-section h3 { color: #333; margin: 20px 0 10px 0; font-size: 1.3rem; }
+        .highlight-box {
+            background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+            padding: 20px; border-radius: 10px;
+            border-left: 5px solid #FF5722; margin: 20px 0;
+        }
+        .code-container { background-color: #1e1e1e; border-radius: 8px; padding: 20px; margin: 20px 0; overflow-x: auto; }
+        .code-header { color: #ff8a65; font-weight: bold; margin-bottom: 15px; font-size: 1.1rem; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        .code-container pre { color: #d4d4d4; font-family: 'Courier New', monospace; font-size: 0.9rem; white-space: pre-wrap; }
+        .file-tree { background-color: #1e1e1e; border-radius: 8px; padding: 20px; margin: 20px 0; }
+        .file-tree pre { color: #4ec9b0; font-family: 'Courier New', monospace; font-size: 0.9rem; }
+        @media (max-width: 768px) {
+            .project-header h1 { font-size: 2rem; }
+            .container { padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="nine-year-plan.html">← Back to Showcase</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>✨ Nine Year Plan — Source Code</h1>
+            <p>File structure and key code explained</p>
+        </div>
+
+        <div class="content-section">
+            <h2>📁 File Structure</h2>
+            <div class="file-tree">
+<pre>projects/nine-year-plan/
+├── index.html          ← Main app (all content embedded)
+├── css/
+│   └── style.css       ← All styles, variables, animations, responsive
+├── js/
+│   └── app.js          ← Scroll nav, fade-in observer, animated counters
+└── knowledge/
+    ├── the-plan.md
+    ├── core-activities.md
+    ├── framework.md
+    ├── institutions.md
+    ├── social-action.md
+    ├── messages.md
+    └── youth.md</pre>
+            </div>
+            <div class="highlight-box">
+                <strong>Design principle:</strong> All visible content is embedded directly in <code>index.html</code>. The <code>knowledge/</code> folder contains Markdown source documents used to author the HTML — they are not loaded at runtime.
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🔑 Key Code: Animated Number Counters</h2>
+            <p>Statistics animate from 0 to their target value when they scroll into view. Uses <code>requestAnimationFrame</code> with ease-out cubic easing for a smooth deceleration effect. Each counter fires once and then unobserves itself.</p>
+            <div class="code-container">
+                <div class="code-header">js/app.js — Animated counters</div>
+<pre>function formatNum(n) {
+  if (n >= 1000000) return (n / 1000000).toFixed(1).replace('.0','') + 'M';
+  if (n >= 1000)    return (n / 1000).toFixed(0) + ',000';
+  return n.toLocaleString();
+}
+
+const statNums = document.querySelectorAll('.stat-num[data-target]');
+
+const counterIO = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (!entry.isIntersecting) return;
+    const el     = entry.target;
+    const target = parseInt(el.dataset.target, 10);
+    const dur    = 1800;
+    const start  = performance.now();
+
+    function tick(now) {
+      const p    = Math.min((now - start) / dur, 1);
+      const ease = 1 - Math.pow(1 - p, 3); // ease-out cubic
+      el.textContent = formatNum(Math.round(ease * target));
+      if (p < 1) requestAnimationFrame(tick);
+      else el.textContent = formatNum(target);
+    }
+    requestAnimationFrame(tick);
+    counterIO.unobserve(el); // fire once only
+  });
+}, { threshold: 0.5 });
+
+statNums.forEach(el => counterIO.observe(el));</pre>
+            </div>
+            <div class="highlight-box">
+                <strong>How to use in HTML:</strong> Add <code>data-target="5700000"</code> to any element with class <code>stat-num</code> and it will animate automatically on scroll.
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🔑 Key Code: Staggered Fade-in Animations</h2>
+            <p>Cards fade in with a staggered delay — each card waits 60ms longer than the previous one, creating a cascade effect as a grid of cards enters the viewport.</p>
+            <div class="code-container">
+                <div class="code-header">js/app.js — Staggered fade-in</div>
+<pre>const fadeTargets = document.querySelectorAll(
+  '.activity-card, .framework-card, .institution-card, ' +
+  '.message-card, .social-card, .stat-card, .timeline-item, ' +
+  '.youth-item, .glossary-item, .variation-card'
+);
+fadeTargets.forEach(el => el.classList.add('fade-in'));
+
+const io = new IntersectionObserver(entries => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 60);
+    }
+  });
+}, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+
+fadeTargets.forEach(el => io.observe(el));</pre>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🔑 Key Code: CSS Design Tokens</h2>
+            <p>The site uses a deep navy/gold/ivory palette appropriate for the subject matter, defined as CSS custom properties.</p>
+            <div class="code-container">
+                <div class="code-header">css/style.css — Root variables</div>
+<pre>:root {
+  --navy:        #1B2A4A;
+  --navy-mid:    #243556;
+  --navy-light:  #2E4270;
+  --gold:        #C8973E;
+  --gold-light:  #E8B96A;
+  --ivory:       #F8F4EE;
+  --ivory-mid:   #EDE7DC;
+  --text-dark:   #1B2A4A;
+  --text-mid:    #3D4F70;
+  --text-light:  #6B7A9A;
+  --section-light: #F8F4EE;
+  --section-mid:   #EDE7DC;
+  --section-dark:  #1B2A4A;
+  --radius:      8px;
+  --shadow-sm:   0 2px 8px rgba(0,0,0,0.08);
+  --shadow-md:   0 4px 16px rgba(0,0,0,0.12);
+  --transition:  0.3s ease;
+}</pre>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>📄 Knowledge Source Files</h2>
+            <p>Each major section of the site was authored from a corresponding Markdown file in <code>knowledge/</code>, containing verified facts and quotes from official Bahá'í documents.</p>
+            <h3>Example: knowledge/the-plan.md</h3>
+            <div class="code-container">
+                <div class="code-header">knowledge/the-plan.md (excerpt)</div>
+<pre>---
+title: "The Nine Year Plan"
+description: "Overview of the Nine Year Plan 2022–2031"
+tags: ["plan", "UHJ", "2022", "2031", "society-building"]
+category: "Overview"
+---
+
+## What Is the Nine Year Plan?
+
+The Nine Year Plan (2022–2031) is the first major undertaking in a
+new twenty-five-year series of global Plans launched by the Universal
+House of Justice at Riḍván 2022.
+
+## Core Aim
+
+> "The release of the society-building power of the Faith of
+> Bahá'u'lláh in ever-greater measures."
+
+## Duration
+2022 – 2031 (first of a series ending Riḍván 2046)</pre>
+            </div>
+        </div>
+
+        <nav class="back-nav" style="margin-top: 30px; text-align: center;">
+            <a href="nine-year-plan.html">← Back to Showcase</a> &nbsp;|&nbsp;
+            <a href="index.html">← Back to Portfolio</a>
+        </nav>
+    </div>
+</body>
+</html>
