@@ -118,6 +118,12 @@ This repository contains **38 production-deployed AI applications** demonstratin
 - **Tech Stack:** Python, Gemini 2.0 Flash, TinyDB, Pandas, Matplotlib, Seaborn, NumPy
 - **AI Capabilities:** Natural language to code generation, RFM analysis (Recency, Frequency, Monetary), 5-segment customer classification (VIP, Regular, At-Risk, New, Churned), automated campaign targeting, customer profiling database, intelligent filter generation, self-correcting code execution
 
+#### [Social Media Marketer](./projects/social-media-marketer/)
+**Multi-agent simulation that reveals which marketing channel delivers the best ROI — and which one to cut**
+- **Live Demo:** [Launch Demo](https://lyven81.github.io/ai-project/projects/social-media-marketer/demo.html)
+- **Tech Stack:** Python, Claude Haiku, Streamlit, Plotly, Pandas, Anthropic SDK
+- **AI Capabilities:** 5 competing AI agents with distinct personas, structured JSON decision-making, economic scoring engine, CMO-level recommendations, real-time simulation progress, downloadable markdown reports
+
 #### [Business Intelligence Agent](./projects/business-intelligence-agent/)
 **General-purpose data analytics agent that answers business questions from any CSV dataset using natural language**
 - **Live Demo:** [Google Colab](https://colab.research.google.com/drive/10wkxsg7Crcdz9oa3rFKlJ6Jtez1CB3xf)
@@ -406,6 +412,7 @@ All projects are production-deployed and accessible via live demos:
 | Business Intelligence Agent | [Launch in Colab](https://colab.research.google.com/drive/10wkxsg7Crcdz9oa3rFKlJ6Jtez1CB3xf) | Business Intelligence |
 | Kopitiam Digital Waiter | [Launch App](https://kopitiam-digital-waiter-169218045868.us-west1.run.app/) | Business Intelligence |
 | MyPropLex | [Launch Demo](https://lyven81.github.io/ai-project/projects/myproplex/demo.html) | Business Intelligence |
+| Social Media Marketer | [Launch Demo](https://lyven81.github.io/ai-project/projects/social-media-marketer/demo.html) | Business Intelligence |
 | TrendMate | [Launch Demo](https://lyven81.github.io/ai-project/projects/trendmate/demo.html) | Business Intelligence |
 | Hire Gardener | [Launch Demo](https://lyven81.github.io/ai-project/projects/hire-gardener/demo.html) | Business Automation |
 | Chinese Traditional Calendar | [Launch App](https://chinese-calender-169218045868.asia-southeast1.run.app/) | Conversational AI |

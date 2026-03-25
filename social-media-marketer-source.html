@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Media Marketer - Source Code</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #222;
+            background-color: #ffffff;
+        }
+
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+
+        .back-nav { margin-bottom: 20px; }
+        .back-nav a { color: #007BFF; text-decoration: none; font-size: 1rem; }
+        .back-nav a:hover { text-decoration: underline; }
+
+        .project-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #E91E63, #9C27B0);
+            color: white;
+            border-radius: 10px;
+        }
+        .project-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        .project-header p  { font-size: 1.2rem; opacity: 0.9; }
+
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        .badge {
+            background-color: rgba(255,255,255,0.2);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .content-section {
+            margin: 40px 0;
+            padding: 30px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border-left: 5px solid #E91E63;
+        }
+        .content-section h2 { color: #E91E63; margin-bottom: 20px; font-size: 1.8rem; }
+        .content-section h3 { color: #333; margin: 20px 0 10px 0; font-size: 1.3rem; }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #fdf4ff, #fce7f3);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #E91E63;
+            margin: 20px 0;
+        }
+
+        .code-container {
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+        .code-header {
+            color: #f48fb1;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+        .code-block {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #d4d4d4;
+            white-space: pre;
+        }
+        .code-comment  { color: #6a9955; font-style: italic; }
+        .code-keyword  { color: #569cd6; }
+        .code-string   { color: #ce9178; }
+        .code-function { color: #dcdcaa; }
+        .code-number   { color: #b5cea8; }
+        .code-class    { color: #4ec9b0; }
+
+        .file-tree {
+            background: #1e1e1e;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+            font-family: monospace;
+            font-size: 0.9rem;
+            color: #d4d4d4;
+            line-height: 1.8;
+        }
+        .file-tree .dir  { color: #569cd6; font-weight: bold; }
+        .file-tree .file { color: #d4d4d4; }
+        .file-tree .note { color: #6a9955; font-style: italic; }
+
+        .demo-links { text-align: center; margin: 30px 0; }
+        .demo-btn {
+            display: inline-block;
+            background-color: #E91E63;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        .demo-btn:hover { background-color: #c2185b; }
+        .demo-btn.secondary { background-color: #9C27B0; }
+        .demo-btn.secondary:hover { background-color: #7b1fa2; }
+
+        @media (max-width: 768px) {
+            .project-header h1 { font-size: 2rem; }
+            .demo-btn { margin: 5px; padding: 10px 20px; }
+            .container { padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <nav class="back-nav">
+        <a href="social-media-marketer.html">← Back to Project Overview</a>
+    </nav>
+
+    <div class="project-header">
+        <h1>📊 Social Media Marketer</h1>
+        <p>Core Source Code — Multi-Agent Simulation Engine</p>
+        <div class="badges">
+            <span class="badge">Python</span>
+            <span class="badge">Claude AI</span>
+            <span class="badge">Streamlit</span>
+            <span class="badge">Anthropic SDK</span>
+        </div>
+    </div>
+
+    <div class="highlight-box">
+        <h3>🔍 About This Code Showcase</h3>
+        <p><strong>This page highlights the core simulation logic behind Social Media Marketer — how five AI agents are defined, how they make decisions using Claude, and how the scoring and reporting system works.</strong></p>
+        <p style="margin-top:10px;">API keys and environment configuration are omitted. The showcase focuses on three key parts: agent persona design, the Claude API decision loop, and the economic scoring engine.</p>
+    </div>
+
+    <div class="content-section">
+        <h2>🗂️ File Structure</h2>
+        <div class="file-tree">
+<span class="dir">social-media-marketer/</span>
+├── <span class="file">app.py</span>          <span class="note"># Streamlit web UI — full simulation interface</span>
+├── <span class="file">main.py</span>         <span class="note"># CLI entry point using Rich terminal output</span>
+├── <span class="file">agents.py</span>       <span class="note"># MarketingAgent class + 5 persona definitions</span>
+├── <span class="file">simulation.py</span>   <span class="note"># run_round() — one round per agent</span>
+├── <span class="file">data.py</span>         <span class="note"># Load CSV, filter by channel, compute stats</span>
+├── <span class="file">report.py</span>       <span class="note"># Build leaderboard, recommendations, save .md</span>
+├── <span class="file">config.py</span>       <span class="note"># Budget, benchmark, rounds, model name</span>
+├── <span class="file">campaigns.csv</span>   <span class="note"># 50 real campaigns — 5 channels, 4 objectives</span>
+├── <span class="file">.env</span>            <span class="note"># ANTHROPIC_API_KEY (not committed)</span>
+├── <span class="file">requirements.txt</span>
+└── <span class="file">run.bat</span>         <span class="note"># Windows launcher — installs deps + opens browser</span>
+        </div>
+    </div>
+
+    <div class="content-section">
+        <h2>🤖 Agent Personas — agents.py</h2>
+        <p>All five agents share one LLM model. Each is differentiated entirely by its system prompt persona — demonstrating how prompt design shapes decision-making behaviour.</p>
+
+        <div class="code-container">
+            <div class="code-header">📄 agents.py — Persona definitions</div>
+            <div class="code-block">
+<span class="code-class">PERSONAS</span> = {
+    <span class="code-string">"Email"</span>: {
+        <span class="code-string">"name"</span>: <span class="code-string">"Emma"</span>,
+        <span class="code-string">"title"</span>: <span class="code-string">"Email Marketing Agent"</span>,
+        <span class="code-string">"style"</span>: <span class="code-string">"patient, data-driven, retention-focused"</span>,
+        <span class="code-string">"strength"</span>: <span class="code-string">"nurturing existing customers and re-engaging lapsed ones"</span>,
+    },
+    <span class="code-string">"Social"</span>: {
+        <span class="code-string">"name"</span>: <span class="code-string">"Sam"</span>,
+        <span class="code-string">"title"</span>: <span class="code-string">"Social Media Agent"</span>,
+        <span class="code-string">"style"</span>: <span class="code-string">"creative, trend-aware, engagement-obsessed"</span>,
+        <span class="code-string">"strength"</span>: <span class="code-string">"acquiring new customers and building brand awareness"</span>,
+    },
+    <span class="code-string">"Paid Search"</span>: {
+        <span class="code-string">"name"</span>: <span class="code-string">"Parker"</span>,
+        <span class="code-string">"title"</span>: <span class="code-string">"Paid Search Agent"</span>,
+        <span class="code-string">"style"</span>: <span class="code-string">"analytical, ROI-obsessed, intent-focused"</span>,
+        <span class="code-string">"strength"</span>: <span class="code-string">"capturing high-intent buyers ready to convert"</span>,
+    },
+    <span class="code-string">"Display"</span>: { ... },
+    <span class="code-string">"Affiliate"</span>: { ... }
+}
+            </div>
+        </div>
+
+        <div class="code-container">
+            <div class="code-header">📄 agents.py — Claude API decision call</div>
+            <div class="code-block">
+<span class="code-keyword">def</span> <span class="code-function">decide</span>(<span class="code-keyword">self</span>, options, round_num):
+    <span class="code-comment"># Build a prompt from the agent's persona + available campaign options</span>
+    opts_text = <span class="code-string">""</span>
+    <span class="code-keyword">for</span> i, c <span class="code-keyword">in</span> <span class="code-function">enumerate</span>(options, <span class="code-number">1</span>):
+        opts_text += (
+            <span class="code-string">f"\n  Option {i}: Objective={c['objective']}, "</span>
+            <span class="code-string">f"Segment={c['segment']}, Duration={c['duration']} days"</span>
+        )
+
+    prompt = (
+        <span class="code-string">f"You are {self.persona['name']}, a {self.channel} marketing specialist.\n"</span>
+        <span class="code-string">f"Style: {self.persona['style']}\n"</span>
+        <span class="code-string">f"Strength: {self.persona['strength']}\n\n"</span>
+        <span class="code-string">f"Current budget: ${self.budget:.0f}\n"</span>
+        <span class="code-string">f"Round: {round_num}/4\n"</span>
+        <span class="code-string">f"ROI benchmark: {ROI_BENCHMARK * 100:.0f}% minimum uplift\n\n"</span>
+        <span class="code-string">f"Campaign options for your {self.channel} channel:{opts_text}\n\n"</span>
+        <span class="code-string">f"Pick the option most likely to beat the benchmark.\n"</span>
+        <span class="code-string">f'Respond ONLY with valid JSON: {{"choice": 1, "budget_pct": 20, "reasoning": "one sentence"}}'</span>
+    )
+
+    <span class="code-comment"># Call Claude — structured JSON output only</span>
+    response = <span class="code-keyword">self</span>._client.messages.create(
+        model=<span class="code-class">MODEL</span>,
+        max_tokens=<span class="code-number">200</span>,
+        messages=[{<span class="code-string">"role"</span>: <span class="code-string">"user"</span>, <span class="code-string">"content"</span>: prompt}],
+    )
+
+    text = response.content[<span class="code-number">0</span>].text.strip()
+    decision = json.loads(text)
+    <span class="code-keyword">return</span> options[choice], pct, reasoning
+            </div>
+        </div>
+    </div>
+
+    <div class="content-section">
+        <h2>⚖️ Economic Scoring Engine — agents.py</h2>
+        <p>Each agent's decision is scored against the campaign's actual expected uplift from the dataset. Good decisions earn back more than was spent. Poor decisions result in a partial loss.</p>
+
+        <div class="code-container">
+            <div class="code-header">📄 agents.py — apply_result()</div>
+            <div class="code-block">
+<span class="code-keyword">def</span> <span class="code-function">apply_result</span>(<span class="code-keyword">self</span>, campaign, allocated, round_num, reasoning):
+    uplift = campaign[<span class="code-string">"uplift"</span>]
+
+    <span class="code-keyword">if</span> uplift >= <span class="code-class">ROI_BENCHMARK</span>:
+        <span class="code-comment"># Above benchmark: agent earns back allocated + uplift bonus</span>
+        earnings = allocated * (<span class="code-number">1</span> + uplift)
+        outcome = <span class="code-string">"PROFIT"</span>
+        <span class="code-keyword">self</span>._below_count = <span class="code-number">0</span>
+    <span class="code-keyword">else</span>:
+        <span class="code-comment"># Below benchmark: partial refund only — proportional to how far short</span>
+        earnings = allocated * (uplift / <span class="code-class">ROI_BENCHMARK</span>)
+        outcome = <span class="code-string">"LOSS"</span>
+        <span class="code-keyword">self</span>._below_count += <span class="code-number">1</span>
+
+    <span class="code-comment"># Two consecutive misses → agent is flagged for CMO review</span>
+    <span class="code-keyword">if self</span>._below_count >= <span class="code-class">KILL_THRESHOLD</span>:
+        <span class="code-keyword">self</span>.flagged = <span class="code-keyword">True</span>
+
+    net = earnings - allocated
+    <span class="code-keyword">self</span>.budget += net
+    <span class="code-keyword">return</span> record
+            </div>
+        </div>
+    </div>
+
+    <div class="content-section">
+        <h2>📊 Data Loading & Channel Stats — data.py</h2>
+        <p>The CSV is loaded once, cached by Streamlit, and filtered per channel when agents need their campaign options each round.</p>
+
+        <div class="code-container">
+            <div class="code-header">📄 data.py — load_campaigns() and channel_stats()</div>
+            <div class="code-block">
+<span class="code-keyword">def</span> <span class="code-function">load_campaigns</span>(filepath=<span class="code-string">"campaigns.csv"</span>):
+    campaigns = []
+    <span class="code-keyword">with</span> <span class="code-function">open</span>(filepath, newline=<span class="code-string">""</span>) <span class="code-keyword">as</span> f:
+        reader = csv.<span class="code-function">DictReader</span>(f)
+        <span class="code-keyword">for</span> row <span class="code-keyword">in</span> reader:
+            start = datetime.<span class="code-function">strptime</span>(row[<span class="code-string">"start_date"</span>], <span class="code-string">"%Y-%m-%d"</span>)
+            end   = datetime.<span class="code-function">strptime</span>(row[<span class="code-string">"end_date"</span>],   <span class="code-string">"%Y-%m-%d"</span>)
+            campaigns.<span class="code-function">append</span>({
+                <span class="code-string">"channel"</span>:  row[<span class="code-string">"channel"</span>],
+                <span class="code-string">"objective"</span>: row[<span class="code-string">"objective"</span>],
+                <span class="code-string">"segment"</span>:   row[<span class="code-string">"target_segment"</span>],
+                <span class="code-string">"uplift"</span>:    <span class="code-function">float</span>(row[<span class="code-string">"expected_uplift"</span>]),
+                <span class="code-string">"duration"</span>:  (end - start).days,
+            })
+    <span class="code-keyword">return</span> campaigns
+
+
+<span class="code-keyword">def</span> <span class="code-function">get_options</span>(campaigns, channel, n=<span class="code-number">3</span>):
+    <span class="code-comment"># Filter by channel, then return n random options each round</span>
+    pool = [c <span class="code-keyword">for</span> c <span class="code-keyword">in</span> campaigns <span class="code-keyword">if</span> c[<span class="code-string">"channel"</span>] == channel]
+    <span class="code-keyword">return</span> random.<span class="code-function">sample</span>(pool, <span class="code-function">min</span>(n, <span class="code-function">len</span>(pool)))
+
+
+<span class="code-keyword">def</span> <span class="code-function">channel_stats</span>(campaigns):
+    <span class="code-comment"># Aggregate avg, best, worst uplift per channel for the baseline table</span>
+    stats = {}
+    <span class="code-keyword">for</span> c <span class="code-keyword">in</span> campaigns:
+        ch = c[<span class="code-string">"channel"</span>]
+        <span class="code-keyword">if</span> ch <span class="code-keyword">not in</span> stats:
+            stats[ch] = []
+        stats[ch].<span class="code-function">append</span>(c[<span class="code-string">"uplift"</span>])
+    <span class="code-keyword">return</span> {
+        ch: {<span class="code-string">"avg"</span>: <span class="code-function">round</span>(<span class="code-function">sum</span>(v)/<span class="code-function">len</span>(v), <span class="code-number">4</span>), <span class="code-string">"best"</span>: <span class="code-function">max</span>(v), <span class="code-string">"worst"</span>: <span class="code-function">min</span>(v)}
+        <span class="code-keyword">for</span> ch, v <span class="code-keyword">in</span> stats.<span class="code-function">items</span>()
+    }
+            </div>
+        </div>
+    </div>
+
+    <div class="content-section">
+        <h2>⚙️ Key Design Decisions</h2>
+        <ul style="margin:15px 0; padding-left:20px;">
+            <li><strong>One model, five system prompts:</strong> Using the same LLM for all agents isolates the effect of persona on outcome — a cleaner experiment than comparing different models</li>
+            <li><strong>Randomised campaign draws each round:</strong> Agents see different options per round, preventing any one channel from winning by luck of the draw consistently</li>
+            <li><strong>Budget-proportional allocation:</strong> Agents allocate 15–25% of their <em>current</em> budget, not a fixed amount — so losing agents become more conservative over time</li>
+            <li><strong>Consecutive-miss flagging:</strong> A single bad round doesn't flag an agent. Two consecutive misses do — matching real-world performance review logic</li>
+            <li><strong>Fault-tolerant JSON parsing:</strong> If Claude returns malformed output, the agent falls back silently to option 1 at 20% allocation — the simulation never crashes</li>
+            <li><strong>Streamlit session state:</strong> Simulation results are stored in <code>st.session_state</code> so the leaderboard survives sidebar interactions without re-running</li>
+        </ul>
+    </div>
+
+    <div class="demo-links">
+        <a href="projects/social-media-marketer/demo.html" class="demo-btn">▶ Try Live Demo</a>
+        <a href="social-media-marketer.html" class="demo-btn secondary">📖 View Full Project Details</a>
+    </div>
+
+    <nav class="back-nav" style="text-align:center; margin-top:40px;">
+        <a href="index.html">← Back to Portfolio</a> |
+        <a href="social-media-marketer.html">View Project Overview</a>
+    </nav>
+
+</div>
+</body>
+</html>
