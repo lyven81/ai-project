@@ -953,20 +953,39 @@ async function handleOptionSelect(option, chapterTitle) {
 }
 
 async function generateImage(prompt) {
-  const fullPrompt = COLORING_STYLE + ' Scene: ' + prompt;
+  const style = 'coloring book line art, thick black outlines, white background, no color fill, fairy tale, child-safe';
+  const fullPrompt = style + ', ' + prompt;
   const url = 'https://image.pollinations.ai/prompt/' + encodeURIComponent(fullPrompt) +
-    '?width=700&height=700&nologo=true&model=flux';
+    '?width=700&height=700&nologo=true&seed=' + Math.floor(Math.random() * 9999);
 
-  const res = await fetch(url);
-  if (!res.ok) throw new Error('Image generation failed: HTTP ' + res.status);
+  try {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const blob = await res.blob();
+    return await new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result.split(',')[1]);
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
+  } catch (e) {
+    return placeholderSVG(prompt);
+  }
+}
 
-  const blob = await res.blob();
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onloadend = () => resolve(reader.result.split(',')[1]);
-    reader.onerror = () => reject(new Error('Failed to read image data'));
-    reader.readAsDataURL(blob);
-  });
+function placeholderSVG(label) {
+  const short = label.replace(/[<>&"]/g, '').substring(0, 60);
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="700" height="700">
+    <rect width="700" height="700" fill="white" stroke="#2D3436" stroke-width="4"/>
+    <rect x="40" y="40" width="620" height="620" fill="none" stroke="#ddd" stroke-width="2" rx="20" stroke-dasharray="12,6"/>
+    <circle cx="350" cy="240" r="90" fill="none" stroke="#2D3436" stroke-width="3"/>
+    <ellipse cx="350" cy="430" rx="130" ry="90" fill="none" stroke="#2D3436" stroke-width="3"/>
+    <line x1="260" y1="390" x2="210" y2="510" stroke="#2D3436" stroke-width="3" stroke-linecap="round"/>
+    <line x1="440" y1="390" x2="490" y2="510" stroke="#2D3436" stroke-width="3" stroke-linecap="round"/>
+    <text x="350" y="600" text-anchor="middle" font-family="Arial" font-size="15" fill="#636e72">Colour this scene</text>
+    <text x="350" y="625" text-anchor="middle" font-family="Arial" font-size="12" fill="#b2bec3">${short}</text>
+  </svg>`;
+  return btoa(unescape(encodeURIComponent(svg)));
 }
 
 // ============================================================
