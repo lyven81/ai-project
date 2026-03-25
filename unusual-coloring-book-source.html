@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unusual Coloring Book - Source Code</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #222;
+            background-color: #ffffff;
+        }
+
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+
+        .back-nav { margin-bottom: 20px; }
+        .back-nav a { color: #007BFF; text-decoration: none; font-size: 1rem; }
+        .back-nav a:hover { text-decoration: underline; }
+
+        .project-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #FF6B6B, #FFD93D);
+            color: white;
+            border-radius: 10px;
+        }
+
+        .project-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        .project-header p { font-size: 1.2rem; opacity: 0.9; }
+
+        .content-section {
+            margin: 40px 0;
+            padding: 30px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border-left: 5px solid #FF6B6B;
+        }
+
+        .content-section h2 { color: #FF6B6B; margin-bottom: 20px; font-size: 1.8rem; }
+        .content-section h3 { color: #333; margin: 20px 0 10px; font-size: 1.2rem; }
+
+        .code-block {
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+            border-radius: 6px;
+            padding: 18px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.88rem;
+            overflow-x: auto;
+            white-space: pre;
+            line-height: 1.6;
+        }
+
+        .file-tree {
+            background-color: #f4f4f4;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 16px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.88rem;
+            white-space: pre;
+            line-height: 1.8;
+        }
+
+        .explanation {
+            background: white;
+            border-left: 3px solid #FFD93D;
+            padding: 14px 18px;
+            margin: 10px 0 20px;
+            font-size: 0.95rem;
+            color: #444;
+            border-radius: 0 6px 6px 0;
+        }
+
+        .demo-btn {
+            display: inline-block;
+            background-color: #FF6B6B;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .demo-btn:hover { background-color: #e05555; }
+        .demo-btn.secondary { background-color: #6c757d; }
+        .demo-btn.secondary:hover { background-color: #545b62; }
+
+        @media (max-width: 768px) {
+            .project-header h1 { font-size: 2rem; }
+            .container { padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <nav class="back-nav">
+        <a href="unusual-coloring-book.html">← Back to Showcase</a>
+    </nav>
+
+    <div class="project-header">
+        <h1>🎨 Unusual Coloring Book</h1>
+        <p>Source Code & Architecture Guide</p>
+    </div>
+
+    <div class="content-section">
+        <h2>📁 Project Structure</h2>
+        <div class="file-tree">Unusual Coloring Book/
+├── open-app.bat              ← Double-click to launch both servers
+├── backend/
+│   ├── main.py               ← FastAPI app — 3 endpoints
+│   ├── story_library.py      ← Cinderella: 6 pages × 3 options (all pre-coded)
+│   ├── image_service.py      ← Gemini image generation + editing
+│   ├── cache.py              ← In-memory cache (key → base64 image)
+│   └── requirements.txt
+└── frontend/
+    ├── package.json
+    ├── vite.config.ts        ← Proxies /api → localhost:8000
+    └── src/
+        ├── App.tsx            ← State machine: loading → cover → choosing → generating → coloring
+        ├── index.css
+        ├── types/index.ts     ← Story, StoryPage, PageOption, ActivePage
+        ├── utils/api.ts       ← fetchStory, fetchCoverImage, generatePageImage, editImage
+        ├── pages/
+        │   ├── CoverPage.tsx      ← Cover image + "Begin the Story" button
+        │   ├── OptionSelector.tsx ← 3 option cards per page (A / B / C)
+        │   └── ColoringBook.tsx   ← Canvas + palette + sidebar + PDF export
+        └── components/
+            ├── FloodFillCanvas.tsx ← BFS flood-fill on HTML5 Canvas, undo stack
+            ├── ColorPalette.tsx    ← 16-colour bright palette
+            └── ProgressTrail.tsx   ← Animated loading steps</div>
+    </div>
+
+    <div class="content-section">
+        <h2>🗄️ story_library.py — The Heart of the App</h2>
+        <div class="explanation">
+            All story content is pre-coded here: 6 chapter titles, 18 story text snippets, and 18 image prompts.
+            No AI is used for text generation. The backend only calls Gemini for the illustration.
+            Every page N option was written to transition naturally into every page N+1 option.
+        </div>
+        <div class="code-block">STORY = {
+    "id": "cinderella",
+    "title": "Cinderella",
+    "total_pages": 6,
+    "cover_prompt": "Children's coloring book cover illustration. Cinderella stands at "
+                    "the top of a grand castle staircase in a flowing gown...",
+    "pages": [
+        {
+            "page": 1,
+            "chapter_title": "The Morning Before the Ball",
+            "options": [
+                {
+                    "id": "a",
+                    "preview": "Cinderella hums while sweeping, holding onto a quiet hope",
+                    "story_text": "Cinderella hummed softly as she swept the cold stone floors...",
+                    "image_prompt": "Children's coloring book page. Cinderella sweeping stone "
+                                    "castle floors with a long broom, wearing a simple dress..."
+                },
+                { "id": "b", "preview": "...", "story_text": "...", "image_prompt": "..." },
+                { "id": "c", "preview": "...", "story_text": "...", "image_prompt": "..." },
+            ]
+        },
+        # pages 2–6 follow the same structure
+    ]
+}</div>
+    </div>
+
+    <div class="content-section">
+        <h2>🌐 main.py — Three Endpoints</h2>
+        <div class="explanation">
+            The backend is intentionally minimal. All story logic is in story_library.py. The API
+            serves story data, generates/caches illustrations, and handles image edits.
+        </div>
+        <div class="code-block">@app.get("/story")
+async def get_story():
+    """Return all 6 pages + 3 options each (no images) — instant, no AI."""
+    return { "id": ..., "title": ..., "pages": [...] }
+
+@app.get("/story/cover")
+async def get_cover():
+    """Generate cover illustration once, then serve from cache forever."""
+    if cache.has("cover_image"):
+        return {"image": cache.get("cover_image")}
+    image = await image_service.generate_single(STORY["cover_prompt"])
+    cache.set("cover_image", image)
+    return {"image": image}
+
+@app.post("/generate/page-image")
+async def generate_page_image(req: PageImageRequest):
+    """Generate illustration for page_number + option_id. Cache result."""
+    cache_key = f"page_{req.page_number}_{req.option_id}"
+    if cache.has(cache_key):
+        return {"image": cache.get(cache_key)}
+    option = find_option(req.page_number, req.option_id)
+    image = await image_service.generate_single(option["image_prompt"])
+    cache.set(cache_key, image)
+    return {"image": image}</div>
+    </div>
+
+    <div class="content-section">
+        <h2>🖼️ image_service.py — Gemini Image Generation</h2>
+        <div class="explanation">
+            Uses the google-genai SDK with response_modalities=["IMAGE"] to request image output from Gemini.
+            The generate_single method prepends a coloring-book style prefix to every prompt.
+            A fallback SVG placeholder is returned if the API call fails.
+        </div>
+        <div class="code-block">COLORING_BOOK_STYLE = (
+    "children's coloring book illustration, thick clean black outlines, "
+    "white background, no color fill, simple friendly style, "
+    "large expressive characters, suitable for ages 5-10, child-safe"
+)
+
+async def generate_single(self, prompt: str) -> str:
+    full_prompt = f"{COLORING_BOOK_STYLE}. Scene: {prompt}. "
+                  "Draw only clean black outlines on pure white."
+
+    response = await loop.run_in_executor(
+        None,
+        lambda: self.client.models.generate_content(
+            model=IMAGE_MODEL,
+            contents=full_prompt,
+            config=types.GenerateContentConfig(
+                response_modalities=["IMAGE"]
+            )
+        )
+    )
+
+    for part in response.candidates[0].content.parts:
+        if hasattr(part, "inline_data") and part.inline_data:
+            data = part.inline_data.data
+            return base64.b64encode(data).decode("utf-8")  # return as base64 string</div>
+    </div>
+
+    <div class="content-section">
+        <h2>📱 App.tsx — State Machine</h2>
+        <div class="explanation">
+            Five states govern the entire user flow. The app loads story data and the cover image
+            in parallel on mount, then steps the user through each page one at a time.
+        </div>
+        <div class="code-block">type AppState = 'loading' | 'cover' | 'choosing' | 'generating' | 'coloring'
+
+// On mount: fetch story JSON + cover image in parallel
+useEffect(() => {
+    Promise.all([fetchStory(), fetchCoverImage()])
+        .then(([story, coverImg]) => {
+            setStory(story)
+            setCoverImage(coverImg)
+            setAppState('cover')         // show cover once both are ready
+        })
+}, [])
+
+// User picks an option → generate image → add to completedPages → coloring
+const handleOptionSelect = async (optionId: string) => {
+    setAppState('generating')
+    const image = await generatePageImage(choosingPage, optionId)
+    setCompletedPages(prev => [...prev, { page, option_id, story_text, image }])
+    setAppState('coloring')
+}</div>
+    </div>
+
+    <div class="content-section">
+        <h2>🎨 FloodFillCanvas.tsx — BFS Coloring</h2>
+        <div class="explanation">
+            The canvas renders the base64 illustration and runs a BFS flood-fill when the user
+            clicks. Each click saves a snapshot to an undo stack (max 10 steps). The undo and
+            clear methods are exposed via a forwarded ref.
+        </div>
+        <div class="code-block">// BFS flood-fill with colour tolerance ±20 per channel
+function floodFill(ctx, x, y, fillColor) {
+    const imageData = ctx.getImageData(0, 0, width, height)
+    const targetColor = getPixel(imageData, x, y)
+    const stack = [[x, y]]
+
+    while (stack.length) {
+        const [cx, cy] = stack.pop()
+        if (!withinTolerance(getPixel(imageData, cx, cy), targetColor)) continue
+        setPixel(imageData, cx, cy, fillColor)
+        stack.push([cx-1,cy], [cx+1,cy], [cx,cy-1], [cx,cy+1])
+    }
+
+    ctx.putImageData(imageData, 0, 0)
+}
+
+// Undo: save canvas state before each fill
+const handleClick = (e) => {
+    undoStack.current.push(ctx.getImageData(0, 0, w, h))  // snapshot
+    floodFill(ctx, x, y, selectedColor)
+}</div>
+    </div>
+
+    <div class="content-section">
+        <h2>📄 PDF Export (inline in ColoringBook.tsx)</h2>
+        <div class="explanation">
+            jsPDF runs entirely in the browser. Each completed page is added as a landscape A4 page
+            with the illustration filling the top 63% and the story text in a rounded box below.
+        </div>
+        <div class="code-block">const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' })
+
+completedPages.forEach((p, i) => {
+    if (i > 0) pdf.addPage()
+
+    // Illustration — top 63% of page
+    pdf.addImage(base64ToDataUrl(image), 'PNG', margin, margin, W - margin*2, H * 0.63)
+
+    // Story text box — rounded rect below
+    pdf.roundedRect(margin, textY, W - margin*2, H - textY - margin, 6, 6, 'F')
+    pdf.text(p.chapter_title, margin + 6, textY + 8)
+    pdf.text(pdf.splitTextToSize(p.story_text, W - margin*2 - 12), margin + 6, textY + 16)
+})
+
+pdf.save('cinderella-coloring-book.pdf')</div>
+    </div>
+
+    <div style="text-align:center; margin: 40px 0;">
+        <a href="unusual-coloring-book.html" class="demo-btn">← Back to Showcase</a>
+        <a href="index.html" class="demo-btn secondary">← Back to Portfolio</a>
+    </div>
+</div>
+</body>
+</html>

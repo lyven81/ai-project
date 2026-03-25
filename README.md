@@ -220,6 +220,12 @@ This repository contains **38 production-deployed AI applications** demonstratin
 
 ### 🎨 Creative AI & Content Generation
 
+#### [Unusual Coloring Book](./projects/unusual-coloring-book/)
+**Step inside Cinderella — choose your own story path, watch the AI illustrate it, colour it in, export to PDF**
+- **Source Code:** [unusual-coloring-book-source.html](https://lyven81.github.io/ai-project/unusual-coloring-book-source.html)
+- **Tech Stack:** React 18 + TypeScript, Python FastAPI, Gemini 3 Flash, Gemini Nano Banana 2, HTML5 Canvas, jsPDF
+- **AI Capabilities:** On-demand illustration generation per story path, image editing via text instruction, server-side image caching
+
 #### [AI Recipe Generator](./projects/image-recipe-generator/)
 **Transform food images into detailed recipes with computer vision and NLP**
 - **Live Demo:** [image-recipe-generator-218391175125.us-central1.run.app](https://image-recipe-generator-218391175125.us-central1.run.app/)
