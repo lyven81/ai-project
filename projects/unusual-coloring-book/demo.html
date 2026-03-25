@@ -949,7 +949,7 @@ async function handleOptionSelect(option, chapterTitle) {
 
 async function generateImage(prompt) {
   const fullPrompt = COLORING_STYLE + ' Scene: ' + prompt;
-  const model = 'gemini-2.0-flash-preview-image-generation';
+  const model = 'gemini-2.5-flash-preview-image-generation';
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
 
   const res = await fetch(url, {
@@ -1184,7 +1184,7 @@ async function handleEdit() {
     const canvas = document.getElementById('coloring-canvas');
     const currentBase64 = canvas.toDataURL('image/png').split(',')[1];
 
-    const model = 'gemini-2.0-flash-exp';
+    const model = 'gemini-2.5-flash-preview-image-generation';
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
     const editPrompt = `Edit this coloring book illustration: ${instruction}. Keep the style identical: thick black outlines, white background, no color fill, child-safe fairy-tale coloring book.`;
 
