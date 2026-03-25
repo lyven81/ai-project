@@ -1,9 +1,9 @@
 @echo off
+cd /d "%~dp0"
 echo Starting Football Assistant Coach...
 echo.
-echo Opening the app in your browser at http://localhost:8501
-echo (It may take a few seconds to load the first time)
+echo The app will open in your browser automatically.
+echo To stop the app, close this window or press Ctrl+C.
 echo.
-start "" http://localhost:8501
 streamlit run app.py
 pause

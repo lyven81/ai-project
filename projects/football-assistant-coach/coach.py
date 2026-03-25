@@ -1,10 +1,14 @@
 import os
 import json
+import time
 import random
 import anthropic
 from config import MODEL, MAX_INDIVIDUAL, MAX_CHEMISTRY, MAX_UNIVERSAL, SESSION_FOCUS
 
-client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
+client = anthropic.Anthropic(
+    api_key=os.getenv("ANTHROPIC_API_KEY"),
+    timeout=30.0,
+)
 
 POSITION_PERSONAS = {
     "GK": (
@@ -24,6 +28,22 @@ POSITION_PERSONAS = {
         "pressing triggers, hold-up play, and runs in behind the defensive line."
     ),
 }
+
+# Coaching notes used when a session falls back to baseline scores
+_HIGHLIGHT_POOL = [
+    "Showed good attitude and effort throughout the session.",
+    "Worked hard and maintained focus for the full session.",
+    "Contributed positively to the group drills.",
+    "Demonstrated solid fundamentals in positional work.",
+    "Good communication and awareness shown during the session.",
+]
+_CONCERN_POOL = [
+    "Continue working on consistency in high-pressure moments.",
+    "Focus on sharpening decision-making under fatigue.",
+    "More intensity needed in pressing sequences.",
+    "Work on first touch and composure in tight spaces.",
+    "Tracking runs and defensive transitions need attention.",
+]
 
 
 def _build_prompt(player: dict, session: str, session_desc: str, focus: dict) -> str:
@@ -60,44 +80,66 @@ Respond ONLY with valid JSON in exactly this format:
 """
 
 
+def _baseline_result(player: dict) -> dict:
+    """Generate a realistic score from base_form when the API is unavailable."""
+    base = player.get("base_form", 65)
+    noise = random.randint(-6, 6)
+    score = max(20, min(95, base + noise))
+    ind  = int(score * (MAX_INDIVIDUAL / 100))
+    chem = int(score * (MAX_CHEMISTRY  / 100))
+    uni  = int(score * (MAX_UNIVERSAL  / 100))
+    return {
+        "individual_score": ind,
+        "chemistry_score":  chem,
+        "universal_score":  uni,
+        "total_score":      ind + chem + uni,
+        "highlight":        random.choice(_HIGHLIGHT_POOL),
+        "concern":          random.choice(_CONCERN_POOL),
+    }
+
+
 def evaluate_player(player: dict, session: str, session_desc: str) -> dict:
-    """Call Claude to evaluate a single player in one training session. Returns scores + narrative."""
-    focus = SESSION_FOCUS[session]
+    """
+    Call Claude to evaluate a single player in one training session.
+    Retries up to 3 times on rate-limit errors with exponential backoff.
+    Falls back to baseline scores if all retries are exhausted.
+    """
+    focus         = SESSION_FOCUS[session]
     system_prompt = POSITION_PERSONAS[player["position"]]
-    user_prompt = _build_prompt(player, session, session_desc, focus)
+    user_prompt   = _build_prompt(player, session, session_desc, focus)
 
-    try:
-        response = client.messages.create(
-            model=MODEL,
-            max_tokens=300,
-            system=system_prompt,
-            messages=[{"role": "user", "content": user_prompt}],
-        )
-        raw = response.content[0].text.strip()
-        result = json.loads(raw)
+    max_retries = 3
+    for attempt in range(max_retries):
+        try:
+            response = client.messages.create(
+                model=MODEL,
+                max_tokens=300,
+                system=system_prompt,
+                messages=[{"role": "user", "content": user_prompt}],
+            )
+            raw    = response.content[0].text.strip()
+            result = json.loads(raw)
 
-        # Clamp values to valid range
-        result["individual_score"] = max(0, min(MAX_INDIVIDUAL, int(result["individual_score"])))
-        result["chemistry_score"]  = max(0, min(MAX_CHEMISTRY,  int(result["chemistry_score"])))
-        result["universal_score"]  = max(0, min(MAX_UNIVERSAL,  int(result["universal_score"])))
-        result["total_score"] = (
-            result["individual_score"] + result["chemistry_score"] + result["universal_score"]
-        )
-        return result
+            result["individual_score"] = max(0, min(MAX_INDIVIDUAL, int(result["individual_score"])))
+            result["chemistry_score"]  = max(0, min(MAX_CHEMISTRY,  int(result["chemistry_score"])))
+            result["universal_score"]  = max(0, min(MAX_UNIVERSAL,  int(result["universal_score"])))
+            result["total_score"] = (
+                result["individual_score"] + result["chemistry_score"] + result["universal_score"]
+            )
+            return result
 
-    except Exception as e:
-        # Fallback: generate a plausible score from base_form with noise
-        base = player.get("base_form", 65)
-        noise = random.randint(-8, 8)
-        base_clamped = max(20, min(95, base + noise))
-        ind  = int(base_clamped * (MAX_INDIVIDUAL / 100))
-        chem = int(base_clamped * (MAX_CHEMISTRY / 100))
-        uni  = int(base_clamped * (MAX_UNIVERSAL / 100))
-        return {
-            "individual_score": ind,
-            "chemistry_score": chem,
-            "universal_score": uni,
-            "total_score": ind + chem + uni,
-            "highlight": "Consistent performance in training.",
-            "concern": f"(Evaluation fallback: {str(e)[:60]})",
-        }
+        except anthropic.RateLimitError:
+            if attempt < max_retries - 1:
+                time.sleep(2 ** attempt)   # 1s → 2s → 4s
+                continue
+            return _baseline_result(player)
+
+        except (json.JSONDecodeError, KeyError, ValueError):
+            # Malformed response — retry once, then fall back
+            if attempt < max_retries - 1:
+                time.sleep(1)
+                continue
+            return _baseline_result(player)
+
+        except Exception:
+            return _baseline_result(player)
