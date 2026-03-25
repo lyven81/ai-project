@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Football Assistant Coach - Source Code</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #222; background-color: #ffffff; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        .back-nav { margin-bottom: 20px; }
+        .back-nav a { color: #007BFF; text-decoration: none; }
+        .back-nav a:hover { text-decoration: underline; }
+        .page-header { text-align: center; padding: 30px 0 20px; margin-bottom: 30px; border-bottom: 2px solid #059669; }
+        .page-header h1 { font-size: 2rem; color: #059669; }
+        .page-header p { color: #555; margin-top: 8px; }
+        .file-section { margin: 30px 0; }
+        .file-title { background: #059669; color: white; padding: 10px 16px; border-radius: 6px 6px 0 0; font-family: monospace; font-size: 1rem; font-weight: bold; }
+        .file-desc { background: #f0fdf4; border: 1px solid #bbf7d0; padding: 10px 16px; font-size: 0.9rem; color: #166534; border-bottom: none; }
+        pre { background: #1e1e1e; color: #d4d4d4; padding: 20px; overflow-x: auto; border-radius: 0 0 6px 6px; font-size: 0.85rem; line-height: 1.6; }
+        .kw { color: #569cd6; }
+        .st { color: #ce9178; }
+        .cm { color: #6a9955; }
+        .fn { color: #dcdcaa; }
+        .num { color: #b5cea8; }
+        footer { text-align: center; padding: 20px; background-color: #222; color: white; margin-top: 40px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <nav class="back-nav">
+        <a href="football-assistant-coach.html">← Back to Project</a>
+    </nav>
+
+    <div class="page-header">
+        <h1>⚽ Football Assistant Coach — Source Code</h1>
+        <p>6-module Python app · Claude Haiku · Streamlit · Multi-agent player evaluation</p>
+    </div>
+
+    <div class="file-section">
+        <div class="file-title">📄 config.py</div>
+        <div class="file-desc">All constants — scoring caps, session weights, formation quotas, selection thresholds</div>
+        <pre>MODEL = <span class="st">"claude-haiku-4-5-20251001"</span>
+
+<span class="cm"># Scoring maximums</span>
+MAX_INDIVIDUAL = <span class="num">35</span>
+MAX_CHEMISTRY  = <span class="num">50</span>
+MAX_UNIVERSAL  = <span class="num">15</span>
+MAX_TOTAL      = <span class="num">100</span>
+
+<span class="cm"># Session weights (must sum to 1.0)</span>
+SESSION_WEIGHTS = {
+    <span class="st">"Monday"</span>:    <span class="num">0.15</span>,
+    <span class="st">"Wednesday"</span>: <span class="num">0.25</span>,
+    <span class="st">"Thursday"</span>:  <span class="num">0.25</span>,
+    <span class="st">"Friday"</span>:    <span class="num">0.35</span>,
+}
+
+<span class="cm"># Session focus: weights for (individual, chemistry, universal) scoring</span>
+SESSION_FOCUS = {
+    <span class="st">"Monday"</span>:    {<span class="st">"individual"</span>: <span class="num">0.30</span>, <span class="st">"chemistry"</span>: <span class="num">0.10</span>, <span class="st">"universal"</span>: <span class="num">0.60</span>},
+    <span class="st">"Wednesday"</span>: {<span class="st">"individual"</span>: <span class="num">0.70</span>, <span class="st">"chemistry"</span>: <span class="num">0.10</span>, <span class="st">"universal"</span>: <span class="num">0.20</span>},
+    <span class="st">"Thursday"</span>:  {<span class="st">"individual"</span>: <span class="num">0.10</span>, <span class="st">"chemistry"</span>: <span class="num">0.70</span>, <span class="st">"universal"</span>: <span class="num">0.20</span>},
+    <span class="st">"Friday"</span>:    {<span class="st">"individual"</span>: <span class="num">0.333</span>, <span class="st">"chemistry"</span>: <span class="num">0.333</span>, <span class="st">"universal"</span>: <span class="num">0.334</span>},
+}
+
+FORMATIONS = {
+    <span class="st">"4-3-3"</span>: {<span class="st">"GK"</span>: <span class="num">1</span>, <span class="st">"DEF"</span>: <span class="num">4</span>, <span class="st">"MID"</span>: <span class="num">3</span>, <span class="st">"FWD"</span>: <span class="num">3</span>},
+    <span class="st">"4-4-2"</span>: {<span class="st">"GK"</span>: <span class="num">1</span>, <span class="st">"DEF"</span>: <span class="num">4</span>, <span class="st">"MID"</span>: <span class="num">4</span>, <span class="st">"FWD"</span>: <span class="num">2</span>},
+    <span class="st">"3-5-2"</span>: {<span class="st">"GK"</span>: <span class="num">1</span>, <span class="st">"DEF"</span>: <span class="num">3</span>, <span class="st">"MID"</span>: <span class="num">5</span>, <span class="st">"FWD"</span>: <span class="num">2</span>},
+}
+
+THRESHOLD_LINEUP = <span class="num">65</span>
+THRESHOLD_BENCH  = <span class="num">50</span>
+THRESHOLD_UNUSED = <span class="num">40</span></pre>
+    </div>
+
+    <div class="file-section">
+        <div class="file-title">📄 coach.py</div>
+        <div class="file-desc">Position-specific AI coach personas — calls Claude Haiku to evaluate each player in each training session</div>
+        <pre><span class="kw">import</span> os, json, random
+<span class="kw">import</span> anthropic
+<span class="kw">from</span> config <span class="kw">import</span> MODEL, MAX_INDIVIDUAL, MAX_CHEMISTRY, MAX_UNIVERSAL, SESSION_FOCUS
+
+client = anthropic.Anthropic(api_key=os.getenv(<span class="st">"ANTHROPIC_API_KEY"</span>))
+
+POSITION_PERSONAS = {
+    <span class="st">"GK"</span>:  <span class="st">"You are a goalkeeping coach. Evaluate goalkeeper performance on shot-stopping, "</span>
+           <span class="st">"command of area, distribution, communication, and organising the defensive line."</span>,
+    <span class="st">"DEF"</span>: <span class="st">"You are a defensive coach. Evaluate defenders on positioning, tackling, "</span>
+           <span class="st">"aerial duels, pressing discipline, and how well they hold their shape."</span>,
+    <span class="st">"MID"</span>: <span class="st">"You are a midfield coach. Evaluate midfielders on passing range, pressing, "</span>
+           <span class="st">"defensive cover, attacking transitions, and combination play with teammates."</span>,
+    <span class="st">"FWD"</span>: <span class="st">"You are a forward coach. Evaluate forwards on finishing, movement, "</span>
+           <span class="st">"pressing triggers, hold-up play, and runs in behind the defensive line."</span>,
+}
+
+<span class="kw">def</span> <span class="fn">evaluate_player</span>(player, session, session_desc):
+    focus  = SESSION_FOCUS[session]
+    prompt = <span class="st">f"""Evaluate {player['name']}, a {player['position']} (age {player['age']}).
+Style: {player['style']}
+Strength: {player['strength']}
+Weakness: {player['weakness']}
+
+Session: {session} — {session_desc}
+Focus: Individual {int(focus['individual']*100)}%, Chemistry {int(focus['chemistry']*100)}%, Universal {int(focus['universal']*100)}%
+
+Scoring:
+- individual_score: 0-{MAX_INDIVIDUAL} (position-specific technical performance)
+- chemistry_score:  0-{MAX_CHEMISTRY}  (selflessness, support runs, pressing coordination)
+- universal_score:  0-{MAX_UNIVERSAL}  (fitness, attitude, discipline)
+
+Respond ONLY with valid JSON:
+{{"individual_score": int, "chemistry_score": int, "universal_score": int,
+  "highlight": "one sentence", "concern": "one sentence or No concerns today"}}"""</span>
+
+    response = client.messages.create(
+        model=MODEL, max_tokens=<span class="num">300</span>,
+        system=POSITION_PERSONAS[player[<span class="st">"position"</span>]],
+        messages=[{<span class="st">"role"</span>: <span class="st">"user"</span>, <span class="st">"content"</span>: prompt}],
+    )
+    result = json.loads(response.content[<span class="num">0</span>].text.strip())
+    result[<span class="st">"individual_score"</span>] = max(<span class="num">0</span>, min(MAX_INDIVIDUAL, int(result[<span class="st">"individual_score"</span>])))
+    result[<span class="st">"chemistry_score"</span>]  = max(<span class="num">0</span>, min(MAX_CHEMISTRY,  int(result[<span class="st">"chemistry_score"</span>])))
+    result[<span class="st">"universal_score"</span>]  = max(<span class="num">0</span>, min(MAX_UNIVERSAL,  int(result[<span class="st">"universal_score"</span>])))
+    result[<span class="st">"total_score"</span>] = (
+        result[<span class="st">"individual_score"</span>] + result[<span class="st">"chemistry_score"</span>] + result[<span class="st">"universal_score"</span>]
+    )
+    <span class="kw">return</span> result</pre>
+    </div>
+
+    <div class="file-section">
+        <div class="file-title">📄 simulation.py</div>
+        <div class="file-desc">Runs 4 training sessions for all 22 players, computes weighted weekly score and rolling form average</div>
+        <pre><span class="kw">from</span> config <span class="kw">import</span> SESSION_WEIGHTS, SESSION_DESCRIPTIONS, FORM_THIS_WEEK, FORM_LAST_WEEK
+<span class="kw">from</span> coach <span class="kw">import</span> evaluate_player
+
+SESSIONS_ORDER = [<span class="st">"Monday"</span>, <span class="st">"Wednesday"</span>, <span class="st">"Thursday"</span>, <span class="st">"Friday"</span>]
+
+<span class="kw">def</span> <span class="fn">run_week</span>(players, last_week_scores=<span class="kw">None</span>):
+    results = {}
+    <span class="kw">for</span> player <span class="kw">in</span> players:
+        pid = player[<span class="st">"id"</span>]
+        session_results = {}
+        <span class="kw">for</span> session <span class="kw">in</span> SESSIONS_ORDER:
+            session_results[session] = evaluate_player(
+                player, session, SESSION_DESCRIPTIONS[session]
+            )
+
+        <span class="cm"># Weighted weekly score</span>
+        weekly_score = sum(
+            session_results[s][<span class="st">"total_score"</span>] * SESSION_WEIGHTS[s]
+            <span class="kw">for</span> s <span class="kw">in</span> SESSIONS_ORDER
+        )
+
+        <span class="cm"># Rolling form: this week 60% + last week 40%</span>
+        <span class="kw">if</span> last_week_scores <span class="kw">and</span> pid <span class="kw">in</span> last_week_scores:
+            form_score = weekly_score * FORM_THIS_WEEK + last_week_scores[pid] * FORM_LAST_WEEK
+        <span class="kw">else</span>:
+            form_score = weekly_score
+
+        results[pid] = {
+            <span class="st">"name"</span>: player[<span class="st">"name"</span>], <span class="st">"position"</span>: player[<span class="st">"position"</span>],
+            <span class="st">"sessions"</span>: session_results,
+            <span class="st">"weekly_score"</span>: round(weekly_score, <span class="num">1</span>),
+            <span class="st">"form_score"</span>: round(form_score, <span class="num">1</span>),
+            <span class="st">"highlight"</span>: session_results[<span class="st">"Friday"</span>][<span class="st">"highlight"</span>],
+            <span class="st">"concern"</span>: session_results[<span class="st">"Friday"</span>][<span class="st">"concern"</span>],
+        }
+    <span class="kw">return</span> results</pre>
+    </div>
+
+    <div class="file-section">
+        <div class="file-title">📄 report.py</div>
+        <div class="file-desc">Formation-aware selection engine + hybrid formation advisor that scores fit across all formations</div>
+        <pre><span class="kw">from</span> config <span class="kw">import</span> FORMATIONS, THRESHOLD_LINEUP, THRESHOLD_BENCH
+
+<span class="kw">def</span> <span class="fn">score_formation_fit</span>(week_results, formation):
+    <span class="st">"""Sum of top-N form scores per position slot — higher = better natural fit."""</span>
+    quotas = FORMATIONS[formation]
+    by_pos = {<span class="st">"GK"</span>: [], <span class="st">"DEF"</span>: [], <span class="st">"MID"</span>: [], <span class="st">"FWD"</span>: []}
+    <span class="kw">for</span> d <span class="kw">in</span> week_results.values():
+        by_pos[d[<span class="st">"position"</span>]].append(d[<span class="st">"form_score"</span>])
+    <span class="kw">for</span> pos <span class="kw">in</span> by_pos:
+        by_pos[pos].sort(reverse=<span class="kw">True</span>)
+    <span class="kw">return</span> round(sum(sum(by_pos[p][:n]) <span class="kw">for</span> p, n <span class="kw">in</span> quotas.items()), <span class="num">1</span>)
+
+<span class="kw">def</span> <span class="fn">recommend_formation</span>(week_results):
+    fit_scores = {f: score_formation_fit(week_results, f) <span class="kw">for</span> f <span class="kw">in</span> FORMATIONS}
+    best = max(fit_scores, key=fit_scores.get)
+    <span class="kw">return</span> best, fit_scores
+
+<span class="kw">def</span> <span class="fn">select_squad</span>(week_results, formation, transfer_risk_ids):
+    quotas = FORMATIONS[formation]
+    by_pos = {pos: [] <span class="kw">for</span> pos <span class="kw">in</span> quotas}
+    <span class="kw">for</span> pid, d <span class="kw">in</span> week_results.items():
+        by_pos[d[<span class="st">"position"</span>]].append({**d, <span class="st">"id"</span>: pid})
+    <span class="kw">for</span> pos <span class="kw">in</span> by_pos:
+        by_pos[pos].sort(key=<span class="kw">lambda</span> x: x[<span class="st">"form_score"</span>], reverse=<span class="kw">True</span>)
+
+    lineup, remaining = [], {pos: [] <span class="kw">for</span> pos <span class="kw">in</span> quotas}
+    <span class="kw">for</span> pos, count <span class="kw">in</span> quotas.items():
+        eligible = [p <span class="kw">for</span> p <span class="kw">in</span> by_pos[pos] <span class="kw">if</span> p[<span class="st">"form_score"</span>] >= THRESHOLD_LINEUP]
+        selected = (eligible + [p <span class="kw">for</span> p <span class="kw">in</span> by_pos[pos] <span class="kw">if</span> p <span class="kw">not in</span> eligible])[:count]
+        lineup.extend(selected)
+        remaining[pos] = [p <span class="kw">for</span> p <span class="kw">in</span> by_pos[pos] <span class="kw">if</span> p <span class="kw">not in</span> selected]
+
+    <span class="cm"># Bench: 1 GK + best 4 outfield</span>
+    bench = []
+    <span class="kw">if</span> remaining[<span class="st">"GK"</span>]:
+        bench.append(remaining[<span class="st">"GK"</span>].pop(<span class="num">0</span>))
+    outfield = sorted(
+        [p <span class="kw">for</span> pos <span class="kw">in</span> [<span class="st">"DEF"</span>,<span class="st">"MID"</span>,<span class="st">"FWD"</span>] <span class="kw">for</span> p <span class="kw">in</span> remaining[pos]],
+        key=<span class="kw">lambda</span> x: x[<span class="st">"form_score"</span>], reverse=<span class="kw">True</span>
+    )
+    bench.extend(outfield[:<span class="num">5</span> - len(bench)])
+
+    used_ids  = {p[<span class="st">"id"</span>] <span class="kw">for</span> p <span class="kw">in</span> lineup + bench}
+    all_ids   = set(week_results.keys())
+    unused_ids = all_ids - used_ids
+    unused = sorted(
+        [{**week_results[pid], <span class="st">"id"</span>: pid} <span class="kw">for</span> pid <span class="kw">in</span> unused_ids],
+        key=<span class="kw">lambda</span> x: x[<span class="st">"form_score"</span>], reverse=<span class="kw">True</span>
+    )
+    transfer_shortlist = [p <span class="kw">for</span> p <span class="kw">in</span> unused <span class="kw">if</span> p[<span class="st">"id"</span>] <span class="kw">in</span> transfer_risk_ids]
+    <span class="kw">return</span> {<span class="st">"formation"</span>: formation, <span class="st">"quotas"</span>: quotas,
+            <span class="st">"lineup"</span>: lineup, <span class="st">"bench"</span>: bench,
+            <span class="st">"unused"</span>: unused, <span class="st">"transfer_shortlist"</span>: transfer_shortlist}</pre>
+    </div>
+
+</div>
+
+<footer>
+    <p>&copy; 2026 Lee Yih Ven | AI Project Portfolio</p>
+</footer>
+</body>
+</html>

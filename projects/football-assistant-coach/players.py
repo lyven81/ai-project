@@ -1,0 +1,163 @@
+PLAYERS = [
+    # Goalkeepers
+    {
+        "id": 1, "name": "Marco Silva", "position": "GK", "age": 28,
+        "style": "Commanding, good distribution, sweeper-keeper",
+        "strength": "Command of box, reflexes, organising defence",
+        "weakness": "Kicking under pressure, slow off the line",
+        "base_form": 72,
+    },
+    {
+        "id": 2, "name": "Daniel Park", "position": "GK", "age": 23,
+        "style": "Shot-stopper, agile, vocal",
+        "strength": "One-on-one saves, penalty saving",
+        "weakness": "Aerial duels, weak on corners",
+        "base_form": 61,
+    },
+
+    # Defenders
+    {
+        "id": 3, "name": "Carlos Ruiz", "position": "DEF", "age": 30,
+        "style": "Ball-playing centre-back, calm under pressure",
+        "strength": "Passing, positioning, reading the game",
+        "weakness": "Pace against quick forwards",
+        "base_form": 74,
+    },
+    {
+        "id": 4, "name": "James Okoye", "position": "DEF", "age": 26,
+        "style": "Aggressive tackler, strong in aerial duels",
+        "strength": "Heading, tackling, set-piece defending",
+        "weakness": "Ball distribution, yellow card tendency",
+        "base_form": 70,
+    },
+    {
+        "id": 5, "name": "Lukas Bauer", "position": "DEF", "age": 29,
+        "style": "Overlapping right back, high stamina",
+        "strength": "Crossing, pressing, work rate",
+        "weakness": "Defensive positioning when caught forward",
+        "base_form": 68,
+    },
+    {
+        "id": 6, "name": "Andre Santos", "position": "DEF", "age": 24,
+        "style": "Left back, technical dribbler",
+        "strength": "1v1 defending, short passing",
+        "weakness": "Tracking runs, positional discipline",
+        "base_form": 65,
+    },
+    {
+        "id": 7, "name": "Tomasz Kowalski", "position": "DEF", "age": 32,
+        "style": "Experienced stopper, leadership on the pitch",
+        "strength": "Organisation, blocking, mentoring younger players",
+        "weakness": "Reduced pace, recovery speed",
+        "base_form": 66,
+    },
+    {
+        "id": 8, "name": "Yusuf Amir", "position": "DEF", "age": 21,
+        "style": "Athletic, high-press defender",
+        "strength": "Interceptions, pace, pressing trigger",
+        "weakness": "Inexperienced at set pieces, rash challenges",
+        "base_form": 58,
+    },
+
+    # Midfielders
+    {
+        "id": 9, "name": "Ricardo Flores", "position": "MID", "age": 27,
+        "style": "Deep-lying playmaker, dictates tempo",
+        "strength": "Passing range, vision, ball retention",
+        "weakness": "Low scoring threat, slow in transition",
+        "base_form": 76,
+    },
+    {
+        "id": 10, "name": "Kwame Asante", "position": "MID", "age": 25,
+        "style": "Box-to-box runner, high energy",
+        "strength": "Pressing, recovery runs, work rate",
+        "weakness": "Final ball, decision-making in tight spaces",
+        "base_form": 71,
+    },
+    {
+        "id": 11, "name": "Mikhail Petrov", "position": "MID", "age": 28,
+        "style": "Creative number 10, dribbler",
+        "strength": "Key passes, dribbling, link-up play",
+        "weakness": "Tracking back, defensive contribution",
+        "base_form": 73,
+    },
+    {
+        "id": 12, "name": "Sanjay Kumar", "position": "MID", "age": 26,
+        "style": "Holding midfielder, shield for defence",
+        "strength": "Interceptions, short passing, positioning",
+        "weakness": "Aerial duels, long-range shots",
+        "base_form": 69,
+    },
+    {
+        "id": 13, "name": "Omar Hassan", "position": "MID", "age": 23,
+        "style": "Wide midfielder, pace and delivery",
+        "strength": "Crossing, direct running, corner delivery",
+        "weakness": "Weak foot, tracking back",
+        "base_form": 64,
+    },
+    {
+        "id": 14, "name": "Felipe Costa", "position": "MID", "age": 30,
+        "style": "Experienced central midfielder, positional intelligence",
+        "strength": "Set-piece delivery, leadership, composure",
+        "weakness": "Reduced sprint speed, fatigue management",
+        "base_form": 67,
+    },
+    {
+        "id": 15, "name": "Jakub Novak", "position": "MID", "age": 22,
+        "style": "Energetic presser, counter-attacking threat",
+        "strength": "Ball winning, quick transitions, stamina",
+        "weakness": "Positional discipline, first touch",
+        "base_form": 60,
+    },
+    {
+        "id": 16, "name": "Emre Demir", "position": "MID", "age": 24,
+        "style": "Technical wide mid, combination play",
+        "strength": "Dribbling, one-twos, creativity",
+        "weakness": "Physicality, aerial challenges",
+        "base_form": 62,
+    },
+
+    # Forwards
+    {
+        "id": 17, "name": "Antoine Leblanc", "position": "FWD", "age": 26,
+        "style": "Target man, aerial presence, hold-up play",
+        "strength": "Heading, winning fouls, holding ball up",
+        "weakness": "Dribbling, pressing from the front",
+        "base_form": 72,
+    },
+    {
+        "id": 18, "name": "Hiroshi Tanaka", "position": "FWD", "age": 24,
+        "style": "Pacey striker, runs in behind",
+        "strength": "Finishing, off-the-ball movement, pace",
+        "weakness": "Hold-up play, defensive contributions",
+        "base_form": 70,
+    },
+    {
+        "id": 19, "name": "David Mensah", "position": "FWD", "age": 27,
+        "style": "Clinical finisher, smart positioning",
+        "strength": "Composure in front of goal, movement, positioning",
+        "weakness": "Work rate without the ball",
+        "base_form": 75,
+    },
+    {
+        "id": 20, "name": "Pavel Cerny", "position": "FWD", "age": 29,
+        "style": "Wide forward, presses high, direct",
+        "strength": "Pressing, dribbling, link-up",
+        "weakness": "End product, shooting accuracy",
+        "base_form": 66,
+    },
+    {
+        "id": 21, "name": "Ali Rahman", "position": "FWD", "age": 21,
+        "style": "Versatile attacker, inside forward",
+        "strength": "Creativity, quick feet, pressing coordination",
+        "weakness": "Physicality, inconsistency under pressure",
+        "base_form": 59,
+    },
+    {
+        "id": 22, "name": "Bruno Carvalho", "position": "FWD", "age": 25,
+        "style": "Poacher, sharp in the box",
+        "strength": "One-touch finishing, movement, pressing",
+        "weakness": "Contributing outside the box, low assist count",
+        "base_form": 63,
+    },
+]

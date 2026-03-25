@@ -118,6 +118,12 @@ This repository contains **38 production-deployed AI applications** demonstratin
 - **Tech Stack:** Python, Gemini 2.0 Flash, TinyDB, Pandas, Matplotlib, Seaborn, NumPy
 - **AI Capabilities:** Natural language to code generation, RFM analysis (Recency, Frequency, Monetary), 5-segment customer classification (VIP, Regular, At-Risk, New, Churned), automated campaign targeting, customer profiling database, intelligent filter generation, self-correcting code execution
 
+#### [Football Assistant Coach](./projects/football-assistant-coach/)
+**AI-powered player selection system that evaluates 22 players across 4 training sessions and recommends the optimal Starting XI**
+- **Live Demo:** [Launch Demo](https://lyven81.github.io/ai-project/projects/football-assistant-coach/demo.html)
+- **Tech Stack:** Python, Claude Haiku, Streamlit, Plotly, Pandas, Anthropic SDK
+- **AI Capabilities:** 22 position-specific AI coach personas, team chemistry scoring (max 50 pts) weighted above individual performance (max 35 pts), formation-aware selection engine, hybrid formation advisor, rolling form calculation (60/40 two-week average), transfer risk detection
+
 #### [Social Media Marketer](./projects/social-media-marketer/)
 **Multi-agent simulation that reveals which marketing channel delivers the best ROI — and which one to cut**
 - **Live Demo:** [Launch Demo](https://lyven81.github.io/ai-project/projects/social-media-marketer/demo.html)
