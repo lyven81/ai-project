@@ -1,0 +1,1287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Unusual Coloring Book — Cinderella</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: #FFFDF7;
+      color: #2D3436;
+      min-height: 100vh;
+    }
+
+    /* ---- Screens ---- */
+    .screen { display: none; }
+    .screen.active { display: flex; }
+
+    /* ---- API Key screen ---- */
+    #screen-apikey {
+      min-height: 100vh;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(160deg, #FFFDF7 0%, #FFF3E0 100%);
+      padding: 40px 20px;
+    }
+    .apikey-card {
+      background: #fff;
+      border-radius: 24px;
+      padding: 48px 40px;
+      box-shadow: 0 8px 48px rgba(0,0,0,0.10);
+      max-width: 480px;
+      width: 100%;
+      text-align: center;
+    }
+    .apikey-card .logo { font-size: 3rem; margin-bottom: 16px; }
+    .apikey-card h1 {
+      font-family: 'Fredoka One', cursive;
+      font-size: 2rem;
+      color: #2D3436;
+      margin-bottom: 8px;
+    }
+    .apikey-card p { font-size: 0.95rem; color: #777; margin-bottom: 28px; line-height: 1.6; }
+    .apikey-card input {
+      width: 100%;
+      border: 2px solid #eee;
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-size: 0.95rem;
+      font-family: 'Nunito', sans-serif;
+      outline: none;
+      margin-bottom: 14px;
+      transition: border-color 0.2s;
+    }
+    .apikey-card input:focus { border-color: #FF6B6B; }
+    .apikey-error {
+      color: #c0392b;
+      font-size: 0.85rem;
+      background: #fff0f0;
+      border-radius: 8px;
+      padding: 8px 12px;
+      margin-bottom: 14px;
+      display: none;
+    }
+    .btn-primary {
+      width: 100%;
+      background: linear-gradient(135deg, #FF6B6B, #FFD93D);
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      padding: 14px;
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+      font-family: 'Nunito', sans-serif;
+    }
+    .btn-primary:hover { opacity: 0.92; }
+    .apikey-note { font-size: 0.8rem; color: #bbb; margin-top: 16px; }
+    .apikey-note a { color: #aaa; }
+
+    /* ---- Cover screen ---- */
+    #screen-cover {
+      min-height: 100vh;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(160deg, #FFFDF7 0%, #FFF3E0 100%);
+      padding: 40px 24px;
+    }
+    .cover-inner {
+      max-width: 540px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 28px;
+    }
+    .cover-book {
+      width: 100%;
+      max-width: 380px;
+      background: linear-gradient(160deg, #FFD93D 0%, #FF6B6B 60%, #C3B1E1 100%);
+      border-radius: 20px;
+      padding: 56px 32px 48px;
+      text-align: center;
+      box-shadow: 0 16px 56px rgba(255,107,107,0.25);
+      position: relative;
+      overflow: hidden;
+    }
+    .cover-book::before {
+      content: '✦';
+      position: absolute;
+      top: 20px;
+      right: 24px;
+      font-size: 1.2rem;
+      color: rgba(255,255,255,0.5);
+    }
+    .cover-book::after {
+      content: '✦';
+      position: absolute;
+      bottom: 24px;
+      left: 24px;
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.4);
+    }
+    .cover-emoji { font-size: 4rem; margin-bottom: 20px; display: block; }
+    .cover-title {
+      font-family: 'Fredoka One', cursive;
+      font-size: 2.6rem;
+      color: #fff;
+      text-shadow: 0 3px 12px rgba(0,0,0,0.2);
+      margin-bottom: 10px;
+    }
+    .cover-tagline {
+      font-size: 0.95rem;
+      color: rgba(255,255,255,0.88);
+      font-weight: 600;
+      font-style: italic;
+    }
+    .cover-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.25);
+      color: #fff;
+      border-radius: 50px;
+      padding: 5px 16px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      margin-top: 18px;
+    }
+    .cover-title-block { text-align: center; }
+    .cover-title-block h2 {
+      font-family: 'Fredoka One', cursive;
+      font-size: 1.8rem;
+      color: #2D3436;
+      margin-bottom: 6px;
+    }
+    .cover-title-block p { font-size: 0.92rem; color: #888; font-style: italic; }
+    .how-it-works {
+      background: #fff;
+      border-radius: 18px;
+      padding: 20px 28px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .how-step { display: flex; align-items: center; gap: 14px; }
+    .how-num {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: linear-gradient(135deg, #FF6B6B, #FFD93D);
+      color: #fff;
+      font-family: 'Fredoka One', cursive;
+      font-size: 1rem;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .how-text { font-size: 0.92rem; color: #444; }
+    .cover-start-btn {
+      background: linear-gradient(135deg, #FF6B6B, #FFD93D);
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      padding: 16px 48px;
+      font-size: 1.1rem;
+      font-weight: 800;
+      cursor: pointer;
+      font-family: 'Nunito', sans-serif;
+      box-shadow: 0 4px 20px rgba(255,107,107,0.35);
+    }
+    .cover-start-btn:hover { opacity: 0.92; }
+    .cover-footer { font-size: 0.8rem; color: #bbb; }
+
+    /* ---- Option Selector screen ---- */
+    #screen-choosing {
+      min-height: 100vh;
+      flex-direction: column;
+      background: #FFFDF7;
+      padding: 32px 24px 60px;
+    }
+    .choosing-inner { max-width: 680px; margin: 0 auto; width: 100%; }
+    .back-btn {
+      background: none;
+      border: 2px solid #ddd;
+      border-radius: 50px;
+      padding: 8px 20px;
+      font-size: 0.9rem;
+      color: #666;
+      cursor: pointer;
+      margin-bottom: 32px;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+    }
+    .back-btn:hover { border-color: #aaa; }
+    .page-tag {
+      font-family: 'Fredoka One', cursive;
+      font-size: 0.85rem;
+      color: #aaa;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 10px;
+    }
+    .chapter-title {
+      font-family: 'Fredoka One', cursive;
+      font-size: 2rem;
+      color: #2D3436;
+      margin-bottom: 10px;
+    }
+    .choose-prompt { font-size: 1rem; color: #777; margin-bottom: 28px; }
+    .options-list { display: flex; flex-direction: column; gap: 16px; }
+    .option-card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 20px 22px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      border: 2px solid transparent;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      cursor: pointer;
+      text-align: left;
+      width: 100%;
+      transition: box-shadow 0.2s, transform 0.15s;
+    }
+    .option-card:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.13); transform: translateY(-2px); }
+    .option-badge {
+      width: 38px; height: 38px; border-radius: 50%;
+      color: #fff;
+      font-family: 'Fredoka One', cursive;
+      font-size: 1.1rem;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .option-body { flex: 1; }
+    .option-preview {
+      font-family: 'Fredoka One', cursive;
+      font-size: 1rem;
+      color: #2D3436;
+      margin-bottom: 6px;
+    }
+    .option-text { font-size: 0.9rem; color: #666; line-height: 1.7; }
+    .option-choose {
+      color: #fff;
+      border-radius: 50px;
+      padding: 5px 14px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      font-family: 'Nunito', sans-serif;
+      white-space: nowrap;
+      align-self: center;
+      flex-shrink: 0;
+    }
+
+    /* ---- Generating screen ---- */
+    #screen-generating {
+      min-height: 100vh;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 24px;
+      background: #FFFDF7;
+    }
+    .gen-card {
+      background: #fff;
+      border-radius: 24px;
+      padding: 48px 56px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.10);
+      text-align: center;
+      max-width: 420px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spinner {
+      width: 56px; height: 56px; border-radius: 50%;
+      border: 5px solid #FFD93D;
+      border-top-color: #FF6B6B;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 28px;
+    }
+    .gen-title {
+      font-family: 'Fredoka One', cursive;
+      font-size: 1.4rem;
+      color: #2D3436;
+      margin-bottom: 10px;
+    }
+    .gen-sub { font-size: 0.9rem; color: #888; line-height: 1.6; }
+
+    /* ---- Coloring screen ---- */
+    #screen-coloring {
+      flex-direction: column;
+      min-height: 100vh;
+      background: #FFFDF7;
+    }
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 24px;
+      background: #fff;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      gap: 16px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .top-back {
+      background: #f5f5f5;
+      border: none;
+      border-radius: 50px;
+      padding: 8px 18px;
+      font-size: 0.85rem;
+      color: #555;
+      cursor: pointer;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+    }
+    .top-title {
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(0.9rem, 2.5vw, 1.3rem);
+      color: #2D3436;
+      flex: 1;
+      text-align: center;
+    }
+    .top-export {
+      background: #4ECDC4;
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      padding: 10px 20px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'Nunito', sans-serif;
+      white-space: nowrap;
+    }
+    .top-export:disabled { opacity: 0.5; cursor: default; }
+    .coloring-layout {
+      display: grid;
+      grid-template-columns: 1fr 310px;
+      gap: 20px;
+      padding: 20px 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    .canvas-col { display: flex; flex-direction: column; gap: 14px; }
+    #coloring-canvas {
+      width: 100%;
+      max-width: 700px;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      cursor: crosshair;
+      display: block;
+      background: #fff;
+    }
+    .page-nav {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+    }
+    .nav-btn {
+      background: #FFD93D;
+      color: #2D3436;
+      border: none;
+      border-radius: 50px;
+      padding: 9px 22px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'Nunito', sans-serif;
+    }
+    .nav-btn:disabled { opacity: 0.4; cursor: default; }
+    .page-label {
+      font-family: 'Fredoka One', cursive;
+      font-size: 1rem;
+      color: #2D3436;
+      min-width: 160px;
+      text-align: center;
+    }
+    .canvas-controls { display: flex; gap: 10px; justify-content: center; }
+    .ctrl-btn {
+      background: #fff;
+      border: 2px solid #ddd;
+      border-radius: 50px;
+      padding: 7px 20px;
+      font-size: 0.85rem;
+      color: #555;
+      cursor: pointer;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+    }
+    .sidebar { display: flex; flex-direction: column; gap: 16px; }
+    .sidebar-box {
+      background: #fff;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    }
+    .sidebar-tag {
+      font-family: 'Fredoka One', cursive;
+      font-size: 0.82rem;
+      color: #aaa;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .story-text-display {
+      font-size: 0.97rem;
+      line-height: 1.75;
+      color: #2D3436;
+    }
+    .thumb-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+    .thumb {
+      width: 44px; height: 44px;
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #999;
+      transition: border 0.15s;
+      background-size: cover;
+      background-position: center;
+      flex-shrink: 0;
+      border: 3px solid #eee;
+    }
+    .thumb.active { border-color: #FF6B6B; }
+    .thumb.empty { border: 3px dashed #ddd; }
+    .continue-hint { font-size: 0.88rem; color: #777; line-height: 1.5; margin-bottom: 12px; }
+    .continue-btn {
+      background: linear-gradient(135deg, #FF6B6B, #FFD93D);
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      padding: 13px 20px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'Nunito', sans-serif;
+      width: 100%;
+    }
+    .done-text {
+      font-family: 'Fredoka One', cursive;
+      font-size: 1.1rem;
+      color: #2D3436;
+      margin-bottom: 12px;
+    }
+    .export-btn2 {
+      background: #4ECDC4;
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      padding: 12px 20px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'Nunito', sans-serif;
+      width: 100%;
+    }
+    /* Color palette */
+    .palette-grid {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 6px;
+      margin-top: 10px;
+    }
+    .color-swatch {
+      width: 100%;
+      aspect-ratio: 1;
+      border-radius: 8px;
+      cursor: pointer;
+      border: 3px solid transparent;
+      transition: transform 0.1s, border-color 0.1s;
+    }
+    .color-swatch:hover { transform: scale(1.15); }
+    .color-swatch.selected { border-color: #2D3436; transform: scale(1.15); }
+    /* Edit box */
+    .edit-label {
+      font-family: 'Fredoka One', cursive;
+      font-size: 1rem;
+      color: #2D3436;
+      margin-bottom: 10px;
+    }
+    .edit-input {
+      width: 100%;
+      border: 2px solid #eee;
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-size: 0.9rem;
+      font-family: 'Nunito', sans-serif;
+      outline: none;
+      margin-bottom: 10px;
+    }
+    .edit-input:focus { border-color: #FF6B6B; }
+    .edit-btn {
+      width: 100%;
+      background: #FF6B6B;
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      padding: 10px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'Nunito', sans-serif;
+    }
+    .edit-btn:disabled { opacity: 0.5; cursor: default; }
+
+    @media (max-width: 768px) {
+      .coloring-layout { grid-template-columns: 1fr; }
+      .apikey-card { padding: 32px 24px; }
+      .gen-card { padding: 40px 28px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== SCREEN: API KEY ===== -->
+<div id="screen-apikey" class="screen active">
+  <div class="apikey-card">
+    <div class="logo">🎨</div>
+    <h1>Unusual Coloring Book</h1>
+    <p>Enter your Gemini API key to start. Your key is stored only in your browser session and never sent anywhere except Google's API.</p>
+    <input type="password" id="api-key-input" placeholder="AIza..." autocomplete="off" />
+    <div class="apikey-error" id="apikey-error"></div>
+    <button class="btn-primary" onclick="startWithKey()">Start Creating →</button>
+    <p class="apikey-note">
+      Get a free key at <a href="https://aistudio.google.com/app/apikey" target="_blank">aistudio.google.com</a>
+    </p>
+  </div>
+</div>
+
+<!-- ===== SCREEN: COVER ===== -->
+<div id="screen-cover" class="screen">
+  <div class="cover-inner">
+    <div class="cover-book">
+      <span class="cover-emoji">👗</span>
+      <div class="cover-title">Cinderella</div>
+      <div class="cover-tagline">The other side of the story</div>
+      <div class="cover-badge">6 pages · 3 paths each</div>
+    </div>
+    <div class="cover-title-block">
+      <h2>Your Coloring Book Awaits</h2>
+      <p>Choose how each chapter unfolds. AI draws your scene. Then colour it in.</p>
+    </div>
+    <div class="how-it-works">
+      <div class="how-step">
+        <div class="how-num">1</div>
+        <div class="how-text">Pick one of three story paths for each page</div>
+      </div>
+      <div class="how-step">
+        <div class="how-num">2</div>
+        <div class="how-text">Gemini AI draws an illustration just for your choice</div>
+      </div>
+      <div class="how-step">
+        <div class="how-num">3</div>
+        <div class="how-text">Colour it in, then continue to the next page</div>
+      </div>
+    </div>
+    <button class="cover-start-btn" onclick="goToChoosing(1)">Begin the Story →</button>
+    <div class="cover-footer">Powered by Gemini AI · All stories are classic public domain fairy tales</div>
+  </div>
+</div>
+
+<!-- ===== SCREEN: CHOOSING ===== -->
+<div id="screen-choosing" class="screen">
+  <div class="choosing-inner">
+    <button class="back-btn" id="choosing-back">← Back</button>
+    <div class="page-tag" id="choosing-page-tag">Page 1 of 6</div>
+    <div class="chapter-title" id="choosing-chapter-title">Chapter Title</div>
+    <div class="choose-prompt">Choose how this part of the story unfolds:</div>
+    <div class="options-list" id="options-list"></div>
+  </div>
+</div>
+
+<!-- ===== SCREEN: GENERATING ===== -->
+<div id="screen-generating" class="screen">
+  <div class="gen-card">
+    <div class="spinner"></div>
+    <div class="gen-title">Drawing your illustration...</div>
+    <div class="gen-sub" id="gen-sub-text">Gemini is creating your scene. This takes about 10–20 seconds.</div>
+  </div>
+</div>
+
+<!-- ===== SCREEN: COLORING ===== -->
+<div id="screen-coloring" class="screen">
+  <div class="top-bar">
+    <button class="top-back" onclick="goToCover()">← New Book</button>
+    <div class="top-title">Cinderella — Unusual Coloring Book</div>
+    <button class="top-export" id="top-export-btn" onclick="exportPDF()" disabled>⬇ Export PDF</button>
+  </div>
+
+  <div class="coloring-layout">
+    <!-- Canvas column -->
+    <div class="canvas-col">
+      <canvas id="coloring-canvas" width="700" height="700"></canvas>
+
+      <div class="page-nav">
+        <button class="nav-btn" id="btn-prev" onclick="navigatePage(-1)" disabled>← Prev</button>
+        <span class="page-label" id="page-label">Page 1 of 1</span>
+        <button class="nav-btn" id="btn-next" onclick="navigatePage(1)" disabled>Next →</button>
+      </div>
+
+      <div class="canvas-controls">
+        <button class="ctrl-btn" onclick="undoFill()">↩ Undo</button>
+        <button class="ctrl-btn" onclick="clearCanvas()">🗑 Clear</button>
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <!-- Story text -->
+      <div class="sidebar-box">
+        <div class="sidebar-tag" id="sb-page-tag">Page 1 — Chapter</div>
+        <div class="story-text-display" id="sb-story-text">Story text appears here.</div>
+      </div>
+
+      <!-- Thumbnail strip -->
+      <div class="sidebar-box">
+        <div class="sidebar-tag">Pages</div>
+        <div class="thumb-row" id="thumb-row"></div>
+      </div>
+
+      <!-- Continue / Done -->
+      <div class="sidebar-box" id="continue-box"></div>
+
+      <!-- Color palette -->
+      <div class="sidebar-box">
+        <div class="sidebar-tag">Colours</div>
+        <div class="palette-grid" id="palette-grid"></div>
+      </div>
+
+      <!-- Edit illustration -->
+      <div class="sidebar-box">
+        <div class="edit-label">Adjust this illustration</div>
+        <input class="edit-input" type="text" id="edit-input" placeholder='e.g. "add more stars in the background"' />
+        <button class="edit-btn" id="edit-btn" onclick="handleEdit()">Update →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// STORY DATA — Cinderella, 6 pages × 3 options
+// ============================================================
+const TOTAL_PAGES = 6;
+const COLORING_STYLE = "children's coloring book illustration, thick clean black outlines, white background, no color fill, simple friendly fairy-tale style, large expressive characters, suitable for ages 5-10, child-safe. Draw only clean black outlines on pure white. No shading, no color fill anywhere.";
+const OPTION_COLORS = ['#FF6B6B', '#4ECDC4', '#C3B1E1'];
+
+const STORY = [
+  {
+    page: 1,
+    chapter_title: "The Morning Before the Ball",
+    options: [
+      {
+        id: "a",
+        preview: "Cinderella hums while sweeping, holding onto a quiet hope",
+        story_text: "Cinderella hummed softly as she swept the cold stone floors, her voice as gentle as spring rain. Deep in her heart a quiet hope flickered — not for a gown or a dance, but simply to be seen for who she truly was.",
+        image_prompt: "Cinderella sweeping stone castle floors with a long broom, wearing a simple dress and apron, looking upward with a gentle hopeful smile. Sunlight streams through a tall arched window. Small birds perch cheerfully on the sill."
+      },
+      {
+        id: "b",
+        preview: "She finds a note in her mother's handwriting tucked inside a book",
+        story_text: "Tucked inside an old storybook, Cinderella found a small folded note in her mother's handwriting. It read: Kindness is the only magic that lasts. She pressed it to her heart, suddenly feeling less alone in the world.",
+        image_prompt: "Cinderella sitting by a sunlit window, holding a small folded note with a tender wondering expression. An open storybook rests on the table beside her. Dust motes float in warm light."
+      },
+      {
+        id: "c",
+        preview: "A tiny mouse bows to her — her first true friend in this house",
+        story_text: "A tiny mouse with bright eyes scurried up and bowed with great formality. Cinderella laughed — the first real laugh in months. 'Well,' she whispered, 'at least I have one friend in this house.' The mouse twirled once, as if to say: and a very good one at that.",
+        image_prompt: "Cinderella kneeling on the kitchen floor, eye-level with a small friendly mouse that is bowing comically. She laughs with pure delight. Flour barrels and a stone hearth fill the cozy background."
+      }
+    ]
+  },
+  {
+    page: 2,
+    chapter_title: "The Invitation Arrives",
+    options: [
+      {
+        id: "a",
+        preview: "A royal messenger arrives — the stepmother reads it first",
+        story_text: "A royal messenger rode up to the gate, his trumpet gleaming in the sun. The stepmother snatched the scroll and read it twice. Then she smiled — but it was not the kind of smile that meant anything good for Cinderella.",
+        image_prompt: "A royal messenger in a decorated uniform presenting a golden scroll at a grand house gate. A stern stepmother reaches for it while two stepsisters crowd eagerly behind her. Cinderella watches quietly from an upstairs window."
+      },
+      {
+        id: "b",
+        preview: "A stepsister looks at Cinderella with something almost like guilt",
+        story_text: "Anastasia, the younger stepsister, grabbed the invitation first. For one brief moment she looked at Cinderella with something like guilt — almost like an apology. Then the stepmother appeared and the moment vanished like smoke.",
+        image_prompt: "A young stepsister holding a fancy invitation scroll, glancing back at Cinderella with a complicated guilty expression. Cinderella stands in a doorway, surprised and hopeful. A grand foyer with chandelier in the background."
+      },
+      {
+        id: "c",
+        preview: "The invitation blows to Cinderella's feet — it says 'all maidens'",
+        story_text: "A gust of wind sent the invitation skidding across the floor and it landed right at Cinderella's feet. She picked it up and read: All maidens of the kingdom are invited. All. The word sat in her chest like a warm ember that refused to go out.",
+        image_prompt: "A royal invitation scroll settling on a stone floor, Cinderella bending to pick it up with wide hopeful eyes. Wind stirs a curtain at an open window. A warm fireplace glows nearby."
+      }
+    ]
+  },
+  {
+    page: 3,
+    chapter_title: "Getting Ready",
+    options: [
+      {
+        id: "a",
+        preview: "By candlelight she sews herself a gown from fabric scraps",
+        story_text: "Cinderella stood before a pile of old fabric scraps. She had nimble fingers and a steady eye for beauty. By candlelight she began to sew — stitch by careful stitch — turning forgotten scraps into something that was entirely her own.",
+        image_prompt: "Cinderella sitting at a small table by a single candle, sewing a gown from colorful fabric scraps with focused happy concentration. Thread, scissors, and pins arranged nearby. Cozy attic room."
+      },
+      {
+        id: "b",
+        preview: "A mysterious old woman at the gate makes her a quiet promise",
+        story_text: "Just as the last carriage rolled away, a shimmer appeared at the garden gate. An old woman with very kind eyes stepped forward and said quietly, 'You shall go — but it begins with you deciding that you deserve to.' Cinderella straightened her back and nodded.",
+        image_prompt: "A kindly old woman with a warm glowing aura standing at a garden gate, speaking gently to Cinderella. Fireflies and stars surround them. Garden flowers frame the scene beautifully."
+      },
+      {
+        id: "c",
+        preview: "Her mouse friend leads her to something glittering hidden by the old oak tree",
+        story_text: "The little mouse whistled from behind the flour barrel. Cinderella followed him out to the old oak tree, where something glittered between the roots — a small cloth pouch with a note: Wear what makes you feel like yourself.",
+        image_prompt: "Cinderella kneeling at the mossy roots of a large old oak tree at twilight, a small mouse pointing excitedly to a glittering cloth pouch tucked between the roots. Stars and fireflies in the night garden."
+      }
+    ]
+  },
+  {
+    page: 4,
+    chapter_title: "The Grand Ballroom",
+    options: [
+      {
+        id: "a",
+        preview: "She steps inside, breathes, and lets herself belong — just for tonight",
+        story_text: "Cinderella stepped into the hall where golden light fell like rain and music threaded through every corner of the air. She did not rush toward the dancing. She paused, breathed, and decided — just for tonight — to let herself belong here.",
+        image_prompt: "Cinderella standing at the entrance of a grand ballroom, looking in with calm wonder and a quiet smile. Sparkling chandeliers, swirling couples dancing, tall arched windows. She is composed and serene."
+      },
+      {
+        id: "b",
+        preview: "The Prince notices her laugh from across the crowded room",
+        story_text: "The Prince stood surrounded by admirers but his gaze kept drifting. Then Cinderella laughed at something small and entirely private, and his attention locked on her — steady as a compass needle finding north. He began to make his way across the room.",
+        image_prompt: "A prince in a ballroom standing still amid swirling dancers, his gaze fixed on Cinderella across the room who is laughing warmly. A crowd of guests between them. Chandeliers and grand pillars in the background."
+      },
+      {
+        id: "c",
+        preview: "A quiet boy sits beside her by the window — 'Me too. I hate crowds.'",
+        story_text: "She found a quiet corner near the tall windows, watching the dancers twirl. Then a boy her age sat down beside her and said simply, 'Me too. I hate crowds.' Cinderella looked at him — not a prince, not a courtier — just someone who understood exactly how she felt.",
+        image_prompt: "Cinderella sitting on a window ledge in a grand ballroom, a friendly young man sitting beside her, both watching the dancing from the sidelines. Moonlight streams through tall windows. Dancing guests in the background."
+      }
+    ]
+  },
+  {
+    page: 5,
+    chapter_title: "Something Changes",
+    options: [
+      {
+        id: "a",
+        preview: "The clock strikes midnight — she realises she has not changed at all",
+        story_text: "Somewhere in the palace a clock began to strike. Twelve deep hollow beats rang through the halls. Cinderella froze — not from magic, but from a sudden clarity: she was still herself. Gown or no gown, nothing that truly mattered had changed.",
+        image_prompt: "Cinderella standing in a palace corridor, a grand ornate clock on the wall with its hands pointing to midnight. She looks at the clock with calm realisation rather than fear or panic. Soft moonlight from a nearby window."
+      },
+      {
+        id: "b",
+        preview: "The Prince reaches for her hand — 'I don't even know your name'",
+        story_text: "The Prince reached for her hand just as the midnight chime rang out. 'I don't even know your name,' he said quietly. She looked him in the eye and smiled. Some things, she had decided, are worth saying out loud.",
+        image_prompt: "A prince gently reaching for Cinderella's hand on a moonlit palace balcony, the two of them facing each other with warmth. Stars and a full moon visible behind them. An ornate clock visible through glass doors."
+      },
+      {
+        id: "c",
+        preview: "Instead of running she sits on the steps — then walks back through the door",
+        story_text: "Instead of running, Cinderella sat down on the wide marble steps. One shoe had slipped off. She looked at it for a long quiet moment — then stood up and walked back through the glowing door.",
+        image_prompt: "Cinderella sitting on wide marble palace steps at night, one glass slipper on her foot and the other lying beside her, looking back at the warm glowing palace entrance with a calm determined expression. Stars overhead."
+      }
+    ]
+  },
+  {
+    page: 6,
+    chapter_title: "The Morning After",
+    options: [
+      {
+        id: "a",
+        preview: "A horseman comes to every door — she steps forward with calm",
+        story_text: "In the quiet of the morning a royal horseman came to each door in the kingdom. When he reached Cinderella's house she stepped forward — not with trembling, but with calm. Some things, once started, simply know how to finish themselves.",
+        image_prompt: "A royal horseman at the front door of a house in golden morning light, Cinderella stepping forward with quiet confidence past the surprised stepmother and stepsisters. A white horse stands proudly in the background."
+      },
+      {
+        id: "b",
+        preview: "She ignores the slipper — and places her mother's note on the table instead",
+        story_text: "The glass slipper sat gleaming on a velvet cushion. When Cinderella's turn came she did not reach for the slipper. Instead she reached into her pocket and placed a small folded note on the table. The Prince read it. He looked up. He understood completely.",
+        image_prompt: "Cinderella standing before a prince who holds a glass slipper on a velvet cushion, but she is calmly placing a small folded note on the table between them. The prince reads it with a gentle understanding expression. Stepsisters watching in confusion."
+      },
+      {
+        id: "c",
+        preview: "He comes not with a slipper but with a question — and she answers",
+        story_text: "The Prince did not come with a slipper. He came with a question: 'The girl by the window — the one who laughed and then stayed. Do you know her?' Cinderella looked at her stepsisters. Then she looked at him. 'Yes,' she said. 'I do.'",
+        image_prompt: "A prince standing earnestly at the doorway of a house in morning light, speaking to Cinderella who stands in the front hall with a quiet confident smile. The confused stepsisters and stepmother stand behind her. Warm sunlight pours through the open door."
+      }
+    ]
+  }
+];
+
+const PALETTE = [
+  '#FF6B6B','#FF9F43','#FFD93D','#6BCB77',
+  '#4ECDC4','#4D96FF','#C3B1E1','#F8A5C2',
+  '#2D3436','#636e72','#b2bec3','#dfe6e9',
+  '#FFFFFF','#74b9ff','#fd79a8','#55efc4'
+];
+
+// ============================================================
+// APP STATE
+// ============================================================
+let apiKey = '';
+let completedPages = [];   // [{page, chapter_title, option_id, story_text, image, originalImageData}]
+let choosingPage = 1;
+let viewingIndex = 0;
+let selectedColor = '#FFD93D';
+let undoStack = [];
+let originalImageData = null;
+let isEditing = false;
+const MAX_UNDO = 10;
+
+// ============================================================
+// SCREEN MANAGEMENT
+// ============================================================
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// ============================================================
+// API KEY SCREEN
+// ============================================================
+function startWithKey() {
+  const input = document.getElementById('api-key-input').value.trim();
+  const errEl = document.getElementById('apikey-error');
+  if (!input || !input.startsWith('AIza')) {
+    errEl.textContent = 'Please enter a valid Gemini API key (starts with AIza).';
+    errEl.style.display = 'block';
+    return;
+  }
+  errEl.style.display = 'none';
+  apiKey = input;
+  sessionStorage.setItem('ucb_api_key', apiKey);
+  goToCover();
+}
+
+document.getElementById('api-key-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') startWithKey();
+});
+
+// ============================================================
+// COVER SCREEN
+// ============================================================
+function goToCover() {
+  completedPages = [];
+  choosingPage = 1;
+  viewingIndex = 0;
+  undoStack = [];
+  showScreen('screen-cover');
+}
+
+// ============================================================
+// CHOOSING SCREEN
+// ============================================================
+function goToChoosing(pageNum) {
+  choosingPage = pageNum;
+  const pageData = STORY[pageNum - 1];
+
+  document.getElementById('choosing-page-tag').textContent = `Page ${pageNum} of ${TOTAL_PAGES}`;
+  document.getElementById('choosing-chapter-title').textContent = pageData.chapter_title;
+
+  // Back button
+  const backBtn = document.getElementById('choosing-back');
+  if (completedPages.length === 0) {
+    backBtn.textContent = '← Cover';
+    backBtn.onclick = () => showScreen('screen-cover');
+  } else {
+    backBtn.textContent = '← Back to Coloring';
+    backBtn.onclick = () => showScreen('screen-coloring');
+  }
+
+  // Render option cards
+  const list = document.getElementById('options-list');
+  list.innerHTML = '';
+  pageData.options.forEach((opt, i) => {
+    const card = document.createElement('button');
+    card.className = 'option-card';
+    card.innerHTML = `
+      <div class="option-badge" style="background:${OPTION_COLORS[i]}">${['A','B','C'][i]}</div>
+      <div class="option-body">
+        <div class="option-preview">${opt.preview}</div>
+        <div class="option-text">${opt.story_text}</div>
+      </div>
+      <span class="option-choose" style="background:${OPTION_COLORS[i]}">Choose →</span>
+    `;
+    card.onclick = () => handleOptionSelect(opt, pageData.chapter_title);
+    list.appendChild(card);
+  });
+
+  showScreen('screen-choosing');
+}
+
+// ============================================================
+// GENERATE IMAGE
+// ============================================================
+async function handleOptionSelect(option, chapterTitle) {
+  showScreen('screen-generating');
+  document.getElementById('gen-sub-text').textContent =
+    `Generating page ${choosingPage}: "${option.preview}"`;
+
+  try {
+    const imageBase64 = await generateImage(option.image_prompt);
+    const newPage = {
+      page: choosingPage,
+      chapter_title: chapterTitle,
+      option_id: option.id,
+      story_text: option.story_text,
+      image: imageBase64
+    };
+    completedPages.push(newPage);
+    viewingIndex = completedPages.length - 1;
+    undoStack = [];
+    renderColoringScreen();
+    showScreen('screen-coloring');
+  } catch (err) {
+    showScreen('screen-choosing');
+    alert('Image generation failed: ' + (err.message || err));
+  }
+}
+
+async function generateImage(prompt) {
+  const fullPrompt = COLORING_STYLE + ' Scene: ' + prompt;
+  const model = 'gemini-2.0-flash-preview-image-generation';
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      contents: [{ parts: [{ text: fullPrompt }] }],
+      generationConfig: { responseModalities: ['IMAGE', 'TEXT'] }
+    })
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err?.error?.message || `HTTP ${res.status}`);
+  }
+
+  const data = await res.json();
+  const parts = data?.candidates?.[0]?.content?.parts || [];
+  for (const part of parts) {
+    if (part?.inlineData?.data) return part.inlineData.data;
+  }
+  throw new Error('No image returned from Gemini. Check your API key and model access.');
+}
+
+// ============================================================
+// COLORING SCREEN
+// ============================================================
+function renderColoringScreen() {
+  const page = completedPages[viewingIndex];
+  if (!page) return;
+
+  // Top bar
+  const exportBtn = document.getElementById('top-export-btn');
+  exportBtn.disabled = completedPages.length === 0;
+
+  // Story text
+  document.getElementById('sb-page-tag').textContent =
+    `Page ${page.page} — ${page.chapter_title}`;
+  document.getElementById('sb-story-text').textContent = page.story_text;
+
+  // Page nav
+  document.getElementById('btn-prev').disabled = viewingIndex <= 0;
+  document.getElementById('btn-next').disabled = viewingIndex >= completedPages.length - 1;
+  document.getElementById('page-label').textContent =
+    `Page ${page.page} of ${completedPages.length}${completedPages.length < TOTAL_PAGES ? ' (of ' + TOTAL_PAGES + ' total)' : ''}`;
+
+  // Thumbnails
+  renderThumbs();
+
+  // Continue / Done box
+  renderContinueBox();
+
+  // Color palette
+  renderPalette();
+
+  // Draw image on canvas
+  loadImageOnCanvas(page.image);
+}
+
+function loadImageOnCanvas(base64) {
+  const canvas = document.getElementById('coloring-canvas');
+  const ctx = canvas.getContext('2d');
+  const img = new Image();
+  img.onload = () => {
+    canvas.width = img.naturalWidth || 700;
+    canvas.height = img.naturalHeight || 700;
+    ctx.drawImage(img, 0, 0);
+    originalImageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    undoStack = [];
+  };
+  img.src = `data:image/png;base64,${base64}`;
+}
+
+function renderThumbs() {
+  const row = document.getElementById('thumb-row');
+  row.innerHTML = '';
+  completedPages.forEach((p, i) => {
+    const t = document.createElement('div');
+    t.className = 'thumb' + (i === viewingIndex ? ' active' : '');
+    t.style.backgroundImage = `url(data:image/png;base64,${p.image})`;
+    t.title = `Page ${p.page}`;
+    t.onclick = () => { viewingIndex = i; renderColoringScreen(); };
+    row.appendChild(t);
+  });
+  for (let i = completedPages.length; i < TOTAL_PAGES; i++) {
+    const t = document.createElement('div');
+    t.className = 'thumb empty';
+    t.textContent = i + 1;
+    row.appendChild(t);
+  }
+}
+
+function renderContinueBox() {
+  const box = document.getElementById('continue-box');
+  const isLastCompleted = viewingIndex === completedPages.length - 1;
+  const canContinue = isLastCompleted && completedPages.length < TOTAL_PAGES;
+
+  if (canContinue) {
+    box.innerHTML = `
+      <p class="continue-hint">Ready to continue? Choose how page ${completedPages.length + 1} unfolds.</p>
+      <button class="continue-btn" onclick="goToChoosing(${completedPages.length + 1})">Choose Page ${completedPages.length + 1} →</button>
+    `;
+  } else if (isLastCompleted && completedPages.length === TOTAL_PAGES) {
+    box.innerHTML = `
+      <p class="done-text">🎉 Your story is complete!</p>
+      <button class="export-btn2" onclick="exportPDF()">⬇ Export PDF</button>
+    `;
+  } else {
+    box.innerHTML = `<p class="continue-hint">Navigate the pages to colour them in.</p>`;
+  }
+}
+
+function renderPalette() {
+  const grid = document.getElementById('palette-grid');
+  grid.innerHTML = '';
+  PALETTE.forEach(color => {
+    const s = document.createElement('div');
+    s.className = 'color-swatch' + (color === selectedColor ? ' selected' : '');
+    s.style.background = color;
+    s.style.border = color === '#FFFFFF' ? '3px solid #ddd' : '3px solid transparent';
+    s.onclick = () => {
+      selectedColor = color;
+      document.querySelectorAll('.color-swatch').forEach(sw => {
+        sw.classList.remove('selected');
+        if (sw.style.background === color || sw.style.backgroundColor === color) sw.classList.add('selected');
+      });
+    };
+    grid.appendChild(s);
+  });
+}
+
+function navigatePage(dir) {
+  const newIndex = viewingIndex + dir;
+  if (newIndex < 0 || newIndex >= completedPages.length) return;
+  viewingIndex = newIndex;
+  undoStack = [];
+  renderColoringScreen();
+}
+
+// ============================================================
+// CANVAS FLOOD FILL
+// ============================================================
+document.getElementById('coloring-canvas').addEventListener('click', function(e) {
+  const canvas = this;
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = canvas.width / rect.width;
+  const scaleY = canvas.height / rect.height;
+  const x = Math.floor((e.clientX - rect.left) * scaleX);
+  const y = Math.floor((e.clientY - rect.top) * scaleY);
+  floodFill(canvas, x, y, selectedColor);
+});
+
+function hexToRgb(hex) {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return [r, g, b];
+}
+
+function withinTolerance(r1,g1,b1, r2,g2,b2, tol=30) {
+  return Math.abs(r1-r2)<=tol && Math.abs(g1-g2)<=tol && Math.abs(b1-b2)<=tol;
+}
+
+function floodFill(canvas, startX, startY, fillColor) {
+  const ctx = canvas.getContext('2d');
+  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  const data = imageData.data;
+  const w = canvas.width, h = canvas.height;
+
+  const si = (startY * w + startX) * 4;
+  const tR = data[si], tG = data[si+1], tB = data[si+2];
+  const [fR, fG, fB] = hexToRgb(fillColor);
+
+  if (withinTolerance(tR,tG,tB, fR,fG,fB, 10)) return;
+
+  // Save undo snapshot
+  if (undoStack.length >= MAX_UNDO) undoStack.shift();
+  undoStack.push(ctx.getImageData(0, 0, w, h));
+
+  const visited = new Uint8Array(w * h);
+  const stack = [startX + startY * w];
+
+  while (stack.length) {
+    const pos = stack.pop();
+    const x = pos % w, y = Math.floor(pos / w);
+    if (x < 0 || x >= w || y < 0 || y >= h) continue;
+    if (visited[pos]) continue;
+    visited[pos] = 1;
+
+    const i = pos * 4;
+    if (!withinTolerance(data[i],data[i+1],data[i+2], tR,tG,tB)) continue;
+
+    data[i] = fR; data[i+1] = fG; data[i+2] = fB; data[i+3] = 255;
+
+    stack.push(pos+1, pos-1, pos+w, pos-w);
+  }
+  ctx.putImageData(imageData, 0, 0);
+}
+
+function undoFill() {
+  if (undoStack.length === 0) return;
+  const canvas = document.getElementById('coloring-canvas');
+  const ctx = canvas.getContext('2d');
+  ctx.putImageData(undoStack.pop(), 0, 0);
+}
+
+function clearCanvas() {
+  if (!originalImageData) return;
+  const canvas = document.getElementById('coloring-canvas');
+  const ctx = canvas.getContext('2d');
+  ctx.putImageData(originalImageData, 0, 0);
+  undoStack = [];
+}
+
+// ============================================================
+// EDIT ILLUSTRATION
+// ============================================================
+async function handleEdit() {
+  const instruction = document.getElementById('edit-input').value.trim();
+  if (!instruction || isEditing) return;
+
+  const page = completedPages[viewingIndex];
+  if (!page) return;
+
+  isEditing = true;
+  const btn = document.getElementById('edit-btn');
+  btn.textContent = 'Updating...';
+  btn.disabled = true;
+
+  try {
+    // Use the current canvas state (may be coloured) as the source image
+    const canvas = document.getElementById('coloring-canvas');
+    const currentBase64 = canvas.toDataURL('image/png').split(',')[1];
+
+    const model = 'gemini-2.0-flash-exp';
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+    const editPrompt = `Edit this coloring book illustration: ${instruction}. Keep the style identical: thick black outlines, white background, no color fill, child-safe fairy-tale coloring book.`;
+
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{
+          parts: [
+            { inline_data: { mime_type: 'image/png', data: currentBase64 } },
+            { text: editPrompt }
+          ]
+        }],
+        generationConfig: { responseModalities: ['IMAGE', 'TEXT'] }
+      })
+    });
+
+    const data = await res.json();
+    const parts = data?.candidates?.[0]?.content?.parts || [];
+    let newBase64 = null;
+    for (const part of parts) {
+      if (part?.inlineData?.data) { newBase64 = part.inlineData.data; break; }
+    }
+    if (newBase64) {
+      page.image = newBase64;
+      loadImageOnCanvas(newBase64);
+      document.getElementById('edit-input').value = '';
+    } else {
+      alert('Edit returned no image. Try a different instruction.');
+    }
+  } catch (err) {
+    alert('Edit failed: ' + (err.message || err));
+  } finally {
+    isEditing = false;
+    btn.textContent = 'Update →';
+    btn.disabled = false;
+  }
+}
+
+document.getElementById('edit-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') handleEdit();
+});
+
+// ============================================================
+// PDF EXPORT
+// ============================================================
+function exportPDF() {
+  if (completedPages.length === 0) return;
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+  const W = pdf.internal.pageSize.getWidth();
+  const H = pdf.internal.pageSize.getHeight();
+  const margin = 12;
+
+  completedPages.forEach((p, i) => {
+    if (i > 0) pdf.addPage();
+    pdf.setFillColor(255, 253, 247);
+    pdf.rect(0, 0, W, H, 'F');
+
+    try {
+      const dataUrl = `data:image/png;base64,${p.image}`;
+      pdf.addImage(dataUrl, 'PNG', margin, margin, W - margin * 2, H * 0.63);
+    } catch(e) {}
+
+    const textY = margin + H * 0.63 + 6;
+    pdf.setFillColor(255, 255, 255);
+    pdf.roundedRect(margin, textY, W - margin * 2, H - textY - margin, 6, 6, 'F');
+
+    pdf.setFont('helvetica', 'bold');
+    pdf.setFontSize(9);
+    pdf.setTextColor(150, 150, 150);
+    pdf.text(`Page ${p.page} — ${p.chapter_title}`, margin + 6, textY + 8);
+
+    pdf.setFont('helvetica', 'normal');
+    pdf.setFontSize(12);
+    pdf.setTextColor(45, 52, 54);
+    const lines = pdf.splitTextToSize(p.story_text, W - margin * 2 - 12);
+    pdf.text(lines, margin + 6, textY + 16);
+
+    pdf.setFontSize(8);
+    pdf.setTextColor(180, 180, 180);
+    pdf.text('Unusual Coloring Book — Cinderella', W / 2, H - 4, { align: 'center' });
+  });
+
+  pdf.save('cinderella-unusual-coloring-book.pdf');
+}
+
+// ============================================================
+// INIT
+// ============================================================
+window.addEventListener('DOMContentLoaded', () => {
+  const saved = sessionStorage.getItem('ucb_api_key');
+  if (saved) {
+    apiKey = saved;
+    document.getElementById('api-key-input').value = saved;
+  }
+});
+</script>
+</body>
+</html>
