@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banana Lab - Source Code</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #222;
+            background-color: #ffffff;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .back-nav {
+            margin-bottom: 20px;
+        }
+
+        .back-nav a {
+            color: #007BFF;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .back-nav a:hover {
+            text-decoration: underline;
+        }
+
+        .project-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #4CAF50, #388E3C);
+            color: white;
+            border-radius: 10px;
+        }
+
+        .project-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .project-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .content-section {
+            margin: 40px 0;
+            padding: 30px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border-left: 5px solid #4CAF50;
+        }
+
+        .content-section h2 {
+            color: #4CAF50;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .content-section h3 {
+            color: #333;
+            margin: 20px 0 10px 0;
+            font-size: 1.3rem;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #f1f8e9, #dcedc8);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #4CAF50;
+            margin: 20px 0;
+        }
+
+        .code-container {
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        .code-header {
+            color: #4ade80;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .code-block {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #d4d4d4;
+            white-space: pre;
+        }
+
+        .code-comment { color: #6a9955; font-style: italic; }
+        .code-keyword { color: #569cd6; }
+        .code-string  { color: #ce9178; }
+        .code-function { color: #dcdcaa; }
+        .code-number  { color: #b5cea8; }
+
+        .demo-links {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .demo-btn {
+            display: inline-block;
+            background-color: #007BFF;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .demo-btn:hover { background-color: #0056b3; }
+
+        .demo-btn.secondary { background-color: #4CAF50; }
+        .demo-btn.secondary:hover { background-color: #388E3C; }
+
+        @media (max-width: 768px) {
+            .project-header h1 { font-size: 2rem; }
+            .project-header p  { font-size: 1rem; }
+            .demo-btn { margin: 5px; padding: 10px 20px; }
+            .container { padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="banana-lab.html">← Back to Project Overview</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>🍌 Banana Lab</h1>
+            <p>Core Source Code — Multi-Agent Automation System</p>
+
+            <div class="badges">
+                <span class="badge">Claude API</span>
+                <span class="badge">Python 3</span>
+                <span class="badge">BuilderAgent</span>
+                <span class="badge">SiteAgent</span>
+                <span class="badge">ReporterAgent</span>
+            </div>
+        </div>
+
+        <div class="highlight-box">
+            <h3>About This Code Showcase</h3>
+            <p><strong>This showcase highlights the core logic of Banana Lab's 3-agent automation pipeline — how Claude is called to research and write 50-prompt packs, how the site is rebuilt automatically, and how the weekly report is compiled from local state.</strong></p>
+            <p>API credentials and Gmail passwords are stored in config.json (not shown). The state file (state.json) is the only database — no SQL server required.</p>
+        </div>
+
+        <div class="content-section">
+            <h2>Project File Structure</h2>
+            <div class="code-container">
+                <div class="code-header">📁 Banana Lab/</div>
+                <div class="code-block">Banana Lab/
+├── main.py                  ← Scheduler + CLI entry point
+├── config.json              ← API keys (not committed)
+├── state.json               ← Live data: products, sales (auto-managed)
+├── requirements.txt         ← anthropic, schedule, requests
+│
+├── agents/
+│   ├── builder_agent.py     ← Monday: research niche + generate 50 prompts
+│   ├── site_agent.py        ← Monday: generate product page + rebuild homepage
+│   └── reporter_agent.py   ← Sunday: email weekly P&amp;L report
+│
+├── utils/
+│   ├── state_manager.py     ← CRUD wrapper for state.json
+│   └── email_sender.py      ← Gmail SMTP delivery
+│
+├── products/                ← Generated each Monday (auto-populated)
+│   ├── {slug}.md            ← Prompt pack (owner converts to PDF)
+│   └── {slug}-listing.txt  ← Ready-to-paste Gumroad listing copy
+│
+└── website/                 ← Banana Lab showroom (auto-rebuilt)
+    ├── index.html           ← Homepage product grid
+    ├── about.html           ← About page
+    ├── style.css            ← Banana yellow + black theme
+    └── products/            ← Individual product landing pages</div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Builder Agent — Niche Research &amp; Prompt Generation</h2>
+            <p>The core of Banana Lab: three Claude API calls per product cycle. First, pick a unique niche. Second, plan five categories. Third, generate 50 prompts in two batches to stay within token limits.</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 agents/builder_agent.py — _research_idea()</div>
+                <div class="code-block"><span class="code-keyword">def</span> <span class="code-function">_research_idea</span>(self, state):
+    existing = [p[<span class="code-string">"title"</span>] <span class="code-keyword">for</span> p <span class="code-keyword">in</span> state.get(<span class="code-string">"products"</span>, [])]
+
+    prompt = f<span class="code-string">"""You are the product researcher for Banana Lab.
+
+Existing products (do not duplicate):
+{json.dumps(existing, indent=2) if existing else "None yet"}
+
+Pick ONE high-demand prompt pack idea for small business owners.
+Return ONLY valid JSON, no markdown fences:
+{{
+  "title": "e.g. 50 ChatGPT Prompts for Restaurant Owners",
+  "slug": "url-friendly-slug-here",
+  "description": "2-3 sentence listing description that sells the pack",
+  "niche": "target niche label",
+  "price": 9.00,
+  "tags": ["tag1", "tag2", "tag3", "tag4", "tag5"],
+  "what_inside": ["bullet 1", "bullet 2", "bullet 3", "bullet 4"]
+}}"""</span>
+
+    msg = self.client.messages.create(
+        model=<span class="code-string">"claude-sonnet-4-6"</span>,
+        max_tokens=<span class="code-number">512</span>,
+        messages=[{<span class="code-string">"role"</span>: <span class="code-string">"user"</span>, <span class="code-string">"content"</span>: prompt}]
+    )
+    raw = msg.content[<span class="code-number">0</span>].text.strip()
+    <span class="code-comment"># Strip accidental markdown fences from Claude's response</span>
+    <span class="code-keyword">if</span> raw.startswith(<span class="code-string">"```"</span>):
+        raw = raw.split(<span class="code-string">"```"</span>)[<span class="code-number">1</span>]
+        <span class="code-keyword">if</span> raw.startswith(<span class="code-string">"json"</span>):
+            raw = raw[<span class="code-number">4</span>:]
+    <span class="code-keyword">return</span> json.loads(raw.strip())</div>
+            </div>
+
+            <div class="code-container">
+                <div class="code-header">📄 agents/builder_agent.py — _generate_prompts() (batched)</div>
+                <div class="code-block"><span class="code-keyword">def</span> <span class="code-function">_generate_prompts</span>(self, idea):
+    <span class="code-string">"""Generate 50 prompts in two batches of 25 to avoid output token limits."""</span>
+
+    <span class="code-comment"># Call 2: determine the 5 categories for this niche</span>
+    cat_msg = self.client.messages.create(
+        model=<span class="code-string">"claude-sonnet-4-6"</span>,
+        max_tokens=<span class="code-number">256</span>,
+        messages=[{<span class="code-string">"role"</span>: <span class="code-string">"user"</span>, <span class="code-string">"content"</span>:
+            f<span class="code-string">"List exactly 5 category names for a ChatGPT prompt pack targeting "</span>
+            f<span class="code-string">"{idea['niche']} owners. Return ONLY a JSON array of 5 strings, no markdown."</span>
+        }]
+    )
+    categories = json.loads(cat_msg.content[<span class="code-number">0</span>].text.strip())
+
+    <span class="code-keyword">def</span> <span class="code-function">_batch</span>(cats, start_number):
+        <span class="code-comment"># Calls 3a and 3b: generate prompts for the given categories</span>
+        batch_cats = <span class="code-string">"\n"</span>.join(f<span class="code-string">"- {c} (10 prompts)"</span> <span class="code-keyword">for</span> c <span class="code-keyword">in</span> cats)
+        p = f<span class="code-string">"""Create ChatGPT prompts for: {idea['title']}
+Write 10 prompts for EACH of these categories:
+{batch_cats}
+
+Rules: niche-specific, use [PLACEHOLDERS IN CAPS], number from {start_number}.
+Return ONLY a valid JSON array: [{{"number": N, "category": "...", "prompt": "..."}}]"""</span>
+
+        msg = self.client.messages.create(
+            model=<span class="code-string">"claude-sonnet-4-6"</span>,
+            max_tokens=<span class="code-number">8000</span>,
+            messages=[{<span class="code-string">"role"</span>: <span class="code-string">"user"</span>, <span class="code-string">"content"</span>: p}]
+        )
+        raw = msg.content[<span class="code-number">0</span>].text.strip()
+        <span class="code-keyword">if</span> raw.startswith(<span class="code-string">"```"</span>):
+            raw = raw.split(<span class="code-string">"```"</span>)[<span class="code-number">1</span>].lstrip(<span class="code-string">"json"</span>).strip().rstrip(<span class="code-string">"```"</span>)
+        <span class="code-keyword">return</span> json.loads(raw.strip())
+
+    <span class="code-comment"># Batch 1: categories 0–2 (30 prompts), Batch 2: categories 3–4 (20 prompts)</span>
+    all_prompts  = _batch(categories[<span class="code-number">0</span>:<span class="code-number">3</span>], <span class="code-number">1</span>)
+    all_prompts += _batch(categories[<span class="code-number">3</span>:<span class="code-number">5</span>], len(all_prompts) + <span class="code-number">1</span>)
+    <span class="code-keyword">return</span> all_prompts</div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Site Agent — Auto-Rebuild Homepage</h2>
+            <p>After every Builder run, Site Agent reads all products from state.json and rewrites index.html from scratch — newest products first. Each registered product gets its own landing page too.</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 agents/site_agent.py — _rebuild_homepage()</div>
+                <div class="code-block"><span class="code-keyword">def</span> <span class="code-function">_rebuild_homepage</span>(self, products):
+    cards = <span class="code-string">""</span>
+    <span class="code-keyword">for</span> p <span class="code-keyword">in</span> reversed(products):   <span class="code-comment"># newest first</span>
+        cards += f<span class="code-string">"""
+  &lt;div class="product-card"&gt;
+    &lt;div class="card-badge"&gt;AI Prompt Pack&lt;/div&gt;
+    &lt;h3&gt;&lt;a href="products/{p['slug']}.html"&gt;{p['title']}&lt;/a&gt;&lt;/h3&gt;
+    &lt;p&gt;{p['description']}&lt;/p&gt;
+    &lt;div class="card-footer"&gt;
+      &lt;span class="price"&gt;${p['price']}&lt;/span&gt;
+      &lt;a href="{p['gumroad_url']}" class="btn-buy-small"&gt;Get It Now&lt;/a&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;"""</span>
+
+    html = f<span class="code-string">"""&lt;!DOCTYPE html&gt;
+...
+  &lt;section class="products-grid"&gt;
+    &lt;h2&gt;All Packs ({len(products)} available)&lt;/h2&gt;
+    &lt;div class="grid"&gt;{cards}&lt;/div&gt;
+  &lt;/section&gt;
+..."""</span>
+
+    path = os.path.join(self.website_dir, <span class="code-string">"index.html"</span>)
+    <span class="code-keyword">with</span> open(path, <span class="code-string">"w"</span>, encoding=<span class="code-string">"utf-8"</span>) <span class="code-keyword">as</span> f:
+        f.write(html)
+    print(f<span class="code-string">"[Site] Homepage rebuilt: {path}"</span>)</div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Reporter Agent — Weekly P&amp;L Email</h2>
+            <p>Every Sunday the Reporter reads state.json, calculates revenue and costs entirely from local data (no Gumroad API), and emails a plain-text weekly summary.</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 agents/reporter_agent.py — _build_report()</div>
+                <div class="code-block"><span class="code-keyword">def</span> <span class="code-function">_build_report</span>(self, products, week):
+    live     = [p <span class="code-keyword">for</span> p <span class="code-keyword">in</span> products <span class="code-keyword">if</span> p.get(<span class="code-string">"status"</span>) == <span class="code-string">"live"</span>]
+    pending  = [p <span class="code-keyword">for</span> p <span class="code-keyword">in</span> products <span class="code-keyword">if</span> p.get(<span class="code-string">"status"</span>) == <span class="code-string">"pending_upload"</span>]
+    new_week = [p <span class="code-keyword">for</span> p <span class="code-keyword">in</span> products <span class="code-keyword">if</span> self._days_ago(p.get(<span class="code-string">"created_date"</span>,<span class="code-string">""</span>)) &lt;= <span class="code-number">7</span>]
+
+    revenue_gross = sum(p.get(<span class="code-string">"sales"</span>,<span class="code-number">0</span>) * p.get(<span class="code-string">"price"</span>,<span class="code-number">0</span>) <span class="code-keyword">for</span> p <span class="code-keyword">in</span> live)
+    gumroad_fees  = revenue_gross * <span class="code-number">0.10</span>
+    api_cost_myr  = len(new_week) * <span class="code-number">0.40</span>   <span class="code-comment"># ~RM 0.40 per product build</span>
+    net_myr       = (revenue_gross - gumroad_fees) * <span class="code-number">4.7</span> - api_cost_myr
+
+    lines = [
+        f<span class="code-string">"Banana Lab — Week {week} Report"</span>,
+        <span class="code-string">"=" * 45</span>,
+        f<span class="code-string">"Products live:          {len(live)}"</span>,
+        f<span class="code-string">"Pending upload:         {len(pending)}"</span>,
+        f<span class="code-string">"Total sales (all time): {sum(p.get('sales',0) for p in live)}"</span>,
+        f<span class="code-string">"Gross revenue:          ${revenue_gross:.2f}"</span>,
+        f<span class="code-string">"Gumroad fee (10%):      -${gumroad_fees:.2f}"</span>,
+        f<span class="code-string">"Est. API cost:          -RM {api_cost_myr:.2f}"</span>,
+        f<span class="code-string">"Net profit:             RM {net_myr:.2f}"</span>,
+    ]
+
+    <span class="code-comment"># Flag underperformers: 3+ weeks live, 0 sales</span>
+    <span class="code-keyword">for</span> u <span class="code-keyword">in</span> live:
+        <span class="code-keyword">if</span> u.get(<span class="code-string">"weeks_live"</span>,<span class="code-number">0</span>) &gt;= <span class="code-number">3</span> <span class="code-keyword">and</span> u.get(<span class="code-string">"sales"</span>,<span class="code-number">0</span>) == <span class="code-number">0</span>:
+            lines.append(f<span class="code-string">"Low performer: \"{u['title']}\" — consider price cut or removal"</span>)
+
+    <span class="code-keyword">return</span> <span class="code-string">"\n"</span>.join(lines)</div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Main Scheduler — Weekly Automation</h2>
+            <p>main.py wires the three agents to a weekly schedule using the Python <code>schedule</code> library, and exposes CLI flags for manual testing and product registration.</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 main.py — Scheduler Setup</div>
+                <div class="code-block"><span class="code-comment"># Scheduled mode — runs indefinitely</span>
+schedule.every().monday.at(<span class="code-string">"09:00"</span>).do(run_monday_pipeline, config=config)
+schedule.every().sunday.at(<span class="code-string">"18:00"</span>).do(run_reporter, config=config)
+
+<span class="code-keyword">while</span> <span class="code-keyword">True</span>:
+    schedule.run_pending()
+    time.sleep(<span class="code-number">30</span>)
+
+<span class="code-comment"># --register flag: attach a Gumroad URL after manual upload</span>
+<span class="code-keyword">if</span> <span class="code-string">"--register"</span> <span class="code-keyword">in</span> args:
+    slug = args[idx + <span class="code-number">1</span>]
+    url  = args[idx + <span class="code-number">2</span>]
+    <span class="code-keyword">if</span> BuilderAgent(config).register(slug, url):
+        run_site(config)   <span class="code-comment"># Rebuild site with new Gumroad link</span></div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Technical Implementation Notes</h2>
+            <h3>Key Design Decisions</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>Batched prompt generation:</strong> Splitting 50 prompts into two API calls (30 + 20) was necessary — a single call for 50 prompts reliably hit Claude's 8192 output token limit and returned truncated JSON</li>
+                <li><strong>Markdown over PDF:</strong> Early versions used fpdf2 to generate PDFs but font encoding errors (em dashes, smart quotes from Claude output) and layout bugs made it unreliable. Markdown output is simpler and lets the owner choose their preferred PDF tool</li>
+                <li><strong>No database:</strong> state.json is the only persistence layer — sufficient for a single-owner store with dozens of products, and trivially portable and human-readable</li>
+                <li><strong>pending_upload gate:</strong> Products stay in pending status until <code>--register</code> is called, preventing "Get It Now" buttons with empty hrefs appearing on the live site</li>
+                <li><strong>Static site generation:</strong> SiteAgent writes pure HTML/CSS with no JavaScript framework or build step — the entire website is just file writes from Python string templates</li>
+            </ul>
+        </div>
+
+        <div class="demo-links">
+            <a href="projects/banana-lab/demo.html" target="_blank" class="demo-btn">🚀 View Live Store</a>
+            <a href="banana-lab.html" class="demo-btn secondary">📖 View Full Project Details</a>
+        </div>
+
+        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+            <a href="index.html">← Back to Portfolio</a> |
+            <a href="banana-lab.html">View Project Overview</a>
+        </nav>
+    </div>
+</body>
+</html>

@@ -162,6 +162,12 @@ This repository contains **38 production-deployed AI applications** demonstratin
 - **Tech Stack:** Python, Streamlit, Ollama, Llama3, Meta WhatsApp Cloud API
 - **AI Capabilities:** 6-stage vendor communication workflow, Llama3 vendor persona simulation, pluggable mock/live mode switch, natural Malaysian English/Malay conversation, AI job completion verification
 
+#### [Banana Lab](./projects/banana-lab/)
+**Automated AI prompt pack store — Claude writes, packages, and lists a new 50-prompt product every Monday**
+- **Live Demo:** [View Store](https://lyven81.github.io/ai-project/projects/banana-lab/demo.html)
+- **Tech Stack:** Python 3, Claude API (claude-sonnet-4-6), schedule library, Gmail SMTP, Static HTML/CSS, Gumroad
+- **AI Capabilities:** Automated niche research (avoids duplicates), batched 50-prompt generation (2 API calls), structured JSON output, Markdown product files with ready-to-paste Gumroad listing copy, self-updating website
+
 #### [Badminton Court Booking Agent](./projects/badminton-booking-agent/)
 **AI-powered agentic workflow for intelligent badminton court booking management using code-as-action pattern**
 - **Live Demo:** [ai-profile-badminton-court-booking--662370080553.us-west1.run.app](https://ai-profile-badminton-court-booking--662370080553.us-west1.run.app/)
