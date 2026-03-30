@@ -2,7 +2,7 @@
 
 [![Portfolio Website](https://img.shields.io/badge/Portfolio-Live-green?logo=vercel)](https://lyven81.github.io/ai-project/)
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-black?logo=github)](https://github.com/lyven81/ai-project)
-[![Projects](https://img.shields.io/badge/Projects-40-blue)](#-featured-projects)
+[![Projects](https://img.shields.io/badge/Projects-43-blue)](#-featured-projects)
 [![AI Powered](https://img.shields.io/badge/AI-Powered-orange?logo=tensorflow)](https://github.com/lyven81/ai-project)
 
 **Innovative AI Solutions for Modern Challenges** - A curated collection of production-ready AI applications showcasing expertise in computer vision, natural language processing, document processing, and creative AI technologies.
@@ -13,7 +13,7 @@
 
 ## 🌟 Portfolio Overview
 
-This repository contains **38 production-deployed AI applications** demonstrating proficiency across multiple AI domains. Each project includes comprehensive documentation, live demos, and complete source code with deployment configurations.
+This repository contains **43 production-deployed AI applications** demonstrating proficiency across multiple AI domains. Each project includes comprehensive documentation, live demos, and complete source code with deployment configurations.
 
 **🎯 Portfolio Highlights:**
 - **15+ AI Technologies** integrated across projects
@@ -21,6 +21,101 @@ This repository contains **38 production-deployed AI applications** demonstratin
 - **Full-Stack Development** with modern frameworks
 - **Professional Documentation** with setup guides and technical details
 - **Real-World Applications** solving practical problems with AI
+
+## AI Architecture Classification
+
+Each project is classified by its AI architecture pattern, based on how the system processes queries, uses tools, and makes decisions.
+
+### Agentic AI (7 projects)
+*Orchestrator with planning, tools, memory, and feedback loops. Autonomous decision-making.*
+
+| Project | Why Agentic |
+|---|---|
+| [Business Intelligence Agent](./projects/business-intelligence-agent/) | NL query → plans analysis → writes code → executes → returns results |
+| [Customer Segmentation Agent](./projects/customer-segmentation-agent/) | Autonomously profiles customers → segments → generates campaigns |
+| [Data Consulting Business Analyst](./projects/data-consulting-business-analyst/) | 4-agent architecture: research → competitor intel → opportunity → strategy |
+| [Sales Dashboard Agent](./projects/sales-dashboard-agent/) | NL query → plans viz → builds charts → iterates |
+| [Stock Analysis Agent](./projects/stock-analysis-agent/) | 5-agent architecture: screening → fundamentals → moat → dividends → reporting |
+| [Time Series Analysis Agent](./projects/time-series-analysis-agent/) | Upload data → plans analysis → executes → visualizes |
+| [Public Sentiment Collection Agent](./projects/public-sentiment-collection-agent/) | 5-agent architecture: listening → sentiment → visualization → export → packaging |
+
+### RAG — Retrieval-Augmented Generation (2 projects)
+*Query → retrieve from knowledge base or external data → augment → LLM → output.*
+
+| Project | Why RAG |
+|---|---|
+| [Claude PDF Summarizer](./projects/claude-pdf-summarizer/) | Upload doc → retrieve content → summarize |
+| [Long View](./projects/long-view/) | 27 OSINT sources → delta detection → LLM synthesis → briefing |
+
+### RPA — Robotic Process Automation (16 projects)
+*Uses tools (APIs, image processing) but follows a fixed pipeline. No autonomous planning.*
+
+| Project | Why RPA |
+|---|---|
+| [AI Avatar Hairstyle Generator](./projects/ai-avatar-hairstyle-generator/) | Upload → face extraction → 9 hairstyles → output |
+| [AI Background Changer](./projects/ai-background-changer/) | Upload → subject preservation → background replace → output |
+| [AI Coloring Book for Kids](./projects/ai-coloring-book-for-kids/) | Theme → generate page → interactive coloring |
+| [AI Expression Generator](./projects/ai-expression-generator/) | Upload → generate 9 expressions → output |
+| [AI Group Photo Generator](./projects/ai-group-photo-generator/) | Upload multiple → blend → output |
+| [AI Photo Editor](./projects/ai-photo-editor/) | Upload → apply AI edits → output |
+| [AI Profile Picture Stylist](./projects/ai-profile-picture-stylist/) | Upload → 4 professional styles → output |
+| [Coloring Book Generator](./projects/coloring-book-generator/) | Prompt → generate pages → PDF output |
+| [Image Recipe Generator](./projects/image-recipe-generator/) | Upload food photo → extract recipe → output |
+| [PDF-to-Audio Reader](./projects/pdf-to-audio-reader/) | Upload PDF → TTS → audio output |
+| [Polaroid Moments Generator](./projects/polaroid-moments-generator/) | Upload → vintage Polaroid style → output |
+| [Polaroid Moments Generator 3](./projects/polaroid-moments-generator-3/) | Upload 3 photos → group composition → output |
+| [Pose Perfect AI](./projects/pose-perfect-ai/) | Upload → pose detection → feedback → output |
+| [Unusual Coloring Book](./projects/unusual-coloring-book/) | Story path → illustrate → color → export |
+| [Virtual Try-On Studio](./projects/virtual-try-on-studio/) | Upload → overlay clothing → output |
+| [Expense Tracker AI](./projects/expense-tracker-ai/) | Receipt → OCR → categorize → analytics |
+
+### LLM Chatbots (14 projects)
+*Query → system prompt → LLM → output. No tools, no memory, no planning.*
+
+| Project | Why LLM Chatbot |
+|---|---|
+| [Fengshui Chatbot](./projects/fengshui-chatbot/) | Prompt-driven feng shui consultation |
+| [Horoscope Chatbot](./projects/horoscope-chatbot/) | Zodiac Q&A, no tools or memory |
+| [Master Wong](./projects/master-wong/) | I Ching readings, prompt-based |
+| [Skyread](./projects/skyread/) | Daily horoscope generation |
+| [Tarot Guru](./projects/tarot-guru/) | Card interpretation, prompt-driven |
+| [Wiseman](./projects/wiseman/) | Chinese philosophy Q&A |
+| [Kopitiam Digital Waiter](./projects/kopitiam-digital-waiter/) | Menu-based ordering, prompt-driven |
+| [Football Assistant Coach](./projects/football-assistant-coach/) | Strategy Q&A, no external tools |
+| [Nine Year Plan](./projects/nine-year-plan/) | Reference Q&A, prompt-based |
+| [Sarawak Laksa](./projects/sarawak-laksa/) | Curated knowledge, prompt-based |
+| [Banana Lab](./projects/banana-lab/) | Prompt pack generation |
+| [MyPropLex](./projects/myproplex/) | Legal Q&A, prompt-driven |
+| [Chinese Calendar](./projects/chinese-calender/) | Calendar lookup, prompt-based |
+| [TrendMate](./projects/trendmate/) | Fashion trend Q&A |
+
+### Hybrid Tools (3 projects)
+*Uses LLM + external tools but not fully autonomous — some decision logic without full orchestration.*
+
+| Project | Why Hybrid |
+|---|---|
+| [Badminton Booking Agent](./projects/badminton-booking-agent/) | Code-as-action pattern with LLM but follows booking flow |
+| [Hire Gardener](./projects/hire-gardener/) | WhatsApp + vendor matching, semi-structured |
+| [Social Media Marketer](./projects/social-media-marketer/) | Multi-agent simulation but fixed evaluation loop |
+
+### Interactive Learning Tools (2 projects)
+*Educational content generation with structured pedagogical output.*
+
+| Project | Why Learning Tool |
+|---|---|
+| [Science Learning Materials Builder](./projects/science-learning-materials-builder/) | 4-agent lesson plan generator with curriculum alignment |
+| [Thematic Outline Puzzles](./projects/thematic-outline-puzzles/) | Structured puzzle content generation |
+
+### Architecture Summary
+
+| Category | Count | % |
+|---|---|---|
+| LLM Chatbots | 14 | 32% |
+| RPA (fixed pipelines) | 16 | 36% |
+| RAG | 2 | 5% |
+| Agentic AI | 7 | 16% |
+| Hybrid Tools | 3 | 7% |
+| Interactive Learning | 2 | 5% |
 
 ## 🚀 Live Portfolio Website
 
