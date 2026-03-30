@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marketing Agency - Source Code</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #222;
+            background-color: #ffffff;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .back-nav {
+            margin-bottom: 20px;
+        }
+
+        .back-nav a {
+            color: #007BFF;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .back-nav a:hover {
+            text-decoration: underline;
+        }
+
+        .project-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #4CAF50, #388E3C);
+            color: white;
+            border-radius: 10px;
+        }
+
+        .project-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .project-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .content-section {
+            margin: 40px 0;
+            padding: 30px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border-left: 5px solid #4CAF50;
+        }
+
+        .content-section h2 {
+            color: #4CAF50;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .content-section h3 {
+            color: #333;
+            margin: 20px 0 10px 0;
+            font-size: 1.3rem;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #f1f8e9, #dcedc8);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #4CAF50;
+            margin: 20px 0;
+        }
+
+        .code-container {
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        .code-header {
+            color: #81c784;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .code-block {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #d4d4d4;
+        }
+
+        .code-comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+
+        .code-keyword {
+            color: #569cd6;
+        }
+
+        .code-string {
+            color: #ce9178;
+        }
+
+        .code-function {
+            color: #dcdcaa;
+        }
+
+        .code-number {
+            color: #b5cea8;
+        }
+
+        .code-decorator {
+            color: #d7ba7d;
+        }
+
+        .demo-links {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .demo-btn {
+            display: inline-block;
+            background-color: #007BFF;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .demo-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .demo-btn.secondary {
+            background-color: #4CAF50;
+        }
+
+        .demo-btn.secondary:hover {
+            background-color: #388E3C;
+        }
+
+        @media (max-width: 768px) {
+            .project-header h1 {
+                font-size: 2rem;
+            }
+
+            .project-header p {
+                font-size: 1rem;
+            }
+
+            .demo-btn {
+                margin: 5px;
+                padding: 10px 20px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="marketing-agency.html">&larr; Back to Project Overview</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>Marketing Agency</h1>
+            <p>Autonomous Content Marketing System for Solo Consultancy Firms</p>
+
+            <div class="badges">
+                <span class="badge">Python</span>
+                <span class="badge">FastAPI</span>
+                <span class="badge">Jinja2</span>
+                <span class="badge">httpx</span>
+                <span class="badge">Uvicorn</span>
+            </div>
+        </div>
+
+        <div class="highlight-box">
+            <h3>About This Code Showcase</h3>
+            <p><strong>This curated code walkthrough demonstrates how the Marketing Agency dashboard aggregates content drafts, lead data, publishing pipelines, and weekly reports into a single 4-tab interface for solo consultancy firms.</strong></p>
+            <p>The system reads from local file repositories, connects to a lead management API, and queries git history to surface recent activity -- all served through a FastAPI backend with Jinja2 templates.</p>
+        </div>
+
+        <div class="content-section">
+            <h2>Project File Structure</h2>
+            <div class="code-container">
+                <div class="code-header">marketing-agency/</div>
+                <div class="code-block">
+marketing-agency/
+  app.py              <span class="code-comment"># FastAPI dashboard server (4 tabs)</span>
+  config.py           <span class="code-comment"># All paths and configuration constants</span>
+  readers.py          <span class="code-comment"># Data readers for content, leads, reports, git</span>
+  requirements.txt    <span class="code-comment"># Python dependencies</span>
+  start.bat           <span class="code-comment"># Double-click launcher</span>
+  user-guide.md       <span class="code-comment"># Complete usage guide</span>
+  static/
+    style.css         <span class="code-comment"># Dashboard styles (gold/dark brand scheme)</span>
+    logo.png          <span class="code-comment"># Brand logo</span>
+  templates/
+    dashboard.html    <span class="code-comment"># 4-tab dashboard UI</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Core: FastAPI Dashboard Server</h2>
+            <p>The main application mounts static files, configures Jinja2 templates, and serves a single dashboard endpoint that aggregates data from all four tabs -- Content, Leads, Pipeline, and Weekly Report.</p>
+
+            <div class="code-container">
+                <div class="code-header">app.py -- FastAPI App with 4-Tab Routing</div>
+                <div class="code-block">
+<span class="code-string">"""
+app.py -- Marketing Agency Dashboard
+FastAPI application with 4-tab dashboard: Leads, Content, Pipeline, Weekly Report.
+"""</span>
+
+<span class="code-keyword">from</span> fastapi <span class="code-keyword">import</span> FastAPI, Request
+<span class="code-keyword">from</span> fastapi.responses <span class="code-keyword">import</span> HTMLResponse
+<span class="code-keyword">from</span> fastapi.staticfiles <span class="code-keyword">import</span> StaticFiles
+<span class="code-keyword">from</span> fastapi.templating <span class="code-keyword">import</span> Jinja2Templates
+
+<span class="code-keyword">from</span> config <span class="code-keyword">import</span> DASHBOARD_PORT
+<span class="code-keyword">from</span> readers <span class="code-keyword">import</span> (
+    get_linkedin_drafts, get_posted_log, get_recent_blog_posts,
+    get_blog_drafts, get_publish_queue, get_publish_log,
+    get_case_study_stats, get_next_week_plan,
+    get_weekly_reports, get_leads_from_api, get_lead_stats_from_api,
+    get_recent_commits,
+)
+
+app = FastAPI(title=<span class="code-string">"Marketing Agency Dashboard"</span>)
+app.mount(<span class="code-string">"/static"</span>, StaticFiles(directory=<span class="code-string">"static"</span>), name=<span class="code-string">"static"</span>)
+templates = Jinja2Templates(directory=<span class="code-string">"templates"</span>)
+
+
+<span class="code-decorator">@app.get("/"</span>, response_class=HTMLResponse)
+<span class="code-keyword">async def</span> <span class="code-function">dashboard</span>(request: Request, tab: str = <span class="code-string">"content"</span>):
+    <span class="code-comment"># Content tab data</span>
+    linkedin_drafts = get_linkedin_drafts()
+    posted_log = get_posted_log()
+    recent_blogs = get_recent_blog_posts()
+    blog_drafts = get_blog_drafts()
+
+    <span class="code-comment"># Pipeline tab data</span>
+    publish_queue = get_publish_queue()
+    publish_log = get_publish_log()
+    case_study_stats = get_case_study_stats()
+    next_week_plan = get_next_week_plan()
+
+    <span class="code-comment"># Weekly report tab data</span>
+    weekly_reports = get_weekly_reports()
+
+    <span class="code-comment"># Leads tab data</span>
+    leads = get_leads_from_api()
+    lead_stats = get_lead_stats_from_api()
+
+    <span class="code-comment"># Recent git activity</span>
+    recent_commits = get_recent_commits()
+
+    <span class="code-comment"># Count pending LinkedIn posts (not yet posted)</span>
+    posted_files = <span class="code-keyword">set</span>()
+    <span class="code-keyword">for</span> line <span class="code-keyword">in</span> posted_log:
+        parts = line.split(<span class="code-string">"|"</span>)
+        <span class="code-keyword">if</span> <span class="code-function">len</span>(parts) &gt;= <span class="code-number">2</span>:
+            posted_files.add(parts[<span class="code-number">1</span>].strip())
+    pending_posts = [d <span class="code-keyword">for</span> d <span class="code-keyword">in</span> linkedin_drafts
+                     <span class="code-keyword">if</span> d[<span class="code-string">"filename"</span>] <span class="code-keyword">not in</span> posted_files]
+
+    <span class="code-keyword">return</span> templates.TemplateResponse(<span class="code-string">"dashboard.html"</span>, {
+        <span class="code-string">"request"</span>: request,
+        <span class="code-string">"tab"</span>: tab,
+        <span class="code-comment"># Content</span>
+        <span class="code-string">"linkedin_drafts"</span>: linkedin_drafts,
+        <span class="code-string">"pending_posts"</span>: pending_posts,
+        <span class="code-string">"posted_count"</span>: <span class="code-function">len</span>(posted_files),
+        <span class="code-string">"recent_blogs"</span>: recent_blogs,
+        <span class="code-string">"blog_drafts"</span>: blog_drafts,
+        <span class="code-comment"># Pipeline</span>
+        <span class="code-string">"publish_queue"</span>: publish_queue,
+        <span class="code-string">"publish_log"</span>: publish_log,
+        <span class="code-string">"case_study_stats"</span>: case_study_stats,
+        <span class="code-string">"next_week_plan"</span>: next_week_plan,
+        <span class="code-comment"># Weekly report</span>
+        <span class="code-string">"weekly_reports"</span>: weekly_reports,
+        <span class="code-comment"># Leads</span>
+        <span class="code-string">"leads"</span>: leads,
+        <span class="code-string">"lead_stats"</span>: lead_stats,
+        <span class="code-comment"># Activity</span>
+        <span class="code-string">"recent_commits"</span>: recent_commits,
+    })
+
+
+<span class="code-decorator">@app.get("/health"</span>)
+<span class="code-keyword">async def</span> <span class="code-function">health</span>():
+    <span class="code-keyword">return</span> {<span class="code-string">"status"</span>: <span class="code-string">"ok"</span>, <span class="code-string">"app"</span>: <span class="code-string">"Marketing Agency Dashboard"</span>}
+
+
+<span class="code-keyword">if</span> __name__ == <span class="code-string">"__main__"</span>:
+    <span class="code-keyword">import</span> uvicorn
+    uvicorn.run(<span class="code-string">"app:app"</span>, host=<span class="code-string">"0.0.0.0"</span>, port=DASHBOARD_PORT, reload=<span class="code-keyword">True</span>)
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Configuration: Centralized Path Management</h2>
+            <p>All file paths and configuration constants live in a single module, making it easy to adapt the system for any consultancy firm's directory structure.</p>
+
+            <div class="code-container">
+                <div class="code-header">config.py -- Path Configuration</div>
+                <div class="code-block">
+<span class="code-string">"""
+config.py -- Marketing Agency Dashboard Configuration
+All paths and constants in one place.
+"""</span>
+
+<span class="code-keyword">import</span> os
+
+<span class="code-comment"># Content repository (live site)</span>
+CONTENT_REPO = r<span class="code-string">"C:\Users\Lenovo\pau-analytics-1.0"</span>
+BLOG_DIR = os.path.join(CONTENT_REPO, <span class="code-string">"blog"</span>)
+BLOG_DRAFTS_DIR = os.path.join(BLOG_DIR, <span class="code-string">"drafts"</span>)
+LINKEDIN_DRAFTS_DIR = os.path.join(BLOG_DIR, <span class="code-string">"linkedin-drafts"</span>)
+CASE_STUDY_DIR = os.path.join(CONTENT_REPO, <span class="code-string">"case-study"</span>)
+PUBLISH_QUEUE = os.path.join(CONTENT_REPO, <span class="code-string">"publish-queue.md"</span>)
+PUBLISH_LOG = os.path.join(CONTENT_REPO, <span class="code-string">"publish-log.txt"</span>)
+NEXT_WEEK_PLAN = os.path.join(CONTENT_REPO, <span class="code-string">"next-week-plan.md"</span>)
+WEEKLY_REPORTS_DIR = os.path.join(CONTENT_REPO, <span class="code-string">"reports"</span>, <span class="code-string">"weekly"</span>)
+POSTED_LOG = os.path.join(LINKEDIN_DRAFTS_DIR, <span class="code-string">"posted-log.txt"</span>)
+BLOG_INDEX = os.path.join(BLOG_DIR, <span class="code-string">"index.html"</span>)
+
+<span class="code-comment"># Web Chat Lead Manager API</span>
+LEAD_MANAGER_URL = os.getenv(<span class="code-string">"LEAD_MANAGER_URL"</span>, <span class="code-string">"http://localhost:8000"</span>)
+
+<span class="code-comment"># Dashboard server</span>
+DASHBOARD_PORT = <span class="code-number">8100</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Data Readers: Content & Lead Aggregation</h2>
+            <p>The readers module provides specialized functions that scan local directories for content drafts and query the lead management API. Each function returns structured data ready for the Jinja2 template.</p>
+
+            <div class="code-container">
+                <div class="code-header">readers.py -- get_linkedin_drafts()</div>
+                <div class="code-block">
+<span class="code-keyword">def</span> <span class="code-function">get_linkedin_drafts</span>() -&gt; list[dict]:
+    <span class="code-string">"""Scan the LinkedIn drafts directory for .txt files,
+    classify each by post type, and return metadata + preview."""</span>
+    drafts = []
+    <span class="code-keyword">if not</span> os.path.isdir(LINKEDIN_DRAFTS_DIR):
+        <span class="code-keyword">return</span> drafts
+    <span class="code-keyword">for</span> f <span class="code-keyword">in</span> <span class="code-function">sorted</span>(glob.glob(
+            os.path.join(LINKEDIN_DRAFTS_DIR, <span class="code-string">"*.txt"</span>)), reverse=<span class="code-keyword">True</span>):
+        basename = os.path.basename(f)
+        <span class="code-keyword">if</span> basename == <span class="code-string">"posted-log.txt"</span>:
+            <span class="code-keyword">continue</span>
+        mod_time = datetime.fromtimestamp(os.path.getmtime(f))
+        content = read_file_safe(f)
+
+        <span class="code-comment"># Determine post type from filename prefix</span>
+        <span class="code-keyword">if</span> basename.startswith(<span class="code-string">"insight-"</span>):
+            post_type = <span class="code-string">"Insight Post"</span>
+        <span class="code-keyword">else</span>:
+            post_type = <span class="code-string">"Blog Teaser"</span>
+
+        drafts.append({
+            <span class="code-string">"filename"</span>: basename,
+            <span class="code-string">"post_type"</span>: post_type,
+            <span class="code-string">"date"</span>: mod_time.strftime(<span class="code-string">"%Y-%m-%d"</span>),
+            <span class="code-string">"preview"</span>: content[:<span class="code-number">200</span>].strip() <span class="code-keyword">if</span> content <span class="code-keyword">else</span> <span class="code-string">"(empty)"</span>,
+            <span class="code-string">"full_content"</span>: content.strip(),
+            <span class="code-string">"word_count"</span>: <span class="code-function">len</span>(content.split()) <span class="code-keyword">if</span> content <span class="code-keyword">else</span> <span class="code-number">0</span>,
+        })
+    <span class="code-keyword">return</span> drafts
+                </div>
+            </div>
+
+            <div class="code-container">
+                <div class="code-header">readers.py -- get_leads_from_api() & get_lead_stats_from_api()</div>
+                <div class="code-block">
+<span class="code-keyword">def</span> <span class="code-function">get_leads_from_api</span>() -&gt; list[dict]:
+    <span class="code-string">"""Fetch all leads from the Web Chat Lead Manager API.
+    Returns an empty list on timeout or connection error,
+    keeping the dashboard functional even when the API is down."""</span>
+    <span class="code-keyword">try</span>:
+        resp = httpx.get(
+            f<span class="code-string">"{LEAD_MANAGER_URL}/api/leads"</span>, timeout=<span class="code-number">2</span>
+        )
+        <span class="code-keyword">if</span> resp.status_code == <span class="code-number">200</span>:
+            <span class="code-keyword">return</span> resp.json()
+    <span class="code-keyword">except</span> Exception:
+        <span class="code-keyword">pass</span>
+    <span class="code-keyword">return</span> []
+
+
+<span class="code-keyword">def</span> <span class="code-function">get_lead_stats_from_api</span>() -&gt; dict:
+    <span class="code-string">"""Fetch aggregated lead statistics from the API.
+    Returns safe defaults so the dashboard renders correctly
+    even when the lead manager service is unavailable."""</span>
+    <span class="code-keyword">try</span>:
+        resp = httpx.get(
+            f<span class="code-string">"{LEAD_MANAGER_URL}/api/stats"</span>, timeout=<span class="code-number">2</span>
+        )
+        <span class="code-keyword">if</span> resp.status_code == <span class="code-number">200</span>:
+            <span class="code-keyword">return</span> resp.json()
+    <span class="code-keyword">except</span> Exception:
+        <span class="code-keyword">pass</span>
+    <span class="code-keyword">return</span> {
+        <span class="code-string">"total"</span>: <span class="code-number">0</span>,
+        <span class="code-string">"this_week"</span>: <span class="code-number">0</span>,
+        <span class="code-string">"needs_followup"</span>: <span class="code-number">0</span>,
+        <span class="code-string">"ch_a_week"</span>: <span class="code-number">0</span>,
+        <span class="code-string">"ch_b_week"</span>: <span class="code-number">0</span>,
+        <span class="code-string">"ch_w_week"</span>: <span class="code-number">0</span>,
+        <span class="code-string">"blog_performance"</span>: [],
+    }
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Technical Implementation Notes</h2>
+            <h3>Key Design Decisions</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>Single-endpoint architecture:</strong> One FastAPI route aggregates all four tabs. The <code>tab</code> query parameter controls which panel the Jinja2 template renders as active, avoiding unnecessary page reloads.</li>
+                <li><strong>Graceful API degradation:</strong> Lead reader functions catch all exceptions with a 2-second timeout and return safe defaults. The dashboard remains fully functional even when the lead manager service is offline.</li>
+                <li><strong>File-based content pipeline:</strong> LinkedIn drafts, blog posts, and publish logs are plain text files in the content repository -- no database required. This keeps the system compatible with git-based workflows.</li>
+                <li><strong>Centralized configuration:</strong> Every file path is defined once in <code>config.py</code>. Adapting the system for a different consultancy requires changing only this single file.</li>
+                <li><strong>Git activity feed:</strong> The dashboard shells out to <code>git log</code> to show recent commits, giving the operator a live view of publishing activity without leaving the dashboard.</li>
+            </ul>
+
+            <h3>Why FastAPI + Jinja2?</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>Lightweight:</strong> No frontend build step required -- the entire dashboard is server-rendered HTML with minimal JavaScript</li>
+                <li><strong>Fast startup:</strong> Uvicorn hot-reloads on file changes, making development instant</li>
+                <li><strong>Python-native:</strong> All data readers use standard library modules (os, glob, subprocess) plus httpx for async-safe API calls</li>
+                <li><strong>One-click launch:</strong> The included <code>start.bat</code> file starts the server with a double-click on Windows</li>
+            </ul>
+        </div>
+
+        <div class="demo-links">
+            <a href="marketing-agency.html" class="demo-btn secondary">View Full Project Details</a>
+        </div>
+
+        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+            <a href="index.html">&larr; Back to Portfolio</a> |
+            <a href="marketing-agency.html">View Project Overview</a>
+        </nav>
+    </div>
+</body>
+</html>

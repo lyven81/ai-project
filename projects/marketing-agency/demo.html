@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marketing Agency — Dashboard Demo</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f6f9; color: #222; }
+
+        .demo-header {
+            background: #1E1B18;
+            color: #F8F6F2;
+            padding: 20px 24px;
+            text-align: center;
+        }
+        .demo-header h1 { color: #C9A84C; font-size: 1.5rem; }
+        .demo-header p { font-size: 0.85rem; opacity: 0.6; margin-top: 4px; }
+        .demo-header .back-link { color: #C9A84C; text-decoration: none; font-size: 0.85rem; display: inline-block; margin-top: 12px; }
+        .demo-header .back-link:hover { text-decoration: underline; }
+
+        .tab-bar {
+            max-width: 900px; margin: 0 auto; display: flex; background: white;
+            border-bottom: 2px solid #e5e7eb; cursor: pointer;
+        }
+        .tab-btn {
+            padding: 12px 24px; border: none; background: none; font-size: 0.9rem;
+            font-weight: 600; color: #666; cursor: pointer; border-bottom: 3px solid transparent;
+        }
+        .tab-btn.active { color: #C9A84C; border-bottom-color: #C9A84C; }
+        .tab-btn:hover { color: #222; background: #f9fafb; }
+        .tab-badge { background: #D4763A; color: white; font-size: 0.7rem; padding: 1px 6px; border-radius: 10px; margin-left: 4px; }
+
+        main { max-width: 900px; margin: 0 auto; padding: 24px; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        .summary-bar { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+        .stat-card { background: white; border-radius: 8px; padding: 14px 18px; flex: 1; min-width: 120px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); text-align: center; }
+        .stat-number { font-size: 1.6rem; font-weight: 700; color: #1E1B18; }
+        .stat-label { font-size: 0.7rem; color: #888; margin-top: 2px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .stat-card.hl { border-left: 4px solid #C9A84C; }
+        .stat-card.warn { border-left: 4px solid #D4763A; }
+
+        .panel { background: white; border-radius: 8px; padding: 18px; margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+        .panel h2 { font-size: 0.95rem; font-weight: 700; margin-bottom: 10px; color: #1E1B18; }
+
+        table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+        th { text-align: left; padding: 8px 10px; background: #f9fafb; border-bottom: 2px solid #e5e7eb; font-weight: 600; color: #555; font-size: 0.72rem; text-transform: uppercase; }
+        td { padding: 8px 10px; border-bottom: 1px solid #f0f0f0; }
+
+        .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.72rem; font-weight: 600; }
+        .badge-pa { background: #dbeafe; color: #1d4ed8; }
+        .badge-pai { background: #fef3c7; color: #92400e; }
+        .badge-pending { background: #fef3c7; color: #92400e; }
+        .badge-posted { background: #e5e7eb; color: #555; }
+        .badge-new { background: #dbeafe; color: #1d4ed8; }
+        .badge-qualifying { background: #fef3c7; color: #92400e; }
+        .badge-ready { background: #d1fae5; color: #065f46; }
+
+        .queue-box { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 14px; margin-bottom: 14px; }
+        .queue-label { font-size: 0.72rem; text-transform: uppercase; color: #888; }
+        .queue-value { font-size: 1rem; font-weight: 600; color: #1E1B18; }
+
+        .empty-state { text-align: center; padding: 30px; color: #999; font-size: 0.85rem; }
+        .preview { font-size: 0.78rem; color: #666; max-width: 300px; }
+
+        @media (max-width: 768px) {
+            .summary-bar { flex-direction: column; }
+            .tab-btn { padding: 10px 14px; font-size: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="demo-header">
+    <h1>Marketing Agency</h1>
+    <p>Autonomous Content Marketing System for Consultancy Firms</p>
+    <a href="../../marketing-agency.html" class="back-link">&larr; Back to Showcase</a>
+</div>
+
+<div class="tab-bar">
+    <button class="tab-btn active" onclick="showTab('content')">Content <span class="tab-badge">3</span></button>
+    <button class="tab-btn" onclick="showTab('pipeline')">Pipeline</button>
+    <button class="tab-btn" onclick="showTab('report')">Weekly Report</button>
+    <button class="tab-btn" onclick="showTab('leads')">Leads <span class="tab-badge">2</span></button>
+</div>
+
+<main>
+
+<!-- CONTENT TAB -->
+<div id="tab-content" class="tab-content active">
+    <div class="summary-bar">
+        <div class="stat-card hl"><div class="stat-number">3</div><div class="stat-label">Posts to Paste</div></div>
+        <div class="stat-card"><div class="stat-number">1</div><div class="stat-label">Posted</div></div>
+        <div class="stat-card"><div class="stat-number">1</div><div class="stat-label">Blogs (14 days)</div></div>
+        <div class="stat-card"><div class="stat-number">0</div><div class="stat-label">Blog Drafts</div></div>
+    </div>
+    <div class="panel">
+        <h2>LinkedIn Drafts</h2>
+        <table>
+            <thead><tr><th>Date</th><th>Brand</th><th>Type</th><th>Preview</th><th>Status</th></tr></thead>
+            <tbody>
+                <tr><td>2026-03-31</td><td><span class="badge badge-pa">Analytics</span></td><td>Blog Teaser</td><td class="preview">Your highest-revenue reseller may be your most expensive liability...</td><td><span class="badge badge-posted">Posted</span></td></tr>
+                <tr><td>2026-03-31</td><td><span class="badge badge-pai">AI Solutions</span></td><td>Solution Showcase</td><td class="preview">Your receptionist missed 3 booking calls today. Each one was worth RM150...</td><td><span class="badge badge-pending">Pending</span></td></tr>
+                <tr><td>2026-03-31</td><td><span class="badge badge-pa">Analytics</span></td><td>Standalone Insight</td><td class="preview">We analysed 12 months of sales data. Tuesday afternoon outsells Saturday morning by 23%...</td><td><span class="badge badge-pending">Pending</span></td></tr>
+                <tr><td>2026-03-31</td><td><span class="badge badge-pai">AI Solutions</span></td><td>Use Case Spotlight</td><td class="preview">Ahmad runs a plumbing business with 3 workers. Every missed call during a job is a lost customer...</td><td><span class="badge badge-pending">Pending</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="panel">
+        <h2>Recent Blog Posts (Last 14 Days)</h2>
+        <table>
+            <thead><tr><th>Date</th><th>Slug</th><th>URL</th></tr></thead>
+            <tbody>
+                <tr><td>2026-03-31</td><td>know-your-reseller</td><td><a href="#">View</a></td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- PIPELINE TAB -->
+<div id="tab-pipeline" class="tab-content">
+    <div class="summary-bar">
+        <div class="stat-card hl"><div class="stat-number">28</div><div class="stat-label">Case Studies Remaining</div></div>
+        <div class="stat-card"><div class="stat-number">12</div><div class="stat-label">Blog Posts Live</div></div>
+        <div class="stat-card"><div class="stat-number">8</div><div class="stat-label">AI Categories</div></div>
+        <div class="stat-card"><div class="stat-number">7</div><div class="stat-label">AI Remaining</div></div>
+    </div>
+    <div class="panel">
+        <h2>Publish Queue (Next Up)</h2>
+        <div class="queue-box">
+            <div class="queue-label">Next Case Study</div>
+            <div class="queue-value">not-all-shoppers-are-equal</div>
+            <div style="margin-top:6px;font-size:0.78rem;color:#666;">Language: English | Status: <span class="badge badge-ready">Ready</span> | Scheduled: 2026-04-07</div>
+        </div>
+    </div>
+    <div class="panel">
+        <h2>AI Solution Categories</h2>
+        <table>
+            <thead><tr><th>Category</th><th>Status</th></tr></thead>
+            <tbody>
+                <tr><td>booking-system</td><td><span class="badge badge-posted">Showcased</span></td></tr>
+                <tr><td>whatsapp-agent</td><td><span class="badge badge-pending">Not showcased</span></td></tr>
+                <tr><td>expert-chatbot</td><td><span class="badge badge-pending">Not showcased</span></td></tr>
+                <tr><td>analytics-agent</td><td><span class="badge badge-pending">Not showcased</span></td></tr>
+                <tr><td>research-system</td><td><span class="badge badge-pending">Not showcased</span></td></tr>
+                <tr><td>operations-tracker</td><td><span class="badge badge-pending">Not showcased</span></td></tr>
+                <tr><td>campaign-manager</td><td><span class="badge badge-pending">Not showcased</span></td></tr>
+                <tr><td>coach-evaluation</td><td><span class="badge badge-pending">Not showcased</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- REPORT TAB -->
+<div id="tab-report" class="tab-content">
+    <div class="panel">
+        <h2>Week 13, 2026</h2>
+        <pre style="font-size:0.78rem;line-height:1.5;white-space:pre-wrap;background:#f9fafb;padding:14px;border-radius:6px;">
+Weekly Report — Week 13 (24-30 Mar 2026)
+
+PUBLISHED THIS WEEK
+  Blog: know-your-reseller (English)
+  LinkedIn: 4 posts (2 Analytics, 2 AI Solutions)
+
+LEADS THIS WEEK
+  Total: 3
+  CH-A (Google Ads): 1
+  CH-B (Blog): 2 — both from know-your-reseller
+  CH-W (Chat): 0
+
+WHAT WORKED
+  know-your-reseller generated 2 CH-B leads — strongest performing blog this month.
+
+ACTION ITEMS
+  [ ] Follow up on 2 New leads (more than 24 hours old)
+  [ ] Run /content-scheduler for next week
+
+NEXT WEEK RECOMMENDATION
+  Publish "not-all-shoppers-are-equal" — similar topic to know-your-reseller, which performed well.
+        </pre>
+    </div>
+</div>
+
+<!-- LEADS TAB -->
+<div id="tab-leads" class="tab-content">
+    <div class="summary-bar">
+        <div class="stat-card"><div class="stat-number">8</div><div class="stat-label">Total Leads</div></div>
+        <div class="stat-card"><div class="stat-number">3</div><div class="stat-label">This Week</div></div>
+        <div class="stat-card warn"><div class="stat-number">2</div><div class="stat-label">Needs Follow-up</div></div>
+        <div class="stat-card"><div class="stat-number">1</div><div class="stat-label">CH-A</div></div>
+        <div class="stat-card"><div class="stat-number">2</div><div class="stat-label">CH-B</div></div>
+        <div class="stat-card"><div class="stat-number">0</div><div class="stat-label">CH-W</div></div>
+    </div>
+    <div class="panel">
+        <h2>Blog Performance (Leads by Blog Post)</h2>
+        <table>
+            <thead><tr><th>Blog Slug</th><th>Leads</th></tr></thead>
+            <tbody>
+                <tr><td>know-your-reseller</td><td><strong>2</strong></td></tr>
+                <tr><td>fixing-the-sales-leaks</td><td><strong>1</strong></td></tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="panel">
+        <h2>All Leads</h2>
+        <table>
+            <thead><tr><th>Date</th><th>Name</th><th>Challenge</th><th>Source</th><th>Status</th></tr></thead>
+            <tbody>
+                <tr><td>2026-03-30</td><td>Sarah Tan</td><td class="preview">We have POS data but don't know how to use it</td><td>CH-B</td><td><span class="badge badge-new">New</span></td></tr>
+                <tr><td>2026-03-29</td><td>Ahmad Razak</td><td class="preview">Our resellers are costing us money but we can't tell which ones</td><td>CH-B</td><td><span class="badge badge-new">New</span></td></tr>
+                <tr><td>2026-03-28</td><td>David Lim</td><td class="preview">Need help with sales dashboard</td><td>CH-A</td><td><span class="badge badge-qualifying">Qualifying</span></td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</main>
+
+<script>
+function showTab(name) {
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    event.target.classList.add('active');
+}
+</script>
+
+</body>
+</html>

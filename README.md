@@ -263,6 +263,12 @@ Each project is classified by its AI architecture pattern, based on how the syst
 - **Tech Stack:** Python 3, Claude API (claude-sonnet-4-6), schedule library, Gmail SMTP, Static HTML/CSS, Gumroad
 - **AI Capabilities:** Automated niche research (avoids duplicates), batched 50-prompt generation (2 API calls), structured JSON output, Markdown product files with ready-to-paste Gumroad listing copy, self-updating website
 
+#### [Marketing Agency](./projects/marketing-agency/)
+**Autonomous content marketing system that produces weekly blog posts, LinkedIn drafts, and lead follow-ups for solo consultancy firms**
+- **Live Demo:** [Launch Demo](https://lyven81.github.io/ai-project/projects/marketing-agency/demo.html)
+- **Tech Stack:** Python, FastAPI, Jinja2, httpx, Claude Code Skills, Ollama
+- **AI Capabilities:** 6-skill content pipeline chaining, brand voice enforcement, lead urgency scoring via Ollama, campaign phase-aware topic selection, dual-brand content (analytics + AI solutions), feedback loop connecting lead data to topic selection
+
 #### [Badminton Court Booking Agent](./projects/badminton-booking-agent/)
 **AI-powered agentic workflow for intelligent badminton court booking management using code-as-action pattern**
 - **Live Demo:** [ai-profile-badminton-court-booking--662370080553.us-west1.run.app](https://ai-profile-badminton-court-booking--662370080553.us-west1.run.app/)

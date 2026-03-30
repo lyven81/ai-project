@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Marketing Agency Dashboard</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="header-title">
+      <img src="/static/logo.png" alt="PA" class="header-logo" />
+      <div>
+        <h1>Marketing Agency</h1>
+        <p class="header-sub">Pau Analytics + Pau AI</p>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Tab Bar -->
+<nav class="tab-bar">
+  <a href="/?tab=content" class="tab-link {% if tab == 'content' %}active{% endif %}">
+    Content
+    {% if pending_posts %}<span class="tab-badge">{{ pending_posts|length }}</span>{% endif %}
+  </a>
+  <a href="/?tab=pipeline" class="tab-link {% if tab == 'pipeline' %}active{% endif %}">Pipeline</a>
+  <a href="/?tab=report" class="tab-link {% if tab == 'report' %}active{% endif %}">Weekly Report</a>
+  <a href="/?tab=leads" class="tab-link {% if tab == 'leads' %}active{% endif %}">
+    Leads
+    {% if lead_stats.needs_followup %}<span class="tab-badge">{{ lead_stats.needs_followup }}</span>{% endif %}
+  </a>
+</nav>
+
+<main>
+
+<!-- ══════════════════════════════════════════════════════════════════════════ -->
+<!-- CONTENT TAB -->
+<!-- ══════════════════════════════════════════════════════════════════════════ -->
+<div class="tab-content {% if tab == 'content' %}active{% endif %}">
+
+  <!-- Summary -->
+  <div class="summary-bar">
+    <div class="stat-card highlight">
+      <div class="stat-number">{{ pending_posts|length }}</div>
+      <div class="stat-label">Posts to Paste</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">{{ posted_count }}</div>
+      <div class="stat-label">Posted</div>
+    </div>
+    <div class="stat-card success">
+      <div class="stat-number">{{ recent_blogs|length }}</div>
+      <div class="stat-label">Blogs (14 days)</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">{{ blog_drafts|length }}</div>
+      <div class="stat-label">Blog Drafts</div>
+    </div>
+  </div>
+
+  <!-- LinkedIn Drafts -->
+  <div class="panel">
+    <h2>LinkedIn Drafts</h2>
+    {% if linkedin_drafts %}
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Brand</th>
+          <th>Type</th>
+          <th>Preview</th>
+          <th>Words</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for draft in linkedin_drafts %}
+        <tr>
+          <td>{{ draft.date }}</td>
+          <td><span class="badge {% if draft.brand == 'Pau AI' %}badge-pai{% else %}badge-pa{% endif %}">{{ draft.brand }}</span></td>
+          <td>{{ draft.post_type }}</td>
+          <td><span class="preview-text">{{ draft.preview }}</span></td>
+          <td>{{ draft.word_count }}</td>
+          <td>
+            {% if draft.filename in posted_log %}
+              <span class="badge badge-posted">Posted</span>
+            {% else %}
+              <span class="badge badge-pending">Pending</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state">No LinkedIn drafts found. Run /run-content-week to generate.</div>
+    {% endif %}
+  </div>
+
+  <!-- Recent Blog Posts -->
+  <div class="panel">
+    <h2>Recent Blog Posts (Last 14 Days)</h2>
+    {% if recent_blogs %}
+    <table>
+      <thead>
+        <tr><th>Date</th><th>Slug</th><th>URL</th></tr>
+      </thead>
+      <tbody>
+        {% for blog in recent_blogs %}
+        <tr>
+          <td>{{ blog.date }}</td>
+          <td>{{ blog.slug }}</td>
+          <td><a href="{{ blog.url }}" target="_blank">View</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state">No blog posts published in the last 14 days.</div>
+    {% endif %}
+  </div>
+
+  <!-- Git Activity -->
+  {% if recent_commits %}
+  <div class="panel">
+    <h2>Recent Git Activity (7 days)</h2>
+    <ul class="commit-list">
+      {% for commit in recent_commits %}
+      <li><span class="commit-hash">{{ commit[:7] }}</span>{{ commit[8:] }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════════ -->
+<!-- PIPELINE TAB -->
+<!-- ══════════════════════════════════════════════════════════════════════════ -->
+<div class="tab-content {% if tab == 'pipeline' %}active{% endif %}">
+
+  <!-- Summary -->
+  <div class="summary-bar">
+    <div class="stat-card highlight">
+      <div class="stat-number">{{ case_study_stats.remaining }}</div>
+      <div class="stat-label">Case Studies Remaining</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">{{ case_study_stats.blog_posts_live }}</div>
+      <div class="stat-label">Blog Posts Live</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">{{ case_study_stats.scheduled }}</div>
+      <div class="stat-label">Scheduled</div>
+    </div>
+    <div class="stat-card success">
+      <div class="stat-number">{{ pau_ai_stats.total_categories }}</div>
+      <div class="stat-label">Pau AI Categories</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">{{ pau_ai_stats.remaining }}</div>
+      <div class="stat-label">Pau AI Remaining</div>
+    </div>
+  </div>
+
+  <!-- Publish Queue -->
+  <div class="panel">
+    <h2>Publish Queue (Next Up)</h2>
+    {% if publish_queue %}
+    <div class="queue-box">
+      <div class="queue-label">Next Case Study</div>
+      <div class="queue-value">{{ publish_queue.slug | default('—') }}</div>
+      <div style="margin-top: 8px; font-size: 0.8rem; color: #666;">
+        Language: {{ publish_queue.language | default('—') }} |
+        Status: <span class="badge badge-ready">{{ publish_queue.status | default('Ready') }}</span> |
+        Scheduled: {{ publish_queue.scheduled | default('—') }}
+      </div>
+    </div>
+    {% else %}
+    <div class="queue-box empty">
+      <div class="queue-value">No topic queued</div>
+      <div style="margin-top: 4px; font-size: 0.8rem; color: #92400e;">Run /content-scheduler to select the next topic.</div>
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- Next Week Plan -->
+  {% if next_week_plan %}
+  <div class="panel">
+    <h2>Next Week Plan (from Coordinator)</h2>
+    <div class="report-content">{{ next_week_plan }}</div>
+  </div>
+  {% endif %}
+
+  <!-- Publish History -->
+  <div class="panel">
+    <h2>Publish History</h2>
+    {% if publish_log %}
+    <table>
+      <thead>
+        <tr><th>Date</th><th>Slug</th><th>Language</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        {% for entry in publish_log %}
+        <tr>
+          <td>{{ entry.date }}</td>
+          <td>{{ entry.slug }}</td>
+          <td>{{ entry.language }}</td>
+          <td>{{ entry.status }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state">No publish history yet. Run /content-scheduler to start.</div>
+    {% endif %}
+  </div>
+
+  <!-- Pau AI Categories -->
+  <div class="panel">
+    <h2>Pau AI Solution Categories</h2>
+    {% if pau_ai_stats.categories %}
+    <table>
+      <thead>
+        <tr><th>Category</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        {% for cat in pau_ai_stats.categories %}
+        <tr>
+          <td>{{ cat }}</td>
+          <td><span class="badge badge-pending">Not showcased</span></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state">No Pau AI template categories found.</div>
+    {% endif %}
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════════ -->
+<!-- WEEKLY REPORT TAB -->
+<!-- ══════════════════════════════════════════════════════════════════════════ -->
+<div class="tab-content {% if tab == 'report' %}active{% endif %}">
+
+  {% if weekly_reports %}
+    {% for report in weekly_reports %}
+    <div class="panel">
+      <h2>{{ report.week }}</h2>
+      <div class="report-content">{{ report.full_content }}</div>
+    </div>
+    {% endfor %}
+  {% else %}
+  <div class="panel">
+    <div class="empty-state">
+      No weekly reports yet. Run /coordinator on Friday to generate the first report.
+    </div>
+  </div>
+  {% endif %}
+
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════════ -->
+<!-- LEADS TAB -->
+<!-- ══════════════════════════════════════════════════════════════════════════ -->
+<div class="tab-content {% if tab == 'leads' %}active{% endif %}">
+
+  <!-- Lead Stats -->
+  <div class="summary-bar">
+    <div class="stat-card">
+      <div class="stat-number">{{ lead_stats.total }}</div>
+      <div class="stat-label">Total Leads</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">{{ lead_stats.this_week }}</div>
+      <div class="stat-label">This Week</div>
+    </div>
+    <div class="stat-card warning">
+      <div class="stat-number">{{ lead_stats.needs_followup }}</div>
+      <div class="stat-label">Needs Follow-up</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">{{ lead_stats.ch_a_week }}</div>
+      <div class="stat-label">CH-A</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">{{ lead_stats.ch_b_week }}</div>
+      <div class="stat-label">CH-B</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">{{ lead_stats.ch_w_week }}</div>
+      <div class="stat-label">CH-W</div>
+    </div>
+  </div>
+
+  <!-- Blog Performance -->
+  {% if lead_stats.blog_performance %}
+  <div class="panel">
+    <h2>Blog Performance (Leads by Blog Post)</h2>
+    <table>
+      <thead>
+        <tr><th>Blog Slug</th><th>Leads</th></tr>
+      </thead>
+      <tbody>
+        {% for blog in lead_stats.blog_performance %}
+        <tr>
+          <td>{{ blog.blog_slug }}</td>
+          <td><strong>{{ blog.count }}</strong></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+
+  <!-- Lead List -->
+  <div class="panel">
+    <h2>All Leads</h2>
+    {% if leads %}
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Name</th>
+          <th>Challenge</th>
+          <th>Source</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for lead in leads %}
+        <tr>
+          <td>{{ lead.date | default('—') }}</td>
+          <td>{{ lead.name | default('—') }}</td>
+          <td><span class="preview-text">{{ (lead.challenge | default('—'))[:100] }}</span></td>
+          <td>{{ lead.source | default('—') }}</td>
+          <td>
+            {% set status = lead.status | default('New') %}
+            <span class="badge
+              {% if status == 'New' %}badge-new
+              {% elif status == 'Qualifying' %}badge-qualifying
+              {% elif status == 'Qualified' %}badge-qualified
+              {% elif status == 'Follow-up sent' %}badge-followup
+              {% elif status == 'Closed' %}badge-closed
+              {% elif status == 'Lost' %}badge-lost
+              {% endif %}">{{ status }}</span>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state">
+      No leads found. Check that the Web Chat Lead Manager is running at the configured URL.
+    </div>
+    {% endif %}
+  </div>
+
+</div>
+
+</main>
+
+</body>
+</html>
