@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wiseman · 智者 — Source Code</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #222;
+            background-color: #ffffff;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .back-nav {
+            margin-bottom: 20px;
+        }
+
+        .back-nav a {
+            color: #007BFF;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .back-nav a:hover {
+            text-decoration: underline;
+        }
+
+        .project-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #9C27B0, #6A1B9A);
+            color: white;
+            border-radius: 10px;
+        }
+
+        .project-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .project-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .content-section {
+            margin: 40px 0;
+            padding: 30px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border-left: 5px solid #9C27B0;
+        }
+
+        .content-section h2 {
+            color: #9C27B0;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .content-section h3 {
+            color: #333;
+            margin: 20px 0 10px 0;
+            font-size: 1.3rem;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #9C27B0;
+            margin: 20px 0;
+        }
+
+        .code-container {
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        .code-header {
+            color: #ce93d8;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .code-block {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #d4d4d4;
+        }
+
+        .code-comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+
+        .code-keyword {
+            color: #569cd6;
+        }
+
+        .code-string {
+            color: #ce9178;
+        }
+
+        .code-function {
+            color: #dcdcaa;
+        }
+
+        .code-number {
+            color: #b5cea8;
+        }
+
+        .demo-links {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .demo-btn {
+            display: inline-block;
+            background-color: #9C27B0;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .demo-btn:hover {
+            background-color: #7B1FA2;
+        }
+
+        .demo-btn.secondary {
+            background-color: #6A1B9A;
+        }
+
+        .demo-btn.secondary:hover {
+            background-color: #4A148C;
+        }
+
+        @media (max-width: 768px) {
+            .project-header h1 {
+                font-size: 2rem;
+            }
+
+            .project-header p {
+                font-size: 1rem;
+            }
+
+            .demo-btn {
+                margin: 5px;
+                padding: 10px 20px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="wiseman.html">&larr; Back to Project Overview</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>Wiseman &middot; 智者</h1>
+            <p>Daily cosmic reading in Mandarin Chinese — Bazi, horoscope, planetary astrology, and Chinese zodiac</p>
+
+            <div class="badges">
+                <span class="badge">Node.js</span>
+                <span class="badge">Express</span>
+                <span class="badge">Claude API</span>
+                <span class="badge">ES Modules</span>
+            </div>
+        </div>
+
+        <div class="highlight-box">
+            <h3>About This Code Showcase</h3>
+            <p><strong>This curated selection highlights how Wiseman generates personalized daily cosmic readings by combining five astrological systems — Bazi, Western horoscope, planetary positions, Chinese zodiac, and Mayan astrology — into a single AI-interpreted narrative.</strong></p>
+            <p>The app uses a modular API architecture where each astrological system has its own module under <code>apis/</code>, and readings are cached per day to avoid redundant LLM calls.</p>
+        </div>
+
+        <div class="content-section">
+            <h2>File Structure</h2>
+            <div class="code-container">
+                <div class="code-block">
+wiseman/
+├── server.mjs              <span class="code-comment"># Express server — routes &amp; middleware</span>
+├── wiseman.config.mjs      <span class="code-comment"># User profile &amp; app settings</span>
+├── profile.json            <span class="code-comment"># Cached personality profile (generated once)</span>
+├── package.json            <span class="code-comment"># Dependencies: express, dotenv</span>
+├── apis/
+│   ├── reading.mjs         <span class="code-comment"># Daily reading generator &amp; chat prompt builder</span>
+│   ├── profile.mjs         <span class="code-comment"># One-time "who am I" profile generator</span>
+│   ├── bazi.mjs            <span class="code-comment"># Chinese Bazi (八字) calculations</span>
+│   ├── astrology.mjs       <span class="code-comment"># Western horoscope engine</span>
+│   ├── zodiac.mjs          <span class="code-comment"># Chinese zodiac analysis</span>
+│   └── maya.mjs            <span class="code-comment"># Mayan calendar day-sign lookup</span>
+├── lib/
+│   └── llm.mjs             <span class="code-comment"># Claude API wrapper</span>
+├── runs/                   <span class="code-comment"># Cached daily readings (one JSON per day)</span>
+└── dashboard/public/       <span class="code-comment"># Frontend HTML/CSS/JS</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Core: Express Server &amp; API Routes</h2>
+            <p>The server exposes three main endpoints: <code>/api/reading</code> for daily cosmic readings, <code>/api/chat</code> for follow-up conversation with Wiseman, and <code>/api/profile</code> for the one-time personality profile. Each reading is cached by date so the same day always returns consistent guidance.</p>
+
+            <div class="code-container">
+                <div class="code-header">server.mjs — Reading &amp; Chat Routes</div>
+                <div class="code-block">
+<span class="code-keyword">import</span> { generateReading, buildChatSystemPrompt } <span class="code-keyword">from</span> <span class="code-string">'./apis/reading.mjs'</span>
+<span class="code-keyword">import</span> { generateProfile } <span class="code-keyword">from</span> <span class="code-string">'./apis/profile.mjs'</span>
+<span class="code-keyword">import</span> { callClaudeChat } <span class="code-keyword">from</span> <span class="code-string">'./lib/llm.mjs'</span>
+<span class="code-keyword">import</span> { config } <span class="code-keyword">from</span> <span class="code-string">'./wiseman.config.mjs'</span>
+
+<span class="code-comment">// GET /api/reading — returns today's reading (cached or fresh)</span>
+app.get(<span class="code-string">'/api/reading'</span>, <span class="code-keyword">async</span> (req, res) =&gt; {
+  <span class="code-keyword">const</span> dateStr = req.query.date || getTodayStr()
+  <span class="code-keyword">const</span> reading = <span class="code-keyword">await</span> <span class="code-function">generateReading</span>(dateStr)
+  res.json({ ok: <span class="code-keyword">true</span>, reading })
+})
+
+<span class="code-comment">// POST /api/chat — chat with Wiseman about today's reading</span>
+app.post(<span class="code-string">'/api/chat'</span>, <span class="code-keyword">async</span> (req, res) =&gt; {
+  <span class="code-keyword">const</span> { message, history, readingDate } = req.body
+  <span class="code-keyword">const</span> dateStr = readingDate || getTodayStr()
+  <span class="code-keyword">const</span> reading = <span class="code-keyword">await</span> <span class="code-function">generateReading</span>(dateStr)
+  <span class="code-keyword">const</span> systemPrompt = <span class="code-function">buildChatSystemPrompt</span>(reading)
+
+  <span class="code-comment">// Build message history for Claude</span>
+  <span class="code-keyword">const</span> messages = []
+  <span class="code-keyword">if</span> (history &amp;&amp; Array.isArray(history)) {
+    <span class="code-keyword">for</span> (<span class="code-keyword">const</span> h <span class="code-keyword">of</span> history) {
+      <span class="code-keyword">if</span> (h.role &amp;&amp; h.content) messages.push({ role: h.role, content: h.content })
+    }
+  }
+  messages.push({ role: <span class="code-string">'user'</span>, content: message })
+
+  <span class="code-keyword">const</span> reply = <span class="code-keyword">await</span> <span class="code-function">callClaudeChat</span>({ systemPrompt, messages, maxTokens: <span class="code-number">512</span> })
+  res.json({ ok: <span class="code-keyword">true</span>, reply })
+})
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Configuration: User Profile &amp; Birth Data</h2>
+            <p>The config file stores the user's birth details — date, time, Chinese zodiac, and Western sign — which feed into all five astrological calculation modules. This makes every reading personally calibrated.</p>
+
+            <div class="code-container">
+                <div class="code-header">wiseman.config.mjs — Personal Configuration</div>
+                <div class="code-block">
+<span class="code-keyword">export const</span> config = {
+  user: {
+    <span class="code-comment">// Birthday details — used for Bazi and horoscope calculations</span>
+    birthday: <span class="code-string">"1981-08-12"</span>,
+    birthTime: <span class="code-string">"17:30"</span>,
+    birthYear: <span class="code-number">1981</span>,
+    birthMonth: <span class="code-number">8</span>,
+    birthDay: <span class="code-number">12</span>,
+    birthHour: <span class="code-number">17</span>,
+    birthMinute: <span class="code-number">30</span>,
+
+    <span class="code-comment">// Chinese astrology</span>
+    chineseZodiac: <span class="code-string">"鸡"</span>,
+    chineseZodiacEn: <span class="code-string">"Rooster"</span>,
+
+    <span class="code-comment">// Western astrology</span>
+    westernSign: <span class="code-string">"狮子座"</span>,
+    westernSignEn: <span class="code-string">"Leo"</span>,
+
+    name: <span class="code-string">"主人"</span>
+  },
+
+  port: process.env.PORT || <span class="code-number">3000</span>,
+  runsDir: <span class="code-string">"./runs"</span>,
+  claudeModel: <span class="code-string">"claude-opus-4-6"</span>
+}
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Technical Implementation Notes</h2>
+            <h3>Key Design Decisions</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>Five astrological systems:</strong> Bazi (八字), Western horoscope, planetary positions, Chinese zodiac, and Mayan calendar are each handled by a dedicated module under <code>apis/</code></li>
+                <li><strong>Daily caching:</strong> Readings are saved as JSON files in <code>runs/</code> by date, so the same day always returns consistent guidance without extra API calls</li>
+                <li><strong>Persistent profile:</strong> The "Who Am I" personality profile is generated once and cached in <code>profile.json</code> — a deep character reading that never changes</li>
+                <li><strong>Context-aware chat:</strong> Follow-up conversations receive today's full reading as system context, so Wiseman can reference specific cosmic influences in replies</li>
+                <li><strong>All output in Mandarin:</strong> The entire reading and chat experience is delivered in Chinese, matching the traditional character of the astrological systems</li>
+            </ul>
+        </div>
+
+        <div class="demo-links">
+            <a href="wiseman.html" class="demo-btn secondary">View Full Project Details</a>
+        </div>
+
+        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+            <a href="index.html">&larr; Back to Portfolio</a> |
+            <a href="project-categories.html">View All Categories</a>
+        </nav>
+    </div>
+</body>
+</html>

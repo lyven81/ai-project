@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tarot Guru — Source Code</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #222;
+            background-color: #ffffff;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .back-nav {
+            margin-bottom: 20px;
+        }
+
+        .back-nav a {
+            color: #007BFF;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .back-nav a:hover {
+            text-decoration: underline;
+        }
+
+        .project-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #9C27B0, #6A1B9A);
+            color: white;
+            border-radius: 10px;
+        }
+
+        .project-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .project-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .content-section {
+            margin: 40px 0;
+            padding: 30px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border-left: 5px solid #9C27B0;
+        }
+
+        .content-section h2 {
+            color: #9C27B0;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .content-section h3 {
+            color: #333;
+            margin: 20px 0 10px 0;
+            font-size: 1.3rem;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #9C27B0;
+            margin: 20px 0;
+        }
+
+        .code-container {
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        .code-header {
+            color: #ce93d8;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .code-block {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #d4d4d4;
+        }
+
+        .code-comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+
+        .code-keyword {
+            color: #569cd6;
+        }
+
+        .code-string {
+            color: #ce9178;
+        }
+
+        .code-function {
+            color: #dcdcaa;
+        }
+
+        .code-number {
+            color: #b5cea8;
+        }
+
+        .demo-links {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .demo-btn {
+            display: inline-block;
+            background-color: #9C27B0;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .demo-btn:hover {
+            background-color: #7B1FA2;
+        }
+
+        .demo-btn.secondary {
+            background-color: #6A1B9A;
+        }
+
+        .demo-btn.secondary:hover {
+            background-color: #4A148C;
+        }
+
+        @media (max-width: 768px) {
+            .project-header h1 {
+                font-size: 2rem;
+            }
+
+            .project-header p {
+                font-size: 1rem;
+            }
+
+            .demo-btn {
+                margin: 5px;
+                padding: 10px 20px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="tarot-guru.html">&larr; Back to Project Overview</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>Tarot Guru</h1>
+            <p>AI-powered personal tarot reading with context-aware spreads and follow-up chat</p>
+
+            <div class="badges">
+                <span class="badge">Node.js</span>
+                <span class="badge">Express</span>
+                <span class="badge">Claude API</span>
+                <span class="badge">ES Modules</span>
+            </div>
+        </div>
+
+        <div class="highlight-box">
+            <h3>About This Code Showcase</h3>
+            <p><strong>This curated selection shows how Tarot Guru implements a multi-step reading flow: the user describes their situation, Claude recommends a spread, cards are drawn programmatically, Claude interprets the spread, and the user can ask follow-up questions.</strong></p>
+            <p>The architecture separates card data, spread logic, and AI interpretation into distinct modules under <code>apis/</code>, keeping each concern clean and testable.</p>
+        </div>
+
+        <div class="content-section">
+            <h2>File Structure</h2>
+            <div class="code-container">
+                <div class="code-block">
+tarot-guru/
+├── server.mjs              <span class="code-comment"># Express server — 5 API routes</span>
+├── tarot.config.mjs        <span class="code-comment"># Port, session dir, Claude model</span>
+├── package.json            <span class="code-comment"># Dependencies: express, dotenv</span>
+├── apis/
+│   ├── reading.mjs         <span class="code-comment"># AI recommendation, interpretation &amp; chat</span>
+│   ├── spreads.mjs         <span class="code-comment"># Spread definitions &amp; card drawing logic</span>
+│   └── cards.mjs           <span class="code-comment"># Full 78-card tarot deck data</span>
+├── lib/
+│   └── llm.mjs             <span class="code-comment"># Claude API wrapper</span>
+├── sessions/               <span class="code-comment"># Saved reading sessions (JSON)</span>
+└── dashboard/public/       <span class="code-comment"># Frontend HTML/CSS/JS</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Core: Multi-Step Reading Flow</h2>
+            <p>The server orchestrates a four-step flow: (1) user describes their question, (2) Claude recommends a spread type, (3) cards are drawn randomly from the 78-card deck, (4) Claude interprets the drawn cards in context. A fifth endpoint handles follow-up chat.</p>
+
+            <div class="code-container">
+                <div class="code-header">server.mjs — Recommend, Draw &amp; Read Routes</div>
+                <div class="code-block">
+<span class="code-keyword">import</span> { getRecommendation, getInitialReading, getChatReply } <span class="code-keyword">from</span> <span class="code-string">'./apis/reading.mjs'</span>
+<span class="code-keyword">import</span> { drawSpread } <span class="code-keyword">from</span> <span class="code-string">'./apis/spreads.mjs'</span>
+
+<span class="code-comment">// Step 1: Claude reads the user's context and recommends a spread</span>
+app.post(<span class="code-string">'/api/recommend'</span>, <span class="code-keyword">async</span> (req, res) =&gt; {
+  <span class="code-keyword">const</span> { userMessage } = req.body
+  <span class="code-keyword">const</span> result = <span class="code-keyword">await</span> <span class="code-function">getRecommendation</span>(userMessage)
+  res.json({ ok: <span class="code-keyword">true</span>, ...result })
+})
+
+<span class="code-comment">// Step 2: Draw cards for the recommended spread type</span>
+app.post(<span class="code-string">'/api/draw'</span>, <span class="code-keyword">async</span> (req, res) =&gt; {
+  <span class="code-keyword">const</span> { spreadType } = req.body
+  <span class="code-keyword">const</span> drawnCards = <span class="code-function">drawSpread</span>(spreadType)
+  res.json({ ok: <span class="code-keyword">true</span>, drawnCards })
+})
+
+<span class="code-comment">// Step 3: Claude interprets the drawn cards</span>
+app.post(<span class="code-string">'/api/read'</span>, <span class="code-keyword">async</span> (req, res) =&gt; {
+  <span class="code-keyword">const</span> { question, drawnCards } = req.body
+  <span class="code-keyword">const</span> reading = <span class="code-keyword">await</span> <span class="code-function">getInitialReading</span>(question, drawnCards)
+  res.json({ ok: <span class="code-keyword">true</span>, reading })
+})
+
+<span class="code-comment">// Step 4: Follow-up conversation with full reading context</span>
+app.post(<span class="code-string">'/api/chat'</span>, <span class="code-keyword">async</span> (req, res) =&gt; {
+  <span class="code-keyword">const</span> { question, drawnCards, initialReading, history, message } = req.body
+  <span class="code-keyword">const</span> reply = <span class="code-keyword">await</span> <span class="code-function">getChatReply</span>({ question, drawnCards, initialReading, history, message })
+  res.json({ ok: <span class="code-keyword">true</span>, reply })
+})
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Session Persistence</h2>
+            <p>Each completed reading can be saved to a timestamped JSON file. This lets users revisit past readings and tracks the full context — question, drawn cards, AI interpretation, and follow-up chat history.</p>
+
+            <div class="code-container">
+                <div class="code-header">server.mjs — Save Session Route</div>
+                <div class="code-block">
+<span class="code-comment">// POST /api/save — Save the complete reading session to disk</span>
+app.post(<span class="code-string">'/api/save'</span>, <span class="code-keyword">async</span> (req, res) =&gt; {
+  <span class="code-keyword">const</span> { session } = req.body
+  <span class="code-keyword">const</span> now = <span class="code-keyword">new</span> Date()
+  <span class="code-keyword">const</span> pad = n =&gt; String(n).padStart(<span class="code-number">2</span>, <span class="code-string">'0'</span>)
+
+  <span class="code-comment">// Filename format: 2026-03-28-14-30.json</span>
+  <span class="code-keyword">const</span> filename = <span class="code-string">`${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}-${pad(now.getHours())}-${pad(now.getMinutes())}.json`</span>
+
+  <span class="code-keyword">const</span> filepath = join(config.sessionsDir, filename)
+  writeFileSync(filepath, JSON.stringify({
+    savedAt: now.toISOString(),
+    ...session
+  }, <span class="code-keyword">null</span>, <span class="code-number">2</span>))
+
+  res.json({ ok: <span class="code-keyword">true</span>, filename })
+})
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Technical Implementation Notes</h2>
+            <h3>Key Design Decisions</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>Context-aware spread selection:</strong> Claude analyzes the user's question to recommend the most appropriate tarot spread (e.g., Celtic Cross for complex life questions, Three-Card for quick guidance)</li>
+                <li><strong>Programmatic card drawing:</strong> Cards are drawn randomly from the full 78-card Rider-Waite deck via <code>spreads.mjs</code>, keeping the randomness separate from AI interpretation</li>
+                <li><strong>Stateful follow-up chat:</strong> The chat endpoint receives the original question, drawn cards, initial reading, and full conversation history — so Claude can reference specific cards and prior insights</li>
+                <li><strong>Session saving:</strong> Complete reading sessions are saved as JSON files with timestamps, enabling users to review and reflect on past readings</li>
+                <li><strong>Minimal dependencies:</strong> Only Express and dotenv — the entire app runs with two npm packages</li>
+            </ul>
+        </div>
+
+        <div class="demo-links">
+            <a href="tarot-guru.html" class="demo-btn secondary">View Full Project Details</a>
+        </div>
+
+        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+            <a href="index.html">&larr; Back to Portfolio</a> |
+            <a href="project-categories.html">View All Categories</a>
+        </nav>
+    </div>
+</body>
+</html>

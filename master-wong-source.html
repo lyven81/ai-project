@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Master Wong · 王师父 — Source Code</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #222;
+            background-color: #ffffff;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .back-nav {
+            margin-bottom: 20px;
+        }
+
+        .back-nav a {
+            color: #007BFF;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .back-nav a:hover {
+            text-decoration: underline;
+        }
+
+        .project-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #9C27B0, #6A1B9A);
+            color: white;
+            border-radius: 10px;
+        }
+
+        .project-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .project-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .content-section {
+            margin: 40px 0;
+            padding: 30px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border-left: 5px solid #9C27B0;
+        }
+
+        .content-section h2 {
+            color: #9C27B0;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .content-section h3 {
+            color: #333;
+            margin: 20px 0 10px 0;
+            font-size: 1.3rem;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #9C27B0;
+            margin: 20px 0;
+        }
+
+        .code-container {
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        .code-header {
+            color: #ce93d8;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .code-block {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #d4d4d4;
+        }
+
+        .code-comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+
+        .code-keyword {
+            color: #569cd6;
+        }
+
+        .code-string {
+            color: #ce9178;
+        }
+
+        .code-function {
+            color: #dcdcaa;
+        }
+
+        .code-number {
+            color: #b5cea8;
+        }
+
+        .demo-links {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .demo-btn {
+            display: inline-block;
+            background-color: #9C27B0;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .demo-btn:hover {
+            background-color: #7B1FA2;
+        }
+
+        .demo-btn.secondary {
+            background-color: #6A1B9A;
+        }
+
+        .demo-btn.secondary:hover {
+            background-color: #4A148C;
+        }
+
+        @media (max-width: 768px) {
+            .project-header h1 {
+                font-size: 2rem;
+            }
+
+            .project-header p {
+                font-size: 1rem;
+            }
+
+            .demo-btn {
+                margin: 5px;
+                padding: 10px 20px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="master-wong.html">&larr; Back to Project Overview</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>Master Wong &middot; 王师父</h1>
+            <p>Personal I Ching oracle with three-coin casting and AI interpretation in Mandarin</p>
+
+            <div class="badges">
+                <span class="badge">Node.js</span>
+                <span class="badge">Express</span>
+                <span class="badge">Claude API</span>
+                <span class="badge">I Ching 64 Hexagrams</span>
+            </div>
+        </div>
+
+        <div class="highlight-box">
+            <h3>About This Code Showcase</h3>
+            <p><strong>This curated selection shows how Master Wong implements the traditional three-coin I Ching casting method digitally, then uses Claude to interpret the resulting hexagram(s) in the context of the user's specific question — all in Mandarin Chinese.</strong></p>
+            <p>The app supports both single hexagram readings and paired (comparative) readings, with a follow-up chat for deeper exploration of the oracle's guidance.</p>
+        </div>
+
+        <div class="content-section">
+            <h2>File Structure</h2>
+            <div class="code-container">
+                <div class="code-block">
+master-wong/
+├── server.mjs              <span class="code-comment"># Express server — routes &amp; middleware</span>
+├── iching.config.mjs       <span class="code-comment"># Port, session dir, Claude model</span>
+├── package.json            <span class="code-comment"># Dependencies: express, dotenv</span>
+├── apis/
+│   ├── casting.mjs         <span class="code-comment"># Three-coin hexagram casting algorithm</span>
+│   ├── hexagrams.mjs       <span class="code-comment"># Full 64-hexagram reference data</span>
+│   └── reading.mjs         <span class="code-comment"># AI recommendation, interpretation &amp; chat</span>
+├── lib/
+│   └── llm.mjs             <span class="code-comment"># Claude API wrapper</span>
+├── sessions/               <span class="code-comment"># Saved reading sessions (JSON)</span>
+└── dashboard/public/       <span class="code-comment"># Frontend HTML/CSS/JS</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Core: Hexagram Casting &amp; Reading</h2>
+            <p>The server handles the full I Ching flow: (1) Claude recommends a reading type based on the user's question, (2) hexagram(s) are cast using the three-coin method, (3) Claude interprets the hexagram in context. Paired readings cast two hexagrams for comparative insight.</p>
+
+            <div class="code-container">
+                <div class="code-header">server.mjs — Cast &amp; Read Routes</div>
+                <div class="code-block">
+<span class="code-keyword">import</span> { config } <span class="code-keyword">from</span> <span class="code-string">'./iching.config.mjs'</span>
+<span class="code-keyword">import</span> { castHexagram } <span class="code-keyword">from</span> <span class="code-string">'./apis/casting.mjs'</span>
+<span class="code-keyword">import</span> { getRecommendation, getInitialReading, getChatReply } <span class="code-keyword">from</span> <span class="code-string">'./apis/reading.mjs'</span>
+
+<span class="code-comment">// Recommend reading type based on user's question</span>
+app.post(<span class="code-string">'/api/recommend'</span>, <span class="code-keyword">async</span> (req, res) =&gt; {
+  <span class="code-keyword">const</span> { userMessage } = req.body
+  <span class="code-keyword">const</span> recommendation = <span class="code-keyword">await</span> <span class="code-function">getRecommendation</span>(userMessage.trim())
+  res.json(recommendation)
+})
+
+<span class="code-comment">// Cast hexagram(s) — single or paired reading</span>
+app.post(<span class="code-string">'/api/cast'</span>, <span class="code-keyword">async</span> (req, res) =&gt; {
+  <span class="code-keyword">const</span> { readingType } = req.body
+
+  <span class="code-keyword">if</span> (readingType === <span class="code-string">'paired'</span>) {
+    <span class="code-comment">// Two hexagrams for comparative insight</span>
+    <span class="code-keyword">const</span> cast1 = <span class="code-function">castHexagram</span>()
+    <span class="code-keyword">const</span> cast2 = <span class="code-function">castHexagram</span>()
+    res.json({ cast1, cast2, readingType })
+  } <span class="code-keyword">else</span> {
+    <span class="code-keyword">const</span> cast1 = <span class="code-function">castHexagram</span>()
+    res.json({ cast1, readingType })
+  }
+})
+
+<span class="code-comment">// Generate AI interpretation of the cast hexagram(s)</span>
+app.post(<span class="code-string">'/api/read'</span>, <span class="code-keyword">async</span> (req, res) =&gt; {
+  <span class="code-keyword">const</span> { question, cast1, cast2 } = req.body
+  <span class="code-keyword">const</span> reading = <span class="code-keyword">await</span> <span class="code-function">getInitialReading</span>(question, cast1, cast2 || <span class="code-keyword">null</span>)
+  res.json({ reading })
+})
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Configuration &amp; Follow-up Chat</h2>
+            <p>The config is minimal — just port, session directory, and Claude model. The chat endpoint carries the full reading context (question, cast hexagrams, initial interpretation, and conversation history) so Master Wong can provide consistent, grounded follow-up guidance.</p>
+
+            <div class="code-container">
+                <div class="code-header">iching.config.mjs — App Configuration</div>
+                <div class="code-block">
+<span class="code-keyword">import</span> <span class="code-string">'dotenv/config'</span>
+
+<span class="code-keyword">export const</span> config = {
+  port: process.env.PORT || <span class="code-number">3002</span>,
+  sessionsDir: <span class="code-string">'./sessions'</span>,
+  claudeModel: <span class="code-string">'claude-sonnet-4-6'</span>
+}
+                </div>
+            </div>
+
+            <div class="code-container">
+                <div class="code-header">server.mjs — Context-Aware Follow-up Chat</div>
+                <div class="code-block">
+<span class="code-comment">// Chat follow-up — carries full reading context</span>
+app.post(<span class="code-string">'/api/chat'</span>, <span class="code-keyword">async</span> (req, res) =&gt; {
+  <span class="code-keyword">const</span> { question, cast1, cast2, initialReading, history, message } = req.body
+
+  <span class="code-keyword">const</span> reply = <span class="code-keyword">await</span> <span class="code-function">getChatReply</span>({
+    question: question || <span class="code-string">''</span>,
+    cast1,
+    cast2: cast2 || <span class="code-keyword">null</span>,
+    initialReading: initialReading || <span class="code-string">''</span>,
+    history: history || [],
+    message
+  })
+
+  res.json({ reply })
+})
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Technical Implementation Notes</h2>
+            <h3>Key Design Decisions</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>Traditional three-coin method:</strong> The <code>castHexagram()</code> function simulates the classic I Ching coin-toss six times to build a hexagram from bottom to top, including changing lines</li>
+                <li><strong>64-hexagram reference:</strong> Complete hexagram data in <code>hexagrams.mjs</code> provides names, trigram compositions, and traditional meanings that feed into Claude's interpretation</li>
+                <li><strong>Paired readings:</strong> For complex decisions, two hexagrams are cast and interpreted together — a feature that mirrors the traditional "before and after" consultation style</li>
+                <li><strong>All output in Mandarin:</strong> Error messages, API responses, and the entire user experience are in Chinese (e.g., "请输入您的问题", "王师父暂时无法回应")</li>
+                <li><strong>Session persistence:</strong> Each reading session is saved as a timestamped JSON file for future review and reflection</li>
+            </ul>
+        </div>
+
+        <div class="demo-links">
+            <a href="master-wong.html" class="demo-btn secondary">View Full Project Details</a>
+        </div>
+
+        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+            <a href="index.html">&larr; Back to Portfolio</a> |
+            <a href="project-categories.html">View All Categories</a>
+        </nav>
+    </div>
+</body>
+</html>

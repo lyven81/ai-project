@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Long View · Crucix — Source Code</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #222;
+            background-color: #ffffff;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .back-nav {
+            margin-bottom: 20px;
+        }
+
+        .back-nav a {
+            color: #007BFF;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .back-nav a:hover {
+            text-decoration: underline;
+        }
+
+        .project-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #9C27B0, #6A1B9A);
+            color: white;
+            border-radius: 10px;
+        }
+
+        .project-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .project-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .content-section {
+            margin: 40px 0;
+            padding: 30px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border-left: 5px solid #9C27B0;
+        }
+
+        .content-section h2 {
+            color: #9C27B0;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .content-section h3 {
+            color: #333;
+            margin: 20px 0 10px 0;
+            font-size: 1.3rem;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #9C27B0;
+            margin: 20px 0;
+        }
+
+        .code-container {
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        .code-header {
+            color: #ce93d8;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .code-block {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #d4d4d4;
+        }
+
+        .code-comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+
+        .code-keyword {
+            color: #569cd6;
+        }
+
+        .code-string {
+            color: #ce9178;
+        }
+
+        .code-function {
+            color: #dcdcaa;
+        }
+
+        .code-number {
+            color: #b5cea8;
+        }
+
+        .demo-links {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .demo-btn {
+            display: inline-block;
+            background-color: #9C27B0;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .demo-btn:hover {
+            background-color: #7B1FA2;
+        }
+
+        .demo-btn.secondary {
+            background-color: #6A1B9A;
+        }
+
+        .demo-btn.secondary:hover {
+            background-color: #4A148C;
+        }
+
+        @media (max-width: 768px) {
+            .project-header h1 {
+                font-size: 2rem;
+            }
+
+            .project-header p {
+                font-size: 1rem;
+            }
+
+            .demo-btn {
+                margin: 5px;
+                padding: 10px 20px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="long-view.html">&larr; Back to Project Overview</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>Long View &middot; Crucix</h1>
+            <p>OSINT intelligence aggregator with 27 data sources, 3D globe visualization, and multi-LLM briefings</p>
+
+            <div class="badges">
+                <span class="badge">Node.js 22+</span>
+                <span class="badge">Express 5</span>
+                <span class="badge">Multi-LLM</span>
+                <span class="badge">Docker</span>
+                <span class="badge">Telegram Bot</span>
+                <span class="badge">Discord Bot</span>
+            </div>
+        </div>
+
+        <div class="highlight-box">
+            <h3>About This Code Showcase</h3>
+            <p><strong>This curated selection shows how Crucix pulls data from 27 OSINT feeds in parallel, manages a delta/memory engine to detect significant changes, and serves everything through a Jarvis-style dashboard with SSE live updates, Telegram bot commands, and Discord alerts.</strong></p>
+            <p>The architecture is modular: each data source is a standalone fetcher under <code>apis/sources/</code>, the delta engine tracks change significance, and multiple LLM providers can generate intelligence briefings.</p>
+        </div>
+
+        <div class="content-section">
+            <h2>File Structure</h2>
+            <div class="code-container">
+                <div class="code-block">
+crucix/
+├── server.mjs              <span class="code-comment"># Express server — SSE, sweep cycle, bot commands</span>
+├── crucix.config.mjs       <span class="code-comment"># All settings with env var overrides</span>
+├── package.json            <span class="code-comment"># Express 5, optional discord.js</span>
+├── Dockerfile              <span class="code-comment"># Alpine container with health check</span>
+├── docker-compose.yml      <span class="code-comment"># One-command deployment</span>
+├── apis/
+│   ├── briefing.mjs        <span class="code-comment"># Full sweep: fetch all 27 sources in parallel</span>
+│   ├── save-briefing.mjs   <span class="code-comment"># Save sweep results to disk</span>
+│   ├── sources/            <span class="code-comment"># 27 individual OSINT source fetchers</span>
+│   └── utils/              <span class="code-comment"># Shared utilities (env, HTTP, parsing)</span>
+├── lib/
+│   ├── delta/              <span class="code-comment"># Change detection engine (hot/warm/cold memory)</span>
+│   ├── llm/                <span class="code-comment"># Multi-provider LLM layer (Anthropic, OpenAI, Gemini)</span>
+│   └── alerts/             <span class="code-comment"># Telegram &amp; Discord alert integrations</span>
+├── dashboard/
+│   ├── inject.mjs          <span class="code-comment"># Synthesize data for dashboard rendering</span>
+│   └── public/             <span class="code-comment"># Jarvis-style frontend with 3D globe</span>
+├── scripts/                <span class="code-comment"># Maintenance scripts (clean, CSV export)</span>
+└── runs/                   <span class="code-comment"># Sweep history &amp; delta memory storage</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Core: Intelligence Engine &amp; Live Updates</h2>
+            <p>The server initializes a delta/memory engine, multi-LLM provider, and alert bots at startup. It runs sweep cycles every 15 minutes (configurable), fetching all 27 OSINT sources in parallel, detecting significant changes via the delta engine, and pushing live updates to connected dashboard clients via Server-Sent Events.</p>
+
+            <div class="code-container">
+                <div class="code-header">server.mjs — Engine Initialization &amp; Bot Commands</div>
+                <div class="code-block">
+<span class="code-keyword">import</span> config <span class="code-keyword">from</span> <span class="code-string">'./crucix.config.mjs'</span>
+<span class="code-keyword">import</span> { fullBriefing } <span class="code-keyword">from</span> <span class="code-string">'./apis/briefing.mjs'</span>
+<span class="code-keyword">import</span> { synthesize, generateIdeas } <span class="code-keyword">from</span> <span class="code-string">'./dashboard/inject.mjs'</span>
+<span class="code-keyword">import</span> { MemoryManager } <span class="code-keyword">from</span> <span class="code-string">'./lib/delta/index.mjs'</span>
+<span class="code-keyword">import</span> { createLLMProvider } <span class="code-keyword">from</span> <span class="code-string">'./lib/llm/index.mjs'</span>
+<span class="code-keyword">import</span> { TelegramAlerter } <span class="code-keyword">from</span> <span class="code-string">'./lib/alerts/telegram.mjs'</span>
+<span class="code-keyword">import</span> { DiscordAlerter } <span class="code-keyword">from</span> <span class="code-string">'./lib/alerts/discord.mjs'</span>
+
+<span class="code-comment">// === State ===</span>
+<span class="code-keyword">let</span> currentData = <span class="code-keyword">null</span>
+<span class="code-keyword">let</span> sweepInProgress = <span class="code-keyword">false</span>
+<span class="code-keyword">const</span> sseClients = <span class="code-keyword">new</span> Set()
+
+<span class="code-comment">// === Delta/Memory ===</span>
+<span class="code-keyword">const</span> memory = <span class="code-keyword">new</span> <span class="code-function">MemoryManager</span>(RUNS_DIR)
+
+<span class="code-comment">// === Multi-LLM + Alerting ===</span>
+<span class="code-keyword">const</span> llmProvider = <span class="code-function">createLLMProvider</span>(config.llm)
+<span class="code-keyword">const</span> telegramAlerter = <span class="code-keyword">new</span> <span class="code-function">TelegramAlerter</span>(config.telegram)
+<span class="code-keyword">const</span> discordAlerter = <span class="code-keyword">new</span> <span class="code-function">DiscordAlerter</span>(config.discord || {})
+
+<span class="code-comment">// Two-way Telegram bot commands</span>
+telegramAlerter.<span class="code-function">onCommand</span>(<span class="code-string">'/status'</span>, <span class="code-keyword">async</span> () =&gt; {
+  <span class="code-keyword">const</span> uptime = Math.floor((Date.now() - startTime) / <span class="code-number">1000</span>)
+  <span class="code-keyword">const</span> sourcesOk = currentData?.meta?.sourcesOk || <span class="code-number">0</span>
+  <span class="code-keyword">const</span> sourcesTotal = currentData?.meta?.sourcesQueried || <span class="code-number">0</span>
+  <span class="code-keyword">return</span> <span class="code-string">`CRUCIX STATUS\nUptime: ${h}h ${m}m\nSources: ${sourcesOk}/${sourcesTotal} OK`</span>
+})
+
+telegramAlerter.<span class="code-function">onCommand</span>(<span class="code-string">'/sweep'</span>, <span class="code-keyword">async</span> () =&gt; {
+  <span class="code-keyword">if</span> (sweepInProgress) <span class="code-keyword">return</span> <span class="code-string">'Sweep already in progress.'</span>
+  <span class="code-function">runSweepCycle</span>()  <span class="code-comment">// Fire and forget</span>
+  <span class="code-keyword">return</span> <span class="code-string">'Manual sweep started.'</span>
+})
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Configuration &amp; Docker Deployment</h2>
+            <p>All settings support environment variable overrides — LLM provider, Telegram/Discord credentials, delta engine thresholds, and refresh interval. The Docker setup uses Alpine Linux with a built-in health check endpoint.</p>
+
+            <div class="code-container">
+                <div class="code-header">crucix.config.mjs — Full Configuration</div>
+                <div class="code-block">
+<span class="code-keyword">export default</span> {
+  port: parseInt(process.env.PORT) || <span class="code-number">3117</span>,
+  refreshIntervalMinutes: parseInt(process.env.REFRESH_INTERVAL_MINUTES) || <span class="code-number">15</span>,
+
+  llm: {
+    provider: process.env.LLM_PROVIDER || <span class="code-keyword">null</span>,  <span class="code-comment">// anthropic | openai | gemini | codex</span>
+    apiKey: process.env.LLM_API_KEY || <span class="code-keyword">null</span>,
+    model: process.env.LLM_MODEL || <span class="code-keyword">null</span>,
+  },
+
+  telegram: {
+    botToken: process.env.TELEGRAM_BOT_TOKEN || <span class="code-keyword">null</span>,
+    chatId: process.env.TELEGRAM_CHAT_ID || <span class="code-keyword">null</span>,
+    channels: process.env.TELEGRAM_CHANNELS || <span class="code-keyword">null</span>,
+  },
+
+  discord: {
+    botToken: process.env.DISCORD_BOT_TOKEN || <span class="code-keyword">null</span>,
+    channelId: process.env.DISCORD_CHANNEL_ID || <span class="code-keyword">null</span>,
+    webhookUrl: process.env.DISCORD_WEBHOOK_URL || <span class="code-keyword">null</span>,
+  },
+
+  delta: {
+    thresholds: { numeric: {}, count: {} }  <span class="code-comment">// Override sensitivity per source</span>
+  }
+}
+                </div>
+            </div>
+
+            <div class="code-container">
+                <div class="code-header">Dockerfile — Alpine Container</div>
+                <div class="code-block">
+<span class="code-keyword">FROM</span> node:22-alpine
+<span class="code-keyword">WORKDIR</span> /app
+
+<span class="code-comment"># Copy package files first for better layer caching</span>
+<span class="code-keyword">COPY</span> package*.json ./
+<span class="code-keyword">RUN</span> npm install --production
+
+<span class="code-keyword">COPY</span> . .
+<span class="code-keyword">EXPOSE</span> <span class="code-number">3117</span>
+
+<span class="code-comment"># Health check every 60 seconds</span>
+<span class="code-keyword">HEALTHCHECK</span> --interval=60s --timeout=10s --retries=3 \
+  CMD wget -qO- http://localhost:3117/api/health || exit 1
+
+<span class="code-keyword">CMD</span> [<span class="code-string">"node"</span>, <span class="code-string">"server.mjs"</span>]
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Technical Implementation Notes</h2>
+            <h3>Key Design Decisions</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>27 parallel source fetchers:</strong> Each OSINT source (satellite fire detection, flight tracking, radiation monitoring, market prices, conflict data, etc.) has its own module under <code>apis/sources/</code>, all fetched concurrently during each sweep</li>
+                <li><strong>Delta/memory engine:</strong> A three-tier memory system (hot/warm/cold) tracks changes over time, detecting when a data point moves significantly enough to warrant an alert</li>
+                <li><strong>Multi-LLM support:</strong> The LLM layer supports Anthropic, OpenAI, Gemini, and Codex — switchable via a single environment variable</li>
+                <li><strong>Server-Sent Events (SSE):</strong> Dashboard clients receive live push updates when new sweep data arrives, no polling required</li>
+                <li><strong>Two-way bot commands:</strong> Telegram users can query system status (<code>/status</code>) or trigger manual sweeps (<code>/sweep</code>) directly from chat</li>
+                <li><strong>Single production dependency:</strong> Only Express is required — all 27 source fetchers use Node.js built-in <code>fetch()</code></li>
+            </ul>
+        </div>
+
+        <div class="demo-links">
+            <a href="long-view.html" class="demo-btn secondary">View Full Project Details</a>
+        </div>
+
+        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+            <a href="index.html">&larr; Back to Portfolio</a> |
+            <a href="project-categories.html">View All Categories</a>
+        </nav>
+    </div>
+</body>
+</html>
