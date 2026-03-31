@@ -386,6 +386,62 @@
             line-height: 1.5;
         }
 
+        /* ── Featured Project (top row) ── */
+        .featured-project {
+            display: flex;
+            gap: 28px;
+            align-items: stretch;
+            background: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            margin-bottom: 28px;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            transition: box-shadow 0.3s;
+        }
+        .featured-project:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.12); }
+        .featured-project .fp-visual {
+            width: 240px; min-height: 180px; flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 3.5rem; position: relative;
+        }
+        .featured-project .fp-visual::after {
+            content: ''; position: absolute; right: 0; top: 0; bottom: 0; width: 40px;
+            background: linear-gradient(to left, #fff, transparent);
+        }
+        .featured-project .fp-body {
+            padding: 28px 28px 28px 0; display: flex; flex-direction: column; justify-content: center; flex: 1;
+        }
+        .featured-project .fp-tag {
+            display: inline-block; font-size: 0.65rem; font-weight: 600; letter-spacing: 1px;
+            text-transform: uppercase; padding: 3px 10px; border-radius: 4px; color: #fff;
+            margin-bottom: 8px; width: fit-content;
+        }
+        .featured-project .fp-body h3 {
+            font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700;
+            color: #1E1B18; margin-bottom: 8px;
+        }
+        .featured-project .fp-body p {
+            font-size: 0.9rem; color: #666; line-height: 1.5; margin-bottom: 16px;
+        }
+        .featured-project .fp-actions { display: flex; gap: 10px; }
+        .fp-swap-hint {
+            text-align: center; font-size: 0.75rem; color: #999;
+            margin-bottom: 16px; letter-spacing: 0.5px;
+        }
+
+        @media (max-width: 768px) {
+            .featured-project { flex-direction: column; }
+            .featured-project .fp-visual { width: 100%; min-height: 120px; }
+            .featured-project .fp-visual::after {
+                right: auto; top: auto; bottom: 0; left: 0; width: 100%; height: 40px;
+                background: linear-gradient(to top, #fff, transparent);
+            }
+            .featured-project .fp-body { padding: 20px; }
+        }
+
         /* ── Featured Project Cards ── */
         .project-grid {
             display: grid;
@@ -677,10 +733,29 @@
     <div class="section-inner">
         <span class="section-tag">FEATURED</span>
         <h2 class="section-heading">One from Each Category</h2>
-        <div class="project-grid">
 
-            <!-- Business Automation -->
-            <div class="project-card" data-animate>
+        <!-- Featured project (top row) -->
+        <div class="featured-project" id="featuredProject" data-animate onclick="window.open(document.getElementById('fpDemoLink').href, '_blank')">
+            <div class="fp-visual" id="fpVisual" style="background:linear-gradient(135deg, #4299e1 0%, #63B3ED 50%, #90CDF4 100%);">
+                <span style="opacity:0.3; font-size:4rem;" id="fpEmoji">&#x1F4CA;</span>
+            </div>
+            <div class="fp-body">
+                <span class="fp-tag" id="fpTag" style="background:#4299e1;">AI Agents</span>
+                <h3 id="fpName">SME Business Advisor</h3>
+                <p id="fpDesc">AI agent with 6 pre-built tools analyses 34,500 e-commerce orders. Ask about sales, profits, discounts, returns, segments, and delivery in plain English.</p>
+                <div class="fp-actions">
+                    <a href="projects/sme-business-advisor/demo.html" id="fpDemoLink" class="btn-gold" target="_blank" onclick="event.stopPropagation();">Live Demo</a>
+                    <a href="sme-business-advisor.html" id="fpDetailsLink" class="btn-outline-gold" onclick="event.stopPropagation();">View Details</a>
+                </div>
+            </div>
+        </div>
+
+        <p class="fp-swap-hint">Click any project below to feature it</p>
+
+        <!-- Bottom 6 projects (3x2 grid) -->
+        <div class="project-grid" id="projectGrid">
+
+            <div class="project-card visible" onclick="swapProject(this)" data-gradient="linear-gradient(135deg, #4CAF50 0%, #66BB6A 50%, #81C784 100%)" data-emoji="💰" data-tag="Business Automation" data-color="#4CAF50" data-name="Marketing Agency" data-desc="AI-powered marketing agency that generates campaigns, content strategies, and ad copy on demand." data-demo="projects/marketing-agency/demo.html" data-details="marketing-agency.html">
                 <div class="project-visual" style="background:linear-gradient(135deg, #4CAF50 0%, #66BB6A 50%, #81C784 100%);">
                     <span style="opacity:0.3; font-size:4rem;">💰</span>
                 </div>
@@ -689,14 +764,13 @@
                     <h3>Marketing Agency</h3>
                     <p>AI-powered marketing agency that generates campaigns, content strategies, and ad copy on demand.</p>
                     <div class="project-actions">
-                        <a href="projects/marketing-agency/demo.html" class="btn-gold">Live Demo</a>
-                        <a href="marketing-agency.html" class="btn-outline-gold">View Details</a>
+                        <a href="projects/marketing-agency/demo.html" class="btn-gold" target="_blank" onclick="event.stopPropagation();">Live Demo</a>
+                        <a href="marketing-agency.html" class="btn-outline-gold" onclick="event.stopPropagation();">View Details</a>
                     </div>
                 </div>
             </div>
 
-            <!-- Business Intelligence -->
-            <div class="project-card" data-animate>
+            <div class="project-card visible" onclick="swapProject(this)" data-gradient="linear-gradient(135deg, #E91E63 0%, #EC407A 50%, #F06292 100%)" data-emoji="&#9636;" data-tag="Business Intelligence" data-color="#E91E63" data-name="Social Media Marketer" data-desc="Analyze social media performance and get AI recommendations to boost engagement and reach." data-demo="projects/social-media-marketer/demo.html" data-details="social-media-marketer.html">
                 <div class="project-visual" style="background:linear-gradient(135deg, #E91E63 0%, #EC407A 50%, #F06292 100%);">
                     <span style="opacity:0.3; font-size:4rem;">&#9636;</span>
                 </div>
@@ -705,14 +779,13 @@
                     <h3>Social Media Marketer</h3>
                     <p>Analyze social media performance and get AI recommendations to boost engagement and reach.</p>
                     <div class="project-actions">
-                        <a href="projects/social-media-marketer/demo.html" class="btn-gold">Live Demo</a>
-                        <a href="social-media-marketer.html" class="btn-outline-gold">View Details</a>
+                        <a href="projects/social-media-marketer/demo.html" class="btn-gold" target="_blank" onclick="event.stopPropagation();">Live Demo</a>
+                        <a href="social-media-marketer.html" class="btn-outline-gold" onclick="event.stopPropagation();">View Details</a>
                     </div>
                 </div>
             </div>
 
-            <!-- Computer Vision -->
-            <div class="project-card" data-animate>
+            <div class="project-card visible" onclick="swapProject(this)" data-gradient="linear-gradient(135deg, #FF9800 0%, #FFA726 50%, #FFB74D 100%)" data-emoji="&#128247;" data-tag="Computer Vision" data-color="#FF9800" data-name="AI Background Changer" data-desc="Swap photo backgrounds instantly using AI-powered image segmentation and generation." data-demo="https://ai-background-changer-169218045868.us-west1.run.app" data-details="ai-background-changer.html">
                 <div class="project-visual" style="background:linear-gradient(135deg, #FF9800 0%, #FFA726 50%, #FFB74D 100%);">
                     <span style="opacity:0.3; font-size:4rem;">&#128247;</span>
                 </div>
@@ -721,14 +794,13 @@
                     <h3>AI Background Changer</h3>
                     <p>Swap photo backgrounds instantly using AI-powered image segmentation and generation.</p>
                     <div class="project-actions">
-                        <a href="https://ai-background-changer-169218045868.us-west1.run.app" class="btn-gold" target="_blank">Live Demo</a>
-                        <a href="ai-background-changer.html" class="btn-outline-gold">View Details</a>
+                        <a href="https://ai-background-changer-169218045868.us-west1.run.app" class="btn-gold" target="_blank" onclick="event.stopPropagation();">Live Demo</a>
+                        <a href="ai-background-changer.html" class="btn-outline-gold" onclick="event.stopPropagation();">View Details</a>
                     </div>
                 </div>
             </div>
 
-            <!-- Conversational AI -->
-            <div class="project-card" data-animate>
+            <div class="project-card visible" onclick="swapProject(this)" data-gradient="linear-gradient(135deg, #9C27B0 0%, #AB47BC 50%, #BA68C8 100%)" data-emoji="&#11088;" data-tag="Conversational AI" data-color="#9C27B0" data-name="Skyread" data-desc="An AI reading companion that helps users explore and understand complex texts interactively." data-demo="projects/skyread/demo.html" data-details="skyread.html">
                 <div class="project-visual" style="background:linear-gradient(135deg, #9C27B0 0%, #AB47BC 50%, #BA68C8 100%);">
                     <span style="opacity:0.3; font-size:4rem;">&#11088;</span>
                 </div>
@@ -737,14 +809,13 @@
                     <h3>Skyread</h3>
                     <p>An AI reading companion that helps users explore and understand complex texts interactively.</p>
                     <div class="project-actions">
-                        <a href="projects/skyread/demo.html" class="btn-gold">Live Demo</a>
-                        <a href="skyread.html" class="btn-outline-gold">View Details</a>
+                        <a href="projects/skyread/demo.html" class="btn-gold" target="_blank" onclick="event.stopPropagation();">Live Demo</a>
+                        <a href="skyread.html" class="btn-outline-gold" onclick="event.stopPropagation();">View Details</a>
                     </div>
                 </div>
             </div>
 
-            <!-- Creative AI -->
-            <div class="project-card" data-animate>
+            <div class="project-card visible" onclick="swapProject(this)" data-gradient="linear-gradient(135deg, #FF5722 0%, #FF7043 50%, #FF8A65 100%)" data-emoji="&#127912;" data-tag="Creative AI" data-color="#FF5722" data-name="Unusual Coloring Book" data-desc="Generate unique coloring book pages with AI that turns any idea into line art for kids and adults." data-demo="projects/unusual-coloring-book/demo.html" data-details="unusual-coloring-book.html">
                 <div class="project-visual" style="background:linear-gradient(135deg, #FF5722 0%, #FF7043 50%, #FF8A65 100%);">
                     <span style="opacity:0.3; font-size:4rem;">&#127912;</span>
                 </div>
@@ -753,14 +824,13 @@
                     <h3>Unusual Coloring Book</h3>
                     <p>Generate unique coloring book pages with AI that turns any idea into line art for kids and adults.</p>
                     <div class="project-actions">
-                        <a href="projects/unusual-coloring-book/demo.html" class="btn-gold">Live Demo</a>
-                        <a href="unusual-coloring-book.html" class="btn-outline-gold">View Details</a>
+                        <a href="projects/unusual-coloring-book/demo.html" class="btn-gold" target="_blank" onclick="event.stopPropagation();">Live Demo</a>
+                        <a href="unusual-coloring-book.html" class="btn-outline-gold" onclick="event.stopPropagation();">View Details</a>
                     </div>
                 </div>
             </div>
 
-            <!-- Document Processing -->
-            <div class="project-card" data-animate>
+            <div class="project-card visible" onclick="swapProject(this)" data-gradient="linear-gradient(135deg, #2196F3 0%, #42A5F5 50%, #64B5F6 100%)" data-emoji="&#128196;" data-tag="Document Processing" data-color="#2196F3" data-name="Claude PDF Summarizer" data-desc="Upload any PDF and get an AI-generated summary with key points extracted in seconds." data-demo="https://summarizer-218391175125.asia-southeast1.run.app" data-details="ai-pdf-summarizer.html">
                 <div class="project-visual" style="background:linear-gradient(135deg, #2196F3 0%, #42A5F5 50%, #64B5F6 100%);">
                     <span style="opacity:0.3; font-size:4rem;">&#128196;</span>
                 </div>
@@ -769,8 +839,8 @@
                     <h3>Claude PDF Summarizer</h3>
                     <p>Upload any PDF and get an AI-generated summary with key points extracted in seconds.</p>
                     <div class="project-actions">
-                        <a href="https://summarizer-218391175125.asia-southeast1.run.app" class="btn-gold" target="_blank">Live Demo</a>
-                        <a href="ai-pdf-summarizer.html" class="btn-outline-gold">View Details</a>
+                        <a href="https://summarizer-218391175125.asia-southeast1.run.app" class="btn-gold" target="_blank" onclick="event.stopPropagation();">Live Demo</a>
+                        <a href="ai-pdf-summarizer.html" class="btn-outline-gold" onclick="event.stopPropagation();">View Details</a>
                     </div>
                 </div>
             </div>
@@ -868,6 +938,74 @@ function swapCategory(clickedCard) {
 
     // Smooth scroll to top of categories
     document.getElementById('categories').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ── Featured Project Swap ────────────────────────────────────────
+var fpState = {
+    gradient: 'linear-gradient(135deg, #4299e1 0%, #63B3ED 50%, #90CDF4 100%)',
+    emoji: '\u{1F4CA}',
+    tag: 'AI Agents',
+    color: '#4299e1',
+    name: 'SME Business Advisor',
+    desc: 'AI agent with 6 pre-built tools analyses 34,500 e-commerce orders. Ask about sales, profits, discounts, returns, segments, and delivery in plain English.',
+    demo: 'projects/sme-business-advisor/demo.html',
+    details: 'sme-business-advisor.html'
+};
+
+function swapProject(clickedCard) {
+    var oldFp = Object.assign({}, fpState);
+
+    var newData = {
+        gradient: clickedCard.getAttribute('data-gradient'),
+        emoji: clickedCard.getAttribute('data-emoji'),
+        tag: clickedCard.getAttribute('data-tag'),
+        color: clickedCard.getAttribute('data-color'),
+        name: clickedCard.getAttribute('data-name'),
+        desc: clickedCard.getAttribute('data-desc'),
+        demo: clickedCard.getAttribute('data-demo'),
+        details: clickedCard.getAttribute('data-details')
+    };
+
+    // Update featured (top row)
+    document.getElementById('fpVisual').style.background = newData.gradient;
+    document.getElementById('fpEmoji').innerHTML = newData.emoji;
+    document.getElementById('fpTag').style.background = newData.color;
+    document.getElementById('fpTag').textContent = newData.tag;
+    document.getElementById('fpName').textContent = newData.name;
+    document.getElementById('fpDesc').textContent = newData.desc;
+    document.getElementById('fpDemoLink').href = newData.demo;
+    document.getElementById('fpDetailsLink').href = newData.details;
+
+    // Update clicked card with old featured data
+    clickedCard.setAttribute('data-gradient', oldFp.gradient);
+    clickedCard.setAttribute('data-emoji', oldFp.emoji);
+    clickedCard.setAttribute('data-tag', oldFp.tag);
+    clickedCard.setAttribute('data-color', oldFp.color);
+    clickedCard.setAttribute('data-name', oldFp.name);
+    clickedCard.setAttribute('data-desc', oldFp.desc);
+    clickedCard.setAttribute('data-demo', oldFp.demo);
+    clickedCard.setAttribute('data-details', oldFp.details);
+
+    var vis = clickedCard.querySelector('.project-visual');
+    var emo = vis.querySelector('span');
+    var tag = clickedCard.querySelector('.project-category-tag');
+    var h3 = clickedCard.querySelector('h3');
+    var p = clickedCard.querySelector('p');
+    var demoBtn = clickedCard.querySelector('.btn-gold');
+    var detailsBtn = clickedCard.querySelector('.btn-outline-gold');
+
+    vis.style.background = oldFp.gradient;
+    emo.innerHTML = oldFp.emoji;
+    tag.style.background = oldFp.color;
+    tag.textContent = oldFp.tag;
+    h3.textContent = oldFp.name;
+    p.textContent = oldFp.desc;
+    demoBtn.href = oldFp.demo;
+    detailsBtn.href = oldFp.details;
+
+    fpState = newData;
+
+    document.getElementById('featured').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 </script>
 
