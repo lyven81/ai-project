@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SME Business Advisor AlloyDB - Source Code</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #222; background-color: #ffffff; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        .back-nav { margin-bottom: 20px; }
+        .back-nav a { color: #007BFF; text-decoration: none; font-size: 1rem; }
+        .back-nav a:hover { text-decoration: underline; }
+        .project-header {
+            text-align: center; margin-bottom: 40px; padding: 40px 0;
+            background: linear-gradient(135deg, #064E3B, #059669); color: white; border-radius: 10px;
+        }
+        .project-header h1 { font-size: 2.5rem; margin-bottom: 10px; color: #6EE7B7; }
+        .project-header p { font-size: 1.2rem; opacity: 0.9; }
+        .content-section { margin: 40px 0; padding: 30px; background-color: #f9f9f9; border-radius: 8px; border-left: 5px solid #059669; }
+        .content-section h2 { color: #059669; margin-bottom: 20px; font-size: 1.8rem; }
+        .content-section h3 { color: #333; margin: 20px 0 10px 0; font-size: 1.3rem; }
+        .content-section p { margin-bottom: 12px; }
+        .content-section ul { padding-left: 20px; }
+        .content-section ul li { margin-bottom: 6px; }
+        .code-block { background-color: #1a0a1e; color: #e0e0e0; border-radius: 8px; padding: 20px; margin: 15px 0; font-family: monospace; font-size: 0.88rem; overflow-x: auto; line-height: 1.6; }
+        .code-block .comment { color: #B09AB8; }
+        .code-block .keyword { color: #6EE7B7; }
+        .code-block .string { color: #A7F3D0; }
+        .file-tree { background: #f4f4f4; border: 1px solid #ddd; border-radius: 8px; padding: 20px; font-family: monospace; font-size: 0.9rem; line-height: 1.8; }
+        .file-tree .folder { color: #059669; font-weight: bold; }
+        .file-tree .file { color: #444; }
+        .file-tree .desc { color: #888; font-size: 0.8rem; margin-left: 8px; }
+        .demo-links { text-align: center; margin: 30px 0; }
+        .demo-btn { display: inline-block; background-color: #059669; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; margin: 0 10px; font-weight: bold; }
+        .demo-btn:hover { background-color: #047857; }
+        .demo-btn.secondary { background-color: #064E3B; color: white; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <nav class="back-nav"><a href="sme-advisor-alloydb.html">&larr; Back to SME Business Advisor &mdash; AlloyDB Showcase</a></nav>
+
+    <div class="project-header">
+        <h1>&#128451; SME Business Advisor &mdash; AlloyDB</h1>
+        <p>Source Code &mdash; AI Agent + Database</p>
+    </div>
+
+    <div class="content-section">
+        <h2>&#128193; File Structure</h2>
+        <div class="file-tree">
+            <div><span class="folder">projects/sme-advisor-alloydb/</span></div>
+            <div>&nbsp;&nbsp;&#9500;&#9472;&#9472; <span class="file">main.py</span><span class="desc">&mdash; FastAPI server + ADK agent + SQL generation</span></div>
+            <div>&nbsp;&nbsp;&#9500;&#9472;&#9472; <span class="file">load_data.py</span><span class="desc">&mdash; CSV to PostgreSQL import script</span></div>
+            <div>&nbsp;&nbsp;&#9500;&#9472;&#9472; <span class="file">index.html</span><span class="desc">&mdash; Chat interface with DB panel + execution log</span></div>
+            <div>&nbsp;&nbsp;&#9500;&#9472;&#9472; <span class="file">dataset.csv</span><span class="desc">&mdash; E-commerce dataset</span></div>
+            <div>&nbsp;&nbsp;&#9500;&#9472;&#9472; <span class="file">requirements.txt</span><span class="desc">&mdash; Python dependencies</span></div>
+            <div>&nbsp;&nbsp;&#9492;&#9472;&#9472; <span class="file">Dockerfile</span><span class="desc">&mdash; Container config for Cloud Run</span></div>
+        </div>
+    </div>
+
+    <div class="content-section">
+        <h2>&#128273; Key Code: SQL Generation Tool</h2>
+        <p>The core tool takes a natural language question, uses Gemini to generate a SQL query, executes it against PostgreSQL (AlloyDB), and returns the results. The agent handles the full cycle from question to answer.</p>
+        <div class="code-block">
+<span class="keyword">def</span> execute_sql_query(question: str) -> dict:
+    <span class="string">"""Convert natural language to SQL, execute against PostgreSQL,
+    and return structured results."""</span>
+
+    <span class="comment"># Step 1: Generate SQL from natural language via Gemini</span>
+    sql_prompt = f<span class="string">"""Given this table schema:
+    orders(order_id, order_date, category, sub_category,
+           region, city, sales, quantity, discount,
+           profit, ship_mode, segment, returned)
+
+    Write a PostgreSQL SELECT query for: {question}
+    Return ONLY the SQL query, no explanation."""</span>
+
+    sql_query = gemini_client.generate(sql_prompt).text.strip()
+
+    <span class="comment"># Step 2: Safety check — only SELECT allowed</span>
+    <span class="keyword">if not</span> validate_sql(sql_query):
+        <span class="keyword">return</span> {<span class="string">"error"</span>: <span class="string">"Only SELECT queries are allowed"</span>}
+
+    <span class="comment"># Step 3: Execute against PostgreSQL</span>
+    conn = pg8000.connect(host=DB_HOST, database=DB_NAME,
+                          user=DB_USER, password=DB_PASS)
+    cursor = conn.cursor()
+    cursor.execute(sql_query)
+    rows = cursor.fetchall()
+    columns = [desc[0] <span class="keyword">for</span> desc <span class="keyword">in</span> cursor.description]
+
+    <span class="keyword">return</span> {
+        <span class="string">"sql"</span>: sql_query,
+        <span class="string">"columns"</span>: columns,
+        <span class="string">"data"</span>: rows,
+        <span class="string">"row_count"</span>: <span class="keyword">len</span>(rows)
+    }
+        </div>
+    </div>
+
+    <div class="content-section">
+        <h2>&#128273; Key Code: 4-Step Execution Log</h2>
+        <p>The UI displays a real-time execution log showing each step of the query pipeline. Users can see exactly how their question becomes an answer.</p>
+        <div class="code-block">
+<span class="comment">&lt;!-- Execution log panel in index.html --&gt;</span>
+&lt;<span class="keyword">div</span> class=<span class="string">"execution-log"</span>&gt;
+  &lt;<span class="keyword">h3</span>&gt;Execution Log&lt;/<span class="keyword">h3</span>&gt;
+  &lt;<span class="keyword">div</span> class=<span class="string">"log-step"</span> id=<span class="string">"step1"</span>&gt;
+    &lt;<span class="keyword">span</span> class=<span class="string">"step-icon"</span>&gt;1&lt;/<span class="keyword">span</span>&gt;
+    &lt;<span class="keyword">span</span>&gt;Question received&lt;/<span class="keyword">span</span>&gt;
+  &lt;/<span class="keyword">div</span>&gt;
+  &lt;<span class="keyword">div</span> class=<span class="string">"log-step"</span> id=<span class="string">"step2"</span>&gt;
+    &lt;<span class="keyword">span</span> class=<span class="string">"step-icon"</span>&gt;2&lt;/<span class="keyword">span</span>&gt;
+    &lt;<span class="keyword">span</span>&gt;SQL generated&lt;/<span class="keyword">span</span>&gt;
+    &lt;<span class="keyword">pre</span> id=<span class="string">"generated-sql"</span>&gt;&lt;/<span class="keyword">pre</span>&gt;
+  &lt;/<span class="keyword">div</span>&gt;
+  &lt;<span class="keyword">div</span> class=<span class="string">"log-step"</span> id=<span class="string">"step3"</span>&gt;
+    &lt;<span class="keyword">span</span> class=<span class="string">"step-icon"</span>&gt;3&lt;/<span class="keyword">span</span>&gt;
+    &lt;<span class="keyword">span</span>&gt;Database executed (&lt;<span class="keyword">span</span> id=<span class="string">"row-count"</span>&gt;&lt;/<span class="keyword">span</span>&gt; rows)&lt;/<span class="keyword">span</span>&gt;
+  &lt;/<span class="keyword">div</span>&gt;
+  &lt;<span class="keyword">div</span> class=<span class="string">"log-step"</span> id=<span class="string">"step4"</span>&gt;
+    &lt;<span class="keyword">span</span> class=<span class="string">"step-icon"</span>&gt;4&lt;/<span class="keyword">span</span>&gt;
+    &lt;<span class="keyword">span</span>&gt;Answer returned&lt;/<span class="keyword">span</span>&gt;
+  &lt;/<span class="keyword">div</span>&gt;
+&lt;/<span class="keyword">div</span>&gt;
+        </div>
+    </div>
+
+    <div class="content-section">
+        <h2>&#128273; Key Code: Safety Check</h2>
+        <p>Before executing any generated SQL, a validation function ensures only SELECT queries run against the database. This prevents accidental or malicious data modification.</p>
+        <div class="code-block">
+<span class="keyword">def</span> validate_sql(sql: str) -> bool:
+    <span class="string">"""Only allow SELECT queries — block INSERT, UPDATE, DELETE, DROP, etc."""</span>
+
+    <span class="comment"># Normalize and check the first keyword</span>
+    cleaned = sql.strip().upper()
+
+    <span class="comment"># Blocked keywords that could modify data</span>
+    blocked = [<span class="string">"INSERT"</span>, <span class="string">"UPDATE"</span>, <span class="string">"DELETE"</span>, <span class="string">"DROP"</span>,
+               <span class="string">"ALTER"</span>, <span class="string">"CREATE"</span>, <span class="string">"TRUNCATE"</span>, <span class="string">"GRANT"</span>]
+
+    <span class="keyword">if not</span> cleaned.startswith(<span class="string">"SELECT"</span>):
+        <span class="keyword">return</span> False
+
+    <span class="keyword">for</span> keyword <span class="keyword">in</span> blocked:
+        <span class="keyword">if</span> keyword <span class="keyword">in</span> cleaned:
+            <span class="keyword">return</span> False
+
+    <span class="keyword">return</span> True
+        </div>
+    </div>
+
+    <div class="content-section">
+        <h2>&#128230; Dependencies (requirements.txt)</h2>
+        <div class="code-block">
+google-adk          <span class="comment"># Google Agent Development Kit</span>
+google-genai        <span class="comment"># Gemini API SDK</span>
+fastapi             <span class="comment"># Web framework for API server</span>
+uvicorn             <span class="comment"># ASGI server</span>
+pandas              <span class="comment"># Data analysis library</span>
+pg8000              <span class="comment"># Pure-Python PostgreSQL driver</span>
+        </div>
+    </div>
+
+    <div class="demo-links">
+        <a href="sme-advisor-alloydb.html" class="demo-btn">&larr; Back to Showcase</a>
+        <a href="projects/sme-advisor-alloydb/demo.html" target="_blank" class="demo-btn secondary">&#128640; Try Live Demo</a>
+    </div>
+
+    <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+        <a href="index.html">&larr; Back to Portfolio</a> |
+        <a href="project-categories.html">View All Categories</a>
+    </nav>
+</div>
+</body>
+</html>

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SME Business Advisor MCP - Source Code</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #222; background-color: #ffffff; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        .back-nav { margin-bottom: 20px; }
+        .back-nav a { color: #007BFF; text-decoration: none; font-size: 1rem; }
+        .back-nav a:hover { text-decoration: underline; }
+        .project-header {
+            text-align: center; margin-bottom: 40px; padding: 40px 0;
+            background: linear-gradient(135deg, #2D1B4E, #7C3AED); color: white; border-radius: 10px;
+        }
+        .project-header h1 { font-size: 2.5rem; margin-bottom: 10px; color: #C4B5FD; }
+        .project-header p { font-size: 1.2rem; opacity: 0.9; }
+        .content-section { margin: 40px 0; padding: 30px; background-color: #f9f9f9; border-radius: 8px; border-left: 5px solid #7C3AED; }
+        .content-section h2 { color: #7C3AED; margin-bottom: 20px; font-size: 1.8rem; }
+        .content-section h3 { color: #333; margin: 20px 0 10px 0; font-size: 1.3rem; }
+        .content-section p { margin-bottom: 12px; }
+        .content-section ul { padding-left: 20px; }
+        .content-section ul li { margin-bottom: 6px; }
+        .code-block { background-color: #1a0a1e; color: #e0e0e0; border-radius: 8px; padding: 20px; margin: 15px 0; font-family: monospace; font-size: 0.88rem; overflow-x: auto; line-height: 1.6; }
+        .code-block .comment { color: #B09AB8; }
+        .code-block .keyword { color: #C4B5FD; }
+        .code-block .string { color: #DDD6FE; }
+        .file-tree { background: #f4f4f4; border: 1px solid #ddd; border-radius: 8px; padding: 20px; font-family: monospace; font-size: 0.9rem; line-height: 1.8; }
+        .file-tree .folder { color: #7C3AED; font-weight: bold; }
+        .file-tree .file { color: #444; }
+        .file-tree .desc { color: #888; font-size: 0.8rem; margin-left: 8px; }
+        .demo-links { text-align: center; margin: 30px 0; }
+        .demo-btn { display: inline-block; background-color: #7C3AED; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; margin: 0 10px; font-weight: bold; }
+        .demo-btn:hover { background-color: #5B21B6; }
+        .demo-btn.secondary { background-color: #2D1B4E; color: white; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <nav class="back-nav"><a href="sme-advisor-mcp.html">&larr; Back to SME Business Advisor &mdash; MCP Showcase</a></nav>
+
+    <div class="project-header">
+        <h1>&#128279; SME Business Advisor &mdash; MCP</h1>
+        <p>Source Code &mdash; AI Agent + MCP Server</p>
+    </div>
+
+    <div class="content-section">
+        <h2>&#128193; File Structure</h2>
+        <div class="file-tree">
+            <div><span class="folder">projects/sme-advisor-mcp/</span></div>
+            <div>&nbsp;&nbsp;&#9500;&#9472;&#9472; <span class="file">main.py</span><span class="desc">&mdash; FastAPI server + Google ADK agent (MCP client)</span></div>
+            <div>&nbsp;&nbsp;&#9500;&#9472;&#9472; <span class="file">mcp_server.py</span><span class="desc">&mdash; MCP data server (7 tools)</span></div>
+            <div>&nbsp;&nbsp;&#9500;&#9472;&#9472; <span class="file">index.html</span><span class="desc">&mdash; Chat interface with MCP status panel</span></div>
+            <div>&nbsp;&nbsp;&#9500;&#9472;&#9472; <span class="file">dataset.csv</span><span class="desc">&mdash; E-commerce dataset</span></div>
+            <div>&nbsp;&nbsp;&#9500;&#9472;&#9472; <span class="file">requirements.txt</span><span class="desc">&mdash; Python dependencies</span></div>
+            <div>&nbsp;&nbsp;&#9492;&#9472;&#9472; <span class="file">Dockerfile</span><span class="desc">&mdash; Container config for Cloud Run</span></div>
+        </div>
+    </div>
+
+    <div class="content-section">
+        <h2>&#128273; Key Code: MCP Tool Registration</h2>
+        <p>MCP tools are registered as wrappers that log every call before delegating to the MCP server. The <code>_log_mcp_call</code> pattern captures the tool name, parameters, and response for the status panel.</p>
+        <div class="code-block">
+<span class="keyword">def</span> _log_mcp_call(tool_name: str, params: dict, result: dict):
+    <span class="string">"""Log every MCP tool invocation for the status panel."""</span>
+    mcp_log.append({
+        <span class="string">"tool"</span>: tool_name,
+        <span class="string">"params"</span>: params,
+        <span class="string">"rows_returned"</span>: <span class="keyword">len</span>(result.get(<span class="string">"data"</span>, [])),
+        <span class="string">"timestamp"</span>: datetime.now().isoformat()
+    })
+
+<span class="keyword">def</span> mcp_read_orders(category: str = <span class="string">""</span>, region: str = <span class="string">""</span>) -> dict:
+    <span class="string">"""Read orders from the MCP data server with optional filters."""</span>
+    params = {<span class="string">"category"</span>: category, <span class="string">"region"</span>: region}
+    result = mcp_client.call(<span class="string">"read_orders"</span>, params)
+    _log_mcp_call(<span class="string">"read_orders"</span>, params, result)
+    <span class="keyword">return</span> result
+
+<span class="keyword">def</span> mcp_get_sales_summary(period: str = <span class="string">"monthly"</span>) -> dict:
+    <span class="string">"""Get aggregated sales summary from MCP server."""</span>
+    params = {<span class="string">"period"</span>: period}
+    result = mcp_client.call(<span class="string">"get_sales_summary"</span>, params)
+    _log_mcp_call(<span class="string">"get_sales_summary"</span>, params, result)
+    <span class="keyword">return</span> result
+
+<span class="comment"># Register all MCP tools with the ADK agent</span>
+agent = Agent(
+    model=<span class="string">"gemini-2.0-flash"</span>,
+    name=<span class="string">"sme_advisor_mcp"</span>,
+    instruction=SYSTEM_PROMPT,
+    tools=[mcp_read_orders, mcp_get_sales_summary, mcp_get_profit,
+           mcp_get_returns, mcp_get_discounts, mcp_get_customers,
+           mcp_get_delivery],
+)
+        </div>
+    </div>
+
+    <div class="content-section">
+        <h2>&#128273; Key Code: MCP Status Panel</h2>
+        <p>The chat interface includes a live MCP status panel showing connection state, data source info, and available tools. This panel updates after every MCP call to show real-time data flow.</p>
+        <div class="code-block">
+<span class="comment">&lt;!-- MCP Status Panel in index.html --&gt;</span>
+&lt;<span class="keyword">div</span> class=<span class="string">"mcp-status-panel"</span>&gt;
+  &lt;<span class="keyword">h3</span>&gt;MCP Connection Status&lt;/<span class="keyword">h3</span>&gt;
+  &lt;<span class="keyword">div</span> class=<span class="string">"status-row"</span>&gt;
+    &lt;<span class="keyword">span</span>&gt;Status:&lt;/<span class="keyword">span</span>&gt;
+    &lt;<span class="keyword">span</span> id=<span class="string">"mcp-status"</span> class=<span class="string">"connected"</span>&gt;Connected&lt;/<span class="keyword">span</span>&gt;
+  &lt;/<span class="keyword">div</span>&gt;
+  &lt;<span class="keyword">div</span> class=<span class="string">"status-row"</span>&gt;
+    &lt;<span class="keyword">span</span>&gt;Source:&lt;/<span class="keyword">span</span>&gt;
+    &lt;<span class="keyword">span</span> id=<span class="string">"mcp-source"</span>&gt;dataset.csv&lt;/<span class="keyword">span</span>&gt;
+  &lt;/<span class="keyword">div</span>&gt;
+  &lt;<span class="keyword">div</span> class=<span class="string">"status-row"</span>&gt;
+    &lt;<span class="keyword">span</span>&gt;Rows:&lt;/<span class="keyword">span</span>&gt;
+    &lt;<span class="keyword">span</span> id=<span class="string">"mcp-rows"</span>&gt;34,500&lt;/<span class="keyword">span</span>&gt;
+  &lt;/<span class="keyword">div</span>&gt;
+  &lt;<span class="keyword">div</span> class=<span class="string">"status-row"</span>&gt;
+    &lt;<span class="keyword">span</span>&gt;Columns:&lt;/<span class="keyword">span</span>&gt;
+    &lt;<span class="keyword">span</span> id=<span class="string">"mcp-cols"</span>&gt;17&lt;/<span class="keyword">span</span>&gt;
+  &lt;/<span class="keyword">div</span>&gt;
+  &lt;<span class="keyword">div</span> class=<span class="string">"tools-list"</span>&gt;
+    &lt;<span class="keyword">h4</span>&gt;Available MCP Tools (7)&lt;/<span class="keyword">h4</span>&gt;
+    &lt;<span class="keyword">ul</span> id=<span class="string">"mcp-tools"</span>&gt;&lt;/<span class="keyword">ul</span>&gt;
+  &lt;/<span class="keyword">div</span>&gt;
+&lt;/<span class="keyword">div</span>&gt;
+        </div>
+    </div>
+
+    <div class="content-section">
+        <h2>&#128230; Dependencies (requirements.txt)</h2>
+        <div class="code-block">
+google-adk          <span class="comment"># Google Agent Development Kit</span>
+google-genai        <span class="comment"># Gemini API SDK</span>
+fastapi             <span class="comment"># Web framework for API server</span>
+uvicorn             <span class="comment"># ASGI server</span>
+pandas              <span class="comment"># Data analysis library</span>
+        </div>
+    </div>
+
+    <div class="demo-links">
+        <a href="sme-advisor-mcp.html" class="demo-btn">&larr; Back to Showcase</a>
+        <a href="projects/sme-advisor-mcp/demo.html" target="_blank" class="demo-btn secondary">&#128640; Try Live Demo</a>
+    </div>
+
+    <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+        <a href="index.html">&larr; Back to Portfolio</a> |
+        <a href="project-categories.html">View All Categories</a>
+    </nav>
+</div>
+</body>
+</html>

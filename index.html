@@ -256,6 +256,55 @@
             background: #F8F6F2;
         }
 
+        /* ── Featured Category (top row) ── */
+        .featured-category {
+            display: flex;
+            gap: 28px;
+            align-items: center;
+            background: #fff;
+            border-radius: 10px;
+            padding: 32px 36px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            margin-bottom: 28px;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            transition: box-shadow 0.3s;
+        }
+        .featured-category:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.12); }
+        .featured-category .featured-bar {
+            position: absolute; top: 0; left: 0; right: 0; height: 5px;
+        }
+        .featured-category .featured-icon {
+            width: 64px; height: 64px; border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.6rem; color: #fff; flex-shrink: 0;
+        }
+        .featured-category .featured-body { flex: 1; }
+        .featured-category .featured-body h3 {
+            font-family: 'Inter', sans-serif; font-size: 1.25rem;
+            font-weight: 700; color: #1E1B18; margin-bottom: 4px;
+        }
+        .featured-category .featured-count {
+            display: inline-block; font-size: 0.72rem; font-weight: 600;
+            padding: 2px 10px; border-radius: 12px; color: #fff; margin-bottom: 8px;
+        }
+        .featured-category .featured-desc {
+            font-size: 0.9rem; color: #555; line-height: 1.5;
+        }
+        .featured-category .featured-btn {
+            background: #C9A84C; color: #fff; padding: 10px 22px;
+            border-radius: 6px; text-decoration: none; font-size: 0.82rem;
+            font-weight: 600; white-space: nowrap; flex-shrink: 0;
+        }
+        .featured-category .featured-btn:hover { background: #b0912e; }
+        .swap-hint {
+            text-align: center; font-size: 0.75rem; color: #999;
+            margin-bottom: 16px; letter-spacing: 0.5px;
+        }
+
         /* ── Category Cards ── */
         .category-grid {
             display: grid;
@@ -269,6 +318,7 @@
             padding: 28px 24px;
             text-decoration: none;
             color: inherit;
+            cursor: pointer;
             box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
             transition: transform 0.3s, box-shadow 0.3s;
             position: relative;
@@ -467,6 +517,9 @@
         }
 
         @media (max-width: 768px) {
+            .featured-category { flex-direction: column; text-align: center; padding: 24px 20px; }
+            .featured-category .featured-icon { margin: 0 auto 12px; }
+
             .navbar {
                 padding: 0 20px;
             }
@@ -539,7 +592,7 @@
     <div class="hero-content">
         <span class="hero-tag">PORTFOLIO</span>
         <h1>AI Projects</h1>
-        <p class="hero-tagline">44 production-ready apps across 6 categories</p>
+        <p class="hero-tagline">68 production-ready apps across 7 categories</p>
         <a href="#categories" class="btn-gold">Explore Projects</a>
     </div>
 </section>
@@ -549,55 +602,71 @@
     <div class="section-inner">
         <span class="section-tag">CATEGORIES</span>
         <h2 class="section-heading">Browse by Category</h2>
-        <div class="category-grid">
 
-            <a href="category-business-automation.html" class="category-card" data-animate>
+        <!-- Featured category (top row) -->
+        <a href="category-ai-agents.html" class="featured-category" id="featuredCategory" data-animate>
+            <div class="featured-bar" id="featuredBar" style="background:#4299e1;"></div>
+            <div class="featured-icon" id="featuredIcon" style="background:#4299e1;">&#x1F4CA;</div>
+            <div class="featured-body">
+                <h3 id="featuredName">AI Agents</h3>
+                <span class="featured-count" id="featuredCount" style="background:#4299e1;">24 projects</span>
+                <p class="featured-desc" id="featuredDesc">Same business question, three ways to answer it — fixed tools, connected data, or database queries.</p>
+            </div>
+            <span class="featured-btn">View All →</span>
+        </a>
+
+        <p class="swap-hint">Click any category below to feature it</p>
+
+        <!-- Bottom 6 categories (3x2 grid) -->
+        <div class="category-grid" id="categoryGrid">
+
+            <div class="category-card visible" data-href="category-business-automation.html" data-color="#4CAF50" data-icon="&#9881;" data-name="Business Automation" data-count="5 projects" data-desc="Automate workflows and streamline business operations with AI agents." onclick="swapCategory(this)">
                 <div class="category-bar" style="background:#4CAF50;"></div>
                 <div class="category-icon" style="background:#4CAF50;">&#9881;</div>
                 <h3>Business Automation</h3>
                 <span class="category-count" style="background:#4CAF50;">5 projects</span>
                 <p class="category-desc">Automate workflows and streamline business operations with AI agents.</p>
-            </a>
+            </div>
 
-            <a href="category-business-intelligence.html" class="category-card" data-animate>
+            <div class="category-card visible" data-href="category-business-intelligence.html" data-color="#E91E63" data-icon="&#9636;" data-name="Business Intelligence" data-count="12 projects" data-desc="Turn raw data into actionable insights with AI-powered analytics." onclick="swapCategory(this)">
                 <div class="category-bar" style="background:#E91E63;"></div>
                 <div class="category-icon" style="background:#E91E63;">&#9636;</div>
                 <h3>Business Intelligence</h3>
                 <span class="category-count" style="background:#E91E63;">12 projects</span>
                 <p class="category-desc">Turn raw data into actionable insights with AI-powered analytics.</p>
-            </a>
+            </div>
 
-            <a href="category-computer-vision.html" class="category-card" data-animate>
+            <div class="category-card visible" data-href="category-computer-vision.html" data-color="#FF9800" data-icon="&#9673;" data-name="Computer Vision" data-count="13 projects" data-desc="Generate and transform images using state-of-the-art vision models." onclick="swapCategory(this)">
                 <div class="category-bar" style="background:#FF9800;"></div>
                 <div class="category-icon" style="background:#FF9800;">&#9673;</div>
                 <h3>Computer Vision</h3>
                 <span class="category-count" style="background:#FF9800;">13 projects</span>
                 <p class="category-desc">Generate and transform images using state-of-the-art vision models.</p>
-            </a>
+            </div>
 
-            <a href="category-conversational-ai.html" class="category-card" data-animate>
+            <div class="category-card visible" data-href="category-conversational-ai.html" data-color="#9C27B0" data-icon="&#9993;" data-name="Conversational AI" data-count="8 projects" data-desc="Build intelligent chatbots and assistants that understand context." onclick="swapCategory(this)">
                 <div class="category-bar" style="background:#9C27B0;"></div>
                 <div class="category-icon" style="background:#9C27B0;">&#9993;</div>
                 <h3>Conversational AI</h3>
                 <span class="category-count" style="background:#9C27B0;">8 projects</span>
                 <p class="category-desc">Build intelligent chatbots and assistants that understand context.</p>
-            </a>
+            </div>
 
-            <a href="category-creative-ai.html" class="category-card" data-animate>
+            <div class="category-card visible" data-href="category-creative-ai.html" data-color="#FF5722" data-icon="&#9733;" data-name="Creative AI" data-count="4 projects" data-desc="Create art, stories, and unique content with generative AI tools." onclick="swapCategory(this)">
                 <div class="category-bar" style="background:#FF5722;"></div>
                 <div class="category-icon" style="background:#FF5722;">&#9733;</div>
                 <h3>Creative AI</h3>
                 <span class="category-count" style="background:#FF5722;">4 projects</span>
                 <p class="category-desc">Create art, stories, and unique content with generative AI tools.</p>
-            </a>
+            </div>
 
-            <a href="category-document-processing.html" class="category-card" data-animate>
+            <div class="category-card visible" data-href="category-document-processing.html" data-color="#2196F3" data-icon="&#9776;" data-name="Document Processing" data-count="3 projects" data-desc="Extract, summarize, and analyze documents with AI precision." onclick="swapCategory(this)">
                 <div class="category-bar" style="background:#2196F3;"></div>
                 <div class="category-icon" style="background:#2196F3;">&#9776;</div>
                 <h3>Document Processing</h3>
                 <span class="category-count" style="background:#2196F3;">3 projects</span>
                 <p class="category-desc">Extract, summarize, and analyze documents with AI precision.</p>
-            </a>
+            </div>
 
         </div>
     </div>
@@ -735,6 +804,71 @@
         observer.observe(el);
     });
 })();
+
+// ── Category Swap ────────────────────────────────────────────────
+// Current featured state
+var featuredState = {
+    href: 'category-ai-agents.html',
+    color: '#4299e1',
+    icon: '\u{1F4CA}',
+    name: 'AI Agents',
+    count: '24 projects',
+    desc: 'Same business question, three ways to answer it \u2014 fixed tools, connected data, or database queries.'
+};
+
+function swapCategory(clickedCard) {
+    // Save current featured state
+    var oldFeatured = Object.assign({}, featuredState);
+
+    // Read clicked card data
+    var newData = {
+        href: clickedCard.getAttribute('data-href'),
+        color: clickedCard.getAttribute('data-color'),
+        icon: clickedCard.getAttribute('data-icon'),
+        name: clickedCard.getAttribute('data-name'),
+        count: clickedCard.getAttribute('data-count'),
+        desc: clickedCard.getAttribute('data-desc')
+    };
+
+    // Update featured (top row)
+    var fc = document.getElementById('featuredCategory');
+    fc.href = newData.href;
+    document.getElementById('featuredBar').style.background = newData.color;
+    document.getElementById('featuredIcon').style.background = newData.color;
+    document.getElementById('featuredIcon').innerHTML = newData.icon;
+    document.getElementById('featuredName').textContent = newData.name;
+    document.getElementById('featuredCount').style.background = newData.color;
+    document.getElementById('featuredCount').textContent = newData.count;
+    document.getElementById('featuredDesc').textContent = newData.desc;
+
+    // Update clicked card with old featured data
+    clickedCard.setAttribute('data-href', oldFeatured.href);
+    clickedCard.setAttribute('data-color', oldFeatured.color);
+    clickedCard.setAttribute('data-icon', oldFeatured.icon);
+    clickedCard.setAttribute('data-name', oldFeatured.name);
+    clickedCard.setAttribute('data-count', oldFeatured.count);
+    clickedCard.setAttribute('data-desc', oldFeatured.desc);
+
+    var bar = clickedCard.querySelector('.category-bar');
+    var icon = clickedCard.querySelector('.category-icon');
+    var h3 = clickedCard.querySelector('h3');
+    var count = clickedCard.querySelector('.category-count');
+    var desc = clickedCard.querySelector('.category-desc');
+
+    bar.style.background = oldFeatured.color;
+    icon.style.background = oldFeatured.color;
+    icon.innerHTML = oldFeatured.icon;
+    h3.textContent = oldFeatured.name;
+    count.style.background = oldFeatured.color;
+    count.textContent = oldFeatured.count;
+    desc.textContent = oldFeatured.desc;
+
+    // Update internal state
+    featuredState = newData;
+
+    // Smooth scroll to top of categories
+    document.getElementById('categories').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
 </script>
 
 </body>

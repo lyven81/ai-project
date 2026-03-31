@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SME Business Advisor — MCP Connected</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #222; background-color: #ffffff; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        .back-nav { margin-bottom: 20px; }
+        .back-nav a { color: #007BFF; text-decoration: none; font-size: 1rem; }
+        .back-nav a:hover { text-decoration: underline; }
+        .project-header {
+            text-align: center; margin-bottom: 40px; padding: 40px 0;
+            background: linear-gradient(135deg, #7C3AED, #5B21B6);
+            color: white; border-radius: 10px;
+        }
+        .project-header h1 { font-size: 2.5rem; margin-bottom: 10px; color: white; }
+        .project-header p { font-size: 1.2rem; opacity: 0.9; }
+        .badges { display: flex; justify-content: center; gap: 10px; margin: 20px 0; flex-wrap: wrap; }
+        .badge { background-color: rgba(255,255,255,0.2); color: white; padding: 5px 12px; border-radius: 15px; font-size: 0.9rem; }
+        .demo-links { text-align: center; margin: 30px 0; }
+        .demo-btn {
+            display: inline-block; background-color: #7C3AED; color: white;
+            padding: 12px 25px; text-decoration: none; border-radius: 5px;
+            margin: 0 10px; font-weight: bold; transition: background-color 0.3s;
+        }
+        .demo-btn:hover { background-color: #5B21B6; }
+        .demo-btn.secondary { background-color: #7C3AED; color: white; }
+        .demo-btn.secondary:hover { background-color: #5B21B6; }
+        .content-section {
+            margin: 40px 0; padding: 30px; background-color: #f9f9f9;
+            border-radius: 8px; border-left: 5px solid #7C3AED;
+        }
+        .content-section h2 { color: #7C3AED; margin-bottom: 20px; font-size: 1.8rem; }
+        .content-section h3 { color: #333; margin: 20px 0 10px 0; font-size: 1.3rem; }
+        .content-section p { margin-bottom: 12px; }
+        .content-section ul { padding-left: 20px; }
+        .content-section ul li { margin-bottom: 8px; }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin: 20px 0; }
+        .feature-item { background: white; padding: 20px; border-radius: 8px; border: 1px solid #ddd; }
+        .feature-item h4 { color: #7C3AED; margin-bottom: 10px; }
+        .tech-stack { display: flex; flex-wrap: wrap; gap: 10px; margin: 15px 0; }
+        .tech-item { background-color: #7C3AED; color: white; padding: 5px 12px; border-radius: 15px; font-size: 0.9rem; }
+        .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin: 20px 0; }
+        .metric-card { background: white; padding: 20px; border-radius: 8px; text-align: center; border: 2px solid #7C3AED; }
+        .metric-number { font-size: 2rem; font-weight: bold; color: #7C3AED; }
+        .metric-label { color: #666; font-size: 0.9rem; }
+        @media (max-width: 768px) {
+            .project-header h1 { font-size: 2rem; }
+            .demo-btn { margin: 5px; padding: 10px 20px; }
+            .container { padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <nav class="back-nav"><a href="index.html">&larr; Back to Portfolio</a></nav>
+
+    <div class="project-header">
+        <h1>&#128279; SME Business Advisor &mdash; MCP Connected</h1>
+        <p>AI Agent + MCP Server for E-Commerce Analytics</p>
+        <div class="badges">
+            <span class="badge">Python</span>
+            <span class="badge">Google ADK</span>
+            <span class="badge">MCP</span>
+            <span class="badge">Google Gemini 2.0 Flash</span>
+            <span class="badge">FastAPI</span>
+            <span class="badge">Docker</span>
+        </div>
+    </div>
+
+    <div class="demo-links">
+        <a href="https://sme-advisor-mcp-522143897885.asia-southeast1.run.app" target="_blank" class="demo-btn">&#128640; Launch Live Demo</a>
+        <a href="sme-advisor-mcp-source.html" class="demo-btn secondary">&#128193; View Source Code</a>
+    </div>
+
+    <div class="content-section">
+        <h2>&#128203; Project Overview &amp; Problem Statement</h2>
+        <p><strong>Challenge:</strong> The base SME Business Advisor loads data directly into memory — tightly coupling the agent to a specific CSV file. Changing the data source means rewriting the agent code.</p>
+        <p><strong>Solution:</strong> This version connects the same AI agent to data through MCP (Model Context Protocol). An MCP server sits between the agent and the data, exposing 7 tools. The data source is now swappable — CSV today, Google Sheets tomorrow — without touching the agent.</p>
+        <h3>How It Works</h3>
+        <ul>
+            <li><strong>MCP status panel:</strong> Shows live connection status, data source, row count, and the 7 available MCP tools</li>
+            <li><strong>7 MCP tools:</strong> mcp_read_orders, mcp_get_sales_summary, mcp_get_profit_summary, mcp_get_discount_comparison, mcp_get_return_rates, mcp_get_customer_segments, mcp_get_delivery_times</li>
+            <li><strong>Tool call transparency:</strong> Each answer shows which MCP tools were called and in what order</li>
+            <li><strong>Swappable data source:</strong> The MCP server abstracts the data layer — swap from CSV to Google Sheets without rewriting the agent</li>
+        </ul>
+    </div>
+
+    <div class="content-section">
+        <h2>&#128421;&#65039; Application Features</h2>
+        <div class="features-grid">
+            <div class="feature-item">
+                <h4>&#128994; MCP Status Panel</h4>
+                <p>A live status panel in the UI shows the MCP server connection state, data source path, total row count, and a list of all 7 available tools — giving full transparency into what the agent can access.</p>
+            </div>
+            <div class="feature-item">
+                <h4>&#128295; 7 MCP Tools</h4>
+                <p>mcp_read_orders, mcp_get_sales_summary, mcp_get_profit_summary, mcp_get_discount_comparison, mcp_get_return_rates, mcp_get_customer_segments, mcp_get_delivery_times — each exposed as a callable MCP resource.</p>
+            </div>
+            <div class="feature-item">
+                <h4>&#128269; Tool Call Transparency</h4>
+                <p>Every response displays which MCP tools were invoked to generate the answer. Users see the full chain of tool calls — building trust in the agent's reasoning process.</p>
+            </div>
+            <div class="feature-item">
+                <h4>&#128260; Swappable Data Source</h4>
+                <p>The MCP server abstracts the data layer from the agent layer. Switch from a local CSV to Google Sheets or a database — the agent code stays exactly the same.</p>
+            </div>
+            <div class="feature-item">
+                <h4>&#128268; Live Data Connection</h4>
+                <p>Data is fetched through the MCP protocol at query time. The agent always works with the current state of the data source — no stale snapshots or manual reloads needed.</p>
+            </div>
+            <div class="feature-item">
+                <h4>&#129504; Same Agent Intelligence</h4>
+                <p>The underlying Gemini 2.0 Flash agent is identical to the base version. Same analytical reasoning, same recommendation quality — only the data access layer has changed.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-section">
+        <h2>&#129302; AI Integration &amp; Intelligence</h2>
+        <div class="features-grid">
+            <div class="feature-item">
+                <h4>&#129504; Google ADK + MCP Protocol</h4>
+                <p>Google ADK manages the agent orchestration while MCP handles the data access layer. The two protocols work together — ADK routes questions to tools, MCP serves the data those tools need.</p>
+            </div>
+            <div class="feature-item">
+                <h4>&#128450;&#65039; Separated Data Layer</h4>
+                <p>The data layer is fully decoupled from the agent layer. The MCP server owns all data access logic — reading, filtering, aggregating — while the agent focuses purely on reasoning and recommendations.</p>
+            </div>
+            <div class="feature-item">
+                <h4>&#9889; Gemini 2.0 Flash</h4>
+                <p>The same Gemini model powers reasoning and recommendation generation. It interprets MCP tool outputs and synthesises them into clear business advice.</p>
+            </div>
+            <div class="feature-item">
+                <h4>&#128187; In-Process MCP Server</h4>
+                <p>The MCP server runs in-process with the FastAPI application — no external service to manage. Simple deployment while maintaining clean architectural separation.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-section">
+        <h2>&#128736;&#65039; Technical Architecture &amp; Implementation</h2>
+        <h3>Frontend Stack</h3>
+        <div class="tech-stack">
+            <span class="tech-item">FastAPI</span>
+            <span class="tech-item">HTML / CSS / JavaScript</span>
+        </div>
+        <h3>Backend Stack</h3>
+        <div class="tech-stack">
+            <span class="tech-item">Python</span>
+            <span class="tech-item">Google ADK</span>
+            <span class="tech-item">MCP Server</span>
+            <span class="tech-item">pandas</span>
+        </div>
+        <h3>Deployment</h3>
+        <div class="tech-stack">
+            <span class="tech-item">Docker</span>
+            <span class="tech-item">Google Cloud Run</span>
+        </div>
+        <h3>System Architecture</h3>
+        <ul>
+            <li><strong>Agent loop:</strong> User question &rarr; Gemini selects MCP tool &rarr; MCP server fetches and processes data &rarr; results returned to agent &rarr; recommendation generated</li>
+            <li><strong>MCP protocol:</strong> Standard Model Context Protocol interface between agent and data — tools are discovered, called, and results returned through the MCP spec</li>
+            <li><strong>In-process server:</strong> MCP server runs inside the same FastAPI process — no network hops, no external dependencies</li>
+            <li><strong>Containerised:</strong> Single Docker image includes both the agent and MCP server, deployed to Cloud Run</li>
+        </ul>
+    </div>
+
+    <div class="content-section">
+        <h2>&#128202; Key Metrics</h2>
+        <div class="metrics">
+            <div class="metric-card">
+                <div class="metric-number">7</div>
+                <div class="metric-label">MCP Tools</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-number">34,500</div>
+                <div class="metric-label">E-Commerce Orders</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-number">17</div>
+                <div class="metric-label">Data Columns</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-number">Swappable</div>
+                <div class="metric-label">Data Source</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="demo-links">
+        <a href="projects/sme-advisor-mcp/demo.html" target="_blank" class="demo-btn">&#128640; Try Live Demo</a>
+        <a href="sme-advisor-mcp-source.html" class="demo-btn secondary">&#128193; View Source Code</a>
+    </div>
+
+    <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+        <a href="index.html">&larr; Back to Portfolio</a> |
+        <a href="project-categories.html">View All Categories</a>
+    </nav>
+</div>
+</body>
+</html>

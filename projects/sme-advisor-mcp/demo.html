@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SME Business Advisor — MCP</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f4f8; color: #2d3748; height: 100vh; display: flex; flex-direction: column; }
+        header { background: #4299e1; padding: 16px 24px; border-bottom: 1px solid #3182ce; }
+        header h1 { font-size: 18px; color: #fff; }
+        header p { font-size: 12px; color: #bee3f8; margin-top: 4px; }
+
+        #mcp-panel { background: #ebf8ff; border-bottom: 1px solid #bee3f8; padding: 12px 24px; font-size: 12px; }
+        #mcp-panel .title { font-weight: 700; color: #2b6cb0; margin-bottom: 6px; }
+        #mcp-panel .status-row { display: flex; gap: 24px; flex-wrap: wrap; }
+        #mcp-panel .status-item { color: #4a5568; }
+        #mcp-panel .status-item .label { color: #718096; }
+        #mcp-panel .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 4px; }
+        #mcp-panel .dot.green { background: #48bb78; }
+        #mcp-panel .dot.grey { background: #cbd5e0; }
+        #mcp-tools { margin-top: 6px; display: flex; gap: 6px; flex-wrap: wrap; }
+        #mcp-tools .tool-tag { background: #bee3f8; color: #2b6cb0; padding: 2px 8px; border-radius: 4px; font-size: 11px; }
+
+        #chat { flex: 1; overflow-y: auto; padding: 24px; display: flex; flex-direction: column; gap: 12px; }
+        .msg { max-width: 720px; padding: 12px 16px; border-radius: 12px; line-height: 1.6; white-space: pre-wrap; }
+        .user { background: #4299e1; color: #fff; align-self: flex-end; }
+        .bot { background: #fff; border-left: 3px solid #48bb78; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+        .tool-log { background: #f7fafc; border-left: 3px solid #4299e1; font-size: 12px; color: #718096; padding: 8px 12px; max-width: 720px; border-radius: 8px; }
+        .tool-log .tool-name { color: #2b6cb0; font-weight: 600; }
+        .loading { color: #a0aec0; font-style: italic; }
+
+        #input-area { background: #fff; padding: 16px 24px; border-top: 1px solid #e2e8f0; display: flex; gap: 12px; }
+        #question { flex: 1; background: #f7fafc; border: 1px solid #e2e8f0; color: #2d3748; padding: 12px; font-family: 'Segoe UI', sans-serif; font-size: 14px; border-radius: 8px; outline: none; }
+        #question:focus { border-color: #4299e1; box-shadow: 0 0 0 3px rgba(66,153,225,0.2); }
+        #send { background: #48bb78; color: white; border: none; padding: 12px 24px; font-family: 'Segoe UI', sans-serif; font-size: 14px; cursor: pointer; border-radius: 8px; font-weight: 600; }
+        #send:hover { background: #38a169; }
+        #send:disabled { background: #cbd5e0; cursor: not-allowed; }
+        #examples { padding: 8px 24px; background: #fff; border-bottom: 1px solid #e2e8f0; }
+        #examples p { font-size: 11px; color: #4a5568; }
+        #examples span { color: #3182ce; cursor: pointer; margin-right: 12px; text-decoration: underline; }
+        #examples span:hover { color: #2b6cb0; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>SME Business Advisor — MCP Connected</h1>
+        <p>AI Agent (ADK) + MCP Server | Data fetched via Model Context Protocol</p>
+    </header>
+
+    <div id="mcp-panel">
+        <div class="title"><span class="dot grey" id="status-dot"></span> MCP Server: <span id="server-name">connecting...</span></div>
+        <div class="status-row">
+            <div class="status-item"><span class="label">Source:</span> <span id="data-source">—</span></div>
+            <div class="status-item"><span class="label">Rows:</span> <span id="data-rows">—</span></div>
+            <div class="status-item"><span class="label">Columns:</span> <span id="data-cols">—</span></div>
+        </div>
+        <div id="mcp-tools"></div>
+    </div>
+
+    <div id="examples">
+        <p>Try:
+            <span onclick="tryQ(this)">Which category has the best profit margin?</span>
+            <span onclick="tryQ(this)">Which region has the highest return rate?</span>
+            <span onclick="tryQ(this)">Are discounts helping my profits?</span>
+        </p>
+    </div>
+    <div id="chat"></div>
+    <div id="input-area">
+        <input type="text" id="question" placeholder="Ask a business question..." autofocus>
+        <button id="send" onclick="sendQ()">Ask</button>
+    </div>
+
+    <script>
+        const chat = document.getElementById("chat");
+        const input = document.getElementById("question");
+        const btn = document.getElementById("send");
+
+        // Load MCP status on page load
+        async function loadMCPStatus() {
+            try {
+                const res = await fetch("/status");
+                const data = await res.json();
+                document.getElementById("status-dot").className = "dot green";
+                document.getElementById("server-name").textContent = data.server + " (connected)";
+                document.getElementById("data-source").textContent = data.source;
+                document.getElementById("data-rows").textContent = data.rows.toLocaleString();
+                document.getElementById("data-cols").textContent = data.columns.length;
+                const toolsDiv = document.getElementById("mcp-tools");
+                toolsDiv.innerHTML = "<span class='label' style='color:#718096;font-size:11px;'>Available MCP tools: </span>";
+                data.tools.forEach(t => {
+                    const tag = document.createElement("span");
+                    tag.className = "tool-tag";
+                    tag.textContent = t;
+                    toolsDiv.appendChild(tag);
+                });
+            } catch (e) {
+                document.getElementById("server-name").textContent = "disconnected";
+            }
+        }
+        loadMCPStatus();
+
+        input.addEventListener("keydown", e => { if (e.key === "Enter") sendQ(); });
+
+        function tryQ(el) { input.value = el.textContent; sendQ(); }
+
+        function addMsg(text, cls) {
+            const div = document.createElement("div");
+            div.className = "msg " + cls;
+            div.textContent = text;
+            chat.appendChild(div);
+            chat.scrollTop = chat.scrollHeight;
+            return div;
+        }
+
+        function addToolLog(tools) {
+            if (!tools || tools.length === 0) return;
+            const div = document.createElement("div");
+            div.className = "tool-log";
+            div.innerHTML = "MCP tools called: " + tools.map(t => "<span class='tool-name'>" + t + "</span>").join(", ");
+            chat.appendChild(div);
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        async function sendQ() {
+            const text = input.value.trim();
+            if (!text) return;
+            input.value = "";
+            addMsg(text, "user");
+            btn.disabled = true;
+            const loader = addMsg("Fetching data from MCP server...", "bot loading");
+
+            try {
+                const res = await fetch("/ask", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ text })
+                });
+                const data = await res.json();
+                addToolLog(data.tools_called);
+                loader.textContent = data.answer;
+                loader.classList.remove("loading");
+            } catch (e) {
+                loader.textContent = "Error: " + e.message;
+                loader.classList.remove("loading");
+            }
+            btn.disabled = false;
+            input.focus();
+        }
+    </script>
+</body>
+</html>

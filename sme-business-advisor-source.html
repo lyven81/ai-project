@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SME Business Advisor - Source Code</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #222; background-color: #ffffff; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        .back-nav { margin-bottom: 20px; }
+        .back-nav a { color: #007BFF; text-decoration: none; font-size: 1rem; }
+        .back-nav a:hover { text-decoration: underline; }
+        .project-header {
+            text-align: center; margin-bottom: 40px; padding: 40px 0;
+            background: linear-gradient(135deg, #1E3A5F, #4299e1); color: white; border-radius: 10px;
+        }
+        .project-header h1 { font-size: 2.5rem; margin-bottom: 10px; color: #90CDF4; }
+        .project-header p { font-size: 1.2rem; opacity: 0.9; }
+        .content-section { margin: 40px 0; padding: 30px; background-color: #f9f9f9; border-radius: 8px; border-left: 5px solid #4299e1; }
+        .content-section h2 { color: #4299e1; margin-bottom: 20px; font-size: 1.8rem; }
+        .content-section h3 { color: #333; margin: 20px 0 10px 0; font-size: 1.3rem; }
+        .content-section p { margin-bottom: 12px; }
+        .content-section ul { padding-left: 20px; }
+        .content-section ul li { margin-bottom: 6px; }
+        .code-block { background-color: #1a0a1e; color: #e0e0e0; border-radius: 8px; padding: 20px; margin: 15px 0; font-family: monospace; font-size: 0.88rem; overflow-x: auto; line-height: 1.6; }
+        .code-block .comment { color: #B09AB8; }
+        .code-block .keyword { color: #90CDF4; }
+        .code-block .string { color: #BEE3F8; }
+        .file-tree { background: #f4f4f4; border: 1px solid #ddd; border-radius: 8px; padding: 20px; font-family: monospace; font-size: 0.9rem; line-height: 1.8; }
+        .file-tree .folder { color: #4299e1; font-weight: bold; }
+        .file-tree .file { color: #444; }
+        .file-tree .desc { color: #888; font-size: 0.8rem; margin-left: 8px; }
+        .demo-links { text-align: center; margin: 30px 0; }
+        .demo-btn { display: inline-block; background-color: #4299e1; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; margin: 0 10px; font-weight: bold; }
+        .demo-btn:hover { background-color: #2B6CB0; }
+        .demo-btn.secondary { background-color: #1E3A5F; color: white; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <nav class="back-nav"><a href="sme-business-advisor.html">&larr; Back to SME Business Advisor Showcase</a></nav>
+
+    <div class="project-header">
+        <h1>&#128202; SME Business Advisor</h1>
+        <p>Source Code &mdash; AI Agent (ADK) for E-Commerce Analytics</p>
+    </div>
+
+    <div class="content-section">
+        <h2>&#128193; File Structure</h2>
+        <div class="file-tree">
+            <div><span class="folder">projects/sme-business-advisor/</span></div>
+            <div>&nbsp;&nbsp;&#9500;&#9472;&#9472; <span class="file">main.py</span><span class="desc">&mdash; FastAPI server + Google ADK agent + 6 analysis tools</span></div>
+            <div>&nbsp;&nbsp;&#9500;&#9472;&#9472; <span class="file">index.html</span><span class="desc">&mdash; Chat interface (demo page)</span></div>
+            <div>&nbsp;&nbsp;&#9500;&#9472;&#9472; <span class="file">dataset.csv</span><span class="desc">&mdash; E-commerce dataset (34,500 orders, 17 columns)</span></div>
+            <div>&nbsp;&nbsp;&#9500;&#9472;&#9472; <span class="file">requirements.txt</span><span class="desc">&mdash; Python dependencies</span></div>
+            <div>&nbsp;&nbsp;&#9500;&#9472;&#9472; <span class="file">Dockerfile</span><span class="desc">&mdash; Container config for Cloud Run</span></div>
+            <div>&nbsp;&nbsp;&#9492;&#9472;&#9472; <span class="file">deploy.sh</span><span class="desc">&mdash; One-command Cloud Run deployment</span></div>
+        </div>
+    </div>
+
+    <div class="content-section">
+        <h2>&#128273; Key Code: Agent Setup (main.py)</h2>
+        <p>The Google ADK agent is created with 6 specialized analysis tools. Each tool reads from the dataset and returns structured insights. The agent uses Gemini 2.0 Flash to interpret user questions and call the right tool.</p>
+        <div class="code-block">
+<span class="keyword">from</span> google.adk.agents <span class="keyword">import</span> Agent
+<span class="keyword">from</span> google.adk.runners <span class="keyword">import</span> Runner
+
+<span class="comment"># Create the ADK agent with 6 analysis tools</span>
+agent = Agent(
+    model=<span class="string">"gemini-2.0-flash"</span>,
+    name=<span class="string">"sme_advisor"</span>,
+    instruction=SYSTEM_PROMPT,
+    tools=[sales_analysis, profit_analysis, discount_analysis,
+           return_analysis, customer_segments, delivery_analysis],
+)
+
+<span class="comment"># Create a runner to handle conversation sessions</span>
+runner = Runner(
+    agent=agent,
+    app_name=<span class="string">"sme_advisor_app"</span>,
+    session_service=session_service,
+)
+        </div>
+    </div>
+
+    <div class="content-section">
+        <h2>&#128273; Key Code: Sales Analysis Tool</h2>
+        <p>Each tool follows the same pattern: accept optional filters (category, region), query the dataset, and return a structured summary. The agent decides which tool to call based on the user's question.</p>
+        <div class="code-block">
+<span class="keyword">def</span> sales_analysis(category: str = <span class="string">""</span>, region: str = <span class="string">""</span>) -> dict:
+    <span class="string">"""Analyze sales performance by category and/or region.
+    Returns total_revenue, total_orders, and avg_order_value."""</span>
+
+    df = pd.read_csv(<span class="string">"dataset.csv"</span>)
+
+    <span class="comment"># Apply optional filters</span>
+    <span class="keyword">if</span> category:
+        df = df[df[<span class="string">"Category"</span>] == category]
+    <span class="keyword">if</span> region:
+        df = df[df[<span class="string">"Region"</span>] == region]
+
+    <span class="comment"># Calculate key metrics</span>
+    total_revenue = <span class="keyword">float</span>(df[<span class="string">"Sales"</span>].sum())
+    total_orders = <span class="keyword">len</span>(df)
+    avg_order_value = <span class="keyword">float</span>(df[<span class="string">"Sales"</span>].mean())
+
+    <span class="keyword">return</span> {
+        <span class="string">"total_revenue"</span>: <span class="keyword">round</span>(total_revenue, 2),
+        <span class="string">"total_orders"</span>: total_orders,
+        <span class="string">"avg_order_value"</span>: <span class="keyword">round</span>(avg_order_value, 2),
+        <span class="string">"filters_applied"</span>: {<span class="string">"category"</span>: category, <span class="string">"region"</span>: region}
+    }
+        </div>
+    </div>
+
+    <div class="content-section">
+        <h2>&#128230; Dependencies (requirements.txt)</h2>
+        <div class="code-block">
+google-adk          <span class="comment"># Google Agent Development Kit</span>
+google-genai        <span class="comment"># Gemini API SDK</span>
+fastapi             <span class="comment"># Web framework for API server</span>
+uvicorn             <span class="comment"># ASGI server</span>
+pandas              <span class="comment"># Data analysis library</span>
+        </div>
+    </div>
+
+    <div class="demo-links">
+        <a href="sme-business-advisor.html" class="demo-btn">&larr; Back to Showcase</a>
+        <a href="projects/sme-business-advisor/demo.html" target="_blank" class="demo-btn secondary">&#128640; Try Live Demo</a>
+    </div>
+
+    <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+        <a href="index.html">&larr; Back to Portfolio</a> |
+        <a href="project-categories.html">View All Categories</a>
+    </nav>
+</div>
+</body>
+</html>
