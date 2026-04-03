@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Manager - Demo</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f0f2f5;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* API Key Bar */
+        .api-bar {
+            background: #263238;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+        .api-bar label {
+            color: #b0bec5;
+            font-size: 13px;
+            white-space: nowrap;
+        }
+        .api-bar input {
+            flex: 1;
+            max-width: 360px;
+            padding: 7px 12px;
+            border: 1px solid #455a64;
+            border-radius: 6px;
+            background: #37474f;
+            color: #eceff1;
+            font-size: 13px;
+            outline: none;
+        }
+        .api-bar input:focus { border-color: #1a73e8; }
+        .api-bar .status {
+            width: 10px; height: 10px; border-radius: 50%;
+            background: #f44336;
+            flex-shrink: 0;
+        }
+        .api-bar .status.connected { background: #4caf50; }
+        .api-bar .back-link {
+            color: #90caf9;
+            text-decoration: none;
+            font-size: 13px;
+            margin-left: auto;
+        }
+        .api-bar .back-link:hover { text-decoration: underline; }
+
+        /* Main layout */
+        .main-layout {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+
+        /* Left panel: Inventory */
+        .inventory-panel {
+            width: 300px;
+            background: white;
+            border-right: 1px solid #e0e0e0;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+        .inventory-header {
+            background: #f8f9fa;
+            padding: 16px;
+            border-bottom: 1px solid #e0e0e0;
+            font-weight: 600;
+            font-size: 14px;
+            color: #333;
+        }
+        .inventory-header span {
+            font-weight: 400;
+            font-size: 12px;
+            color: #888;
+            display: block;
+            margin-top: 4px;
+        }
+        .inventory-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 8px;
+        }
+        .inv-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 10px;
+            border-radius: 6px;
+            font-size: 13px;
+            margin-bottom: 2px;
+        }
+        .inv-item:hover { background: #f8f9fa; }
+        .inv-item .name { flex: 1; color: #333; }
+        .inv-item .stock {
+            font-weight: 600;
+            font-size: 12px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-left: 8px;
+            white-space: nowrap;
+        }
+        .inv-item .stock.critical { background: #fce4e4; color: #d32f2f; }
+        .inv-item .stock.low { background: #fff3e0; color: #e65100; }
+        .inv-item .stock.healthy { background: #e8f5e9; color: #2e7d32; }
+        .inv-legend {
+            padding: 10px 16px;
+            border-top: 1px solid #e0e0e0;
+            font-size: 11px;
+            color: #888;
+            display: flex;
+            gap: 12px;
+        }
+        .inv-legend .dot {
+            width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 4px;
+        }
+        .dot.critical { background: #d32f2f; }
+        .dot.low { background: #e65100; }
+        .dot.healthy { background: #2e7d32; }
+
+        /* Right panel: Chat */
+        .chat-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .header {
+            background: #1a73e8;
+            color: white;
+            padding: 16px 24px;
+            font-size: 20px;
+            font-weight: 600;
+        }
+        .header span {
+            font-size: 13px;
+            font-weight: 400;
+            opacity: 0.85;
+            margin-left: 12px;
+        }
+        .chat-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        /* Welcome section */
+        .welcome-section {
+            align-self: center;
+            text-align: center;
+            max-width: 500px;
+            margin-top: 20px;
+        }
+        .welcome-section h2 {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        .welcome-section p {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+        .quick-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .quick-btn {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 12px 16px;
+            font-size: 14px;
+            color: #1a73e8;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.15s;
+        }
+        .quick-btn:hover {
+            background: #e8f0fe;
+            border-color: #1a73e8;
+        }
+
+        /* Messages */
+        .message {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            line-height: 1.6;
+            font-size: 14px;
+            white-space: pre-wrap;
+        }
+        .message.user {
+            align-self: flex-end;
+            background: #1a73e8;
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+        .message.agent {
+            align-self: flex-start;
+            background: white;
+            color: #1f1f1f;
+            border-bottom-left-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .message.agent table {
+            border-collapse: collapse;
+            margin: 8px 0;
+            font-size: 13px;
+            width: 100%;
+        }
+        .message.agent th, .message.agent td {
+            border: 1px solid #e0e0e0;
+            padding: 6px 10px;
+            text-align: left;
+        }
+        .message.agent th {
+            background: #f5f5f5;
+            font-weight: 600;
+        }
+
+        /* Input */
+        .input-area {
+            background: white;
+            padding: 16px 24px;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            gap: 12px;
+        }
+        .input-area input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 1px solid #ddd;
+            border-radius: 24px;
+            font-size: 14px;
+            outline: none;
+        }
+        .input-area input:focus { border-color: #1a73e8; }
+        .input-area button {
+            background: #1a73e8;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .input-area button:disabled { background: #ccc; cursor: not-allowed; }
+
+        .typing {
+            align-self: flex-start;
+            color: #888;
+            font-size: 13px;
+            padding: 8px 16px;
+        }
+        .typing::after {
+            content: '...';
+            animation: dots 1.5s infinite;
+        }
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60%, 100% { content: '...'; }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-layout { flex-direction: column; }
+            .inventory-panel {
+                width: 100%;
+                max-height: 200px;
+                border-right: none;
+                border-bottom: 1px solid #e0e0e0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- API Key Bar -->
+    <div class="api-bar">
+        <label>Gemini API Key:</label>
+        <input type="password" id="apiKey" placeholder="Enter your Gemini API key" oninput="onApiKeyChange()">
+        <div class="status" id="apiStatus"></div>
+        <a href="../../stock-manager.html" class="back-link">&larr; Back to Project</a>
+    </div>
+
+    <div class="main-layout">
+        <!-- Left: Inventory Panel -->
+        <div class="inventory-panel">
+            <div class="inventory-header">
+                Current Inventory
+                <span>Stock levels for 18 products</span>
+            </div>
+            <div class="inventory-list" id="inventoryList"></div>
+            <div class="inv-legend">
+                <span><span class="dot critical"></span>Critical</span>
+                <span><span class="dot low"></span>Low</span>
+                <span><span class="dot healthy"></span>Healthy</span>
+            </div>
+        </div>
+
+        <!-- Right: Chat Panel -->
+        <div class="chat-panel">
+            <div class="header">
+                Stock Manager
+                <span>Smart Restocking for Your Steam Bun Shop</span>
+            </div>
+            <div class="chat-area" id="chatArea">
+                <div class="welcome-section" id="welcomeSection">
+                    <h2>What should you restock this week?</h2>
+                    <p>Stock Manager analyzes your sales trends, checks inventory levels, and recommends what to restock &mdash; all in one step. Enter your Gemini API key above to start.</p>
+                    <div class="quick-actions">
+                        <button class="quick-btn" onclick="askQuestion('What should I restock this week?')">What should I restock this week?</button>
+                        <button class="quick-btn" onclick="askQuestion('Which products are selling the fastest?')">Which products are selling the fastest?</button>
+                        <button class="quick-btn" onclick="askQuestion('Show me items with low stock')">Show me items with low stock</button>
+                        <button class="quick-btn" onclick="askQuestion('Are there any products with rising demand?')">Are there any products with rising demand?</button>
+                    </div>
+                </div>
+            </div>
+            <div class="input-area">
+                <input type="text" id="msgInput" placeholder="Ask about restocking, sales trends, or inventory..."
+                       onkeydown="if(event.key==='Enter')sendMessage()">
+                <button id="sendBtn" onclick="sendMessage()">&#9654;</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- Inventory Data (from dataset CSVs) ---
+        const products = [
+            { id: "P001", name: "BBQ Pork Bun", category: "bun", price: 2.5, cost: 1.0, reorder_point: 50, reorder_qty: 200, supplier: "Ah Kow Filling Supply", phone: "+60129876543", stock: 143 },
+            { id: "P002", name: "Red Bean Bun", category: "bun", price: 2.0, cost: 0.8, reorder_point: 40, reorder_qty: 150, supplier: "Ah Kow Filling Supply", phone: "+60129876543", stock: 65 },
+            { id: "P003", name: "Custard Bun", category: "bun", price: 2.5, cost: 0.9, reorder_point: 50, reorder_qty: 200, supplier: "Ah Kow Filling Supply", phone: "+60129876543", stock: 114 },
+            { id: "P004", name: "Lotus Paste Bun", category: "bun", price: 2.5, cost: 1.1, reorder_point: 30, reorder_qty: 120, supplier: "Ah Kow Filling Supply", phone: "+60129876543", stock: 47 },
+            { id: "P005", name: "Kaya Bun", category: "bun", price: 2.0, cost: 0.8, reorder_point: 40, reorder_qty: 150, supplier: "Ah Kow Filling Supply", phone: "+60129876543", stock: 30 },
+            { id: "P006", name: "Chicken Bun", category: "bun", price: 2.8, cost: 1.2, reorder_point: 30, reorder_qty: 120, supplier: "Ah Kow Filling Supply", phone: "+60129876543", stock: 31 },
+            { id: "P007", name: "Vegetable Bun", category: "bun", price: 2.0, cost: 0.7, reorder_point: 20, reorder_qty: 80, supplier: "Ah Kow Filling Supply", phone: "+60129876543", stock: 14 },
+            { id: "P008", name: "Salted Egg Bun", category: "bun", price: 3.0, cost: 1.3, reorder_point: 30, reorder_qty: 100, supplier: "Ah Kow Filling Supply", phone: "+60129876543", stock: 15 },
+            { id: "P009", name: "Pandan Bun", category: "bun", price: 2.0, cost: 0.8, reorder_point: 20, reorder_qty: 80, supplier: "Ah Kow Filling Supply", phone: "+60129876543", stock: 50 },
+            { id: "P010", name: "Coffee Bun", category: "bun", price: 2.0, cost: 0.8, reorder_point: 20, reorder_qty: 80, supplier: "Ah Kow Filling Supply", phone: "+60129876543", stock: 12 },
+            { id: "P011", name: "Plain Mantou", category: "bun", price: 1.5, cost: 0.5, reorder_point: 40, reorder_qty: 150, supplier: "Fresh Flour Trading", phone: "+60123456789", stock: 116 },
+            { id: "P012", name: "Fried Mantou", category: "bun", price: 2.0, cost: 0.7, reorder_point: 30, reorder_qty: 100, supplier: "Fresh Flour Trading", phone: "+60123456789", stock: 44 },
+            { id: "P013", name: "Siew Mai", category: "dimsum", price: 1.8, cost: 0.7, reorder_point: 50, reorder_qty: 200, supplier: "Heng Huat Frozen Supply", phone: "+60145678901", stock: 104 },
+            { id: "P014", name: "Har Gow", category: "dimsum", price: 2.0, cost: 0.9, reorder_point: 40, reorder_qty: 150, supplier: "Heng Huat Frozen Supply", phone: "+60145678901", stock: 109 },
+            { id: "P015", name: "Lo Mai Gai", category: "dimsum", price: 3.5, cost: 1.5, reorder_point: 20, reorder_qty: 80, supplier: "Heng Huat Frozen Supply", phone: "+60145678901", stock: 8 },
+            { id: "P016", name: "Spring Roll", category: "dimsum", price: 1.5, cost: 0.5, reorder_point: 40, reorder_qty: 150, supplier: "Heng Huat Frozen Supply", phone: "+60145678901", stock: 13 },
+            { id: "P017", name: "Egg Tart", category: "pastry", price: 2.5, cost: 1.0, reorder_point: 30, reorder_qty: 120, supplier: "Fresh Flour Trading", phone: "+60123456789", stock: 54 },
+            { id: "P018", name: "Tau Sa Piah", category: "pastry", price: 1.8, cost: 0.6, reorder_point: 20, reorder_qty: 80, supplier: "Fresh Flour Trading", phone: "+60123456789", stock: 20 }
+        ];
+
+        // --- Render Inventory Panel ---
+        function renderInventory() {
+            const list = document.getElementById('inventoryList');
+            const sorted = [...products].sort((a, b) => (a.stock / a.reorder_point) - (b.stock / b.reorder_point));
+            list.innerHTML = sorted.map(p => {
+                let status = 'healthy';
+                if (p.stock < p.reorder_point * 0.5) status = 'critical';
+                else if (p.stock < p.reorder_point) status = 'low';
+                return `<div class="inv-item">
+                    <span class="name">${p.name}</span>
+                    <span class="stock ${status}">${p.stock} / ${p.reorder_point}</span>
+                </div>`;
+            }).join('');
+        }
+
+        // --- API Key Management ---
+        function onApiKeyChange() {
+            const key = document.getElementById('apiKey').value.trim();
+            const dot = document.getElementById('apiStatus');
+            if (key.length > 10) {
+                dot.classList.add('connected');
+                sessionStorage.setItem('gemini_api_key', key);
+            } else {
+                dot.classList.remove('connected');
+            }
+        }
+
+        function getApiKey() {
+            return document.getElementById('apiKey').value.trim() || sessionStorage.getItem('gemini_api_key') || '';
+        }
+
+        // Restore key from session
+        (function() {
+            const saved = sessionStorage.getItem('gemini_api_key');
+            if (saved) {
+                document.getElementById('apiKey').value = saved;
+                document.getElementById('apiStatus').classList.add('connected');
+            }
+        })();
+
+        // --- Build system prompt with inventory context ---
+        function buildSystemPrompt() {
+            const lowItems = products.filter(p => p.stock < p.reorder_point);
+            const criticalItems = products.filter(p => p.stock < p.reorder_point * 0.5);
+            const healthyItems = products.filter(p => p.stock >= p.reorder_point);
+
+            let inventoryContext = "CURRENT INVENTORY STATUS:\n\n";
+            inventoryContext += "CRITICAL (below 50% of reorder point):\n";
+            criticalItems.forEach(p => {
+                inventoryContext += `- ${p.name}: ${p.stock} in stock (reorder point: ${p.reorder_point}, reorder qty: ${p.reorder_qty}, supplier: ${p.supplier}, phone: ${p.phone})\n`;
+            });
+            inventoryContext += "\nLOW (below reorder point):\n";
+            lowItems.filter(p => p.stock >= p.reorder_point * 0.5).forEach(p => {
+                inventoryContext += `- ${p.name}: ${p.stock} in stock (reorder point: ${p.reorder_point}, reorder qty: ${p.reorder_qty}, supplier: ${p.supplier}, phone: ${p.phone})\n`;
+            });
+            inventoryContext += "\nHEALTHY:\n";
+            healthyItems.forEach(p => {
+                inventoryContext += `- ${p.name}: ${p.stock} in stock (reorder point: ${p.reorder_point})\n`;
+            });
+
+            return `You are Stock Manager, a smart restocking assistant for a steam bun shop in Malaysia. You help the shop owner decide what to restock based on inventory data.
+
+${inventoryContext}
+
+PRODUCT CATALOG: 18 items across 3 categories (buns, dim sum, pastries) from 4 suppliers:
+- Ah Kow Filling Supply (+60129876543): all filled buns
+- Fresh Flour Trading (+60123456789): mantou, egg tart, tau sa piah
+- Heng Huat Frozen Supply (+60145678901): siew mai, har gow, lo mai gai, spring roll
+
+RESTOCKING RULES:
+1. CRITICAL items (below 50% of reorder point): MUST restock immediately
+2. LOW items (below reorder point): Should restock soon
+3. HEALTHY items: No action needed unless demand is rising
+
+When recommending restocking:
+- List items in a markdown table with: Product | Current Stock | Reorder Point | Order Qty | Supplier | Reason
+- Group by supplier for easy ordering
+- Include supplier contact phone numbers
+- Be concise and practical — this is a busy shop owner
+
+For sales trend questions, note that top sellers are typically BBQ Pork Bun, Siew Mai, and Custard Bun. Slower movers include Pandan Bun and Coffee Bun. Provide realistic analysis based on the product types and stock levels.`;
+        }
+
+        // --- Chat Logic ---
+        let conversationHistory = [];
+
+        function askQuestion(question) {
+            document.getElementById('msgInput').value = question;
+            sendMessage();
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('msgInput');
+            const msg = input.value.trim();
+            if (!msg) return;
+
+            const apiKey = getApiKey();
+            if (!apiKey) {
+                alert('Please enter your Gemini API key first.');
+                return;
+            }
+
+            input.value = '';
+            document.getElementById('sendBtn').disabled = true;
+
+            const welcome = document.getElementById('welcomeSection');
+            if (welcome) welcome.remove();
+
+            addMessage(msg, 'user');
+            conversationHistory.push({ role: 'user', parts: [{ text: msg }] });
+
+            const typing = document.createElement('div');
+            typing.className = 'typing';
+            typing.textContent = 'Analyzing';
+            document.getElementById('chatArea').appendChild(typing);
+            scrollToBottom();
+
+            try {
+                const response = await fetch(
+                    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+                    {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            system_instruction: { parts: [{ text: buildSystemPrompt() }] },
+                            contents: conversationHistory
+                        })
+                    }
+                );
+
+                const data = await response.json();
+                typing.remove();
+
+                if (data.candidates && data.candidates[0]?.content?.parts?.[0]?.text) {
+                    const reply = data.candidates[0].content.parts[0].text;
+                    conversationHistory.push({ role: 'model', parts: [{ text: reply }] });
+                    addMessage(reply, 'agent');
+                } else if (data.error) {
+                    addMessage(`Error: ${data.error.message}`, 'agent');
+                } else {
+                    addMessage('Sorry, I could not process your request. Please try again.', 'agent');
+                }
+            } catch (err) {
+                typing.remove();
+                addMessage('Error: Could not reach the Gemini API. Check your API key and try again.', 'agent');
+            }
+
+            document.getElementById('sendBtn').disabled = false;
+        }
+
+        function addMessage(text, role) {
+            const chatArea = document.getElementById('chatArea');
+            const div = document.createElement('div');
+            div.className = `message ${role}`;
+
+            if (role === 'agent') {
+                let html = text;
+                // Convert markdown tables to HTML
+                html = html.replace(/\|(.+)\|\n\|[-:| ]+\|\n((?:\|.+\|\n?)*)/g, (match, header, body) => {
+                    const headers = header.split('|').map(h => h.trim()).filter(Boolean);
+                    const rows = body.trim().split('\n').map(row =>
+                        row.split('|').map(c => c.trim()).filter(Boolean)
+                    );
+                    let table = '<table><thead><tr>' + headers.map(h => `<th>${h}</th>`).join('') + '</tr></thead><tbody>';
+                    rows.forEach(row => {
+                        table += '<tr>' + row.map(c => `<td>${c}</td>`).join('') + '</tr>';
+                    });
+                    table += '</tbody></table>';
+                    return table;
+                });
+                // Convert bold
+                html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                // Convert bullet points
+                html = html.replace(/^\*\s+/gm, '&bull; ');
+                // Line breaks
+                html = html.replace(/\n/g, '<br>');
+                div.innerHTML = html;
+            } else {
+                div.textContent = text;
+            }
+
+            chatArea.appendChild(div);
+            scrollToBottom();
+        }
+
+        function scrollToBottom() {
+            const chatArea = document.getElementById('chatArea');
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }
+
+        // Init
+        renderInventory();
+    </script>
+</body>
+</html>

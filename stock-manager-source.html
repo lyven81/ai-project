@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Manager - Source Code</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #222;
+            background-color: #ffffff;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .back-nav {
+            margin-bottom: 20px;
+        }
+
+        .back-nav a {
+            color: #007BFF;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .back-nav a:hover {
+            text-decoration: underline;
+        }
+
+        .project-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #AD1457, #880E4F);
+            color: white;
+            border-radius: 10px;
+        }
+
+        .project-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .project-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .content-section {
+            margin: 40px 0;
+            padding: 30px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border-left: 5px solid #E91E63;
+        }
+
+        .content-section h2 {
+            color: #E91E63;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .content-section h3 {
+            color: #333;
+            margin: 20px 0 10px 0;
+            font-size: 1.3rem;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #fce4ec, #f8bbd0);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #E91E63;
+            margin: 20px 0;
+        }
+
+        .code-container {
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        .code-header {
+            color: #f48fb1;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .code-block {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #d4d4d4;
+        }
+
+        .code-comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+
+        .code-keyword {
+            color: #569cd6;
+        }
+
+        .code-string {
+            color: #ce9178;
+        }
+
+        .code-function {
+            color: #dcdcaa;
+        }
+
+        .code-number {
+            color: #b5cea8;
+        }
+
+        .code-decorator {
+            color: #d7ba7d;
+        }
+
+        .demo-links {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .demo-btn {
+            display: inline-block;
+            background-color: #007BFF;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .demo-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .demo-btn.secondary {
+            background-color: #28a745;
+        }
+
+        .demo-btn.secondary:hover {
+            background-color: #218838;
+        }
+
+        @media (max-width: 768px) {
+            .project-header h1 {
+                font-size: 2rem;
+            }
+
+            .project-header p {
+                font-size: 1rem;
+            }
+
+            .demo-btn {
+                margin: 5px;
+                padding: 10px 20px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="stock-manager.html">&larr; Back to Project Overview</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>Stock Manager</h1>
+            <p>Multi-Agent Architecture &amp; Restocking Logic</p>
+
+            <div class="badges">
+                <span class="badge">Google ADK</span>
+                <span class="badge">Gemini 2.5 Flash</span>
+                <span class="badge">AlloyDB</span>
+                <span class="badge">FastAPI</span>
+                <span class="badge">Google Sheets MCP</span>
+            </div>
+        </div>
+
+        <div class="highlight-box">
+            <h3>About This Code Showcase</h3>
+            <p><strong>This curated code walkthrough shows how Stock Manager orchestrates three AI agents to analyze sales, check inventory, and generate purchase orders for a steam bun shop.</strong></p>
+            <p>The focus is on the multi-agent architecture (Google ADK), the SQL-based analysis tools, and the Google Sheets integration. Environment setup and deployment scripts are omitted for clarity.</p>
+        </div>
+
+        <div class="content-section">
+            <h2>Project Structure</h2>
+
+            <div class="code-container">
+                <div class="code-header">File Structure</div>
+                <div class="code-block">
+projects/stock-manager/
+├── main.py              <span class="code-comment"># FastAPI app + API endpoints</span>
+├── agents.py            <span class="code-comment"># ADK agent definitions (SequentialAgent + 3 sub-agents)</span>
+├── tools.py             <span class="code-comment"># Tool functions (AlloyDB queries + Google Sheets)</span>
+├── schema.sql           <span class="code-comment"># Database schema (4 tables)</span>
+├── db_setup.py          <span class="code-comment"># Load CSV data into AlloyDB</span>
+├── static/
+│   └── index.html       <span class="code-comment"># Chat UI with inventory panel</span>
+├── dataset/
+│   ├── suppliers.csv    <span class="code-comment"># 4 suppliers with lead times</span>
+│   ├── products.csv     <span class="code-comment"># 18 products (buns, dim sum, pastries)</span>
+│   ├── sales.csv        <span class="code-comment"># 9,852 sales transactions over 6 months</span>
+│   └── inventory.csv    <span class="code-comment"># Current stock levels</span>
+├── Dockerfile
+└── requirements.txt
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Multi-Agent Architecture (agents.py)</h2>
+            <p>The core of Stock Manager is a SequentialAgent that chains three specialized sub-agents. Each agent has its own instruction prompt and tool set:</p>
+
+            <div class="code-container">
+                <div class="code-header">agents.py &mdash; Agent Definitions</div>
+                <div class="code-block">
+<span class="code-keyword">from</span> google.adk.agents <span class="code-keyword">import</span> Agent, SequentialAgent
+<span class="code-keyword">from</span> tools <span class="code-keyword">import</span> (
+    get_sales_summary, get_sales_trends,
+    get_inventory_status, get_low_stock_items,
+    create_purchase_order,
+)
+
+<span class="code-comment"># Sub-agent 1: Sales Analyst</span>
+sales_analyst = Agent(
+    name=<span class="code-string">"sales_analyst"</span>,
+    model=<span class="code-string">"gemini-2.5-flash"</span>,
+    instruction=<span class="code-string">"""You are the Sales Analyst agent for a steam bun shop.
+
+Analyze sales data by calling BOTH tools:
+1. Call get_sales_summary for average daily sales per product.
+2. Call get_sales_trends to detect rising or falling demand.
+
+Return a summary listing:
+- Top 5 fast movers (highest daily sales)
+- Top 5 slow movers (lowest daily sales)
+- All products with RISING trends (10%+ increase)"""</span>,
+    tools=[get_sales_summary, get_sales_trends],
+)
+
+<span class="code-comment"># Sub-agent 2: Inventory Checker</span>
+inventory_checker = Agent(
+    name=<span class="code-string">"inventory_checker"</span>,
+    model=<span class="code-string">"gemini-2.5-flash"</span>,
+    instruction=<span class="code-string">"""You are the Inventory Checker agent.
+
+Check stock levels by calling BOTH tools:
+1. Call get_inventory_status for all products.
+2. Call get_low_stock_items for items below reorder point.
+
+Return: critical items, low items, and healthy items."""</span>,
+    tools=[get_inventory_status, get_low_stock_items],
+)
+
+<span class="code-comment"># Sub-agent 3: Restock Decision Maker</span>
+restock_decider = Agent(
+    name=<span class="code-string">"restock_decider"</span>,
+    model=<span class="code-string">"gemini-2.5-flash"</span>,
+    instruction=<span class="code-string">"""You are the Restock Decision agent.
+
+Review sales analysis and inventory check. Decide restocking:
+1. LOW STOCK: below reorder point -> ALWAYS restock
+2. TRENDING UP: 10%+ increase AND stock within 1.5x reorder -> restock early
+3. HEALTHY + STABLE: skip
+
+Call create_purchase_order with the final restock list."""</span>,
+    tools=[create_purchase_order],
+)
+
+<span class="code-comment"># Manager: chains all sub-agents in order</span>
+manager_agent = SequentialAgent(
+    name=<span class="code-string">"stock_manager"</span>,
+    sub_agents=[sales_analyst, inventory_checker, restock_decider],
+)
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>SQL Analysis Tools (tools.py)</h2>
+            <p>Each agent calls Python functions that query AlloyDB. Here are the two sales analysis tools used by the Sales Analyst agent:</p>
+
+            <div class="code-container">
+                <div class="code-header">tools.py &mdash; Sales Trend Detection</div>
+                <div class="code-block">
+<span class="code-keyword">def</span> <span class="code-function">get_sales_trends</span>() -> dict:
+    <span class="code-string">"""Compare sales from the most recent 7 days vs the prior 7 days
+    to detect rising or falling demand."""</span>
+    rows = _query(<span class="code-string">"""
+        WITH date_range AS (
+            SELECT MAX(sale_date) AS max_date FROM sales
+        ),
+        recent AS (
+            SELECT product_id, SUM(quantity_sold) AS recent_sold
+            FROM sales, date_range
+            WHERE sale_date > max_date - INTERVAL '7 days'
+            GROUP BY product_id
+        ),
+        previous AS (
+            SELECT product_id, SUM(quantity_sold) AS prev_sold
+            FROM sales, date_range
+            WHERE sale_date > max_date - INTERVAL '14 days'
+              AND sale_date <= max_date - INTERVAL '7 days'
+            GROUP BY product_id
+        )
+        SELECT p.product_name,
+               COALESCE(r.recent_sold, 0) AS recent_sold,
+               COALESCE(pr.prev_sold, 0) AS prev_sold,
+               ROUND(((r.recent_sold - pr.prev_sold)::numeric
+                    / pr.prev_sold) * 100, 1) AS pct_change
+        FROM products p
+        LEFT JOIN recent r ON p.product_id = r.product_id
+        LEFT JOIN previous pr ON p.product_id = pr.product_id
+        ORDER BY pct_change DESC
+    """</span>)
+    <span class="code-keyword">for</span> row <span class="code-keyword">in</span> rows:
+        pct = float(row[<span class="code-string">"pct_change"</span>])
+        <span class="code-keyword">if</span> pct >= <span class="code-number">10</span>:
+            row[<span class="code-string">"trend"</span>] = <span class="code-string">"rising"</span>
+        <span class="code-keyword">elif</span> pct <= <span class="code-number">-10</span>:
+            row[<span class="code-string">"trend"</span>] = <span class="code-string">"falling"</span>
+        <span class="code-keyword">else</span>:
+            row[<span class="code-string">"trend"</span>] = <span class="code-string">"stable"</span>
+    <span class="code-keyword">return</span> {<span class="code-string">"products"</span>: rows}
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Google Sheets Integration (tools.py)</h2>
+            <p>The Restock Decider agent calls this tool to push a purchase order to Google Sheets. Each order creates a new worksheet named by date:</p>
+
+            <div class="code-container">
+                <div class="code-header">tools.py &mdash; Purchase Order Generator</div>
+                <div class="code-block">
+<span class="code-keyword">def</span> <span class="code-function">create_purchase_order</span>(order_items_json: str) -> dict:
+    <span class="code-string">"""Create a purchase order and push it to Google Sheets."""</span>
+    items = json.loads(order_items_json)
+
+    <span class="code-comment"># Authenticate using Application Default Credentials</span>
+    creds, _ = google.auth.default(
+        scopes=[<span class="code-string">"https://www.googleapis.com/auth/spreadsheets"</span>]
+    )
+    gc = gspread.authorize(creds)
+    sh = gc.open_by_key(os.environ[<span class="code-string">"GOOGLE_SHEETS_ID"</span>])
+
+    <span class="code-comment"># Create a new worksheet for today's order</span>
+    sheet_title = f<span class="code-string">"PO-{date.today().isoformat()}"</span>
+    <span class="code-keyword">try</span>:
+        worksheet = sh.worksheet(sheet_title)
+        worksheet.clear()
+    <span class="code-keyword">except</span> WorksheetNotFound:
+        worksheet = sh.add_worksheet(title=sheet_title, rows=<span class="code-number">100</span>, cols=<span class="code-number">10</span>)
+
+    <span class="code-comment"># Build rows grouped by supplier</span>
+    header = [<span class="code-string">"Product"</span>, <span class="code-string">"Quantity"</span>, <span class="code-string">"Supplier"</span>, <span class="code-string">"Contact Phone"</span>]
+    rows = [header]
+    current_supplier = <span class="code-keyword">None</span>
+    <span class="code-keyword">for</span> item <span class="code-keyword">in</span> sorted(items, key=<span class="code-keyword">lambda</span> x: x[<span class="code-string">"supplier_name"</span>]):
+        supplier = item[<span class="code-string">"supplier_name"</span>]
+        <span class="code-keyword">if</span> supplier != current_supplier:
+            <span class="code-keyword">if</span> current_supplier:
+                rows.append([<span class="code-string">""</span>, <span class="code-string">""</span>, <span class="code-string">""</span>, <span class="code-string">""</span>])
+            rows.append([f<span class="code-string">"--- {supplier} ---"</span>, <span class="code-string">""</span>, <span class="code-string">""</span>, <span class="code-string">""</span>])
+            current_supplier = supplier
+        rows.append([item[<span class="code-string">"product_name"</span>], str(item[<span class="code-string">"quantity"</span>]),
+                     supplier, item[<span class="code-string">"contact_phone"</span>]])
+
+    worksheet.update(range_name=<span class="code-string">"A1"</span>, values=rows)
+    <span class="code-keyword">return</span> {<span class="code-string">"status"</span>: <span class="code-string">"success"</span>, <span class="code-string">"sheet_url"</span>: f<span class="code-string">"https://docs.google.com/spreadsheets/d/{sheets_id}/edit"</span>}
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>FastAPI Endpoint (main.py)</h2>
+            <p>The API endpoint receives user messages, runs the ADK agent pipeline, and returns the final response:</p>
+
+            <div class="code-container">
+                <div class="code-header">main.py &mdash; Restock API Endpoint</div>
+                <div class="code-block">
+<span class="code-decorator">@app.post</span>(<span class="code-string">"/api/restock"</span>)
+<span class="code-keyword">async def</span> <span class="code-function">restock</span>(request: Request):
+    data = <span class="code-keyword">await</span> request.json()
+    user_message = data.get(<span class="code-string">"message"</span>, <span class="code-string">"What should I restock this week?"</span>)
+
+    content = types.Content(
+        role=<span class="code-string">"user"</span>, parts=[types.Part(text=user_message)]
+    )
+
+    <span class="code-comment"># Run the sequential agent pipeline</span>
+    all_texts = []
+    <span class="code-keyword">async for</span> event <span class="code-keyword">in</span> runner.run_async(
+        user_id=user_id, session_id=session_id, new_message=content
+    ):
+        <span class="code-keyword">if</span> event.content <span class="code-keyword">and</span> event.content.parts:
+            <span class="code-keyword">for</span> part <span class="code-keyword">in</span> event.content.parts:
+                <span class="code-keyword">if</span> part.text <span class="code-keyword">and</span> part.text.strip():
+                    all_texts.append(part.text.strip())
+
+    <span class="code-comment"># Return the last agent's output (Restock Decider)</span>
+    response_text = all_texts[-<span class="code-number">1</span>] <span class="code-keyword">if</span> all_texts <span class="code-keyword">else</span> <span class="code-string">"Could not process request."</span>
+    <span class="code-keyword">return</span> JSONResponse({<span class="code-string">"response"</span>: response_text})
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Database Schema (schema.sql)</h2>
+            <p>Four tables model the shop's data: suppliers, products, sales transactions, and current inventory:</p>
+
+            <div class="code-container">
+                <div class="code-header">schema.sql &mdash; AlloyDB Tables</div>
+                <div class="code-block">
+<span class="code-keyword">CREATE TABLE</span> suppliers (
+    supplier_id   <span class="code-keyword">VARCHAR</span>(<span class="code-number">10</span>) <span class="code-keyword">PRIMARY KEY</span>,
+    supplier_name <span class="code-keyword">VARCHAR</span>(<span class="code-number">100</span>),
+    contact_phone <span class="code-keyword">VARCHAR</span>(<span class="code-number">20</span>),
+    email         <span class="code-keyword">VARCHAR</span>(<span class="code-number">100</span>),
+    lead_time_days <span class="code-keyword">INTEGER</span>
+);
+
+<span class="code-keyword">CREATE TABLE</span> products (
+    product_id      <span class="code-keyword">VARCHAR</span>(<span class="code-number">10</span>) <span class="code-keyword">PRIMARY KEY</span>,
+    product_name    <span class="code-keyword">VARCHAR</span>(<span class="code-number">100</span>),
+    category        <span class="code-keyword">VARCHAR</span>(<span class="code-number">50</span>),
+    unit_price      <span class="code-keyword">DECIMAL</span>(<span class="code-number">10</span>,<span class="code-number">2</span>),
+    reorder_point   <span class="code-keyword">INTEGER</span>,
+    reorder_quantity <span class="code-keyword">INTEGER</span>,
+    supplier_id     <span class="code-keyword">VARCHAR</span>(<span class="code-number">10</span>) <span class="code-keyword">REFERENCES</span> suppliers
+);
+
+<span class="code-keyword">CREATE TABLE</span> sales (
+    sale_id      <span class="code-keyword">VARCHAR</span>(<span class="code-number">20</span>) <span class="code-keyword">PRIMARY KEY</span>,
+    product_id   <span class="code-keyword">VARCHAR</span>(<span class="code-number">10</span>) <span class="code-keyword">REFERENCES</span> products,
+    quantity_sold <span class="code-keyword">INTEGER</span>,
+    sale_date    <span class="code-keyword">DATE</span>
+);
+
+<span class="code-keyword">CREATE TABLE</span> inventory (
+    product_id    <span class="code-keyword">VARCHAR</span>(<span class="code-number">10</span>) <span class="code-keyword">PRIMARY KEY REFERENCES</span> products,
+    current_stock <span class="code-keyword">INTEGER</span>,
+    last_updated  <span class="code-keyword">DATE</span>
+);
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Technical Implementation Notes</h2>
+            <h3>Key Design Decisions</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>SequentialAgent over LLM routing:</strong> Deterministic agent ordering ensures all three analysis steps always run, avoiding missed checks</li>
+                <li><strong>Separate tools per agent:</strong> Each agent has only the tools it needs, reducing prompt confusion and improving reliability</li>
+                <li><strong>SQL in Python, not in prompts:</strong> SQL queries are hardcoded in tool functions, not generated by the LLM, ensuring consistent and safe database access</li>
+                <li><strong>Google Sheets as output:</strong> Purchase orders land in a familiar format that suppliers and shop staff already use</li>
+                <li><strong>Retry with fresh session:</strong> On rate limit errors, a new ADK session is created to avoid corrupted conversation state</li>
+            </ul>
+
+            <h3>Why AlloyDB?</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>PostgreSQL compatible:</strong> Standard SQL works out of the box with existing pg8000/SQLAlchemy stack</li>
+                <li><strong>Managed service:</strong> No database administration needed for a small shop deployment</li>
+                <li><strong>VPC integration:</strong> Secure access from Cloud Run without exposing the database to the internet</li>
+            </ul>
+        </div>
+
+        <div class="demo-links">
+            <a href="projects/stock-manager/demo.html" class="demo-btn">Try Live Demo</a>
+            <a href="stock-manager.html" class="demo-btn secondary">View Full Project Details</a>
+        </div>
+
+        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+            <a href="index.html">&larr; Back to Portfolio</a> |
+            <a href="stock-manager.html">View Project Overview</a>
+        </nav>
+    </div>
+</body>
+</html>

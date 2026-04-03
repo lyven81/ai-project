@@ -26,6 +26,13 @@ This repository contains **43 production-deployed AI applications** demonstratin
 
 Each project is classified by its AI architecture pattern, based on how the system processes queries, uses tools, and makes decisions.
 
+### Multi-Agent Orchestration (1 project)
+*Multiple specialized agents chained in sequence, each with its own tools and instructions.*
+
+| Project | Why Multi-Agent |
+|---|---|
+| [Stock Manager](./projects/stock-manager/) | 3-agent ADK pipeline: Sales Analyst → Inventory Checker → Restock Decider → Google Sheets |
+
 ### Agentic AI (7 projects)
 *Orchestrator with planning, tools, memory, and feedback loops. Autonomous decision-making.*
 
