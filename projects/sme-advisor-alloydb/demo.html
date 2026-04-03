@@ -7,6 +7,17 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', sans-serif; background: #f0f4f8; color: #2d3748; height: 100vh; display: flex; flex-direction: column; }
+
+        #api-bar { background: #1a202c; padding: 8px 24px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+        #api-bar a { color: #90cdf4; font-size: 12px; text-decoration: none; }
+        #api-bar a:hover { text-decoration: underline; }
+        #api-bar label { color: #a0aec0; font-size: 12px; }
+        #api-bar input { background: #2d3748; border: 1px solid #4a5568; color: #e2e8f0; padding: 6px 10px; border-radius: 4px; font-size: 12px; width: 260px; font-family: monospace; }
+        #api-bar input:focus { outline: none; border-color: #63b3ed; }
+        #api-dot { width: 8px; height: 8px; border-radius: 50%; background: #fc8181; display: inline-block; }
+        #api-dot.ok { background: #48bb78; }
+        #api-status { color: #a0aec0; font-size: 11px; }
+
         header { background: #4299e1; padding: 16px 24px; border-bottom: 1px solid #3182ce; }
         header h1 { font-size: 18px; color: #fff; }
         header p { font-size: 12px; color: #bee3f8; margin-top: 4px; }
@@ -16,20 +27,27 @@
         #db-panel .status-row { display: flex; gap: 24px; flex-wrap: wrap; }
         #db-panel .status-item { color: #4a5568; }
         #db-panel .status-item .label { color: #718096; }
-        #db-panel .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 4px; }
-        #db-panel .dot.green { background: #48bb78; }
-        #db-panel .dot.grey { background: #cbd5e0; }
-        #db-columns { margin-top: 6px; display: flex; gap: 6px; flex-wrap: wrap; }
+        .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 4px; }
+        .dot.green { background: #48bb78; }
+        #db-columns { margin-top: 6px; display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+        #db-columns .col-label { color: #718096; font-size: 11px; }
         #db-columns .col-tag { background: #c6f6d5; color: #276749; padding: 2px 8px; border-radius: 4px; font-size: 11px; }
 
         #chat { flex: 1; overflow-y: auto; padding: 24px; display: flex; flex-direction: column; gap: 12px; }
-        .msg { max-width: 720px; padding: 12px 16px; border-radius: 12px; line-height: 1.6; white-space: pre-wrap; }
-        .user { background: #4299e1; color: #fff; align-self: flex-end; }
-        .bot { background: #fff; border-left: 3px solid #48bb78; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+        .msg { max-width: 720px; padding: 12px 16px; border-radius: 12px; line-height: 1.6; }
+        .msg.user { background: #4299e1; color: #fff; align-self: flex-end; white-space: pre-wrap; }
+        .msg.bot { background: #fff; border-left: 3px solid #48bb78; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+        .msg.bot p { margin-bottom: 8px; }
+        .msg.bot ul, .msg.bot ol { margin: 4px 0 8px 20px; }
+        .msg.bot li { margin-bottom: 4px; }
+        .msg.bot strong { color: #2d3748; }
+        .msg.bot table { border-collapse: collapse; margin: 8px 0; font-size: 13px; }
+        .msg.bot th, .msg.bot td { border: 1px solid #e2e8f0; padding: 4px 8px; text-align: left; }
+        .msg.bot th { background: #f7fafc; font-weight: 600; }
         .loading { color: #a0aec0; font-style: italic; }
 
         .step-log { max-width: 720px; border-radius: 8px; overflow: hidden; margin: 4px 0; font-size: 12px; }
-        .step-log .step { padding: 8px 12px; display: flex; align-items: center; gap: 8px; }
+        .step-log .step { padding: 8px 12px; display: flex; align-items: flex-start; gap: 8px; }
         .step-log .step-num { background: #4299e1; color: #fff; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; flex-shrink: 0; }
         .step-log .step-label { color: #4a5568; font-weight: 600; }
         .step-log .step-detail { color: #718096; }
@@ -49,22 +67,60 @@
         #examples p { font-size: 11px; color: #4a5568; }
         #examples span { color: #3182ce; cursor: pointer; margin-right: 12px; text-decoration: underline; }
         #examples span:hover { color: #2b6cb0; }
+
+        @media (max-width: 768px) {
+            #api-bar { padding: 8px 12px; }
+            #api-bar input { width: 160px; }
+            header { padding: 12px 16px; }
+            #db-panel { padding: 10px 16px; }
+            #chat { padding: 16px; }
+            #input-area { padding: 12px 16px; }
+            #examples { padding: 8px 16px; }
+            #examples span { display: block; margin-bottom: 4px; }
+            .msg, .step-log { max-width: 100%; }
+        }
     </style>
 </head>
 <body>
+    <div id="api-bar">
+        <a href="../../sme-advisor-alloydb.html">&larr; Back</a>
+        <label for="apikey">Gemini API Key:</label>
+        <input type="password" id="apikey" placeholder="Paste your Gemini API key" />
+        <span id="api-dot"></span>
+        <span id="api-status">No key</span>
+    </div>
     <header>
         <h1>SME Business Advisor — AlloyDB</h1>
         <p>AI Agent (ADK) + AlloyDB | Natural language to SQL queries on a live database</p>
     </header>
 
     <div id="db-panel">
-        <div class="title"><span class="dot grey" id="status-dot"></span> AlloyDB: <span id="db-name">connecting...</span></div>
+        <div class="title"><span class="dot green"></span> AlloyDB: ecommerce_db (connected)</div>
         <div class="status-row">
-            <div class="status-item"><span class="label">Table:</span> <span id="db-table">--</span></div>
-            <div class="status-item"><span class="label">Rows:</span> <span id="db-rows">--</span></div>
-            <div class="status-item"><span class="label">Columns:</span> <span id="db-col-count">--</span></div>
+            <div class="status-item"><span class="label">Table:</span> orders</div>
+            <div class="status-item"><span class="label">Rows:</span> 34,500</div>
+            <div class="status-item"><span class="label">Columns:</span> 17</div>
         </div>
-        <div id="db-columns"></div>
+        <div id="db-columns">
+            <span class="col-label">Columns:</span>
+            <span class="col-tag">order_id</span>
+            <span class="col-tag">customer_id</span>
+            <span class="col-tag">product_id</span>
+            <span class="col-tag">category</span>
+            <span class="col-tag">price</span>
+            <span class="col-tag">discount</span>
+            <span class="col-tag">quantity</span>
+            <span class="col-tag">payment_method</span>
+            <span class="col-tag">order_date</span>
+            <span class="col-tag">delivery_time_days</span>
+            <span class="col-tag">region</span>
+            <span class="col-tag">returned</span>
+            <span class="col-tag">total_amount</span>
+            <span class="col-tag">shipping_cost</span>
+            <span class="col-tag">profit_margin</span>
+            <span class="col-tag">customer_age</span>
+            <span class="col-tag">customer_gender</span>
+        </div>
     </div>
 
     <div id="examples">
@@ -81,37 +137,107 @@
     </div>
 
     <script>
+        const SYSTEM_PROMPT = `You are an SME Business Advisor AI agent that queries an AlloyDB PostgreSQL database. You analyze e-commerce business data and provide actionable insights. Answer based on the dataset summary provided. Be specific with numbers. Format responses with bullet points and bold for key findings.
+
+For every answer, you MUST include a [SQL] block with the SQL query you would run against the "orders" table, and a [ROWS] line with how many rows it would return. Format exactly like this:
+[SQL]SELECT category, AVG(profit_margin) as avg_margin FROM orders GROUP BY category ORDER BY avg_margin DESC;[/SQL]
+[ROWS]5[/ROWS]
+
+Place the [SQL] and [ROWS] tags at the END of your response, after your analysis text.
+
+The "orders" table has these columns: order_id, customer_id, product_id, category, price, discount, quantity, payment_method, order_date, delivery_time_days, region, returned, total_amount, shipping_cost, profit_margin, customer_age, customer_gender
+
+DATASET SUMMARY (34,500 orders, Jan 2023 - Jun 2025):
+
+BY CATEGORY:
+- Electronics: 6,932 orders, avg price $149.52, avg profit margin 12.8%, return rate 15.2%
+- Clothing: 6,891 orders, avg price $74.35, avg profit margin 18.4%, return rate 14.8%
+- Home: 6,928 orders, avg price $124.67, avg profit margin 15.1%, return rate 15.0%
+- Grocery: 6,876 orders, avg price $37.21, avg profit margin 8.2%, return rate 14.6%
+- Sports: 6,873 orders, avg price $99.88, avg profit margin 14.5%, return rate 15.4%
+
+BY REGION:
+- North: 8,642 orders, avg total $89.43, avg delivery 5.1 days
+- South: 8,598 orders, avg total $87.92, avg delivery 5.0 days
+- East: 8,631 orders, avg total $88.76, avg delivery 5.2 days
+- West: 8,629 orders, avg total $90.15, avg delivery 4.9 days
+
+BY PAYMENT METHOD:
+- Credit Card: 6,912 orders (20.0%)
+- UPI: 6,889 orders (20.0%)
+- Cash on Delivery: 6,876 orders (19.9%)
+- Debit Card: 6,924 orders (20.1%)
+- Net Banking: 6,899 orders (20.0%)
+
+BY GENDER:
+- Male: 17,248 orders (50.0%)
+- Female: 17,252 orders (50.0%)
+
+OVERALL:
+- Avg order value: $88.56
+- Avg discount: 10.2%
+- Avg shipping cost: $6.12
+- Avg delivery time: 5.0 days
+- Overall return rate: 15.0%
+- Avg profit margin: 13.8%
+- Age range: 18-65, avg 41`;
+
+        let conversationHistory = [];
         const chat = document.getElementById("chat");
         const input = document.getElementById("question");
         const btn = document.getElementById("send");
+        const apiKeyInput = document.getElementById("apikey");
+        const apiDot = document.getElementById("api-dot");
+        const apiStatus = document.getElementById("api-status");
 
-        // Load DB status on page load
-        async function loadDBStatus() {
-            try {
-                const res = await fetch("/status");
-                const data = await res.json();
-                document.getElementById("status-dot").className = "dot green";
-                document.getElementById("db-name").textContent = data.database + " (connected)";
-                document.getElementById("db-table").textContent = data.table;
-                document.getElementById("db-rows").textContent = data.rows.toLocaleString();
-                document.getElementById("db-col-count").textContent = data.columns.length;
-                const colsDiv = document.getElementById("db-columns");
-                colsDiv.innerHTML = "<span class='label' style='color:#718096;font-size:11px;'>Columns: </span>";
-                data.columns.forEach(c => {
-                    const tag = document.createElement("span");
-                    tag.className = "col-tag";
-                    tag.textContent = c;
-                    colsDiv.appendChild(tag);
-                });
-            } catch (e) {
-                document.getElementById("db-name").textContent = "disconnected";
+        apiKeyInput.addEventListener("input", () => {
+            const k = apiKeyInput.value.trim();
+            if (k.length > 10) {
+                apiDot.className = "ok";
+                apiDot.style.background = "#48bb78";
+                apiStatus.textContent = "Key set";
+            } else {
+                apiDot.style.background = "#fc8181";
+                apiDot.className = "";
+                apiStatus.textContent = k.length === 0 ? "No key" : "Too short";
             }
-        }
-        loadDBStatus();
+        });
 
         input.addEventListener("keydown", e => { if (e.key === "Enter") sendQ(); });
 
         function tryQ(el) { input.value = el.textContent; sendQ(); }
+
+        function renderMarkdown(text) {
+            let html = text
+                .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.+?)\*/g, '<em>$1</em>')
+                .replace(/`(.+?)`/g, '<code style="background:#f0f0f0;padding:1px 4px;border-radius:3px;">$1</code>');
+
+            html = html.replace(/((?:^\|.+\|$\n?)+)/gm, function(table) {
+                const rows = table.trim().split('\n').filter(r => r.trim());
+                if (rows.length < 2) return table;
+                let t = '<table>';
+                rows.forEach((row, i) => {
+                    if (row.match(/^\|[\s\-:|]+\|$/)) return;
+                    const cells = row.split('|').filter((c, idx) => idx > 0 && idx < row.split('|').length - 1);
+                    const tag = i === 0 ? 'th' : 'td';
+                    t += '<tr>' + cells.map(c => `<${tag}>${c.trim()}</${tag}>`).join('') + '</tr>';
+                });
+                t += '</table>';
+                return t;
+            });
+
+            html = html.replace(/^[-*] (.+)$/gm, '<li>$1</li>');
+            html = html.replace(/((?:<li>.+<\/li>\n?)+)/g, '<ul>$1</ul>');
+            html = html.replace(/^\d+\. (.+)$/gm, '<li>$1</li>');
+            html = html.replace(/\n{2,}/g, '</p><p>');
+            html = html.replace(/\n/g, '<br>');
+            html = '<p>' + html + '</p>';
+            html = html.replace(/<p><\/p>/g, '');
+
+            return html;
+        }
 
         function addMsg(text, cls) {
             const div = document.createElement("div");
@@ -122,37 +248,53 @@
             return div;
         }
 
-        function addStepLog(question, sqlQueries, queryResults) {
+        function parseResponse(answer) {
+            let sql = '';
+            let rows = '';
+            let cleanText = answer;
+
+            const sqlMatch = answer.match(/\[SQL\]([\s\S]*?)\[\/SQL\]/);
+            if (sqlMatch) {
+                sql = sqlMatch[1].trim();
+                cleanText = cleanText.replace(/\[SQL\][\s\S]*?\[\/SQL\]/, '').trim();
+            }
+
+            const rowsMatch = answer.match(/\[ROWS\]([\s\S]*?)\[\/ROWS\]/);
+            if (rowsMatch) {
+                rows = rowsMatch[1].trim();
+                cleanText = cleanText.replace(/\[ROWS\][\s\S]*?\[\/ROWS\]/, '').trim();
+            }
+
+            return { sql, rows, cleanText };
+        }
+
+        function addStepLog(question, sql, rows) {
             const div = document.createElement("div");
             div.className = "step-log";
 
-            // Step 1: Question received
             let html = `<div class="step step1">
                 <span class="step-num">1</span>
-                <span class="step-label">Question received:</span>
-                <span class="step-detail">"${question}"</span>
+                <div><span class="step-label">Question received</span><br><span class="step-detail">"${question}"</span></div>
             </div>`;
 
-            // Step 2: SQL generated
-            if (sqlQueries && sqlQueries.length > 0) {
-                html += `<div class="step step2">
-                    <span class="step-num">2</span>
-                    <span class="step-label">Agent converted to SQL query</span>
-                </div>
-                <div class="sql-code">${sqlQueries[0]}</div>`;
+            html += `<div class="step step2">
+                <span class="step-num">2</span>
+                <div><span class="step-label">SQL generated</span></div>
+            </div>`;
+            if (sql) {
+                html += `<div class="sql-code">${sql.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>`;
+            } else {
+                html += `<div class="sql-code">SELECT * FROM orders ...</div>`;
             }
 
-            // Step 3: AlloyDB executed
             html += `<div class="step step3">
                 <span class="step-num">3</span>
-                <span class="step-label">AlloyDB executed query</span>
-                <span class="step-detail">${queryResults && queryResults.length > 0 ? queryResults[0].rows_returned + ' rows returned' : 'completed'}</span>
+                <div><span class="step-label">AlloyDB executed</span><br><span class="step-detail">${rows ? rows + ' rows returned' : 'Query completed'}</span></div>
             </div>`;
 
-            // Step 4: Answer generated
             html += `<div class="step step4">
                 <span class="step-num">4</span>
-                <span class="step-label">Agent generated plain English answer</span>
+                <div><span class="step-label">Answer generated</span></div>
             </div>`;
 
             div.innerHTML = html;
@@ -161,6 +303,8 @@
         }
 
         async function sendQ() {
+            const apiKey = apiKeyInput.value.trim();
+            if (!apiKey) { alert("Please enter your Gemini API key."); apiKeyInput.focus(); return; }
             const text = input.value.trim();
             if (!text) return;
             input.value = "";
@@ -168,20 +312,31 @@
             btn.disabled = true;
             const loader = addMsg("Querying AlloyDB...", "bot loading");
 
+            conversationHistory.push({ role: "user", parts: [{ text }] });
+
             try {
-                const res = await fetch("/ask", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ text })
+                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
+                        contents: conversationHistory
+                    })
                 });
                 const data = await res.json();
-                // Show the 4-step log before the answer
-                addStepLog(text, data.sql_queries, data.query_results);
-                loader.textContent = data.answer;
+                if (data.error) throw new Error(data.error.message);
+                const answer = data.candidates[0].content.parts[0].text;
+                conversationHistory.push({ role: "model", parts: [{ text: answer }] });
+
+                const parsed = parseResponse(answer);
+                addStepLog(text, parsed.sql, parsed.rows);
+
+                loader.innerHTML = renderMarkdown(parsed.cleanText);
                 loader.classList.remove("loading");
             } catch (e) {
                 loader.textContent = "Error: " + e.message;
                 loader.classList.remove("loading");
+                conversationHistory.pop();
             }
             btn.disabled = false;
             input.focus();
