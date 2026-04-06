@@ -178,6 +178,12 @@ Each project is classified by its AI architecture pattern, based on how the syst
 
 ### 📊 Business Intelligence & Analytics Agents
 
+#### [Good Company](./projects/good-company/)
+**Stock research assistant that reads quarter report PDFs and runs a 7-step analysis to determine if a company is a good business and worth investing in**
+- **Live Demo:** [Demo (Dialog Group)](./projects/good-company/demo.html)
+- **Tech Stack:** Python, FastAPI, Gemini 2.5 Flash, PyMuPDF, Vanilla JS, marked.js
+- **AI Capabilities:** 7-step phased analysis (company overview, forensic check, verdict, valuation, bull/bear debate, personal risk check, final scorecard), local PDF reading, 7 visualization types (metric cards, scorecards, verdict badges, range bars, scenario cards), one-click report copy, plain-language output with Goldman Sachs analytical depth
+
 #### [Time Series Analysis Agent](./projects/time-series-analysis-agent/)
 **AI-powered data analytics through natural language queries using Google Gemini**
 - **Live Demo:** [Google Colab](https://colab.research.google.com/drive/1ZTfYPQZXObgxqk3hawGu9Sm33EjJX2xA)

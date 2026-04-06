@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Good Company — Demo (Dialog Group)</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f0f4f8; color: #2d3748; }
+
+        header { background: linear-gradient(135deg, #1a365d, #2b6cb0); padding: 20px 32px; }
+        header h1 { font-size: 22px; color: #fff; font-weight: 700; }
+        header p { font-size: 13px; color: #bee3f8; margin-top: 4px; }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 24px 16px 80px; }
+
+        /* Selector */
+        .selector { background: #fff; border-radius: 12px; padding: 20px 24px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+        .selector label { font-weight: 600; font-size: 14px; color: #4a5568; display: block; margin-bottom: 8px; }
+        .selector select { width: 100%; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; background: #f7fafc; color: #2d3748; }
+        .selector select:focus { border-color: #4299e1; outline: none; box-shadow: 0 0 0 3px rgba(66,153,225,0.2); }
+        .selector select optgroup { font-weight: 700; color: #2d3748; font-size: 13px; }
+        .selector select option { font-weight: 400; color: #4a5568; padding: 4px 0; }
+        .btn-row { display: flex; gap: 10px; margin-top: 12px; }
+
+        .btn { padding: 10px 20px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.15s; }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .btn-primary { background: #4299e1; color: #fff; }
+        .btn-primary:hover:not(:disabled) { background: #3182ce; }
+        .btn-secondary { background: #edf2f7; color: #4a5568; }
+        .btn-secondary:hover:not(:disabled) { background: #e2e8f0; }
+        .btn-green { background: #48bb78; color: #fff; }
+        .btn-green:hover:not(:disabled) { background: #38a169; }
+        .btn-sm { padding: 6px 14px; font-size: 13px; }
+
+        /* Phase sections */
+        .phase { margin-bottom: 24px; }
+        .phase-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+        .phase-header h2 { font-size: 16px; color: #2d3748; }
+        .phase-badge { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .badge-blue { background: #ebf8ff; color: #2b6cb0; }
+        .badge-green { background: #f0fff4; color: #276749; }
+        .badge-amber { background: #fffff0; color: #975a16; }
+
+        /* Cards */
+        .card { background: #fff; border-radius: 10px; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); overflow: hidden; }
+        .card-header { padding: 14px 20px; border-bottom: 1px solid #f0f0f0; display: flex; align-items: center; justify-content: space-between; }
+        .card-header h3 { font-size: 14px; color: #4a5568; font-weight: 600; }
+        .card-step { font-size: 11px; color: #a0aec0; font-weight: 600; }
+        .card-body { padding: 20px; font-size: 14px; line-height: 1.7; color: #4a5568; }
+        .card-body h1, .card-body h2, .card-body h3 { color: #2d3748; margin: 16px 0 8px 0; }
+        .card-body h1 { font-size: 18px; } .card-body h2 { font-size: 16px; } .card-body h3 { font-size: 14px; }
+        .card-body ul, .card-body ol { padding-left: 20px; margin: 8px 0; }
+        .card-body li { margin-bottom: 4px; }
+        .card-body p { margin-bottom: 10px; }
+        .card-body strong { color: #2d3748; }
+        .card-body table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 13px; }
+        .card-body th, .card-body td { padding: 8px 12px; text-align: left; border-bottom: 1px solid #edf2f7; }
+        .card-body th { background: #f7fafc; color: #4a5568; font-weight: 600; }
+        .card-empty { color: #cbd5e0; font-style: italic; }
+        .card-loading { display: flex; align-items: center; gap: 10px; color: #a0aec0; }
+        .spinner { width: 18px; height: 18px; border: 2px solid #e2e8f0; border-top-color: #4299e1; border-radius: 50%; animation: spin 0.7s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* --- Visualizations --- */
+
+        /* Metric cards */
+        .vis-metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-bottom: 16px; }
+        .metric-card { background: #f7fafc; border-radius: 8px; padding: 14px 16px; border-left: 3px solid #4299e1; }
+        .metric-label { font-size: 11px; color: #718096; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+        .metric-value { font-size: 20px; font-weight: 700; color: #2d3748; }
+        .metric-change { font-size: 12px; margin-top: 2px; }
+        .metric-change.positive { color: #38a169; }
+        .metric-change.negative { color: #e53e3e; }
+        .metric-change.neutral { color: #a0aec0; }
+
+        /* Scorecard (forensic) */
+        .vis-scorecard { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+        .score-row { display: flex; align-items: center; gap: 12px; padding: 10px 14px; background: #f7fafc; border-radius: 8px; }
+        .score-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+        .score-dot.green { background: #48bb78; }
+        .score-dot.yellow { background: #ecc94b; }
+        .score-dot.red { background: #f56565; }
+        .score-area { font-weight: 600; font-size: 13px; color: #2d3748; min-width: 140px; }
+        .score-note { font-size: 13px; color: #718096; }
+
+        /* Verdict */
+        .vis-verdict { margin-bottom: 16px; }
+        .verdict-badge { display: inline-block; padding: 10px 20px; border-radius: 8px; font-size: 16px; font-weight: 700; margin-bottom: 14px; }
+        .verdict-1 { background: #fffff0; color: #975a16; border: 2px solid #ecc94b; }
+        .verdict-2 { background: #fff5f5; color: #c53030; border: 2px solid #fc8181; }
+        .verdict-3 { background: #f0fff4; color: #276749; border: 2px solid #68d391; }
+        .verdict-4 { background: #f7fafc; color: #718096; border: 2px solid #cbd5e0; }
+        .vis-bars { display: flex; flex-direction: column; gap: 8px; }
+        .bar-row { display: flex; align-items: center; gap: 10px; }
+        .bar-label { font-size: 12px; color: #718096; min-width: 130px; text-align: right; }
+        .bar-track { flex: 1; height: 20px; background: #edf2f7; border-radius: 4px; overflow: hidden; position: relative; }
+        .bar-fill { height: 100%; border-radius: 4px; transition: width 0.5s ease; display: flex; align-items: center; justify-content: flex-end; padding-right: 6px; }
+        .bar-fill span { font-size: 11px; font-weight: 700; color: #fff; }
+        .bar-fill.high { background: linear-gradient(90deg, #48bb78, #38a169); }
+        .bar-fill.mid { background: linear-gradient(90deg, #ecc94b, #d69e2e); }
+        .bar-fill.low { background: linear-gradient(90deg, #fc8181, #e53e3e); }
+
+        /* Valuation range */
+        .vis-valuation { margin-bottom: 16px; }
+        .val-range { position: relative; height: 40px; background: linear-gradient(90deg, #f0fff4 0%, #fffff0 50%, #fff5f5 100%); border-radius: 8px; margin: 14px 0; display: flex; align-items: stretch; }
+        .val-zone { flex: 1; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; border-right: 1px dashed #cbd5e0; }
+        .val-zone:last-child { border-right: none; }
+        .val-zone.cheap { color: #276749; }
+        .val-zone.fair { color: #975a16; }
+        .val-zone.expensive { color: #c53030; }
+        .val-assessment { display: inline-block; padding: 6px 14px; border-radius: 6px; font-size: 13px; font-weight: 700; }
+        .val-assessment.cheap { background: #f0fff4; color: #276749; }
+        .val-assessment.fair { background: #fffff0; color: #975a16; }
+        .val-assessment.expensive { background: #fff5f5; color: #c53030; }
+
+        /* Bull vs Bear */
+        .vis-bullbear { margin-bottom: 16px; }
+        .bb-bar { display: flex; height: 36px; border-radius: 8px; overflow: hidden; margin: 10px 0; }
+        .bb-bull { background: #48bb78; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 14px; transition: width 0.5s ease; }
+        .bb-bear { background: #f56565; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 14px; transition: width 0.5s ease; }
+        .bb-labels { display: flex; justify-content: space-between; font-size: 12px; color: #718096; margin-bottom: 4px; }
+        .bb-verdict { font-size: 14px; color: #4a5568; margin-top: 8px; padding: 10px 14px; background: #f7fafc; border-radius: 8px; }
+
+        /* Scenarios */
+        .vis-scenarios { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px; }
+        .scenario-card { border-radius: 8px; padding: 14px; }
+        .scenario-card.bull { background: #f0fff4; border-top: 3px solid #48bb78; }
+        .scenario-card.base { background: #ebf8ff; border-top: 3px solid #4299e1; }
+        .scenario-card.bear { background: #fff5f5; border-top: 3px solid #f56565; }
+        .scenario-name { font-size: 13px; font-weight: 700; margin-bottom: 8px; }
+        .scenario-card.bull .scenario-name { color: #276749; }
+        .scenario-card.base .scenario-name { color: #2b6cb0; }
+        .scenario-card.bear .scenario-name { color: #c53030; }
+        .scenario-row { font-size: 12px; color: #4a5568; margin-bottom: 4px; }
+        .scenario-row strong { color: #2d3748; }
+
+        /* Comparison table */
+        .vis-comparison { margin-bottom: 16px; overflow-x: auto; }
+        .vis-comparison table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        .vis-comparison th, .vis-comparison td { padding: 10px 12px; text-align: center; border-bottom: 1px solid #edf2f7; }
+        .vis-comparison th { background: #f7fafc; color: #4a5568; font-weight: 600; }
+        .vis-comparison td.winner { background: #f0fff4; font-weight: 700; color: #276749; }
+
+        /* Read More / Phase 2 inputs */
+        .readmore-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+        .compare-row { display: flex; gap: 12px; align-items: end; margin-bottom: 14px; }
+        .compare-row select { flex: 1; padding: 8px 12px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 13px; }
+        .input-group { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+        .input-group label { font-size: 13px; color: #718096; display: block; margin-bottom: 4px; }
+        .input-group input, .input-group select { padding: 8px 12px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 13px; background: #f7fafc; }
+        .input-group input:focus, .input-group select:focus { border-color: #4299e1; outline: none; }
+
+        .status-bar { background: #fff; border-radius: 10px; padding: 12px 20px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); display: flex; align-items: center; gap: 12px; font-size: 13px; color: #718096; }
+        .status-dot { width: 8px; height: 8px; border-radius: 50%; }
+        .dot-green { background: #48bb78; }
+        .dot-grey { background: #cbd5e0; }
+        .hidden { display: none; }
+
+        /* Final scorecard */
+        .vis-final { margin-bottom: 16px; }
+        .final-verdict-badge { display: inline-block; padding: 10px 24px; border-radius: 8px; font-size: 18px; font-weight: 700; letter-spacing: 1px; margin-bottom: 8px; }
+        .final-verdict-badge.pass { background: #f0fff4; color: #276749; border: 2px solid #68d391; }
+        .final-verdict-badge.borderline { background: #fffff0; color: #975a16; border: 2px solid #ecc94b; }
+        .final-verdict-badge.fail { background: #fff5f5; color: #c53030; border: 2px solid #fc8181; }
+        .final-avg { font-size: 14px; color: #4a5568; margin-bottom: 4px; }
+        .final-score { font-size: 13px; font-weight: 700; color: #2d3748; min-width: 45px; text-align: center; }
+        .final-missing { margin-top: 12px; padding: 10px 14px; background: #fffff0; border-radius: 8px; font-size: 13px; color: #975a16; border-left: 3px solid #ecc94b; }
+
+        /* Copy report button */
+        .copy-bar { background: #fff; border-radius: 10px; padding: 14px 20px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); display: flex; align-items: center; justify-content: space-between; }
+        .copy-bar span { font-size: 13px; color: #718096; }
+        .btn-copy { background: #2d3748; color: #fff; }
+        .btn-copy:hover:not(:disabled) { background: #1a202c; }
+        .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: #2d3748; color: #fff; padding: 10px 24px; border-radius: 8px; font-size: 14px; font-weight: 600; opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 100; }
+        .toast.show { opacity: 1; }
+
+        @media (max-width: 640px) {
+            .vis-metrics { grid-template-columns: repeat(2, 1fr); }
+            .vis-scenarios { grid-template-columns: 1fr; }
+        }
+    
+        /* Demo-specific */
+        .demo-bar { background: #1a365d; padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; }
+        .demo-bar span { color: #bee3f8; font-size: 13px; }
+        .demo-bar a { color: #90cdf4; text-decoration: none; font-size: 13px; }
+        .demo-bar a:hover { text-decoration: underline; }
+        .demo-notice { background: #ebf8ff; border: 1px solid #bee3f8; border-radius: 8px; padding: 14px 18px; margin-bottom: 20px; font-size: 13px; color: #2b6cb0; }
+    </style>
+</head>
+<body>
+    <div class="demo-bar">
+        <span>Demo Mode — Pre-generated analysis for Dialog Group Berhad</span>
+        <a href="../../good-company.html">Back to Project</a>
+    </div>
+
+    <header>
+        <h1>Good Company</h1>
+        <p>Stock Research Assistant — Is this a good company? Should I invest?</p>
+    </header>
+
+    <div class="container">
+        <div class="demo-notice">
+            This demo uses pre-generated analysis for <strong>Dialog Group Berhad (Q2 FY2026)</strong>. In the full app, you select any quarter report PDF from your local folder and the analysis runs live via Gemini.
+        </div>
+
+        <div class="selector">
+            <label>Quarter Report</label>
+            <select disabled><option selected>Dialog - 6 Apr 26.pdf</option></select>
+            <div class="btn-row">
+                <button class="btn btn-primary" id="btn-start" onclick="startPhase1()">Start Analysis</button>
+            </div>
+        </div>
+
+        <!-- Phase 1 -->
+        <div class="phase" id="phase1-section">
+            <div class="phase-header">
+                <span class="phase-badge badge-blue">Phase 1</span>
+                <h2>Is This a Good Company?</h2>
+            </div>
+            <div class="card" id="card-cheat_sheet">
+                <div class="card-header"><h3>Step 1 — Company Overview</h3><span class="card-step">Cheat Sheet</span></div>
+                <div class="card-visual"></div>
+                <div class="card-body"><span class="card-empty">Waiting for analysis...</span></div>
+            </div>
+            <div class="card" id="card-forensic_check">
+                <div class="card-header"><h3>Step 2 — Forensic Check</h3><span class="card-step">Red Flags</span></div>
+                <div class="card-visual"></div>
+                <div class="card-body"><span class="card-empty">Waiting for analysis...</span></div>
+            </div>
+            <div class="card" id="card-business_vs_stock">
+                <div class="card-header"><h3>Step 3 — Verdict</h3><span class="card-step">Good Business or Good Stock?</span></div>
+                <div class="card-visual"></div>
+                <div class="card-body"><span class="card-empty">Waiting for analysis...</span></div>
+            </div>
+        </div>
+
+        <!-- Copy report -->
+        <div class="copy-bar hidden" id="copy-bar">
+            <span>Copy all opened sections as text</span>
+            <button class="btn btn-copy btn-sm" onclick="copyReport()">Copy Report</button>
+        </div>
+
+        <!-- Read More -->
+        <div class="phase hidden" id="readmore-section">
+            <div class="phase-header">
+                <span class="phase-badge badge-amber">Read More</span>
+                <h2>Supplementary Reports</h2>
+            </div>
+            <p style="font-size:13px;color:#718096;margin-bottom:14px;">In the full app, 4 supplementary reports are available here: Deep Dive, Earnings Breakdown, Scenario Stress Test, and Company Comparison.</p>
+        </div>
+
+        <!-- Phase 2 -->
+        <div class="phase hidden" id="phase2-section">
+            <div class="phase-header">
+                <span class="phase-badge badge-green">Phase 2</span>
+                <h2>Should I Invest?</h2>
+            </div>
+            <div class="input-group">
+                <div><label>My intended price</label><input type="text" value="RM 2.00" disabled></div>
+                <div><label>Time horizon</label><select disabled><option selected>3 years</option></select></div>
+                <div><label>Risk tolerance</label><select disabled><option selected>Medium</option></select></div>
+            </div>
+            <div class="btn-row" style="margin-bottom:14px;">
+                <button class="btn btn-green" id="btn-phase2" onclick="startPhase2()">Start Investment Analysis</button>
+            </div>
+            <div class="card" id="card-valuation">
+                <div class="card-header"><h3>Step 4 — Valuation Check</h3><span class="card-step">Cheap / Fair / Expensive</span></div>
+                <div class="card-visual"></div>
+                <div class="card-body"><span class="card-empty">Waiting for analysis...</span></div>
+            </div>
+            <div class="card" id="card-bull_vs_bear">
+                <div class="card-header"><h3>Step 5 — Bull vs Bear</h3><span class="card-step">Balanced Debate</span></div>
+                <div class="card-visual"></div>
+                <div class="card-body"><span class="card-empty">Waiting for analysis...</span></div>
+            </div>
+            <div class="card" id="card-risk_check">
+                <div class="card-header"><h3>Step 6 — Personal Risk Check</h3><span class="card-step">Should I Buy?</span></div>
+                <div class="card-visual"></div>
+                <div class="card-body"><span class="card-empty">Waiting for analysis...</span></div>
+            </div>
+        </div>
+
+        <!-- Step 7 -->
+        <div class="phase hidden" id="final-section">
+            <div class="phase-header">
+                <span class="phase-badge" style="background:#faf5ff;color:#6b46c1;">Step 7</span>
+                <h2>Final Scorecard</h2>
+            </div>
+            <div class="btn-row" style="margin-bottom:14px;">
+                <button class="btn btn-sm" style="background:#6b46c1;color:#fff;" id="btn-final" onclick="runFinalScorecard()">Run Final Scorecard</button>
+            </div>
+            <div class="card" id="card-final_scorecard">
+                <div class="card-header"><h3>Step 7 — Investment Yardstick</h3><span class="card-step">Personal Screening Criteria</span></div>
+                <div class="card-visual"></div>
+                <div class="card-body"><span class="card-empty">Click "Run Final Scorecard" after completing Phase 2</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast">Copied to clipboard</div>
+
+    <script>
+        const DEMO_DATA = {"cheat_sheet": {"text": "Here's an investor cheat sheet for Dialog Group Berhad's latest quarter:\n\n---\n\n### DIALOG GROUP BERHAD: Investor Cheat Sheet (Q2 FY2026)\n\n**What the Company Actually Does**\nDialog Group Berhad is a leading integrated technical service provider for the energy sector. They operate across the entire energy value chain, from finding and extracting oil and gas (Upstream), to storing and transporting it (Midstream), and processing or maintaining facilities (Downstream). While their core operations are in Malaysia, they also have a significant international presence. They are diversifying into sustainable and renewable energy products and services.\n\n**How It Makes Money**\nDialog generates revenue through various activities:\n*   **Midstream Operations:** This is a core focus, involving tank storage terminals. They earn from healthy storage occupancy and phased capacity expansions for long-term customers, particularly at the Pengerang Deepwater Terminals (PDT) in Malaysia.\n*   **Downstream Operations:** They provide integrated technical services like engineering, procurement, construction & commissioning (EPCC), plant maintenance, catalyst handling, and specialist products. Project completion and cost optimization drive earnings here.\n*   **Upstream Operations:** They are involved in developing and rejuvenating oil and gas fields, earning from crude oil allocation and related services.\n*   **Joint Ventures and Associates:** Contributions from their investments in other companies, which can also be significantly influenced by factors like favorable foreign exchange movements.\n*   **Geographical Spread:** They earn revenue from customers across Malaysia, Australia & New Zealand, other parts of Asia, Thailand, and other countries.\n\n**Biggest Growth Drivers**\nDialog is strategically focused on long-term growth and recurring income through several key initiatives:\n*   **Pengerang Deepwater Terminals (PDT) Expansion:** Significant investment in expanding tank storage capacity, including an additional 614,000 m3 for BP Singapore (mid-2028 completion) and a 272,000 m3 expansion for Pengerang Biorefinery Sdn. Bhd. (PBSB) for sustainable and renewable products (USD330 million investment).\n*   **Renewable Energy Focus:** Expanding into storage facilities for low-carbon fuel alternatives, such as the DIALOG Terminals Langsat (3) with a second phase of 150,000 m3 storage for renewable and petroleum products by September 2026.\n*   **Upstream Business Development:** Progressing on new gas field developments (Salbiah, RAJA, Mutiara Clusters) and expanding participation in other parts of the value chain, including a newly awarded participating interest in the Cendramas Production Sharing Contract.\n*   **LNG-driven Air Separation Unit:** A joint venture with PETRONAS Gas Berhad for a facility targeted for completion by end 2026.\n*   **Leveraging Downstream Expertise:** The expansion plans for PDT are expected to drive significant EPCC activity for their downstream operations.\n\n**Biggest Risks**\nWhile the company emphasizes its resilience, several factors could impact performance:\n*   **Fluctuating Global Oil Prices:** Lower realized oil prices directly impact upstream contributions.\n*   **Currency Movements:** Significant foreign currency translation losses in the period highlight exposure to exchange rate volatility, especially on foreign currency liabilities.\n*   **Economic Uncertainty:** Broader economic conditions can affect project timelines and demand for services.\n*   **Reduced Business Activities:** A decrease in international business activities has previously led to lower profit contributions.\n*   **Crude Oil Allocation:** Reduced allocation can negatively impact upstream earnings.\n\n**Key Numbers (for the 3 months ended 31 December 2025)**\n*   **Revenue:** RM756.3 million (up 11.2% year-over-year, or YoY)\n*   **Net Profit (attributable to owners of the parent):** RM137.7 million (a significant recovery from a loss of RM129.5 million YoY)\n*   **EPS (Earnings Per Share - basic):** 2.44 sen (recovering from a loss per share of 2.29 sen YoY)\n*   **Profit Margin (Net Profit as a percentage of Revenue):** 18.2% (a substantial turnaround from a negative margin of -19.0% YoY)\n\n**Segment Breakdown (for the 6 months ended 31 December 2025)**\nThe company reports geographically:\n*   **Malaysia:** Contributed the vast majority of profit (RM294.0 million PBT - Profit Before Tax) and revenue (RM936.0 million)\n*   **Australia & New Zealand:** RM9.1 million PBT, RM224.7 million revenue\n*   **Thailand:** RM19.1 million PBT, RM134.6 million revenue\n*   **Other Asia:** RM8.4 million PBT, RM87.7 million revenue\n*   **Other Countries:** RM5.2 million PBT, RM30.4 million revenue\n*   *Note: These figures are for the cumulative six-month period.*\n\n**Management Tone**\nManagement is highly **confident and optimistic**. They stress the \"healthy performance,\" \"resilience of its integrated business model,\" and its ability to \"manage and sustain the Group through periods of economic uncertainty, oil price volatility and currency movements.\" They explicitly state they \"remain confident\" and are \"optimistic of its positive performance in the financial year ending 30 June 2026,\" emphasizing their steadfast pursuit of long-term strategies, diversification, and investment in workforce and digital transformation.\n\n**What to Watch Next Quarter**\n*   **Progress on PDT Expansions:** Monitor milestones for the BP Singapore and PBSB storage capacity projects.\n*   **Upstream Field Developments:** Look for updates on the Salbiah, RAJA, Mutiara, and Cendramas field developments.\n*   **Renewable Energy Ventures:** Track the progress and initial contributions from DIALOG Terminals Langsat (3) Phase 2.\n*   **LNG-driven Air Separation Unit:** Watch for updates on the joint venture with PETRONAS Gas Berhad, as it nears its targeted completion.\n*   **Overall Market Conditions:** Observe global oil prices and currency movements, as they remain key external factors impacting the group's diverse operations.\n\n---", "visual_data": {"metrics": [{"label": "Revenue", "value": "RM756,337k", "change": "+11.2%"}, {"label": "Net Profit", "value": "RM137,741k", "change": "N/A (from loss)"}, {"label": "EPS", "value": "2.44 sen", "change": "N/A (from loss)"}, {"label": "Profit Margin", "value": "18.2%", "change": "N/A (from negative)"}]}}, "forensic_check": {"text": "Here's a review of DIALOG GROUP BERHAD's quarter report, looking for potential problems:\n\n### Overall Performance Overview\n\nDIALOG GROUP BERHAD reported a strong turnaround in profit for the six months ended 31 December 2025, reversing a loss from the previous year. Revenue grew by 7.5% year-to-date, and profit after tax surged significantly. Management attributes this to robust Malaysian operations, including healthy tank storage occupancy, successful project completions, and cost optimization. They also noted a positive impact from the elimination of a loss-making joint venture (JV) and favorable foreign exchange (FX) movements on JV liabilities.\n\nWhile the profit numbers look excellent on the surface, a deeper dive into the financials reveals several areas that warrant close attention, particularly concerning how profits translate into actual cash and the increase in debt.\n\n### Detailed Review and Red Flags\n\n**1. Revenue Quality**\nRevenue is growing from actual demand, particularly from Malaysian operations with increased tank storage occupancy and completed projects. The company is actively pursuing new long-term contracts and expanding into sustainable energy solutions (e.g., biofuel storage), indicating genuine business growth initiatives. There's no indication of significant one-off revenue items artificially boosting the top line.\n\n*   **Red Flag:** None.\n\n**2. Earnings Quality**\nThe reported profit is strong, driven by improved core operations, cost optimization, and the cessation of a loss-making joint venture. This is good news. However, a significant portion of the *increase* in profit from joint ventures and associates for the quarter was explicitly attributed to \"favourable foreign exchange movement on USD liabilities\" (B1). This is a non-operational gain, meaning it's not from day-to-day business activities and may not recur. Also, note A5 states \"no unusual items affecting... net income,\" which contradicts the explanation in B1 about the FX gain. This inconsistency raises a minor flag about clarity in reporting.\n\n*   **Red Flag:** **Yellow.** A noticeable portion of the profit increase, specifically from joint ventures, comes from non-operational foreign exchange gains, and there's a contradiction in the notes regarding unusual items.\n\n**3. Cash Flow Strength**\nThis is the most significant area of concern. Despite a massive increase in reported profit before tax (from RM40.7 million to RM335.8 million year-to-date), the **net cash generated from operating activities (CFO)** actually *decreased* by 25.6% (from RM402.7 million to RM299.8 million) year-over-year. This indicates a poor conversion of accounting profit into actual cash.\n\nA major reason for this weak cash flow is a substantial increase in **working capital** (the difference between current assets and current liabilities). Specifically, \"Net change in inventories and receivables\" resulted in a **cash outflow of RM268.6 million**. Trade and other receivables jumped by a very high 76.8% (RM321.6 million) in just six months, while revenue only grew by 7.5%. This suggests that the company is either facing difficulties collecting payments from customers (slowing collections) or could be recognizing revenue too early, before cash is received. This divergence between profit and operating cash flow is a serious red flag.\n\n*   **Red Flag:** **Red.** Operating cash flow significantly declined despite a surge in reported profit, primarily due to a substantial increase in receivables that far outpaced revenue growth.\n\n**4. Debt Risk**\nThe company's total debt increased from approximately RM2.1 billion at 30 June 2025 to RM2.47 billion at 31 December 2025. This increase of RM364 million is primarily due to the issuance of an additional RM500 million in Senior Sukuk Wakalah (an Islamic bond) during the period. While the company has a strong cash balance (RM1.86 billion), this growing debt load needs careful monitoring, especially in light of the declining operating cash flow. The company is investing heavily in new projects (tank terminals, upstream, renewables), which explains the need for capital, but reliance on new debt to fund operations or investments when operating cash flow is weak increases risk.\n\n*   **Red Flag:** **Yellow.** Total debt increased by RM500 million through new bond issuance. While current cash levels are healthy and investments are underway, the rising debt level warrants close watch, especially given the weakened operating cash flow.\n\n**5. Dilution Risk**\nThere is no indication of share issuance during this period. The share capital and weighted average number of ordinary shares (shares outstanding) remained stable.\n\n*   **Red Flag:** None.\n\n**6. Accounting Signals**\nThe most notable accounting signal is the dramatic increase in **Trade and other receivables** (money owed to the company by customers) by 76.8% in six months, compared to only 7.5% revenue growth. This is a classic sign of potential aggressive revenue recognition (booking sales before cash is assured or collected) or deteriorating collection practices. This divergence between sales and cash collection is a serious concern for the quality of earnings. The discrepancy between Note A5 (no unusual items) and B1 (foreign exchange gains) also signals a minor inconsistency in reporting.\n\n*   **Red Flag:** **Yellow.** The significant increase in receivables relative to revenue growth is a potential red flag for aggressive accounting or collection issues. There's also a minor inconsistency in management's commentary regarding unusual items.\n\n### Conclusion\n\nDIALOG GROUP BERHAD is experiencing strong reported profit growth driven by operational improvements and cost control. However, the quality of these earnings is somewhat diluted by non-operational foreign exchange gains, and more importantly, the company's ability to convert this profit into actual cash from operations has significantly deteriorated. The substantial increase in receivables is a major concern. While the company is actively investing in future growth, the rising debt levels alongside weak operating cash flow conversion creates a potentially risky financial structure. A smart business owner would focus on whether the company can improve its cash collection and ensure that future growth projects generate strong, consistent operating cash flow.\n\n---", "visual_data": {"checks": [{"area": "Revenue Quality", "rating": "green", "note": "Revenue is growing from core demand and strategic initiatives, no significant one-off items."}, {"area": "Earnings Quality", "rating": "yellow", "note": "Profit boost partly from non-operational FX gains and a minor reporting inconsistency regarding unusual items."}, {"area": "Cash Flow", "rating": "red", "note": "Operating cash flow declined sharply despite profit growth due to a massive increase in receivables."}, {"area": "Debt Risk", "rating": "yellow", "note": "Debt increased significantly via new Sukuk issuance, requiring careful monitoring given cash flow concerns."}, {"area": "Dilution Risk", "rating": "green", "note": "No new shares issued; ownership not diluted during the period."}, {"area": "Accounting Signals", "rating": "yellow", "note": "Receivables grew much faster than revenue, hinting at potential collection issues or aggressive revenue recognition."}]}}, "business_vs_stock": {"text": "Here's an analysis of Dialog Group Berhad's quarter report:\n\n## 1. Is this a GOOD BUSINESS?\n\nYes, Dialog Group Berhad appears to be a **GOOD BUSINESS**.\n\n**Reasoning:**\n\nThe company is an integrated technical service provider to the energy sectors (Upstream, Midstream, Downstream). It has a diversified business model that helps it manage economic cycles, oil price volatility, and currency changes.\n\n*   **Strong Product/Service:** Dialog is a leading independent owner and operator of tank terminals in Southeast Asia, with strategic assets like the Pengerang Deepwater Terminals (PDT). These terminals are crucial infrastructure for the energy industry and often come with long-term usage agreements, providing stable, recurring income. The company is also expanding into new areas like renewable fuel storage, showing adaptability to future energy trends. In its upstream business (exploring and producing oil/gas), it's actively developing fields and securing new contracts. Its downstream operations (processing and distribution) are also set to benefit from expansion projects.\n*   **Reliable Profits:** The current report shows a dramatic turnaround in profitability. After recording a loss in the same period last year (31 Dec 2024), the company posted a significant profit for the 6 months ended 31 Dec 2025.\n    *   **Revenue (Sales)** increased by 7.5% year-on-year to RM1.41 billion.\n    *   **Profit before tax** surged from RM40.7 million to RM335.8 million – a massive improvement.\n    *   **Net profit attributable to shareholders** recovered from RM21.5 million to RM277.8 million. This indicates a strong recovery and execution.\n*   **Good Management:** Management clearly outlines its long-term strategies, which include expanding strategic assets (PDT Phase 3 for BP Singapore), investing in renewable energy infrastructure (PT2SB for Pengerang Biorefinery Sdn. Bhd., Dialog Terminals Langsat 3 for renewable products), and growing its upstream activities. They emphasize building competencies, upskilling the workforce, and digital transformation. Their focus on generating long-term recurring income suggests a prudent and sustainable business approach. The decision to invest in projects supporting the low-carbon transition (like biofuel storage) also shows foresight and adaptability.\n\n## 2. Is this a GOOD STOCK?\n\nBased on the report, this appears to be a **GOOD STOCK**, especially considering its strong business quality and future growth prospects.\n\n**Reasoning:**\n\n*   **Business Quality (Score: 9/10)**: The company possesses strong competitive advantages, including its position as a major independent tank terminal operator, strategic infrastructure (PDT), and diversified energy services. The long-term contracts for its midstream assets provide stability and predictability. Its expansion into renewable energy storage positions it well for the future. These factors create a lasting advantage.\n*   **Management Quality (Score: 8/10)**: Management demonstrates competence, strategic vision, and alignment with shareholders. They are actively investing in growth projects, focusing on long-term value creation, and adapting to industry shifts (e.g., low-carbon initiatives). The transparent reporting and dividend payments indicate good governance.\n*   **Financial Strength (Score: 7/10)**: The company exhibits solid financial health, marked by a significant rebound in profits and robust cash reserves (RM1.86 billion). While operating cash flow saw a dip (due to higher cash tied up in working capital) and total debt increased with the issuance of new Sukuk (Islamic bonds), this debt is largely to fund strategic growth projects, which is a reasonable use of capital for an expanding business. The overall balance sheet remains strong, and the debt-to-equity ratio is manageable.\n*   **Valuation (Score: 6/10)**: Without the actual stock price, it's impossible to give a precise valuation. However, given the substantial profit recovery (EPS of 4.92 sen for 6 months, a huge jump) and the strong future growth pipeline, it's likely the market has recognized some of this positive momentum. A score of 6 assumes the stock is priced fairly, reflecting its quality and growth prospects, rather than being \"cheap\" or \"overpriced\" given the strong underlying performance and outlook. Good businesses rarely stay dirt cheap for long.\n*   **Upside Probability (Score: 8/10)**: The likelihood of the stock increasing from here appears high. The company has strong earnings momentum, a clear strategic roadmap with significant infrastructure projects underway (PDT expansion, new renewable storage facilities), and continued growth in its upstream segment. These initiatives are expected to drive future revenue and profit growth. While macroeconomic factors and commodity prices always pose risks, Dialog's diversified and integrated model provides resilience, suggesting a positive trajectory.\n\n---\n\n**Classification:**\n**3. Great business, great stock**\n\n**Explanation:**\nDialog Group Berhad is a fundamentally strong company with a resilient business model, strategic assets, and a clear path for growth in both traditional energy and emerging renewable sectors. The latest report shows a remarkable financial turnaround, proving the effectiveness of its integrated operations. Management is competent and focused on long-term value. While the stock might not be \"cheap\" in absolute terms after its strong performance, its high quality, strong growth prospects, and clear strategic initiatives make it a compelling investment at a fair price. The company is actively building its future, which provides significant upside potential for shareholders.\n\n---", "visual_data": {"verdict": 3, "verdict_label": "Great business, great stock", "scores": [{"dimension": "Business Quality", "score": 9}, {"dimension": "Management", "score": 8}, {"dimension": "Financial Strength", "score": 7}, {"dimension": "Valuation", "score": 6}, {"dimension": "Upside Probability", "score": 8}]}}, "valuation": {"text": "Based on the DIALOG GROUP BERHAD quarter report for the period ended 31 December 2025, here's an estimate of the stock's valuation.\n\nFirst, let's gather the key financial data and make annual projections, as this report covers six months. We'll assume the performance for the first six months will be similar for the second six months to get a full-year estimate.\n\n**Key Financial Data (Annualized based on 6 months ended 31 Dec 2025):**\n\n*   **Revenue:** RM 1,413,333,000 (6 months) \\* 2 = **RM 2,826,666,000**\n*   **Net Profit (attributable to owners):** RM 277,757,000 (6 months) \\* 2 = **RM 555,514,000**\n*   **Earnings Per Share (EPS):** RM 0.0492 (6 months) \\* 2 = **RM 0.0984** per share\n*   **Number of Shares Outstanding:** 5,642,685,000 shares (from Basic earnings per share note B13)\n*   **Profit Before Tax (PBT):** RM 335,794,000 (6 months) \\* 2 = **RM 671,588,000**\n*   **Finance Costs:** RM 27,918,000 (6 months) \\* 2 = **RM 55,836,000**\n*   **Depreciation & Amortisation:** RM 179,008,000 (6 months) \\* 2 = **RM 358,016,000**\n*   **Total Debt:** RM 2,492,696,000\n    *   *(This includes Current & Non-Current Bank Borrowings (RM 972,695,000), Senior Sukuk Wakalah (RM 1,000,000,000), Perpetual Sukuk Wakalah (RM 498,940,000 – often treated like debt for valuation), and Lease Liabilities (RM 21,061,000))*\n*   **Cash & Cash Equivalents:** RM 1,862,997,000\n*   **Net Debt:** RM 2,492,696,000 (Total Debt) - RM 1,862,997,000 (Cash) = **RM 629,699,000**\n\n---\n\n### Valuation Methods Used\n\nSince the current market price of the stock is not provided in the report, we will work backward from typical valuation multiples for companies in this sector (energy infrastructure and services) to derive implied share prices.\n\n#### 1. P/E Ratio (Price-to-Earnings Ratio)\n\n*   **What it means:** The P/E ratio tells you how many years of profit you are paying for each share of the company. A higher P/E means investors expect higher future growth or are willing to pay a premium for the company's earnings.\n*   **Calculation & Comparison:**\n    *   **Annualized Earnings Per Share (EPS):** RM 0.0984\n    *   For an established company with good growth prospects in Malaysia's energy sector, a \"fair\" P/E ratio typically ranges from 18x to 22x. Lower multiples (e.g., below 15x) might suggest it's \"cheap,\" while higher multiples (e.g., above 25x) could indicate it's \"expensive\" due to high growth expectations.\n    *   **Assumptions for this company:** Given DIALOG's stable terminal business and ongoing expansion projects (like Pengerang Deepwater Terminals), a P/E of **20x** is a reasonable \"fair\" benchmark.\n\n#### 2. EV/EBITDA (Enterprise Value-to-Earnings Before Interest, Taxes, Depreciation, and Amortization)\n\n*   **What it means:** EV/EBITDA compares the total value of a company (its market value plus its debt, minus its cash) to its operating cash profit before non-cash charges like depreciation and taxes. It's useful for comparing companies with different debt levels or depreciation policies, especially in capital-intensive industries.\n*   **Calculation & Comparison:**\n    *   **Annualized EBIT (Earnings Before Interest and Taxes):** PBT + Finance Costs = RM 671,588,000 + RM 55,836,000 = RM 727,424,000\n        *(Note: This EBIT includes the share of profit from joint ventures and associates, which is a significant part of Dialog's group profitability.)*\n    *   **Annualized EBITDA:** EBIT + Depreciation & Amortisation = RM 727,424,000 + RM 358,016,000 = **RM 1,085,440,000**\n    *   **Net Debt:** RM 629,699,000\n    *   For infrastructure-heavy and energy services companies, a \"fair\" EV/EBITDA multiple often falls between 10x and 12x. Below 8x might be considered \"cheap,\" and above 14x could suggest it's \"expensive.\"\n    *   **Assumptions for this company:** Considering DIALOG's asset base and long-term contracts, an EV/EBITDA of **11x** is a reasonable \"fair\" benchmark.\n\n---\n\n### Price Scenarios\n\nBased on the annualized financials and the assumed multiples, here are the implied share price scenarios:\n\n*   **P/E Ratio based prices (using annualized EPS of RM 0.0984):**\n    *   **Cheap Case (P/E 15x):** RM 0.0984 \\* 15 = **RM 1.476**\n    *   **Fair Value (P/E 20x):** RM 0.0984 \\* 20 = **RM 1.968**\n    *   **Expensive Case (P/E 25x):** RM 0.0984 \\* 25 = **RM 2.460**\n\n*   **EV/EBITDA based prices (using annualized EBITDA of RM 1,085,440,000 and Net Debt of RM 629,699,000):**\n    *   **Cheap Case (EV/EBITDA 8x):**\n        *   Implied Enterprise Value (EV) = RM 1,085,440,000 \\* 8 = RM 8,683,520,000\n        *   Implied Market Cap = EV - Net Debt = RM 8,683,520,000 - RM 629,699,000 = RM 8,053,821,000\n        *   Implied Share Price = RM 8,053,821,000 / 5,642,685,000 shares = **RM 1.427**\n    *   **Fair Value (EV/EBITDA 11x):**\n        *   Implied EV = RM 1,085,440,000 \\* 11 = RM 11,939,840,000\n        *   Implied Market Cap = EV - Net Debt = RM 11,939,840,000 - RM 629,699,000 = RM 11,310,141,000\n        *   Implied Share Price = RM 11,310,141,000 / 5,642,685,000 shares = **RM 2.004**\n    *   **Expensive Case (EV/EBITDA 14x):**\n        *   Implied EV = RM 1,085,440,000 \\* 14 = RM 15,196,160,000\n        *   Implied Market Cap = EV - Net Debt = RM 15,196,160,000 - RM 629,699,000 = RM 14,566,461,000\n        *   Implied Share Price = RM 14,566,461,000 / 5,642,685,000 shares = **RM 2.582**\n\n---\n\n### Consolidated Price Scenarios and Assessment\n\nThe two valuation methods provide consistent results, particularly for the \"fair value\" range. We will consolidate these for the final scenarios:\n\n*   **Cheap case:** **RM 1.45**\n    *   At this price, the stock would be trading at roughly 14.7x its annualized earnings (P/E) and 8.1x its operating cash profit (EV/EBITDA). This suggests the market is either very pessimistic or overlooking the company's future growth.\n*   **Fair value:** **RM 1.99**\n    *   This price reflects DIALOG's current fundamentals and growth prospects. It implies a P/E of about 20.2x and an EV/EBITDA of 11.0x, which are typical for a company with its characteristics in the sector, including a mix of stable recurring income and growth initiatives.\n*   **Expensive case:** **RM 2.52**\n    *   At this price, the stock would be trading at approximately 25.6x its annualized earnings (P/E) and 13.9x its operating cash profit (EV/EBITDA). This suggests the market is very optimistic about its future growth, potentially pricing in significant positive developments that may not be fully certain.\n\n**Current Assessment:**\nBased on the annualized figures and typical industry multiples, a fair value for DIALOG GROUP BERHAD is estimated to be around **RM 1.99 per share**. If the current market price is significantly below this, it might be considered cheap. If it's significantly above, it might be considered expensive. Without the actual current share price, we assess its intrinsic value is in the \"fairly priced\" range given its strong performance recovery and growth plans outlined in the report.\n\n---", "visual_data": {"cheap": "RM 1.45", "fair": "RM 1.99", "expensive": "RM 2.52", "current_assessment": "Fairly priced (based on intrinsic valuation)", "methods_used": ["P/E ratio", "EV/EBITDA"]}}, "bull_vs_bear": {"text": "Based on DIALOG GROUP BERHAD's quarter report for the period ended 31 December 2025, here's a case for and against investing:\n\n---\n\n### BULL CASE (reasons to buy)\n\n1.  **Why revenue can keep growing**\n    *   **Strong Top-Line Growth:** Revenue for the last six months (cumulative period) rose 7.5% year-on-year to RM1.41 billion. The most recent quarter alone saw an 11.2% increase compared to the same period last year, showing good momentum.\n    *   **Massive Midstream Expansion:** DIALOG is undertaking significant projects, including expanding its Pengerang Deepwater Terminals (PDT). This includes an additional 614,000 cubic meters (m3) of tank capacity under a conditional long-term service agreement (LTSA) with BP Singapore Pte Limited, expected by mid-2028.\n    *   **Renewable Energy Focus:** The company is strategically moving into the growing renewable sector. A joint venture will add 272,000 m3 of storage for sustainable and renewable products, backed by a 25-year long-term take-or-pay Terminal Usage Agreement (TUA). DIALOG Terminals Langsat (3) is also expanding its renewable fuel storage, with dedicated capacity for EcoCeres Limited by September 2026.\n    *   **Upstream Growth:** DIALOG is actively developing new oil and gas fields (Salbiah, RAJA, Mutiara Cluster) and recently secured a participating interest in the Cendramas Production Sharing Contract. These increased upstream activities provide opportunities for future revenue from engineering and specialist technical services.\n    *   **Diversified Business Model:** Operations span Upstream (exploration & production), Midstream (storage & terminals), and Downstream (technical services). This diversification helps manage risks across different energy market cycles and generates recurring income.\n\n2.  **What could make profit margins expand**\n    *   **Dramatic Profit Recovery:** The company swung from a significant loss after tax of RM125.6 million in the same quarter last year to a profit of RM150.9 million in the latest quarter. For the six-month period, profit after tax jumped more than 100% to RM297.0 million, indicating a strong financial turnaround.\n    *   **Lower Operating Expenses:** Despite higher revenue, operating expenses actually decreased in both the latest quarter and the six-month period compared to last year. This demonstrates strong cost control and improved operational efficiency.\n    *   **Strong Joint Venture (JV) Performance:** Profits from joint ventures and associate companies soared. This was mainly due to favorable foreign exchange movements (currency fluctuations that benefited the company, especially on USD liabilities) and the successful elimination of a previously loss-making joint venture.\n    *   **Optimisation Initiatives:** The Downstream business achieved higher contributions on the back of cost optimization initiatives and efficient project completion. DIALOG is also investing in digital transformation to remain efficient and competitive, which can lead to better margins.\n    *   **Lower Effective Tax Rate:** The company's effective tax rate (the actual percentage of profit paid in taxes) for the six-month period was lower than the statutory 24% rate, primarily due to the utilization of tax losses and non-taxable income.\n\n3.  **Product or brand strength**\n    *   **Market Leadership:** DIALOG positions itself as a \"leading integrated technical service provider\" and \"one of the largest independent terminal owner-cum-operator in Southeast Asia,\" with a current operating capacity of 5.1 million m3. This signifies a strong market position and reputation.\n    *   **Strategic Assets:** The ongoing development of Pengerang Deepwater Terminals (PDT) into \"one of the largest petroleum and petrochemical hubs for the Asia Pacific region\" highlights its strategic high-value infrastructure assets.\n    *   **Long-Term Customer Relationships:** The company has secured long-term contracts with major players like BP Singapore (LTSA) and Pengerang Biorefinery Sdn. Bhd. (25-year TUA), demonstrating customer trust and securing stable future revenue streams.\n    *   **Adaptability to Energy Transition:** Venturing into storage facilities for sustainable and renewable products shows the company's proactive approach to adapting to the evolving global energy landscape.\n\n4.  **Positive industry trends**\n    *   **Growing Demand for Low-Carbon Fuels:** DIALOG is capitalizing on the \"growing demand for low-carbon fuel alternatives\" by investing in renewable fuel storage, aligning with global energy transition trends.\n    *   **Regional Energy Demand:** The development of PDT as a regional hub and the identified \"growing market demand in Sabah, particularly for power generation\" support a robust regional energy demand that directly benefits DIALOG's core operations.\n    *   **Resilience in Volatile Markets:** Management expresses optimism for continued positive performance despite \"economic uncertainty, oil price volatility and currency movements,\" suggesting its diversified business model is robust enough to navigate market fluctuations.\n\n5.  **Upcoming events that could push the stock up**\n    *   **Mid-Term Project Completions:** The Liquefied Natural Gas (LNG)-driven Air Separation Unit facility (a joint venture with PETRONAS Gas Berhad) is targeted for completion by end 2026. Phase 2 of the Langsat Terminals (for renewable products) is expected by September 2026, bringing new assets online and generating revenue.\n    *   **Major Long-Term Project Milestone:** The additional 614,000 m3 tank capacity for BP Singapore (part of the PDT Phase 3 expansion) is slated for completion by mid-2028. Progress updates on such a significant project could positively influence investor sentiment.\n    *   **Upstream Developments:** Ongoing progress in new oil and gas field developments (Salbiah, RAJA, Mutiara Cluster) and the recently awarded Cendramas Production Sharing Contract could provide positive news flow and future earnings potential.\n    *   **Long-Term Contract Security:** The inherent stability and revenue visibility from the 25-year TUA with Pengerang Biorefinery and the LTSA with BP Singapore are attractive to long-term investors.\n    *   **Management's Optimistic Outlook:** The company's management is \"optimistic of its positive performance in the financial year ending 30 June 2026,\" which could boost investor confidence.\n\n---\n\n### BEAR CASE (reasons to avoid)\n\n1.  **Why growth might slow down**\n    *   **International Weakness:** While domestic operations performed strongly, the \"International front\" saw a \"light decrease in profit contributions attributable to reduced business activities.\" This could signal headwinds or reduced opportunities in overseas markets.\n    *   **Upstream Volatility:** The Upstream business experienced \"lower contribution due to reduced crude oil allocation and lower realised oil prices.\" This segment remains highly exposed to fluctuating commodity prices and government policies, which are inherently unpredictable and can constrain growth.\n    *   **Geographical Concentration Risk:** The majority of the company's segment profit before tax (RM294 million out of RM335 million total) comes from Malaysia. Over-reliance on a single country for most of its earnings carries geographical risk if the Malaysian economy or energy sector faces significant slowdowns.\n    *   **Selective Growth Approach:** The company explicitly states it will \"prioritise these projects and adopt a cautious, selective approach to bidding for other EPCC (Engineering, Procurement, Construction & Commissioning) contracts.\" While prudent, this might mean foregoing other potential growth opportunities in the Downstream sector.\n\n2.  **What could squeeze profit margins**\n    *   **Increasing Debt and Finance Costs:** Finance costs (interest payments on borrowings) increased for both the quarter and the six-month period. The company issued an additional RM500 million in Senior Sukuk Wakalah (a type of Islamic bond) in August 2025, significantly increasing its total debt. Higher debt leads to higher interest expenses, which reduce net profit.\n    *   **Foreign Exchange Volatility:** While \"favourable foreign exchange movement\" boosted joint venture profits this quarter, exchange rates are highly volatile. An unfavorable swing in currency could reverse these gains and negatively impact future profitability, especially given the international nature of some operations.\n    *   **Rising Operational Costs:** Although operating expenses decreased in this period, aggressive growth plans and large-scale project execution (like the PDT expansion) in the future could lead to higher operational costs, especially in an inflationary environment.\n    *   **Hedging Losses:** The company recorded negative \"cash flow hedge\" amounts, indicating losses from financial instruments used to reduce risk from price changes. This highlights ongoing exposure to market volatility despite hedging efforts.\n\n3.  **Competition threats**\n    *   **Intense Energy Sector Competition:** Operating across the Upstream, Midstream, and Downstream segments of the energy sector inherently implies a competitive environment. While DIALOG has secured long-term contracts, winning new business for EPCC or terminal services can be challenging, potentially putting pressure on pricing and margins.\n    *   **Capacity Glut Risk:** Despite DIALOG's terminal expansions, a broader market oversupply in storage (especially for traditional petroleum products) could lead to lower occupancy rates or pricing pressure for uncommitted capacity, impacting profitability.\n    *   **Technological Disruption:** The ongoing energy transition may lead to new technologies and new competitors, potentially disrupting existing business models or making current assets less valuable in the long term.\n\n4.  **Balance sheet worries**\n    *   **Significant Debt Increase:** Total liabilities increased substantially by approximately RM500 million in six months (from RM2,378 million to RM2,873 million), primarily due to the new RM500 million Sukuk issuance. This significantly raises the company's financial leverage (reliance on borrowed money) and future repayment obligations.\n    *   **Rising Receivables:** Trade and other receivables (money owed to the company by customers) jumped significantly from RM418 million to RM740 million in six months. This could indicate slower collection of payments from customers, potentially tying up valuable working capital and increasing credit risk.\n    *   **Large Future Commitments:** The company has substantial future commitments, including RM109 million for capital expenditure and a significant RM827 million for its upstream business. These are large cash outflows that will require funding, potentially through further debt or equity, which could dilute shareholders.\n    *   **Contingent Liabilities:** DIALOG provides significant corporate guarantees (RM924.2 million for subsidiaries and RM42.6 million for JVs/associates). These are potential future obligations if the guaranteed entities fail to meet their financial commitments.\n\n5.  **Events that could push the stock down**\n    *   **Project Delays or Cost Overruns:** Major development projects, such as the PDT expansion (mid-2028), the LNG-driven Air Separation Unit (end 2026), and Langsat Phase 2 (September 2026), are complex. Any delays in completion or unexpected cost increases could disappoint investors and negatively impact financial performance.\n    *   **Declining Oil Prices:** A sustained drop in global crude oil prices would directly hurt the Upstream business's profitability and could also reduce overall investment in energy infrastructure, impacting demand for DIALOG's services across segments.\n    *   **Global Economic Slowdown:** A broader economic downturn could reduce overall demand for energy products and services, leading to lower utilization of terminals and fewer new projects in the Downstream segment.\n    *   **Unfavorable Regulatory Changes:** New environmental regulations or changes in energy policies could impact the profitability or viability of current and future projects, especially those related to fossil fuels.\n    *   **Adverse Foreign Exchange Movements:** Reversals in currency trends, particularly a weaker US Dollar, could negatively impact profits from joint ventures and associates, as favorable FX movements contributed significantly this quarter.\n\n---\n\n### Which side is stronger right now, and why?\n\nThe **Bull Case is stronger right now.**\n\nThe report clearly shows a significant financial turnaround, with robust profit recovery and strong revenue growth driven by solid performance in Malaysia and the successful resolution of prior loss-making ventures. The company has secured major long-term contracts (e.g., with BP Singapore, Pengerang Biorefinery) and is strategically expanding into high-growth areas like renewable fuel storage and developing major energy hubs. While there are valid concerns about increased debt, rising receivables, and some weakness in international business, the scale of current positive financial results, combined with clear, multi-year growth projects and a diversified business model, outweighs these risks. The operational efficiency gains (lower operating expenses despite higher revenue) are particularly compelling indicators of strong underlying business health.\n\n---", "visual_data": {"bull_points": 5, "bear_points": 5, "winner": "bull", "confidence": "high", "one_line": "The bull case is stronger due to a significant profit turnaround, strong revenue growth, strategic long-term projects, and effective cost management, outweighing concerns about rising debt and international weakness."}}, "risk_check": {"text": "Here's a direct assessment of Dialog Group Berhad based on the provided quarter report, tailored to your investment profile:\n\n**Your Profile:**\n*   **Intended purchase price:** RM 2.00\n*   **Hold period:** 3 years\n*   **Risk tolerance:** Medium\n\n---\n\n### What Can Go Right If I Buy\n\n1.  **Strong Turnaround and Profitability:** The company has bounced back impressively. It went from a significant loss (RM 125.6 million) in the same quarter last year to a healthy profit (RM 150.9 million) this quarter. Revenue is growing (up 11.2% this quarter), and crucially, operating expenses have significantly reduced (down from RM 822.5 million to RM 662.0 million), showing improved efficiency.\n2.  **Clear Growth Pipeline, Especially in Midstream:** DIALOG has concrete, long-term expansion plans.\n    *   **Pengerang Deepwater Terminals (PDT):** Phase 3 expansion for BP Singapore (614,000 m3 for refined products/biofuels) is expected to be completed by mid-2028, aligning perfectly with your 3-year hold. This represents long-term, dedicated customer agreements.\n    *   **Biofuels/Renewables:** Joint venture PT2SB is adding 272,000 m3 of storage for Pengerang Biorefinery Sdn. Bhd. (PBSB) with a 25-year \"take-or-pay\" agreement. This is a significant investment (USD 330 million) in a growing, low-carbon sector, aiming for recurring income.\n    *   **Langsat Terminals (3):** Initial phase for renewable fuel storage is operational, with a second phase by Sep 2026. This shows commitment to the energy transition.\n3.  **Diversified and Resilient Business Model:** Operating across upstream, midstream, and downstream segments, and geographically, helps the company withstand fluctuations in oil prices or regional economic downturns. The strategic shift towards renewables also positions them for future energy trends.\n4.  **Healthy Cash Position:** Despite significant investments, cash and cash equivalents increased by over RM 193 million this period, giving them financial flexibility for ongoing projects.\n5.  **Improved Earnings Per Share (EPS):** The EPS has recovered significantly (4.92 sen for the 6-month period vs. 0.38 sen last year), which is a key driver for stock price appreciation.\n\n### What Can Go Wrong\n\n1.  **Working Capital Drain (High Receivables):** Cash generated from operations *decreased* despite higher profits. This is because a substantial amount of cash (RM 268.6 million) is now tied up in inventories and trade receivables (money owed by customers). Trade receivables alone jumped from RM 418.5 million to RM 740.1 million. If customers delay payments or debts become uncollectible, it could strain the company's liquidity.\n2.  **Increased Debt Burden:** While bank borrowings decreased, the company issued RM 500 million in Senior Sukuk Wakalah (Islamic bonds) this period. This increases total non-current liabilities from RM 882.0 million to RM 1,240.1 million. Higher debt means higher interest payments and increased financial risk, especially if project returns don't materialize as expected or if broader interest rates rise.\n3.  **One-Off Factors in Joint Venture (JV) Profits:** The substantial increase in JV profits this quarter (RM 76.4 million vs. RM 7.6 million last year) was partly attributed to \"favourable foreign exchange movement on USD liabilities.\" This is a currency fluctuation benefit, not a sustainable operational improvement, and could reverse in future quarters if exchange rates turn unfavorable.\n4.  **Upstream Sensitivity to Oil Prices:** Although diversified, the upstream segment's contribution was lower due to \"reduced crude oil allocation and lower realised oil prices.\" A sustained drop in oil prices could impact this part of their business.\n5.  **Project Execution Risk:** The large-scale expansion projects (PDT, PT2SB, Upstream fields) are ambitious. Delays, cost overruns, or unforeseen operational challenges could impact the projected recurring income streams and overall profitability within your 3-year holding period.\n\n### What I Might Be Underestimating (Blind Spots)\n\n1.  **Quality of Receivables and Collections:** The dramatic increase in trade receivables is a significant blind spot. It's crucial to understand if this is normal for their project cycles, if payment terms have been extended, or if it signals potential future collection issues. Poor collection can quickly erode profits and tie up essential capital.\n2.  **Sustainability of JV/Associate Earnings:** Beyond the favorable FX impact, the underlying operational strength of their joint ventures is key. Are these partnerships consistently delivering robust, recurring profits, or are some still susceptible to volatility?\n3.  **Impact of Higher Debt Servicing:** While the Sukuk rate is fixed, the increased overall debt means higher finance costs. You might be underestimating how this increased burden could eat into net profits if new projects face delays or underperform.\n4.  **Competitive Landscape and Technology Shifts:** The energy sector is dynamic. While DIALOG is investing in renewables, the pace of technological change and increasing competition in both traditional and green energy sectors could be a challenge. How robust are their competitive advantages for securing these long-term contracts?\n5.  **Transparency on Project Returns:** The report highlights project commitments but lacks specific details on the expected returns (e.g., Return on Investment, Internal Rate of Return) for these large capital expenditures. Without this, it's hard to gauge the true value creation for shareholders.\n\n### What Type of Investor This Stock Fits Best\n\nThis stock **best fits a Growth Investor with a medium-to-long term horizon (3+ years) who is comfortable with infrastructure plays and believes in the energy transition story.**\n\n*   It's not a speculative \"moonshot,\" but a mature company strategically expanding.\n*   The focus on long-term, recurring income from tank terminals and new energy infrastructure aligns with a growth investor seeking steady asset accumulation.\n*   It partially fits an Income Investor, as it has historically paid dividends, but no interim dividend was declared this period, indicating a priority on reinvesting for growth.\n*   It's less suitable for pure Value Investors unless you believe its long-term asset value is significantly underestimated, as the current valuation (around 20x annualized P/E at RM2.00) is not exceptionally cheap.\n\n### What New Information Would Make This a Stronger Buy\n\n1.  **Clear Improvement in Cash Flow from Operations:** Evidence that the company is effectively managing its working capital, particularly collecting receivables, leading to a strong positive trend in operating cash flow.\n2.  **Breakdown of Sustainable JV Profits:** More detail distinguishing recurring operational profits from one-off gains (like FX movements) within joint ventures and associates, confirming the quality of these earnings.\n3.  **Positive Project Updates with Specifics:** Announcement of new contracts or significant milestones for its major projects (PDT, PT2SB), accompanied by transparent guidance on expected margins or returns.\n4.  **Commitment to Debt Reduction/Stable Gearing:** A clear strategic plan or visible trend indicating that the company intends to stabilize or reduce its overall debt-to-equity ratio as new assets come online.\n5.  **Further Concrete Moves into High-Growth Renewables:** Expansion into more high-value segments of the renewable energy value chain, beyond just storage, showing deeper commitment and capability.\n\n### What New Information Would Make Me Walk Away\n\n1.  **Deterioration in Receivables and Collections:** Any further significant increase in trade receivables coupled with signs of delayed payments or increasing bad debts would be a major red flag, indicating a fundamental cash management problem.\n2.  **Major Project Delays or Cost Overruns:** Significant setbacks, delays, or unexpected cost increases for the PDT Phase 3, PT2SB biorefinery storage, or other key growth projects would severely impact future recurring income and shareholder value.\n3.  **Sustained Decline in Operational Margins:** If the cost optimization gains prove temporary, or if new contracts are won at significantly lower margins, eroding overall profitability and the viability of the growth strategy.\n4.  **Adverse Reversal of FX Impact on JVs:** If the favorable foreign exchange movements on USD liabilities reverse significantly and lead to material losses in JV contributions, highlighting an uncontrolled risk.\n5.  **Increased Competition or Regulatory Headwinds:** New market entrants or unfavorable policy changes in the energy sector that could threaten DIALOG's competitive position or project viability, especially in the growing low-carbon segment.\n\n---\n\n### Does This Stock Fit Your Profile?\n\n**Yes, it can fit your medium-risk, 3-year holding period profile, but with important monitoring points.**\n\n**Why it fits:** The company is showing strong operational recovery and has a clear, strategic growth plan centered on long-term recurring income from infrastructure assets (especially in the midstream and renewables segments) that aligns well with a 3-year horizon. This reduces pure commodity price exposure.\n\n**Why you need to be cautious:** The increase in trade receivables and overall debt levels introduce financial risks that a \"medium\" risk investor needs to monitor closely. While the current quarter's profit is impressive, some of the JV gains are tied to FX, which is less predictable. Your RM 2.00 purchase price implies a forward P/E around 20x, which values the future growth. If the growth projects falter or the working capital issues persist, this valuation might become expensive.\n\n**Recommendation:** Consider buying, but **monitor the cash flow from operations and receivables closely** in the next one to two quarters. Also, pay attention to updates on the progress and expected returns of their major expansion projects.", "visual_data": null}, "final_scorecard": {"text": "DIALOG GROUP BERHAD: Investment Yardstick Assessment\n\nHere’s an assessment of Dialog Group Berhad’s performance based on its latest quarter report, scored against your personal investment yardstick.\n\n**1. FUNDAMENTALS & PROFITABILITY**\nThe company shows strong profitability. Earnings per share (EPS) for the 6 months ended 31 December 2025 is 4.92 sen, which is positive and significantly improved from the previous year (0.38 sen). Return on equity (ROE – how efficiently the company uses shareholder money) is annualized at 9.56%, comfortably above the 5% target. While there was a mention of favorable foreign exchange (FX) movement impacting joint venture profits, the overall operational improvement and strong revenue growth suggest these are largely real and recurring profits.\n**Score: 8/10**\n**Note:** Positive EPS and strong annualized ROE of 9.56%, with overall profits appearing largely recurring despite some FX impact.\n\n**2. FINANCIAL HEALTH & SOLVENCY**\nDialog’s financial health is robust. The company's debt is very manageable, with a low debt-to-equity ratio of approximately 0.31. Current assets of RM2.69 billion easily cover current liabilities of RM1.63 billion, giving a healthy current ratio of 1.65. The balance sheet is getting stronger, with total assets and total equity increasing since the last financial year. Net tangible assets (NTA – real assets backing each share) per share is 84.86 sen, well above the 20 sen benchmark. Cash and cash equivalents of RM1.86 billion are nearly as much as total debt.\n**Score: 9/10**\n**Note:** Strong balance sheet with manageable debt (D/E 0.31), healthy current ratio (1.65), and NTA per share of 84.86 sen.\n\n**3. VALUATION**\nThis dimension cannot be fully assessed from the quarter report alone. Key metrics like the P/E ratio (price-to-earnings), Price-to-Book (PTBV), and Price-to-Sales (PSR) require the current stock price and market capitalization, which are not provided. Without this crucial external market data, it's impossible to determine if the company is currently trading at a fair value.\n**Score: 4/10**\n**Note:** Valuation metrics (P/E, PTBV, PSR) cannot be calculated due to missing stock price and market capitalization data.\n\n**4. BUSINESS MOAT**\nDialog exhibits a strong business moat. As an integrated technical service provider diversified across the Upstream, Midstream, and Downstream energy sectors, it benefits from scale, specialized expertise, and strategic assets. Its midstream business, as \"one of the largest independent terminal owner-cum-operator in Southeast Asia\" with long-term service agreements (LTSAs) for its Pengerang Deepwater Terminals (PDT), creates high barriers to entry for competitors. The company's ongoing expansions in renewable fuel storage further solidify its defensible market position.\n**Score: 9/10**\n**Note:** Strong competitive advantages through diversified, integrated operations, scale, long-term contracts, and strategic assets.\n\n**5. CASH FLOW & DIVIDENDS**\nThe company generates real cash from operations, with net cash from operating activities at RM299.78 million for the 6 months ended 31 December 2025. Dialog is a dividend-paying company, having paid a final dividend for the previous financial year. However, free cash flow (FCF – cash left after operating expenses and capital expenditure) for the current period has significantly shrunk to RM2.24 million, largely due to increased capital expenditure (CapEx). While this lower FCF is a concern, it appears to be a result of strategic investments for future growth, such as terminal expansions.\n**Score: 6/10**\n**Note:** Positive operating cash flow and a dividend payer, but free cash flow significantly reduced due to high growth-oriented capital expenditure.\n\n**6. MANAGEMENT & OUTLOOK**\nManagement appears competent and honest. Their commentary is balanced, acknowledging both successes and challenges (e.g., lower upstream contributions). They articulate clear long-term strategies, emphasizing diversification and investment in future growth areas, particularly in expanding terminal capacities with long-term customers and venturing into renewable energy storage. The focus on upskilling the workforce and digital transformation suggests a forward-thinking approach. Their optimism for the financial year ending June 2026 seems realistic, backed by concrete expansion plans and a disciplined approach to new projects.\n**Score: 9/10**\n**Note:** Competent management with clear, realistic strategies and ongoing investments in future growth and sustainability.\n\n**7. LIQUIDITY**\nThis dimension cannot be assessed from the quarter report. Data on the stock's active trading volume and the company's market capitalization are external market factors not included in these financial statements. Without this information, it's impossible to determine how easily one could buy or sell the stock.\n**Score: 1/10**\n**Note:** Crucial market data on trading volume and market capitalization is not available in the report.\n\n---\n\n**FINAL VERDICT:**\n**FAIL**\n\n**Reasoning:**\nWhile Dialog Group Berhad demonstrates excellent fundamental strengths, financial health, a strong business moat, and capable management, the assessment against your \"personal investment yardstick\" highlights critical gaps. The inability to calculate valuation metrics (P/E, PTBV, PSR) and assess liquidity (trading volume, market cap) due to missing external market data is a significant red flag for an investor. According to the scoring criteria, having \"multiple dimensions below 5\" (Valuation scored 4, Liquidity scored 1) and \"any critical red flag\" (the absence of market data) places the company in the 'FAIL' category for investment consideration based *solely* on this report. An investor needs these external data points to make an informed decision about entry price and exit strategy.\n\n---\n\n**Additional Data Needed:**\n*   Live stock price\n*   Current trading volume\n*   Current market capitalization\n\n---", "visual_data": {"dimensions": [{"name": "Fundamentals & Profitability", "score": 8, "note": "Positive EPS and strong annualized ROE of 9.56%, with overall profits appearing largely recurring despite some FX impact."}, {"name": "Financial Health & Solvency", "score": 9, "note": "Strong balance sheet with manageable debt (D/E 0.31), healthy current ratio (1.65), and NTA per share of 84.86 sen."}, {"name": "Valuation", "score": 4, "note": "Valuation metrics (P/E, PTBV, PSR) cannot be calculated due to missing stock price and market capitalization data."}, {"name": "Business Moat", "score": 9, "note": "Strong competitive advantages through diversified, integrated operations, scale, long-term contracts, and strategic assets."}, {"name": "Cash Flow & Dividends", "score": 6, "note": "Positive operating cash flow and a dividend payer, but free cash flow significantly reduced due to high growth-oriented capital expenditure."}, {"name": "Management & Outlook", "score": 9, "note": "Competent management with clear, realistic strategies and ongoing investments in future growth and sustainability."}, {"name": "Liquidity", "score": 1, "note": "Crucial market data on trading volume and market capitalization is not available in the report."}], "overall": "FAIL", "avg_score": 6.57, "missing_data": ["Live stock price", "Current trading volume", "Current market capitalization"]}}};
+        const VISUAL_TYPES = {"cheat_sheet": "metrics", "forensic_check": "scorecard", "business_vs_stock": "verdict", "valuation": "valuation", "bull_vs_bear": "bullbear", "risk_check": "none", "final_scorecard": "scorecard_final"};
+        const reportTexts = {};
+
+        // --- Visualization renderers ---
+
+        function renderMetrics(data) {
+            if (!data || !data.metrics) return "";
+            return '<div class="vis-metrics">' + data.metrics.map(m => {
+                const cls = (m.change || "").startsWith("-") ? "negative" : (m.change || "").startsWith("+") ? "positive" : "neutral";
+                return '<div class="metric-card"><div class="metric-label">'+m.label+'</div><div class="metric-value">'+m.value+'</div><div class="metric-change '+cls+'">'+(m.change||"")+'</div></div>';
+            }).join("") + "</div>";
+        }
+
+        function renderScorecard(data) {
+            if (!data || !data.checks) return "";
+            return '<div class="vis-scorecard">' + data.checks.map(c =>
+                '<div class="score-row"><span class="score-dot '+c.rating+'"></span><span class="score-area">'+c.area+'</span><span class="score-note">'+c.note+'</span></div>'
+            ).join("") + "</div>";
+        }
+
+        function renderVerdict(data) {
+            if (!data) return "";
+            let html = '<div class="vis-verdict"><div class="verdict-badge verdict-'+data.verdict+'">'+data.verdict_label+'</div><div class="vis-bars">';
+            (data.scores||[]).forEach(s => {
+                const pct = Math.max(0,Math.min(100,s.score*10));
+                const cls = s.score>=7?"high":s.score>=5?"mid":"low";
+                html += '<div class="bar-row"><span class="bar-label">'+s.dimension+'</span><div class="bar-track"><div class="bar-fill '+cls+'" style="width:'+pct+'%"><span>'+s.score+'/10</span></div></div></div>';
+            });
+            return html + "</div></div>";
+        }
+
+        function renderValuation(data) {
+            if (!data) return "";
+            const a = data.current_assessment || "fair";
+            return '<div class="vis-valuation"><div class="val-range"><div class="val-zone cheap">Cheap<br><strong>'+(data.cheap||"—")+'</strong></div><div class="val-zone fair">Fair Value<br><strong>'+(data.fair||"—")+'</strong></div><div class="val-zone expensive">Expensive<br><strong>'+(data.expensive||"—")+'</strong></div></div><div>Current assessment: <span class="val-assessment '+a+'">'+a.toUpperCase()+'</span></div></div>';
+        }
+
+        function renderBullBear(data) {
+            if (!data) return "";
+            const total = (data.bull_points||0) + (data.bear_points||0);
+            const bullPct = total > 0 ? Math.round((data.bull_points/total)*100) : 50;
+            return '<div class="vis-bullbear"><div class="bb-labels"><span>Bull Case</span><span>Bear Case</span></div><div class="bb-bar"><div class="bb-bull" style="width:'+bullPct+'%">'+data.bull_points+' points</div><div class="bb-bear" style="width:'+(100-bullPct)+'%">'+data.bear_points+' points</div></div><div class="bb-verdict"><strong>Winner:</strong> '+(data.winner||"—")+' (confidence: '+(data.confidence||"—")+') — '+(data.one_line||"")+'</div></div>';
+        }
+
+        function renderFinalScorecard(data) {
+            if (!data || !data.dimensions) return "";
+            const oc = data.overall==="PASS"?"pass":data.overall==="FAIL"?"fail":"borderline";
+            let html = '<div class="vis-final"><div class="final-verdict-badge '+oc+'">'+(data.overall||"—")+'</div><div class="final-avg">Average score: <strong>'+(data.avg_score||"—")+'</strong> / 10</div><div class="vis-scorecard" style="margin-top:12px;">';
+            data.dimensions.forEach(d => {
+                const r = d.score>=7?"green":d.score>=5?"yellow":"red";
+                html += '<div class="score-row"><span class="score-dot '+r+'"></span><span class="score-area">'+d.name+'</span><span class="final-score">'+d.score+'/10</span><span class="score-note">'+d.note+'</span></div>';
+            });
+            html += "</div>";
+            if (data.missing_data && data.missing_data.length > 0) {
+                html += '<div class="final-missing"><strong>Data not in report:</strong> ' + data.missing_data.join(", ") + "</div>";
+            }
+            return html + "</div>";
+        }
+
+        function renderVisual(type, data) {
+            if (!data) return "";
+            switch(type) {
+                case "metrics": return renderMetrics(data);
+                case "scorecard": return renderScorecard(data);
+                case "verdict": return renderVerdict(data);
+                case "valuation": return renderValuation(data);
+                case "bullbear": return renderBullBear(data);
+                case "scorecard_final": return renderFinalScorecard(data);
+                default: return "";
+            }
+        }
+
+        // --- Card helpers ---
+        function setCardLoading(id, msg) {
+            const c = document.getElementById("card-"+id);
+            c.querySelector(".card-visual").innerHTML = "";
+            c.querySelector(".card-body").innerHTML = '<div class="card-loading"><div class="spinner"></div> '+msg+'</div>';
+        }
+        function setCardResult(id, vis, html) {
+            const c = document.getElementById("card-"+id);
+            c.querySelector(".card-visual").innerHTML = vis;
+            c.querySelector(".card-body").innerHTML = html;
+        }
+        function setCardEmpty(id) {
+            const c = document.getElementById("card-"+id);
+            c.querySelector(".card-visual").innerHTML = "";
+            c.querySelector(".card-body").innerHTML = '<span class="card-empty">Waiting for analysis...</span>';
+        }
+
+        function showStep(key, delay) {
+            return new Promise(resolve => {
+                const labels = {cheat_sheet:"Reading the report...",forensic_check:"Checking the numbers...",business_vs_stock:"Deciding the verdict...",valuation:"Checking valuation...",bull_vs_bear:"Building bull vs bear case...",risk_check:"Running personal risk check...",final_scorecard:"Scoring against your investment yardstick..."};
+                setCardLoading(key, labels[key]||"Analyzing...");
+                setTimeout(() => {
+                    const d = DEMO_DATA[key];
+                    setCardResult(key, renderVisual(VISUAL_TYPES[key], d.visual_data), marked.parse(d.text));
+                    reportTexts[key] = d.text;
+                    resolve();
+                }, delay);
+            });
+        }
+
+        // --- Phases ---
+        async function startPhase1() {
+            document.getElementById("btn-start").disabled = true;
+            ["readmore-section","phase2-section","final-section","copy-bar"].forEach(id => document.getElementById(id).classList.add("hidden"));
+            ["cheat_sheet","forensic_check","business_vs_stock","valuation","bull_vs_bear","risk_check","final_scorecard"].forEach(setCardEmpty);
+            Object.keys(reportTexts).forEach(k => delete reportTexts[k]);
+
+            await showStep("cheat_sheet", 1500);
+            await showStep("forensic_check", 1200);
+            await showStep("business_vs_stock", 1200);
+
+            ["copy-bar","readmore-section","phase2-section"].forEach(id => document.getElementById(id).classList.remove("hidden"));
+            document.getElementById("btn-start").disabled = false;
+        }
+
+        async function startPhase2() {
+            document.getElementById("btn-phase2").disabled = true;
+            await showStep("valuation", 1200);
+            await showStep("bull_vs_bear", 1200);
+            await showStep("risk_check", 1200);
+            document.getElementById("final-section").classList.remove("hidden");
+            document.getElementById("btn-phase2").disabled = false;
+        }
+
+        async function runFinalScorecard() {
+            document.getElementById("btn-final").disabled = true;
+            await showStep("final_scorecard", 1500);
+            document.getElementById("btn-final").disabled = false;
+        }
+
+        // --- Copy ---
+        function copyReport() {
+            const sections = [
+                {key:"cheat_sheet",title:"STEP 1 — COMPANY OVERVIEW"},
+                {key:"forensic_check",title:"STEP 2 — FORENSIC CHECK"},
+                {key:"business_vs_stock",title:"STEP 3 — VERDICT"},
+                {key:"valuation",title:"STEP 4 — VALUATION CHECK"},
+                {key:"bull_vs_bear",title:"STEP 5 — BULL VS BEAR"},
+                {key:"risk_check",title:"STEP 6 — PERSONAL RISK CHECK"},
+                {key:"final_scorecard",title:"STEP 7 — FINAL SCORECARD"},
+            ];
+            let output = "GOOD COMPANY REPORT\nCompany: Dialog Group Berhad\nSource: Dialog - 6 Apr 26.pdf\nGenerated: Demo\n" + "=".repeat(60) + "\n\n";
+            let count = 0;
+            sections.forEach(s => {
+                if (reportTexts[s.key]) {
+                    output += s.title + "\n" + "-".repeat(s.title.length) + "\n\n" + reportTexts[s.key] + "\n\n" + "=".repeat(60) + "\n\n";
+                    count++;
+                }
+            });
+            if (count === 0) { showToast("No analysis to copy yet"); return; }
+            navigator.clipboard.writeText(output).then(() => showToast("Copied "+count+" sections to clipboard")).catch(() => {
+                const ta = document.createElement("textarea"); ta.value = output;
+                document.body.appendChild(ta); ta.select(); document.execCommand("copy");
+                document.body.removeChild(ta); showToast("Copied "+count+" sections to clipboard");
+            });
+        }
+
+        function showToast(msg) {
+            const t = document.getElementById("toast"); t.textContent = msg;
+            t.classList.add("show"); setTimeout(() => t.classList.remove("show"), 2000);
+        }
+    </script>
+</body>
+</html>

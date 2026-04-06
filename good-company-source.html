@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Good Company - Source Code</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #222; background-color: #ffffff; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        .back-nav { margin-bottom: 20px; }
+        .back-nav a { color: #007BFF; text-decoration: none; font-size: 1rem; }
+        .back-nav a:hover { text-decoration: underline; }
+
+        .project-header {
+            text-align: center; margin-bottom: 40px; padding: 40px 0;
+            background: linear-gradient(135deg, #1a365d, #163254);
+            color: white; border-radius: 10px;
+        }
+        .project-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        .project-header p { font-size: 1.2rem; opacity: 0.9; }
+        .badges { display: flex; justify-content: center; gap: 10px; margin: 20px 0; flex-wrap: wrap; }
+        .badge { background-color: rgba(255,255,255,0.2); color: white; padding: 5px 12px; border-radius: 15px; font-size: 0.9rem; }
+
+        .content-section { margin: 40px 0; padding: 30px; background-color: #f9f9f9; border-radius: 8px; border-left: 5px solid #2b6cb0; }
+        .content-section h2 { color: #2b6cb0; margin-bottom: 20px; font-size: 1.8rem; }
+        .content-section h3 { color: #333; margin: 20px 0 10px 0; font-size: 1.3rem; }
+
+        .highlight-box { background: linear-gradient(135deg, #ebf8ff, #bee3f8); padding: 20px; border-radius: 10px; border-left: 5px solid #2b6cb0; margin: 20px 0; }
+        .highlight-box h3 { color: #1a365d; margin-bottom: 10px; }
+        .highlight-box p { color: #2d3748; }
+
+        pre { background-color: #1a202c; color: #e2e8f0; border-radius: 8px; padding: 20px; margin: 15px 0; overflow-x: auto; font-size: 0.9rem; line-height: 1.5; }
+        code { font-family: 'Consolas', 'Monaco', monospace; }
+
+        .file-tree { background: #f7fafc; padding: 20px; border-radius: 8px; font-family: monospace; font-size: 0.95rem; line-height: 1.8; margin: 15px 0; }
+        .file-tree .folder { color: #2b6cb0; font-weight: 700; }
+        .file-tree .file { color: #4a5568; }
+        .file-tree .comment { color: #a0aec0; }
+
+        @media (max-width: 768px) {
+            .project-header h1 { font-size: 2rem; }
+            .container { padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="good-company.html">&larr; Back to Project</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>Good Company</h1>
+            <p>Source Code &amp; Architecture</p>
+            <div class="badges">
+                <span class="badge">Python</span>
+                <span class="badge">FastAPI</span>
+                <span class="badge">Gemini API</span>
+                <span class="badge">PyMuPDF</span>
+                <span class="badge">Vanilla JS</span>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Project Structure</h2>
+            <div class="file-tree">
+                <span class="folder">good-company/</span><br>
+                &nbsp;&nbsp;<span class="file">main.py</span> <span class="comment"># FastAPI backend, PDF reading, Gemini API calls</span><br>
+                &nbsp;&nbsp;<span class="file">prompts.py</span> <span class="comment"># All 10 analysis prompts (Phase 1, Read More, Phase 2, Final)</span><br>
+                &nbsp;&nbsp;<span class="file">index.html</span> <span class="comment"># Full UI with visualization renderers</span><br>
+                &nbsp;&nbsp;<span class="file">demo.html</span> <span class="comment"># Standalone demo (paste text, no server needed)</span><br>
+                &nbsp;&nbsp;<span class="file">requirements.txt</span> <span class="comment"># Python dependencies</span><br>
+                &nbsp;&nbsp;<span class="file">.env</span> <span class="comment"># Gemini API key</span><br>
+                &nbsp;&nbsp;<span class="file">start.bat</span> <span class="comment"># Windows launcher</span><br>
+                &nbsp;&nbsp;<span class="file">user-guide.txt</span> <span class="comment"># Plain language user guide</span><br>
+                &nbsp;&nbsp;<span class="folder">Quarter report/</span> <span class="comment"># Drop PDFs here</span><br>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Backend: main.py</h2>
+
+            <div class="highlight-box">
+                <h3>Key Design Decisions</h3>
+                <p><strong>PDF text cache:</strong> Extracted text is cached per filename so multiple prompts reuse the same extraction without re-reading the PDF.</p>
+                <p><strong>Visual data parsing:</strong> Each LLM response is split into narrative text and a VISUAL_DATA JSON block. The frontend renders the JSON as cards, scorecards, and bars.</p>
+                <p><strong>Date parsing from filenames:</strong> "Company - DD Mon YY.pdf" is parsed with regex to sort reports by date (newest first).</p>
+            </div>
+
+            <h3>Core: PDF Extraction + Gemini Call</h3>
+<pre><code>def extract_text(filename: str) -> str:
+    if filename in _text_cache:
+        return _text_cache[filename]
+    path = REPORT_DIR / filename
+    doc = fitz.open(str(path))
+    text = "\n".join(page.get_text() for page in doc)
+    doc.close()
+    _text_cache[filename] = text
+    return text
+
+def parse_visual_data(response_text: str):
+    match = re.search(
+        r"VISUAL_DATA_START\s*(\{.*?\})\s*VISUAL_DATA_END",
+        response_text, re.DOTALL
+    )
+    if match:
+        text = response_text[:match.start()].strip()
+        try:
+            return text, json.loads(match.group(1))
+        except json.JSONDecodeError:
+            return text, None
+    return response_text.strip(), None</code></pre>
+
+            <h3>API Endpoint</h3>
+<pre><code>@app.post("/analyze")
+async def analyze(req: AnalyzeRequest):
+    all_prompts = {**PHASE_1, **READ_MORE, **PHASE_2, **FINAL}
+    prompt_data = all_prompts.get(req.prompt)
+    text = extract_text(req.report)
+    template = prompt_data["instruction"]
+    full_prompt = template.replace("{report_text}", text)
+
+    response = model.generate_content(full_prompt)
+    narrative, visual_data = parse_visual_data(response.text)
+
+    return {
+        "result": narrative,
+        "visual_data": visual_data,
+        "visual_type": prompt_data.get("visual_type", "none"),
+    }</code></pre>
+        </div>
+
+        <div class="content-section">
+            <h2>Prompts: prompts.py</h2>
+
+            <p>10 prompts organized into 4 groups. Each prompt includes:</p>
+            <ul>
+                <li>A plain language directive for accessible output</li>
+                <li>A structured analysis framework (the analytical depth stays Goldman Sachs grade)</li>
+                <li>A VISUAL_DATA JSON schema (7 of 10 prompts) for frontend rendering</li>
+            </ul>
+
+            <h3>Prompt Groups</h3>
+<pre><code>PHASE_1 = {
+    "cheat_sheet":        # Step 1 — visual: metric cards
+    "forensic_check":     # Step 2 — visual: green/yellow/red scorecard
+    "business_vs_stock":  # Step 3 — visual: verdict badge + score bars
+}
+
+READ_MORE = {
+    "deep_dive":           # text only
+    "earnings_breakdown":  # text only
+    "stress_test":         # visual: 3 scenario cards
+    "company_comparison":  # visual: comparison table
+}
+
+PHASE_2 = {
+    "valuation":     # Step 4 — visual: cheap/fair/expensive range
+    "bull_vs_bear":  # Step 5 — visual: bull/bear tally bar
+    "risk_check":    # Step 6 — text only (personalized)
+}
+
+FINAL = {
+    "final_scorecard":  # Step 7 — visual: 7-dimension scorecard + PASS/FAIL
+}</code></pre>
+        </div>
+
+        <div class="content-section">
+            <h2>Frontend: index.html</h2>
+
+            <p>Single-file frontend with 7 visualization renderers. Each renderer takes the VISUAL_DATA JSON and produces HTML:</p>
+
+            <h3>Visualization Types</h3>
+<pre><code>function renderVisual(type, data) {
+    switch (type) {
+        case "metrics":        return renderMetrics(data);
+        case "scorecard":      return renderScorecard(data);
+        case "verdict":        return renderVerdict(data);
+        case "valuation":      return renderValuation(data);
+        case "bullbear":       return renderBullBear(data);
+        case "scenarios":      return renderScenarios(data);
+        case "comparison":     return renderComparison(data);
+        case "scorecard_final": return renderFinalScorecard(data);
+    }
+}</code></pre>
+
+            <h3>Copy Report Function</h3>
+            <p>Stores raw markdown per section in a <code>reportTexts</code> object. On copy, assembles all opened sections into a formatted text document with headers and separators.</p>
+        </div>
+
+        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+            <a href="good-company.html">&larr; Back to Project</a> |
+            <a href="https://github.com/lyven81/ai-project/tree/main/projects/good-company">View on GitHub</a>
+        </nav>
+    </div>
+</body>
+</html>

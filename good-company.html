@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Good Company - Stock Research Assistant</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #222; background-color: #ffffff; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        .back-nav { margin-bottom: 20px; }
+        .back-nav a { color: #007BFF; text-decoration: none; font-size: 1rem; }
+        .back-nav a:hover { text-decoration: underline; }
+
+        .project-header {
+            text-align: center; margin-bottom: 40px; padding: 40px 0;
+            background: linear-gradient(135deg, #1a365d, #2b6cb0);
+            color: white; border-radius: 10px;
+        }
+        .project-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        .project-header p { font-size: 1.2rem; opacity: 0.9; }
+        .badges { display: flex; justify-content: center; gap: 10px; margin: 20px 0; flex-wrap: wrap; }
+        .badge { background-color: rgba(255,255,255,0.2); color: white; padding: 5px 12px; border-radius: 15px; font-size: 0.9rem; }
+
+        .demo-links { text-align: center; margin: 30px 0; }
+        .demo-btn { display: inline-block; background-color: #007BFF; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; margin: 0 10px; font-weight: bold; transition: background-color 0.3s; }
+        .demo-btn:hover { background-color: #0056b3; }
+        .demo-btn.secondary { background-color: #28a745; }
+        .demo-btn.secondary:hover { background-color: #218838; }
+
+        .content-section { margin: 40px 0; padding: 30px; background-color: #f9f9f9; border-radius: 8px; border-left: 5px solid #2b6cb0; }
+        .content-section h2 { color: #2b6cb0; margin-bottom: 20px; font-size: 1.8rem; }
+        .content-section h3 { color: #333; margin: 20px 0 10px 0; font-size: 1.3rem; }
+
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin: 20px 0; }
+        .feature-item { background: white; padding: 20px; border-radius: 8px; border: 1px solid #ddd; }
+        .feature-item h4 { color: #2b6cb0; margin-bottom: 10px; }
+
+        .tech-stack { display: flex; flex-wrap: wrap; gap: 10px; margin: 15px 0; }
+        .tech-item { background-color: #2b6cb0; color: white; padding: 5px 12px; border-radius: 15px; font-size: 0.9rem; }
+
+        .code-block { background-color: #f4f4f4; border: 1px solid #ddd; border-radius: 5px; padding: 15px; margin: 15px 0; font-family: monospace; overflow-x: auto; }
+
+        .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin: 20px 0; }
+        .metric-card { background: white; padding: 20px; border-radius: 8px; text-align: center; border: 2px solid #2b6cb0; }
+        .metric-number { font-size: 2rem; font-weight: bold; color: #2b6cb0; }
+        .metric-label { color: #666; font-size: 0.9rem; }
+
+        .flow-table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+        .flow-table th, .flow-table td { padding: 10px 14px; text-align: left; border-bottom: 1px solid #ddd; }
+        .flow-table th { background: #edf2f7; color: #2d3748; font-weight: 600; }
+        .flow-table td:first-child { font-weight: 600; color: #2b6cb0; white-space: nowrap; }
+
+        @media (max-width: 768px) {
+            .project-header h1 { font-size: 2rem; }
+            .project-header p { font-size: 1rem; }
+            .demo-btn { margin: 5px; padding: 10px 20px; }
+            .container { padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="index.html">&larr; Back to Portfolio</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>Good Company</h1>
+            <p>Is this a good company? Should I invest?</p>
+            <div class="badges">
+                <span class="badge">Gemini 2.5 Flash</span>
+                <span class="badge">FastAPI</span>
+                <span class="badge">PyMuPDF</span>
+                <span class="badge">Local PDF Reader</span>
+                <span class="badge">7-Step Analysis</span>
+            </div>
+        </div>
+
+        <div class="demo-links">
+            <a href="projects/good-company/demo.html" class="demo-btn">Launch Live Demo</a>
+            <a href="good-company-source.html" class="demo-btn secondary">View Source Code</a>
+        </div>
+
+        <div class="content-section">
+            <h2>Project Overview</h2>
+            <p><strong>Problem:</strong> Evaluating whether a company is worth investing in requires reading dense quarter reports and cross-referencing multiple analytical frameworks. Most retail investors either skip the analysis entirely or rely on surface-level metrics.</p>
+
+            <p><strong>Solution:</strong> Good Company reads quarter report PDFs directly from your local device and runs a structured 7-step analysis. It separates two distinct questions: "Is this a good business?" and "Is this a good stock?" &mdash; because a good company is not always a good investment.</p>
+
+            <h3>How It Works</h3>
+            <p>Drop a quarter report PDF into the designated folder. The app reads it locally (nothing is uploaded), sends the text to Gemini for analysis, and presents results with visual scorecards, metric cards, and color-coded verdicts.</p>
+        </div>
+
+        <div class="content-section">
+            <h2>Analysis Pipeline</h2>
+            <p>The analysis is split into two phases, a supplementary section, and a final scorecard:</p>
+
+            <table class="flow-table">
+                <thead><tr><th>Step</th><th>Name</th><th>What It Answers</th><th>Visual Output</th></tr></thead>
+                <tbody>
+                    <tr><td>Phase 1</td><td colspan="3" style="font-weight:600;color:#333;">Is this a good company?</td></tr>
+                    <tr><td>Step 1</td><td>Company Overview</td><td>What does this company do and how does it make money?</td><td>Metric cards (revenue, profit, EPS, margin)</td></tr>
+                    <tr><td>Step 2</td><td>Forensic Check</td><td>Are the numbers trustworthy?</td><td>Green/yellow/red scorecard</td></tr>
+                    <tr><td>Step 3</td><td>Verdict</td><td>Good business, good stock, both, or neither?</td><td>Verdict badge + dimension score bars</td></tr>
+                    <tr><td>Read More</td><td colspan="3" style="font-weight:600;color:#333;">Supplementary reports (on demand)</td></tr>
+                    <tr><td></td><td>Deep Dive</td><td>Full business model analysis</td><td>Text only</td></tr>
+                    <tr><td></td><td>Earnings Breakdown</td><td>What improved, what got worse</td><td>Text only</td></tr>
+                    <tr><td></td><td>Stress Test</td><td>Bull / base / bear scenarios</td><td>3 scenario cards</td></tr>
+                    <tr><td></td><td>Company Comparison</td><td>Head-to-head vs another stock</td><td>Comparison table with scores</td></tr>
+                    <tr><td>Phase 2</td><td colspan="3" style="font-weight:600;color:#333;">Should I invest?</td></tr>
+                    <tr><td>Step 4</td><td>Valuation Check</td><td>Is it cheap, fair, or expensive?</td><td>Cheap/fair/expensive range bar</td></tr>
+                    <tr><td>Step 5</td><td>Bull vs Bear</td><td>Strongest case for and against</td><td>Bull/bear tally bar</td></tr>
+                    <tr><td>Step 6</td><td>Personal Risk Check</td><td>Should I buy given my price, horizon, and risk tolerance?</td><td>Text only</td></tr>
+                    <tr><td>Step 7</td><td>Final Scorecard</td><td>Does it pass my personal screening criteria?</td><td>7-dimension scorecard + PASS/BORDERLINE/FAIL</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-section">
+            <h2>Application Features</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <h4>Local PDF Reading</h4>
+                    <p>Reads quarter report PDFs directly from your device via MCP pattern. No upload needed. Files never leave your machine.</p>
+                </div>
+                <div class="feature-item">
+                    <h4>Phase 1: Company Quality</h4>
+                    <p>Three automated steps: company overview with key metrics, forensic accounting check for red flags, and a 4-way verdict classification.</p>
+                </div>
+                <div class="feature-item">
+                    <h4>Read More Reports</h4>
+                    <p>Four on-demand supplementary reports available after Phase 1, regardless of whether the company is good or bad. Includes company comparison.</p>
+                </div>
+                <div class="feature-item">
+                    <h4>Phase 2: Investment Decision</h4>
+                    <p>Personalized to your purchase price, time horizon, and risk tolerance. Valuation framework, bull/bear debate, and direct risk advice.</p>
+                </div>
+                <div class="feature-item">
+                    <h4>Final Scorecard</h4>
+                    <p>Scores the company against a 7-dimension personal investment yardstick: fundamentals, financial health, valuation, moat, cash flow, management, and liquidity.</p>
+                </div>
+                <div class="feature-item">
+                    <h4>Copy Report</h4>
+                    <p>One-click copy of all opened sections as formatted text. Paste into Notebook LLM, Notepad, or any document for further analysis.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Technical Architecture</h2>
+
+            <h3>Backend</h3>
+            <div class="tech-stack">
+                <span class="tech-item">Python 3</span>
+                <span class="tech-item">FastAPI</span>
+                <span class="tech-item">Gemini 2.5 Flash</span>
+                <span class="tech-item">PyMuPDF (PDF parsing)</span>
+                <span class="tech-item">python-dotenv</span>
+            </div>
+
+            <h3>Frontend</h3>
+            <div class="tech-stack">
+                <span class="tech-item">Single-page HTML</span>
+                <span class="tech-item">Vanilla JavaScript</span>
+                <span class="tech-item">marked.js (Markdown)</span>
+                <span class="tech-item">CSS Grid / Flexbox</span>
+            </div>
+
+            <h3>Architecture</h3>
+            <ul>
+                <li><strong>MCP-inspired pattern:</strong> Backend reads PDFs from a local folder, extracts text with PyMuPDF, caches per filename</li>
+                <li><strong>10 analysis prompts:</strong> Each prompt is a structured template with a VISUAL_DATA JSON block for frontend rendering</li>
+                <li><strong>Dual-output responses:</strong> Every prompt returns narrative text + structured JSON, parsed and rendered as cards, scorecards, and bars</li>
+                <li><strong>Date-sorted dropdown:</strong> Filenames parsed for date using "Company - DD Mon YY.pdf" pattern, grouped by date (newest first)</li>
+                <li><strong>Clipboard export:</strong> Raw markdown text stored per section, assembled into formatted report on copy</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>Setup &amp; Installation</h2>
+
+            <h3>Prerequisites</h3>
+            <ul>
+                <li>Python 3.10+</li>
+                <li>Gemini API key (free from <a href="https://aistudio.google.com/apikey">aistudio.google.com/apikey</a>)</li>
+            </ul>
+
+            <h3>Quick Start</h3>
+            <div class="code-block">
+# Clone the repository
+git clone https://github.com/lyven81/ai-project.git
+cd ai-project/projects/good-company
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Set API key
+echo "GEMINI_API_KEY=your-key-here" > .env
+
+# Create report folder and add PDFs
+mkdir "Quarter report"
+
+# Run the app
+python main.py
+            </div>
+
+            <h3>File Naming Convention</h3>
+            <div class="code-block">
+Quarter report/
+  Dialog - 6 Apr 26.pdf
+  Padini - 5 Feb 26.pdf
+  Apollo - 29 Jan 26.pdf
+            </div>
+            <p>Pattern: <code>Company Name - DD Mon YY.pdf</code>. The app parses the date for sorting (newest first).</p>
+        </div>
+
+        <div class="content-section">
+            <h2>Key Metrics</h2>
+            <div class="metrics">
+                <div class="metric-card">
+                    <div class="metric-number">7</div>
+                    <div class="metric-label">Analysis Steps</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">10</div>
+                    <div class="metric-label">Prompt Templates</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">7</div>
+                    <div class="metric-label">Visual Output Types</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">~$0.02</div>
+                    <div class="metric-label">Cost per Full Analysis</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-links">
+            <a href="projects/good-company/demo.html" class="demo-btn">Try Live Demo</a>
+            <a href="https://github.com/lyven81/ai-project/tree/main/projects/good-company" class="demo-btn secondary">Full Source Code</a>
+        </div>
+
+        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+            <a href="index.html">&larr; Back to Portfolio</a> |
+            <a href="project-categories.html">View All Categories</a>
+        </nav>
+    </div>
+</body>
+</html>

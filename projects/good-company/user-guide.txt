@@ -1,0 +1,148 @@
+Good Company — User Guide
+=========================
+
+What is this?
+-------------
+Good Company is a stock research assistant that reads quarter reports (PDFs)
+saved on your computer and tells you whether a company is a good business
+and whether the stock is worth investing in.
+
+It runs 6 analysis steps in two phases:
+  Phase 1: Is this a good company? (3 steps, runs automatically)
+  Phase 2: Should I invest? (3 steps, you control when to run)
+
+Plus 4 supplementary "Read More" reports available after Phase 1.
+
+
+Setup (one time only)
+---------------------
+1. Get a Gemini API key:
+   - Go to https://aistudio.google.com/apikey
+   - Click "Create API Key"
+   - Copy the key
+
+2. Open the .env file in this folder with Notepad.
+   Replace "your-api-key-here" with your actual API key.
+   Save and close.
+
+3. That's it. No other setup needed.
+
+
+How to use
+----------
+1. Download a company's quarter report (PDF) from Bursa Malaysia or the
+   company's investor relations page.
+
+2. Save the PDF in this folder:
+   C:\Users\Lenovo\Documents\Good Company\Quarter report\
+
+   Name it clearly, e.g.:
+   - Apollo Q1 2026.pdf
+   - Oriental Kopi Q4 2025.pdf
+   - WCT Q3 2025.pdf
+
+3. Double-click "start.bat" to launch the app.
+   Your browser will open automatically at http://localhost:8080
+
+4. Select a report from the dropdown. Reports are sorted by date
+   (newest first), then alphabetically within each date group.
+   Click "Start Analysis".
+
+5. Phase 1 runs three steps automatically. Each step shows:
+   - A VISUAL summary at the top (metric cards, scorecards, or verdict badge)
+   - A WRITTEN analysis below in plain language
+
+   Step 1: Company Overview — key numbers as metric cards + what the company does
+   Step 2: Forensic Check — green/yellow/red scorecard + detailed findings
+   Step 3: Verdict — color-coded verdict badge + dimension scores (1-10 bars)
+
+6. After Phase 1, you can click "Read More" buttons for deeper analysis:
+   - Deep Dive — full research report (text only)
+   - Earnings Breakdown — what improved, what got worse (text only)
+   - Scenario Stress Test — bull/base/bear scenario cards + written analysis
+   - Compare With... — side-by-side comparison table + written analysis
+
+7. When you are ready, fill in your details in Phase 2:
+   - Your intended purchase price
+   - How long you plan to hold (1, 3, 5, or 10 years)
+   - Your risk tolerance (low, medium, high)
+   Then click "Start Investment Analysis" for three more steps:
+   Step 4: Valuation — cheap/fair/expensive range bar + written analysis
+   Step 5: Bull vs Bear — visual tally bar (green vs red) + written debate
+   Step 6: Personal Risk Check — plain language advice (text only)
+
+
+Tips
+----
+- You can analyze multiple companies in one session. Just select a
+  different report and click "Start Analysis" again.
+
+- To compare two companies, both PDFs must be in the Quarter report folder.
+
+- If you add new PDFs while the app is running, click "Refresh List".
+
+- The app reads PDFs from your local folder. Nothing is uploaded anywhere.
+  The only external call is to Google's Gemini API for the analysis.
+
+- Phase 1 takes about 1-2 minutes (3 API calls).
+  Each Read More report takes about 30 seconds.
+  Phase 2 takes about 1-2 minutes (3 API calls).
+
+- A full analysis (Phase 1 + all Read More + Phase 2) costs roughly
+  $0.01-0.03 in Gemini API usage, depending on report length.
+
+
+Folder structure
+----------------
+Good Company\
+  start.bat              Double-click to launch
+  main.py                Backend server
+  prompts.py             All 10 analysis prompts (editable)
+  index.html             Browser interface
+  requirements.txt       Python dependencies
+  .env                   Your Gemini API key (keep this private)
+  user-guide.txt         This file
+  Quarter report\        Put your PDFs here
+
+
+Troubleshooting
+---------------
+"No PDFs found"
+  → Make sure your PDF files are in the "Quarter report" folder
+    and have the .pdf extension.
+
+"Error: API key not valid"
+  → Open .env and check your GEMINI_API_KEY is correct.
+    Get a new key at https://aistudio.google.com/apikey
+
+"Error: Report not found"
+  → Click "Refresh List" to reload the file list.
+
+Browser shows "can't reach this page"
+  → Wait a few seconds and refresh. The server needs a moment to start.
+
+"pip is not recognized"
+  → Python is not in your system PATH. Open a terminal and run:
+    where python
+    If Python is installed via Miniconda, use the Miniconda prompt
+    or add Python to your PATH.
+
+
+Editing prompts
+---------------
+All prompts are in prompts.py. You can open it with any text editor
+and modify the analysis instructions. Changes take effect next time
+you restart the app (close the terminal window and double-click
+start.bat again).
+
+
+LLM model
+----------
+This app uses Google Gemini 2.5 Flash. It was chosen because:
+- Large context window (handles long PDFs easily)
+- Fast response time
+- Low cost (~$0.01 per full analysis)
+- You already have GCP infrastructure
+
+If you want to switch to Claude or another model later, only main.py
+needs to change. The prompts work with any LLM.
