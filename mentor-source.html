@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mentor - Source Code</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #222; background-color: #ffffff; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        .back-nav { margin-bottom: 20px; }
+        .back-nav a { color: #007BFF; text-decoration: none; font-size: 1rem; }
+        .back-nav a:hover { text-decoration: underline; }
+        .project-header { text-align: center; margin-bottom: 40px; padding: 40px 0; background: linear-gradient(135deg, #9C27B0, #6A1B9A); color: white; border-radius: 10px; }
+        .project-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        .project-header p { font-size: 1.2rem; opacity: 0.9; }
+        .content-section { margin: 40px 0; padding: 30px; background-color: #f9f9f9; border-radius: 8px; border-left: 5px solid #9C27B0; }
+        .content-section h2 { color: #9C27B0; margin-bottom: 20px; font-size: 1.8rem; }
+        .content-section h3 { color: #333; margin: 20px 0 10px 0; font-size: 1.3rem; }
+        .content-section p { margin-bottom: 12px; }
+        .file-tree { background: #f4f4f4; padding: 20px; border-radius: 6px; font-family: monospace; white-space: pre; overflow-x: auto; border: 1px solid #ddd; }
+        pre.code { background: #1e1e1e; color: #d4d4d4; padding: 18px; border-radius: 6px; overflow-x: auto; font-size: 13px; line-height: 1.5; margin: 12px 0; }
+        pre.code .comment { color: #6a9955; }
+        pre.code .string { color: #ce9178; }
+        pre.code .keyword { color: #c586c0; }
+        code.inline { background: #f0f0f0; padding: 2px 6px; border-radius: 3px; font-family: monospace; font-size: 13px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="mentor.html">← Back to Showcase</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>📁 Mentor — Source Code</h1>
+            <p>An AI advisor for solo founders of service and expert businesses</p>
+        </div>
+
+        <div class="content-section">
+            <h2>📂 Project Structure</h2>
+            <div class="file-tree">projects/mentor/
+├── mentor_server.py       # Flask backend + retrieval + Claude API
+├── mentor-ui.html         # Full frontend (Daily, Wiki, Learn & Talk tabs)
+├── demo.html              # Portfolio live demo (browser-only)
+├── power-of-process.txt   # Sample knowledge base (demo)
+└── config.txt             # User's API key (local only)</div>
+        </div>
+
+        <div class="content-section">
+            <h2>🧠 Core Logic — Retrieval + Grounding</h2>
+            <p>Every chat request is processed through a two-layer context pipeline before being sent to Claude Haiku. Layer 1 is always-on reality (user profile, schedule, priorities, progress log). Layer 2 is keyword-retrieved wiki chunks relevant to the specific question.</p>
+
+            <h3>Wiki Chunking</h3>
+            <p>Every wiki markdown file is split by <code class="inline">##</code> headings into teachable sections, stored in memory for instant lookup.</p>
+<pre class="code">def load_wiki_chunks():
+    chunks = []
+    for md_file in WIKI_DIR.rglob("*.md"):
+        topic = md_file.parent.name
+        text = md_file.read_text(encoding="utf-8")
+        sections = re.split(r"\n(?=## )", text)
+        for sec in sections:
+            if len(sec) &lt; 100:
+                continue
+            title_match = re.match(r"##\s*(.+)", sec)
+            title = title_match.group(1).strip() if title_match else topic
+            chunks.append({"topic": topic, "title": title, "text": sec})
+    return chunks</pre>
+
+            <h3>Keyword Retrieval</h3>
+            <p>A simple tokenizer + set intersection score keeps the system fast and transparent. No vector database needed at this scale.</p>
+<pre class="code">def retrieve(question, k=3):
+    q_tokens = set(tokenize(question))
+    scored = []
+    for chunk in WIKI_CHUNKS:
+        chunk_tokens = set(tokenize(chunk["text"]))
+        score = len(q_tokens &amp; chunk_tokens)
+        title_tokens = set(tokenize(chunk["title"]))
+        score += 2 * len(q_tokens &amp; title_tokens)  # title boost
+        if score &gt; 0:
+            scored.append((score, chunk))
+    scored.sort(key=lambda x: x[0], reverse=True)
+    return [c for _, c in scored[:k]]</pre>
+        </div>
+
+        <div class="content-section">
+            <h2>🎯 System Prompt — The Output Contract</h2>
+            <p>The strict rules enforced on every reply. This is what turns a chatbot into a mentor.</p>
+<pre class="code">SYSTEM_PROMPT = """You are a unified-voice mentor for a solo founder
+of a service and expert business.
+
+CRITICAL RULES:
+1. Reply in MAXIMUM 2 paragraphs. Each paragraph MAXIMUM 3 sentences.
+2. Use direct, clear, simple language. No jargon. No filler.
+3. Candid tone — tell the truth even when uncomfortable.
+   Be encouraging when real progress has been made.
+4. Never say "Baker says" or "Weiss recommends" —
+   speak as one trusted advisor using "I".
+5. Ground EVERY recommendation in the user's actual context
+   (schedule, priorities, progress, skill level).
+6. Use the wiki frameworks as the logic, but translate them
+   to the user's real situation.
+7. If the wiki doesn't cover it, say so in one sentence.
+8. End with a specific next action when the question calls for one.
+9. Never suggest something the user clearly lacks capacity for
+   without naming that gap first.
+"""</pre>
+        </div>
+
+        <div class="content-section">
+            <h2>💬 Chat Endpoint With Session Memory</h2>
+            <p>The chat endpoint accepts a short history array from the browser so follow-up questions work naturally. It also appends every exchange to a dated markdown log.</p>
+<pre class="code">@app.route("/api/ask", methods=["POST"])
+def api_ask():
+    data = request.get_json(force=True)
+    question = (data.get("question") or "").strip()
+    history = data.get("history") or []
+
+    retrieved = retrieve(question, k=3)
+    wiki_context = "\n\n---\n\n".join(
+        f"[{c['topic']} — {c['title']}]\n{c['text']}" for c in retrieved
+    )
+    current_user_message = f"""USER CONTEXT:
+{LAYER1_CONTEXT}
+
+---
+
+RELEVANT WIKI FRAMEWORKS:
+{wiki_context}
+
+---
+
+QUESTION: {question}"""
+
+    messages = []
+    for msg in history[-10:]:  # cap at 10
+        role = msg.get("role")
+        content = (msg.get("content") or "").strip()
+        if role in ("user", "assistant") and content:
+            messages.append({"role": role, "content": content})
+    messages.append({"role": "user", "content": current_user_message})
+
+    resp = anthropic_client.messages.create(
+        model="claude-haiku-4-5-20251001",
+        max_tokens=400,
+        system=SYSTEM_PROMPT,
+        messages=messages
+    )
+    answer = resp.content[0].text
+    append_chat_log(question, answer, retrieved)
+    return jsonify({"answer": answer, "sources": retrieved})</pre>
+        </div>
+
+        <div class="content-section">
+            <h2>📚 Live Demo Notes</h2>
+            <p>The portfolio live demo (<code class="inline">projects/mentor/demo.html</code>) runs entirely in the browser with no backend. It loads a single sample knowledge base file (<code class="inline">power-of-process.txt</code>) and calls the Gemini API directly from the browser when the user provides an API key. This preserves the production UI (Daily, Wiki, Learn & Talk tabs) and the tone contract of the system prompt.</p>
+            <p>The full production version uses Claude Haiku 4.5 via the Anthropic SDK, a multi-file wiki, and the local Flask server for true reality grounding (schedule, priorities, progress logs).</p>
+        </div>
+
+        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+            <a href="mentor.html">← Back to Showcase</a> |
+            <a href="index.html">Portfolio Home</a>
+        </nav>
+    </div>
+</body>
+</html>

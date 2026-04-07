@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mentor — Live Demo</title>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<style>
+  :root {
+    --bg: #fff8ee;
+    --bg-gradient: linear-gradient(135deg, #fff8ee 0%, #ffeedd 100%);
+    --panel: #ffffff;
+    --border: #ffd9a8;
+    --text: #3a2a1a;
+    --muted: #8a7560;
+    --accent: #ff8c42;
+    --accent-hover: #ff6b1a;
+    --accent-soft: #fff0e0;
+    --user-bubble: #ffe4c4;
+    --mentor-bubble: #fff5ea;
+    --shadow: 0 2px 12px rgba(255, 140, 66, 0.12);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", sans-serif;
+    background: var(--bg-gradient);
+    color: var(--text);
+    line-height: 1.65;
+    min-height: 100vh;
+  }
+  /* API key bar */
+  .api-bar {
+    background: #1a1a2e;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #fff;
+    font-size: 13px;
+  }
+  .api-bar label { color: #ffd9a8; }
+  .api-bar input {
+    flex: 1;
+    max-width: 500px;
+    padding: 6px 12px;
+    border: 1px solid #444;
+    background: #2a2a3e;
+    color: #fff;
+    border-radius: 4px;
+    font-size: 13px;
+  }
+  .api-bar button {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+  }
+  .api-bar .status { color: #8a8aa0; font-size: 12px; }
+  .api-bar .status.ok { color: #7ee787; }
+  .api-bar a { color: var(--accent); }
+
+  header {
+    background: var(--panel);
+    border-bottom: 2px solid var(--border);
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: var(--shadow);
+  }
+  header h1 { font-size: 22px; font-weight: 700; color: var(--accent); }
+  header .subtitle { color: var(--muted); font-size: 12px; margin-top: 2px; }
+  header .demo-tag {
+    background: var(--accent-soft);
+    color: var(--accent-hover);
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .container { display: grid; grid-template-columns: 260px 1fr; height: calc(100vh - 85px - 48px); }
+  nav {
+    background: var(--panel);
+    border-right: 2px solid var(--border);
+    padding: 22px 0;
+    overflow-y: auto;
+  }
+  nav .section {
+    padding: 0 20px 8px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--accent);
+    font-weight: 700;
+    margin-top: 18px;
+  }
+  nav .section:first-child { margin-top: 0; }
+  nav a {
+    display: block;
+    padding: 11px 20px;
+    color: var(--text);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    border-left: 4px solid transparent;
+    cursor: pointer;
+  }
+  nav a:hover { background: var(--accent-soft); border-left-color: var(--accent); color: var(--accent-hover); }
+  nav a.active { background: var(--accent-soft); border-left-color: var(--accent); color: var(--accent-hover); font-weight: 600; }
+  main { padding: 38px 50px; overflow-y: auto; max-width: 900px; }
+  main h1 { font-size: 26px; margin-bottom: 16px; color: var(--accent); }
+  main h2 { font-size: 19px; margin: 24px 0 12px; color: var(--accent-hover); border-bottom: 2px solid var(--border); padding-bottom: 6px; }
+  main h3 { font-size: 16px; margin: 18px 0 8px; }
+  main p { margin-bottom: 12px; }
+  main ul, main ol { margin: 12px 0 12px 24px; }
+  main li { margin-bottom: 6px; }
+  main code { background: var(--accent-soft); padding: 2px 6px; border-radius: 4px; font-size: 13px; color: var(--accent-hover); font-weight: 600; }
+  main strong { color: var(--accent-hover); }
+  .welcome { text-align: center; padding: 40px 20px; }
+  .welcome h2 { border: none; color: var(--accent); font-size: 28px; margin-bottom: 12px; }
+  .welcome .tagline { color: var(--muted); margin-bottom: 30px; }
+  .welcome .modes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .welcome .mode { background: var(--panel); padding: 22px; border-radius: 12px; border: 2px solid var(--border); text-align: left; box-shadow: var(--shadow); }
+  .welcome .mode h3 { color: var(--accent); margin-bottom: 8px; font-size: 17px; }
+  .welcome .mode p { font-size: 13px; color: var(--muted); }
+  .lesson-card { background: var(--panel); border: 2px solid var(--border); border-radius: 14px; padding: 28px 32px; box-shadow: var(--shadow); }
+  .lesson-card .label { display: inline-block; background: var(--accent-soft); color: var(--accent-hover); padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+  .lesson-card p { white-space: pre-wrap; }
+  .btn { background: var(--accent); color: #fff; border: none; padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; margin-top: 20px; }
+  .btn:hover { background: var(--accent-hover); }
+  .btn:disabled { background: var(--muted); cursor: not-allowed; }
+  .chat-wrap { display: flex; flex-direction: column; height: calc(100vh - 85px - 48px - 80px); max-width: 800px; }
+  .chat-header h2 { border: none; color: var(--accent); margin: 0 0 4px; font-size: 22px; }
+  .chat-header p { color: var(--muted); font-size: 13px; margin-bottom: 14px; }
+  .chat-messages { flex: 1; overflow-y: auto; padding: 16px 4px; background: var(--panel); border: 2px solid var(--border); border-radius: 14px 14px 0 0; box-shadow: var(--shadow); }
+  .chat-msg { margin: 10px 18px 12px; max-width: 85%; }
+  .chat-msg.user { margin-left: auto; }
+  .chat-msg .bubble { padding: 11px 15px; border-radius: 14px; font-size: 14px; line-height: 1.55; }
+  .chat-msg.user .bubble { background: var(--user-bubble); border-bottom-right-radius: 4px; }
+  .chat-msg.mentor .bubble { background: var(--mentor-bubble); border: 1px solid var(--border); border-bottom-left-radius: 4px; }
+  .chat-msg.loading .bubble { font-style: italic; color: var(--muted); }
+  .chat-input-row { display: flex; gap: 10px; padding: 12px; background: var(--panel); border: 2px solid var(--border); border-top: none; border-radius: 0 0 14px 14px; box-shadow: var(--shadow); }
+  .chat-input-row input { flex: 1; padding: 11px 15px; border: 2px solid var(--border); border-radius: 10px; font-size: 14px; font-family: inherit; background: var(--bg); color: var(--text); outline: none; }
+  .chat-input-row input:focus { border-color: var(--accent); }
+  .chat-input-row .btn { margin-top: 0; }
+  .quick-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+  .chip { background: var(--accent-soft); color: var(--accent-hover); border: 1px solid var(--border); padding: 6px 12px; border-radius: 20px; font-size: 12px; cursor: pointer; font-weight: 500; }
+  .chip:hover { background: var(--accent); color: #fff; }
+  .error { color: #c0392b; padding: 16px; background: #fdeeee; border-radius: 8px; border: 1px solid #f5c6c6; }
+  .demo-note { background: var(--accent-soft); border: 1px dashed var(--accent); padding: 12px 16px; border-radius: 8px; margin-bottom: 20px; font-size: 13px; color: var(--accent-hover); }
+  ::-webkit-scrollbar { width: 10px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 5px; }
+</style>
+</head>
+<body>
+
+<div class="api-bar">
+  <label>🔑 Gemini API Key:</label>
+  <input type="password" id="apiKeyInput" placeholder="Paste your Gemini API key (get one at aistudio.google.com)…" />
+  <button id="apiKeyBtn">Save</button>
+  <span class="status" id="apiKeyStatus">Not set</span>
+</div>
+
+<header>
+  <div>
+    <h1>🧭 Mentor</h1>
+    <div class="subtitle">AI advisor for solo founders of service and expert businesses</div>
+  </div>
+  <span class="demo-tag">Live Demo</span>
+</header>
+
+<div class="container">
+  <nav id="nav">
+    <div class="section">Knowledge Source</div>
+    <a data-view="source">The Power of Process</a>
+
+    <div class="section">Learn &amp; Talk</div>
+    <a data-view="lesson">Today's Lesson</a>
+    <a data-view="chat">Do you want to talk?</a>
+
+    <div class="section">About</div>
+    <a data-view="about">How the demo works</a>
+    <a href="../../mentor.html">← Back to showcase</a>
+  </nav>
+
+  <main id="content">
+    <div class="welcome">
+      <h2>Welcome!</h2>
+      <p class="tagline">This is a live demo of the Mentor app running in your browser.</p>
+      <div class="demo-note" style="max-width: 600px; margin: 0 auto 30px;">
+        <strong>Demo mode:</strong> Paste your free Gemini API key above, then ask any business question grounded in the sample knowledge base.
+      </div>
+      <div class="modes">
+        <div class="mode">
+          <h3>📚 Knowledge Source</h3>
+          <p>A single expert transcript on process, expertise, and how pattern recognition earns premium fees. Click to read.</p>
+        </div>
+        <div class="mode">
+          <h3>🎓 Today's Lesson</h3>
+          <p>One bite-sized idea from the knowledge base. Click again for a new one.</p>
+        </div>
+        <div class="mode">
+          <h3>💬 Do you want to talk?</h3>
+          <p>Ask any business question. Replies are grounded in the source, limited to 2 short paragraphs.</p>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+  // ---------- API key handling ----------
+  const apiKeyInput = document.getElementById('apiKeyInput');
+  const apiKeyBtn = document.getElementById('apiKeyBtn');
+  const apiKeyStatus = document.getElementById('apiKeyStatus');
+  function saveKey() {
+    const k = apiKeyInput.value.trim();
+    if (k) {
+      sessionStorage.setItem('geminiKey', k);
+      apiKeyStatus.textContent = 'Saved ✓';
+      apiKeyStatus.classList.add('ok');
+    }
+  }
+  function getKey() { return sessionStorage.getItem('geminiKey') || ''; }
+  apiKeyBtn.addEventListener('click', saveKey);
+  apiKeyInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') saveKey(); });
+  window.addEventListener('load', () => {
+    const k = getKey();
+    if (k) { apiKeyInput.value = k; apiKeyStatus.textContent = 'Saved ✓'; apiKeyStatus.classList.add('ok'); }
+  });
+
+  // ---------- Knowledge base loader ----------
+  let sourceText = '';
+  let sourceChunks = [];
+  async function loadSource() {
+    if (sourceText) return;
+    const res = await fetch('power-of-process.txt');
+    sourceText = await res.text();
+    // Split into paragraphs of meaningful length
+    const paras = sourceText.split(/\n\s*\n/).map(p => p.trim()).filter(p => p.length > 150);
+    sourceChunks = paras;
+  }
+
+  // ---------- Navigation ----------
+  const links = document.querySelectorAll('nav a[data-view]');
+  const content = document.getElementById('content');
+  function setActive(link) { links.forEach(l => l.classList.remove('active')); link.classList.add('active'); }
+
+  async function viewSource() {
+    await loadSource();
+    content.innerHTML = `
+      <div class="demo-note">This is the sample knowledge base used by the demo. In the full app, users load their own multi-topic wiki.</div>
+      <h1>The Power of Process</h1>
+      <h3>Source: 2Bobs podcast transcript — David C. Baker &amp; Blair Enns</h3>
+      <div style="background: var(--panel); padding: 24px; border-radius: 12px; border: 2px solid var(--border); box-shadow: var(--shadow); white-space: pre-wrap; font-size: 14px;">${escapeHtml(sourceText)}</div>`;
+  }
+
+  async function viewLesson() {
+    await loadSource();
+    if (!sourceChunks.length) { content.innerHTML = '<div class="error">Could not load source text.</div>'; return; }
+    const chunk = sourceChunks[Math.floor(Math.random() * sourceChunks.length)];
+    content.innerHTML = `
+      <div class="lesson-card">
+        <div class="label">Today's Lesson</div>
+        <p>${escapeHtml(chunk)}</p>
+        <button class="btn" id="newLessonBtn">Show me another</button>
+      </div>`;
+    document.getElementById('newLessonBtn').addEventListener('click', viewLesson);
+  }
+
+  function viewAbout() {
+    content.innerHTML = `
+      <h1>How the demo works</h1>
+      <div class="demo-note"><strong>This is a simplified portfolio demo.</strong> The full app runs locally with Claude Haiku 4.5, a multi-topic wiki, and real-time grounding in the user's schedule, priorities, and progress.</div>
+      <h2>Demo architecture</h2>
+      <ul>
+        <li><strong>Knowledge source:</strong> A single transcript (<code>power-of-process.txt</code>) embedded in the project folder</li>
+        <li><strong>Today's Lesson:</strong> Random paragraph chunk from the transcript — no LLM call</li>
+        <li><strong>Chat:</strong> Your question + the full transcript + strict output rules sent to Gemini 2.0 Flash</li>
+        <li><strong>Output contract:</strong> Max 2 paragraphs, max 3 sentences each, candid but encouraging, never generic</li>
+        <li><strong>Your API key</strong> stays in your browser session only</li>
+      </ul>
+      <h2>Full app vs demo</h2>
+      <table style="width:100%; border-collapse: collapse; margin: 16px 0;">
+        <tr style="background: var(--accent-soft);"><th style="padding:10px; text-align:left; border:1px solid var(--border);">Feature</th><th style="padding:10px; text-align:left; border:1px solid var(--border);">Demo</th><th style="padding:10px; text-align:left; border:1px solid var(--border);">Full App</th></tr>
+        <tr><td style="padding:10px; border:1px solid var(--border);">Knowledge base</td><td style="padding:10px; border:1px solid var(--border);">1 transcript</td><td style="padding:10px; border:1px solid var(--border);">5-topic wiki, extensible</td></tr>
+        <tr><td style="padding:10px; border:1px solid var(--border);">LLM</td><td style="padding:10px; border:1px solid var(--border);">Gemini 2.0 Flash</td><td style="padding:10px; border:1px solid var(--border);">Claude Haiku 4.5</td></tr>
+        <tr><td style="padding:10px; border:1px solid var(--border);">Reality grounding</td><td style="padding:10px; border:1px solid var(--border);">None (portfolio demo)</td><td style="padding:10px; border:1px solid var(--border);">Schedule, priorities, progress</td></tr>
+        <tr><td style="padding:10px; border:1px solid var(--border);">Session memory</td><td style="padding:10px; border:1px solid var(--border);">Yes</td><td style="padding:10px; border:1px solid var(--border);">Yes</td></tr>
+        <tr><td style="padding:10px; border:1px solid var(--border);">Chat log archive</td><td style="padding:10px; border:1px solid var(--border);">Browser only</td><td style="padding:10px; border:1px solid var(--border);">Dated markdown files</td></tr>
+      </table>`;
+  }
+
+  // ---------- Chat ----------
+  let chatHistory = [];
+  function viewChat() {
+    content.innerHTML = `
+      <div class="chat-wrap">
+        <div class="chat-header">
+          <h2>Do you want to talk?</h2>
+          <p>Ask me any business question. I'll answer in 2 short paragraphs, grounded in the sample knowledge base.</p>
+        </div>
+        <div class="quick-chips">
+          <span class="chip" data-q="Why does positioning matter so much?">Why does positioning matter?</span>
+          <span class="chip" data-q="How do I charge a price premium?">How do I charge a price premium?</span>
+          <span class="chip" data-q="Should I specialize in one vertical?">Should I specialize?</span>
+          <span class="chip" data-q="What is process worth to a client?">What is process worth?</span>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+          <div class="chat-msg mentor"><div class="bubble">What's on your mind today?</div></div>
+        </div>
+        <div class="chat-input-row">
+          <input id="chatInput" type="text" placeholder="Type your question and press Enter..." autofocus />
+          <button class="btn" id="chatSendBtn">Send</button>
+        </div>
+      </div>`;
+
+    const input = document.getElementById('chatInput');
+    const sendBtn = document.getElementById('chatSendBtn');
+    const messages = document.getElementById('chatMessages');
+
+    function addMsg(role, text) {
+      const div = document.createElement('div');
+      div.className = 'chat-msg ' + role;
+      const bubble = document.createElement('div');
+      bubble.className = 'bubble';
+      bubble.innerHTML = marked.parse(text);
+      div.appendChild(bubble);
+      messages.appendChild(div);
+      messages.scrollTop = messages.scrollHeight;
+      return div;
+    }
+
+    async function send(qOverride) {
+      const q = (qOverride || input.value).trim();
+      if (!q) return;
+      const key = getKey();
+      if (!key) { addMsg('mentor', '**Please paste your Gemini API key in the top bar first.** You can get a free one at [aistudio.google.com](https://aistudio.google.com/app/apikey).'); return; }
+      input.value = '';
+      sendBtn.disabled = true;
+      addMsg('user', q);
+      const loading = addMsg('mentor loading', 'Thinking...');
+
+      await loadSource();
+      const systemPrompt = `You are a unified-voice mentor for a solo founder of a service and expert business.
+
+CRITICAL RULES:
+1. Reply in MAXIMUM 2 paragraphs. Each paragraph MAXIMUM 3 sentences.
+2. Use direct, clear, simple language. No jargon. No filler. No motivational fluff.
+3. Candid tone — tell the truth even when it's uncomfortable. Be encouraging when real progress has been made.
+4. Never say "Baker says" or "Enns recommends" — speak as one trusted advisor using "I".
+5. Ground every recommendation in the knowledge source below. Translate ideas to the user's real situation.
+6. If the source doesn't cover the question, say so in one sentence and give general reasoning.
+7. End with a specific next action when appropriate.
+
+KNOWLEDGE SOURCE (The Power of Process — expert transcript):
+${sourceText}`;
+
+      const historyText = chatHistory.slice(-6).map(m => `${m.role === 'user' ? 'User' : 'Mentor'}: ${m.content}`).join('\n\n');
+      const userText = (historyText ? `Prior conversation:\n${historyText}\n\n` : '') + `Question: ${q}`;
+
+      try {
+        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${key}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            systemInstruction: { parts: [{ text: systemPrompt }] },
+            contents: [{ role: 'user', parts: [{ text: userText }] }],
+            generationConfig: { temperature: 0.4, maxOutputTokens: 400 }
+          })
+        });
+        const data = await res.json();
+        loading.remove();
+        if (data.error) { addMsg('mentor', `**Error:** ${data.error.message}`); return; }
+        const answer = data.candidates?.[0]?.content?.parts?.[0]?.text || '(no response)';
+        addMsg('mentor', answer);
+        chatHistory.push({ role: 'user', content: q });
+        chatHistory.push({ role: 'assistant', content: answer });
+        if (chatHistory.length > 10) chatHistory = chatHistory.slice(-10);
+      } catch (err) {
+        loading.remove();
+        addMsg('mentor', `**Error:** ${err.message}`);
+      } finally {
+        sendBtn.disabled = false;
+        input.focus();
+      }
+    }
+
+    sendBtn.addEventListener('click', () => send());
+    input.addEventListener('keydown', (e) => { if (e.key === 'Enter') send(); });
+    document.querySelectorAll('.chip').forEach(chip => {
+      chip.addEventListener('click', () => send(chip.dataset.q));
+    });
+  }
+
+  function escapeHtml(s) { return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+  links.forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      setActive(link);
+      const v = link.dataset.view;
+      if (v === 'source') viewSource();
+      else if (v === 'lesson') viewLesson();
+      else if (v === 'chat') viewChat();
+      else if (v === 'about') viewAbout();
+    });
+  });
+</script>
+</body>
+</html>

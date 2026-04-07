@@ -290,6 +290,12 @@ Each project is classified by its AI architecture pattern, based on how the syst
 
 ### 🤖 Conversational AI & Specialized Chatbots
 
+#### [Mentor](./mentor.html)
+**AI advisor for solo founders of service and expert businesses — grounded in proven frameworks, not generic chatbot fluff**
+- **Live Demo:** [Launch Demo](https://lyven81.github.io/ai-project/projects/mentor/demo.html)
+- **Tech Stack:** Python Flask, Claude Haiku 4.5, Anthropic SDK, Vanilla JS, marked.js
+- **AI Capabilities:** Unified-voice synthesis of multiple expert sources, keyword-retrieval grounding, two-layer context (always-on reality + retrieved frameworks), strict output contract (≤2 paragraphs, ≤3 sentences each), candid but encouraging tone, session memory for natural follow-ups, persistent chat log archive
+
 #### [Tarot Guru](./projects/tarot-guru/)
 **AI-powered personal tarot reading app that uses cards as a mirror for reflection and clarity**
 - **Live Demo:** [Launch Demo](https://lyven81.github.io/ai-project/projects/tarot-guru/demo.html)

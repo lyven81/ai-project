@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mentor - AI Advisor for Solo Service Founders</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #222; background-color: #ffffff; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        .back-nav { margin-bottom: 20px; }
+        .back-nav a { color: #007BFF; text-decoration: none; font-size: 1rem; }
+        .back-nav a:hover { text-decoration: underline; }
+        .project-header { text-align: center; margin-bottom: 40px; padding: 40px 0; background: linear-gradient(135deg, #9C27B0, #6A1B9A); color: white; border-radius: 10px; }
+        .project-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        .project-header p { font-size: 1.2rem; opacity: 0.9; }
+        .badges { display: flex; justify-content: center; gap: 10px; margin: 20px 0; flex-wrap: wrap; }
+        .badge { background-color: rgba(255, 255, 255, 0.2); color: white; padding: 5px 12px; border-radius: 15px; font-size: 0.9rem; }
+        .demo-links { text-align: center; margin: 30px 0; }
+        .demo-btn { display: inline-block; background-color: #9C27B0; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; margin: 0 10px; font-weight: bold; transition: background-color 0.3s; }
+        .demo-btn:hover { background-color: #6A1B9A; }
+        .demo-btn.secondary { background-color: #FF8C42; }
+        .demo-btn.secondary:hover { background-color: #FF6B1A; }
+        .content-section { margin: 40px 0; padding: 30px; background-color: #f9f9f9; border-radius: 8px; border-left: 5px solid #9C27B0; }
+        .content-section h2 { color: #9C27B0; margin-bottom: 20px; font-size: 1.8rem; }
+        .content-section h3 { color: #333; margin: 20px 0 10px 0; font-size: 1.3rem; }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin: 20px 0; }
+        .feature-item { background: white; padding: 20px; border-radius: 8px; border: 1px solid #ddd; }
+        .feature-item h4 { color: #9C27B0; margin-bottom: 10px; }
+        .tech-stack { display: flex; flex-wrap: wrap; gap: 10px; margin: 15px 0; }
+        .tech-item { background-color: #9C27B0; color: white; padding: 5px 12px; border-radius: 15px; font-size: 0.9rem; }
+        .code-block { background-color: #f4f4f4; border: 1px solid #ddd; border-radius: 5px; padding: 15px; margin: 15px 0; font-family: monospace; overflow-x: auto; white-space: pre; }
+        .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin: 20px 0; }
+        .metric-card { background: white; padding: 20px; border-radius: 8px; text-align: center; border: 2px solid #9C27B0; }
+        .metric-number { font-size: 2rem; font-weight: bold; color: #9C27B0; }
+        .metric-label { color: #666; font-size: 0.9rem; }
+        @media (max-width: 768px) {
+            .project-header h1 { font-size: 2rem; }
+            .project-header p { font-size: 1rem; }
+            .badges { justify-content: center; }
+            .demo-btn { margin: 5px; padding: 10px 20px; }
+            .container { padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="index.html">← Back to Portfolio</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>🧭 Mentor</h1>
+            <p>An AI advisor for solo founders of service and expert businesses — grounded in proven frameworks, not generic chatbot fluff</p>
+
+            <div class="badges">
+                <span class="badge">Claude Haiku 4.5</span>
+                <span class="badge">Python Flask</span>
+                <span class="badge">Retrieval-Augmented</span>
+                <span class="badge">Vanilla JS</span>
+                <span class="badge">Local-First</span>
+            </div>
+        </div>
+
+        <div class="demo-links">
+            <a href="projects/mentor/demo.html" class="demo-btn">🚀 Launch Live Demo</a>
+            <a href="mentor-source.html" class="demo-btn secondary">📁 View Source Code</a>
+        </div>
+
+        <div class="content-section">
+            <h2>📋 Project Overview & Problem Statement</h2>
+            <p><strong>Challenge:</strong> Solo consultants, agencies, and service founders need real business advice, but generic AI chatbots give theoretical answers disconnected from their actual situation. Reading four different business books (positioning, pricing, selling, decision-making) leaves them with conflicting voices and no way to apply the wisdom to their specific week.</p>
+
+            <p><strong>Solution:</strong> Mentor compiles multiple expert sources into a single unified-voice wiki and grounds every reply in the user's real schedule, priorities, and progress. It uses Claude Haiku 4.5 with strict output rules — maximum two short paragraphs, direct language, candid but encouraging — to deliver advice that feels like a trusted advisor, not a search engine.</p>
+
+            <h3>Key Benefits</h3>
+            <ul>
+                <li><strong>One Unified Voice:</strong> Four expert authors synthesized into a single trusted advisor — no "Baker says, Weiss recommends" noise</li>
+                <li><strong>Grounded in Reality:</strong> Every answer ties back to the user's actual weekly schedule, priority order, and current progress log</li>
+                <li><strong>Concise by Design:</strong> Strict ≤2 paragraphs, ≤3 sentences per paragraph — no wall-of-text AI fluff</li>
+                <li><strong>Candid, Not Robotic:</strong> Direct honest advice, encouraging when real progress is made</li>
+                <li><strong>Session Memory:</strong> Remembers the last 10 messages so follow-up questions work naturally</li>
+                <li><strong>Persistent Log:</strong> Every conversation archived to a dated markdown file for later review</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>🖥️ Application Features</h2>
+
+            <div class="features-grid">
+                <div class="feature-item">
+                    <h4>📚 Knowledge Wiki</h4>
+                    <p>Five topic articles — positioning, selling, pricing, business model, decision-making — compiled from multiple expert sources into one synthesized voice. Browse or click any topic to read the full framework.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>🎓 Today's Lesson</h4>
+                    <p>One random teachable chunk from the wiki on each click. A bite-sized idea to absorb at the start of the day, no commitment required.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>💬 Chat Advisor</h4>
+                    <p>Ask any business question. Retrieval finds the top 3 relevant wiki chunks, Claude Haiku generates a grounded answer in ≤2 short paragraphs, and sources are shown so you know where the advice came from.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>📅 Daily Context</h4>
+                    <p>Always-on access to the user's weekly schedule, priority order, and latest progress log — loaded into every chat request so advice is never generic.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🤖 AI Integration & Intelligence</h2>
+
+            <div class="features-grid">
+                <div class="feature-item">
+                    <h4>🧠 Claude Haiku 4.5</h4>
+                    <p>Fast, low-cost LLM that generates concise grounded replies. Roughly one sen per question in production — cheap enough for daily use without cost anxiety.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>🔍 Keyword Retrieval</h4>
+                    <p>Every question is tokenized and scored against all wiki chunks. The top three are sent to the LLM as context, keeping token usage low and answers focused.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>🎯 Strict Output Prompt</h4>
+                    <p>The system prompt enforces maximum 2 paragraphs of 3 sentences each, unified voice, candid tone, and honest gap-flagging. No theoretical advice without reality grounding.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>🪞 Layer 1 + Layer 2 Grounding</h4>
+                    <p>Layer 1 is always-on context: user profile, schedule, priorities, progress. Layer 2 is retrieved wiki chunks per question. Both are sent with every request to ensure advice matches both reality and frameworks.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🛠️ Technical Architecture & Implementation</h2>
+
+            <h3>Frontend Stack</h3>
+            <div class="tech-stack">
+                <span class="tech-item">Vanilla HTML</span>
+                <span class="tech-item">CSS Grid</span>
+                <span class="tech-item">Vanilla JavaScript</span>
+                <span class="tech-item">marked.js (Markdown)</span>
+            </div>
+
+            <h3>Backend Stack</h3>
+            <div class="tech-stack">
+                <span class="tech-item">Python 3</span>
+                <span class="tech-item">Flask</span>
+                <span class="tech-item">Anthropic SDK</span>
+                <span class="tech-item">Claude Haiku 4.5</span>
+            </div>
+
+            <h3>Deployment & Infrastructure</h3>
+            <div class="tech-stack">
+                <span class="tech-item">Local-First</span>
+                <span class="tech-item">One-Click .bat Launcher</span>
+                <span class="tech-item">No Cloud Required</span>
+            </div>
+
+            <h3>System Architecture</h3>
+            <ul>
+                <li><strong>Local-First Design:</strong> Runs entirely on the user's machine — no server hosting, no data sent anywhere except the LLM API call</li>
+                <li><strong>Two-Layer Context Pipeline:</strong> Layer 1 (reality) loaded on startup, Layer 2 (frameworks) retrieved per question</li>
+                <li><strong>Session Memory:</strong> Last 10 messages kept in browser state and sent with each chat request for follow-up coherence</li>
+                <li><strong>Chat Log Archive:</strong> Every Q+A exchange appended to a dated markdown file for permanent record</li>
+                <li><strong>Retrieval-Augmented Generation:</strong> Simple keyword scoring picks top 3 wiki chunks per question — no vector database needed for the current scale</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>📖 Development Setup & Installation Guide</h2>
+
+            <h3>Prerequisites</h3>
+            <ul>
+                <li><strong>Python 3.9+</strong></li>
+                <li><strong>Anthropic API Key</strong> from console.anthropic.com</li>
+            </ul>
+
+            <h3>Quick Start</h3>
+            <div class="code-block">
+# Clone the repository
+git clone https://github.com/lyven81/ai-project.git
+cd ai-project/projects/mentor
+
+# Install dependencies
+pip install flask anthropic
+
+# Set your API key in config.txt
+# ANTHROPIC_API_KEY=sk-ant-...
+
+# Run the server
+python mentor_server.py
+            </div>
+
+            <h3>Environment Configuration</h3>
+            <div class="code-block">
+# config.txt
+ANTHROPIC_API_KEY=your_anthropic_api_key_here
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>📊 Key Metrics</h2>
+
+            <div class="metrics">
+                <div class="metric-card">
+                    <div class="metric-number">5</div>
+                    <div class="metric-label">Wiki Topics</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">~2</div>
+                    <div class="metric-label">Paragraphs Per Reply</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">~1 sen</div>
+                    <div class="metric-label">Cost Per Question</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">Local</div>
+                    <div class="metric-label">First Deployment</div>
+                </div>
+            </div>
+
+            <h3>Business Value</h3>
+            <ul>
+                <li><strong>Focused Advice:</strong> Replaces generic AI chat with domain-specific, reality-grounded guidance</li>
+                <li><strong>Cost-Effective:</strong> Daily use costs roughly RM 0.30 per day with Claude Haiku</li>
+                <li><strong>Privacy-First:</strong> Runs locally — knowledge base and chat log never leave the user's machine</li>
+                <li><strong>Extensible:</strong> Drop new source files into the wiki to expand the knowledge base at any time</li>
+                <li><strong>Self-Contained:</strong> One .bat file launches everything, no complex setup</li>
+            </ul>
+        </div>
+
+        <div class="demo-links">
+            <a href="projects/mentor/demo.html" class="demo-btn">🚀 Try Live Demo</a>
+            <a href="https://github.com/lyven81/ai-project/tree/main/projects/mentor" class="demo-btn secondary">📖 Full Source Code</a>
+        </div>
+
+        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+            <a href="index.html">← Back to Portfolio</a> |
+            <a href="project-categories.html">View All Categories</a>
+        </nav>
+    </div>
+</body>
+</html>
