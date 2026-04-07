@@ -237,15 +237,76 @@
 
   // ---------- Knowledge base loader ----------
   let sourceText = '';
-  let sourceChunks = [];
   async function loadSource() {
     if (sourceText) return;
     const res = await fetch('power-of-process.txt');
     sourceText = await res.text();
-    // Split into paragraphs of meaningful length
-    const paras = sourceText.split(/\n\s*\n/).map(p => p.trim()).filter(p => p.length > 150);
-    sourceChunks = paras;
   }
+
+  // ---------- Curated lessons ----------
+  // Hand-extracted teachable ideas from "The Power of Process" — each a standalone, actionable lesson.
+  const LESSONS = [
+    {
+      title: "Process is a Tool of Reassurance",
+      body: "Clients get nervous late in the sale. They stop worrying about the upside of change and start worrying about the cost and risk of making a mistake. A clear process calms them — not because they can judge whether it's good, but because it sounds like you've done this before. Think of a surgeon explaining what happens after the incision; that's the effect you want.",
+      action: "Save your process talk for late in the sale. Use it to calm a nervous client, not to impress an excited one."
+    },
+    {
+      title: "Don't Fall in Love With Your Process",
+      body: "The moment you codify a process, you will want to put it on your website, in your proposal, and at the top of every meeting. Resist. Used too early, process leaks onto the page when it should be quietly held in reserve. It's a trump card — saved for when the client's doubts need mopping up, not played first.",
+      action: "Audit your website and proposal today. Any mention of 'our 4-step process' gets removed or moved to a late-stage conversation."
+    },
+    {
+      title: "The Four Phases: Diagnose, Prescribe, Apply, Reapply",
+      body: "A good process mirrors medicine. You diagnose before you prescribe. You prescribe before you apply. And if the engagement continues, you reapply with new information. Skipping diagnosis is why so many proposals feel generic — the firm jumped straight to prescription without earning it.",
+      action: "Look at your last three proposals. Did you diagnose the client's real problem, or did you skip straight to what you wanted to sell?"
+    },
+    {
+      title: "No Process = No Confidence",
+      body: "If a client asks how you'll do the work and your answer is 'we'll figure it out as we go,' you've just told them you're making it up. That's the equivalent of a surgeon saying surgery is an organic process. The client doesn't need to understand your method — they just need to believe you have one.",
+      action: "Write down how you'd answer 'how will you do this?' in one minute, without jargon. If you can't, that's the gap."
+    },
+    {
+      title: "Process Comes From Pattern Recognition",
+      body: "You build a process by noticing what you already do. Solve enough similar problems and patterns emerge — not just in what you observe, but in how you execute. Write them down. Iterate. The first version will feel crude; that's fine. Codifying is the start, not the end.",
+      action: "Pick your most recent engagement. Write down the five steps you actually took. That's your draft process."
+    },
+    {
+      title: "Ask an Outsider to Spot Your Process",
+      body: "You can't see your own patterns because they feel normal to you. An intern or new hire watching you work for two weeks will notice things you've stopped noticing. Give them one instruction: 'Try to infer our process from what you see.' If they say 'I see no process,' that's not an acceptable answer — it means they need to look harder.",
+      action: "Next junior hire or intern, give them a notebook and two weeks to document how you actually work."
+    },
+    {
+      title: "Process Lets Junior People Do Senior Work",
+      body: "Real IP is process you can hand to a smart-but-inexperienced person and they can apply it. If interpreting the process still requires your genius, it isn't IP — it's just you. The test: could a new employee deliver reasonable results using your framework? If not, you're still throwing people out of airplanes hoping they invent parachutes.",
+      action: "Name one task you do that only you can do. Ask yourself: what would it take to make it teachable in one week?"
+    },
+    {
+      title: "Process Falls Out of a Point of View",
+      body: "The strongest processes aren't invented — they flow from a belief. If your point of view is 'clients should never have to pitch,' your process will naturally reflect that. Without a point of view, process becomes arbitrary: four steps that start with the same letter because it looks neat. With one, process becomes proof of the point of view.",
+      action: "Write one sentence: what do you believe about how your work should be done? That belief is where your process starts."
+    },
+    {
+      title: "Broad Positioning Kills Process",
+      body: "If every engagement you take is wildly different, you can't build a process — because there's no pattern to capture. This is why positioning and process are linked. The narrower your focus, the more your engagements resemble each other, and the more refined your process can become. Broad positioning isn't freedom; it's drag on your expertise.",
+      action: "Look at your last five clients. If they all needed different things, the missing work isn't process — it's positioning."
+    },
+    {
+      title: "Real IP Usually Has Math in It",
+      body: "The highest expression of process is real intellectual property — something protectable, unique, and valuable on its own. Almost all real IP has two things in common: some data or measurement, and some unique language. It's developed over years, not weeks. Most people who think they have IP don't; they have an early draft that's worth refining for another five years.",
+      action: "Audit your current process. Is there anything measurable that you capture every engagement? If not, that's where IP starts."
+    },
+    {
+      title: "Avoid the Four Ds",
+      body: "Half the world's agencies have a 'Discover, Design, Deliver, Done' process, or some variant. It's become a visual cliché that signals you copied from the same TED talk as everyone else. Your process doesn't need to start with the same letter. It needs to be honest, specific, and actually describe how you work.",
+      action: "If your process slide has four words that start with D, rewrite it today. Use verbs that describe what you really do."
+    },
+    {
+      title: "Case Studies Framed by Your Process",
+      body: "Process-frame case studies are your strongest proof that the process you claim to use actually works. They walk the reader through a real engagement using your process steps as the narrative spine. They're powerful — which is why you'll be tempted to use them too early. Save them for the late stage when reassurance matters most.",
+      action: "Rewrite one past case study using your four-phase process as the structure. Save it for your next nervous late-stage client."
+    }
+  ];
 
   // ---------- Navigation ----------
   const links = document.querySelectorAll('nav a[data-view]');
@@ -261,15 +322,24 @@
       <div style="background: var(--panel); padding: 24px; border-radius: 12px; border: 2px solid var(--border); box-shadow: var(--shadow); white-space: pre-wrap; font-size: 14px;">${escapeHtml(sourceText)}</div>`;
   }
 
-  async function viewLesson() {
-    await loadSource();
-    if (!sourceChunks.length) { content.innerHTML = '<div class="error">Could not load source text.</div>'; return; }
-    const chunk = sourceChunks[Math.floor(Math.random() * sourceChunks.length)];
+  let lastLessonIdx = -1;
+  function viewLesson() {
+    let idx = Math.floor(Math.random() * LESSONS.length);
+    // Avoid repeating the same lesson twice in a row
+    if (LESSONS.length > 1 && idx === lastLessonIdx) {
+      idx = (idx + 1) % LESSONS.length;
+    }
+    lastLessonIdx = idx;
+    const lesson = LESSONS[idx];
     content.innerHTML = `
       <div class="lesson-card">
         <div class="label">Today's Lesson</div>
-        <p>${escapeHtml(chunk)}</p>
-        <button class="btn" id="newLessonBtn">Show me another</button>
+        <h2 style="border:none; margin:4px 0 14px; color: var(--accent);">${escapeHtml(lesson.title)}</h2>
+        <p style="margin-bottom: 16px;">${escapeHtml(lesson.body)}</p>
+        <div style="background: var(--accent-soft); border-left: 4px solid var(--accent); padding: 12px 16px; border-radius: 0 8px 8px 0; margin-top: 14px;">
+          <strong style="color: var(--accent-hover);">Try this:</strong> ${escapeHtml(lesson.action)}
+        </div>
+        <button class="btn" id="newLessonBtn">Show me another lesson</button>
       </div>`;
     document.getElementById('newLessonBtn').addEventListener('click', viewLesson);
   }
