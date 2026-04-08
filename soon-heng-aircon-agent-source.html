@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soon Heng Air-Cond Service - Source Code</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #222; background-color: #ffffff; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        .back-nav { margin-bottom: 20px; }
+        .back-nav a { color: #007BFF; text-decoration: none; font-size: 1rem; }
+        .back-nav a:hover { text-decoration: underline; }
+        .project-header {
+            text-align: center; margin-bottom: 40px; padding: 40px 0;
+            background: linear-gradient(135deg, #25D366, #075E54);
+            color: white; border-radius: 10px;
+        }
+        .project-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        .project-header p { font-size: 1.2rem; opacity: 0.9; }
+        .badges { display: flex; justify-content: center; gap: 10px; margin: 20px 0; flex-wrap: wrap; }
+        .badge { background-color: rgba(255,255,255,0.2); color: white; padding: 5px 12px; border-radius: 15px; font-size: 0.9rem; }
+        .content-section { margin: 40px 0; padding: 30px; background-color: #f9f9f9; border-radius: 8px; border-left: 5px solid #25D366; }
+        .content-section h2 { color: #075E54; margin-bottom: 20px; font-size: 1.8rem; }
+        .content-section h3 { color: #333; margin: 20px 0 10px 0; font-size: 1.3rem; }
+        .highlight-box { background: linear-gradient(135deg, #DCFCE7, #BBF7D0); padding: 20px; border-radius: 10px; border-left: 5px solid #25D366; margin: 20px 0; }
+        .code-container { background-color: #1e1e1e; border-radius: 8px; padding: 20px; margin: 20px 0; overflow-x: auto; }
+        .code-header { color: #25D366; font-weight: bold; margin-bottom: 15px; font-size: 1.1rem; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        .code-block { font-family: 'Consolas','Monaco','Courier New',monospace; font-size: 13px; line-height: 1.5; color: #d4d4d4; white-space: pre; }
+        .demo-links { text-align: center; margin: 30px 0; }
+        .demo-btn { display: inline-block; background-color: #25D366; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; margin: 0 10px; font-weight: bold; transition: background-color 0.3s; }
+        .demo-btn:hover { background-color: #1ebe5d; }
+        .demo-btn.secondary { background-color: #075E54; }
+        .demo-btn.secondary:hover { background-color: #054d44; }
+        @media (max-width: 768px) {
+            .project-header h1 { font-size: 2rem; }
+            .project-header p { font-size: 1rem; }
+            .demo-btn { margin: 5px; padding: 10px 20px; }
+            .container { padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="soon-heng-aircon-agent.html">&larr; Back to Project Overview</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>❄️ Soon Heng Air-Cond Service</h1>
+            <p>Source Code &mdash; Scripted WhatsApp Agent Demo</p>
+            <div class="badges">
+                <span class="badge">HTML</span>
+                <span class="badge">CSS</span>
+                <span class="badge">JavaScript</span>
+                <span class="badge">No Backend</span>
+            </div>
+        </div>
+
+        <div class="highlight-box">
+            <h3>About This Code Showcase</h3>
+            <p><strong>The entire demo lives in a single self-contained <code>demo.html</code> file.</strong> No backend, no API key, no build step. The 6-stage conversation is scripted in JavaScript, and the WhatsApp UI is built with plain CSS using the WhatsApp dark theme palette.</p>
+            <p>Below are the key excerpts: the message rendering helpers, the quote card, and the stage flow that drives the demo.</p>
+        </div>
+
+        <div class="demo-links">
+            <a href="projects/soon-heng-aircon-agent/demo.html" class="demo-btn">Launch Live Demo</a>
+            <a href="https://github.com/lyven81/ai-project/tree/main/projects/soon-heng-aircon-agent" target="_blank" class="demo-btn secondary">GitHub Repository</a>
+        </div>
+
+        <div class="content-section">
+            <h2>Core: Message Rendering Helpers</h2>
+            <p>Each conversation turn calls <code>agentReply()</code> or <code>customerMsg()</code>. The agent reply shows a typing indicator before the message lands, just like a real WhatsApp conversation.</p>
+
+            <div class="code-container">
+                <div class="code-header">demo.html &mdash; Bubble &amp; Typing Helpers</div>
+                <div class="code-block">const sleep = ms =&gt; new Promise(r =&gt; setTimeout(r, ms));
+
+function appendBubble(role, text, time, media) {
+  const box = document.getElementById('msg-box');
+  const w = document.createElement('div');
+  w.className = `mw ${role === 'agent' ? 'sent' : 'received'}`;
+
+  let mediaHtml = '';
+  if (media === 'photo') {
+    mediaHtml = `&lt;div class="media-card"&gt;
+      &lt;div class="media-ico"&gt;📸&lt;/div&gt;
+      &lt;div&gt;
+        &lt;div class="media-n"&gt;aircon-indoor.jpg&lt;/div&gt;
+        &lt;div class="media-s"&gt;2.4 MB · Photo&lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;`;
+  }
+
+  let quoteHtml = '';
+  if (media === 'quote') {
+    quoteHtml = `&lt;div class="quote-card"&gt;
+      &lt;div class="qc-title"&gt;Quotation&lt;/div&gt;
+      &lt;div class="qc-row"&gt;&lt;span&gt;Service&lt;/span&gt;&lt;span&gt;Chemical Wash × 2 units&lt;/span&gt;&lt;/div&gt;
+      &lt;div class="qc-row"&gt;&lt;span&gt;Estimated Time&lt;/span&gt;&lt;span&gt;1.5 hours&lt;/span&gt;&lt;/div&gt;
+      &lt;div class="qc-row"&gt;&lt;span&gt;Parts&lt;/span&gt;&lt;span&gt;Cleaning chemicals included&lt;/span&gt;&lt;/div&gt;
+      &lt;div class="qc-row qc-total"&gt;&lt;span&gt;Total&lt;/span&gt;&lt;span&gt;RM 220&lt;/span&gt;&lt;/div&gt;
+    &lt;/div&gt;`;
+  }
+
+  w.innerHTML = `&lt;div class="bubble"&gt;
+    &lt;div class="b-text"&gt;${text}&lt;/div&gt;
+    ${mediaHtml}${quoteHtml}
+    &lt;div class="b-meta"&gt;
+      &lt;span class="b-time"&gt;${time}&lt;/span&gt;
+      ${role === 'agent' ? '&lt;span class="tick"&gt;✓✓&lt;/span&gt;' : ''}
+    &lt;/div&gt;
+  &lt;/div&gt;`;
+  box.appendChild(w);
+  box.scrollTop = box.scrollHeight;
+}
+
+async function agentReply(text, time, media) {
+  showTyping();
+  await sleep(1800);
+  hideTyping();
+  appendBubble('agent', text, time, media);
+}
+
+async function customerMsg(text, time, media) {
+  await sleep(800);
+  appendBubble('customer', text, time, media);
+}</div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Stage 1 &mdash; Customer Inquiry</h2>
+            <p>The customer opens with a question; the AI confirms the service area and immediately starts scoping.</p>
+
+            <div class="code-container">
+                <div class="code-header">demo.html &mdash; Stage 1 Flow</div>
+                <div class="code-block">async function startDemo() {
+  document.getElementById('intro').style.display = 'none';
+
+  setStage(1, '📩 Stage 1 — Customer sends inquiry');
+  setBtn('Incoming message...', null, true);
+  updateStats(1, 0, 0, '—');
+
+  await sleep(1000);
+  await customerMsg(
+    'Hi, my bedroom aircon not cold liao. You all do service in Seremban?',
+    '9:14 AM'
+  );
+
+  await sleep(600);
+  setStage(1, '🤖 Stage 1 — AI agent responding to inquiry...');
+  await agentReply(
+    'Hi! Yes we cover Seremban and Nilai. Sorry to hear that. ' +
+    'A few quick questions: how many units are not cold? ' +
+    'Are they wall-mounted? When was the last service?',
+    '9:14 AM'
+  );
+
+  updateStats(1, 0, 0, '14s');
+  setStage(2, '✅ Stage 1 complete — Moving to scoping');
+  setBtn('Customer replies with details...', stage2);
+}</div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Stage 3 &mdash; AI Generates the Quote</h2>
+            <p>Once the AI has enough info (unit count, symptoms, last-service date, address), it drops a quote card into the chat with the chemical wash recommendation.</p>
+
+            <div class="code-container">
+                <div class="code-header">demo.html &mdash; Stage 3 Flow</div>
+                <div class="code-block">async function stage3() {
+  setBtn('Processing...', null, true);
+  setStage(3, '❄️ Stage 3 — AI agent providing quote...');
+
+  await sleep(500);
+  appendBanner('— AI generating quote based on job details —');
+
+  await agentReply(
+    'Here\'s your quote for the chemical wash:',
+    '9:17 AM',
+    'quote'
+  );
+
+  await sleep(300);
+  await agentReply(
+    'RM 220 covers both units — chemical wash, drainage clear, ' +
+    'gas pressure check, and we\'ll inspect the dripping issue. ' +
+    'Quote valid 7 days. Want to book a slot?',
+    '9:17 AM'
+  );
+
+  setStage(4, '✅ Stage 3 complete — Quote sent. Waiting for customer...');
+  setBtn('Customer accepts quote...', stage4);
+}</div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Stage 5 &mdash; Confirm + Auto Reminder</h2>
+            <p>After confirming the booking, the demo simulates a same-evening reminder using a banner + agent message.</p>
+
+            <div class="code-container">
+                <div class="code-header">demo.html &mdash; Stage 5 Flow (excerpt)</div>
+                <div class="code-block">async function stage5() {
+  setStage(5, '✅ Stage 5 — AI agent confirming booking...');
+  appendBanner('— Booking confirmed —');
+
+  await agentReply(
+    'Booking confirmed! Here\'s your summary:\n\n' +
+    '❄️ Service: Chemical Wash × 2 units\n' +
+    '📅 Date: Tomorrow, 2:00 PM\n' +
+    '📍 Address: No. 18, Jln Rasah 5, Taman Rasah Jaya, Seremban\n' +
+    '💰 Price: RM 220 (chemicals included)',
+    '9:20 AM'
+  );
+
+  updateStats(1, 1, 220, '14s');
+
+  await sleep(1500);
+  appendBanner('— Tonight 7pm: AI sends automatic reminder —');
+
+  await agentReply(
+    'Hi Auntie Wong! Just a reminder about your aircon chemical wash ' +
+    'tomorrow at 2:00 PM. Please make sure both bedroom aircons are ' +
+    'accessible and switch them off 30 minutes before we arrive.',
+    '7:00 PM'
+  );
+}</div>
+            </div>
+        </div>
+
+        <div class="demo-links">
+            <a href="projects/soon-heng-aircon-agent/demo.html" class="demo-btn">Try Live Demo</a>
+            <a href="soon-heng-aircon-agent.html" class="demo-btn secondary">View Full Project Details</a>
+        </div>
+
+        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+            <a href="index.html">&larr; Back to Portfolio</a> |
+            <a href="soon-heng-aircon-agent.html">View Project Overview</a>
+        </nav>
+    </div>
+</body>
+</html>
