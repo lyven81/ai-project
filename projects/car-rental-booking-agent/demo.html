@@ -348,6 +348,13 @@
     </div>
 
     <div class="card">
+      <div class="card-header">&#9203; Waiting to Pick Up</div>
+      <div class="card-body" style="padding:12px 14px;">
+        <div class="booking-list" id="waitingPickup"></div>
+      </div>
+    </div>
+
+    <div class="card">
       <div class="card-header">&#128203; Recent Bookings</div>
       <div class="card-body" style="padding:12px 14px;">
         <div class="booking-list" id="recentBookings"></div>
@@ -1014,6 +1021,22 @@ function renderSidePanel() {
         ${cars.map(c => `<div class="bk-detail">${c.vehicle_id} &middot; ${c.model} &middot; ${c.plate_number}</div>`).join('')}
       </div>`;
     }).filter(Boolean).join('');
+  }
+
+  // Waiting to pick up (booked, not yet released)
+  const wp = document.getElementById('waitingPickup');
+  const waiting = bookings.filter(b => b.status === 'booked')
+    .sort((a,b) => a.pickup_date.localeCompare(b.pickup_date));
+  if (!waiting.length) {
+    wp.innerHTML = '<p style="font-size:0.82rem;color:#9ca3af;">No upcoming pickups.</p>';
+  } else {
+    wp.innerHTML = waiting.map(b => `
+      <div class="bk-item">
+        <div class="bk-id">${b.booking_id} <span class="bk-amount">${b.pickup_date}</span></div>
+        <div class="bk-detail">${b.model} &middot; ${b.plate_number}</div>
+        <div class="bk-detail">${b.customer_name} &middot; ${b.pickup_location}</div>
+      </div>
+    `).join('');
   }
 
   // Recent bookings
