@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kereta Sewa Jalan-jalan - Source Code</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #222; background-color: #ffffff; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        .back-nav { margin-bottom: 20px; }
+        .back-nav a { color: #007BFF; text-decoration: none; font-size: 1rem; }
+        .back-nav a:hover { text-decoration: underline; }
+        .project-header {
+            text-align: center; margin-bottom: 40px; padding: 40px 0;
+            background: linear-gradient(135deg, #0D9488, #0F766E);
+            color: white; border-radius: 10px;
+        }
+        .project-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        .project-header p { font-size: 1.2rem; opacity: 0.9; }
+        .badges { display: flex; justify-content: center; gap: 10px; margin: 20px 0; flex-wrap: wrap; }
+        .badge { background-color: rgba(255,255,255,0.2); color: white; padding: 5px 12px; border-radius: 15px; font-size: 0.9rem; }
+        .content-section { margin: 40px 0; padding: 30px; background-color: #f9f9f9; border-radius: 8px; border-left: 5px solid #0D9488; }
+        .content-section h2 { color: #0D9488; margin-bottom: 20px; font-size: 1.8rem; }
+        .content-section h3 { color: #333; margin: 20px 0 10px 0; font-size: 1.3rem; }
+        .highlight-box { background: linear-gradient(135deg, #CCFBF1, #99F6E4); padding: 20px; border-radius: 10px; border-left: 5px solid #0D9488; margin: 20px 0; }
+        .code-container { background-color: #1e1e1e; border-radius: 8px; padding: 20px; margin: 20px 0; overflow-x: auto; }
+        .code-header { color: #0D9488; font-weight: bold; margin-bottom: 15px; font-size: 1.1rem; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        .code-block { font-family: 'Consolas','Monaco','Courier New',monospace; font-size: 14px; line-height: 1.5; color: #d4d4d4; white-space: pre; }
+        .code-comment { color: #6a9955; font-style: italic; }
+        .code-keyword { color: #569cd6; }
+        .code-string { color: #ce9178; }
+        .code-function { color: #dcdcaa; }
+        .code-number { color: #b5cea8; }
+        .demo-links { text-align: center; margin: 30px 0; }
+        .demo-btn { display: inline-block; background-color: #0D9488; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; margin: 0 10px; font-weight: bold; transition: background-color 0.3s; }
+        .demo-btn:hover { background-color: #0F766E; }
+        .demo-btn.secondary { background-color: #FF9800; }
+        .demo-btn.secondary:hover { background-color: #F57C00; }
+        @media (max-width: 768px) {
+            .project-header h1 { font-size: 2rem; }
+            .project-header p { font-size: 1rem; }
+            .demo-btn { margin: 5px; padding: 10px 20px; }
+            .container { padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="car-rental-booking-agent.html">&larr; Back to Project Overview</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>Kereta Sewa Jalan-jalan</h1>
+            <p>Core Source Code &amp; Agentic AI Implementation</p>
+            <div class="badges">
+                <span class="badge">Python 3.8+</span>
+                <span class="badge">FastAPI</span>
+                <span class="badge">Gemini 2.5 Flash</span>
+                <span class="badge">Code-as-Action</span>
+            </div>
+        </div>
+
+        <div class="highlight-box">
+            <h3>About This Code Showcase</h3>
+            <p><strong>This code snippet shows the M5 Agentic Workflow pattern applied to car rental bookings.</strong> The LLM generates Python code that queries vehicles, checks date conflicts, computes rental cost, and inserts new bookings.</p>
+            <p>The full implementation (main.py) is under 200 lines and handles all rental flow logic through code-as-action.</p>
+        </div>
+
+        <div class="demo-links">
+            <a href="projects/car-rental-booking-agent/demo.html" class="demo-btn">Launch Live Demo</a>
+            <a href="https://github.com/lyven81/ai-project/tree/main/projects/car-rental-booking-agent" target="_blank" class="demo-btn secondary">GitHub Repository</a>
+        </div>
+
+        <div class="content-section">
+            <h2>Core: Agentic Booking Engine (main.py)</h2>
+            <p>FastAPI backend wraps Gemini 2.5 Flash to generate executable Python code for each rental request. Helper functions are injected into the execution namespace:</p>
+
+            <div class="code-container">
+                <div class="code-header">main.py &mdash; FastAPI App &amp; Code Execution</div>
+                <div class="code-block"><span class="code-keyword">from</span> fastapi <span class="code-keyword">import</span> FastAPI, HTTPException
+<span class="code-keyword">import</span> google.generativeai <span class="code-keyword">as</span> genai
+<span class="code-keyword">from</span> tinydb <span class="code-keyword">import</span> TinyDB, Query
+<span class="code-keyword">from</span> datetime <span class="code-keyword">import</span> datetime, timedelta
+
+app = FastAPI(title=<span class="code-string">"Kereta Sewa Jalan-jalan API"</span>)
+
+db = TinyDB(<span class="code-string">'kereta_sewa_bookings.json'</span>)
+vehicles_tbl = db.table(<span class="code-string">'vehicles'</span>)
+bookings_tbl = db.table(<span class="code-string">'bookings'</span>)
+
+PICKUP_LOCATIONS = [<span class="code-string">"KLIA"</span>, <span class="code-string">"KL Sentral"</span>,
+                    <span class="code-string">"Subang Airport (SZB)"</span>, <span class="code-string">"TBS"</span>]
+BOOKING_DEPOSIT = <span class="code-number">100.0</span>
+HOTEL_DELIVERY_FEE = <span class="code-number">50.0</span>
+
+<span class="code-keyword">def</span> <span class="code-function">get_daily_rate</span>(tier):
+    <span class="code-keyword">return</span> {<span class="code-string">"Economy"</span>: <span class="code-number">120</span>, <span class="code-string">"Compact"</span>: <span class="code-number">160</span>,
+            <span class="code-string">"SUV"</span>: <span class="code-number">250</span>, <span class="code-string">"MPV"</span>: <span class="code-number">220</span>,
+            <span class="code-string">"Premium"</span>: <span class="code-number">350</span>}.get(tier, <span class="code-number">150</span>)
+
+<span class="code-keyword">def</span> <span class="code-function">calculate_rental_cost</span>(tier, days, hotel_delivery=<span class="code-keyword">False</span>):
+    <span class="code-comment"># Weekly rate only applies for full-week economy/compact rentals</span>
+    weekly = {<span class="code-string">"Economy"</span>: <span class="code-number">700</span>, <span class="code-string">"Compact"</span>: <span class="code-number">950</span>}.get(tier)
+    daily = get_daily_rate(tier)
+    base = weekly <span class="code-keyword">if</span> (weekly <span class="code-keyword">and</span> days == <span class="code-number">7</span>) <span class="code-keyword">else</span> daily * days
+    total = base + BOOKING_DEPOSIT
+    <span class="code-keyword">if</span> hotel_delivery:
+        total += HOTEL_DELIVERY_FEE
+    <span class="code-keyword">return</span> {<span class="code-string">"base"</span>: base, <span class="code-string">"deposit"</span>: BOOKING_DEPOSIT,
+            <span class="code-string">"delivery"</span>: HOTEL_DELIVERY_FEE <span class="code-keyword">if</span> hotel_delivery <span class="code-keyword">else</span> <span class="code-number">0</span>,
+            <span class="code-string">"total"</span>: total}
+
+<span class="code-keyword">def</span> <span class="code-function">has_date_conflict</span>(vehicle_id, pickup_date, return_date, bookings_tbl):
+    start = datetime.strptime(pickup_date, <span class="code-string">"%Y-%m-%d"</span>)
+    end = datetime.strptime(return_date, <span class="code-string">"%Y-%m-%d"</span>)
+    existing = bookings_tbl.search(
+        (Query().vehicle_id == vehicle_id) &
+        (Query().status.one_of([<span class="code-string">"rented"</span>, <span class="code-string">"booked"</span>]))
+    )
+    <span class="code-keyword">for</span> b <span class="code-keyword">in</span> existing:
+        ex_start = datetime.strptime(b[<span class="code-string">"pickup_date"</span>], <span class="code-string">"%Y-%m-%d"</span>)
+        ex_end = datetime.strptime(b[<span class="code-string">"return_date"</span>], <span class="code-string">"%Y-%m-%d"</span>)
+        <span class="code-keyword">if</span> <span class="code-keyword">not</span> (end &lt;= ex_start <span class="code-keyword">or</span> start &gt;= ex_end):
+            <span class="code-keyword">return</span> <span class="code-keyword">True</span>
+    <span class="code-keyword">return</span> <span class="code-keyword">False</span></div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Agentic Workflow: Code Generation Prompt</h2>
+            <p>The LLM receives a strict prompt that lists available helpers and expected output format. It writes Python code that sets <code>STATUS</code> and <code>answer_text</code> variables:</p>
+
+            <div class="code-container">
+                <div class="code-header">main.py &mdash; Gemini Prompt &amp; Code Execution</div>
+                <div class="code-block">PROMPT = <span class="code-string">"""You are Kereta Sewa Jalan-jalan car rental booking assistant.
+WRITE PYTHON CODE.
+
+Database: vehicles_tbl, bookings_tbl
+Functions: next_booking_id, get_daily_rate, calculate_rental_cost,
+           has_date_conflict, datetime, timedelta
+
+Fleet: 56 vehicles across Economy/Compact/SUV/MPV/Premium tiers
+Pricing: Economy RM120/day RM700/week | Compact RM160/day RM950/week
+         SUV RM250/day | MPV RM220/day | Premium RM350/day
+Booking deposit: RM 100 (deducted from final bill)
+Hotel delivery: RM 50 add-on
+Pickup locations (free): KLIA, KL Sentral, Subang Airport (SZB), TBS
+Required: customer_name, phone, license_no
+Booking prefix: RNT. Min 1 day, max 7 days.
+Reference: Wednesday, 8 Apr 2026
+
+Set STATUS (success|vehicle_unavailable|date_conflict|invalid_request)
+and answer_text
+Output: Python code in markdown block
+
+Request: {question}"""</span>
+
+<span class="code-keyword">def</span> <span class="code-function">execute_code</span>(code, user_request):
+    SAFE = {<span class="code-string">"Query"</span>: Query, <span class="code-string">"next_booking_id"</span>: next_booking_id,
+            <span class="code-string">"get_daily_rate"</span>: get_daily_rate,
+            <span class="code-string">"calculate_rental_cost"</span>: calculate_rental_cost,
+            <span class="code-string">"has_date_conflict"</span>: has_date_conflict,
+            <span class="code-string">"datetime"</span>: datetime, <span class="code-string">"timedelta"</span>: timedelta,
+            <span class="code-string">"user_request"</span>: user_request}
+    LOCALS = {<span class="code-string">"db"</span>: db, <span class="code-string">"vehicles_tbl"</span>: vehicles_tbl,
+              <span class="code-string">"bookings_tbl"</span>: bookings_tbl}
+    <span class="code-keyword">try</span>:
+        exec(code, SAFE, LOCALS)
+    <span class="code-keyword">except</span> Exception:
+        <span class="code-keyword">return</span> {<span class="code-string">"error"</span>: traceback.format_exc()}
+    <span class="code-keyword">return</span> {
+        <span class="code-string">"answer"</span>: LOCALS.get(<span class="code-string">"answer_text"</span>, <span class="code-string">"No response"</span>),
+        <span class="code-string">"status"</span>: LOCALS.get(<span class="code-string">"STATUS"</span>, <span class="code-string">"unknown"</span>)
+    }</div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Example: AI-Generated Booking Code</h2>
+            <p>When a user says <em>"Book a Myvi for 3 days from KLIA. Name: Ahmad, Phone: 0123456789, License: D1234567"</em>, Gemini produces code like:</p>
+
+            <div class="code-container">
+                <div class="code-header">Example Generated Code</div>
+                <div class="code-block"><span class="code-comment"># Parse request from user_request</span>
+pickup_date = <span class="code-string">"2026-04-09"</span>
+days = <span class="code-number">3</span>
+return_date = (datetime.strptime(pickup_date, <span class="code-string">"%Y-%m-%d"</span>)
+               + timedelta(days=days)).strftime(<span class="code-string">"%Y-%m-%d"</span>)
+
+<span class="code-comment"># Find first available Myvi</span>
+candidates = vehicles_tbl.search(
+    (Query().model == <span class="code-string">"Perodua Myvi"</span>) &
+    (Query().status != <span class="code-string">"maintenance"</span>)
+)
+vehicle = <span class="code-keyword">None</span>
+<span class="code-keyword">for</span> v <span class="code-keyword">in</span> candidates:
+    <span class="code-keyword">if</span> <span class="code-keyword">not</span> has_date_conflict(v[<span class="code-string">"vehicle_id"</span>], pickup_date,
+                              return_date, bookings_tbl):
+        vehicle = v
+        <span class="code-keyword">break</span>
+
+<span class="code-keyword">if</span> vehicle <span class="code-keyword">is</span> <span class="code-keyword">None</span>:
+    STATUS = <span class="code-string">"vehicle_unavailable"</span>
+    answer_text = <span class="code-string">"No Myvi available for those dates."</span>
+<span class="code-keyword">else</span>:
+    cost = calculate_rental_cost(<span class="code-string">"Economy"</span>, days, hotel_delivery=<span class="code-keyword">False</span>)
+    bk_id = next_booking_id(bookings_tbl, <span class="code-string">"RNT"</span>)
+    bookings_tbl.insert({
+        <span class="code-string">"booking_id"</span>: bk_id,
+        <span class="code-string">"vehicle_id"</span>: vehicle[<span class="code-string">"vehicle_id"</span>],
+        <span class="code-string">"model"</span>: vehicle[<span class="code-string">"model"</span>],
+        <span class="code-string">"customer_name"</span>: <span class="code-string">"Ahmad"</span>,
+        <span class="code-string">"phone"</span>: <span class="code-string">"0123456789"</span>,
+        <span class="code-string">"license_no"</span>: <span class="code-string">"D1234567"</span>,
+        <span class="code-string">"pickup_location"</span>: <span class="code-string">"KLIA"</span>,
+        <span class="code-string">"pickup_date"</span>: pickup_date,
+        <span class="code-string">"return_date"</span>: return_date,
+        <span class="code-string">"days"</span>: days,
+        <span class="code-string">"total_amount_myr"</span>: cost[<span class="code-string">"total"</span>],
+        <span class="code-string">"status"</span>: <span class="code-string">"booked"</span>
+    })
+    STATUS = <span class="code-string">"success"</span>
+    answer_text = f<span class="code-string">"Booking {bk_id} confirmed for {vehicle['model']} "</span> \
+                  f<span class="code-string">"({pickup_date} to {return_date}). Total RM {cost['total']}."</span></div>
+            </div>
+
+            <p><strong>Key Points:</strong></p>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li>The LLM parsed the natural language request and extracted model, duration, location, and customer details</li>
+                <li>It searched the fleet for an available Myvi and checked date conflicts</li>
+                <li>It invoked <code>calculate_rental_cost</code> with the Economy tier</li>
+                <li>It generated a new RNT booking ID and inserted the record</li>
+                <li>All business logic emerged dynamically, not hardcoded per intent</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>FastAPI Endpoints</h2>
+            <div class="code-container">
+                <div class="code-header">main.py &mdash; REST API Routes</div>
+                <div class="code-block"><span class="code-keyword">@app.post</span>(<span class="code-string">"/api/chat"</span>, response_model=ChatResponse)
+<span class="code-keyword">async def</span> <span class="code-function">chat</span>(request: ChatRequest):
+    content = generate_code(PROMPT.format(question=request.message))
+    result = execute_code(extract_code(content), request.message)
+    <span class="code-keyword">if</span> result[<span class="code-string">"error"</span>]:
+        <span class="code-keyword">raise</span> HTTPException(<span class="code-number">500</span>, detail=result[<span class="code-string">"error"</span>])
+    <span class="code-keyword">return</span> ChatResponse(answer=result[<span class="code-string">"answer"</span>], status=result[<span class="code-string">"status"</span>])
+
+<span class="code-keyword">@app.get</span>(<span class="code-string">"/api/vehicles"</span>)
+<span class="code-keyword">async def</span> <span class="code-function">get_vehicles</span>(status=<span class="code-keyword">None</span>, tier=<span class="code-keyword">None</span>):
+    vehicles = [v <span class="code-keyword">for</span> v <span class="code-keyword">in</span> vehicles_tbl.all()
+                <span class="code-keyword">if</span> (<span class="code-keyword">not</span> status <span class="code-keyword">or</span> v[<span class="code-string">"status"</span>] == status)
+                <span class="code-keyword">and</span> (<span class="code-keyword">not</span> tier <span class="code-keyword">or</span> v[<span class="code-string">"tier"</span>] == tier)]
+    <span class="code-keyword">return</span> {<span class="code-string">"vehicles"</span>: vehicles, <span class="code-string">"total"</span>: len(vehicles)}
+
+<span class="code-keyword">@app.get</span>(<span class="code-string">"/api/bookings"</span>)
+<span class="code-keyword">async def</span> <span class="code-function">get_bookings</span>(status=<span class="code-keyword">None</span>, date=<span class="code-keyword">None</span>):
+    bookings = [b <span class="code-keyword">for</span> b <span class="code-keyword">in</span> bookings_tbl.all()
+                <span class="code-keyword">if</span> (<span class="code-keyword">not</span> status <span class="code-keyword">or</span> b[<span class="code-string">"status"</span>] == status)
+                <span class="code-keyword">and</span> (<span class="code-keyword">not</span> date <span class="code-keyword">or</span> b[<span class="code-string">"pickup_date"</span>] == date)]
+    <span class="code-keyword">return</span> {<span class="code-string">"bookings"</span>: bookings, <span class="code-string">"total"</span>: len(bookings)}</div>
+            </div>
+        </div>
+
+        <div class="demo-links">
+            <a href="projects/car-rental-booking-agent/demo.html" class="demo-btn">Try Live Demo</a>
+            <a href="car-rental-booking-agent.html" class="demo-btn secondary">View Full Project Details</a>
+        </div>
+
+        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+            <a href="index.html">&larr; Back to Portfolio</a> |
+            <a href="car-rental-booking-agent.html">View Project Overview</a>
+        </nav>
+    </div>
+</body>
+</html>

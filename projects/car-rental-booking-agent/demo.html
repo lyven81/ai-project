@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kereta Sewa Jalan-jalan — Live Demo</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+      background: #f0f2f5;
+      color: #1a1a2e;
+      min-height: 100vh;
+    }
+
+    /* API Key Bar */
+    #keyBar {
+      background: #0F3D3A;
+      color: white;
+      padding: 9px 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.82rem;
+      flex-wrap: wrap;
+    }
+    #keyBar label { white-space: nowrap; opacity: 0.8; }
+    #apiKeyInput {
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: white;
+      padding: 5px 10px;
+      border-radius: 6px;
+      width: 260px;
+      font-size: 0.82rem;
+    }
+    #apiKeyInput::placeholder { color: rgba(255,255,255,0.45); }
+    #saveKeyBtn {
+      background: #0D9488;
+      color: white;
+      border: none;
+      padding: 5px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.82rem;
+    }
+    #keySaved {
+      color: #86efac;
+      font-size: 0.78rem;
+      display: none;
+    }
+
+    .page-header {
+      background: linear-gradient(135deg, #0D9488, #0F766E);
+      color: white;
+      padding: 28px 20px 24px;
+      text-align: center;
+    }
+    .page-header h1 { font-size: 1.6rem; font-weight: 700; margin-bottom: 6px; }
+    .page-header p { font-size: 0.92rem; opacity: 0.88; }
+    .back-link {
+      position: absolute;
+      top: 48px; left: 16px;
+      color: white;
+      text-decoration: none;
+      font-size: 0.82rem;
+      opacity: 0.8;
+    }
+    .back-link:hover { opacity: 1; }
+
+    .layout {
+      max-width: 1050px;
+      margin: 0 auto;
+      padding: 20px;
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 16px;
+    }
+    @media (max-width: 760px) {
+      .layout { grid-template-columns: 1fr; }
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      overflow: hidden;
+    }
+    .card-header {
+      padding: 14px 18px;
+      border-bottom: 1px solid #f0f0f0;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: #374151;
+    }
+    .card-body { padding: 16px 18px; }
+
+    #chatBox {
+      height: 440px;
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background: #fafafa;
+    }
+    .msg { display: flex; gap: 8px; }
+    .msg.user { flex-direction: row-reverse; }
+    .bubble {
+      max-width: 80%;
+      padding: 10px 14px;
+      border-radius: 14px;
+      font-size: 0.88rem;
+      line-height: 1.5;
+    }
+    .msg.user .bubble {
+      background: #0D9488;
+      color: white;
+      border-radius: 14px 14px 2px 14px;
+    }
+    .msg.bot .bubble {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 14px 14px 14px 2px;
+      color: #1a1a2e;
+    }
+    .msg.bot .bubble.error { background: #fef2f2; border-color: #fecaca; }
+    .avatar {
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.85rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .msg.bot .avatar { background: #0D9488; color: white; }
+    .msg.user .avatar { background: #e5e7eb; color: #374151; }
+
+    .status-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .status-success { background: #ccfbf1; color: #115e59; }
+    .status-conflict { background: #fef9c3; color: #854d0e; }
+    .status-unavailable { background: #fee2e2; color: #991b1b; }
+    .status-info { background: #dbeafe; color: #1e40af; }
+
+    .booking-card {
+      background: #f0fdfa;
+      border: 1px solid #99f6e4;
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin-top: 8px;
+      font-size: 0.82rem;
+    }
+    .booking-card .bk-row { display: flex; justify-content: space-between; margin-bottom: 3px; }
+    .booking-card .bk-label { color: #6b7280; }
+    .booking-card .bk-val { font-weight: 600; color: #115e59; }
+    .booking-card .bk-total {
+      border-top: 1px solid #99f6e4;
+      margin-top: 8px;
+      padding-top: 6px;
+      font-size: 0.9rem;
+    }
+
+    .typing .bubble { background: white; border: 1px solid #e5e7eb; padding: 12px 16px; }
+    .dots span {
+      display: inline-block;
+      width: 6px; height: 6px;
+      background: #9ca3af;
+      border-radius: 50%;
+      margin: 0 2px;
+      animation: bounce 1.2s infinite;
+    }
+    .dots span:nth-child(2) { animation-delay: 0.2s; }
+    .dots span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes bounce {
+      0%,60%,100% { transform: translateY(0); }
+      30% { transform: translateY(-6px); }
+    }
+
+    .input-row {
+      display: flex;
+      gap: 8px;
+      padding: 12px 16px;
+      border-top: 1px solid #f0f0f0;
+      background: white;
+    }
+    #msgInput {
+      flex: 1;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      padding: 9px 13px;
+      font-size: 0.88rem;
+      resize: none;
+      font-family: inherit;
+      outline: none;
+      line-height: 1.4;
+    }
+    #msgInput:focus { border-color: #0D9488; }
+    #sendBtn {
+      background: #0D9488;
+      color: white;
+      border: none;
+      padding: 9px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.88rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    #sendBtn:disabled { opacity: 0.55; cursor: default; }
+
+    .quick-actions {
+      display: flex;
+      gap: 6px;
+      padding: 10px 16px 12px;
+      flex-wrap: wrap;
+      background: white;
+      border-top: 1px solid #f0f0f0;
+    }
+    .chip {
+      background: #f0fdfa;
+      border: 1px solid #99f6e4;
+      color: #115e59;
+      padding: 4px 10px;
+      border-radius: 16px;
+      font-size: 0.78rem;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .chip:hover { background: #ccfbf1; }
+
+    .side { display: flex; flex-direction: column; gap: 16px; }
+
+    .pricing-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+    .pricing-table th {
+      background: #f9fafb;
+      padding: 6px 10px;
+      text-align: left;
+      color: #6b7280;
+      font-weight: 600;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    .pricing-table td {
+      padding: 7px 10px;
+      border-bottom: 1px solid #f3f4f6;
+    }
+    .pricing-table tr:last-child td { border-bottom: none; }
+    .price-val { font-weight: 700; color: #115e59; }
+
+    .fleet-grid {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 4px;
+    }
+    .fleet-cell {
+      border-radius: 4px;
+      padding: 4px 2px;
+      text-align: center;
+      font-size: 0.62rem;
+      font-weight: 700;
+    }
+    .fc-available { background: #dcfce7; color: #166534; }
+    .fc-rented    { background: #fee2e2; color: #991b1b; }
+    .fc-booked    { background: #fef9c3; color: #854d0e; }
+    .fc-maintenance { background: #e5e7eb; color: #374151; }
+
+    .legend { font-size: 0.7rem; color: #6b7280; margin-top: 8px; display: flex; flex-wrap: wrap; gap: 10px; }
+    .legend span::before { content: "■"; margin-right: 3px; }
+    .lg-a::before { color: #16a34a; }
+    .lg-r::before { color: #dc2626; }
+    .lg-b::before { color: #ca8a04; }
+    .lg-m::before { color: #6b7280; }
+
+    .booking-list { display: flex; flex-direction: column; gap: 8px; max-height: 280px; overflow-y: auto; }
+    .bk-item {
+      background: #f9fafb;
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 0.76rem;
+    }
+    .bk-item .bk-id { font-weight: 700; color: #374151; margin-bottom: 2px; }
+    .bk-item .bk-detail { color: #6b7280; }
+    .bk-item .bk-amount { color: #115e59; font-weight: 700; float: right; }
+
+    .loc-list { font-size: 0.8rem; color: #374151; }
+    .loc-list li { padding: 4px 0; border-bottom: 1px dashed #f0f0f0; list-style: none; }
+    .loc-list li:last-child { border-bottom: none; }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #9ca3af;
+      font-size: 0.78rem;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<div id="keyBar">
+  <label>Gemini API Key:</label>
+  <input id="apiKeyInput" type="password" placeholder="Enter your Gemini API key" />
+  <button id="saveKeyBtn" onclick="saveKey()">Save</button>
+  <span id="keySaved">&#10003; Key saved</span>
+  <span style="opacity:0.5;margin-left:auto;font-size:0.75rem;">No key? The demo runs in simulation mode.</span>
+</div>
+
+<div class="page-header" style="position:relative;">
+  <a href="../../car-rental-booking-agent.html" class="back-link">&larr; Back to Project</a>
+  <h1>&#128663; Kereta Sewa Jalan-jalan</h1>
+  <p>Klang Valley &middot; 56 Vehicles &middot; 4 Pickup Locations &middot; AI-powered car rental</p>
+</div>
+
+<div class="layout">
+
+  <div>
+    <div class="card">
+      <div class="card-header">&#128172; Chat with the Booking Agent</div>
+      <div id="chatBox"></div>
+      <div class="quick-actions" id="quickActions">
+        <span class="chip" onclick="useChip(this)">Show available cars tomorrow</span>
+        <span class="chip" onclick="useChip(this)">Book a Myvi for 3 days from KLIA</span>
+        <span class="chip" onclick="useChip(this)">What SUVs do you have this week?</span>
+        <span class="chip" onclick="useChip(this)">Show all active bookings</span>
+        <span class="chip" onclick="useChip(this)">Cancel booking RNT002</span>
+      </div>
+      <div class="input-row">
+        <textarea id="msgInput" rows="2" placeholder="e.g. Book a Honda City for 4 days from KLIA. Name: Ahmad, Phone: 0123456789, License: D1234567"></textarea>
+        <button id="sendBtn" onclick="sendMessage()">Send</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="side">
+
+    <div class="card">
+      <div class="card-header">&#128176; Pricing (RM)</div>
+      <div class="card-body" style="padding:0;">
+        <table class="pricing-table">
+          <tr><th>Tier</th><th>Daily</th><th>Weekly</th></tr>
+          <tr><td>Economy</td><td class="price-val">120</td><td class="price-val">700</td></tr>
+          <tr><td>Compact</td><td class="price-val">160</td><td class="price-val">950</td></tr>
+          <tr><td>SUV</td><td class="price-val">250</td><td>&mdash;</td></tr>
+          <tr><td>MPV</td><td class="price-val">220</td><td>&mdash;</td></tr>
+          <tr><td>Premium</td><td class="price-val">350</td><td>&mdash;</td></tr>
+        </table>
+        <div style="padding:8px 12px;font-size:0.72rem;color:#6b7280;border-top:1px solid #f0f0f0;">
+          + RM 100 booking deposit &middot; + RM 50 hotel delivery
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">&#128663; Fleet Status (56)</div>
+      <div class="card-body">
+        <div class="fleet-grid" id="fleetGrid"></div>
+        <div class="legend">
+          <span class="lg-a">Available</span>
+          <span class="lg-r">Rented</span>
+          <span class="lg-b">Booked</span>
+          <span class="lg-m">Maintenance</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">&#128205; Pickup Locations</div>
+      <div class="card-body">
+        <ul class="loc-list">
+          <li>KLIA</li>
+          <li>KL Sentral</li>
+          <li>Subang Airport (SZB)</li>
+          <li>TBS (Terminal Bersepadu Selatan)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">&#128203; Recent Bookings</div>
+      <div class="card-body" style="padding:12px 14px;">
+        <div class="booking-list" id="recentBookings"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer>&copy; 2026 Lee Yih Ven | AI Project Portfolio &middot; Demo runs in-browser &middot; No server required</footer>
+
+<script>
+// Fleet definition
+const TIER_RATES = {
+  Economy: { daily: 120, weekly: 700 },
+  Compact: { daily: 160, weekly: 950 },
+  SUV:     { daily: 250, weekly: null },
+  MPV:     { daily: 220, weekly: null },
+  Premium: { daily: 350, weekly: null }
+};
+
+const FLEET_SPEC = [
+  { start: 1,  count: 10, model: 'Perodua Axia',   tier: 'Economy', prefix: 'WXY' },
+  { start: 11, count: 10, model: 'Perodua Myvi',   tier: 'Economy', prefix: 'WAB' },
+  { start: 21, count: 10, model: 'Honda City',     tier: 'Compact', prefix: 'WCD' },
+  { start: 31, count: 10, model: 'Toyota Vios',    tier: 'Compact', prefix: 'WEF' },
+  { start: 41, count: 3,  model: 'Proton X50',     tier: 'SUV',     prefix: 'WGH' },
+  { start: 44, count: 3,  model: 'Honda HR-V',     tier: 'SUV',     prefix: 'WJK' },
+  { start: 47, count: 3,  model: 'Perodua Alza',   tier: 'MPV',     prefix: 'WLM' },
+  { start: 50, count: 3,  model: 'Toyota Avanza',  tier: 'MPV',     prefix: 'WNP' },
+  { start: 53, count: 2,  model: 'Toyota Camry',   tier: 'Premium', prefix: 'WQR' },
+  { start: 55, count: 2,  model: 'Honda Accord',   tier: 'Premium', prefix: 'WST' }
+];
+
+const vehicles = [];
+FLEET_SPEC.forEach(spec => {
+  for (let i = 0; i < spec.count; i++) {
+    const vid = spec.start + i;
+    const plateNum = 1000 + vid * 7;
+    vehicles.push({
+      vehicle_id: `VHC${String(vid).padStart(3,'0')}`,
+      model: spec.model,
+      tier: spec.tier,
+      plate_number: `${spec.prefix} ${plateNum}`,
+      daily_rate: TIER_RATES[spec.tier].daily,
+      weekly_rate: TIER_RATES[spec.tier].weekly,
+      status: 'available'
+    });
+  }
+});
+
+function vget(id) { return vehicles.find(v => v.vehicle_id === id); }
+
+// Pre-seed rentals/bookings/maintenance
+const RENTED_CUSTOMERS = [
+  { name: 'Ahmad bin Rahim',   phone: '0123456701', license: 'D1100001' },
+  { name: 'Siti Nurhaliza',    phone: '0123456702', license: 'D1100002' },
+  { name: 'Wong Kam Fai',      phone: '0123456703', license: 'D1100003' },
+  { name: 'Tan Mei Ling',      phone: '0123456704', license: 'D1100004' },
+  { name: 'Kumar Raj',         phone: '0123456705', license: 'D1100005' },
+  { name: 'Lim Chee Wei',      phone: '0123456706', license: 'D1100006' },
+  { name: 'Nurul Aisyah',      phone: '0123456707', license: 'D1100007' },
+  { name: 'Raj Kumar',         phone: '0123456708', license: 'D1100008' },
+  { name: 'Lee Siew Hoon',     phone: '0123456709', license: 'D1100009' },
+  { name: 'Azman bin Ali',     phone: '0123456710', license: 'D1100010' },
+  { name: 'Fatimah Zahra',     phone: '0123456711', license: 'D1100011' },
+  { name: 'Chong Wei Ming',    phone: '0123456712', license: 'D1100012' },
+  { name: 'Hassan bin Omar',   phone: '0123456713', license: 'D1100013' },
+  { name: 'Priya Devi',        phone: '0123456714', license: 'D1100014' },
+  { name: 'Goh Boon Huat',     phone: '0123456715', license: 'D1100015' },
+  { name: 'Zainab binti Yusof',phone: '0123456716', license: 'D1100016' },
+  { name: 'Rajesh Nair',       phone: '0123456717', license: 'D1100017' },
+  { name: 'Tan Wei Jie',       phone: '0123456718', license: 'D1100018' },
+  { name: 'Norhayati binti Ismail', phone: '0123456719', license: 'D1100019' },
+  { name: 'Mohd Faizal',       phone: '0123456720', license: 'D1100020' },
+  { name: 'Ng Chun Keat',      phone: '0123456721', license: 'D1100021' },
+  { name: 'Suresh Kumar',      phone: '0123456722', license: 'D1100022' },
+  { name: 'Aminah binti Salleh', phone: '0123456723', license: 'D1100023' },
+  { name: 'Lau Kok Seng',      phone: '0123456724', license: 'D1100024' },
+  { name: 'Ibrahim bin Abdullah', phone: '0123456725', license: 'D1100025' },
+  { name: 'Chew Ai Lin',       phone: '0123456726', license: 'D1100026' },
+  { name: 'Ravi Shankar',      phone: '0123456727', license: 'D1100027' },
+  { name: 'Yap Jia Hui',       phone: '0123456728', license: 'D1100028' },
+  { name: 'Rosli bin Hassan',  phone: '0123456729', license: 'D1100029' },
+  { name: 'Lim Poh Choo',      phone: '0123456730', license: 'D1100030' },
+  { name: 'Kamal bin Yusoff',  phone: '0123456731', license: 'D1100031' },
+  { name: 'Ho Sze Ying',       phone: '0123456732', license: 'D1100032' },
+  { name: 'Deva Raja',         phone: '0123456733', license: 'D1100033' },
+  { name: 'Hafiz bin Razak',   phone: '0123456734', license: 'D1100034' }
+];
+
+const RENTED_VEHICLE_IDS = [
+  // Economy rented (12)
+  'VHC001','VHC002','VHC003','VHC004','VHC006','VHC007','VHC008','VHC009',
+  'VHC011','VHC012','VHC013','VHC014',
+  // Compact rented (12)
+  'VHC021','VHC022','VHC023','VHC024','VHC025','VHC026',
+  'VHC031','VHC032','VHC033','VHC034','VHC035','VHC036',
+  // SUV rented (3)
+  'VHC041','VHC044','VHC045',
+  // MPV rented (4)
+  'VHC047','VHC048','VHC050','VHC051',
+  // Premium rented (3)
+  'VHC053','VHC055','VHC056'
+];
+
+const MAINTENANCE_IDS = ['VHC005','VHC042'];
+
+// 10 future bookings
+const FUTURE_BOOKINGS = [
+  { vid: 'VHC010', pickup: '2026-04-09', days: 2, loc: 'KLIA',          name: 'Mark Tan',        phone: '0198880001', license: 'D2200001' },
+  { vid: 'VHC015', pickup: '2026-04-09', days: 3, loc: 'KL Sentral',    name: 'Aishah binti Ramli', phone: '0198880002', license: 'D2200002' },
+  { vid: 'VHC020', pickup: '2026-04-10', days: 1, loc: 'Subang Airport (SZB)', name: 'David Chua', phone: '0198880003', license: 'D2200003' },
+  { vid: 'VHC027', pickup: '2026-04-10', days: 4, loc: 'KLIA',          name: 'Sharmila Devi',   phone: '0198880004', license: 'D2200004' },
+  { vid: 'VHC037', pickup: '2026-04-11', days: 5, loc: 'TBS',           name: 'Yusof bin Hashim', phone: '0198880005', license: 'D2200005' },
+  { vid: 'VHC043', pickup: '2026-04-11', days: 3, loc: 'KLIA',          name: 'Jennifer Lee',    phone: '0198880006', license: 'D2200006' },
+  { vid: 'VHC046', pickup: '2026-04-12', days: 2, loc: 'KL Sentral',    name: 'Arun Krishnan',   phone: '0198880007', license: 'D2200007' },
+  { vid: 'VHC049', pickup: '2026-04-13', days: 3, loc: 'KLIA',          name: 'Nurul Hidayah',   phone: '0198880008', license: 'D2200008' },
+  { vid: 'VHC052', pickup: '2026-04-14', days: 4, loc: 'Subang Airport (SZB)', name: 'Tan Kok Leong', phone: '0198880009', license: 'D2200009' },
+  { vid: 'VHC054', pickup: '2026-04-15', days: 2, loc: 'KL Sentral',    name: 'Farah Diana',     phone: '0198880010', license: 'D2200010' }
+];
+
+let bookings = [];
+let bookingCounter = 0;
+
+function fmtDate(d) { return d.toISOString().split('T')[0]; }
+function addDays(dateStr, n) {
+  const d = new Date(dateStr);
+  d.setDate(d.getDate() + n);
+  return fmtDate(d);
+}
+function nextBookingId() {
+  bookingCounter++;
+  return `RNT${String(bookingCounter).padStart(3,'0')}`;
+}
+function calcCost(tier, days, hotelDelivery) {
+  const rates = TIER_RATES[tier];
+  let base;
+  if (rates.weekly && days === 7) base = rates.weekly;
+  else base = rates.daily * days;
+  const deposit = 100;
+  const delivery = hotelDelivery ? 50 : 0;
+  return { base, deposit, delivery, total: base + deposit + delivery };
+}
+
+// Seed data
+function seedData() {
+  // Maintenance
+  MAINTENANCE_IDS.forEach(id => { vget(id).status = 'maintenance'; });
+
+  // Rented (pickup in past, return between Apr 9-15)
+  const pastPickups = ['2026-04-01','2026-04-02','2026-04-03','2026-04-04','2026-04-05','2026-04-06','2026-04-07'];
+  const returnDates = ['2026-04-09','2026-04-10','2026-04-11','2026-04-12','2026-04-13','2026-04-14','2026-04-15'];
+  const pickupLocs = ['KLIA','KL Sentral','Subang Airport (SZB)','TBS'];
+
+  RENTED_VEHICLE_IDS.forEach((vid, i) => {
+    const v = vget(vid);
+    v.status = 'rented';
+    const cust = RENTED_CUSTOMERS[i];
+    const pickup = pastPickups[i % 7];
+    const ret = returnDates[i % 7];
+    const days = Math.round((new Date(ret) - new Date(pickup)) / 86400000);
+    const cost = calcCost(v.tier, days, false);
+    bookings.push({
+      booking_id: nextBookingId(),
+      vehicle_id: vid,
+      model: v.model,
+      plate_number: v.plate_number,
+      tier: v.tier,
+      customer_name: cust.name,
+      phone: cust.phone,
+      license_no: cust.license,
+      pickup_location: pickupLocs[i % 4],
+      pickup_date: pickup,
+      return_date: ret,
+      days: days,
+      hotel_delivery: false,
+      base_amount_myr: cost.base,
+      deposit_myr: cost.deposit,
+      delivery_myr: 0,
+      total_amount_myr: cost.total,
+      status: 'rented',
+      timestamp: new Date(pickup + 'T09:00:00').toISOString()
+    });
+  });
+
+  // Future bookings
+  FUTURE_BOOKINGS.forEach(fb => {
+    const v = vget(fb.vid);
+    v.status = 'booked';
+    const ret = addDays(fb.pickup, fb.days);
+    const cost = calcCost(v.tier, fb.days, false);
+    bookings.push({
+      booking_id: nextBookingId(),
+      vehicle_id: fb.vid,
+      model: v.model,
+      plate_number: v.plate_number,
+      tier: v.tier,
+      customer_name: fb.name,
+      phone: fb.phone,
+      license_no: fb.license,
+      pickup_location: fb.loc,
+      pickup_date: fb.pickup,
+      return_date: ret,
+      days: fb.days,
+      hotel_delivery: false,
+      base_amount_myr: cost.base,
+      deposit_myr: cost.deposit,
+      delivery_myr: 0,
+      total_amount_myr: cost.total,
+      status: 'booked',
+      timestamp: '2026-04-08T10:00:00'
+    });
+  });
+}
+seedData();
+
+// Helpers
+function getKey() { return sessionStorage.getItem('gemini_key') || ''; }
+function saveKey() {
+  const v = document.getElementById('apiKeyInput').value.trim();
+  if (v) {
+    sessionStorage.setItem('gemini_key', v);
+    document.getElementById('keySaved').style.display = 'inline';
+    setTimeout(() => document.getElementById('keySaved').style.display = 'none', 2000);
+  }
+}
+function todayStr() { return '2026-04-08'; }
+function tomorrowStr() { return '2026-04-09'; }
+
+function hasDateConflict(vid, pickup, ret) {
+  const s = new Date(pickup), e = new Date(ret);
+  return bookings.some(b =>
+    b.vehicle_id === vid && ['rented','booked'].includes(b.status) &&
+    !(e <= new Date(b.pickup_date) || s >= new Date(b.return_date))
+  );
+}
+
+function findAvailableByTier(tier, pickup, days) {
+  const ret = addDays(pickup, days);
+  return vehicles.filter(v =>
+    v.tier === tier && v.status !== 'maintenance' && !hasDateConflict(v.vehicle_id, pickup, ret)
+  );
+}
+
+function findAvailableByModel(modelKeyword, pickup, days) {
+  const ret = addDays(pickup, days);
+  return vehicles.filter(v =>
+    v.model.toLowerCase().includes(modelKeyword.toLowerCase()) &&
+    v.status !== 'maintenance' && !hasDateConflict(v.vehicle_id, pickup, ret)
+  );
+}
+
+// Booking logic
+function bookVehicle({ vehicle_id, tier, model, pickup_date, days, pickup_location, hotel_delivery, customer_name, phone, license_no }) {
+  if (!pickup_date) pickup_date = tomorrowStr();
+  if (!days) days = 1;
+  if (days < 1 || days > 7) {
+    return { status: 'invalid_request', answer: `Rental duration must be between 1 and 7 days. You requested ${days} day(s).` };
+  }
+  if (!pickup_location) pickup_location = 'KLIA';
+  if (!customer_name) customer_name = 'Walk-in Customer';
+  if (!phone) phone = 'N/A';
+  if (!license_no) license_no = 'N/A';
+
+  let v;
+  if (vehicle_id) {
+    v = vget(vehicle_id);
+    if (!v) return { status: 'invalid_request', answer: `Vehicle ${vehicle_id} does not exist. Valid range: VHC001–VHC056.` };
+  } else if (model) {
+    const matches = findAvailableByModel(model, pickup_date, days);
+    if (!matches.length) return { status: 'vehicle_unavailable', answer: `Sorry, no ${model} is available for ${days} day(s) from ${pickup_date}.` };
+    v = matches[0];
+  } else if (tier) {
+    const matches = findAvailableByTier(tier, pickup_date, days);
+    if (!matches.length) return { status: 'vehicle_unavailable', answer: `Sorry, no ${tier} vehicles are available for ${days} day(s) from ${pickup_date}.` };
+    v = matches[0];
+  } else {
+    return { status: 'invalid_request', answer: `Please specify a vehicle, model, or tier (Economy, Compact, SUV, MPV, Premium).` };
+  }
+
+  if (v.status === 'maintenance') {
+    return { status: 'vehicle_unavailable', answer: `${v.model} (${v.vehicle_id}) is under maintenance.` };
+  }
+
+  const ret = addDays(pickup_date, days);
+  if (hasDateConflict(v.vehicle_id, pickup_date, ret)) {
+    return { status: 'date_conflict', answer: `${v.model} (${v.vehicle_id}) is not available from ${pickup_date} to ${ret}. Try another date or vehicle.` };
+  }
+
+  const cost = calcCost(v.tier, days, !!hotel_delivery);
+  const bkId = nextBookingId();
+  const booking = {
+    booking_id: bkId,
+    vehicle_id: v.vehicle_id,
+    model: v.model,
+    plate_number: v.plate_number,
+    tier: v.tier,
+    customer_name, phone, license_no,
+    pickup_location,
+    pickup_date,
+    return_date: ret,
+    days,
+    hotel_delivery: !!hotel_delivery,
+    base_amount_myr: cost.base,
+    deposit_myr: cost.deposit,
+    delivery_myr: cost.delivery,
+    total_amount_myr: cost.total,
+    status: 'booked',
+    timestamp: new Date().toISOString()
+  };
+  bookings.push(booking);
+  v.status = 'booked';
+  renderSidePanel();
+  return { status: 'success', answer: `Booking confirmed!`, booking };
+}
+
+function cancelBooking(bookingId) {
+  const bk = bookings.find(b => b.booking_id === bookingId);
+  if (!bk) return { status: 'invalid_request', answer: `No booking found with ID ${bookingId}.` };
+  if (bk.status === 'cancelled') return { status: 'invalid_request', answer: `Booking ${bookingId} is already cancelled.` };
+  bk.status = 'cancelled';
+  // Free vehicle if no other active bookings
+  const v = vget(bk.vehicle_id);
+  if (v && !bookings.some(b => b.vehicle_id === v.vehicle_id && ['rented','booked'].includes(b.status))) {
+    if (v.status !== 'maintenance') v.status = 'available';
+  }
+  renderSidePanel();
+  return { status: 'success', answer: `Booking ${bookingId} for ${bk.customer_name} (${bk.model} ${bk.plate_number}, ${bk.pickup_date} to ${bk.return_date}) has been cancelled. Note: RM 100 deposit is non-refundable.` };
+}
+
+function listAvailable(tier, pickup, days) {
+  if (!pickup) pickup = tomorrowStr();
+  if (!days) days = 1;
+  let list = tier ? findAvailableByTier(tier, pickup, days) : vehicles.filter(v => v.status !== 'maintenance' && !hasDateConflict(v.vehicle_id, pickup, addDays(pickup, days)));
+  if (!list.length) return { status: 'info', answer: `No ${tier || ''} vehicles available for ${days} day(s) from ${pickup}.` };
+  const byTier = {};
+  list.forEach(v => { (byTier[v.tier] = byTier[v.tier] || []).push(v); });
+  let answer = `**Available vehicles from ${pickup} for ${days} day(s):**\n\n`;
+  Object.keys(byTier).forEach(t => {
+    answer += `**${t}** (${byTier[t].length}): ` + byTier[t].slice(0, 6).map(v => `${v.vehicle_id} ${v.model}`).join(', ');
+    if (byTier[t].length > 6) answer += ` +${byTier[t].length - 6} more`;
+    answer += '\n';
+  });
+  return { status: 'info', answer };
+}
+
+function listBookings(filterStatus) {
+  const filtered = filterStatus
+    ? bookings.filter(b => b.status === filterStatus)
+    : bookings.filter(b => ['rented','booked'].includes(b.status));
+  if (!filtered.length) return { status: 'info', answer: `No active bookings.` };
+  const lines = filtered.slice(0, 15).map(b =>
+    `- **${b.booking_id}** [${b.status}] ${b.model} ${b.plate_number}, ${b.pickup_date}→${b.return_date}, ${b.customer_name} · RM ${b.total_amount_myr}`
+  );
+  let answer = `**Active bookings (${filtered.length}):**\n\n` + lines.join('\n');
+  if (filtered.length > 15) answer += `\n\n_...and ${filtered.length - 15} more._`;
+  return { status: 'info', answer };
+}
+
+function checkVehicleStatus(vid) {
+  const v = vget(vid);
+  if (!v) return { status: 'invalid_request', answer: `Vehicle ${vid} does not exist.` };
+  const active = bookings.find(b => b.vehicle_id === vid && ['rented','booked'].includes(b.status));
+  let answer = `**${v.vehicle_id}** — ${v.model} (${v.tier}), plate ${v.plate_number}\nStatus: **${v.status}**`;
+  if (active) answer += `\nCurrent booking: ${active.booking_id} (${active.pickup_date}→${active.return_date}) for ${active.customer_name}`;
+  return { status: 'info', answer };
+}
+
+function showPricing() {
+  return {
+    status: 'info',
+    answer: `**Kereta Sewa Jalan-jalan Pricing:**\n\n| Tier | Daily | Weekly |\n|---|---|---|\n| Economy | RM 120 | RM 700 |\n| Compact | RM 160 | RM 950 |\n| SUV | RM 250 | — |\n| MPV | RM 220 | — |\n| Premium | RM 350 | — |\n\n+ RM 100 booking deposit (deducted from final bill)\n+ RM 50 optional hotel delivery`
+  };
+}
+
+function showLocations() {
+  return {
+    status: 'info',
+    answer: `**Pickup & Return Locations (free):**\n- KLIA\n- KL Sentral\n- Subang Airport (SZB)\n- TBS (Terminal Bersepadu Selatan)\n\nHotel delivery available as RM 50 add-on.`
+  };
+}
+
+// Gemini intent parsing
+async function parseIntent(userMessage) {
+  const key = getKey();
+  if (!key) return simulateIntent(userMessage);
+
+  const prompt = `You are a booking intent parser for a Malaysian car rental system.
+Today is 2026-04-08. Tomorrow is 2026-04-09.
+
+Parse the user message and return ONLY valid JSON (no markdown):
+{
+  "intent": "book_vehicle|cancel_booking|list_available|list_bookings|check_vehicle|show_pricing|show_locations|unknown",
+  "vehicle_id": null or "VHC001" format,
+  "tier": null or "Economy|Compact|SUV|MPV|Premium",
+  "model": null or string (e.g. "Myvi","City","X50"),
+  "pickup_date": null or "YYYY-MM-DD",
+  "days": null or integer 1-7,
+  "pickup_location": null or one of "KLIA|KL Sentral|Subang Airport (SZB)|TBS",
+  "hotel_delivery": null or boolean,
+  "customer_name": null or string,
+  "phone": null or string,
+  "license_no": null or string,
+  "booking_id": null or "RNTXXX" format,
+  "filter_status": null or "rented|booked|cancelled"
+}
+
+User message: "${userMessage.replace(/"/g,'\\"')}"`;
+
+  try {
+    const res = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${key}`,
+      {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({
+          contents: [{parts: [{text: prompt}]}],
+          generationConfig: {temperature: 0.1, maxOutputTokens: 512}
+        })
+      }
+    );
+    const data = await res.json();
+    if (data.error) throw new Error(data.error.message);
+    const text = data.candidates[0].content.parts[0].text;
+    const m = text.match(/\{[\s\S]*\}/);
+    return m ? JSON.parse(m[0]) : simulateIntent(userMessage);
+  } catch(e) {
+    return simulateIntent(userMessage);
+  }
+}
+
+function simulateIntent(msg) {
+  const m = msg.toLowerCase();
+
+  let intent = 'unknown';
+  if (/cancel/i.test(m)) intent = 'cancel_booking';
+  else if (/book|rent|reserve|hire/i.test(m)) intent = 'book_vehicle';
+  else if (/availab|free|show.*car|what.*car|which.*car|what.*have/i.test(m)) intent = 'list_available';
+  else if (/list|show.*book|all book|my book|active book/i.test(m)) intent = 'list_bookings';
+  else if (/status of|check.*vhc/i.test(m)) intent = 'check_vehicle';
+  else if (/price|rate|cost|how much/i.test(m)) intent = 'show_pricing';
+  else if (/location|pickup|where/i.test(m)) intent = 'show_locations';
+
+  // Tier
+  let tier = null;
+  if (/economy|axia|myvi/i.test(m)) tier = 'Economy';
+  else if (/compact|vios|city/i.test(m)) tier = 'Compact';
+  else if (/suv|x50|hr-?v|hrv/i.test(m)) tier = 'SUV';
+  else if (/mpv|alza|avanza/i.test(m)) tier = 'MPV';
+  else if (/premium|camry|accord/i.test(m)) tier = 'Premium';
+
+  // Model keyword
+  let model = null;
+  const modelList = ['axia','myvi','city','vios','x50','hr-v','hrv','alza','avanza','camry','accord'];
+  for (const mk of modelList) {
+    if (m.includes(mk)) { model = mk === 'hrv' ? 'HR-V' : mk.charAt(0).toUpperCase() + mk.slice(1); break; }
+  }
+
+  // Date
+  let pickup_date = null;
+  if (/tomorrow/i.test(m)) pickup_date = '2026-04-09';
+  else if (/today/i.test(m)) pickup_date = '2026-04-08';
+  else if (/this week|week/i.test(m)) pickup_date = '2026-04-09';
+  const dm = msg.match(/(\d{4}-\d{2}-\d{2})/);
+  if (dm) pickup_date = dm[1];
+
+  // Days
+  let days = null;
+  const dayMatch = m.match(/(\d+)\s*day/i);
+  if (dayMatch) days = parseInt(dayMatch[1]);
+  const weekMatch = m.match(/(\d+)?\s*week/i);
+  if (weekMatch && !days) days = 7;
+
+  // Pickup location
+  let pickup_location = null;
+  if (/klia/i.test(m)) pickup_location = 'KLIA';
+  else if (/kl sentral|sentral/i.test(m)) pickup_location = 'KL Sentral';
+  else if (/subang|szb/i.test(m)) pickup_location = 'Subang Airport (SZB)';
+  else if (/tbs|bersepadu/i.test(m)) pickup_location = 'TBS';
+
+  // Hotel delivery
+  const hotel_delivery = /hotel delivery|deliver.*hotel/i.test(m) ? true : null;
+
+  // Vehicle ID
+  const vidMatch = msg.match(/VHC\d{3}/i);
+  const vehicle_id = vidMatch ? vidMatch[0].toUpperCase() : null;
+
+  // Booking ID
+  const bkgMatch = msg.match(/RNT\d+/i);
+  const booking_id = bkgMatch ? bkgMatch[0].toUpperCase() : null;
+
+  // Name / phone / license
+  const nameMatch = msg.match(/name[:\s]+([A-Za-z ]{2,30})/i);
+  const customer_name = nameMatch ? nameMatch[1].trim() : null;
+  const phoneMatch = msg.match(/phone[:\s]+(\d{8,12})/i) || msg.match(/(01\d{8,9})/);
+  const phone = phoneMatch ? phoneMatch[1] : null;
+  const licMatch = msg.match(/licen[cs]e[:\s]+([A-Z0-9]{5,15})/i);
+  const license_no = licMatch ? licMatch[1] : null;
+
+  return {
+    intent, vehicle_id, tier, model, pickup_date, days, pickup_location,
+    hotel_delivery, customer_name, phone, license_no, booking_id, filter_status: null
+  };
+}
+
+function dispatch(parsed) {
+  switch(parsed.intent) {
+    case 'book_vehicle':    return bookVehicle(parsed);
+    case 'cancel_booking':  return cancelBooking(parsed.booking_id);
+    case 'list_available':  return listAvailable(parsed.tier, parsed.pickup_date, parsed.days);
+    case 'list_bookings':   return listBookings(parsed.filter_status);
+    case 'check_vehicle':   return checkVehicleStatus(parsed.vehicle_id);
+    case 'show_pricing':    return showPricing();
+    case 'show_locations':  return showLocations();
+    default:
+      return {
+        status: 'info',
+        answer: `I can help you with:\n- **Book a car** — "Book a Myvi for 3 days from KLIA"\n- **Check availability** — "Show available cars tomorrow"\n- **Browse by tier** — "What SUVs do you have?"\n- **List bookings** — "Show all active bookings"\n- **Cancel a booking** — "Cancel RNT002"\n- **Vehicle status** — "Check VHC041"\n- **Pricing / Locations** — "What are the rates?"`
+      };
+  }
+}
+
+// Rendering
+function appendMsg(role, html, statusClass) {
+  const box = document.getElementById('chatBox');
+  const div = document.createElement('div');
+  div.className = `msg ${role}`;
+  const avatarText = role === 'bot' ? '&#129302;' : '&#128100;';
+  div.innerHTML = `<div class="avatar">${avatarText}</div><div class="bubble ${statusClass||''}">${html}</div>`;
+  box.appendChild(div);
+  box.scrollTop = box.scrollHeight;
+  return div;
+}
+
+function showTyping() {
+  const box = document.getElementById('chatBox');
+  const div = document.createElement('div');
+  div.className = 'msg bot typing';
+  div.id = 'typingIndicator';
+  div.innerHTML = `<div class="avatar">&#129302;</div><div class="bubble"><div class="dots"><span></span><span></span><span></span></div></div>`;
+  box.appendChild(div);
+  box.scrollTop = box.scrollHeight;
+}
+function removeTyping() {
+  const el = document.getElementById('typingIndicator');
+  if (el) el.remove();
+}
+
+function formatAnswer(text) {
+  return text
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\n/g, '<br>');
+}
+
+function renderResult(result) {
+  const statusMap = {
+    success: 'status-success',
+    date_conflict: 'status-conflict',
+    invalid_request: 'status-unavailable',
+    vehicle_unavailable: 'status-unavailable',
+    info: 'status-info'
+  };
+  const cls = statusMap[result.status] || 'status-info';
+
+  let html = `<span class="status-badge ${cls}">${result.status.replace('_',' ')}</span><br>${formatAnswer(result.answer)}`;
+
+  if (result.booking) {
+    const b = result.booking;
+    html += `<div class="booking-card">
+      <div class="bk-row"><span class="bk-label">Booking ID</span><span class="bk-val">${b.booking_id}</span></div>
+      <div class="bk-row"><span class="bk-label">Vehicle</span><span class="bk-val">${b.model} (${b.vehicle_id})</span></div>
+      <div class="bk-row"><span class="bk-label">Plate</span><span class="bk-val">${b.plate_number}</span></div>
+      <div class="bk-row"><span class="bk-label">Pickup</span><span class="bk-val">${b.pickup_location} · ${b.pickup_date}</span></div>
+      <div class="bk-row"><span class="bk-label">Return</span><span class="bk-val">${b.return_date} (${b.days} day${b.days>1?'s':''})</span></div>
+      <div class="bk-row"><span class="bk-label">Customer</span><span class="bk-val">${b.customer_name}</span></div>
+      <div class="bk-row"><span class="bk-label">Phone</span><span class="bk-val">${b.phone}</span></div>
+      <div class="bk-row"><span class="bk-label">License</span><span class="bk-val">${b.license_no}</span></div>
+      <div class="bk-row"><span class="bk-label">Rental</span><span class="bk-val">RM ${b.base_amount_myr}</span></div>
+      <div class="bk-row"><span class="bk-label">Deposit</span><span class="bk-val">RM ${b.deposit_myr}</span></div>
+      ${b.delivery_myr ? `<div class="bk-row"><span class="bk-label">Hotel Delivery</span><span class="bk-val">RM ${b.delivery_myr}</span></div>` : ''}
+      <div class="bk-row bk-total"><span class="bk-label">Total</span><span class="bk-val" style="font-size:1rem;">RM ${b.total_amount_myr}</span></div>
+    </div>`;
+  }
+
+  appendMsg('bot', html, result.status === 'success' ? '' : (result.status === 'info' ? '' : 'error'));
+}
+
+async function sendMessage() {
+  const input = document.getElementById('msgInput');
+  const btn = document.getElementById('sendBtn');
+  const msg = input.value.trim();
+  if (!msg) return;
+
+  appendMsg('user', msg);
+  input.value = '';
+  btn.disabled = true;
+  showTyping();
+
+  document.getElementById('quickActions').style.display = 'none';
+
+  try {
+    const parsed = await parseIntent(msg);
+    const result = dispatch(parsed);
+    removeTyping();
+    renderResult(result);
+  } catch(e) {
+    removeTyping();
+    appendMsg('bot', `<span class="status-badge status-unavailable">error</span><br>Something went wrong: ${e.message}`, 'error');
+  }
+
+  btn.disabled = false;
+  input.focus();
+}
+
+function useChip(el) {
+  document.getElementById('msgInput').value = el.textContent;
+  sendMessage();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('msgInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+  });
+
+  const saved = sessionStorage.getItem('gemini_key');
+  if (saved) document.getElementById('apiKeyInput').value = saved;
+
+  renderSidePanel();
+
+  appendMsg('bot', `<span class="status-badge status-info">welcome</span><br>Hello! I'm the <strong>Kereta Sewa Jalan-jalan</strong> booking agent. I manage <strong>56 vehicles</strong> across 5 tiers and 4 pickup locations in Klang Valley. Try the quick actions below, or type any request in natural language.${!getKey() ? '<br><br><em style="color:#9ca3af;font-size:0.82rem;">Running in simulation mode — add your Gemini API key above for enhanced natural language understanding.</em>' : ''}`);
+});
+
+function renderSidePanel() {
+  // Fleet grid
+  const grid = document.getElementById('fleetGrid');
+  grid.innerHTML = vehicles.map(v => {
+    const cls = `fc-${v.status}`;
+    const label = v.vehicle_id.replace('VHC','');
+    return `<div class="fleet-cell ${cls}" title="${v.vehicle_id} ${v.model} (${v.status})">${label}</div>`;
+  }).join('');
+
+  // Recent bookings
+  const rb = document.getElementById('recentBookings');
+  const recent = [...bookings].filter(b => ['rented','booked'].includes(b.status)).reverse().slice(0, 8);
+  if (!recent.length) {
+    rb.innerHTML = '<p style="font-size:0.82rem;color:#9ca3af;">No bookings yet.</p>';
+  } else {
+    rb.innerHTML = recent.map(b => `
+      <div class="bk-item">
+        <div class="bk-id">${b.booking_id} [${b.status}] <span class="bk-amount">RM ${b.total_amount_myr}</span></div>
+        <div class="bk-detail">${b.model} · ${b.plate_number}</div>
+        <div class="bk-detail">${b.pickup_date}→${b.return_date} · ${b.customer_name}</div>
+      </div>
+    `).join('');
+  }
+}
+</script>
+</body>
+</html>
