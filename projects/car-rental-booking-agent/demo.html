@@ -341,6 +341,20 @@
   <div class="side">
 
     <div class="card">
+      <div class="card-header">&#128663; Available Cars</div>
+      <div class="card-body" style="padding:12px 14px;">
+        <div class="booking-list" id="availableCars"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">&#128203; Recent Bookings</div>
+      <div class="card-body" style="padding:12px 14px;">
+        <div class="booking-list" id="recentBookings"></div>
+      </div>
+    </div>
+
+    <div class="card">
       <div class="card-header">&#128176; Pricing (RM)</div>
       <div class="card-body" style="padding:0;">
         <table class="pricing-table">
@@ -354,38 +368,6 @@
         <div style="padding:8px 12px;font-size:0.72rem;color:#6b7280;border-top:1px solid #f0f0f0;">
           + RM 100 booking deposit &middot; + RM 50 hotel delivery
         </div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-header">&#128663; Fleet Status (56)</div>
-      <div class="card-body">
-        <div class="fleet-grid" id="fleetGrid"></div>
-        <div class="legend">
-          <span class="lg-a">Available</span>
-          <span class="lg-r">Rented</span>
-          <span class="lg-b">Booked</span>
-          <span class="lg-m">Maintenance</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-header">&#128205; Pickup Locations</div>
-      <div class="card-body">
-        <ul class="loc-list">
-          <li>KLIA</li>
-          <li>KL Sentral</li>
-          <li>Subang Airport (SZB)</li>
-          <li>TBS (Terminal Bersepadu Selatan)</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-header">&#128203; Recent Bookings</div>
-      <div class="card-body" style="padding:12px 14px;">
-        <div class="booking-list" id="recentBookings"></div>
       </div>
     </div>
 
@@ -1017,13 +999,22 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function renderSidePanel() {
-  // Fleet grid
-  const grid = document.getElementById('fleetGrid');
-  grid.innerHTML = vehicles.map(v => {
-    const cls = `fc-${v.status}`;
-    const label = v.vehicle_id.replace('VHC','');
-    return `<div class="fleet-cell ${cls}" title="${v.vehicle_id} ${v.model} (${v.status})">${label}</div>`;
-  }).join('');
+  // Available cars list (grouped by tier)
+  const ac = document.getElementById('availableCars');
+  const avail = vehicles.filter(v => v.status === 'available');
+  if (!avail.length) {
+    ac.innerHTML = '<p style="font-size:0.82rem;color:#9ca3af;">No cars available right now.</p>';
+  } else {
+    const tiers = ['Economy','Compact','SUV','MPV','Premium'];
+    ac.innerHTML = tiers.map(t => {
+      const cars = avail.filter(v => v.tier === t);
+      if (!cars.length) return '';
+      return `<div class="bk-item">
+        <div class="bk-id">${t} <span class="bk-amount">${cars.length} car${cars.length>1?'s':''}</span></div>
+        ${cars.map(c => `<div class="bk-detail">${c.vehicle_id} &middot; ${c.model} &middot; ${c.plate_number}</div>`).join('')}
+      </div>`;
+    }).filter(Boolean).join('');
+  }
 
   // Recent bookings
   const rb = document.getElementById('recentBookings');
