@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Sunday Boardroom — Leadership Meeting</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: linear-gradient(135deg, #fff6e5 0%, #ffe8d6 40%, #ffd6e0 100%);
+    color: #3a2a1a;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* Top bar */
+  .topbar {
+    background: linear-gradient(90deg, #ffb347 0%, #ff7eb9 100%);
+    padding: 14px 26px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 14px rgba(255, 126, 185, 0.25);
+    color: #fff;
+  }
+  .topbar h1 {
+    font-size: 17px;
+    font-weight: 700;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  }
+  .topbar .meta {
+    font-size: 13px;
+    display: flex;
+    gap: 18px;
+    align-items: center;
+    font-weight: 500;
+  }
+  .rec {
+    background: rgba(255,255,255,0.25);
+    padding: 4px 10px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .rec::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    background: #ff3355;
+    border-radius: 50%;
+    animation: pulse 1.5s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  /* Main content area */
+  .main {
+    flex: 1;
+    display: flex;
+    padding: 18px;
+    gap: 16px;
+    min-height: 0;
+  }
+
+  /* Video grid */
+  .grid {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 14px;
+  }
+  .tile {
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+    border: 4px solid transparent;
+    transition: all 0.3s;
+    aspect-ratio: 16/10;
+    box-shadow: 0 4px 16px rgba(255, 126, 185, 0.15);
+  }
+  .tile:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 22px rgba(255, 126, 185, 0.25);
+  }
+  .tile.speaking {
+    border-color: #36d399;
+    box-shadow: 0 0 26px rgba(54, 211, 153, 0.5);
+  }
+
+  /* Accent color ring per tile */
+  .tile[data-seat="1"] { background: #d1f2d1; } /* green */
+  .tile[data-seat="2"] { background: #fff4d6; } /* cream */
+  .tile[data-seat="3"] { background: #d6ecff; } /* light blue */
+  .tile[data-seat="4"] { background: #ffe5c2; } /* beige founder */
+  .tile[data-seat="5"] { background: #ffd6e7; } /* pink */
+  .tile[data-seat="6"] { background: #e5d6ff; } /* lavender */
+  .tile[data-seat="7"] { background: #fff9c2; } /* yellow */
+
+  .tile .video {
+    width: 100%;
+    height: 100%;
+    background-image: url('team.jpg');
+    background-size: 700% auto;
+    background-repeat: no-repeat;
+  }
+  /* Default crops from the group photo (used if no custom image set) */
+  .tile[data-seat="1"] .video { background-position: 4% 32%; }
+  .tile[data-seat="2"] .video { background-position: 20% 32%; }
+  .tile[data-seat="3"] .video { background-position: 35% 32%; }
+  .tile[data-seat="4"] .video { background-position: 50% 30%; }
+  .tile[data-seat="5"] .video { background-position: 64% 32%; }
+  .tile[data-seat="6"] .video { background-position: 80% 32%; }
+  .tile[data-seat="7"] .video { background-position: 96% 32%; }
+
+  /* When custom image is loaded, use background-size cover */
+  .tile .video.custom {
+    background-size: cover !important;
+    cursor: grab;
+  }
+  .tile .video.custom:active { cursor: grabbing; }
+
+  .tile .label {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    background: rgba(255, 255, 255, 0.92);
+    padding: 6px 12px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  }
+  .tile .label .name {
+    font-weight: 700;
+    color: #3a2a1a;
+    outline: none;
+    cursor: text;
+    padding: 1px 3px;
+    border-radius: 4px;
+  }
+  .tile .label .name:hover { background: #fff4d6; }
+  .tile .label .name:focus { background: #fff4d6; box-shadow: 0 0 0 2px #ffb347; }
+  .tile .label .role {
+    color: #ff7eb9;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .tile .mic {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(255, 255, 255, 0.92);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  }
+  .tile.muted .mic { background: #ff6b6b; }
+
+  /* Upload button (camera icon) */
+  .tile .upload-btn {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(255, 255, 255, 0.92);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    transition: all 0.2s;
+    border: none;
+  }
+  .tile .upload-btn:hover {
+    background: #ffb347;
+    transform: scale(1.1);
+  }
+  .tile .upload-btn input {
+    display: none;
+  }
+
+  .tile .founder-badge {
+    position: absolute;
+    top: 10px;
+    left: 48px;
+    background: linear-gradient(90deg, #ffd93d 0%, #ffb347 100%);
+    color: #3a2a1a;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    box-shadow: 0 2px 6px rgba(255, 179, 71, 0.4);
+  }
+
+  /* Guest tile placeholder */
+  .guest-tile {
+    background: rgba(255, 255, 255, 0.6) !important;
+    border: 3px dashed #ffb347 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ff7eb9;
+    font-weight: 600;
+  }
+  .guest-tile:hover { background: rgba(255, 255, 255, 0.85) !important; }
+
+  /* Side panel — agenda */
+  .sidepanel {
+    width: 320px;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(8px);
+    border-radius: 16px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    box-shadow: 0 4px 20px rgba(255, 126, 185, 0.15);
+  }
+  .sidepanel h2 {
+    font-size: 14px;
+    font-weight: 700;
+    color: #ff7eb9;
+    margin-bottom: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+  .agenda-item {
+    background: #fff6e5;
+    padding: 13px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    font-size: 13px;
+    border-left: 4px solid #ffd6e0;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .agenda-item:hover {
+    background: #ffe8d6;
+    transform: translateX(2px);
+  }
+  .agenda-item.active {
+    border-left-color: #36d399;
+    background: #d1f2d1;
+  }
+  .agenda-item .num {
+    color: #ff7eb9;
+    font-size: 11px;
+    margin-bottom: 4px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+  .agenda-item .title {
+    font-weight: 600;
+    color: #3a2a1a;
+    outline: none;
+    cursor: text;
+  }
+  .agenda-item .title:focus { background: #fff; box-shadow: 0 0 0 2px #ffb347; border-radius: 4px; padding: 2px; }
+  .agenda-item .delete-btn {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    background: transparent;
+    border: none;
+    color: #ff6b6b;
+    font-size: 14px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+  }
+  .agenda-item { position: relative; }
+  .agenda-item:hover .delete-btn { opacity: 1; }
+  .agenda-item .delete-btn:hover { background: #ff6b6b; color: #fff; }
+  .add-item-btn {
+    width: 100%;
+    padding: 10px;
+    border: 2px dashed #ffb347;
+    background: transparent;
+    color: #ff7eb9;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 4px;
+    margin-bottom: 10px;
+    transition: all 0.2s;
+  }
+  .add-item-btn:hover { background: #fff4d6; border-color: #ff7eb9; }
+  .sidepanel .last-updated {
+    font-size: 10px;
+    color: #a67a5a;
+    margin-bottom: 10px;
+    font-style: italic;
+  }
+  .sidepanel .note {
+    font-size: 11px;
+    color: #a67a5a;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 2px dashed #ffd6e0;
+    line-height: 1.6;
+  }
+  .sidepanel .note code {
+    background: #fff4d6;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 10px;
+  }
+
+  /* Bottom control bar */
+  .controls {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 14px 24px;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    box-shadow: 0 -2px 14px rgba(255, 126, 185, 0.15);
+  }
+  .btn {
+    background: #fff6e5;
+    color: #3a2a1a;
+    border: 2px solid #ffd6e0;
+    padding: 10px 20px;
+    border-radius: 24px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+  }
+  .btn:hover {
+    background: #ffe8d6;
+    border-color: #ffb347;
+    transform: translateY(-2px);
+  }
+  .btn.primary {
+    background: linear-gradient(90deg, #ffb347 0%, #ff7eb9 100%);
+    color: #fff;
+    border-color: transparent;
+  }
+  .btn.primary:hover {
+    box-shadow: 0 4px 12px rgba(255, 126, 185, 0.35);
+  }
+  .btn.end {
+    background: linear-gradient(90deg, #ff6b6b 0%, #ee0979 100%);
+    color: #fff;
+    border-color: transparent;
+  }
+  .btn.end:hover {
+    box-shadow: 0 4px 12px rgba(238, 9, 121, 0.4);
+  }
+
+  /* Reset button */
+  .reset-all {
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    background: #fff;
+    border: 2px solid #ffd6e0;
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-size: 11px;
+    color: #ff7eb9;
+    cursor: pointer;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  .reset-all:hover { background: #ffe8d6; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <h1>🌸 Sunday Boardroom — Leadership Meeting</h1>
+  <div class="meta">
+    <span id="clock">Monday, 13 April 2026</span>
+    <span id="timer">00:00</span>
+    <span class="rec">REC</span>
+  </div>
+</div>
+
+<div class="main">
+  <div class="grid">
+
+    <div class="tile" data-seat="1">
+      <div class="video"></div>
+      <label class="upload-btn" title="Upload photo">
+        📷
+        <input type="file" accept="image/*" onchange="uploadPhoto(event, 1)">
+      </label>
+      <div class="mic">🎤</div>
+      <div class="label">
+        <span class="name" contenteditable="true" data-seat-name="1" title="Click to edit name">Faizal Tan</span>
+        <span class="role">🛠️ AI Engineer</span>
+      </div>
+    </div>
+
+    <div class="tile" data-seat="2">
+      <div class="video"></div>
+      <label class="upload-btn" title="Upload photo">
+        📷
+        <input type="file" accept="image/*" onchange="uploadPhoto(event, 2)">
+      </label>
+      <div class="mic">🎤</div>
+      <div class="label">
+        <span class="name" contenteditable="true" data-seat-name="2" title="Click to edit name">Mei Ling</span>
+        <span class="role">🎓 Mentor</span>
+      </div>
+    </div>
+
+    <div class="tile" data-seat="3">
+      <div class="video"></div>
+      <label class="upload-btn" title="Upload photo">
+        📷
+        <input type="file" accept="image/*" onchange="uploadPhoto(event, 3)">
+      </label>
+      <div class="mic">🎤</div>
+      <div class="label">
+        <span class="name" contenteditable="true" data-seat-name="3" title="Click to edit name">Rajesh Kumar</span>
+        <span class="role">🔬 Research</span>
+      </div>
+    </div>
+
+    <div class="tile speaking" data-seat="4">
+      <div class="video"></div>
+      <label class="upload-btn" title="Upload photo">
+        📷
+        <input type="file" accept="image/*" onchange="uploadPhoto(event, 4)">
+      </label>
+      <div class="founder-badge">FOUNDER</div>
+      <div class="mic">🎤</div>
+      <div class="label">
+        <span class="name" contenteditable="true" data-seat-name="4" title="Click to edit name">Amir Hakim</span>
+        <span class="role">Chair</span>
+      </div>
+    </div>
+
+    <div class="tile" data-seat="5">
+      <div class="video"></div>
+      <label class="upload-btn" title="Upload photo">
+        📷
+        <input type="file" accept="image/*" onchange="uploadPhoto(event, 5)">
+      </label>
+      <div class="mic">🎤</div>
+      <div class="label">
+        <span class="name" contenteditable="true" data-seat-name="5" title="Click to edit name">Siti Nurhaliza</span>
+        <span class="role">🧭 Coordinator</span>
+      </div>
+    </div>
+
+    <div class="tile" data-seat="6">
+      <div class="video"></div>
+      <label class="upload-btn" title="Upload photo">
+        📷
+        <input type="file" accept="image/*" onchange="uploadPhoto(event, 6)">
+      </label>
+      <div class="mic">🎤</div>
+      <div class="label">
+        <span class="name" contenteditable="true" data-seat-name="6" title="Click to edit name">Jason Lim</span>
+        <span class="role">📣 Marketing</span>
+      </div>
+    </div>
+
+    <div class="tile" data-seat="7">
+      <div class="video"></div>
+      <label class="upload-btn" title="Upload photo">
+        📷
+        <input type="file" accept="image/*" onchange="uploadPhoto(event, 7)">
+      </label>
+      <div class="mic">🎤</div>
+      <div class="label">
+        <span class="name" contenteditable="true" data-seat-name="7" title="Click to edit name">Anisa Rahman</span>
+        <span class="role">📝 Editor</span>
+      </div>
+    </div>
+
+    <div class="tile guest-tile">
+      <div style="text-align:center; font-size:13px;">
+        <div style="font-size:36px; margin-bottom:4px;">✨</div>
+        Guest seat
+      </div>
+    </div>
+
+  </div>
+
+  <div class="sidepanel">
+    <h2>🌟 Agenda / Action Items</h2>
+    <div class="last-updated" id="agendaLastUpdated">Last updated: never</div>
+    <div id="agendaList"></div>
+    <button class="add-item-btn" onclick="addAgendaItem()">＋ Add item</button>
+
+    <div class="note">
+      💡 <b>Click text</b> to edit any item. Press Enter to save.<br>
+      💡 <b>Click an item</b> to mark it active (green).<br>
+      💡 <b>Hover + ×</b> to delete an item.<br>
+      💡 <b>＋ Add item</b> to add new action items after a meeting.<br>
+      💡 All changes save automatically to your browser.<br><br>
+      After each meeting, update this list with decisions and action items so it becomes your weekly reminder.<br><br>
+      Meeting minutes are written to <code>what was discussed.md</code> by Siti Nurhaliza when you run <code>run board meeting</code> in Claude Code.
+    </div>
+  </div>
+</div>
+
+<div class="controls">
+  <button class="btn">🎤 Mute</button>
+  <button class="btn">📹 Stop Video</button>
+  <button class="btn">💬 Chat</button>
+  <button class="btn primary">📋 Agenda</button>
+  <button class="btn primary">📝 Minutes</button>
+  <button class="btn end">End Meeting</button>
+</div>
+
+<button class="reset-all" onclick="resetAllPhotos()">↺ Reset all photos</button>
+
+<script>
+  // Load saved photos + positions from localStorage on page load
+  function loadSavedPhotos() {
+    for (let i = 1; i <= 7; i++) {
+      const saved = localStorage.getItem('boardroom_seat_' + i);
+      if (saved) {
+        const videoEl = document.querySelector(`.tile[data-seat="${i}"] .video`);
+        videoEl.style.backgroundImage = `url('${saved}')`;
+        videoEl.classList.add('custom');
+        const savedPos = localStorage.getItem('boardroom_pos_' + i);
+        const pos = savedPos ? JSON.parse(savedPos) : { x: 50, y: 50 };
+        videoEl.style.backgroundPosition = `${pos.x}% ${pos.y}%`;
+      }
+    }
+  }
+
+  // Handle photo upload
+  function uploadPhoto(event, seat) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const dataUrl = e.target.result;
+      localStorage.setItem('boardroom_seat_' + seat, dataUrl);
+      localStorage.setItem('boardroom_pos_' + seat, JSON.stringify({ x: 50, y: 50 }));
+      const videoEl = document.querySelector(`.tile[data-seat="${seat}"] .video`);
+      videoEl.style.backgroundImage = `url('${dataUrl}')`;
+      videoEl.style.backgroundPosition = '50% 50%';
+      videoEl.classList.add('custom');
+    };
+    reader.readAsDataURL(file);
+  }
+
+  // Drag to reposition the image inside each custom tile
+  document.querySelectorAll('.tile[data-seat] .video').forEach(videoEl => {
+    const seat = videoEl.closest('.tile').getAttribute('data-seat');
+    let dragging = false;
+    let startX, startY, startPosX, startPosY;
+
+    videoEl.addEventListener('mousedown', (e) => {
+      if (!videoEl.classList.contains('custom')) return;
+      e.preventDefault();
+      e.stopPropagation();
+      dragging = true;
+      startX = e.clientX;
+      startY = e.clientY;
+      const saved = localStorage.getItem('boardroom_pos_' + seat);
+      const pos = saved ? JSON.parse(saved) : { x: 50, y: 50 };
+      startPosX = pos.x;
+      startPosY = pos.y;
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (!dragging) return;
+      const rect = videoEl.getBoundingClientRect();
+      // Drag distance translates to % shift of background-position.
+      // Negative because dragging down should reveal the top of the image.
+      const dx = ((e.clientX - startX) / rect.width) * -100;
+      const dy = ((e.clientY - startY) / rect.height) * -100;
+      let newX = Math.max(0, Math.min(100, startPosX + dx));
+      let newY = Math.max(0, Math.min(100, startPosY + dy));
+      videoEl.style.backgroundPosition = `${newX}% ${newY}%`;
+    });
+
+    document.addEventListener('mouseup', (e) => {
+      if (!dragging) return;
+      dragging = false;
+      // Parse current position from style and save
+      const match = videoEl.style.backgroundPosition.match(/([\d.]+)%\s+([\d.]+)%/);
+      if (match) {
+        const pos = { x: parseFloat(match[1]), y: parseFloat(match[2]) };
+        localStorage.setItem('boardroom_pos_' + seat, JSON.stringify(pos));
+      }
+    });
+  });
+
+  // Reset all custom photos
+  function resetAllPhotos() {
+    if (!confirm('Reset all photos back to the group photo crops?')) return;
+    for (let i = 1; i <= 7; i++) {
+      localStorage.removeItem('boardroom_seat_' + i);
+      const videoEl = document.querySelector(`.tile[data-seat="${i}"] .video`);
+      videoEl.style.backgroundImage = '';
+      videoEl.classList.remove('custom');
+    }
+  }
+
+  // Click a tile to set it as active speaker
+  const tiles = document.querySelectorAll('.tile[data-seat]');
+  tiles.forEach(tile => {
+    tile.addEventListener('click', (e) => {
+      // Don't trigger speaker change when clicking upload button
+      if (e.target.closest('.upload-btn')) return;
+      tiles.forEach(t => t.classList.remove('speaking'));
+      tile.classList.add('speaking');
+    });
+  });
+
+  // Meeting timer
+  let seconds = 0;
+  const timer = document.getElementById('timer');
+  setInterval(() => {
+    seconds++;
+    const m = String(Math.floor(seconds/60)).padStart(2,'0');
+    const s = String(seconds%60).padStart(2,'0');
+    timer.textContent = `${m}:${s}`;
+  }, 1000);
+
+  // ================== AGENDA (editable + persistent) ==================
+  const DEFAULT_AGENDA = [
+    { title: "Last week's decisions — status review", active: false },
+    { title: "Chief Researcher report", active: false },
+    { title: "Marketing Director report", active: false },
+    { title: "Editor-in-Chief report", active: false },
+    { title: "AI Engineer Lead report", active: false },
+    { title: "Founder — this week's priorities", active: true },
+    { title: "Mentor observations", active: false },
+    { title: "Action items + owners", active: false }
+  ];
+
+  function loadAgenda() {
+    const saved = localStorage.getItem('boardroom_agenda');
+    return saved ? JSON.parse(saved) : DEFAULT_AGENDA;
+  }
+
+  function saveAgenda(agenda) {
+    localStorage.setItem('boardroom_agenda', JSON.stringify(agenda));
+    localStorage.setItem('boardroom_agenda_updated', new Date().toISOString());
+    renderLastUpdated();
+  }
+
+  function renderLastUpdated() {
+    const ts = localStorage.getItem('boardroom_agenda_updated');
+    const el = document.getElementById('agendaLastUpdated');
+    if (!ts) { el.textContent = 'Last updated: never'; return; }
+    const d = new Date(ts);
+    el.textContent = 'Last updated: ' + d.toLocaleString();
+  }
+
+  function renderAgenda() {
+    const agenda = loadAgenda();
+    const container = document.getElementById('agendaList');
+    container.innerHTML = '';
+    agenda.forEach((item, idx) => {
+      const div = document.createElement('div');
+      div.className = 'agenda-item' + (item.active ? ' active' : '');
+      div.innerHTML = `
+        <div class="num">ITEM ${idx + 1}${item.active ? ' — in session' : ''}</div>
+        <div class="title" contenteditable="true">${escapeHtml(item.title)}</div>
+        <button class="delete-btn" title="Delete item">×</button>
+      `;
+      // Click to activate (but not on the editable title or delete button)
+      div.addEventListener('click', (e) => {
+        if (e.target.classList.contains('title') || e.target.classList.contains('delete-btn')) return;
+        const a = loadAgenda();
+        a.forEach(i => i.active = false);
+        a[idx].active = true;
+        saveAgenda(a);
+        renderAgenda();
+      });
+      // Edit title
+      const titleEl = div.querySelector('.title');
+      titleEl.addEventListener('blur', () => {
+        const a = loadAgenda();
+        a[idx].title = titleEl.textContent.trim() || '(empty)';
+        saveAgenda(a);
+      });
+      titleEl.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') { e.preventDefault(); titleEl.blur(); }
+      });
+      // Delete
+      div.querySelector('.delete-btn').addEventListener('click', (e) => {
+        e.stopPropagation();
+        const a = loadAgenda();
+        a.splice(idx, 1);
+        saveAgenda(a);
+        renderAgenda();
+      });
+      container.appendChild(div);
+    });
+    renderLastUpdated();
+  }
+
+  function addAgendaItem() {
+    const a = loadAgenda();
+    a.push({ title: 'New item — click to edit', active: false });
+    saveAgenda(a);
+    renderAgenda();
+  }
+
+  function escapeHtml(s) {
+    return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  renderAgenda();
+
+  // Load saved names from localStorage
+  function loadSavedNames() {
+    document.querySelectorAll('[data-seat-name]').forEach(el => {
+      const seat = el.getAttribute('data-seat-name');
+      const saved = localStorage.getItem('boardroom_name_' + seat);
+      if (saved) el.textContent = saved;
+    });
+  }
+
+  // Save name on edit
+  document.querySelectorAll('[data-seat-name]').forEach(el => {
+    el.addEventListener('blur', () => {
+      const seat = el.getAttribute('data-seat-name');
+      localStorage.setItem('boardroom_name_' + seat, el.textContent.trim());
+    });
+    el.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') { e.preventDefault(); el.blur(); }
+    });
+    // Prevent tile click handler from firing while editing name
+    el.addEventListener('click', (e) => e.stopPropagation());
+  });
+
+  // Extend reset to also clear names
+  const origReset = resetAllPhotos;
+  resetAllPhotos = function() {
+    if (!confirm('Reset all photos AND names back to defaults?')) return;
+    for (let i = 1; i <= 7; i++) {
+      localStorage.removeItem('boardroom_seat_' + i);
+      localStorage.removeItem('boardroom_name_' + i);
+      localStorage.removeItem('boardroom_pos_' + i);
+    }
+    localStorage.removeItem('boardroom_agenda');
+    localStorage.removeItem('boardroom_agenda_updated');
+    location.reload();
+  };
+
+  // Init
+  loadSavedPhotos();
+  loadSavedNames();
+</script>
+
+</body>
+</html>

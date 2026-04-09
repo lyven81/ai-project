@@ -178,6 +178,12 @@ Each project is classified by its AI architecture pattern, based on how the syst
 
 ### 📊 Business Intelligence & Analytics Agents
 
+#### [Leadership Team](./leadership-team.html)
+**Autonomous AI boardroom for independent property agents — 6 manager agents run a weekly listing review and write minutes to disk**
+- **Live Demo:** [Launch Boardroom](./projects/leadership-team/demo.html)
+- **Tech Stack:** Claude Code, Subagents, Skills, HTML/CSS/JS, Markdown state files
+- **AI Capabilities:** 7-seat Zoom-style boardroom UI tailored to a one-person property agency, 6 specialised manager subagents (Engineering/portal automation, Research/comparables, Marketing/leads, Editor/listing copy, Coordinator/viewings, Mentor/deal strategy), `run board meeting` walks through every active listing + pipeline, `check approvals` surfaces price cuts and counter-offers, persistent agency state (listings, buyers, deals) grounded in Markdown
+
 #### [Good Company](./projects/good-company/)
 **Stock research assistant that reads quarter report PDFs and runs a 7-step analysis to determine if a company is a good business and worth investing in**
 - **Live Demo:** [Demo (Dialog Group)](./projects/good-company/demo.html)

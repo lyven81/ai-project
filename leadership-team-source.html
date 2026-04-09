@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leadership Team — Source Code</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #222; background: #fff; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        .back-nav a { color: #4299E1; text-decoration: none; }
+        .back-nav a:hover { text-decoration: underline; }
+        .header { text-align: center; padding: 40px 0; background: linear-gradient(135deg,#4299E1,#2B6CB0); color: #fff; border-radius: 10px; margin-bottom: 30px; }
+        .header h1 { font-size: 2.2rem; margin-bottom: 10px; }
+        .header p { opacity: 0.9; }
+        .section { margin: 30px 0; padding: 25px; background: #f9f9f9; border-left: 5px solid #4299E1; border-radius: 8px; }
+        .section h2 { color: #4299E1; margin-bottom: 15px; }
+        .file-tree { font-family: monospace; background: #f4f4f4; padding: 18px; border-radius: 6px; white-space: pre; overflow-x: auto; }
+        pre { background: #1e1e1e; color: #d4d4d4; padding: 16px; border-radius: 6px; overflow-x: auto; font-size: 0.85rem; }
+        .explain { background: #fff; border: 1px solid #ddd; padding: 15px; border-radius: 6px; margin: 10px 0; }
+        .explain h4 { color: #4299E1; margin-bottom: 8px; }
+        ul { margin-left: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav"><a href="leadership-team.html">← Back to Showcase</a></nav>
+
+        <div class="header">
+            <h1>🌸 Leadership Team — Source Code</h1>
+            <p>A Zoom-style boardroom UI plus a multi-agent Claude Code meeting system</p>
+        </div>
+
+        <div class="section">
+            <h2>📁 File Structure</h2>
+            <div class="file-tree">projects/leadership-team/
+├── boardroom.html                         # Zoom-style 7-seat boardroom UI
+├── demo.html                              # Same file, served as the live demo
+├── team.jpg                               # Group photo used as seat fallback
+├── user guide.md                          # How to run the boardroom + commands
+├── company-state.md                       # Persistent company state (read by managers)
+└── branding-and-portfolio-action-plan.md  # Current strategy and initiatives</div>
+        </div>
+
+        <div class="section">
+            <h2>🎯 Key Code Highlights</h2>
+
+            <div class="explain">
+                <h4>1. Seven-seat video grid (CSS Grid)</h4>
+                <p>The boardroom is a 4×2 CSS grid. Each tile carries its own accent colour, cropped face region from the group photo, editable name, and a mic indicator.</p>
+            </div>
+<pre>.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 14px;
+}
+.tile[data-seat="1"] { background: #d1f2d1; } /* Aiman */
+.tile[data-seat="4"] { background: #ffe5c2; } /* Founder */
+.tile.speaking { border-color: #36d399; box-shadow: 0 0 26px rgba(54,211,153,0.5); }</pre>
+
+            <div class="explain">
+                <h4>2. Click-to-speak active speaker</h4>
+                <p>Clicking any tile highlights it as the active speaker — a lightweight way to walk through each manager during the meeting.</p>
+            </div>
+<pre>tiles.forEach(tile => {
+  tile.addEventListener('click', (e) => {
+    if (e.target.closest('.upload-btn')) return;
+    tiles.forEach(t => t.classList.remove('speaking'));
+    tile.classList.add('speaking');
+  });
+});</pre>
+
+            <div class="explain">
+                <h4>3. Persistent editable agenda</h4>
+                <p>The side panel renders an editable agenda backed by <code>localStorage</code>. Items can be added, edited, activated, or deleted — all persisted across reloads.</p>
+            </div>
+<pre>function saveAgenda(agenda) {
+  localStorage.setItem('boardroom_agenda', JSON.stringify(agenda));
+  localStorage.setItem('boardroom_agenda_updated', new Date().toISOString());
+  renderLastUpdated();
+}
+
+function addAgendaItem() {
+  const a = loadAgenda();
+  a.push({ title: 'New item — click to edit', active: false });
+  saveAgenda(a);
+  renderAgenda();
+}</pre>
+
+            <div class="explain">
+                <h4>4. Photo upload per seat with drag-to-reposition</h4>
+                <p>Each seat accepts a photo upload. The image is stored in <code>localStorage</code> as a data URL and can be dragged to reposition the crop inside its tile.</p>
+            </div>
+<pre>function uploadPhoto(event, seat) {
+  const file = event.target.files[0];
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const dataUrl = e.target.result;
+    localStorage.setItem('boardroom_seat_' + seat, dataUrl);
+    const videoEl = document.querySelector(`.tile[data-seat="${seat}"] .video`);
+    videoEl.style.backgroundImage = `url('${dataUrl}')`;
+    videoEl.classList.add('custom');
+  };
+  reader.readAsDataURL(file);
+}</pre>
+
+            <div class="explain">
+                <h4>5. Agent layer — the real meeting</h4>
+                <p>The visual UI is only ambiance. The meeting is run by the <code>board-meeting</code> skill in Claude Code, which orchestrates six manager subagents. Each subagent reads <code>company-state.md</code> before reporting, so contributions stay grounded in actual state.</p>
+            </div>
+<pre># Inside Claude Code
+run board meeting
+
+# → Ms Yap drafts agenda from last week's minutes
+# → Daniel Wong (Chief Researcher) reports
+# → Ryan Goh (Marketing Director) reports
+# → Priya Chen (Editor-in-Chief) reports
+# → Aiman Razak (AI Engineer Lead) reports
+# → Cindy (Mentor) gives strategic observations
+# → Ms Yap writes minutes to `what was discussed.md`</pre>
+        </div>
+
+        <div class="section">
+            <h2>🔗 Full Source</h2>
+            <p>All files live in the portfolio repo:</p>
+            <p><a href="https://github.com/lyven81/ai-project/tree/main/projects/leadership-team" target="_blank">github.com/lyven81/ai-project/tree/main/projects/leadership-team</a></p>
+        </div>
+
+        <nav class="back-nav" style="text-align:center; margin-top: 40px;">
+            <a href="leadership-team.html">← Back to Showcase</a> |
+            <a href="index.html">Back to Portfolio</a>
+        </nav>
+    </div>
+</body>
+</html>
