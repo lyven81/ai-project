@@ -41,9 +41,7 @@ Each project is classified by its AI architecture pattern, based on how the syst
 | [Business Intelligence Agent](./projects/business-intelligence-agent/) | NL query → plans analysis → writes code → executes → returns results |
 | [Customer Segmentation Agent](./projects/customer-segmentation-agent/) | Autonomously profiles customers → segments → generates campaigns |
 | [Data Consulting Business Analyst](./projects/data-consulting-business-analyst/) | 4-agent architecture: research → competitor intel → opportunity → strategy |
-| [Sales Dashboard Agent](./projects/sales-dashboard-agent/) | NL query → plans viz → builds charts → iterates |
 | [Stock Analysis Agent](./projects/stock-analysis-agent/) | 5-agent architecture: screening → fundamentals → moat → dividends → reporting |
-| [Time Series Analysis Agent](./projects/time-series-analysis-agent/) | Upload data → plans analysis → executes → visualizes |
 | [Public Sentiment Collection Agent](./projects/public-sentiment-collection-agent/) | 5-agent architecture: listening → sentiment → visualization → export → packaging |
 
 ### RAG — Retrieval-Augmented Generation (2 projects)
@@ -59,21 +57,15 @@ Each project is classified by its AI architecture pattern, based on how the syst
 
 | Project | Why RPA |
 |---|---|
-| [AI Avatar Hairstyle Generator](./projects/ai-avatar-hairstyle-generator/) | Upload → face extraction → 9 hairstyles → output |
 | [AI Background Changer](./projects/ai-background-changer/) | Upload → subject preservation → background replace → output |
 | [AI Coloring Book for Kids](./projects/ai-coloring-book-for-kids/) | Theme → generate page → interactive coloring |
-| [AI Expression Generator](./projects/ai-expression-generator/) | Upload → generate 9 expressions → output |
-| [AI Group Photo Generator](./projects/ai-group-photo-generator/) | Upload multiple → blend → output |
 | [AI Photo Editor](./projects/ai-photo-editor/) | Upload → apply AI edits → output |
 | [AI Profile Picture Stylist](./projects/ai-profile-picture-stylist/) | Upload → 4 professional styles → output |
 | [Coloring Book Generator](./projects/coloring-book-generator/) | Prompt → generate pages → PDF output |
 | [Image Recipe Generator](./projects/image-recipe-generator/) | Upload food photo → extract recipe → output |
 | [PDF-to-Audio Reader](./projects/pdf-to-audio-reader/) | Upload PDF → TTS → audio output |
 | [Polaroid Moments Generator](./projects/polaroid-moments-generator/) | Upload → vintage Polaroid style → output |
-| [Polaroid Moments Generator 3](./projects/polaroid-moments-generator-3/) | Upload 3 photos → group composition → output |
-| [Pose Perfect AI](./projects/pose-perfect-ai/) | Upload → pose detection → feedback → output |
 | [Unusual Coloring Book](./projects/unusual-coloring-book/) | Story path → illustrate → color → export |
-| [Virtual Try-On Studio](./projects/virtual-try-on-studio/) | Upload → overlay clothing → output |
 | [Expense Tracker AI](./projects/expense-tracker-ai/) | Receipt → OCR → categorize → analytics |
 
 ### LLM Chatbots (14 projects)
@@ -132,29 +124,11 @@ Each project is classified by its AI architecture pattern, based on how the syst
 
 ### 📸 Computer Vision & Image Processing
 
-#### [Pose Perfect AI](./projects/pose-perfect-ai/)
-**Advanced computer vision for pose analysis and movement optimization**
-- **Live Demo:** [pose-perfect-ai-169218045868.us-west1.run.app](https://pose-perfect-ai-169218045868.us-west1.run.app/)
-- **Tech Stack:** React, TypeScript, Computer Vision APIs, AI Pose Detection
-- **AI Capabilities:** Real-time pose detection, form analysis, movement correction feedback
-
-#### [Virtual Try-On Studio](./projects/virtual-try-on-studio/)
-**AR-powered virtual clothing experience with AI-driven fitting**
-- **Live Demo:** [virtual-try-on-studio-169218045868.us-west1.run.app](https://virtual-try-on-studio-169218045868.us-west1.run.app/)
-- **Tech Stack:** React, TypeScript, AR/3D Processing, Computer Vision
-- **AI Capabilities:** Virtual garment fitting, body measurement analysis, size recommendations
-
 #### [AI Photo Editor](./projects/ai-photo-editor/)
 **Professional-grade AI-powered photo editing with intelligent enhancement**
 - **Live Demo:** [gemini-image-editor-169218045868.us-west1.run.app](https://gemini-image-editor-169218045868.us-west1.run.app/)
 - **Tech Stack:** React, TypeScript, Vite, Google Gemini AI
 - **AI Capabilities:** Intelligent photo optimization, real-time filters, advanced image processing
-
-#### [AI Group Photo Generator](./projects/ai-group-photo-generator/)
-**Create stunning group compositions with advanced AI technology**
-- **Live Demo:** [ai-group-photo-generator-169218045868.us-west1.run.app](https://ai-group-photo-generator-169218045868.us-west1.run.app/)
-- **Tech Stack:** React, TypeScript, AI Image Generation, Computer Vision
-- **AI Capabilities:** Group composition optimization, facial recognition, professional photo generation
 
 ### 📄 Document Processing & Analysis
 
@@ -190,23 +164,11 @@ Each project is classified by its AI architecture pattern, based on how the syst
 - **Tech Stack:** Python, FastAPI, Gemini 2.5 Flash, PyMuPDF, Vanilla JS, marked.js
 - **AI Capabilities:** 7-step phased analysis (company overview, forensic check, verdict, valuation, bull/bear debate, personal risk check, final scorecard), local PDF reading, 7 visualization types (metric cards, scorecards, verdict badges, range bars, scenario cards), one-click report copy, plain-language output with Goldman Sachs analytical depth
 
-#### [Time Series Analysis Agent](./projects/time-series-analysis-agent/)
-**AI-powered data analytics through natural language queries using Google Gemini**
-- **Live Demo:** [Google Colab](https://colab.research.google.com/drive/1ZTfYPQZXObgxqk3hawGu9Sm33EjJX2xA)
-- **Tech Stack:** Python, Gemini 2.0 Flash, Pandas, NumPy, Matplotlib, Seaborn
-- **AI Capabilities:** Natural language to code generation, automated time series analysis, revenue trends, customer segmentation, profit margin analysis, correlation analysis, self-correcting with error handling
-
 #### [Stock Analysis Agent](./projects/stock-analysis-agent/)
 **Multi-agent investment research system with automated stock screening and fundamental analysis**
 - **Live Demo:** [Google Colab](https://colab.research.google.com/drive/1Wji69Sq-IqhtMEJTlxIkQ39ZZ5JAXR6w)
 - **Tech Stack:** Python, Gemini 2.0 Flash, Yahoo Finance API, Tavily API, Matplotlib
 - **AI Capabilities:** 5-agent architecture (screening, fundamentals, business moat, dividends, reporting), investment yardstick scoring (0-100 points), web-powered competitive analysis, automated report generation with visualizations, Malaysian stock market analysis
-
-#### [Sales Dashboard Agent](./projects/sales-dashboard-agent/)
-**Natural language to code analytics with automated visualizations using code-as-plan pattern**
-- **Live Demo:** [Google Colab](https://colab.research.google.com/drive/1ssz7RkCySo4fhzkLdCs5c7gCgkP7ypv7)
-- **Tech Stack:** Python, Gemini 2.0 Flash, TinyDB, Pandas, Matplotlib, Seaborn
-- **AI Capabilities:** Business question interpretation, Python code generation, safe execution sandbox, automated chart creation (bar/line/scatter), revenue/profit/customer analytics, read-only database security
 
 #### [Science Learning Materials Builder](./projects/science-learning-materials-builder/)
 **4-agent educational content generator for age-appropriate science lessons aligned with NGSS standards**
@@ -214,13 +176,11 @@ Each project is classified by its AI architecture pattern, based on how the syst
 - **Tech Stack:** Python, Gemini 2.0 Flash, Tavily API, WeasyPrint, Markdown Processing
 - **AI Capabilities:** Curriculum research (web search + NGSS validation), visual illustration prompts, 3rd-grade reading level content writing, quiz generation (5 MC + 2 SA), hands-on activities, markdown + PDF export
 
-
 #### [Data Consulting Business Analysis Agent](./projects/data-consulting-business-analyst/)
 **Automated market intelligence system for data analytics consulting firms - 100x faster than manual research**
 - **Live Demo:** [Google Colab](https://colab.research.google.com/drive/1BZ1m_XsI5q7CHvdopcCK53Wlw0sCt1-j)
 - **Tech Stack:** Python, Gemini 2.0 Flash, Tavily API, Matplotlib, Seaborn, NetworkX
 - **AI Capabilities:** 4-agent architecture (industry research, competitor intelligence, opportunity analysis, strategic reporting), web-powered trend discovery, competitive capability matrix mapping, white-space opportunity detection, 2x2 strategic opportunity maps, executive-ready markdown reports with embedded visualizations
-
 
 #### [Football Assistant Coach](./projects/football-assistant-coach/)
 **AI-powered player selection system that evaluates 22 players across 4 training sessions and recommends the optimal Starting XI**
@@ -347,27 +307,6 @@ Each project is classified by its AI architecture pattern, based on how the syst
 - **Source Code:** [unusual-coloring-book-source.html](https://lyven81.github.io/ai-project/unusual-coloring-book-source.html)
 - **Tech Stack:** React 18 + TypeScript, Python FastAPI, Gemini 3 Flash, Gemini Nano Banana 2, HTML5 Canvas, jsPDF
 - **AI Capabilities:** On-demand illustration generation per story path, image editing via text instruction, server-side image caching
-
-
-#### [AI Avatar Hairstyle Generator](./projects/ai-avatar-hairstyle-generator/)
-**Transform single photos into 9 different hairstyle avatars with AI-powered virtual styling**
-- **Live Demo:** [ai-avatar-hairstyle-generator-169218045868.us-west1.run.app](https://ai-avatar-hairstyle-generator-169218045868.us-west1.run.app/)
-- **Tech Stack:** React, TypeScript, Gemini AI, Computer Vision, Image Generation
-- **AI Capabilities:** Face extraction, hairstyle application, identity preservation, photorealistic avatar creation
-
-#### [AI Expression Generator](./projects/ai-expression-generator/)
-**Generate 9 different emotional expressions from a single photo using advanced AI technology**
-- **Live Demo:** [ai-expression-generator-169218045868.us-west1.run.app](https://ai-expression-generator-169218045868.us-west1.run.app/)
-- **Tech Stack:** React, TypeScript, Gemini 2.5 Flash, Multimodal AI, Image Processing
-- **AI Capabilities:** Facial expression transformation, identity preservation, emotional range generation, photorealistic quality
-
-#### [Polaroid Moments Generator 3](./projects/polaroid-moments-generator-3/)
-**Create nostalgic three-person group photos with AI-powered storytelling and vintage aesthetics**
-- **Live Demo:** [polaroid-moments-generator-3-person-169218045868.us-west1.run.app](https://polaroid-moments-generator-3-person-169218045868.us-west1.run.app/)
-- **Tech Stack:** React, TypeScript, Gemini AI, Advanced Multi-Image Processing
-- **AI Capabilities:** Three-person group composition, story-driven pose generation, social dynamics modeling, vintage polaroid aesthetics
-
-
 
 #### [AI Storybook Generator](./projects/ai-storybook-generator/)
 **Interactive storybook creation with AI-generated narratives and coloring book illustrations for educational engagement**
@@ -502,10 +441,6 @@ All projects are production-deployed and accessible via live demos:
 
 | Project | Live Demo | Category |
 |---------|-----------|----------|
-| Pose Perfect AI | [Launch App](https://pose-perfect-ai-169218045868.us-west1.run.app/) | Computer Vision |
-| Virtual Try-On Studio | [Launch App](https://virtual-try-on-studio-169218045868.us-west1.run.app/) | Computer Vision |
-| AI Photo Editor | [Launch App](https://gemini-image-editor-169218045868.us-west1.run.app/) | Image Processing |
-| AI Group Photo Generator | [Launch App](https://ai-group-photo-generator-169218045868.us-west1.run.app/) | Creative AI |
 | Claude PDF Summarizer | [Launch App](https://summarizer-218391175125.asia-southeast1.run.app/) | Document Processing |
 | Expense Tracker AI | [Launch App](https://expense-tracker-ai-169218045868.us-west1.run.app/) | Document Processing |
 | PDF-to-Audio Reader | [Launch App](https://pdf-to-audio-reader-169218045868.us-west1.run.app/) | Document Processing |
@@ -528,9 +463,6 @@ All projects are production-deployed and accessible via live demos:
 | Skyread | [Launch App](https://ais-dev-m2gjhpuvdrj3c3mly7e6rr-168381537832.asia-east1.run.app) | Conversational AI |
 | AI Recipe Generator | [Launch App](https://image-recipe-generator-218391175125.us-central1.run.app/) | Creative AI |
 | Polaroid Moments Generator | [Launch App](https://polaroid-moments-generator-169218045868.us-west1.run.app/) | Creative AI |
-| Polaroid Moments Generator 3 | [Launch App](https://polaroid-moments-generator-3-person-169218045868.us-west1.run.app/) | Creative AI |
-| AI Avatar Hairstyle Generator | [Launch App](https://ai-avatar-hairstyle-generator-169218045868.us-west1.run.app/) | Creative AI |
-| AI Expression Generator | [Launch App](https://ai-expression-generator-169218045868.us-west1.run.app/) | Creative AI |
 | AI Profile Picture Stylist | [Launch App](https://ai-profile-picture-stylist-662370080553.us-west1.run.app/) | Creative AI |
 | AI Background Changer | [Launch App](https://ai-background-changer-169218045868.us-west1.run.app/) | Creative AI |
 | AI Coloring Book for Kids | [Launch App](https://ai-coloring-book-for-kids-662370080553.us-west1.run.app/) | Creative AI |
