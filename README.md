@@ -2,7 +2,7 @@
 
 [![Portfolio Website](https://img.shields.io/badge/Portfolio-Live-green?logo=vercel)](https://lyven81.github.io/ai-project/)
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-black?logo=github)](https://github.com/lyven81/ai-project)
-[![Projects](https://img.shields.io/badge/Projects-43-blue)](#-featured-projects)
+[![Projects](https://img.shields.io/badge/Projects-57-blue)](#-featured-projects)
 [![AI Powered](https://img.shields.io/badge/AI-Powered-orange?logo=tensorflow)](https://github.com/lyven81/ai-project)
 
 **Innovative AI Solutions for Modern Challenges** - A curated collection of production-ready AI applications showcasing expertise in computer vision, natural language processing, document processing, and creative AI technologies.
@@ -13,7 +13,7 @@
 
 ## 🌟 Portfolio Overview
 
-This repository contains **43 production-deployed AI applications** demonstrating proficiency across multiple AI domains. Each project includes comprehensive documentation, live demos, and complete source code with deployment configurations.
+This repository contains **57 AI applications** built in this repo (some published to the portfolio homepage, others retained as archived builds) demonstrating proficiency across multiple AI domains. Each project includes comprehensive documentation, live demos, and complete source code with deployment configurations.
 
 **🎯 Portfolio Highlights:**
 - **15+ AI Technologies** integrated across projects
@@ -26,14 +26,15 @@ This repository contains **43 production-deployed AI applications** demonstratin
 
 Each project is classified by its AI architecture pattern, based on how the system processes queries, uses tools, and makes decisions.
 
-### Multi-Agent Orchestration (1 project)
+### Multi-Agent Orchestration (2 projects)
 *Multiple specialized agents chained in sequence, each with its own tools and instructions.*
 
 | Project | Why Multi-Agent |
 |---|---|
 | [Stock Manager](./projects/stock-manager/) | 3-agent ADK pipeline: Sales Analyst → Inventory Checker → Restock Decider → Google Sheets |
+| [Leadership Team](./leadership-team.html) | 6 manager subagents (Engineering, Research, Marketing, Editor, Coordinator, Mentor) run a weekly boardroom and write minutes to disk |
 
-### Agentic AI (7 projects)
+### Agentic AI (11 projects)
 *Orchestrator with planning, tools, memory, and feedback loops. Autonomous decision-making.*
 
 | Project | Why Agentic |
@@ -43,16 +44,23 @@ Each project is classified by its AI architecture pattern, based on how the syst
 | [Data Consulting Business Analyst](./projects/data-consulting-business-analyst/) | 4-agent architecture: research → competitor intel → opportunity → strategy |
 | [Stock Analysis Agent](./projects/stock-analysis-agent/) | 5-agent architecture: screening → fundamentals → moat → dividends → reporting |
 | [Public Sentiment Collection Agent](./projects/public-sentiment-collection-agent/) | 5-agent architecture: listening → sentiment → visualization → export → packaging |
+| [Sales Dashboard Agent](./projects/sales-dashboard-agent/) | Autonomous sales KPI analysis and dashboard generation |
+| [Time Series Analysis Agent](./projects/time-series-analysis-agent/) | Autonomous forecasting and trend detection pipeline |
+| [SME Business Advisor](./projects/sme-business-advisor/) | ADK-based advisor agent for Malaysian SMEs (Gen AI Academy track) |
+| [SME Advisor MCP](./projects/sme-advisor-mcp/) | MCP-connected advisor agent with tool integration |
+| [SME Advisor AlloyDB](./projects/sme-advisor-alloydb/) | Retrieval-augmented advisor grounded in AlloyDB vector store |
+| [Marketing Agency](./projects/marketing-agency/) | 6-skill content pipeline with brand voice enforcement and lead feedback loop |
 
-### RAG — Retrieval-Augmented Generation (2 projects)
+### RAG — Retrieval-Augmented Generation (3 projects)
 *Query → retrieve from knowledge base or external data → augment → LLM → output.*
 
 | Project | Why RAG |
 |---|---|
 | [Claude PDF Summarizer](./projects/claude-pdf-summarizer/) | Upload doc → retrieve content → summarize |
 | [Long View](./projects/long-view/) | 27 OSINT sources → delta detection → LLM synthesis → briefing |
+| [Good Company](./projects/good-company/) | Quarter report PDFs → 7-step phased stock analysis → scorecard |
 
-### RPA — Robotic Process Automation (16 projects)
+### RPA — Robotic Process Automation (19 projects)
 *Uses tools (APIs, image processing) but follows a fixed pipeline. No autonomous planning.*
 
 | Project | Why RPA |
@@ -65,10 +73,19 @@ Each project is classified by its AI architecture pattern, based on how the syst
 | [Image Recipe Generator](./projects/image-recipe-generator/) | Upload food photo → extract recipe → output |
 | [PDF-to-Audio Reader](./projects/pdf-to-audio-reader/) | Upload PDF → TTS → audio output |
 | [Polaroid Moments Generator](./projects/polaroid-moments-generator/) | Upload → vintage Polaroid style → output |
+| [Polaroid Moments Generator 3](./projects/polaroid-moments-generator-3/) | Upload → extended Polaroid style set → output |
 | [Unusual Coloring Book](./projects/unusual-coloring-book/) | Story path → illustrate → color → export |
 | [Expense Tracker AI](./projects/expense-tracker-ai/) | Receipt → OCR → categorize → analytics |
+| [AI Avatar Hairstyle Generator](./projects/ai-avatar-hairstyle-generator/) | Upload → restyle hair → output |
+| [AI Expression Generator](./projects/ai-expression-generator/) | Upload → regenerate facial expression → output |
+| [AI Group Photo Generator](./projects/ai-group-photo-generator/) | Multiple photos → composite group shot |
+| [Pose Perfect AI](./projects/pose-perfect-ai/) | Upload → pose correction/restyle → output |
+| [Virtual Try-On Studio](./projects/virtual-try-on-studio/) | Upload person + garment → try-on composite |
+| [AI Recipe Generator](./ai-recipe-generator.html) | Ingredients → recipe generation → output |
+| [AI Storybook Generator](./ai-storybook-generator.html) | Prompt → illustrated storybook pages |
+| [Gemini Image Editor](./gemini-image-editor.html) | Upload → Gemini-powered edits → output |
 
-### LLM Chatbots (14 projects)
+### LLM Chatbots (15 projects)
 *Query → system prompt → LLM → output. No tools, no memory, no planning.*
 
 | Project | Why LLM Chatbot |
@@ -87,8 +104,9 @@ Each project is classified by its AI architecture pattern, based on how the syst
 | [MyPropLex](./projects/myproplex/) | Legal Q&A, prompt-driven |
 | [Chinese Calendar](./projects/chinese-calender/) | Calendar lookup, prompt-based |
 | [TrendMate](./projects/trendmate/) | Fashion trend Q&A |
+| [Mentor](./projects/mentor/) | Unified-voice advisor with keyword retrieval + session memory |
 
-### Hybrid Tools (3 projects)
+### Hybrid Tools (5 projects)
 *Uses LLM + external tools but not fully autonomous — some decision logic without full orchestration.*
 
 | Project | Why Hybrid |
@@ -96,6 +114,8 @@ Each project is classified by its AI architecture pattern, based on how the syst
 | [Badminton Booking Agent](./projects/badminton-booking-agent/) | Code-as-action pattern with LLM but follows booking flow |
 | [Hire Gardener](./projects/hire-gardener/) | WhatsApp + vendor matching, semi-structured |
 | [Social Media Marketer](./projects/social-media-marketer/) | Multi-agent simulation but fixed evaluation loop |
+| [Car Rental Booking Agent](./projects/car-rental-booking-agent/) | LLM-assisted rental booking flow with fixed pipeline |
+| [Soon Heng Aircon Agent](./projects/soon-heng-aircon-agent/) | WhatsApp-based service booking agent with structured flow |
 
 ### Interactive Learning Tools (2 projects)
 *Educational content generation with structured pedagogical output.*
@@ -109,12 +129,17 @@ Each project is classified by its AI architecture pattern, based on how the syst
 
 | Category | Count | % |
 |---|---|---|
-| LLM Chatbots | 14 | 32% |
-| RPA (fixed pipelines) | 16 | 36% |
-| RAG | 2 | 5% |
-| Agentic AI | 7 | 16% |
-| Hybrid Tools | 3 | 7% |
-| Interactive Learning | 2 | 5% |
+| RPA (fixed pipelines) | 19 | 33% |
+| LLM Chatbots | 15 | 26% |
+| Agentic AI | 11 | 19% |
+| Hybrid Tools | 5 | 9% |
+| RAG | 3 | 5% |
+| Multi-Agent Orchestration | 2 | 4% |
+| Interactive Learning | 2 | 4% |
+
+**Total: 57 projects**
+
+> Note: As of Apr 9, 2026, 16 projects were unpublished from the live portfolio homepage display to sharpen focus. They remain in the repo and are still counted here as built work.
 
 ## 🚀 Live Portfolio Website
 
