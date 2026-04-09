@@ -214,11 +214,6 @@ Each project is classified by its AI architecture pattern, based on how the syst
 - **Tech Stack:** Python, Gemini 2.0 Flash, Tavily API, WeasyPrint, Markdown Processing
 - **AI Capabilities:** Curriculum research (web search + NGSS validation), visual illustration prompts, 3rd-grade reading level content writing, quiz generation (5 MC + 2 SA), hands-on activities, markdown + PDF export
 
-#### [Public Sentiment Collection Agent](./projects/public-sentiment-collection-agent/)
-**AI-powered geographic sentiment analysis with credibility tracking and source diversity assessment**
-- **Live Demo:** [Google Colab](https://colab.research.google.com/drive/1On9i4SrYBVQqG-Fex5up9o3Eo1Y6mWls)
-- **Tech Stack:** Python, Gemini 2.0 Flash, Tavily API, Pandas, Matplotlib, Seaborn
-- **AI Capabilities:** 5-agent architecture (geographic listening, comparative sentiment analysis, visualization, data export, packaging), credibility scoring (0-100), source diversity tracking with bias detection, regional sentiment comparison, automatic quality warnings, 10 files per analysis (1 report, 4 charts, 5 CSV exports)
 
 #### [Data Consulting Business Analysis Agent](./projects/data-consulting-business-analyst/)
 **Automated market intelligence system for data analytics consulting firms - 100x faster than manual research**
@@ -226,11 +221,6 @@ Each project is classified by its AI architecture pattern, based on how the syst
 - **Tech Stack:** Python, Gemini 2.0 Flash, Tavily API, Matplotlib, Seaborn, NetworkX
 - **AI Capabilities:** 4-agent architecture (industry research, competitor intelligence, opportunity analysis, strategic reporting), web-powered trend discovery, competitive capability matrix mapping, white-space opportunity detection, 2x2 strategic opportunity maps, executive-ready markdown reports with embedded visualizations
 
-#### [Customer Segmentation Agent](./projects/customer-segmentation-agent/)
-**AI-powered customer segmentation and targeted marketing campaign creation using RFM analysis**
-- **Live Demo:** [Google Colab](https://colab.research.google.com/drive/1UfEqslRGbYY4qOcv2SCDrj1e0dC5jqJl)
-- **Tech Stack:** Python, Gemini 2.0 Flash, TinyDB, Pandas, Matplotlib, Seaborn, NumPy
-- **AI Capabilities:** Natural language to code generation, RFM analysis (Recency, Frequency, Monetary), 5-segment customer classification (VIP, Regular, At-Risk, New, Churned), automated campaign targeting, customer profiling database, intelligent filter generation, self-correcting code execution
 
 #### [Football Assistant Coach](./projects/football-assistant-coach/)
 **AI-powered player selection system that evaluates 22 players across 4 training sessions and recommends the optimal Starting XI**
@@ -358,17 +348,6 @@ Each project is classified by its AI architecture pattern, based on how the syst
 - **Tech Stack:** React 18 + TypeScript, Python FastAPI, Gemini 3 Flash, Gemini Nano Banana 2, HTML5 Canvas, jsPDF
 - **AI Capabilities:** On-demand illustration generation per story path, image editing via text instruction, server-side image caching
 
-#### [AI Recipe Generator](./projects/image-recipe-generator/)
-**Transform food images into detailed recipes with computer vision and NLP**
-- **Live Demo:** [image-recipe-generator-218391175125.us-central1.run.app](https://image-recipe-generator-218391175125.us-central1.run.app/)
-- **Tech Stack:** Python, Computer Vision, NLP, Image Recognition APIs
-- **AI Capabilities:** Food image analysis, ingredient recognition, step-by-step recipe generation
-
-#### [Polaroid Moments Generator](./projects/polaroid-moments-generator/)
-**Create nostalgic retro-style photos by blending personal images with AI**
-- **Live Demo:** [polaroid-moments-generator-169218045868.us-west1.run.app](https://polaroid-moments-generator-169218045868.us-west1.run.app/)
-- **Tech Stack:** React, TypeScript, Gemini AI, Advanced Image Processing
-- **AI Capabilities:** Dual image blending, pose synthesis, vintage aesthetic generation, facial preservation
 
 #### [AI Avatar Hairstyle Generator](./projects/ai-avatar-hairstyle-generator/)
 **Transform single photos into 9 different hairstyle avatars with AI-powered virtual styling**
@@ -388,23 +367,7 @@ Each project is classified by its AI architecture pattern, based on how the syst
 - **Tech Stack:** React, TypeScript, Gemini AI, Advanced Multi-Image Processing
 - **AI Capabilities:** Three-person group composition, story-driven pose generation, social dynamics modeling, vintage polaroid aesthetics
 
-#### [AI Profile Picture Stylist](./projects/ai-profile-picture-stylist/)
-**Transform single photos into 4 professional profile picture styles using Google Gemini AI**
-- **Live Demo:** [ai-profile-picture-stylist-662370080553.us-west1.run.app](https://ai-profile-picture-stylist-662370080553.us-west1.run.app/)
-- **Tech Stack:** React 19, TypeScript, Vite, Google Gemini AI, Tailwind CSS
-- **AI Capabilities:** Smart people detection, professional style generation, Classic B&W/Corporate/Lifestyle/Editorial styles, instant validation
 
-#### [AI Background Changer](./projects/ai-background-changer/)
-**Intelligent image background replacement using natural language prompts and Gemini AI**
-- **Live Demo:** [ai-background-changer-169218045868.us-west1.run.app](https://ai-background-changer-169218045868.us-west1.run.app/)
-- **Tech Stack:** React 19, TypeScript, Gemini 2.5 Flash, Multimodal AI, Canvas API
-- **AI Capabilities:** Natural language background understanding, subject preservation, seamless background replacement, context-aware generation
-
-#### [AI Coloring Book for Kids](./projects/ai-coloring-book-for-kids/)
-**Interactive educational coloring experience powered by AI with child-centered design and motor skill development**
-- **Live Demo:** [ai-coloring-book-for-kids-662370080553.us-west1.run.app](https://ai-coloring-book-for-kids-662370080553.us-west1.run.app/)
-- **Tech Stack:** React 19.1+, TypeScript 5.8+, Gemini AI, Canvas API, Educational Technology
-- **AI Capabilities:** Theme-based coloring page generation, child-safe content filtering, educational AI prompts, interactive learning experiences
 
 #### [AI Storybook Generator](./projects/ai-storybook-generator/)
 **Interactive storybook creation with AI-generated narratives and coloring book illustrations for educational engagement**
