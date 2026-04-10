@@ -426,29 +426,21 @@ Do not include explanations or markdown formatting.
             <div class="code-container">
                 <div class="code-header">main.py &mdash; SQL Safety Validation</div>
                 <div class="code-block">
-<span class="code-keyword">def</span> <span class="code-function">is_safe_sql</span>(sql: str) -&gt; bool:
-    <span class="code-string">"""Validate that generated SQL is read-only and safe to execute.
+<span class="code-keyword">def</span> <span class="code-function">is_safe_sql</span>(sql):
+    <span class="code-string">"""Block anything that isn't a read-only SELECT or CTE (WITH ... SELECT)."""</span>
+    upper = sql.upper().strip().rstrip(<span class="code-string">";"</span>).strip()
 
-    Returns True only if the query is a SELECT statement with no
-    dangerous keywords that could modify the database.
-    """</span>
-    sql_upper = sql.upper().strip()
-
-    <span class="code-comment"># Must start with SELECT</span>
-    <span class="code-keyword">if not</span> sql_upper.startswith(<span class="code-string">"SELECT"</span>):
+    <span class="code-comment"># Allow both plain SELECT and WITH...SELECT (CTE pattern)</span>
+    <span class="code-keyword">if not</span> (upper.startswith(<span class="code-string">"SELECT"</span>) <span class="code-keyword">or</span> upper.startswith(<span class="code-string">"WITH"</span>)):
         <span class="code-keyword">return</span> <span class="code-keyword">False</span>
 
-    <span class="code-comment"># Block any data modification or schema change keywords</span>
-    <span class="code-keyword">DANGEROUS_KEYWORDS</span> = [
-        <span class="code-string">"INSERT"</span>, <span class="code-string">"UPDATE"</span>, <span class="code-string">"DELETE"</span>, <span class="code-string">"DROP"</span>,
-        <span class="code-string">"ALTER"</span>, <span class="code-string">"CREATE"</span>, <span class="code-string">"TRUNCATE"</span>,
-        <span class="code-string">"EXEC"</span>, <span class="code-string">"EXECUTE"</span>, <span class="code-string">"ATTACH"</span>,
-        <span class="code-string">"DETACH"</span>, <span class="code-string">"PRAGMA"</span>, <span class="code-string">"VACUUM"</span>,
-        <span class="code-string">"REPLACE"</span>, <span class="code-string">"GRANT"</span>, <span class="code-string">"REVOKE"</span>
-    ]
+    <span class="code-comment"># Word-boundary check so 'created_at' doesn't trip 'CREATE'</span>
+    dangerous = [<span class="code-string">"INSERT"</span>, <span class="code-string">"UPDATE"</span>, <span class="code-string">"DELETE"</span>, <span class="code-string">"DROP"</span>,
+                 <span class="code-string">"ALTER"</span>, <span class="code-string">"TRUNCATE"</span>, <span class="code-string">"EXEC"</span>,
+                 <span class="code-string">"REPLACE"</span>, <span class="code-string">"ATTACH"</span>]
 
-    <span class="code-keyword">for</span> keyword <span class="code-keyword">in</span> DANGEROUS_KEYWORDS:
-        <span class="code-keyword">if</span> keyword <span class="code-keyword">in</span> sql_upper:
+    <span class="code-keyword">for</span> keyword <span class="code-keyword">in</span> dangerous:
+        <span class="code-keyword">if</span> re.search(<span class="code-string">r"\b"</span> + keyword + <span class="code-string">r"\b"</span>, upper):
             <span class="code-keyword">return</span> <span class="code-keyword">False</span>
 
     <span class="code-keyword">return</span> <span class="code-keyword">True</span>
@@ -484,7 +476,7 @@ Do not include explanations or markdown formatting.
                 <li><strong>Temperature 0.0:</strong> Deterministic SQL generation ensures the same question always produces the same query &mdash; critical for trust in a management tool</li>
                 <li><strong>Seeded demo stories:</strong> Nine children with scripted learning trajectories ensure demo queries always return meaningful, explainable results</li>
                 <li><strong>Hybrid deployment:</strong> GitHub Pages serves a static demo with client-side Gemini calls; FastAPI serves the full backend for Cloud Run deployment</li>
-                <li><strong>Read-only SQL enforcement:</strong> The is_safe_sql function blocks 15+ dangerous SQL keywords at the application layer, regardless of what the LLM generates</li>
+                <li><strong>Read-only SQL enforcement:</strong> The is_safe_sql function uses word-boundary regex to block dangerous SQL keywords without false-positives on column names like 'created_at'. Supports both SELECT and WITH/CTE queries.</li>
                 <li><strong>Malaysian education context:</strong> Business rules encode post-UPSR assessment norms (PBD, UASA, Year 4 anchoring) that generic AI tools would not know</li>
             </ul>
 
