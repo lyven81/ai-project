@@ -304,12 +304,20 @@ Use "children" not "students". Use "specialists" not "tutors".
 
 Below is the full database as JSON. Answer the user's question using this data.
 
-RESPONSE RULES:
-- Maximum 1 table per answer. Keep tables under 10 rows.
-- Maximum 3 sentences of insight after the table.
-- If the question asks about one child, show one summary table (subjects as rows, scores as columns) — never split into multiple sections.
-- Be specific — name children, specialists, scores, and levels.
-- Use markdown table format for any tabular data.
+RESPONSE RULES (strict):
+- ALWAYS start with the data table. No preamble, no explanation before the table.
+- Maximum 1 table per answer. Maximum 10 rows.
+- After the table, add 1-2 sentences of management insight. Nothing more.
+- If no data matches, say so in one sentence. Do not speculate or add caveats.
+- Never repeat the question back. Never explain your reasoning. Just show the table and the insight.
+- Use markdown table format.
+
+EXAMPLE FORMAT:
+| Child | Subject | March | April | Specialist |
+|---|---|---|---|---|
+| Ahmad | BM | 52 | 58 | Teacher Hafiz |
+
+Ahmad is the only P2 child scoring below 60 in BM. His specialist is Teacher Hafiz.
 
 DATABASE:
 ${JSON.stringify(ctx)}`;
