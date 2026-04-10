@@ -1,0 +1,137 @@
+# ============================================================
+# Bright Path — Premium Small-Class Tuition Centre
+# AI Agent + Database Configuration
+# ============================================================
+# Built for Malaysia's post-UPSR PBD + UASA assessment era.
+# Level philosophy:
+#   Preschool   : foundational literacy & numeracy
+#   Primary 1-3 : building core habits and foundational skills
+#   Primary 4   : MOE anchor year (core subject mastery baseline)
+#   Primary 5   : secondary prep Phase 1 (build FORWARD from P4 baseline)
+#   Primary 6   : secondary prep Phase 2 (ensure every child is Form 1 ready)
+# P5 and P6 are NOT fill-the-gap years. Any P5/P6 child with an
+# unresolved Year 4 gap is a CRITICAL escalation.
+# ============================================================
+
+business_name: "Bright Path Tuition Centre"
+business_type: "premium-tuition"
+tagline: "Know every child. Find every gap. Bridge it."
+currency: "RM"
+language: "en"
+
+database:
+  mode: "sqlite"
+  sqlite_file: "data.db"
+  csv_import: ""   # not used — data.db is built by seed_generator.py
+
+  schema: |
+    Table: students
+    Columns:
+      - student_id (TEXT, primary key)
+      - name (TEXT)
+      - age (INTEGER)
+      - level (TEXT) — one of: Preschool, P1, P2, P3, P4, P5, P6
+      - school_name (TEXT)
+      - gender (TEXT) — Male or Female
+      - join_date (TEXT, YYYY-MM-DD)
+      - status (TEXT) — active, paused, dropped
+      - p4_math_baseline (REAL) — Year 4 Math mastery baseline (P5/P6 only, else NULL)
+      - p4_english_baseline (REAL)
+      - p4_bm_baseline (REAL)
+      - p4_mandarin_baseline (REAL)
+      - p4_science_baseline (REAL)
+
+    Table: tutors
+    Columns:
+      - tutor_id (TEXT, primary key)
+      - name (TEXT)
+      - employment_type (TEXT) — full-time or part-time
+      - band (TEXT) — preschool, P1-P3, or P4-P6
+      - subject (TEXT) — subject this specialist teaches (NULL for preschool)
+      - join_date (TEXT, YYYY-MM-DD)
+
+    Table: classes
+    Columns:
+      - class_id (TEXT, primary key)
+      - class_type (TEXT) — level-specific or subject-specific
+      - level (TEXT) — Preschool, P1, P2, P3, P4, P5, P6
+      - subject (TEXT) — BM, English, Mandarin, Math, Science (NULL for preschool)
+      - tutor_id (TEXT, foreign key to tutors)
+      - day_of_week (TEXT)
+      - start_time (TEXT)
+      - max_students (INTEGER) — always 10 (premium cap)
+      - is_anchor_year (INTEGER) — 1 if P4 (MOE 2026 anchor), else 0
+
+    Table: enrolments
+    Columns:
+      - enrolment_id (TEXT, primary key)
+      - student_id (TEXT, foreign key)
+      - class_id (TEXT, foreign key)
+      - start_date (TEXT, YYYY-MM-DD)
+      - end_date (TEXT, YYYY-MM-DD) — NULL if active
+      - status (TEXT) — active, completed, dropped
+
+    Table: attendance
+    Columns:
+      - attendance_id (TEXT, primary key)
+      - enrolment_id (TEXT, foreign key)
+      - class_date (TEXT, YYYY-MM-DD)
+      - status (TEXT) — present, absent, replacement
+
+    Table: assessments
+    Columns:
+      - assessment_id (TEXT, primary key)
+      - enrolment_id (TEXT, foreign key)
+      - assessment_date (TEXT, YYYY-MM-DD)
+      - assessment_type (TEXT) — monthly_test, school_pbd, school_uasa
+      - subject (TEXT)
+      - score (REAL) — 0 to 100
+      - max_score (REAL) — always 100
+      - grade (TEXT) — A+, A, B, C, D, F
+
+    Table: development_notes
+    Columns:
+      - note_id (TEXT, primary key)
+      - student_id (TEXT, foreign key)
+      - tutor_id (TEXT, foreign key)
+      - note_date (TEXT, YYYY-MM-DD)
+      - dimension (TEXT) — academic_mastery, critical_thinking, participation, discipline, collaboration, creativity
+      - observation (TEXT) — short note from the specialist tutor
+
+    KEY BUSINESS RULES FOR THE AGENT:
+    - Max 10 children per class (premium small-class promise).
+    - Year 4 (P4) is the MOE anchor year — use is_anchor_year flag.
+    - For P5/P6 children, compare their current monthly_test score
+      against their p4_*_baseline in the students table. If current
+      is below baseline, that is a CRITICAL escalation (they entered
+      P5/P6 with an unresolved Year 4 gap).
+    - P5 and P6 are secondary-preparation years, NOT remediation years.
+    - The centre has 5 subjects: BM, English, Mandarin, Math, Science.
+    - "Children" is the preferred word over "students" in answers.
+    - "Specialists" is the preferred word over "tutors" in answers.
+
+  sample_questions:
+    - "Which Year 4 children are struggling with core subject mastery?"
+    - "Show me P5 children with unresolved Year 4 gaps (critical cases)."
+    - "Which P6 children are at risk of entering Form 1 unprepared?"
+    - "Who in P6 is fully secondary-ready across all subjects?"
+    - "Which specialist has the strongest improvement this month?"
+    - "Which classes still have space for 2 or 3 more children?"
+    - "Compare Year 4 Math mastery between our two P4 Math specialists."
+    - "Show me children whose school PBD scores dropped."
+
+demo:
+  theme_color: "#059669"
+  theme_gradient: "linear-gradient(135deg, #059669, #047857)"
+  icon: "🎓"
+  quick_actions:
+    - "Centre snapshot"
+    - "Year 4 anchor report"
+    - "Secondary readiness (P5 & P6)"
+    - "Critical escalations"
+    - "Specialist quality audit"
+    - "Class space availability"
+  placeholder: "Ask about mastery, development, or secondary readiness..."
+
+deployment:
+  port: 8090

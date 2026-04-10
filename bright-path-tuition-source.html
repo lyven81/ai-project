@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bright Path Tuition Centre - Source Code</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #222;
+            background-color: #ffffff;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .back-nav {
+            margin-bottom: 20px;
+        }
+
+        .back-nav a {
+            color: #007BFF;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .back-nav a:hover {
+            text-decoration: underline;
+        }
+
+        .project-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #E91E63, #C2185B);
+            color: white;
+            border-radius: 10px;
+        }
+
+        .project-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .project-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .content-section {
+            margin: 40px 0;
+            padding: 30px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border-left: 5px solid #E91E63;
+        }
+
+        .content-section h2 {
+            color: #E91E63;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .content-section h3 {
+            color: #333;
+            margin: 20px 0 10px 0;
+            font-size: 1.3rem;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #fce4ec, #f8bbd0);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #E91E63;
+            margin: 20px 0;
+        }
+
+        .code-container {
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        .code-header {
+            color: #f48fb1;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .code-block {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #d4d4d4;
+        }
+
+        .code-comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+
+        .code-keyword {
+            color: #569cd6;
+        }
+
+        .code-string {
+            color: #ce9178;
+        }
+
+        .code-function {
+            color: #dcdcaa;
+        }
+
+        .code-number {
+            color: #b5cea8;
+        }
+
+        .file-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .file-list li {
+            padding: 10px 15px;
+            margin: 5px 0;
+            background: white;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+        }
+
+        .file-list li strong {
+            color: #E91E63;
+        }
+
+        .demo-links {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .demo-btn {
+            display: inline-block;
+            background-color: #007BFF;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .demo-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .demo-btn.secondary {
+            background-color: #28a745;
+        }
+
+        .demo-btn.secondary:hover {
+            background-color: #218838;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 20px;
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .project-header h1 {
+                font-size: 2rem;
+            }
+
+            .project-header p {
+                font-size: 1rem;
+            }
+
+            .demo-btn {
+                margin: 5px;
+                padding: 10px 20px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="bright-path-tuition.html">&larr; Back to Project Overview</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>Bright Path Tuition Centre</h1>
+            <p>Core Source Code &amp; NL-to-SQL Implementation</p>
+
+            <div class="badges">
+                <span class="badge">Gemini 2.5 Flash</span>
+                <span class="badge">FastAPI</span>
+                <span class="badge">SQLite</span>
+                <span class="badge">Python</span>
+                <span class="badge">GitHub Pages</span>
+            </div>
+        </div>
+
+        <div class="highlight-box">
+            <h3>About This Code Showcase</h3>
+            <p><strong>This curated code showcase demonstrates how Bright Path Tuition Centre translates natural-language management questions into safe SQL queries against a 7-table database of 185 children, 22 specialist tutors, and 63 classes.</strong></p>
+            <p>The snippets below highlight the config-driven schema, seeded demo data, prompt template, and SQL safety validation. Deployment scripts and API keys are omitted for clarity.</p>
+        </div>
+
+        <div class="content-section">
+            <h2>Source Files</h2>
+            <ul class="file-list">
+                <li><strong>config.yaml</strong> &mdash; 7-table schema + business rules + quick actions</li>
+                <li><strong>seed_generator.py</strong> &mdash; Builds data.db with 9 seeded demo stories</li>
+                <li><strong>main.py</strong> &mdash; FastAPI app, NL-to-SQL via Gemini</li>
+                <li><strong>index.html</strong> &mdash; Hybrid demo page (presets + client-side Gemini)</li>
+                <li><strong>data_context.json</strong> &mdash; Compact database context for client-side queries</li>
+                <li><strong>Dockerfile</strong> &mdash; Cloud Run container</li>
+                <li><strong>requirements.txt</strong> &mdash; Python dependencies</li>
+                <li><strong>README.md</strong> &mdash; Portfolio-ready documentation</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>config.yaml &mdash; Schema &amp; Business Rules</h2>
+            <p>The config file defines the full 7-table schema, business rules, and quick actions. The AI agent receives this as context in every query. Here are key tables:</p>
+
+            <div class="code-container">
+                <div class="code-header">config.yaml &mdash; Table Definitions (excerpt)</div>
+                <div class="code-block">
+<span class="code-keyword">schema:</span>
+  <span class="code-keyword">tables:</span>
+
+    <span class="code-keyword">students:</span>
+      <span class="code-comment"># 185 children across Preschool to P6</span>
+      <span class="code-keyword">columns:</span>
+        - <span class="code-string">student_id</span>: INTEGER PRIMARY KEY
+        - <span class="code-string">name</span>: TEXT
+        - <span class="code-string">year_group</span>: TEXT  <span class="code-comment"># Preschool, P1, P2, ... P6</span>
+        - <span class="code-string">date_of_birth</span>: DATE
+        - <span class="code-string">enrolment_date</span>: DATE
+        - <span class="code-string">parent_contact</span>: TEXT
+        - <span class="code-string">status</span>: TEXT  <span class="code-comment"># active, withdrawn, graduated</span>
+
+    <span class="code-keyword">tutors:</span>
+      <span class="code-comment"># 22 specialist tutors with subject expertise</span>
+      <span class="code-keyword">columns:</span>
+        - <span class="code-string">tutor_id</span>: INTEGER PRIMARY KEY
+        - <span class="code-string">name</span>: TEXT
+        - <span class="code-string">subject_expertise</span>: TEXT  <span class="code-comment"># Maths, English, BM, Science</span>
+        - <span class="code-string">hire_date</span>: DATE
+        - <span class="code-string">status</span>: TEXT  <span class="code-comment"># active, on_leave, terminated</span>
+
+    <span class="code-keyword">assessments:</span>
+      <span class="code-comment"># Score records per child per subject</span>
+      <span class="code-keyword">columns:</span>
+        - <span class="code-string">assessment_id</span>: INTEGER PRIMARY KEY
+        - <span class="code-string">student_id</span>: INTEGER REFERENCES students
+        - <span class="code-string">subject</span>: TEXT
+        - <span class="code-string">score</span>: INTEGER  <span class="code-comment"># 0-100</span>
+        - <span class="code-string">assessment_date</span>: DATE
+        - <span class="code-string">assessment_type</span>: TEXT  <span class="code-comment"># PBD, UASA, internal</span>
+
+<span class="code-keyword">business_rules:</span>
+  - <span class="code-string">"Always refer to learners as 'children', never 'students'"</span>
+  - <span class="code-string">"Year 4 is the MOE anchor year from 2026"</span>
+  - <span class="code-string">"P5/P6 children below P4 baseline score trigger escalation"</span>
+  - <span class="code-string">"Maximum class size is 10 children"</span>
+  - <span class="code-string">"Improvement = latest score minus previous score"</span>
+  - <span class="code-string">"Top improver threshold: 15+ marks between assessments"</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>seed_generator.py &mdash; Seeded Demo Stories</h2>
+            <p>The seed generator builds a realistic database with 9 named children whose data tells specific stories &mdash; enabling meaningful demo queries:</p>
+
+            <div class="code-container">
+                <div class="code-header">seed_generator.py &mdash; Seeded Story Children</div>
+                <div class="code-block">
+<span class="code-comment"># 9 seeded children with specific learning trajectories</span>
+<span class="code-comment"># These stories make demo queries return meaningful results</span>
+
+<span class="code-keyword">SEEDED_STORIES</span> = [
+    {
+        <span class="code-string">"name"</span>: <span class="code-string">"Ahmad Rizqi"</span>,
+        <span class="code-string">"year_group"</span>: <span class="code-string">"P4"</span>,
+        <span class="code-string">"story"</span>: <span class="code-string">"Year 4 anchor child — strong in BM, struggling in Maths"</span>,
+        <span class="code-string">"scores"</span>: {
+            <span class="code-string">"BM"</span>: [<span class="code-number">82</span>, <span class="code-number">85</span>, <span class="code-number">88</span>],
+            <span class="code-string">"Maths"</span>: [<span class="code-number">45</span>, <span class="code-number">48</span>, <span class="code-number">52</span>],
+            <span class="code-string">"English"</span>: [<span class="code-number">70</span>, <span class="code-number">72</span>, <span class="code-number">75</span>],
+            <span class="code-string">"Science"</span>: [<span class="code-number">65</span>, <span class="code-number">68</span>, <span class="code-number">70</span>]
+        }
+    },
+    {
+        <span class="code-string">"name"</span>: <span class="code-string">"Mei Ling Tan"</span>,
+        <span class="code-string">"year_group"</span>: <span class="code-string">"P6"</span>,
+        <span class="code-string">"story"</span>: <span class="code-string">"P6 escalation — below P4 baseline in Science, needs urgent help"</span>,
+        <span class="code-string">"scores"</span>: {
+            <span class="code-string">"BM"</span>: [<span class="code-number">60</span>, <span class="code-number">58</span>, <span class="code-number">55</span>],
+            <span class="code-string">"Maths"</span>: [<span class="code-number">55</span>, <span class="code-number">52</span>, <span class="code-number">50</span>],
+            <span class="code-string">"English"</span>: [<span class="code-number">65</span>, <span class="code-number">63</span>, <span class="code-number">60</span>],
+            <span class="code-string">"Science"</span>: [<span class="code-number">40</span>, <span class="code-number">38</span>, <span class="code-number">35</span>]
+        }
+    },
+    {
+        <span class="code-string">"name"</span>: <span class="code-string">"Darren Lim"</span>,
+        <span class="code-string">"year_group"</span>: <span class="code-string">"P5"</span>,
+        <span class="code-string">"story"</span>: <span class="code-string">"Top improver — jumped 20 marks in English after tutor switch"</span>,
+        <span class="code-string">"scores"</span>: {
+            <span class="code-string">"BM"</span>: [<span class="code-number">70</span>, <span class="code-number">72</span>, <span class="code-number">75</span>],
+            <span class="code-string">"Maths"</span>: [<span class="code-number">78</span>, <span class="code-number">80</span>, <span class="code-number">82</span>],
+            <span class="code-string">"English"</span>: [<span class="code-number">50</span>, <span class="code-number">55</span>, <span class="code-number">70</span>],
+            <span class="code-string">"Science"</span>: [<span class="code-number">72</span>, <span class="code-number">74</span>, <span class="code-number">76</span>]
+        }
+    },
+    <span class="code-comment"># ... 6 more seeded stories covering:</span>
+    <span class="code-comment"># - Preschool readiness check</span>
+    <span class="code-comment"># - Consistent high performer (P3)</span>
+    <span class="code-comment"># - Withdrawn child (attendance drop)</span>
+    <span class="code-comment"># - New enrolment (P1, only 1 assessment)</span>
+    <span class="code-comment"># - Multi-subject weakness (P4 anchor concern)</span>
+    <span class="code-comment"># - Tutor quality comparison anchor child</span>
+]
+
+<span class="code-keyword">def</span> <span class="code-function">seed_database</span>(db_path: str):
+    <span class="code-string">"""Build data.db with 185 children (9 seeded + 176 random)"""</span>
+    conn = sqlite3.connect(db_path)
+
+    <span class="code-comment"># Insert seeded children first</span>
+    <span class="code-keyword">for</span> child <span class="code-keyword">in</span> SEEDED_STORIES:
+        insert_student(conn, child)
+        insert_assessments(conn, child)
+
+    <span class="code-comment"># Fill remaining slots with randomised children</span>
+    <span class="code-keyword">for</span> i <span class="code-keyword">in</span> range(<span class="code-number">176</span>):
+        insert_random_student(conn, i)
+
+    conn.commit()
+    conn.close()
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>main.py &mdash; FastAPI App &amp; NL-to-SQL</h2>
+            <p>The FastAPI backend receives natural language questions, constructs a Gemini prompt with the full schema context, generates SQL, validates it for safety, and returns formatted results:</p>
+
+            <div class="code-container">
+                <div class="code-header">main.py &mdash; Prompt Template</div>
+                <div class="code-block">
+<span class="code-keyword">SYSTEM_PROMPT</span> = <span class="code-string">"""You are a data assistant for Bright Path Tuition Centre.
+You translate natural language questions into SQLite SQL queries.
+
+IMPORTANT RULES:
+- Always refer to learners as "children", never "students"
+- Year 4 (P4) is the MOE anchor year from 2026
+- P5/P6 children scoring below P4 baseline (60%) trigger escalation
+- Maximum class size is 10 children
+- Improvement = latest score - previous score
+- Top improver threshold: 15+ marks between assessments
+- Always use SELECT only — never INSERT, UPDATE, DELETE, or DROP
+
+DATABASE SCHEMA:
+{schema_context}
+
+Given the user's question, return ONLY a valid SQLite SELECT query.
+Do not include explanations or markdown formatting.
+"""</span>
+
+<span class="code-keyword">async def</span> <span class="code-function">generate_sql</span>(question: str) -&gt; str:
+    <span class="code-string">"""Send question + schema to Gemini, get SQL back"""</span>
+    model = genai.GenerativeModel(<span class="code-string">"gemini-2.5-flash"</span>)
+    response = model.generate_content(
+        SYSTEM_PROMPT.format(schema_context=schema_context)
+        + <span class="code-string">f"\n\nQuestion: {question}"</span>,
+        generation_config=genai.GenerationConfig(
+            temperature=<span class="code-number">0.0</span>,
+            max_output_tokens=<span class="code-number">500</span>
+        )
+    )
+    <span class="code-keyword">return</span> response.text.strip()
+                </div>
+            </div>
+
+            <div class="code-container">
+                <div class="code-header">main.py &mdash; SQL Safety Validation</div>
+                <div class="code-block">
+<span class="code-keyword">def</span> <span class="code-function">is_safe_sql</span>(sql: str) -&gt; bool:
+    <span class="code-string">"""Validate that generated SQL is read-only and safe to execute.
+
+    Returns True only if the query is a SELECT statement with no
+    dangerous keywords that could modify the database.
+    """</span>
+    sql_upper = sql.upper().strip()
+
+    <span class="code-comment"># Must start with SELECT</span>
+    <span class="code-keyword">if not</span> sql_upper.startswith(<span class="code-string">"SELECT"</span>):
+        <span class="code-keyword">return</span> <span class="code-keyword">False</span>
+
+    <span class="code-comment"># Block any data modification or schema change keywords</span>
+    <span class="code-keyword">DANGEROUS_KEYWORDS</span> = [
+        <span class="code-string">"INSERT"</span>, <span class="code-string">"UPDATE"</span>, <span class="code-string">"DELETE"</span>, <span class="code-string">"DROP"</span>,
+        <span class="code-string">"ALTER"</span>, <span class="code-string">"CREATE"</span>, <span class="code-string">"TRUNCATE"</span>,
+        <span class="code-string">"EXEC"</span>, <span class="code-string">"EXECUTE"</span>, <span class="code-string">"ATTACH"</span>,
+        <span class="code-string">"DETACH"</span>, <span class="code-string">"PRAGMA"</span>, <span class="code-string">"VACUUM"</span>,
+        <span class="code-string">"REPLACE"</span>, <span class="code-string">"GRANT"</span>, <span class="code-string">"REVOKE"</span>
+    ]
+
+    <span class="code-keyword">for</span> keyword <span class="code-keyword">in</span> DANGEROUS_KEYWORDS:
+        <span class="code-keyword">if</span> keyword <span class="code-keyword">in</span> sql_upper:
+            <span class="code-keyword">return</span> <span class="code-keyword">False</span>
+
+    <span class="code-keyword">return</span> <span class="code-keyword">True</span>
+
+
+<span class="code-keyword">@app</span>.post(<span class="code-string">"/ask"</span>)
+<span class="code-keyword">async def</span> <span class="code-function">ask_question</span>(request: QuestionRequest):
+    <span class="code-string">"""Main endpoint: question in, answer out"""</span>
+    sql = <span class="code-keyword">await</span> generate_sql(request.question)
+
+    <span class="code-keyword">if not</span> is_safe_sql(sql):
+        <span class="code-keyword">return</span> {<span class="code-string">"error"</span>: <span class="code-string">"Generated query failed safety check"</span>}
+
+    <span class="code-comment"># Execute validated SQL against data.db</span>
+    conn = sqlite3.connect(<span class="code-string">"data.db"</span>)
+    cursor = conn.execute(sql)
+    columns = [desc[<span class="code-number">0</span>] <span class="code-keyword">for</span> desc <span class="code-keyword">in</span> cursor.description]
+    rows = cursor.fetchall()
+    conn.close()
+
+    <span class="code-comment"># Format results for the frontend</span>
+    results = [dict(zip(columns, row)) <span class="code-keyword">for</span> row <span class="code-keyword">in</span> rows]
+    <span class="code-keyword">return</span> {<span class="code-string">"sql"</span>: sql, <span class="code-string">"results"</span>: results, <span class="code-string">"count"</span>: len(results)}
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Technical Implementation Notes</h2>
+            <h3>Key Design Decisions</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>Config-driven schema:</strong> The entire database schema and business rules live in config.yaml, making it easy to add tables or update rules without touching application code</li>
+                <li><strong>Temperature 0.0:</strong> Deterministic SQL generation ensures the same question always produces the same query &mdash; critical for trust in a management tool</li>
+                <li><strong>Seeded demo stories:</strong> Nine children with scripted learning trajectories ensure demo queries always return meaningful, explainable results</li>
+                <li><strong>Hybrid deployment:</strong> GitHub Pages serves a static demo with client-side Gemini calls; FastAPI serves the full backend for Cloud Run deployment</li>
+                <li><strong>Read-only SQL enforcement:</strong> The is_safe_sql function blocks 15+ dangerous SQL keywords at the application layer, regardless of what the LLM generates</li>
+                <li><strong>Malaysian education context:</strong> Business rules encode post-UPSR assessment norms (PBD, UASA, Year 4 anchoring) that generic AI tools would not know</li>
+            </ul>
+
+            <h3>Why SQLite?</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>Zero configuration:</strong> No database server to provision &mdash; ideal for a single-centre management tool</li>
+                <li><strong>Fast reads:</strong> All analytics queries run in milliseconds on 185 children</li>
+                <li><strong>Portable:</strong> The entire database is a single file, making backups and demo resets trivial</li>
+            </ul>
+        </div>
+
+        <div class="demo-links">
+            <a href="bright-path-tuition/index.html" class="demo-btn">Try Demo</a>
+            <a href="bright-path-tuition.html" class="demo-btn secondary">View Full Project Details</a>
+        </div>
+
+        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+            <a href="index.html">&larr; Back to Portfolio</a> |
+            <a href="bright-path-tuition.html">View Project Overview</a>
+        </nav>
+    </div>
+
+    <footer>
+        &copy; 2025 Lee Yih Ven | Data-Driven Solutions
+    </footer>
+</body>
+</html>

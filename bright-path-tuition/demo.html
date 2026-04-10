@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bright Path Tuition Centre — AI Management Assistant</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; line-height: 1.6; color: #403B36; background-color: #ffffff; }
+        .container { display: flex; min-height: 100vh; }
+
+        /* LEFT COLUMN */
+        .left-column { width: 30%; background-color: #f8f8f8; padding: 40px 30px; position: fixed; height: 100vh; overflow-y: auto; border-right: 1px solid #e0e0e0; }
+        .left-column h1 { font-size: 1.8em; font-weight: bold; color: #403B36; margin-bottom: 10px; }
+        .left-column h2 { font-size: 1em; font-weight: 400; color: #666; margin-bottom: 20px; }
+        .intro p { color: #555; margin-bottom: 20px; line-height: 1.8; }
+        .mcp-badge { display: inline-block; padding: 6px 12px; background-color: #e8f4f8; color: #2c5f7a; border-radius: 20px; font-size: 0.8em; font-weight: 600; margin-top: 10px; border: 1px solid #b8dce8; }
+
+        .home-link-section, .dashboard-link-section, .agentic-link-section { margin: 20px 0; }
+        .home-link-btn, .dashboard-link-btn, .agentic-link-btn { display: inline-block; padding: 12px 30px; background-color: #403B36; color: #fff; text-decoration: none; border-radius: 5px; font-weight: 500; transition: background-color 0.3s ease; text-align: center; width: 100%; }
+        .home-link-btn:hover, .dashboard-link-btn:hover, .agentic-link-btn:hover { background-color: #CBA135; }
+        .agentic-link-btn { background-color: #CBA135; }
+        .agentic-link-btn:hover { background-color: #B8902E; }
+
+        .contact { margin-top: 30px; }
+        .contact h2 { font-size: 1.2em; color: #403B36; margin-bottom: 15px; font-weight: 600; }
+        .contact p { color: #555; margin-bottom: 15px; }
+        .contact ul { list-style: none; }
+        .contact li { margin-bottom: 10px; color: #555; }
+        .contact a { color: #CBA135; text-decoration: none; }
+        .contact a:hover { text-decoration: underline; }
+
+        /* RIGHT COLUMN */
+        .right-column { width: 70%; margin-left: 30%; padding: 40px 50px; background-color: #ffffff; }
+        .chatbot-header { text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 2px solid #e0e0e0; }
+        .chatbot-header h1 { font-size: 2.2em; color: #403B36; margin-bottom: 10px; font-weight: 600; }
+        .chatbot-header p { font-size: 1.05em; color: #666; line-height: 1.8; }
+
+        /* API KEY BAR */
+        .key-bar { max-width: 900px; margin: 0 auto 20px auto; padding: 12px 16px; background-color: #fff8e1; border: 1px solid #f0d974; border-radius: 8px; display: flex; align-items: center; gap: 10px; font-size: 0.9em; }
+        .key-bar label { color: #6b5d00; font-weight: 600; }
+        .key-bar input { flex: 1; padding: 8px 10px; border: 1px solid #d4c56a; border-radius: 4px; font-family: inherit; font-size: 0.9em; }
+        .key-bar button { padding: 8px 16px; background-color: #CBA135; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-family: inherit; font-weight: 600; }
+        .key-bar button:hover { background-color: #B8902E; }
+        .key-bar .saved { color: #2e7d32; font-weight: 600; display: none; }
+        .key-bar .saved.on { display: inline; }
+
+        /* DB STATUS */
+        .db-status { max-width: 900px; margin: 0 auto 20px auto; padding: 12px 16px; background-color: #f0f9f0; border-left: 4px solid #4CAF50; border-radius: 4px; font-size: 0.9em; color: #2e7d32; }
+        .db-status .label { color: #666; margin-right: 6px; }
+        .db-status .value { color: #403B36; font-weight: 600; margin-right: 20px; }
+
+        /* CHAT CONTAINER */
+        .chat-container { max-width: 900px; margin: 0 auto; background-color: #f8f8f8; border-radius: 10px; padding: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .suggested-questions { margin-bottom: 30px; }
+        .suggested-questions h3 { font-size: 1.3em; color: #403B36; margin-bottom: 15px; font-weight: 600; }
+        .question-btn { display: block; width: 100%; padding: 15px 20px; margin-bottom: 12px; background-color: #ffffff; color: #403B36; border: 2px solid #CBA135; border-radius: 8px; text-align: left; cursor: pointer; font-size: 0.95em; font-family: 'Poppins', sans-serif; transition: all 0.3s ease; }
+        .question-btn:hover { background-color: #CBA135; color: #ffffff; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(203, 161, 53, 0.3); }
+
+        .chat-messages { min-height: 200px; margin-top: 20px; }
+        .message { margin-bottom: 20px; padding: 15px 20px; border-radius: 10px; animation: fadeIn 0.5s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .message.user { background-color: #CBA135; color: #ffffff; margin-left: 50px; text-align: right; }
+        .message.agent { background-color: #ffffff; color: #403B36; margin-right: 50px; border: 1px solid #e0e0e0; }
+        .message.agent .agent-label { font-weight: 600; color: #CBA135; margin-bottom: 8px; display: block; }
+        .message.agent table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 0.9em; }
+        .message.agent th, .message.agent td { border: 1px solid #e0e0e0; padding: 8px 12px; text-align: left; }
+        .message.agent th { background-color: #f8f8f8; font-weight: 600; }
+        .sql-block { background-color: #2d2d2d; color: #f8f8f2; padding: 12px 15px; border-radius: 6px; font-family: 'Courier New', monospace; font-size: 0.85em; margin: 10px 0; overflow-x: auto; white-space: pre-wrap; }
+
+        /* INPUT AREA */
+        .input-area { max-width: 900px; margin: 20px auto 0 auto; display: flex; gap: 10px; }
+        .input-area input { flex: 1; padding: 14px 18px; border: 2px solid #e0e0e0; border-radius: 8px; font-family: 'Poppins', sans-serif; font-size: 1em; }
+        .input-area input:focus { outline: none; border-color: #CBA135; }
+        .input-area button { padding: 14px 30px; background-color: #CBA135; color: #fff; border: none; border-radius: 8px; cursor: pointer; font-family: 'Poppins', sans-serif; font-size: 1em; font-weight: 600; }
+        .input-area button:hover { background-color: #B8902E; }
+        .input-area button:disabled { background-color: #ccc; cursor: not-allowed; }
+
+        /* FOOTER */
+        footer { text-align: center; padding: 30px 20px; background-color: #222; color: #fff; margin-top: 50px; margin-left: 30%; }
+        footer p { margin: 0; font-size: 0.9em; }
+
+        /* MOBILE */
+        @media (max-width: 768px) {
+            .container { flex-direction: column; }
+            .left-column { width: 100%; position: relative; height: auto; }
+            .right-column { width: 100%; margin-left: 0; padding: 30px 20px; }
+            .message.user { margin-left: 20px; }
+            .message.agent { margin-right: 20px; }
+            footer { margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- LEFT SIDEBAR -->
+        <aside class="left-column">
+            <header>
+                <h1>Lee Yih Ven</h1>
+                <h2>AI Project Portfolio</h2>
+            </header>
+            <section class="intro">
+                <p>Ask this AI assistant about the tuition centre — which Year 4 children need help, which P6 children are not yet ready for Form 1, and which specialist tutors are getting the best results from their small-class sessions.</p>
+                <div class="mcp-badge">Live SQL Agent • Gemini 2.5 • 7 tables</div>
+            </section>
+
+            <section class="home-link-section">
+                <a class="home-link-btn" href="https://lyven81.github.io/ai-project/index.html">Home</a>
+            </section>
+            <section class="home-link-section">
+                <a class="home-link-btn" href="https://github.com/lyven81/ai-project/tree/main/bright-path-tuition">Source Code</a>
+            </section>
+            <section class="dashboard-link-section">
+                <a class="dashboard-link-btn" href="#" onclick="return false;">Project Outline</a>
+            </section>
+            <section class="agentic-link-section">
+                <a class="agentic-link-btn" href="#">AI Assistant</a>
+            </section>
+
+            <section class="contact">
+                <h2>About This App</h2>
+                <p>Built for the post-UPSR PBD + UASA era. Year 4 is the MOE anchor year from 2026. P5 and P6 are secondary-preparation years, not fill-the-gap years — the app flags any child entering P5/P6 with unresolved Year 4 gaps as a critical escalation.</p>
+                <ul>
+                    <li>Email: <a href="mailto:director@pinnacleslearning.com">director@pinnacleslearning.com</a></li>
+                    <li>Phone: +6014-9207099</li>
+                </ul>
+            </section>
+        </aside>
+
+        <!-- RIGHT MAIN -->
+        <main class="right-column">
+            <div class="chatbot-header">
+                <h1>🎓 Bright Path Tuition Centre</h1>
+                <p>Know every child. Find every gap. Bridge it.<br>Premium small-class tuition — max 10 children per class, one specialist per ~9 children.</p>
+            </div>
+
+            <!-- Gemini key bar (only shows if key is missing) -->
+            <div class="key-bar" id="keyBar">
+                <label>Gemini API Key:</label>
+                <input id="apiKeyInput" type="password" placeholder="Enter your Gemini API key" />
+                <button onclick="saveKey()">Save</button>
+                <span class="saved" id="keySaved">✓ Saved</span>
+            </div>
+
+            <!-- DB status -->
+            <div class="db-status" id="dbStatus">
+                <span class="label">Database:</span><span class="value" id="dbMode">—</span>
+                <span class="label">Children:</span><span class="value" id="dbRows">—</span>
+                <span class="label">Status:</span><span class="value" id="dbStatusText">Connecting...</span>
+            </div>
+
+            <div class="chat-container">
+                <div class="suggested-questions">
+                    <h3>Try these management questions:</h3>
+                    <button class="question-btn" onclick="askQuestion(this)">Which Year 4 children are struggling with core subject mastery?</button>
+                    <button class="question-btn" onclick="askQuestion(this)">Show me P5 children whose current Math score is below their Year 4 baseline — these are critical cases.</button>
+                    <button class="question-btn" onclick="askQuestion(this)">Which P6 children are at risk of entering Form 1 unprepared?</button>
+                    <button class="question-btn" onclick="askQuestion(this)">Who in P6 is fully secondary-ready across all subjects?</button>
+                    <button class="question-btn" onclick="askQuestion(this)">Compare P4 Math mastery between Teacher Daniel and Teacher Alicia.</button>
+                    <button class="question-btn" onclick="askQuestion(this)">Which classes still have space for 2 or 3 more children?</button>
+                    <button class="question-btn" onclick="askQuestion(this)">Who are this month's top improvers across the centre?</button>
+                    <button class="question-btn" onclick="askQuestion(this)">Which specialist tutor has the strongest improvement this month?</button>
+                </div>
+
+                <div class="chat-messages" id="chatMessages">
+                    <p style="text-align: center; color: #999; font-style: italic;">Click a question above, or type your own question below.</p>
+                </div>
+            </div>
+
+            <div class="input-area">
+                <input type="text" id="msgInput" placeholder="Ask about mastery, development, or secondary readiness..." autofocus />
+                <button id="sendBtn" onclick="sendMessage()">Ask</button>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <p>© 2025 Lee Yih Ven | Data-Driven Solutions</p>
+    </footer>
+
+    <script>
+    // ────────────────────────────────────────────────────────────
+    // Load DB status on page load
+    // ────────────────────────────────────────────────────────────
+    fetch('/api/status').then(r => r.json()).then(data => {
+        document.getElementById('dbMode').textContent = (data.database_mode || 'sqlite').toUpperCase();
+        document.getElementById('dbRows').textContent = (data.records || 0).toLocaleString();
+        document.getElementById('dbStatusText').textContent = data.status || 'Ready';
+        // Hide API key bar if already configured
+        if (data.api_configured) {
+            document.getElementById('keyBar').style.display = 'none';
+        }
+    }).catch(() => {
+        document.getElementById('dbStatusText').textContent = 'Offline — start the server first';
+    });
+
+    // ────────────────────────────────────────────────────────────
+    // API key bar (for runtime key input if server has no key)
+    // ────────────────────────────────────────────────────────────
+    function saveKey() {
+        const v = document.getElementById('apiKeyInput').value.trim();
+        if (!v) return;
+        localStorage.setItem('gemini_key', v);
+        document.getElementById('keySaved').classList.add('on');
+        setTimeout(() => document.getElementById('keySaved').classList.remove('on'), 2000);
+    }
+
+    // ────────────────────────────────────────────────────────────
+    // Click a suggested question → fill input and send
+    // ────────────────────────────────────────────────────────────
+    function askQuestion(btn) {
+        const q = btn.textContent.trim();
+        document.getElementById('msgInput').value = q;
+        sendMessage();
+    }
+
+    // ────────────────────────────────────────────────────────────
+    // Send a chat message to /api/chat
+    // ────────────────────────────────────────────────────────────
+    async function sendMessage() {
+        const input = document.getElementById('msgInput');
+        const btn = document.getElementById('sendBtn');
+        const chat = document.getElementById('chatMessages');
+        const q = input.value.trim();
+        if (!q) return;
+
+        // If this is the first message, clear the placeholder
+        if (chat.querySelector('p[style]')) chat.innerHTML = '';
+
+        // Append user message
+        const userMsg = document.createElement('div');
+        userMsg.className = 'message user';
+        userMsg.textContent = q;
+        chat.appendChild(userMsg);
+
+        // Append loading agent message
+        const agentMsg = document.createElement('div');
+        agentMsg.className = 'message agent';
+        agentMsg.innerHTML = '<span class="agent-label">AI Management Assistant</span><em>Thinking…</em>';
+        chat.appendChild(agentMsg);
+
+        input.value = '';
+        btn.disabled = true;
+        agentMsg.scrollIntoView({ behavior: 'smooth', block: 'end' });
+
+        try {
+            const res = await fetch('/api/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: q })
+            });
+            const data = await res.json();
+
+            let html = '<span class="agent-label">AI Management Assistant</span>';
+            html += markdownTable(data.answer || 'No answer returned.');
+            if (data.rows_returned !== undefined && data.rows_returned > 0) {
+                html += `<div style="margin-top:10px;color:#666;font-size:0.85em;">Returned ${data.rows_returned} row${data.rows_returned === 1 ? '' : 's'}.</div>`;
+            }
+            agentMsg.innerHTML = html;
+        } catch (err) {
+            agentMsg.innerHTML = '<span class="agent-label">AI Management Assistant</span>Error: ' + err.message;
+        } finally {
+            btn.disabled = false;
+            agentMsg.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        }
+    }
+
+    // Enter key to send
+    document.getElementById('msgInput').addEventListener('keydown', e => {
+        if (e.key === 'Enter') sendMessage();
+    });
+
+    // Escape HTML for SQL display
+    function escapeHtml(s) {
+        return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    // Convert the **Query Results** markdown table from the API into an HTML table
+    function markdownTable(md) {
+        if (!md) return '';
+        // Strip the **Query Results:** heading if present
+        md = md.replace(/\*\*Query Results:\*\*\s*/, '');
+        const lines = md.split('\n').filter(l => l.trim());
+        if (!lines.length) return `<p>${md}</p>`;
+
+        // Detect markdown table (lines starting with |)
+        const tableLines = lines.filter(l => l.startsWith('|'));
+        if (tableLines.length < 2) return `<p>${md.replace(/\n/g, '<br>')}</p>`;
+
+        const headers = tableLines[0].split('|').slice(1, -1).map(h => h.trim());
+        const rows = tableLines.slice(2).map(r => r.split('|').slice(1, -1).map(c => c.trim()));
+        let html = '<table><thead><tr>';
+        headers.forEach(h => html += `<th>${h}</th>`);
+        html += '</tr></thead><tbody>';
+        rows.forEach(r => {
+            html += '<tr>';
+            r.forEach(c => html += `<td>${c}</td>`);
+            html += '</tr>';
+        });
+        html += '</tbody></table>';
+        return html;
+    }
+    </script>
+</body>
+</html>
