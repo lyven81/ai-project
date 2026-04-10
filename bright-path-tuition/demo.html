@@ -302,7 +302,14 @@ Centre: 185 children, 22 specialist tutors, 63 classes (max 10 per class), 5 sub
 
 Use "children" not "students". Use "specialists" not "tutors".
 
-Below is the full database as JSON. Answer the user's question using this data. Be specific — name children, specialists, scores, and levels. Keep answers concise. If you show a table, use markdown table format.
+Below is the full database as JSON. Answer the user's question using this data.
+
+RESPONSE RULES:
+- Maximum 1 table per answer. Keep tables under 10 rows.
+- Maximum 3 sentences of insight after the table.
+- If the question asks about one child, show one summary table (subjects as rows, scores as columns) — never split into multiple sections.
+- Be specific — name children, specialists, scores, and levels.
+- Use markdown table format for any tabular data.
 
 DATABASE:
 ${JSON.stringify(ctx)}`;
@@ -310,7 +317,7 @@ ${JSON.stringify(ctx)}`;
             const payload = {
                 contents: [{ parts: [{ text: q }] }],
                 systemInstruction: { parts: [{ text: systemPrompt }] },
-                generationConfig: { temperature: 0.1, maxOutputTokens: 2048 }
+                generationConfig: { temperature: 0.1, maxOutputTokens: 8192 }
             };
 
             const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${key}`, {
