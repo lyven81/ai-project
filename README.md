@@ -243,11 +243,11 @@ Each project is classified by its AI architecture pattern, based on how the syst
 - **Tech Stack:** Python, Claude Sonnet 4.6, Tavily Search API, Streamlit
 - **AI Capabilities:** ReAct agent loop with web search, Malaysian fashion market specialist, trend/pricing/supplier/seasonal research, 3-sentence actionable answers, 10 preset questions
 
-#### [Bright Path Tuition Centre](./bright-path-tuition/)
-**AI management assistant for premium small-class tuition centres — finds mastery gaps and proposes fixes for every child**
-- **Live Demo:** [Launch Demo](https://lyven81.github.io/ai-project/bright-path-tuition/index.html)
-- **Tech Stack:** HTML, CSS, JavaScript, Claude API
-- **AI Capabilities:** Student mastery gap detection, personalized intervention proposals, class performance analytics, tuition centre management workflows
+#### [Bright Path Tuition Centre](./bright-path-tuition.html)
+**AI management assistant for premium small-class tuition centres**
+- **Live Demo:** [Launch Demo](https://lyven81.github.io/ai-project/bright-path-tuition/demo.html)
+- **Tech Stack:** Gemini 2.5 Flash, FastAPI, SQLite, Python, GitHub Pages
+- **AI Capabilities:** NL-to-SQL agent across 7 tables (185 children, 22 specialists, 63 classes). Year 4 mastery anchor, P5/P6 secondary-readiness escalation, specialist quality audit, gap-to-fix recommendations. Built for Malaysia's post-UPSR PBD + UASA era.
 
 ### 🤖 Business Automation & Booking Systems
 
