@@ -263,7 +263,13 @@
         }
 
         // Need API key for custom questions
-        const key = localStorage.getItem('gemini_key') || document.getElementById('apiKeyInput').value.trim();
+        let key = localStorage.getItem('gemini_key');
+        // If saved key is the masked placeholder, clear it
+        if (key === '••••••••••••••••') key = null;
+        // Also check the input field for a freshly typed key
+        const inputKey = document.getElementById('apiKeyInput').value.trim();
+        if (inputKey && inputKey !== '••••••••••••••••') key = inputKey;
+
         if (!key) {
             const chat = clearChat();
             addUserMsg(chat, q);
@@ -314,7 +320,33 @@ ${JSON.stringify(ctx)}`;
             });
 
             const data = await res.json();
-            const text = data?.candidates?.[0]?.content?.parts?.[0]?.text || 'No response received.';
+
+            // Handle API errors
+            if (data.error) {
+                agentMsg.innerHTML = '<span class="agent-label">AI Management Assistant</span><p>API Error: ' + (data.error.message || JSON.stringify(data.error)) + '</p>';
+                return;
+            }
+
+            // Handle content filtering / no candidates
+            if (!data.candidates || !data.candidates.length) {
+                const reason = data.promptFeedback?.blockReason || 'Unknown reason';
+                agentMsg.innerHTML = '<span class="agent-label">AI Management Assistant</span><p>The model could not generate a response. Reason: ' + reason + '</p>';
+                return;
+            }
+
+            // Handle finish reason other than STOP
+            const finishReason = data.candidates[0].finishReason;
+            if (finishReason && finishReason !== 'STOP' && finishReason !== 'MAX_TOKENS') {
+                agentMsg.innerHTML = '<span class="agent-label">AI Management Assistant</span><p>Response blocked. Finish reason: ' + finishReason + '</p>';
+                return;
+            }
+
+            const text = data.candidates[0]?.content?.parts?.[0]?.text || '';
+            if (!text) {
+                agentMsg.innerHTML = '<span class="agent-label">AI Management Assistant</span><p>The model returned an empty response. Please try rephrasing your question.</p>';
+                return;
+            }
+
             agentMsg.innerHTML = '<span class="agent-label">AI Management Assistant</span>' + formatResponse(text);
         } catch (err) {
             agentMsg.innerHTML = '<span class="agent-label">AI Management Assistant</span>Error: ' + err.message;
