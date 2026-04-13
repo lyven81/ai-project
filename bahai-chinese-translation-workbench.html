@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bahai Chinese Translation Workbench - Sacred Text Translation Pipeline with Human Governance</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #222;
+            background-color: #ffffff;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .back-nav {
+            margin-bottom: 20px;
+        }
+
+        .back-nav a {
+            color: #007BFF;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .back-nav a:hover {
+            text-decoration: underline;
+        }
+
+        .project-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #2196F3, #1565C0);
+            color: white;
+            border-radius: 10px;
+        }
+
+        .project-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .project-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .demo-links {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .demo-btn {
+            display: inline-block;
+            background-color: #007BFF;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .demo-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .demo-btn.secondary {
+            background-color: #2196F3;
+        }
+
+        .demo-btn.secondary:hover {
+            background-color: #1565C0;
+        }
+
+        .content-section {
+            margin: 40px 0;
+            padding: 30px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border-left: 5px solid #2196F3;
+        }
+
+        .content-section h2 {
+            color: #2196F3;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .content-section h3 {
+            color: #333;
+            margin: 20px 0 10px 0;
+            font-size: 1.3rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .feature-item {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+
+        .feature-item h4 {
+            color: #2196F3;
+            margin-bottom: 10px;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .tech-item {
+            background-color: #2196F3;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .code-block {
+            background-color: #f4f4f4;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: monospace;
+            overflow-x: auto;
+        }
+
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .metric-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid #2196F3;
+        }
+
+        .metric-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2196F3;
+        }
+
+        .metric-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .lang-switch {
+            text-align: center;
+            margin: 10px 0 0 0;
+        }
+
+        .lang-switch a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .lang-switch a:hover {
+            color: white;
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .project-header h1 {
+                font-size: 2rem;
+            }
+
+            .project-header p {
+                font-size: 1rem;
+            }
+
+            .badges {
+                justify-content: center;
+            }
+
+            .demo-btn {
+                margin: 5px;
+                padding: 10px 20px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="index.html">&larr; Back to Portfolio</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>Bahai Chinese Translation Workbench</h1>
+            <p>Sacred text translation pipeline with human governance</p>
+
+            <div class="badges">
+                <span class="badge">Claude Sonnet 4.6</span>
+                <span class="badge">FastAPI</span>
+                <span class="badge">SQLite</span>
+                <span class="badge">Docker</span>
+            </div>
+
+            <div class="lang-switch">
+                <a href="bahai-chinese-translation-workbench-zh.html">中文版</a>
+            </div>
+        </div>
+
+        <div class="demo-links">
+            <a href="projects/bahai-chinese-translation-workbench/demo.html" class="demo-btn">Launch Demo</a>
+            <a href="bahai-chinese-translation-workbench-source.html" class="demo-btn secondary">View Source Code</a>
+        </div>
+
+        <div class="content-section">
+            <h2>Project Overview</h2>
+            <p><strong>Challenge:</strong> A team of 27 volunteer translators works to translate Baha'i sacred writings into Chinese. Working manually, they complete approximately 1 book per year. Each translation must meet three rigorous standards: accuracy (准确) — faithful to the original meaning; beauty (文风优美) — elevated, literary Chinese register worthy of sacred scripture; and consistency (风格一致) — uniform terminology and style aligned with the tradition established by Shoghi Effendi.</p>
+
+            <p style="margin-top: 15px;"><strong>Solution:</strong> The Bahai Chinese Translation Workbench is an AI-assisted pipeline that accelerates translation throughput to an estimated 4-6 books per year while preserving human governance over every translation decision. The system implements a 3-stage pipeline — AI Translation, Human Review, and AI Editing — where no translation advances without explicit human approval.</p>
+
+            <h3>Key Benefits</h3>
+            <ul>
+                <li><strong>Accelerated Output:</strong> AI drafts cut initial translation time significantly, freeing human translators to focus on review and refinement</li>
+                <li><strong>Terminology Consistency:</strong> A 20-term glossary is injected into every AI prompt, ensuring approved translations for key Baha'i terms</li>
+                <li><strong>Human Governance:</strong> The review gate ensures no AI output reaches final publication without human approval, editing, or rejection</li>
+                <li><strong>Three-Standard Quality:</strong> Every stage is evaluated against accuracy, beauty, and consistency — the three pillars of sacred text translation</li>
+                <li><strong>Side-by-Side View:</strong> Source and translation are displayed together for easy comparison during review</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>Application Features</h2>
+
+            <div class="features-grid">
+                <div class="feature-item">
+                    <h4>AI Translation with Glossary</h4>
+                    <p>Stage 1 generates a Chinese translation draft using Claude Sonnet 4.6. The prompt includes the full 20-term terminology glossary to ensure proper nouns, theological terms, and scripture titles are translated consistently.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>Side-by-Side Comparison</h4>
+                    <p>Source text and Chinese translation are displayed in a two-panel layout. Reviewers can read the original and translation simultaneously, making it easy to verify accuracy and completeness.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>Human Review Gate</h4>
+                    <p>Stage 2 places the translation under human governance. Reviewers can approve (pass as-is), edit (modify and pass), or reject (block and flag). No translation advances without a human decision.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>AI Editing with Checklist</h4>
+                    <p>Stage 3 refines the approved translation for grammar, punctuation, tone, and terminology uniformity. The AI editor evaluates against all three standards and reports a checklist with assessment notes.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>Terminology Glossary Sidebar</h4>
+                    <p>A searchable sidebar displays all 20 approved glossary terms with English, Chinese translations, and usage notes. The glossary is accessible at any stage for quick reference.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>AI Integration</h2>
+
+            <div class="features-grid">
+                <div class="feature-item">
+                    <h4>Three-Standard Framework</h4>
+                    <p>Both the translation and editing prompts encode the three quality standards — accuracy (准确), beauty (文风优美), and consistency (风格一致) — directly into the system prompt. The AI evaluates and reports against each standard.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>Glossary Injection</h4>
+                    <p>The 20-term glossary is formatted and injected into every AI prompt. Terms cover persons (Baha'u'llah, Abdu'l-Baha), institutions (Universal House of Justice), theology (Manifestation of God), and scripture titles (Kitab-i-Aqdas).</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>JSON Structured Output</h4>
+                    <p>AI agents return structured JSON with translation text, term usage reports, and notes. A recursive unwrapping function handles cases where the LLM wraps output in markdown fences or nested JSON objects.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>Stage Gate Logic</h4>
+                    <p>The backend enforces strict stage sequencing. Documents must complete Stage 1 before review, and Stage 2 before editing. The review endpoint validates the decision (approve/edit/reject) and routes accordingly.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Technical Architecture</h2>
+
+            <h3>Backend</h3>
+            <div class="tech-stack">
+                <span class="tech-item">Python 3</span>
+                <span class="tech-item">FastAPI</span>
+                <span class="tech-item">Anthropic SDK</span>
+                <span class="tech-item">Claude Sonnet 4.6</span>
+                <span class="tech-item">SQLite</span>
+                <span class="tech-item">Pydantic</span>
+            </div>
+
+            <h3>Frontend</h3>
+            <div class="tech-stack">
+                <span class="tech-item">Vanilla HTML</span>
+                <span class="tech-item">Vanilla JavaScript</span>
+                <span class="tech-item">CSS (No Framework)</span>
+            </div>
+
+            <h3>Deployment</h3>
+            <div class="tech-stack">
+                <span class="tech-item">Docker</span>
+                <span class="tech-item">Google Cloud Run</span>
+            </div>
+
+            <h3>System Design</h3>
+            <ul>
+                <li><strong>Single-Server Architecture:</strong> FastAPI serves both the REST API and the HTML frontend from the same process</li>
+                <li><strong>SQLite Database:</strong> Stores documents, stage outputs, and audit logs with full traceability</li>
+                <li><strong>3-Stage Pipeline:</strong> Translation (AI) &rarr; Review (Human) &rarr; Editing (AI), with strict stage gate enforcement</li>
+                <li><strong>REST API:</strong> Endpoints for document creation, review submission, editing execution, and glossary retrieval</li>
+                <li><strong>Audit Trail:</strong> Every action (stage started, completed, approved, rejected) is logged with timestamps</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>Setup Guide</h2>
+
+            <h3>Prerequisites</h3>
+            <ul>
+                <li><strong>Python 3.10+</strong> with pip</li>
+                <li><strong>Anthropic API Key</strong> from console.anthropic.com</li>
+            </ul>
+
+            <h3>Quick Start</h3>
+            <div class="code-block">
+# Clone the repository
+git clone https://github.com/lyven81/ai-project.git
+cd ai-project/projects/bahai-chinese-translation-workbench
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Set up environment variables
+# Create a .env file with your API key:
+# ANTHROPIC_API_KEY=your_api_key_here
+
+# Run the app
+python app.py
+            </div>
+
+            <h3>Environment Configuration</h3>
+            <div class="code-block">
+# Required API Configuration
+ANTHROPIC_API_KEY=your_anthropic_api_key_here
+            </div>
+
+            <h3>Docker Deployment</h3>
+            <div class="code-block">
+# Build and run with Docker
+docker build -t bahai-translation-workbench .
+docker run -p 8080:8080 -e ANTHROPIC_API_KEY=your_key bahai-translation-workbench
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Key Metrics</h2>
+
+            <div class="metrics">
+                <div class="metric-card">
+                    <div class="metric-number">3</div>
+                    <div class="metric-label">Pipeline Stages</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">20</div>
+                    <div class="metric-label">Glossary Terms</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">3</div>
+                    <div class="metric-label">Quality Standards</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">Side-by-Side</div>
+                    <div class="metric-label">Comparison View</div>
+                </div>
+            </div>
+
+            <h3>Translation Quality Standards</h3>
+            <ul>
+                <li><strong>Accuracy (准确):</strong> Faithful to the original meaning — never add, omit, or reinterpret</li>
+                <li><strong>Beauty (文风优美):</strong> Elevated, literary Chinese register — the language must carry the weight and dignity of sacred scripture</li>
+                <li><strong>Consistency (风格一致):</strong> Uniform terminology and style aligned with the tradition established by the Guardian</li>
+            </ul>
+        </div>
+
+        <div class="demo-links">
+            <a href="projects/bahai-chinese-translation-workbench/demo.html" class="demo-btn">Launch Demo</a>
+            <a href="https://github.com/lyven81/ai-project/tree/main/projects/bahai-chinese-translation-workbench" class="demo-btn secondary">Full Source Code</a>
+        </div>
+
+        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+            <a href="index.html">&larr; Back to Portfolio</a> |
+            <a href="project-categories.html">View All Categories</a>
+        </nav>
+    </div>
+</body>
+</html>

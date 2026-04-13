@@ -2,7 +2,7 @@
 
 [![Portfolio Website](https://img.shields.io/badge/Portfolio-Live-green?logo=vercel)](https://lyven81.github.io/ai-project/)
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-black?logo=github)](https://github.com/lyven81/ai-project)
-[![Projects](https://img.shields.io/badge/Projects-60-blue)](#-featured-projects)
+[![Projects](https://img.shields.io/badge/Projects-61-blue)](#-featured-projects)
 [![AI Powered](https://img.shields.io/badge/AI-Powered-orange?logo=tensorflow)](https://github.com/lyven81/ai-project)
 
 **Innovative AI Solutions for Modern Challenges** - A curated collection of production-ready AI applications showcasing expertise in computer vision, natural language processing, document processing, and creative AI technologies.
@@ -13,7 +13,7 @@
 
 ## 🌟 Portfolio Overview
 
-This repository contains **60 AI applications** built in this repo (some published to the portfolio homepage, others retained as archived builds) demonstrating proficiency across multiple AI domains. Each project includes comprehensive documentation, live demos, and complete source code with deployment configurations.
+This repository contains **61 AI applications** built in this repo (some published to the portfolio homepage, others retained as archived builds) demonstrating proficiency across multiple AI domains. Each project includes comprehensive documentation, live demos, and complete source code with deployment configurations.
 
 **🎯 Portfolio Highlights:**
 - **15+ AI Technologies** integrated across projects
@@ -137,7 +137,7 @@ Each project is classified by its AI architecture pattern, based on how the syst
 | Multi-Agent Orchestration | 2 | 4% |
 | Interactive Learning | 2 | 4% |
 
-**Total: 60 projects**
+**Total: 61 projects**
 
 > Note: As of Apr 9, 2026, 16 projects were unpublished from the live portfolio homepage display to sharpen focus. They remain in the repo and are still counted here as built work.
 
@@ -174,6 +174,12 @@ Each project is classified by its AI architecture pattern, based on how the syst
 - **Live Demo:** [pdf-to-audio-reader-169218045868.us-west1.run.app](https://pdf-to-audio-reader-169218045868.us-west1.run.app/)
 - **Tech Stack:** React, TypeScript, Gemini AI, Web Speech API, PDF.js
 - **AI Capabilities:** Document structure analysis, text-to-speech conversion, synchronized highlighting, chapter navigation
+
+#### [Bahai Chinese Translation Workbench](./projects/bahai-chinese-translation-workbench/)
+**Sacred text translation pipeline with human governance**
+- **Live Demo:** [Demo](https://lyven81.github.io/ai-project/projects/bahai-chinese-translation-workbench/demo.html)
+- **Tech Stack:** AI-assisted translation pipeline, terminology glossary, human review workflow
+- **AI Capabilities:** AI-assisted translation of Baha'i Sacred Writings into Chinese, three-stage pipeline with human review and terminology glossary
 
 ### 📊 Business Intelligence & Analytics Agents
 

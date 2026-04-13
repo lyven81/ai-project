@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bahai Chinese Translation Workbench - Demo</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f5f0eb; color: #2c2c2c; line-height: 1.6; }
+        .demo-banner { background: #2196F3; color: #fff; text-align: center; padding: 10px 16px; font-size: 13px; }
+        .demo-banner a { color: #fff; font-weight: 600; }
+        .header { background: linear-gradient(135deg, #3c2415 0%, #5a3a28 100%); color: #f5f0eb; padding: 24px 32px; text-align: center; }
+        .header h1 { font-size: 24px; font-weight: 600; letter-spacing: 0.5px; }
+        .header p { font-size: 13px; color: #c4a882; margin-top: 4px; }
+        .progress-bar { display: flex; justify-content: center; align-items: center; padding: 20px 32px; background: #fff; border-bottom: 1px solid #e0d5c8; }
+        .stage-step { display: flex; align-items: center; gap: 8px; }
+        .stage-circle { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; border: 2px solid #c4a882; color: #c4a882; background: #fff; transition: all 0.3s; }
+        .stage-circle.active { background: #c4a882; color: #fff; }
+        .stage-circle.completed { background: #5a8a5a; color: #fff; border-color: #5a8a5a; }
+        .stage-label { font-size: 13px; color: #888; }
+        .stage-label.active { color: #3c2415; font-weight: 600; }
+        .stage-label.completed { color: #5a8a5a; }
+        .stage-connector { width: 48px; height: 2px; background: #e0d5c8; margin: 0 8px; }
+        .stage-connector.completed { background: #5a8a5a; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
+        .input-section { background: #fff; border-radius: 8px; padding: 24px; border: 1px solid #e0d5c8; }
+        .input-section h2 { font-size: 18px; color: #3c2415; margin-bottom: 16px; }
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; font-size: 13px; font-weight: 600; color: #5a3a28; margin-bottom: 4px; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 12px; border: 1px solid #d4c5b3; border-radius: 6px; font-size: 14px; font-family: inherit; background: #faf8f5; }
+        .form-group textarea { min-height: 200px; resize: vertical; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: #c4a882; box-shadow: 0 0 0 3px rgba(196,168,130,0.15); }
+        .btn { padding: 10px 24px; border: none; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .btn-primary { background: #5a3a28; color: #fff; }
+        .btn-primary:hover { background: #3c2415; }
+        .btn-primary:disabled { background: #b0a090; cursor: not-allowed; }
+        .btn-approve { background: #5a8a5a; color: #fff; }
+        .btn-approve:hover { background: #4a7a4a; }
+        .btn-reject { background: #8a4a4a; color: #fff; }
+        .btn-reject:hover { background: #7a3a3a; }
+        .side-by-side { display: none; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 24px; }
+        .side-by-side.visible { display: grid; }
+        .text-panel { background: #fff; border-radius: 8px; border: 1px solid #e0d5c8; overflow: hidden; }
+        .panel-header { padding: 12px 16px; font-size: 13px; font-weight: 600; border-bottom: 1px solid #e0d5c8; }
+        .panel-header.source { background: #f0ebe4; color: #5a3a28; }
+        .panel-header.translation { background: #e8f0e8; color: #3a5a3a; }
+        .panel-body { padding: 16px; font-size: 14px; line-height: 1.8; max-height: 500px; overflow-y: auto; white-space: pre-wrap; }
+        .review-panel, .editing-panel, .result-panel { display: none; background: #fff; border-radius: 8px; padding: 24px; border: 1px solid #e0d5c8; margin-top: 16px; }
+        .review-panel.visible, .editing-panel.visible, .result-panel.visible { display: block; }
+        .review-panel h3, .editing-panel h3, .result-panel h3 { font-size: 16px; color: #3c2415; margin-bottom: 16px; }
+        .radio-group { display: flex; gap: 24px; margin-bottom: 16px; }
+        .radio-group label { display: flex; align-items: center; gap: 6px; font-size: 14px; cursor: pointer; }
+        .edit-textarea { display: none; width: 100%; min-height: 200px; padding: 12px; border: 1px solid #d4c5b3; border-radius: 6px; font-size: 14px; font-family: inherit; line-height: 1.8; resize: vertical; margin-bottom: 12px; }
+        .edit-textarea.visible { display: block; }
+        .notes-input { width: 100%; padding: 10px 12px; border: 1px solid #d4c5b3; border-radius: 6px; font-size: 14px; font-family: inherit; margin-bottom: 16px; }
+        .changes-list { list-style: none; padding: 0; }
+        .changes-list li { padding: 8px 12px; margin-bottom: 6px; background: #faf8f5; border-left: 3px solid #c4a882; border-radius: 0 4px 4px 0; font-size: 13px; }
+        .checklist { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-top: 12px; }
+        .checklist-item { padding: 12px; background: #faf8f5; border-radius: 6px; border: 1px solid #e0d5c8; }
+        .checklist-item h4 { font-size: 13px; color: #5a3a28; margin-bottom: 4px; }
+        .checklist-item p { font-size: 12px; color: #666; }
+        .glossary-toggle { position: fixed; right: 0; top: 50%; transform: translateY(-50%); background: #5a3a28; color: #fff; padding: 12px 8px; border-radius: 6px 0 0 6px; cursor: pointer; writing-mode: vertical-rl; font-size: 12px; font-weight: 600; z-index: 100; }
+        .glossary-sidebar { position: fixed; right: -320px; top: 0; width: 320px; height: 100vh; background: #fff; border-left: 1px solid #e0d5c8; padding: 16px; overflow-y: auto; transition: right 0.3s; z-index: 99; box-shadow: -4px 0 12px rgba(0,0,0,0.05); }
+        .glossary-sidebar.open { right: 0; }
+        .glossary-sidebar h3 { font-size: 16px; color: #3c2415; margin-bottom: 12px; }
+        .glossary-search { width: 100%; padding: 8px 10px; border: 1px solid #d4c5b3; border-radius: 6px; font-size: 13px; margin-bottom: 12px; }
+        .glossary-term { padding: 8px 0; border-bottom: 1px solid #f0ebe4; font-size: 13px; }
+        .glossary-term .en { color: #3c2415; font-weight: 600; }
+        .glossary-term .zh { color: #5a8a5a; }
+        .glossary-term .note { color: #999; font-size: 11px; display: block; margin-top: 2px; }
+        .spinner { display: none; align-items: center; gap: 8px; margin-top: 12px; font-size: 14px; color: #5a3a28; }
+        .spinner.visible { display: flex; }
+        .spinner::before { content: ''; width: 18px; height: 18px; border: 2px solid #e0d5c8; border-top-color: #5a3a28; border-radius: 50%; animation: spin 0.8s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @media (max-width: 768px) { .side-by-side.visible { grid-template-columns: 1fr; } .checklist { grid-template-columns: 1fr; } .radio-group { flex-direction: column; gap: 8px; } }
+    </style>
+</head>
+<body>
+<div class="demo-banner">
+    This is a demo version with pre-loaded sample data. For the full app with live AI translation, <a href="../../bahai-chinese-translation-workbench.html">run the project locally</a>.
+</div>
+<div class="header"><h1>Bahai Chinese Translation Workbench</h1><p>AI-Assisted Sacred Writings Translation Pipeline (Demo)</p></div>
+<div class="progress-bar">
+    <div class="stage-step"><div class="stage-circle active" id="circle-1">1</div><span class="stage-label active" id="label-1">Translation</span></div>
+    <div class="stage-connector" id="conn-1"></div>
+    <div class="stage-step"><div class="stage-circle" id="circle-2">2</div><span class="stage-label" id="label-2">Review</span></div>
+    <div class="stage-connector" id="conn-2"></div>
+    <div class="stage-step"><div class="stage-circle" id="circle-3">3</div><span class="stage-label" id="label-3">Editing</span></div>
+</div>
+<div class="container">
+    <div class="input-section" id="input-section">
+        <h2>New Translation</h2>
+        <div class="form-group"><label for="doc-title">Document Title</label><input type="text" id="doc-title" value="Gleanings from the Writings of Baha'u'llah, Section I"></div>
+        <div class="form-group"><label for="source-lang">Source Language</label><select id="source-lang"><option value="en" selected>English</option><option value="ar">Arabic</option><option value="fa">Persian</option></select></div>
+        <div class="form-group"><label for="source-text">Source Text</label><textarea id="source-text">The tabernacle of unity hath been raised; regard ye not one another as strangers. Ye are the fruits of one tree, and the leaves of one branch. We cherish the hope that the light of justice may shine upon the world and sanctify it from tyranny. If the rulers and kings of the earth, the symbols of the power of God, exalted be His glory, arise and resolve to dedicate themselves to whatever will promote the highest interests of the whole of humanity, the reign of justice will assuredly be established amongst the children of men, and the effulgence of its light will envelop the whole earth.</textarea></div>
+        <button class="btn btn-primary" id="btn-translate" onclick="startTranslation()">Start Translation</button>
+        <div class="spinner" id="spinner-translate">Translating with AI... This may take a moment.</div>
+    </div>
+    <div class="side-by-side" id="side-by-side">
+        <div class="text-panel"><div class="panel-header source">Source Text</div><div class="panel-body" id="panel-source"></div></div>
+        <div class="text-panel"><div class="panel-header translation" id="panel-translation-header">Chinese Translation (Stage 1 — AI)</div><div class="panel-body" id="panel-translation"></div></div>
+    </div>
+    <div class="review-panel" id="review-panel">
+        <h3>Stage 2: Translation Review (Human Governor)</h3>
+        <p style="font-size:13px; color:#666; margin-bottom:16px;">Review the AI translation against the source text. Check for meaning accuracy, theological correctness, and completeness.</p>
+        <div class="radio-group">
+            <label><input type="radio" name="decision" value="approve" onchange="onDecisionChange(this.value)"> Approve</label>
+            <label><input type="radio" name="decision" value="edit" onchange="onDecisionChange(this.value)"> Edit</label>
+            <label><input type="radio" name="decision" value="reject" onchange="onDecisionChange(this.value)"> Reject</label>
+        </div>
+        <textarea class="edit-textarea" id="edit-textarea" placeholder="Edit the translation here..."></textarea>
+        <input type="text" class="notes-input" id="review-notes" placeholder="Reviewer notes (optional)">
+        <button class="btn btn-approve" id="btn-review" onclick="submitReview()" disabled>Submit Review</button>
+    </div>
+    <div class="editing-panel" id="editing-panel">
+        <h3>Stage 3: AI Editing</h3>
+        <p style="font-size:13px; color:#666; margin-bottom:16px;">The AI editor will refine grammar, punctuation, tone, and terminology uniformity based on the approved translation.</p>
+        <button class="btn btn-primary" id="btn-edit" onclick="runEditing()">Run Editing Agent</button>
+        <div class="spinner" id="spinner-edit">Editing with AI... Checking accuracy, beauty, and consistency.</div>
+    </div>
+    <div class="result-panel" id="result-panel">
+        <h3>Editing Complete</h3>
+        <h4 style="font-size:14px; color:#5a3a28; margin:16px 0 8px;">Changes Made</h4>
+        <ul class="changes-list" id="changes-list"></ul>
+        <h4 style="font-size:14px; color:#5a3a28; margin:16px 0 8px;">Three-Standard Checklist</h4>
+        <div class="checklist" id="checklist"></div>
+    </div>
+</div>
+<div class="glossary-toggle" onclick="toggleGlossary()">Glossary</div>
+<div class="glossary-sidebar" id="glossary-sidebar">
+    <h3>Terminology Glossary</h3>
+    <input type="text" class="glossary-search" id="glossary-search" placeholder="Search terms..." oninput="filterGlossary()">
+    <div id="glossary-list"></div>
+</div>
+<script>
+// ---- DEMO DATA ----
+const SAMPLE_SOURCE = document.getElementById('source-text').value;
+
+const SAMPLE_TRANSLATION = "团结的帐幕已经高高举起；你们不应再把彼此视为陌生人。你们是同一棵树上的果实，同一根枝条上的叶子。我们殷切盼望，正义之光能照耀全世界，使其从暴政中得到净化。若地上的统治者和君王们——上帝威权的象征，愿祂的荣耀被颂扬——奋起决心，致力于促进全人类的最高利益，正义的统治必将在人类的子孙中得以确立，其光辉必将普照大地。";
+
+const SAMPLE_EDITED = "团结的帐幕已经高举；你们不应视彼此为陌生人。你们乃同一棵树上的果实，同一枝条上的叶子。我们殷切期望，正义之光得以照耀全世界，使其从暴政中获得净化。若地上的统治者与君王们——上帝威权之象征，愿祂的荣耀被颂扬——奋起决心，致力于促进全人类之最高利益，正义之治必将在人类子孙中确立，其光辉必将普照大地。";
+
+const SAMPLE_CHANGES = [
+    "\"高高举起\" → \"高举\"：简洁化，更符合经典文风",
+    "\"同一根枝条\" → \"同一枝条\"：去掉不必要的量词，使表达更庄重",
+    "\"殷切盼望\" → \"殷切期望\"：\"期望\" 在正式文体中更为常用",
+    "\"能照耀\" → \"得以照耀\"：使用 \"得以\" 增强正式语感",
+    "\"使其从暴政中得到净化\" → \"使其从暴政中获得净化\"：\"获得\" 较 \"得到\" 更为典雅",
+    "\"的统治者和君王们\" → \"的统治者与君王们\"：\"与\" 在正式文体中优于 \"和\"",
+    "\"上帝威权的象征\" → \"上帝威权之象征\"：使用 \"之\" 替代 \"的\"，增添古典韵味",
+    "\"促进全人类的最高利益\" → \"促进全人类之最高利益\"：统一使用 \"之\"",
+    "\"正义的统治\" → \"正义之治\"：更简练典雅",
+    "\"在人类的子孙中得以确立\" → \"在人类子孙中确立\"：精简表达"
+];
+
+const SAMPLE_CHECKLIST = {
+    accuracy: "翻译忠实传达原文含义。所有核心概念——团结的帐幕、同一棵树的比喻、正义之光——均准确呈现，未有增添或遗漏。",
+    beauty: "经编辑后，文风更为庄重典雅。使用 \"之\" 替代部分 \"的\"，采用更精练的表达，整体语感更接近经典神圣经典的翻译风格。",
+    consistency: "术语使用一致，标点符号统一采用中文标点（，。；：——）。\"上帝\" \"正义\" \"人类\" 等核心词汇的翻译在全文中保持统一。"
+};
+
+const glossaryData = [
+    { english: "Baha'u'llah", chinese: "巴哈欧拉", notes: "Founder of the Baha'i Faith. Always use this transliteration." },
+    { english: "Abdu'l-Baha", chinese: "阿博都-巴哈", notes: "Son of Baha'u'llah. Title meaning 'Servant of Baha'." },
+    { english: "the Guardian", chinese: "圣护", notes: "Shoghi Effendi. Use '圣护' in formal sacred text contexts." },
+    { english: "Shoghi Effendi", chinese: "守基·阿芬第", notes: "Guardian of the Baha'i Faith." },
+    { english: "the Bab", chinese: "巴布", notes: "Herald of the Baha'i Faith. Title meaning 'the Gate'." },
+    { english: "Universal House of Justice", chinese: "世界正义院", notes: "Supreme governing institution of the Baha'i Faith." },
+    { english: "National Spiritual Assembly", chinese: "总灵理会", notes: "National governing body. Abbreviated as NSA." },
+    { english: "Local Spiritual Assembly", chinese: "地方灵理会", notes: "Local governing body." },
+    { english: "Manifestation of God", chinese: "上帝的显圣者", notes: "Central theological term for divine messengers." },
+    { english: "the Covenant", chinese: "圣约", notes: "The binding agreement between God and humanity." },
+    { english: "the Word of God", chinese: "上帝之言", notes: "Sacred scripture. Elevated register required." },
+    { english: "Holy Writings", chinese: "圣典", notes: "Collective term for Baha'i sacred texts." },
+    { english: "consultation", chinese: "磋商", notes: "Baha'i decision-making process. Not '咨询'." },
+    { english: "service", chinese: "服务", notes: "In spiritual context, service to humanity and God." },
+    { english: "unity", chinese: "团结", notes: "Core Baha'i principle. Also '统一' in some contexts." },
+    { english: "the Kitab-i-Aqdas", chinese: "《亚格达斯经》", notes: "The Most Holy Book. Always use book title markers." },
+    { english: "the Kitab-i-Iqan", chinese: "《伊甘经》", notes: "The Book of Certitude." },
+    { english: "the Hidden Words", chinese: "《隐言经》", notes: "Collection of short spiritual passages by Baha'u'llah." },
+    { english: "Tablets", chinese: "书简", notes: "Letters and epistles by Baha'u'llah or Abdu'l-Baha." },
+    { english: "the Blessed Beauty", chinese: "天佑美尊", notes: "Title of Baha'u'llah used in devotional contexts." }
+];
+
+// ---- STATE ----
+let currentStage = 1;
+let approvedTranslation = '';
+
+// ---- GLOSSARY ----
+function renderGlossary(terms) {
+    document.getElementById('glossary-list').innerHTML = terms.map(t =>
+        '<div class="glossary-term"><span class="en">' + t.english + '</span> &rarr; <span class="zh">' + t.chinese + '</span>' +
+        (t.notes ? '<span class="note">' + t.notes + '</span>' : '') + '</div>'
+    ).join('');
+}
+function filterGlossary() {
+    var q = document.getElementById('glossary-search').value.toLowerCase();
+    renderGlossary(glossaryData.filter(function(t) {
+        return t.english.toLowerCase().indexOf(q) !== -1 || t.chinese.indexOf(q) !== -1;
+    }));
+}
+function toggleGlossary() {
+    document.getElementById('glossary-sidebar').classList.toggle('open');
+}
+renderGlossary(glossaryData);
+
+// ---- PROGRESS BAR ----
+function updateProgress(stage, status) {
+    for (var i = 1; i <= 3; i++) {
+        var c = document.getElementById('circle-' + i);
+        var l = document.getElementById('label-' + i);
+        c.className = 'stage-circle';
+        l.className = 'stage-label';
+        if (i < stage || (i === stage && status === 'completed')) {
+            c.classList.add('completed');
+            c.textContent = '\u2713';
+            l.classList.add('completed');
+        } else if (i === stage) {
+            c.classList.add('active');
+            l.classList.add('active');
+        } else {
+            c.textContent = i;
+        }
+        if (i < 3) {
+            var cn = document.getElementById('conn-' + i);
+            cn.className = 'stage-connector';
+            if (i < stage || (i === stage && status === 'completed')) cn.classList.add('completed');
+        }
+    }
+}
+
+// ---- STAGE 1: TRANSLATION ----
+function startTranslation() {
+    var title = document.getElementById('doc-title').value.trim();
+    var sourceText = document.getElementById('source-text').value.trim();
+    if (!title || !sourceText) { alert('Please enter a document title and source text.'); return; }
+
+    document.getElementById('btn-translate').disabled = true;
+    document.getElementById('spinner-translate').classList.add('visible');
+
+    // Simulate AI translation with 2-second delay
+    setTimeout(function() {
+        document.getElementById('spinner-translate').classList.remove('visible');
+        document.getElementById('input-section').style.display = 'none';
+        document.getElementById('side-by-side').classList.add('visible');
+        document.getElementById('panel-source').textContent = sourceText;
+        document.getElementById('panel-translation').textContent = SAMPLE_TRANSLATION;
+        document.getElementById('panel-translation-header').textContent = 'Chinese Translation (Stage 1 \u2014 AI)';
+
+        currentStage = 2;
+        updateProgress(2, 'active');
+        document.getElementById('review-panel').classList.add('visible');
+        document.getElementById('edit-textarea').value = SAMPLE_TRANSLATION;
+    }, 2000);
+}
+
+// ---- STAGE 2: REVIEW ----
+function onDecisionChange(v) {
+    document.getElementById('edit-textarea').classList.toggle('visible', v === 'edit');
+    var btn = document.getElementById('btn-review');
+    btn.disabled = false;
+    btn.className = 'btn';
+    if (v === 'reject') { btn.classList.add('btn-reject'); btn.textContent = 'Reject'; }
+    else if (v === 'approve') { btn.classList.add('btn-approve'); btn.textContent = 'Approve Translation'; }
+    else { btn.classList.add('btn-approve'); btn.textContent = 'Submit Edited Translation'; }
+}
+
+function submitReview() {
+    var radios = document.querySelectorAll('input[name="decision"]');
+    var decision = '';
+    for (var i = 0; i < radios.length; i++) { if (radios[i].checked) decision = radios[i].value; }
+    if (!decision) return;
+
+    if (decision === 'reject') {
+        alert('Translation rejected. In the full app, the translator would be notified to revise.');
+        return;
+    }
+
+    if (decision === 'edit') {
+        approvedTranslation = document.getElementById('edit-textarea').value.trim();
+        if (!approvedTranslation) { alert('Please enter your edited translation.'); return; }
+    } else {
+        approvedTranslation = SAMPLE_TRANSLATION;
+    }
+
+    // Move to Stage 3
+    document.getElementById('review-panel').classList.remove('visible');
+    document.getElementById('panel-translation').textContent = approvedTranslation;
+    document.getElementById('panel-translation-header').textContent = 'Chinese Translation (Stage 2 \u2014 Reviewed)';
+    updateProgress(2, 'completed');
+    updateProgress(3, 'active');
+    document.getElementById('editing-panel').classList.add('visible');
+}
+
+// ---- STAGE 3: EDITING ----
+function runEditing() {
+    document.getElementById('btn-edit').disabled = true;
+    document.getElementById('spinner-edit').classList.add('visible');
+
+    // Simulate AI editing with 2-second delay
+    setTimeout(function() {
+        document.getElementById('spinner-edit').classList.remove('visible');
+        document.getElementById('editing-panel').classList.remove('visible');
+        document.getElementById('result-panel').classList.add('visible');
+
+        // Update translation panel with edited text
+        document.getElementById('panel-translation').textContent = SAMPLE_EDITED;
+        document.getElementById('panel-translation-header').textContent = 'Chinese Translation (Stage 3 \u2014 Edited)';
+
+        // Render changes list
+        document.getElementById('changes-list').innerHTML = SAMPLE_CHANGES.map(function(c) {
+            return '<li>' + c + '</li>';
+        }).join('');
+
+        // Render checklist
+        document.getElementById('checklist').innerHTML =
+            '<div class="checklist-item"><h4>Accuracy \u51C6\u786E</h4><p>' + SAMPLE_CHECKLIST.accuracy + '</p></div>' +
+            '<div class="checklist-item"><h4>Beauty \u6587\u98CE\u4F18\u7F8E</h4><p>' + SAMPLE_CHECKLIST.beauty + '</p></div>' +
+            '<div class="checklist-item"><h4>Consistency \u98CE\u683C\u4E00\u81F4</h4><p>' + SAMPLE_CHECKLIST.consistency + '</p></div>';
+
+        updateProgress(3, 'completed');
+    }, 2000);
+}
+</script>
+</body>
+</html>

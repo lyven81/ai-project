@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bahai Chinese Translation Workbench - Source Code</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #222;
+            background-color: #ffffff;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .back-nav {
+            margin-bottom: 20px;
+        }
+
+        .back-nav a {
+            color: #007BFF;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .back-nav a:hover {
+            text-decoration: underline;
+        }
+
+        .project-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #2196F3, #1565C0);
+            color: white;
+            border-radius: 10px;
+        }
+
+        .project-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .project-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .content-section {
+            margin: 40px 0;
+            padding: 30px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border-left: 5px solid #2196F3;
+        }
+
+        .content-section h2 {
+            color: #2196F3;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .content-section h3 {
+            color: #333;
+            margin: 20px 0 10px 0;
+            font-size: 1.3rem;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #2196F3;
+            margin: 20px 0;
+        }
+
+        .code-container {
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        .code-header {
+            color: #64b5f6;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .code-block {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #d4d4d4;
+        }
+
+        .code-comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+
+        .code-keyword {
+            color: #569cd6;
+        }
+
+        .code-string {
+            color: #ce9178;
+        }
+
+        .code-function {
+            color: #dcdcaa;
+        }
+
+        .code-number {
+            color: #b5cea8;
+        }
+
+        .demo-links {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .demo-btn {
+            display: inline-block;
+            background-color: #007BFF;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .demo-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .demo-btn.secondary {
+            background-color: #2196F3;
+        }
+
+        .demo-btn.secondary:hover {
+            background-color: #1565C0;
+        }
+
+        .file-tree {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            background-color: #f4f4f4;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        @media (max-width: 768px) {
+            .project-header h1 {
+                font-size: 2rem;
+            }
+
+            .project-header p {
+                font-size: 1rem;
+            }
+
+            .demo-btn {
+                margin: 5px;
+                padding: 10px 20px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="bahai-chinese-translation-workbench.html">&larr; Back to Project Overview</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>Bahai Chinese Translation Workbench</h1>
+            <p>Core Source Code &amp; Translation Pipeline Implementation</p>
+
+            <div class="badges">
+                <span class="badge">Claude Sonnet 4.6</span>
+                <span class="badge">FastAPI</span>
+                <span class="badge">SQLite</span>
+                <span class="badge">Anthropic SDK</span>
+            </div>
+        </div>
+
+        <div class="highlight-box">
+            <h3>About This Code Showcase</h3>
+            <p><strong>This curated code showcase demonstrates the core translation pipeline: how the AI translation prompt encodes three quality standards with glossary injection, how the stage gate logic enforces human governance, and how the recursive unwrapping function handles structured AI output.</strong></p>
+            <p>Environment configuration and deployment scripts are omitted for clarity. This showcase highlights the AI agent prompts, backend stage logic, and output parsing.</p>
+        </div>
+
+        <div class="content-section">
+            <h2>File Structure</h2>
+
+            <div class="file-tree">
+projects/bahai-chinese-translation-workbench/
+├── app.py              # FastAPI server — routes, stage gate logic
+├── agents.py           # AI agents — translation &amp; editing prompts
+├── db.py               # SQLite database — schema, CRUD, audit log
+├── glossary.json       # 20-term terminology glossary (JSON)
+├── index.html          # Frontend UI — 3-stage pipeline interface
+├── requirements.txt    # Python dependencies
+├── Dockerfile          # Container build for Cloud Run
+├── start.bat           # Windows quick-start script
+└── workbench.db        # SQLite database file (auto-created)
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Three-Standard Translation Prompt</h2>
+            <p>The translation agent's system prompt encodes the three quality standards and injects the full terminology glossary. This is the core of how the AI understands the translation requirements.</p>
+
+            <div class="code-container">
+                <div class="code-header">agents.py &mdash; TRANSLATION_SYSTEM_PROMPT</div>
+                <div class="code-block">
+<span class="code-keyword">TRANSLATION_SYSTEM_PROMPT</span> = <span class="code-string">"""You are translating Baha'i Sacred Writings into Chinese (简体中文).
+
+Three standards govern your translation:
+1. ACCURACY (准确): Faithful to the original meaning. Never add, omit, or reinterpret.
+2. BEAUTY (文风优美): Elevated, literary Chinese register. Not colloquial.
+   The language must carry the weight and dignity of sacred scripture.
+   Follow the poetic, classical-influenced modern Chinese style —
+   not contemporary casual language.
+3. CONSISTENCY (风格一致): Consistent with the translation style established
+   by Shoghi Effendi (the Guardian). Use formal, classical-influenced
+   modern Chinese. Use Chinese punctuation marks (，。；：！？""''《》).
+
+TERMINOLOGY GLOSSARY — You MUST use these approved translations:
+{glossary_block}
+
+RULES:
+- Translate the complete text. Do not summarize or skip any passage.
+- Preserve paragraph structure from the source.
+- For terms in the glossary, use the approved Chinese translation exactly.
+- For proper nouns not in the glossary, transliterate and add the original
+  in parentheses on first occurrence.
+- Do not add explanatory notes or commentary within the translation itself.
+
+Return your output as JSON with these keys:
+- "translation": the complete Chinese translation (string)
+- "term_usage": list of glossary terms you applied
+- "notes": any translator notes on difficult passages or choices made
+
+Return ONLY the JSON object, no other text."""</span>
+                </div>
+            </div>
+
+            <div class="code-container">
+                <div class="code-header">agents.py &mdash; translation_agent() function</div>
+                <div class="code-block">
+<span class="code-keyword">def</span> <span class="code-function">translation_agent</span>(source_text, source_lang, glossary):
+    <span class="code-string">"""Stage 1: Generate Chinese translation draft from source text."""</span>
+    client = _get_client()
+    glossary_block = format_glossary_for_prompt(glossary)
+    system_prompt = TRANSLATION_SYSTEM_PROMPT.replace(<span class="code-string">"{glossary_block}"</span>, glossary_block)
+
+    lang_label = {<span class="code-string">"en"</span>: <span class="code-string">"English"</span>, <span class="code-string">"ar"</span>: <span class="code-string">"Arabic"</span>, <span class="code-string">"fa"</span>: <span class="code-string">"Persian"</span>}.get(source_lang, <span class="code-string">"English"</span>)
+
+    response = client.messages.create(
+        model=MODEL,
+        max_tokens=<span class="code-number">4096</span>,
+        temperature=<span class="code-number">0.3</span>,
+        system=system_prompt,
+        messages=[{<span class="code-string">"role"</span>: <span class="code-string">"user"</span>, <span class="code-string">"content"</span>: f<span class="code-string">"Translate the following {lang_label} text into Chinese:\n\n{source_text}"</span>}],
+    )
+
+    response_text = response.content[<span class="code-number">0</span>].text
+    parsed = _parse_json_response(response_text)
+    <span class="code-keyword">if</span> parsed <span class="code-keyword">and</span> <span class="code-string">"translation"</span> <span class="code-keyword">in</span> parsed:
+        result = {<span class="code-string">"translation"</span>: parsed[<span class="code-string">"translation"</span>],
+                  <span class="code-string">"term_usage"</span>: parsed.get(<span class="code-string">"term_usage"</span>, []),
+                  <span class="code-string">"notes"</span>: parsed.get(<span class="code-string">"notes"</span>, <span class="code-string">""</span>)}
+    <span class="code-keyword">else</span>:
+        result = {<span class="code-string">"translation"</span>: response_text, <span class="code-string">"term_usage"</span>: [],
+                  <span class="code-string">"notes"</span>: <span class="code-string">"Warning: Could not parse structured response."</span>}
+    <span class="code-keyword">return</span> result
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Stage Gate Logic</h2>
+            <p>The backend enforces strict stage sequencing. The review endpoint validates that the document is at Stage 2 and routes based on the human reviewer's decision (approve, edit, or reject).</p>
+
+            <div class="code-container">
+                <div class="code-header">app.py &mdash; Review endpoint (Stage 2 gate)</div>
+                <div class="code-block">
+<span class="code-keyword">@app</span>.post(<span class="code-string">"/api/documents/{doc_id}/review"</span>)
+<span class="code-keyword">def</span> <span class="code-function">review_doc</span>(doc_id: int, req: ReviewRequest):
+    doc = get_document(doc_id)
+    <span class="code-keyword">if</span> doc <span class="code-keyword">is None</span>:
+        <span class="code-keyword">raise</span> HTTPException(status_code=<span class="code-number">404</span>, detail=<span class="code-string">"Document not found"</span>)
+    <span class="code-keyword">if</span> doc[<span class="code-string">"current_stage"</span>] != <span class="code-number">2</span>:
+        <span class="code-keyword">raise</span> HTTPException(status_code=<span class="code-number">400</span>,
+            detail=<span class="code-string">"Document is not at Stage 2 (review)"</span>)
+
+    stages = get_stage_outputs(doc_id)
+    stage1_output = next((s <span class="code-keyword">for</span> s <span class="code-keyword">in</span> stages <span class="code-keyword">if</span> s[<span class="code-string">"stage"</span>] == <span class="code-number">1</span>), <span class="code-keyword">None</span>)
+
+    <span class="code-keyword">if</span> req.decision == <span class="code-string">"approve"</span>:
+        <span class="code-comment"># Pass AI translation as-is to Stage 3</span>
+        save_stage_output(doc_id=doc_id, stage=<span class="code-number">2</span>,
+            input_text=stage1_output[<span class="code-string">"output_text"</span>],
+            output_text=stage1_output[<span class="code-string">"output_text"</span>],
+            operator=<span class="code-string">"human"</span>, human_notes=req.notes)
+        log_audit(doc_id, <span class="code-string">"stage2_approved"</span>)
+        update_document_stage(doc_id, <span class="code-number">3</span>)
+
+    <span class="code-keyword">elif</span> req.decision == <span class="code-string">"edit"</span>:
+        <span class="code-comment"># Use human-edited text for Stage 3</span>
+        save_stage_output(doc_id=doc_id, stage=<span class="code-number">2</span>,
+            input_text=stage1_output[<span class="code-string">"output_text"</span>],
+            output_text=req.edited_text,
+            operator=<span class="code-string">"human"</span>, human_notes=req.notes)
+        log_audit(doc_id, <span class="code-string">"stage2_edited"</span>)
+        update_document_stage(doc_id, <span class="code-number">3</span>)
+
+    <span class="code-keyword">elif</span> req.decision == <span class="code-string">"reject"</span>:
+        <span class="code-comment"># Block — do not advance stage</span>
+        log_audit(doc_id, <span class="code-string">"stage2_rejected"</span>)
+
+    <span class="code-keyword">return</span> _build_response(doc_id)
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Recursive JSON Unwrapping</h2>
+            <p>LLMs sometimes wrap output in markdown code fences or nested JSON. The <code>_unwrap_text</code> function recursively strips these layers to extract the actual translation text.</p>
+
+            <div class="code-container">
+                <div class="code-header">agents.py &mdash; _unwrap_text() function</div>
+                <div class="code-block">
+<span class="code-keyword">def</span> <span class="code-function">_unwrap_text</span>(raw, target_keys=<span class="code-keyword">None</span>):
+    <span class="code-string">"""Recursively unwrap JSON/markdown until plain text is found.
+    target_keys: list of JSON keys to extract
+        (e.g. ['translation', 'edited_text', 'typeset_text'])
+    """</span>
+    <span class="code-keyword">if</span> target_keys <span class="code-keyword">is None</span>:
+        target_keys = [<span class="code-string">"translation"</span>, <span class="code-string">"edited_text"</span>, <span class="code-string">"typeset_text"</span>]
+    text = raw
+    <span class="code-keyword">for</span> _ <span class="code-keyword">in</span> range(<span class="code-number">5</span>):  <span class="code-comment"># Max 5 unwrap iterations</span>
+        text = _strip_markdown_fences(text)
+        <span class="code-keyword">if</span> text.strip().startswith(<span class="code-string">"{"</span>):
+            <span class="code-keyword">try</span>:
+                data = json.loads(text)
+                extracted = <span class="code-keyword">None</span>
+                <span class="code-keyword">for</span> k <span class="code-keyword">in</span> target_keys:
+                    <span class="code-keyword">if</span> k <span class="code-keyword">in</span> data <span class="code-keyword">and</span> isinstance(data[k], str):
+                        extracted = data[k]
+                        <span class="code-keyword">break</span>
+                <span class="code-keyword">if</span> extracted:
+                    text = extracted
+                    <span class="code-keyword">continue</span>
+                <span class="code-keyword">else</span>:
+                    <span class="code-keyword">break</span>
+            <span class="code-keyword">except</span> (json.JSONDecodeError, TypeError):
+                <span class="code-keyword">break</span>
+        <span class="code-keyword">else</span>:
+            <span class="code-keyword">break</span>
+    <span class="code-keyword">return</span> text
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Technical Implementation Notes</h2>
+            <h3>Key Design Decisions</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>Three-standard prompt engineering:</strong> Both translation and editing prompts encode accuracy, beauty, and consistency as explicit evaluation criteria for the AI</li>
+                <li><strong>Glossary injection:</strong> The full 20-term glossary is formatted and injected into every AI call, ensuring theological term consistency across all translations</li>
+                <li><strong>Strict stage gates:</strong> The backend validates stage sequence at every endpoint — documents cannot skip stages or advance without proper authorization</li>
+                <li><strong>Recursive unwrapping:</strong> Up to 5 iterations of markdown/JSON stripping handles the common LLM behavior of wrapping output in code fences</li>
+                <li><strong>Audit trail:</strong> Every action is logged with timestamps, providing full traceability for translation governance</li>
+                <li><strong>Human-in-the-loop:</strong> Stage 2 is always human-operated — the system enforces that no AI output reaches final publication without human review</li>
+            </ul>
+
+            <h3>Why SQLite?</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>Zero configuration:</strong> No database server needed — ideal for a small team translation tool</li>
+                <li><strong>Full audit trail:</strong> Stage outputs and audit logs are stored with timestamps for governance compliance</li>
+                <li><strong>Portable:</strong> The entire database is a single file, making backups and sharing straightforward</li>
+            </ul>
+        </div>
+
+        <div class="demo-links">
+            <a href="projects/bahai-chinese-translation-workbench/demo.html" class="demo-btn">Launch Demo</a>
+            <a href="bahai-chinese-translation-workbench.html" class="demo-btn secondary">View Full Project Details</a>
+        </div>
+
+        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+            <a href="index.html">&larr; Back to Portfolio</a> |
+            <a href="bahai-chinese-translation-workbench.html">View Project Overview</a>
+        </nav>
+    </div>
+</body>
+</html>
