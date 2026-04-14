@@ -13,7 +13,9 @@ Geographic sentiment analysis system with credibility scoring, bias detection, a
 
 ## 🚀 Live Demo
 
-**[🌟 Launch in Google Colab](https://colab.research.google.com/)** | [📹 Video Demo](#)
+**[🌟 Launch AI Assistant Demo](https://lyven81.github.io/ai-project/projects/public-sentiment-collection-agent/demo.html)** — interactive 5-agent sentiment pipeline walkthrough with real coffee-shop review data. No setup required.
+
+*Want to run the full batch pipeline locally? See the "How to Use" section below.*
 
 ## ✨ Features
 

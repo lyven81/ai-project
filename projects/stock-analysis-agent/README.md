@@ -10,7 +10,9 @@ Multi-agent investment analysis system that automates stock screening, fundament
 
 ## 🚀 Live Demo
 
-**[🌟 View Live Demo on Google Colab](https://colab.research.google.com/drive/1Wji69Sq-IqhtMEJTlxIkQ39ZZ5JAXR6w)**
+**[🌟 Launch AI Assistant Demo](https://lyven81.github.io/ai-project/projects/stock-analysis-agent/demo.html)** — interactive 5-agent stock analysis walkthrough using 99 Speedmart's Q3 2025 report. No setup required.
+
+*Also available as a full Colab notebook:* [View Live Demo on Google Colab](https://colab.research.google.com/drive/1Wji69Sq-IqhtMEJTlxIkQ39ZZ5JAXR6w)
 
 ## ✨ Features
 

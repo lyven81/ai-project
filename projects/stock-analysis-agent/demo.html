@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Analysis Agent — AI Pipeline Demo (99 Speed Mart Q3 2025)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; line-height: 1.6; color: #2B2B2B; background-color: #ffffff; }
+        .container { display: flex; min-height: 100vh; }
+        .left-column { width: 30%; background-color: #FFF4EA; padding: 40px 30px; position: fixed; height: 100vh; overflow-y: auto; border-right: 1px solid #F0DAC2; }
+        .left-column h1 { font-size: 1.8em; font-weight: bold; color: #2B2B2B; margin-bottom: 10px; }
+        .left-column h2 { font-size: 1em; font-weight: 400; color: #666; margin-bottom: 20px; }
+        .intro p { color: #444; margin-bottom: 20px; line-height: 1.8; }
+        .mcp-badge { display: inline-block; padding: 6px 12px; background-color: #ffffff; color: #C25F1A; border-radius: 20px; font-size: 0.8em; font-weight: 600; margin-top: 10px; border: 1px solid #E87722; }
+        .home-link-section { margin: 20px 0; }
+        .home-link-btn { display: inline-block; padding: 12px 30px; background-color: #E87722; color: #fff; text-decoration: none; border-radius: 5px; font-weight: 500; transition: background-color 0.3s ease; text-align: center; width: 100%; }
+        .home-link-btn:hover { background-color: #C25F1A; }
+        .contact { margin-top: 30px; }
+        .contact h2 { font-size: 1.2em; color: #2B2B2B; margin-bottom: 15px; font-weight: 600; }
+        .contact p { color: #444; margin-bottom: 15px; }
+        .contact ul { list-style: none; }
+        .contact li { margin-bottom: 10px; color: #444; }
+        .contact a { color: #E87722; text-decoration: none; }
+        .contact a:hover { text-decoration: underline; color: #C25F1A; }
+        .pipeline-box { background-color: #ffffff; border-left: 4px solid #E87722; padding: 15px 18px; border-radius: 6px; margin-top: 15px; font-size: 0.9em; color: #444; border-top: 1px solid #F0DAC2; border-right: 1px solid #F0DAC2; border-bottom: 1px solid #F0DAC2; }
+        .pipeline-box strong { color: #C25F1A; }
+        .right-column { width: 70%; margin-left: 30%; padding: 40px 50px; background-color: #ffffff; }
+        .chatbot-header { text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 2px solid #F0DAC2; }
+        .chatbot-header h1 { font-size: 2.2em; color: #2B2B2B; margin-bottom: 10px; font-weight: 600; }
+        .chatbot-header p { font-size: 1.05em; color: #666; line-height: 1.8; }
+        .db-status { max-width: 900px; margin: 0 auto 20px auto; padding: 12px 16px; background-color: #FFF8F0; border-left: 4px solid #E87722; border-radius: 4px; font-size: 0.9em; color: #2B2B2B; border-top: 1px solid #F0DAC2; border-right: 1px solid #F0DAC2; border-bottom: 1px solid #F0DAC2; }
+        .db-status strong { color: #C25F1A; }
+        .chat-container { max-width: 900px; margin: 0 auto; background-color: #FFFAF4; border-radius: 10px; padding: 30px; box-shadow: 0 2px 12px rgba(232,119,34,0.08); border: 1px solid #F0DAC2; }
+        .agent-group { margin-bottom: 25px; }
+        .agent-group-header { display: flex; align-items: center; gap: 14px; padding: 12px 16px; background-color: #ffffff; border-radius: 8px; margin-bottom: 12px; border: 1px solid #F0DAC2; border-left: 4px solid #E87722; }
+        .agent-num { flex: 0 0 auto; width: 38px; height: 38px; border-radius: 50%; background-color: #E87722; color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.1em; }
+        .agent-meta strong { display: block; color: #2B2B2B; font-size: 1.05em; font-weight: 600; }
+        .agent-meta span { display: block; color: #666; font-size: 0.85em; margin-top: 2px; }
+        .question-btn { display: block; width: 100%; padding: 14px 18px; margin-bottom: 10px; background-color: #ffffff; color: #2B2B2B; border: 1px solid #F0DAC2; border-left: 3px solid #E87722; border-radius: 6px; text-align: left; cursor: pointer; font-size: 0.95em; font-family: 'Poppins', sans-serif; transition: all 0.25s ease; }
+        .question-btn:hover { background-color: #FFF4EA; border-color: #E87722; transform: translateX(3px); box-shadow: 0 2px 8px rgba(232,119,34,0.15); }
+        .chat-messages { min-height: 200px; margin-top: 25px; padding-top: 20px; border-top: 1px solid #F0DAC2; }
+        .chat-messages .placeholder { text-align: center; color: #999; font-style: italic; }
+        .message { margin-bottom: 20px; padding: 15px 20px; border-radius: 10px; animation: fadeIn 0.5s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .message.user { background-color: #E87722; color: #ffffff; margin-left: 50px; text-align: right; font-weight: 500; }
+        .message.agent { background-color: #ffffff; color: #2B2B2B; margin-right: 50px; border: 1px solid #F0DAC2; }
+        .message.agent .agent-label { font-weight: 600; color: #E87722; margin-bottom: 8px; display: block; font-size: 0.85em; letter-spacing: 0.5px; }
+        .message.agent table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 0.9em; }
+        .message.agent th, .message.agent td { border: 1px solid #F0DAC2; padding: 8px 12px; text-align: left; }
+        .message.agent th { background-color: #E87722; font-weight: 600; color: #ffffff; }
+        .message.agent td { background-color: #ffffff; }
+        .insight-box { margin-top: 15px; padding: 15px; background-color: #FFF4EA; border-radius: 6px; border-left: 4px solid #E87722; color: #2B2B2B; }
+        .insight-box strong { color: #C25F1A; display: block; margin-bottom: 4px; }
+        footer { text-align: center; padding: 30px 20px; background-color: #2B2B2B; color: #fff; margin-top: 50px; margin-left: 30%; }
+        footer p { margin: 0; font-size: 0.9em; }
+        @media (max-width: 768px) {
+            .container { flex-direction: column; }
+            .left-column { width: 100%; position: relative; height: auto; }
+            .right-column { width: 100%; margin-left: 0; padding: 30px 20px; }
+            .message.user { margin-left: 20px; }
+            .message.agent { margin-right: 20px; }
+            footer { margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <aside class="left-column">
+            <header>
+                <h1>Lee Yih Ven</h1>
+                <h2>AI Project Portfolio</h2>
+            </header>
+            <section class="intro">
+                <p>Ask this AI assistant about a Bursa-listed stock — how to screen it, read its margins, judge its moat, check its dividend track record, and synthesise an analyst-ready report.</p>
+                <div class="mcp-badge">Stock Analysis • Gemini 2.5 • Bursa MCP • 5-agent pipeline</div>
+            </section>
+            <section class="home-link-section">
+                <a class="home-link-btn" href="https://lyven81.github.io/ai-project/index.html">Home</a>
+            </section>
+            <section class="home-link-section">
+                <a class="home-link-btn" href="https://github.com/lyven81/ai-project/tree/main/projects/stock-analysis-agent">Source Code</a>
+            </section>
+            <section class="contact">
+                <h2>About This App</h2>
+                <p>This demo shows Q&amp;A examples grouped by agent stage, but the production app is a batch pipeline — input a Bursa ticker + its latest quarter report, five agents run in sequence, output is an analyst-ready report covering screening, fundamentals, moat, dividends, and the investment call.</p>
+                <div class="pipeline-box">
+                    <strong>The real 5-agent pipeline:</strong><br>
+                    1. Screening Agent — basic health checks<br>
+                    2. Fundamentals Agent — margins &amp; growth<br>
+                    3. Moat Agent — competitive position<br>
+                    4. Dividends Agent — payout sustainability<br>
+                    5. Reporting Agent — synthesis + investment call
+                </div>
+                <p style="margin-top:15px;">Source report powering this demo: 99 Speed Mart Retail Holdings Berhad (Bursa: 99SMART) — Q3 2025 Unaudited Interim Financial Report (period ended 30 Sept 2025).</p>
+                <ul>
+                    <li>Email: <a href="mailto:yven81@gmail.com">yven81@gmail.com</a></li>
+                    <li>Phone: +6014-9207099</li>
+                </ul>
+            </section>
+        </aside>
+
+        <main class="right-column">
+            <div class="chatbot-header">
+                <h1>Stock Analysis Agent</h1>
+                <p>Bursa Malaysia fundamental-analysis pipeline.<br>Sample case: 99 Speed Mart (99SMART) — Q3 2025 Interim Financial Report.</p>
+            </div>
+
+            <div class="db-status">
+                <strong>Pipeline Input:</strong> 99SMART Q3 2025 • Revenue RM3.04B • PAT RM160.7M • 2,966 outlets • 5 agents • 15 sample analyses
+            </div>
+
+            <div class="chat-container">
+
+                <div class="agent-group">
+                    <div class="agent-group-header">
+                        <div class="agent-num">1</div>
+                        <div class="agent-meta">
+                            <strong>Screening Agent</strong>
+                            <span>Runs the basic health checks and top-line screens</span>
+                        </div>
+                    </div>
+                    <button class="question-btn" onclick="showPreset(1)">What are the basic screening stats for 99SMART Q3 2025?</button>
+                    <button class="question-btn" onclick="showPreset(2)">Does 99SMART pass the top-line growth screen?</button>
+                    <button class="question-btn" onclick="showPreset(3)">Does it pass the profitability screen?</button>
+                </div>
+
+                <div class="agent-group">
+                    <div class="agent-group-header">
+                        <div class="agent-num">2</div>
+                        <div class="agent-meta">
+                            <strong>Fundamentals Agent</strong>
+                            <span>Reads the P&amp;L — margin trends, cost discipline, growth quality</span>
+                        </div>
+                    </div>
+                    <button class="question-btn" onclick="showPreset(4)">How have Q3 2025 margins moved versus Q3 2024?</button>
+                    <button class="question-btn" onclick="showPreset(5)">Is cost of sales growth outpacing revenue growth?</button>
+                    <button class="question-btn" onclick="showPreset(6)">How does the 9-month cumulative performance read?</button>
+                </div>
+
+                <div class="agent-group">
+                    <div class="agent-group-header">
+                        <div class="agent-num">3</div>
+                        <div class="agent-meta">
+                            <strong>Moat Agent</strong>
+                            <span>Assesses competitive position, scale, and barrier to entry</span>
+                        </div>
+                    </div>
+                    <button class="question-btn" onclick="showPreset(7)">What's the scale story — outlet count and geographic coverage?</button>
+                    <button class="question-btn" onclick="showPreset(8)">What do transaction volume and basket economics tell us?</button>
+                    <button class="question-btn" onclick="showPreset(9)">Is the company widening its moat — new channels or markets?</button>
+                </div>
+
+                <div class="agent-group">
+                    <div class="agent-group-header">
+                        <div class="agent-num">4</div>
+                        <div class="agent-meta">
+                            <strong>Dividends Agent</strong>
+                            <span>Tracks payout record, ratio, and sustainability</span>
+                        </div>
+                    </div>
+                    <button class="question-btn" onclick="showPreset(10)">What's the dividend track record for FY2025 so far?</button>
+                    <button class="question-btn" onclick="showPreset(11)">What's the payout ratio and is it sustainable?</button>
+                    <button class="question-btn" onclick="showPreset(12)">Is the balance sheet strong enough to keep paying dividends?</button>
+                </div>
+
+                <div class="agent-group">
+                    <div class="agent-group-header">
+                        <div class="agent-num">5</div>
+                        <div class="agent-meta">
+                            <strong>Reporting Agent</strong>
+                            <span>Synthesises the four upstream agents into an investment call</span>
+                        </div>
+                    </div>
+                    <button class="question-btn" onclick="showPreset(13)">Draft the executive summary for the 99SMART Q3 2025 report.</button>
+                    <button class="question-btn" onclick="showPreset(14)">What are the top 3 investment merits based on Q3 2025?</button>
+                    <button class="question-btn" onclick="showPreset(15)">What are the 3 risks to watch going forward?</button>
+                </div>
+
+                <div class="chat-messages" id="chatMessages">
+                    <p class="placeholder">Click any question above to see that agent stage's output.</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Lee Yih Ven | Data-Driven Solutions</p>
+    </footer>
+
+    <script>
+    const presets = {
+        1: { agent: "Screening Agent", question: "What are the basic screening stats for 99SMART Q3 2025?",
+             headers: ["Metric","Value"],
+             rows: [["Ticker","99SMART (Bursa Malaysia)"],["Q3 2025 revenue","RM 3,037.8 million"],["Q3 2025 PAT","RM 160.7 million"],["9M 2025 revenue","RM 8,357.2 million"],["9M 2025 PAT","RM 457.0 million"],["EPS (9M 2025)","5.44 sen"],["Net assets per share","RM 0.2199"]],
+             insight: "99SMART posted RM3.04B in Q3 revenue and RM160.7M PAT. Cumulative 9-month PAT of RM457M is already 25% ahead of the same period in 2024 — the stock clears basic screening on both growth and scale." },
+        2: { agent: "Screening Agent", question: "Does 99SMART pass the top-line growth screen?",
+             headers: ["Metric","Q3 2025","Q3 2024","YoY"],
+             rows: [["Revenue (RM mil)","3,037.8","2,551.2","+19.1%"],["Gross profit (RM mil)","328.3","269.8","+21.7%"],["Profit from operations (RM mil)","586.8","478.9","+22.5%"],["PAT (RM mil)","160.7","107.2","+49.9%"]],
+             insight: "Yes — PASS. Revenue grew 19.1% YoY and PAT grew 49.9% (normalised PAT +27.5% after stripping out 2024's one-off IPO and bonus expenses). Every top-line line grew double-digit." },
+        3: { agent: "Screening Agent", question: "Does it pass the profitability screen?",
+             headers: ["Margin","Q3 2025","Q3 2024","Movement"],
+             rows: [["GP margin","10.8%","10.6%","+0.2 pp"],["PBT margin","7.0%","5.7%","+1.3 pp"],["PAT margin","5.3%","4.2%","+1.1 pp"],["Normalised PAT margin","5.3%","4.9%","+0.4 pp"]],
+             insight: "PASS — all margin lines expanded YoY. The 1.3 percentage-point lift in PBT margin is particularly healthy: revenue scaled up while cost growth lagged, which means operating leverage is working. Normalised expansion of +0.4 pp confirms the trend is real, not an accounting artefact." },
+
+        4: { agent: "Fundamentals Agent", question: "How have Q3 2025 margins moved versus Q3 2024?",
+             headers: ["Line","Q3 2025 (RM mil)","Q3 2024 (RM mil)","YoY Growth"],
+             rows: [["Revenue","3,037.8","2,551.2","+19.1%"],["Cost of sales","(2,709.5)","(2,281.4)","+18.8%"],["Gross profit","328.3","269.8","+21.7%"],["Operating expenses","(363.1)","(322.4)","+12.6%"],["Finance costs","(12.1)","(11.3)","+6.9%"],["PBT","211.6","145.1","+45.8%"]],
+             insight: "The margin engine is working: cost of sales grew slightly slower than revenue (+18.8% vs +19.1%), opex grew just +12.6%, and finance costs barely moved. Every expense line grew slower than revenue — this is textbook operating leverage." },
+        5: { agent: "Fundamentals Agent", question: "Is cost of sales growth outpacing revenue growth?",
+             headers: ["Cost Line","Growth","Revenue Growth","Verdict"],
+             rows: [["Cost of sales","+18.8%","+19.1%","COGS growing slower — GP margin expands"],["Admin & opex","+12.6%","+19.1%","Clear operating leverage"],["Finance costs","+6.9%","+19.1%","Minimal drag"]],
+             insight: "No — cost growth is well below revenue growth. This is the strongest fundamental signal in the quarter: every cost line expanded slower than the top line. A retailer growing revenue at 19% while opex only grows 13% is extracting real leverage from scale." },
+        6: { agent: "Fundamentals Agent", question: "How does the 9-month cumulative performance read?",
+             headers: ["Metric","9M 2025 (RM mil)","9M 2024 (RM mil)","YoY"],
+             rows: [["Revenue","8,357.2","7,397.0","+13.0%"],["Gross profit","967.8","839.9","+15.2%"],["PBT","604.8","493.1","+22.7%"],["PAT","457.0","365.8","+24.9%"],["Normalised PAT","457.0","386.0","+18.4%"]],
+             insight: "Cumulative 9-month PAT grew 24.9% (normalised +18.4%). 9M PAT margin of 5.5% is up from 4.9% in 2024 — the margin expansion is not a one-quarter fluke; it's been consistent across three quarters." },
+
+        7: { agent: "Moat Agent", question: "What's the scale story — outlet count and geographic coverage?",
+             headers: ["Measure","Value"],
+             rows: [["Outlets (30 Sept 2025)","2,966"],["Net new outlets YoY","+269"],["Target outlets by end-2025","3,000+"],["Annual expansion pace","250 new outlets/year"],["Malaysian state coverage","All states (Kelantan added Oct 2025)"],["International footprint","First China outlet (Fuzhou) opened Aug 2025"]],
+             insight: "99SMART crossed the all-states milestone in October and is on track for 3,000+ outlets by year-end. Opening 250 outlets a year on this base is a compounding physical moat — no Malaysian competitor can replicate it at speed without multi-year capex." },
+        8: { agent: "Moat Agent", question: "What do transaction volume and basket economics tell us?",
+             headers: ["Metric","Q3 2025","Q3 2024","YoY"],
+             rows: [["Transactions","141.8 million","119.9 million","+18.3%"],["Average basket size","RM 21.40","RM 21.40","Flat"],["9M transactions","390.3 million","344.8 million","+13.2%"]],
+             insight: "Transaction volume grew 18.3% while basket size stayed flat at RM21.40. The growth is coming from new customers and new outlets, not price — a cleaner scale signal than margin-led growth. For a daily-essentials retailer, this is exactly the right pattern." },
+        9: { agent: "Moat Agent", question: "Is the company widening its moat — new channels or markets?",
+             headers: ["Initiative","Status","Contribution"],
+             rows: [["Bulk sales e-commerce platform","Active","+RM 15.1M revenue in Q3 vs Q3 2024"],["China expansion (Fuzhou 99 Mini-Mart)","First outlet opened 31 Aug 2025","Prototype — assessing market fit"],["All-state Malaysia coverage","Completed (Kelantan, 26 Oct 2025)","Full-country retail footprint"],["SARA customer acquisition","Ongoing","Broadened consumer base via government assistance initiatives"]],
+             insight: "Four separate moat-widening moves are live at once: bulk e-commerce (already adding revenue), China prototype, complete Malaysian coverage, and SARA-driven customer acquisition. The combination makes the moat wider and deeper without diluting the core model." },
+
+        10:{ agent: "Dividends Agent", question: "What's the dividend track record for FY2025 so far?",
+             headers: ["Dividend","Rate / Share","Amount","Status"],
+             rows: [["First interim","RM 0.0225","RM 189.0 million","Paid 9 June 2025"],["Second interim","2.0 sen","RM 168.0 million","Declared 17 Nov, payable 12 Dec 2025"],["Special interim","0.25 sen","RM 21.0 million","Declared 17 Nov, payable 12 Dec 2025"],["Total FY2025 declared","4.75 sen","RM 378.0 million","—"]],
+             insight: "Three dividends totalling RM378M have been declared for FY2025 — and the year isn't over. The special interim signals confidence in cash generation. FY2024's total was RM100M, so the FY2025 pace is roughly 3.8× the prior year." },
+        11:{ agent: "Dividends Agent", question: "What's the payout ratio and is it sustainable?",
+             headers: ["Metric","Value"],
+             rows: [["9M 2025 PAT","RM 457.0 million"],["Dividends declared FY2025","RM 378.0 million"],["Approx 9M payout ratio","~82.7%"],["9M operating cash flow","RM 787.5 million"],["Dividend coverage by operating cash","2.08×"]],
+             insight: "The 82.7% payout ratio is high by retail-sector norms, but operating cash flow of RM787M covers the RM378M payout more than twice over. The dividend is funded by cash, not borrowing — sustainable at this pace." },
+        12:{ agent: "Dividends Agent", question: "Is the balance sheet strong enough to keep paying dividends?",
+             headers: ["Balance Sheet Item","30 Sept 2025","31 Dec 2024","Change"],
+             rows: [["Cash & bank balances","RM 1,066.1 million","RM 698.1 million","+RM 368.0M"],["Total equity","RM 1,847.0 million","RM 1,579.0 million","+RM 268.0M"],["Term loans","Nil","RM 3.4 million","Fully repaid"],["Lease liabilities (long-term)","RM 759.1 million","RM 711.8 million","+RM 47.3M"],["Retained profits","RM 1,182.4 million","RM 914.3 million","+RM 268.0M"]],
+             insight: "Cash ballooned to RM1.07B even after paying RM189M in dividends and zeroing out term loans. Total equity grew RM268M in 9 months. The balance sheet is debt-free (excluding operating lease liabilities) and has ample cash — dividends can continue." },
+
+        13:{ agent: "Reporting Agent", question: "Draft the executive summary for the 99SMART Q3 2025 report.",
+             headers: ["Section","Content"],
+             rows: [["Headline","Revenue RM3.04B (+19.1% YoY), PAT RM160.7M (+49.9% YoY). Normalised PAT +27.5%."],["Growth quality","Volume-led (+18.3% txns), not price-led (basket flat at RM21.40). Operating leverage delivering — cost lines growing slower than revenue."],["Moat","2,966 outlets, all Malaysian states covered, first China outlet live, bulk e-commerce adding incremental revenue. On track for 3,000+ outlets by end-2025."],["Dividend","FY2025 dividends declared so far: RM378M (82.7% payout). Funded by RM787.5M operating cash flow. Special interim signals management confidence."],["Balance sheet","RM1.07B cash, zero term loans, RM1.85B total equity. Dividend-safe."]],
+             insight: "The report reads as a textbook growth-plus-income story: volume-led revenue growth, margin expansion, rising dividend, clean balance sheet, and a credible next leg (China + e-commerce). This is the kind of profile that compounds quietly over multi-year holds." },
+        14:{ agent: "Reporting Agent", question: "What are the top 3 investment merits based on Q3 2025?",
+             headers: ["Rank","Merit","Evidence"],
+             rows: [["1","Operating leverage is real","Revenue +19.1% while opex only +12.6%; PBT margin +1.3 pp"],["2","Moat is compounding","2,966 outlets, all-state Malaysia, China pilot, bulk e-commerce"],["3","Income + growth combo","82.7% payout covered 2× by operating cash; FY2025 dividends = 3.8× FY2024"]],
+             insight: "All three merits are structural, not cyclical — scale compounding, proven leverage model, disciplined capital return. This is why the quarter matters: it shows the post-IPO story is execution, not just a listing narrative." },
+        15:{ agent: "Reporting Agent", question: "What are the 3 risks to watch going forward?",
+             headers: ["Rank","Risk","Why it matters"],
+             rows: [["1","High dividend payout ratio","82.7% of PAT leaves little room if earnings miss — any growth slowdown pressures dividend"],["2","Minimum wage & depreciation drag","Q3 opex +12.6% driven by wage adjustment and new-outlet depreciation — a structural cost creep"],["3","China prototype risk","First Fuzhou outlet is Aug 2025 — too early to judge; execution risk on international expansion is real"]],
+             insight: "None of these are dealbreakers, but all three deserve monitoring next quarter. The most actionable is the payout-ratio risk: if Q4 PAT growth decelerates, the special-dividend precedent sets a high bar for FY2026 expectations." }
+    };
+
+    function clearChat() {
+        const chat = document.getElementById('chatMessages');
+        const placeholder = chat.querySelector('.placeholder');
+        if (placeholder) chat.innerHTML = '';
+        return chat;
+    }
+
+    function addUserMsg(chat, text) {
+        const d = document.createElement('div');
+        d.className = 'message user';
+        d.textContent = text;
+        chat.appendChild(d);
+    }
+
+    function buildTableHTML(headers, rows) {
+        let h = '<table><thead><tr>';
+        headers.forEach(c => h += `<th>${c}</th>`);
+        h += '</tr></thead><tbody>';
+        rows.forEach(r => { h += '<tr>'; r.forEach(c => h += `<td>${c}</td>`); h += '</tr>'; });
+        h += '</tbody></table>';
+        return h;
+    }
+
+    function addAgentMsg(chat, agent, tableHTML, insight) {
+        const d = document.createElement('div');
+        d.className = 'message agent';
+        d.innerHTML = `<span class="agent-label">${agent.toUpperCase()}</span>` + tableHTML +
+            `<div class="insight-box"><strong>Insight</strong>${insight}</div>`;
+        chat.appendChild(d);
+        d.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    }
+
+    function showPreset(id) {
+        const p = presets[id];
+        const chat = clearChat();
+        addUserMsg(chat, p.question);
+        addAgentMsg(chat, p.agent, buildTableHTML(p.headers, p.rows), p.insight);
+    }
+    </script>
+</body>
+</html>

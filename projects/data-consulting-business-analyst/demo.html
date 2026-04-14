@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Consulting Business Analyst — AI Agent Pipeline Demo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; line-height: 1.6; color: #E8ECF5; background-color: #0D1B34; }
+        .container { display: flex; min-height: 100vh; }
+        .left-column { width: 30%; background-color: #1A2B4A; padding: 40px 30px; position: fixed; height: 100vh; overflow-y: auto; border-right: 1px solid #2E426B; }
+        .left-column h1 { font-size: 1.8em; font-weight: bold; color: #E8ECF5; margin-bottom: 10px; }
+        .left-column h2 { font-size: 1em; font-weight: 400; color: #94A3C1; margin-bottom: 20px; }
+        .intro p { color: #C5CEE0; margin-bottom: 20px; line-height: 1.8; }
+        .mcp-badge { display: inline-block; padding: 6px 12px; background-color: #223557; color: #F2B82E; border-radius: 20px; font-size: 0.8em; font-weight: 600; margin-top: 10px; border: 1px solid #D4A017; }
+        .home-link-section { margin: 20px 0; }
+        .home-link-btn { display: inline-block; padding: 12px 30px; background-color: #D4A017; color: #0D1B34; text-decoration: none; border-radius: 5px; font-weight: 600; transition: background-color 0.3s ease; text-align: center; width: 100%; }
+        .home-link-btn:hover { background-color: #F2B82E; }
+        .contact { margin-top: 30px; }
+        .contact h2 { font-size: 1.2em; color: #E8ECF5; margin-bottom: 15px; font-weight: 600; }
+        .contact p { color: #C5CEE0; margin-bottom: 15px; }
+        .contact ul { list-style: none; }
+        .contact li { margin-bottom: 10px; color: #C5CEE0; }
+        .contact a { color: #D4A017; text-decoration: none; }
+        .contact a:hover { text-decoration: underline; color: #F2B82E; }
+        .pipeline-box { background-color: #223557; border-left: 4px solid #D4A017; padding: 15px 18px; border-radius: 6px; margin-top: 15px; font-size: 0.9em; color: #C5CEE0; }
+        .pipeline-box strong { color: #F2B82E; }
+        .right-column { width: 70%; margin-left: 30%; padding: 40px 50px; background-color: #0D1B34; }
+        .chatbot-header { text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 2px solid #2E426B; }
+        .chatbot-header h1 { font-size: 2.2em; color: #E8ECF5; margin-bottom: 10px; font-weight: 600; }
+        .chatbot-header p { font-size: 1.05em; color: #94A3C1; line-height: 1.8; }
+        .db-status { max-width: 900px; margin: 0 auto 20px auto; padding: 12px 16px; background-color: #1A2B4A; border-left: 4px solid #D4A017; border-radius: 4px; font-size: 0.9em; color: #C5CEE0; }
+        .db-status strong { color: #F2B82E; }
+        .chat-container { max-width: 900px; margin: 0 auto; background-color: #1A2B4A; border-radius: 10px; padding: 30px; box-shadow: 0 4px 16px rgba(0,0,0,0.35); border: 1px solid #2E426B; }
+        .agent-group { margin-bottom: 25px; }
+        .agent-group-header { display: flex; align-items: center; gap: 14px; padding: 12px 16px; background-color: #223557; border-radius: 8px; margin-bottom: 12px; border: 1px solid #2E426B; }
+        .agent-num { flex: 0 0 auto; width: 38px; height: 38px; border-radius: 50%; background-color: #D4A017; color: #0D1B34; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.1em; }
+        .agent-meta strong { display: block; color: #F2B82E; font-size: 1.05em; font-weight: 600; }
+        .agent-meta span { display: block; color: #94A3C1; font-size: 0.85em; margin-top: 2px; }
+        .question-btn { display: block; width: 100%; padding: 14px 18px; margin-bottom: 10px; background-color: #0D1B34; color: #E8ECF5; border: 1px solid #2E426B; border-left: 3px solid #D4A017; border-radius: 6px; text-align: left; cursor: pointer; font-size: 0.95em; font-family: 'Poppins', sans-serif; transition: all 0.25s ease; }
+        .question-btn:hover { background-color: #223557; border-color: #D4A017; transform: translateX(3px); }
+        .chat-messages { min-height: 200px; margin-top: 25px; padding-top: 20px; border-top: 1px solid #2E426B; }
+        .chat-messages .placeholder { text-align: center; color: #94A3C1; font-style: italic; }
+        .message { margin-bottom: 20px; padding: 15px 20px; border-radius: 10px; animation: fadeIn 0.5s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .message.user { background-color: #D4A017; color: #0D1B34; margin-left: 50px; text-align: right; font-weight: 500; }
+        .message.agent { background-color: #223557; color: #E8ECF5; margin-right: 50px; border: 1px solid #2E426B; }
+        .message.agent .agent-label { font-weight: 600; color: #F2B82E; margin-bottom: 8px; display: block; font-size: 0.9em; letter-spacing: 0.5px; }
+        .message.agent table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 0.9em; }
+        .message.agent th, .message.agent td { border: 1px solid #2E426B; padding: 8px 12px; text-align: left; color: #E8ECF5; }
+        .message.agent th { background-color: #0D1B34; font-weight: 600; color: #F2B82E; }
+        .message.agent td { background-color: #1A2B4A; }
+        .insight-box { margin-top: 15px; padding: 15px; background-color: #1A2B4A; border-radius: 6px; border-left: 4px solid #D4A017; color: #C5CEE0; }
+        .insight-box strong { color: #F2B82E; display: block; margin-bottom: 4px; }
+        footer { text-align: center; padding: 30px 20px; background-color: #050E1F; color: #C5CEE0; margin-top: 50px; margin-left: 30%; border-top: 1px solid #2E426B; }
+        footer p { margin: 0; font-size: 0.9em; }
+        @media (max-width: 768px) {
+            .container { flex-direction: column; }
+            .left-column { width: 100%; position: relative; height: auto; }
+            .right-column { width: 100%; margin-left: 0; padding: 30px 20px; }
+            .message.user { margin-left: 20px; }
+            .message.agent { margin-right: 20px; }
+            footer { margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <aside class="left-column">
+            <header>
+                <h1>Lee Yih Ven</h1>
+                <h2>AI Project Portfolio</h2>
+            </header>
+            <section class="intro">
+                <p>Ask this AI assistant about a Malaysian fruit retail business — which SKUs drive revenue, where pricing discipline is leaking margin, and which three moves should the owner make in the next 90 days.</p>
+                <div class="mcp-badge">Research Agent • Gemini 2.5 • Tavily MCP • 4-agent pipeline</div>
+            </section>
+            <section class="home-link-section">
+                <a class="home-link-btn" href="https://lyven81.github.io/ai-project/index.html">Home</a>
+            </section>
+            <section class="home-link-section">
+                <a class="home-link-btn" href="https://github.com/lyven81/ai-project/tree/main/projects/data-consulting-business-analyst">Source Code</a>
+            </section>
+            <section class="contact">
+                <h2>About This App</h2>
+                <p>This demo shows Q&amp;A examples grouped by agent stage, but the production app is a batch pipeline — input a business context, four agents run in sequence, output is a 12-section executive market entry report in 10–15 minutes.</p>
+                <div class="pipeline-box">
+                    <strong>The real 4-agent pipeline:</strong><br>
+                    1. Research Agent — scans market, identifies top 8 trends<br>
+                    2. Competitor Intel Agent — maps 10+ competitors &amp; capabilities<br>
+                    3. Opportunity Agent — scores white-space on a 2×2 matrix<br>
+                    4. Strategy Agent — writes 12-section report + PDF
+                </div>
+                <p style="margin-top:15px;">Dataset powering this demo: 3,000 Malaysian fruit retail transactions (September 2024, 21 SKUs, RM1.88M revenue).</p>
+                <ul>
+                    <li>Email: <a href="mailto:yven81@gmail.com">yven81@gmail.com</a></li>
+                    <li>Phone: +6014-9207099</li>
+                </ul>
+            </section>
+        </aside>
+
+        <main class="right-column">
+            <div class="chatbot-header">
+                <h1>Data Consulting Business Analyst</h1>
+                <p>Market research &amp; strategy agent for Malaysian SMEs.<br>Sample case: fruit retail business — Sept 2024, 3,000 transactions, 21 SKUs.</p>
+            </div>
+
+            <div class="db-status">
+                <strong>Pipeline Input:</strong> 3,000 transactions • 21 SKUs • RM 1,885,806 revenue • 30 days • 4 agents • 12 sample analyses
+            </div>
+
+            <div class="chat-container">
+
+                <div class="agent-group">
+                    <div class="agent-group-header">
+                        <div class="agent-num">1</div>
+                        <div class="agent-meta">
+                            <strong>Research Agent</strong>
+                            <span>Scans market, identifies top trends and demand signals</span>
+                        </div>
+                    </div>
+                    <button class="question-btn" onclick="showPreset(1)">What's the total size and shape of this Malaysian fruit retail market?</button>
+                    <button class="question-btn" onclick="showPreset(2)">Which 5 fruits are generating the highest demand by volume?</button>
+                    <button class="question-btn" onclick="showPreset(3)">How does daily revenue move across the 30-day window — peak and trough?</button>
+                </div>
+
+                <div class="agent-group">
+                    <div class="agent-group-header">
+                        <div class="agent-num">2</div>
+                        <div class="agent-meta">
+                            <strong>Competitor Intel Agent</strong>
+                            <span>Maps competitor SKUs, capabilities, and pricing behaviour</span>
+                        </div>
+                    </div>
+                    <button class="question-btn" onclick="showPreset(4)">Map the SKU landscape — which categories dominate and which are fragmented?</button>
+                    <button class="question-btn" onclick="showPreset(5)">Where does pricing discipline break down across the SKU set?</button>
+                    <button class="question-btn" onclick="showPreset(6)">How do bulk (B2B) players behave differently from retail buyers?</button>
+                </div>
+
+                <div class="agent-group">
+                    <div class="agent-group-header">
+                        <div class="agent-num">3</div>
+                        <div class="agent-meta">
+                            <strong>Opportunity Agent</strong>
+                            <span>Scores white-space on a 2×2 matrix (Grow / Fix / Monitor / Exit)</span>
+                        </div>
+                    </div>
+                    <button class="question-btn" onclick="showPreset(7)">Which SKUs land in the "Grow" quadrant — high revenue, stable pricing?</button>
+                    <button class="question-btn" onclick="showPreset(8)">Which SKUs are in the "Fix" quadrant — high revenue but high price variance?</button>
+                    <button class="question-btn" onclick="showPreset(9)">Which SKUs sit in "Monitor" or "Exit" — low revenue, candidates for review?</button>
+                </div>
+
+                <div class="agent-group">
+                    <div class="agent-group-header">
+                        <div class="agent-num">4</div>
+                        <div class="agent-meta">
+                            <strong>Strategy Agent</strong>
+                            <span>Writes the executive report, priorities, and 90-day action plan</span>
+                        </div>
+                    </div>
+                    <button class="question-btn" onclick="showPreset(10)">Write the executive summary for the market entry report.</button>
+                    <button class="question-btn" onclick="showPreset(11)">List the top 3 strategic priorities synthesising all pipeline findings.</button>
+                    <button class="question-btn" onclick="showPreset(12)">Propose a 90-day priority action plan with phase milestones.</button>
+                </div>
+
+                <div class="chat-messages" id="chatMessages">
+                    <p class="placeholder">Click any question above to see that agent stage's output.</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Lee Yih Ven | Data-Driven Solutions</p>
+    </footer>
+
+    <script>
+    const presets = {
+        1: { agent: "Research Agent", question: "What's the total size and shape of this Malaysian fruit retail market?",
+             headers: ["Metric","Value"],
+             rows: [["Total revenue","RM 1,885,806"],["Total transactions","3,000"],["Unique SKUs","21"],["Average transaction size","RM 628.60"],["Daily average revenue","RM 62,860"],["Period covered","Sept 2024 (30 days)"]],
+             insight: "This is a mid-scale Malaysian fruit retail operation clocking just under RM1.9 million in September 2024 across 3,000 transactions. The 21-SKU portfolio and RM62.8K daily baseline frame the market as a single-site operator with B2B uplift potential." },
+        2: { agent: "Research Agent", question: "Which 5 fruits are generating the highest demand by volume?",
+             headers: ["Rank","Fruit","Volume (kg)","Revenue (RM)"],
+             rows: [["1","Guavas","17,047","104,267"],["2","Durians","16,853","99,330"],["3","Peaches","16,520","98,298"],["4","Dragon fruits","16,470","96,974"],["5","Ciku","15,387","92,286"]],
+             insight: "Guavas lead both volume and revenue rankings. The top 5 by volume overlap heavily with the top 5 by revenue, suggesting demand — not price — is driving the rankings. These are the core SKUs any market entrant must compete against." },
+        3: { agent: "Research Agent", question: "How does daily revenue move across the 30-day window — peak and trough?",
+             headers: ["Day Type","Date","Revenue (RM)","vs Average"],
+             rows: [["Peak day","14 Sept 2024","78,932","+25.6%"],["Daily average","—","62,860","0.0%"],["Lowest day","7 Sept 2024","47,843","−23.9%"]],
+             insight: "Daily revenue swings ±25% around the RM62.8K average, indicating strong weekday/weekend or supply-timing dependency. Any forecast or operating plan must use a daily-pattern model, not a monthly average." },
+
+        4: { agent: "Competitor Intel Agent", question: "Map the SKU landscape — which categories dominate and which are fragmented?",
+             headers: ["Segment","SKUs","Rev Share","Concentration"],
+             rows: [["Top 5 SKUs","Guavas, Durians, Peaches, Dragon fruits, Mangosteens","26.1%","Low"],["Middle 13 SKUs","Ciku, Papayas, Passion fruits … Pineapples","55.3%","Very flat"],["Bottom 3 SKUs","Honeydew, Longans, Starfruits","12.6%","Weak tail"]],
+             insight: "The market is a flat long-tail — no SKU exceeds 5.5% of revenue, and top 5 only 26%. This is a fragmented category with no dominant leader, which means there's white-space but also no clear playbook to copy." },
+        5: { agent: "Competitor Intel Agent", question: "Where does pricing discipline break down across the SKU set?",
+             headers: ["SKU","Min Price","Max Price","Gap (RM)"],
+             rows: [["Bananas","RM 2.00","RM 10.00","8.00"],["Lychees","RM 2.02","RM 10.00","7.98"],["Guavas","RM 2.01","RM 9.98","7.97"],["Ciku","RM 2.01","RM 9.98","7.97"],["Peaches","RM 2.02","RM 9.98","7.96"]],
+             insight: "Every top SKU is being sold at both RM2 and RM10 per kg across different transactions — a 5× spread on identical product. This is market-wide pricing chaos, and the single biggest margin-recovery lever for a new entrant." },
+        6: { agent: "Competitor Intel Agent", question: "How do bulk (B2B) players behave differently from retail buyers?",
+             headers: ["Segment","Txn Share","Revenue Share","Avg Ticket"],
+             rows: [["Bulk orders (≥150 kg)","26.6%","44.0%","RM 1,042"],["Retail orders (<150 kg)","73.4%","56.0%","RM 479"],["Total","100%","100%","RM 628.60"]],
+             insight: "Bulk buyers are 27% of transactions but drive 44% of revenue at 2.2× the retail ticket size. The B2B channel is structurally more valuable — any competitor that wins the bulk playbook wins the market." },
+
+        7: { agent: "Opportunity Agent", question: "Which SKUs land in the \"Grow\" quadrant — high revenue, stable pricing?",
+             headers: ["SKU","Revenue (RM)","Price Std Dev","Quadrant"],
+             rows: [["Papayas","92,197","RM 2.27","GROW"],["Cempedak","91,489","RM 2.29","GROW"],["Plums","90,841","RM 2.27","GROW"]],
+             insight: "Only 3 of 21 SKUs sit cleanly in the Grow quadrant — high revenue AND consistent pricing. These are the safest SKUs to scale aggressively: volume uplift won't be eroded by pricing chaos." },
+        8: { agent: "Opportunity Agent", question: "Which SKUs are in the \"Fix\" quadrant — high revenue but high price variance?",
+             headers: ["SKU","Revenue (RM)","Price Std Dev","Action"],
+             rows: [["Guavas","104,267","RM 2.38","Pricing SOP urgent"],["Durians","99,330","RM 2.32","Pricing SOP urgent"],["Peaches","98,298","RM 2.38","Pricing SOP urgent"],["Dragon fruits","96,974","RM 2.39","Pricing SOP urgent"],["Mangosteens","92,614","RM 2.37","Pricing SOP"],["Ciku","92,286","RM 2.32","Pricing SOP"],["Passion fruits","91,812","RM 2.43","Pricing SOP"],["Watermelons","89,619","RM 2.43","Pricing SOP"]],
+             insight: "8 SKUs are in the Fix quadrant — high revenue with broken pricing discipline. Fixing these is the highest-leverage move: same volume × consistent price = an estimated 8–15% margin lift. Guavas alone could add RM12K–RM15K/month." },
+        9: { agent: "Opportunity Agent", question: "Which SKUs sit in \"Monitor\" or \"Exit\" — low revenue, candidates for review?",
+             headers: ["Quadrant","SKUs","Recommendation"],
+             rows: [["MONITOR (low rev, high variance)","Rambutans, Oranges, Longans","Watch 60 days, decide"],["EXIT (low rev, stable)","Starfruits, Honeydew, Pineapples, Mangoes, Bananas, Jackfruits, Lychees","Trim to seasonal or delist"]],
+             insight: "10 SKUs sit in Monitor or Exit. The 7 Exit-quadrant SKUs already have stable pricing but low revenue — no growth upside, just shelf cost. Delisting 3–4 of them frees capital and management attention for the Grow and Fix work." },
+
+        10:{ agent: "Strategy Agent", question: "Write the executive summary for the market entry report.",
+             headers: ["Section","Content"],
+             rows: [["Market shape","Fragmented Malaysian fruit retail — RM1.88M/month single site, 21 SKUs, no dominant category (top 5 = 26%)."],["Core diagnosis","Pricing chaos is the market-wide weak spot (RM2–RM10 on identical SKUs), not demand or supply."],["Where to play","Win the Fix quadrant (8 high-revenue SKUs with broken pricing) and the bulk/B2B channel (27% of txns driving 44% of revenue)."],["How to win","Pricing SOP + bulk playbook + bottom-3 delist. Conservative uplift: +12–18% revenue and +10–15% margin within 90 days."]],
+             insight: "The executive summary frames the market as fragmented-with-structure: there's no dominant competitor, but there are clear plays (pricing + bulk) that a disciplined operator can capture in a single quarter." },
+        11:{ agent: "Strategy Agent", question: "List the top 3 strategic priorities synthesising all pipeline findings.",
+             headers: ["Priority","Move","Estimated Impact"],
+             rows: [["1","Pricing discipline — close the RM8 price gap across the 8 Fix-quadrant SKUs","8–15% gross margin lift"],["2","Bulk/B2B channel playbook — formalise the 27% that drives 44% of revenue","RM150K–RM250K annual uplift"],["3","Bottom-quadrant cleanup — delist 3–4 Exit SKUs, monitor Rambutans/Oranges/Longans","Free capital + shelf for Grow/Fix"]],
+             insight: "The three priorities are ordered by effort-to-impact. Priority 1 is quick-win with no capital risk. Priority 2 unlocks the largest revenue. Priority 3 is the structural cleanup that enables the first two." },
+        12:{ agent: "Strategy Agent", question: "Propose a 90-day priority action plan with phase milestones.",
+             headers: ["Phase","Days","Focus","Deliverable"],
+             rows: [["Phase 1 — Stop the bleed","1–30","Pricing SOP + Fix-quadrant audit","Price bands + daily variance dashboard"],["Phase 2 — Grow the winning channel","31–60","B2B/bulk-order playbook","Named key-account list + reorder script"],["Phase 3 — Clean the portfolio","61–90","Exit/Monitor SKU decision + shelf redesign","Delist/retain call + Q4 forecast"]],
+             insight: "Phase 1 is margin recovery — no capital. Phase 2 converts the 27% bulk segment into a managed channel. Phase 3 resets the SKU mix for Q4. Targets across the full 90 days: +12–18% revenue, +10–15% margin." }
+    };
+
+    function clearChat() {
+        const chat = document.getElementById('chatMessages');
+        const placeholder = chat.querySelector('.placeholder');
+        if (placeholder) chat.innerHTML = '';
+        return chat;
+    }
+
+    function addUserMsg(chat, text) {
+        const d = document.createElement('div');
+        d.className = 'message user';
+        d.textContent = text;
+        chat.appendChild(d);
+    }
+
+    function buildTableHTML(headers, rows) {
+        let h = '<table><thead><tr>';
+        headers.forEach(c => h += `<th>${c}</th>`);
+        h += '</tr></thead><tbody>';
+        rows.forEach(r => { h += '<tr>'; r.forEach(c => h += `<td>${c}</td>`); h += '</tr>'; });
+        h += '</tbody></table>';
+        return h;
+    }
+
+    function addAgentMsg(chat, agent, tableHTML, insight) {
+        const d = document.createElement('div');
+        d.className = 'message agent';
+        d.innerHTML = `<span class="agent-label">${agent.toUpperCase()}</span>` + tableHTML +
+            `<div class="insight-box"><strong>Strategic Insight</strong>${insight}</div>`;
+        chat.appendChild(d);
+        d.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    }
+
+    function showPreset(id) {
+        const p = presets[id];
+        const chat = clearChat();
+        addUserMsg(chat, p.question);
+        addAgentMsg(chat, p.agent, buildTableHTML(p.headers, p.rows), p.insight);
+    }
+    </script>
+</body>
+</html>

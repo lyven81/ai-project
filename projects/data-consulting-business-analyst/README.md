@@ -13,7 +13,9 @@ AI-powered market discovery system for data analytics consulting firms. Automate
 
 ## 🚀 Live Demo
 
-**[🌟 Launch in Google Colab](https://colab.research.google.com/)** | [📹 Video Demo](#)
+**[🌟 Launch AI Assistant Demo](https://lyven81.github.io/ai-project/projects/data-consulting-business-analyst/demo.html)** — interactive 4-agent pipeline walkthrough with real Malaysian fruit retail data. No setup required.
+
+*Want to run the full batch pipeline locally? See the "How to Use" section below.*
 
 ## ✨ Features
 
