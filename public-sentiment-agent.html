@@ -447,27 +447,27 @@ Pipeline Flow:
                 <li><strong>Download Results:</strong> Get markdown report, 4 charts, and 5 CSV files</li>
             </ol>
 
-            <h3>Example Usage</h3>
+            <h3>Example Usage — coffee shop review case</h3>
             <div class="code-block">
-# Example: Analyze firecracker ban opinions across cultures
+# Example: Analyse coffee shop reviews across 4 social channels
 results = run_enhanced_sentiment_pipeline(
-    issue_keyword="Should firecrackers and fireworks be banned?",
-    locations=["Malaysia", "Germany", "USA", "India"],
-    num_sources_per_location=15,
+    review_dataset="coffee_shop_reviews_q1_2024.csv",
+    channels=["Twitter", "Instagram", "Facebook", "Google"],
+    period="Q1 2024",
     output_dir="."
 )
 
 # Output:
-# - comparative_report_20251024_123456.md
-# - regional_comparison_20251024_123456.png
-# - credibility_dashboard_20251024_123456.png
-# - source_diversity_20251024_123456.png
-# - theme_frequency_20251024_123456.png
-# - sentiment_distribution_20251024_123456.csv
-# - emotion_frequency_20251024_123456.csv
-# - theme_comparison_20251024_123456.csv
-# - source_attribution_20251024_123456.csv
-# - credibility_metrics_20251024_123456.csv
+# - voice_of_customer_report_q1_2024.md
+# - channel_sentiment_comparison.png
+# - product_performance_ranking.png
+# - category_heatmap.png
+# - monthly_volume_trend.png
+# - channel_sentiment.csv
+# - category_performance.csv
+# - flagged_products.csv
+# - customer_reviewers.csv
+# - monthly_volume.csv
             </div>
 
             <h3>Required API Keys</h3>
@@ -494,27 +494,27 @@ results = run_enhanced_sentiment_pipeline(
                     <div class="metric-label">Specialized Agents</div>
                 </div>
                 <div class="metric-card">
-                    <div class="metric-number">0-100</div>
-                    <div class="metric-label">Credibility Score</div>
+                    <div class="metric-number">−100 to +100</div>
+                    <div class="metric-label">Net Sentiment Score</div>
                 </div>
             </div>
 
             <h3>Business Value Demonstration</h3>
             <ul>
-                <li><strong>Addresses Cultural Nuance:</strong> Reveals regional differences instead of misleading global averages</li>
-                <li><strong>Transparent Quality Metrics:</strong> Users see exactly how trustworthy each regional analysis is</li>
-                <li><strong>Prevents Flawed Decisions:</strong> Detects and warns about echo chamber bias and data quality issues</li>
-                <li><strong>Production-Ready Output:</strong> Professional charts, CSV exports, and executive reports</li>
-                <li><strong>Cost-Effective:</strong> ~$0.50 per analysis vs. $10,000+ for manual research</li>
+                <li><strong>Separates channel from product signal:</strong> Distinguishes a bad channel (Facebook) from a bad product (Banana Bread) — different fixes</li>
+                <li><strong>Surfaces the 2–3 SKUs that really need attention:</strong> Instead of "50% positive" headline, pinpoints where negative outweighs positive</li>
+                <li><strong>Single KPI per channel:</strong> Net sentiment score makes monthly tracking trivial</li>
+                <li><strong>Production-ready output:</strong> Markdown report + 4 charts + 5 CSV exports for BI/Sheets</li>
+                <li><strong>Cost-effective:</strong> ~RM2 per run vs. RM15,000+ for a traditional customer-experience audit</li>
             </ul>
 
             <h3>Use Cases</h3>
             <ul>
-                <li><strong>Market Research:</strong> Understand regional product acceptance before launch</li>
-                <li><strong>Policy Analysis:</strong> Gauge public opinion on regulations by region</li>
-                <li><strong>Brand Monitoring:</strong> Track sentiment across different markets</li>
-                <li><strong>Competitive Intelligence:</strong> Compare regional perception of competitors</li>
-                <li><strong>Crisis Management:</strong> Monitor sentiment evolution during PR incidents</li>
+                <li><strong>F&B voice-of-customer:</strong> Monthly review of Google/IG/FB/Twitter feedback across the menu</li>
+                <li><strong>Product recipe / supplier review:</strong> Flag SKUs where negative reviews justify a kitchen or vendor audit</li>
+                <li><strong>Channel reputation management:</strong> Identify which platform needs active reply programmes</li>
+                <li><strong>New product launch tracking:</strong> Compare launch-month sentiment against baseline after 30/60/90 days</li>
+                <li><strong>Competitive benchmark:</strong> Run the same pipeline on a competitor's public reviews to compare</li>
             </ul>
         </div>
 
@@ -523,24 +523,24 @@ results = run_enhanced_sentiment_pipeline(
 
             <h3>Data Collection Limitations</h3>
             <ul>
-                <li><strong>Language Bias:</strong> Primarily English-language sources (non-English opinions underrepresented)</li>
-                <li><strong>Digital Divide:</strong> Only captures online populations (offline communities excluded)</li>
-                <li><strong>Platform Bias:</strong> Web search favors certain platforms over others</li>
-                <li><strong>Temporal:</strong> Snapshot in time, sentiment may shift rapidly</li>
-                <li><strong>Sample Size:</strong> Small samples may not represent entire populations</li>
+                <li><strong>Self-selection bias:</strong> Reviewers are customers motivated to post — silent majority is not represented</li>
+                <li><strong>Channel skew:</strong> Each platform has its own review culture (Google rewards effort, Facebook rewards complaint)</li>
+                <li><strong>Temporal snapshot:</strong> Sentiment reflects the period captured — can shift quickly after menu changes or incidents</li>
+                <li><strong>Language coverage:</strong> Primarily English/Malay reviews — non-English opinions underrepresented in the demo dataset</li>
+                <li><strong>Product attribution:</strong> Reviews without a specified product roll up to "general" — limits SKU-level precision</li>
             </ul>
 
-            <h3>Geographic Filtering Challenges</h3>
+            <h3>Sentiment Classification Challenges</h3>
             <ul>
-                <li>Geographic attribution is approximate (based on search query modifiers)</li>
-                <li>Cross-border content may appear in multiple regions</li>
-                <li>VPNs and global platforms complicate true location detection</li>
+                <li>Sarcasm and irony can flip classification (e.g. "Great, just what I wanted" read as positive)</li>
+                <li>Short reviews (&lt; 5 words) give lower-confidence signals</li>
+                <li>Reviews about service vs product can conflate — the demo pipeline tracks product but not service explicitly</li>
             </ul>
 
             <h3>Recommended Use</h3>
-            <p>✅ <strong>Good for:</strong> Directional insights, trend detection, hypothesis generation</p>
-            <p>⚠️ <strong>Caution for:</strong> Policy decisions, legal proceedings, precise measurement</p>
-            <p>❌ <strong>Not for:</strong> Statistical inference about entire populations</p>
+            <p>✅ <strong>Good for:</strong> Trend detection, SKU flagging, channel health monitoring, monthly voice-of-customer reporting</p>
+            <p>⚠️ <strong>Caution for:</strong> Attributing cause to single reviews, punishing individual staff based on reviews, forecasting revenue from sentiment alone</p>
+            <p>❌ <strong>Not for:</strong> Statistical inference about silent non-reviewing customers</p>
         </div>
 
         <div class="demo-links">

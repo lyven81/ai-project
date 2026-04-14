@@ -403,40 +403,42 @@ Output Package:
                 <li><strong>Download Results:</strong> Get markdown report and 3 visualization charts</li>
             </ol>
 
-            <h3>Example Usage</h3>
+            <h3>Example Usage — fruit retail case</h3>
             <div class="code-block">
-# Run the full 4-agent discovery pipeline
+# Run the full 4-agent pipeline on the fruit retail dataset
 results = run_consulting_discovery_pipeline(
-    output_path="data_analytics_consulting_report_20251024.md"
+    input_csv="fruit_sales_sept_2024.csv",
+    output_path="fruit_retail_market_report.md"
 )
 
 # The pipeline automatically:
-# 1. Researches industry trends (Agent 1)
-# 2. Maps competitive landscape (Agent 2)
-# 3. Identifies opportunities (Agent 3)
-# 4. Generates strategic report (Agent 4)
+# 1. Research Agent — market shape, top SKUs, daily variance
+# 2. Competitor Intel Agent — SKU landscape, pricing discipline analysis
+# 3. Opportunity Agent — 2×2 Grow / Fix / Monitor / Exit placement
+# 4. Strategy Agent — executive summary + 3 priorities + 90-day plan
 
 # Output Files:
-# - data_analytics_consulting_report_20251024.md
-# - trends_chart_20251024.png
-# - competitor_matrix_20251024.png
-# - opportunity_map_20251024.png
+# - fruit_retail_market_report.md
+# - sku_revenue_chart.png
+# - pricing_discipline_heatmap.png
+# - opportunity_map_2x2.png
             </div>
 
             <h3>Customization Options</h3>
             <div class="code-block">
-# Modify search queries for your specific market
+# Re-run the pipeline against a different SME vertical
 queries = [
-    "healthcare data analytics consulting trends 2024",
-    "financial services BI consulting market",
-    "retail analytics firms capabilities"
+    "Malaysian kopitiam F&B daily sales analysis",
+    "SME retail pricing discipline benchmarks",
+    "Bursa-listed consumer staples same-store-sales"
 ]
 
-# Adjust number of competitors to analyze
-num_competitors = 15  # Default: 10
+# Adjust quadrant thresholds (default: median revenue × median price variance)
+rev_threshold = 90000         # RM per SKU per month
+var_threshold = 2.30          # Price std dev per SKU
 
-# Change visualization style
-sns.set_palette("viridis")  # Custom color scheme
+# Change visualization palette
+sns.set_palette("YlOrBr")     # Amber-gold theme
             </div>
 
             <h3>Required API Keys</h3>
@@ -479,80 +481,84 @@ sns.set_palette("viridis")  # Custom color scheme
 
             <h3>Use Cases</h3>
             <ul>
-                <li><strong>New Market Entry:</strong> Evaluate opportunities before launching consulting practice</li>
-                <li><strong>Service Portfolio Planning:</strong> Identify high-growth capabilities to build</li>
-                <li><strong>Competitive Positioning:</strong> Find white-space differentiation angles</li>
-                <li><strong>Investment Decisions:</strong> Data-driven prioritization of initiatives</li>
-                <li><strong>Strategic Planning:</strong> Annual/quarterly market assessments</li>
-                <li><strong>M&A Due Diligence:</strong> Quick market assessment for acquisition targets</li>
+                <li><strong>SME portfolio review:</strong> Rank SKUs by revenue, volume, and pricing stability in one pass</li>
+                <li><strong>Pricing discipline audit:</strong> Surface SKUs with wide price variance and estimate the margin recovery upside</li>
+                <li><strong>Channel strategy:</strong> Compare bulk/B2B vs retail performance to identify the higher-value channel</li>
+                <li><strong>Quarterly SKU review:</strong> Track Grow/Fix/Monitor/Exit quadrant shifts over time</li>
+                <li><strong>Pre-investment diligence:</strong> Rapid market shape assessment on any transaction dataset</li>
+                <li><strong>Board/owner reporting:</strong> Executive summary + top 3 priorities + 90-day plan, ready to present</li>
             </ul>
 
             <h3>Real-World Impact</h3>
             <div class="code-block">
 Traditional Manual Approach:
-- Time: 2-4 weeks
-- Cost: $5,000-$50,000 (consultant fees)
-- Coverage: Limited by research budget
-- Freshness: Outdated by publication
+- Time: 4-6 weeks
+- Cost: RM30,000-RM100,000 (SME consulting engagement)
+- Coverage: Limited by consultant hours and experience
+- Freshness: Outdated by the time the deck is delivered
 
 AI-Powered Approach:
 - Time: 10-15 minutes
-- Cost: ~$0.20 (API calls only)
-- Coverage: Comprehensive multi-angle search
-- Freshness: Real-time market data
+- Cost: ~RM1 per analysis (API calls only)
+- Coverage: Every transaction in the dataset, no sampling
+- Freshness: Re-runnable any time the data updates
             </div>
         </div>
 
         <div class="content-section">
             <h2>📋 Sample Report Sections</h2>
 
-            <h3>Executive Summary Example</h3>
+            <h3>Executive Summary Example — fruit retail case</h3>
             <div class="code-block">
-The data analytics consulting market is experiencing 25-35% annual growth
-driven by AI/ML adoption, cloud migration, and real-time analytics demand.
-Three white-space opportunities identified:
+The Malaysian fruit retail business clocks RM1.88 million in monthly
+revenue across 3,000 transactions and 21 SKUs (Sept 2024). The market
+is fragmented — no single SKU exceeds 5.5% of revenue, and the top 5
+combined account for only 26.1%. Three structural opportunities identified:
 
-1. AI Governance Consulting (Attractiveness: 85%, Competition: 30%)
-   - High demand from Fortune 500 compliance teams
-   - Few specialized providers
+1. Pricing Discipline (Impact: High, Effort: Low)
+   - Every top SKU sold at both RM2 and RM10 per kg (5× spread)
+   - Single biggest margin-recovery lever — no volume risk
+   - Estimated 8–15% gross margin lift from pricing SOP alone
 
-2. Edge Analytics for IoT (Attractiveness: 80%, Competition: 25%)
-   - Manufacturing and logistics focus
-   - Requires specialized hardware knowledge
+2. Bulk / B2B Channel Playbook (Impact: High, Effort: Medium)
+   - Bulk orders are 27% of transactions but 44% of revenue
+   - Avg bulk ticket RM1,042 vs retail RM479 (2.2×)
+   - Formalising this channel could add RM150K–RM250K annually
 
-3. Real-time Financial Analytics (Attractiveness: 75%, Competition: 40%)
-   - Trading firms and fintech startups
-   - Moderate competition but growing rapidly
+3. Bottom-Quadrant SKU Cleanup (Impact: Medium, Effort: Low)
+   - 10 of 21 SKUs sit in Monitor or Exit quadrants
+   - 3 Exit SKUs (Starfruits, Honeydew, Pineapples) are clean delist
+     candidates — freeing shelf and capital for the top 5
             </div>
 
-            <h3>Strategic Recommendations Example</h3>
+            <h3>Strategic Recommendations Example — fruit retail case</h3>
             <ul>
-                <li><strong>Focus Area:</strong> Specialize in AI Governance + Cloud Analytics (complementary capabilities)</li>
-                <li><strong>Target Market:</strong> Mid-market financial services firms ($100M-$1B revenue)</li>
-                <li><strong>Differentiation:</strong> Regulatory compliance expertise + modern tech stack</li>
-                <li><strong>Partnerships:</strong> AWS/Snowflake co-selling opportunities</li>
-                <li><strong>Timeline:</strong> 3-month foundation phase → 6-month market entry → 12-month scale</li>
+                <li><strong>Focus Area:</strong> Pricing SOP across 8 "Fix" quadrant SKUs (top revenue + broken pricing)</li>
+                <li><strong>Target Priority:</strong> Guavas, Durians, Peaches, Dragon Fruits, Mangosteens (top 5 by revenue)</li>
+                <li><strong>Differentiation:</strong> Daily variance dashboard + weekly price-band review</li>
+                <li><strong>Partnerships:</strong> Named key-account playbook for the 27% of transactions driving 44% of revenue</li>
+                <li><strong>Timeline:</strong> 30-day pricing audit → 60-day B2B playbook → 90-day portfolio cleanup</li>
             </ul>
         </div>
 
         <div class="content-section">
             <h2>🎯 Advanced Features & Customization</h2>
 
-            <h3>Industry-Specific Variations</h3>
-            <p>Easily adapt the system for different industries:</p>
+            <h3>Vertical-Specific Variations</h3>
+            <p>The same 4-agent pipeline adapts to any transactional SME business:</p>
             <ul>
-                <li><strong>Healthcare Analytics:</strong> Focus on HIPAA compliance, EHR integration</li>
-                <li><strong>Financial Services:</strong> Emphasize regulatory reporting, risk analytics</li>
-                <li><strong>Retail & E-commerce:</strong> Customer analytics, inventory optimization</li>
-                <li><strong>Manufacturing:</strong> IoT sensor analytics, predictive maintenance</li>
+                <li><strong>Fresh produce & grocery:</strong> SKU portfolio + pricing variance (fruit retail — the demo case)</li>
+                <li><strong>F&B outlets:</strong> Menu item performance + daily ticket analysis + bulk catering mix</li>
+                <li><strong>Retail apparel:</strong> Category rotation + markdown discipline + channel concentration</li>
+                <li><strong>Services businesses:</strong> Package utilisation + repeat-customer share + seasonal pattern</li>
             </ul>
 
             <h3>Add-On Agents (Future Enhancements)</h3>
             <ul>
-                <li><strong>Pricing Intelligence Agent:</strong> Analyze competitor pricing models</li>
-                <li><strong>Talent Market Agent:</strong> Research data science hiring trends and salaries</li>
-                <li><strong>Technology Stack Agent:</strong> Map tool adoption rates (Python, Tableau, Power BI)</li>
-                <li><strong>Case Study Agent:</strong> Extract success stories and ROI examples</li>
+                <li><strong>Supplier Intelligence Agent:</strong> Trace cost drivers back to supplier-level pricing</li>
+                <li><strong>Competitor Benchmark Agent:</strong> Compare your SKUs against nearby competitors in the same category</li>
+                <li><strong>Seasonality Agent:</strong> Detect day-of-week and month-over-month patterns in transactions</li>
+                <li><strong>Forecasting Agent:</strong> Project next-quarter revenue and SKU mix based on trend data</li>
             </ul>
 
             <h3>Integration Options</h3>
