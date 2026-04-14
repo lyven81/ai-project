@@ -241,7 +241,7 @@
 
         <div class="project-header">
             <h1>🌍 Public Sentiment Collection Agent</h1>
-            <p>AI-powered geographic sentiment analysis with credibility tracking and source diversity assessment</p>
+            <p>5-agent voice-of-customer pipeline — demonstrated on 500 coffee shop reviews across Twitter, Instagram, Facebook, and Google (Q1 2024)</p>
 
             <div class="badges">
                 <span class="badge">Python 3.9+</span>
@@ -259,29 +259,30 @@
 
         <div class="content-section">
             <h2>📋 Project Overview & Problem Statement</h2>
-            <p><strong>Challenge:</strong> Traditional sentiment analysis tools lump all geographic regions together, producing misleading global averages that mask critical cultural and regional differences. For example, analyzing "public opinion on alcohol consumption" globally would show a mixed sentiment, completely missing that Saudi Arabia has 95% negative sentiment (religious/cultural) while Germany has 70% positive sentiment (beer culture).</p>
+            <p><strong>Challenge:</strong> A coffee shop owner receives dozens of reviews per week across Twitter, Instagram, Facebook, and Google — thousands per quarter. The raw feed is impossible to read end-to-end, impossible to compare channel by channel, and impossible to prioritise. Was that bad week a Banana Bread problem, a Facebook problem, or neither? By the time the pattern becomes visible, a month of customer confidence has already leaked.</p>
 
-            <p><strong>Solution:</strong> Public Sentiment Collection Agent uses geographic segmentation, source diversity tracking, and credibility scoring to provide accurate, context-aware sentiment analysis. The system automatically detects data quality issues like echo chamber bias and single-domain concentration.</p>
+            <p><strong>Solution:</strong> The Public Sentiment Collection Agent runs social-channel review data through a 5-agent AI pipeline — listening, sentiment classification, visualisation, export, and packaging. This showcase demonstrates the pipeline applied to 500 coffee shop reviews from Q1 2024. Output: ranked product list, channel-by-channel net-sentiment scores, flagged SKUs where negative outweighs positive, and a 60-day action plan — in under 10 minutes.</p>
 
             <div class="warning-box">
-                <h4>🚨 Why Geographic Filtering Matters</h4>
-                <p><strong>Example: "Public opinion on alcohol consumption"</strong></p>
-                <p>❌ <strong>WITHOUT geographic filtering:</strong> 60% negative, 30% neutral, 10% positive (MISLEADING - lumps all regions together)</p>
-                <p>✅ <strong>WITH geographic filtering:</strong></p>
+                <h4>🚨 Why Channel-Level Analysis Matters</h4>
+                <p><strong>Example: a mid-sized Malaysian coffee shop, 500 reviews in Q1 2024</strong></p>
+                <p>❌ <strong>WITHOUT channel segmentation:</strong> "50% positive" — sounds fine, hides which channel is bleeding reputation</p>
+                <p>✅ <strong>WITH channel segmentation:</strong></p>
                 <ul style="margin-top: 10px; padding-left: 20px;">
-                    <li>Saudi Arabia: 95% negative (religious/cultural context)</li>
-                    <li>Germany: 70% positive (beer culture)</li>
-                    <li>USA: 50/50 split (health concerns vs. social acceptance)</li>
+                    <li>Google: +27.6 net sentiment, 55% positive — strong</li>
+                    <li>Facebook: +4.2 net sentiment, 41% negative — actively bleeding reputation</li>
+                    <li>Two products (Banana Bread, Matcha Latte) have negative reviews outnumbering positive</li>
+                    <li>The signal points to 2 SKUs and 1 channel to fix, not "the coffee shop is bad"</li>
                 </ul>
             </div>
 
             <h3>Key Benefits</h3>
             <ul>
-                <li><strong>Geographic Segmentation:</strong> Analyze sentiment by country/region to reveal cultural nuances</li>
-                <li><strong>Source Diversity Tracking:</strong> Monitor news, social media, forums, blogs across regions</li>
-                <li><strong>Credibility Scoring:</strong> 0-100 score based on source diversity and sample size</li>
-                <li><strong>Automatic Bias Detection:</strong> Warns about echo chambers, single-domain concentration</li>
-                <li><strong>Comprehensive Output:</strong> 10 files per analysis (1 report, 4 charts, 5 CSV exports)</li>
+                <li><strong>Channel-level segmentation:</strong> Separate Google from Facebook — they report opposite stories</li>
+                <li><strong>Product-level drill-down:</strong> Find the specific SKUs where negative sentiment exceeds positive</li>
+                <li><strong>Net sentiment score per channel:</strong> Single KPI for monthly tracking and trend detection</li>
+                <li><strong>Automatic flagging:</strong> Surfaces products / channels needing urgent attention</li>
+                <li><strong>Comprehensive output:</strong> 10 files per run (1 markdown report, 4 charts, 5 CSV exports)</li>
             </ul>
         </div>
 
@@ -290,73 +291,72 @@
 
             <div class="features-grid">
                 <div class="feature-item">
-                    <h4>🌍 Geographic Social Listening Agent</h4>
-                    <p>Collects sentiment data with location-specific filtering using Tavily Search API. Tracks source diversity and issues quality warnings.</p>
+                    <h4>🌍 Listening Agent</h4>
+                    <p>Scans social channels and collects reviews with metadata — customer, channel, product, timestamp. In the coffee shop case: pulled 500 reviews across Twitter (141), Instagram (123), Facebook (120), Google (116) from 334 unique customers.</p>
                 </div>
 
                 <div class="feature-item">
-                    <h4>🧠 Comparative Sentiment Analysis Agent</h4>
-                    <p>Processes data separately for each location using Gemini AI. Calculates credibility scores: (Diversity × 0.6) + (Sample Size × 0.4)</p>
+                    <h4>🧠 Sentiment Agent</h4>
+                    <p>Classifies each review as positive / negative / neutral, then aggregates by channel, product, and category. In the coffee shop case: 252 positive, 171 negative, 77 neutral — 50.4% positive headline with strong channel-level variance.</p>
                 </div>
 
                 <div class="feature-item">
-                    <h4>📊 Comparative Visualization Designer Agent</h4>
-                    <p>Creates 4 professional charts: regional sentiment comparison, credibility dashboard, source diversity, and theme frequency.</p>
+                    <h4>📊 Visualization Agent</h4>
+                    <p>Builds 4 charts: channel comparison, product ranking, category heatmap, and monthly trend. In the coffee shop case: surfaced Facebook as harshest channel (+4.2 net sentiment) and Google as the kindest (+27.6).</p>
                 </div>
 
                 <div class="feature-item">
-                    <h4>💾 Data Export Agent</h4>
-                    <p>Exports 5 CSV files: sentiment distribution, emotion frequency, theme comparison, source attribution, and credibility metrics.</p>
+                    <h4>💾 Export Agent</h4>
+                    <p>Exports 5 CSVs for downstream use in Excel, Google Sheets, or BI tools. In the coffee shop case: channel breakdown, category rankings, flagged products, monthly net-sentiment trend, and most-active reviewers.</p>
                 </div>
 
                 <div class="feature-item">
-                    <h4>📝 Enhanced Packaging Agent</h4>
-                    <p>Generates executive-ready markdown reports with embedded visualizations, data tables, and methodological limitations.</p>
+                    <h4>📝 Packaging Agent</h4>
+                    <p>Produces an executive voice-of-customer report, top 3 action priorities, and a 60-day fix plan. In the coffee shop case: recommended fixing Banana Bread + Matcha Latte, activating Facebook reputation programme, and amplifying Sandwiches marketing.</p>
                 </div>
             </div>
 
-            <h3>AI Processing Pipeline</h3>
+            <h3>AI Processing Pipeline — as applied to the coffee shop review case</h3>
             <ul>
-                <li><strong>Step 1:</strong> Geographic data collection with location-based web search</li>
-                <li><strong>Step 2:</strong> Source diversity analysis and bias detection</li>
-                <li><strong>Step 3:</strong> Cultural context-aware sentiment analysis using Gemini AI</li>
-                <li><strong>Step 4:</strong> Credibility scoring and quality assessment</li>
-                <li><strong>Step 5:</strong> Comparative visualization generation</li>
-                <li><strong>Step 6:</strong> Data export to CSV for Excel/Google Sheets</li>
-                <li><strong>Step 7:</strong> Executive report packaging with all insights</li>
+                <li><strong>Step 1:</strong> Ingest 500-review dataset and normalise metadata (customer, channel, product, timestamp)</li>
+                <li><strong>Step 2:</strong> Classify each review (positive / negative / neutral) using Gemini AI</li>
+                <li><strong>Step 3:</strong> Roll up sentiment by channel, product category, and individual SKU</li>
+                <li><strong>Step 4:</strong> Compute net-sentiment KPIs and flag products where negative outweighs positive</li>
+                <li><strong>Step 5:</strong> Generate 4 charts (channel, product, category, monthly trend)</li>
+                <li><strong>Step 6:</strong> Export 5 CSVs (channel breakdown, category rankings, flagged products, net sentiment, top reviewers)</li>
+                <li><strong>Step 7:</strong> Package executive report + top 3 priorities + 60-day action plan</li>
             </ul>
         </div>
 
         <div class="content-section">
-            <h2>🔍 Source Diversity & Credibility Features</h2>
+            <h2>🔍 Channel Behaviour & Net-Sentiment Scoring</h2>
 
-            <h3>Source Type Classification</h3>
-            <p>The system automatically classifies sources into categories:</p>
+            <h3>Channel Behaviour Classification</h3>
+            <p>The system automatically classifies each social channel's behavioural pattern — in the coffee shop case:</p>
             <ul>
-                <li><strong>News:</strong> Professional journalism (BBC, CNN, Reuters, local news sites)</li>
-                <li><strong>Social Media:</strong> User-generated content (Reddit, Twitter, Facebook)</li>
-                <li><strong>Institutional:</strong> Government and academic sources (.gov, .edu)</li>
-                <li><strong>Blogs:</strong> Opinion and commentary (Medium, personal blogs)</li>
-                <li><strong>Forums:</strong> Community discussions and Q&A sites</li>
+                <li><strong>Google:</strong> Long-form, effort-required review — tends to reward positive experiences (55% positive, +27.6 net)</li>
+                <li><strong>Instagram:</strong> Visual and casual — mostly positive (52% positive, +17.9 net)</li>
+                <li><strong>Twitter:</strong> Short-form, polarised — balanced split (50% positive, +15.6 net)</li>
+                <li><strong>Facebook:</strong> Complaint-friendly — harshest channel (45% positive, 41% negative, +4.2 net)</li>
             </ul>
 
-            <h3>Automatic Bias Warnings</h3>
-            <p>The system issues warnings when data quality is compromised:</p>
+            <h3>Automatic Issue Flags</h3>
+            <p>The system issues warnings when a channel, category, or product signals distress — examples from the coffee shop case:</p>
             <div class="code-block">
-⚠️ Over 70% sources are social media (potential echo chamber bias)
-⚠️ 60% of sources from single domain: reddit.com
-⚠️ Only 4 unique sources (low diversity)
+⚠️ Product negative outweighs positive: Banana Bread (50% neg, 33% pos)
+⚠️ Product negative outweighs positive: Matcha Latte (47% neg, 40% pos)
+⚠️ Channel net sentiment below +10: Facebook (+4.2 — active reputation repair needed)
+⚠️ Category net sentiment below +15: Cold Coffee & Iced Drinks (+12)
             </div>
 
-            <h3>Credibility Score Calculation</h3>
+            <h3>Net Sentiment Score Calculation</h3>
             <div class="code-block">
-Credibility Score (0-100) =
-    Source Diversity Score × 0.6 +
-    Sample Size Score × 0.4
+Net Sentiment Score per channel =
+    (Positive count − Negative count) / Total × 100
 
-🟢 70-100: High confidence (diverse sources, adequate sample)
-🟡 50-69: Medium confidence (some limitations present)
-🔴 0-49: Low confidence (significant data quality concerns)
+🟢 +20 and above: Healthy (channel ambassadors — amplify content)
+🟡 +10 to +19: Monitor (watch the trend, respond to complaints)
+🔴 Below +10: Active repair (reply daily, tactical recovery playbook)
             </div>
         </div>
 
@@ -365,30 +365,30 @@ Credibility Score (0-100) =
 
             <h3>1 Markdown Report</h3>
             <ul>
-                <li>Executive summary with regional comparison</li>
-                <li>Sentiment distribution tables by location</li>
-                <li>Emotion and theme frequency breakdown</li>
-                <li>Credibility assessment with warnings</li>
-                <li>Source diversity analysis</li>
-                <li>Methodological limitations</li>
-                <li>Actionable recommendations</li>
+                <li>Executive summary with headline net sentiment</li>
+                <li>Channel-by-channel sentiment breakdown</li>
+                <li>Product category rankings by net score</li>
+                <li>Flagged products (negative outweighs positive)</li>
+                <li>Top reviewers / repeat customer patterns</li>
+                <li>60-day action plan with phased milestones</li>
+                <li>Top 3 priorities for the operator</li>
             </ul>
 
             <h3>4 Visualization Charts (PNG)</h3>
             <ul>
-                <li><strong>Regional Sentiment Comparison:</strong> Grouped bar chart showing positive/negative/neutral by location</li>
-                <li><strong>Credibility Dashboard:</strong> Horizontal bar charts for credibility scores and sample sizes</li>
-                <li><strong>Source Diversity Breakdown:</strong> Stacked bar chart showing source types by location</li>
-                <li><strong>Theme Frequency Comparison:</strong> Grouped bar chart showing theme mentions across regions</li>
+                <li><strong>Channel Sentiment Comparison:</strong> Stacked bar chart — positive / negative / neutral per channel</li>
+                <li><strong>Product Performance Ranking:</strong> Horizontal bar chart — top-positive products and most-flagged SKUs</li>
+                <li><strong>Category Heatmap:</strong> Product category × sentiment grid, net score per cell</li>
+                <li><strong>Monthly Volume & Trend:</strong> Review count per month with net-sentiment trend line</li>
             </ul>
 
             <h3>5 CSV Data Exports</h3>
             <ul>
-                <li><strong>sentiment_distribution.csv:</strong> Positive/negative/neutral percentages by location</li>
-                <li><strong>emotion_frequency.csv:</strong> Fear, anger, hope, joy, sadness counts per region</li>
-                <li><strong>theme_comparison.csv:</strong> Matrix of theme frequencies across locations</li>
-                <li><strong>source_attribution.csv:</strong> Domain-level source breakdown by location</li>
-                <li><strong>credibility_metrics.csv:</strong> Detailed quality metrics with warnings</li>
+                <li><strong>channel_sentiment.csv:</strong> Net sentiment breakdown per channel (Twitter / IG / FB / Google)</li>
+                <li><strong>category_performance.csv:</strong> Product categories ranked by net sentiment</li>
+                <li><strong>flagged_products.csv:</strong> SKUs where negative reviews outnumber positive</li>
+                <li><strong>customer_reviewers.csv:</strong> Most active reviewers (4+ reviews) — VIP / detractor candidates</li>
+                <li><strong>monthly_volume.csv:</strong> Review count and net sentiment by month</li>
             </ul>
         </div>
 
