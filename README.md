@@ -41,6 +41,7 @@ Each project is classified by its AI architecture pattern, based on how the syst
 |---|---|
 | [Business Intelligence Agent](./projects/business-intelligence-agent/) | NL query → plans analysis → writes code → executes → returns results |
 | [Ecommerce Analyst](./ecommerce-analyst.html) | Private analyst for mid-size e-commerce sellers. Ask about margins, returns, shipping; get a Monday brief |
+| [Hoo Tim Analytics Agent](./hoo-tim-analytics-agent.html) | Live AI agent + 5 MCP tools for a Selangor snack distributor — BYO Gemini key, 6,074 order lines, 300 resellers across 9 districts |
 | [Customer Segmentation Agent](./projects/customer-segmentation-agent/) | Autonomously profiles customers → segments → generates campaigns |
 | [Data Consulting Business Analyst](./projects/data-consulting-business-analyst/) | 4-agent architecture: research → competitor intel → opportunity → strategy |
 | [Stock Analysis Agent](./projects/stock-analysis-agent/) | 5-agent architecture: screening → fundamentals → moat → dividends → reporting |
@@ -497,6 +498,7 @@ All projects are production-deployed and accessible via live demos:
 | Customer Segmentation Agent | [Launch in Colab](https://colab.research.google.com/drive/1UfEqslRGbYY4qOcv2SCDrj1e0dC5jqJl) | Business Intelligence |
 | Business Intelligence Agent | [Launch in Colab](https://colab.research.google.com/drive/10wkxsg7Crcdz9oa3rFKlJ6Jtez1CB3xf) | Business Intelligence |
 | Ecommerce Analyst | [Launch Demo](https://lyven81.github.io/ai-project/projects/ecommerce-analyst/demo.html) | Business Intelligence |
+| Hoo Tim Analytics Agent | [Launch Demo](https://lyven81.github.io/ai-project/projects/hoo-tim-analytics-agent/demo.html) | Business Intelligence |
 | Kopitiam Digital Waiter | [Launch App](https://kopitiam-digital-waiter-169218045868.us-west1.run.app/) | Business Intelligence |
 | MyPropLex | [Launch Demo](https://lyven81.github.io/ai-project/projects/myproplex/demo.html) | Business Intelligence |
 | Social Media Marketer | [Launch Demo](https://lyven81.github.io/ai-project/projects/social-media-marketer/demo.html) | Business Intelligence |

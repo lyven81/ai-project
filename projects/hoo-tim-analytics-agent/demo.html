@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hoo Tim Analytics Agent — Live MCP Demo</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<script src="data.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Poppins', sans-serif; line-height: 1.6; color: #403B36; background-color: #ffffff; }
+  .container { display: flex; min-height: 100vh; }
+
+  .left-column { width: 30%; background-color: #f8f8f8; padding: 40px 30px; position: fixed; height: 100vh; overflow-y: auto; border-right: 1px solid #e0e0e0; }
+  .left-column h1 { font-size: 1.8em; font-weight: bold; color: #403B36; margin-bottom: 10px; }
+  .left-column h2 { font-size: 1em; font-weight: 400; color: #666; margin-bottom: 20px; }
+  .intro p { color: #555; margin-bottom: 20px; line-height: 1.8; }
+  .badge { display: inline-block; padding: 6px 12px; background-color: #fff3e0; color: #8a5400; border-radius: 20px; font-size: 0.8em; font-weight: 600; margin-top: 10px; border: 1px solid #f0c27b; }
+  .link-section { margin: 15px 0; }
+  .link-btn { display: inline-block; padding: 12px 30px; background-color: #403B36; color: #fff; text-decoration: none; border-radius: 5px; font-weight: 500; transition: background-color 0.3s ease; text-align: center; width: 100%; }
+  .link-btn:hover { background-color: #CBA135; }
+  .about { margin-top: 30px; }
+  .about h2 { font-size: 1.1em; color: #403B36; margin-bottom: 12px; font-weight: 600; }
+  .about p { color: #555; margin-bottom: 12px; font-size: 0.92em; }
+  .about ul { list-style: none; }
+  .about li { margin-bottom: 8px; color: #555; font-size: 0.9em; padding-left: 16px; position: relative; }
+  .about li::before { content: '▸'; position: absolute; left: 0; color: #CBA135; }
+  .about a { color: #CBA135; text-decoration: none; }
+  .about a:hover { text-decoration: underline; }
+
+  .right-column { width: 70%; margin-left: 30%; padding: 30px 40px; background-color: #ffffff; }
+
+  .hero { text-align: center; margin-bottom: 24px; padding-bottom: 18px; border-bottom: 2px solid #e0e0e0; }
+  .hero h1 { font-size: 2em; color: #403B36; margin-bottom: 8px; font-weight: 600; }
+  .hero p { font-size: 1em; color: #666; line-height: 1.7; }
+  .hero .pill { display: inline-block; margin-top: 10px; padding: 4px 12px; background: #fff3e0; color: #8a5400; border-radius: 16px; font-size: 0.75em; font-weight: 600; letter-spacing: 0.4px; }
+
+  .meta-bar { max-width: 900px; margin: 0 auto 20px auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .meta-card { background-color: #faf6ec; border: 1px solid #e5d9b0; border-radius: 8px; padding: 12px 10px; text-align: center; }
+  .meta-card .num { font-size: 1.2em; font-weight: 700; color: #8a5400; display: block; }
+  .meta-card .lbl { font-size: 0.72em; color: #7a6a55; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
+
+  .api-card { max-width: 900px; margin: 0 auto 20px auto; background: linear-gradient(135deg, #1a1915, #2a2722); border: 2px solid #CBA135; border-radius: 12px; padding: 18px 22px; color: #f0e9d8; }
+  .api-card .api-title { font-size: 0.95em; font-weight: 600; color: #CBA135; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+  .api-card .api-dot { width: 8px; height: 8px; border-radius: 50%; background: #e57373; display: inline-block; }
+  .api-card .api-dot.ok { background: #7ed957; }
+  .api-card .api-row { display: flex; gap: 10px; align-items: center; margin-top: 6px; }
+  .api-card input { flex: 1; padding: 10px 14px; border: 1px solid #555; background: #0e0d0a; color: #f0e9d8; border-radius: 6px; font-family: 'Courier New', monospace; font-size: 0.9em; }
+  .api-card input:focus { outline: none; border-color: #CBA135; }
+  .api-card button { padding: 10px 18px; background: #CBA135; color: #1a1915; border: none; border-radius: 6px; font-family: 'Poppins', sans-serif; font-weight: 600; cursor: pointer; }
+  .api-card button:hover { background: #d4b34e; }
+  .api-card .api-help { font-size: 0.78em; color: #b8ad8e; margin-top: 8px; }
+  .api-card .api-help a { color: #CBA135; text-decoration: none; }
+
+  .mcp-panel { max-width: 900px; margin: 0 auto 20px auto; background: linear-gradient(135deg, #fff8ec, #faf6ec); border: 1px solid #e5d9b0; border-radius: 10px; padding: 16px 20px; }
+  .mcp-panel .mcp-title { font-size: 0.9em; font-weight: 600; color: #8a5400; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+  .mcp-tools { display: flex; flex-wrap: wrap; gap: 8px; }
+  .mcp-tool { background: #fff; border: 1px solid #CBA135; padding: 6px 12px; border-radius: 20px; font-size: 0.78em; color: #5a3a28; font-family: 'Courier New', monospace; }
+  .mcp-tool.active { background: #CBA135; color: #fff; }
+
+  .section-title { font-size: 1.15em; color: #403B36; margin-bottom: 4px; font-weight: 600; }
+  .section-sub { font-size: 0.85em; color: #888; margin-bottom: 14px; }
+
+  .quick-section { max-width: 900px; margin: 0 auto 24px auto; background-color: #f8f8f8; border-radius: 10px; padding: 20px 24px; box-shadow: 0 2px 10px rgba(0,0,0,0.06); }
+  .quick-category { margin-top: 14px; }
+  .quick-category:first-of-type { margin-top: 0; }
+  .quick-category .cat-label { font-size: 0.78em; color: #8a5400; text-transform: uppercase; letter-spacing: 0.6px; font-weight: 600; margin-bottom: 8px; }
+  .quick-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .question-btn { padding: 11px 14px; background-color: #ffffff; color: #403B36; border: 1px solid #e5d9b0; border-radius: 8px; text-align: left; cursor: pointer; font-size: 0.85em; font-family: 'Poppins', sans-serif; transition: all 0.25s ease; line-height: 1.4; }
+  .question-btn:hover { background-color: #CBA135; color: #ffffff; border-color: #CBA135; transform: translateY(-1px); box-shadow: 0 3px 10px rgba(203, 161, 53, 0.25); }
+
+  .chat-section { max-width: 900px; margin: 0 auto 24px auto; background-color: #ffffff; border: 1px solid #e5d9b0; border-radius: 10px; padding: 20px 24px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); }
+  .chat-messages { min-height: 80px; max-height: 700px; overflow-y: auto; }
+  .message { margin-bottom: 14px; padding: 12px 16px; border-radius: 10px; animation: fadeIn 0.4s ease-in; font-size: 0.92em; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  .message.user { background-color: #CBA135; color: #ffffff; margin-left: 60px; text-align: right; }
+  .message.agent { background-color: #faf6ec; color: #403B36; margin-right: 60px; border: 1px solid #e5d9b0; }
+  .message.agent .agent-label { font-weight: 600; color: #8a5400; margin-bottom: 6px; display: block; font-size: 0.82em; }
+  .message.tool-trace { background: #0e0d0a; color: #CBA135; margin-right: 60px; font-family: 'Courier New', monospace; font-size: 0.78em; padding: 10px 14px; border-radius: 6px; line-height: 1.7; }
+  .message.tool-trace .trace-line { display: block; }
+  .message.tool-trace .trace-key { color: #7ed957; }
+  .message.tool-trace .trace-val { color: #f0e9d8; }
+  .message.agent p { margin-bottom: 8px; }
+  .message.agent strong { color: #8a5400; }
+  .message.agent table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 0.85em; background: #fff; }
+  .message.agent th, .message.agent td { border: 1px solid #e0e0e0; padding: 6px 9px; text-align: left; }
+  .message.agent th { background-color: #fff3e0; font-weight: 600; color: #8a5400; }
+  .message.agent ul, .message.agent ol { margin: 8px 0 8px 22px; }
+  .message.agent li { margin-bottom: 4px; }
+  .message.error { background: #fde8e8; color: #8a2a2a; border: 1px solid #f5b8b8; margin-right: 60px; }
+
+  .input-area { margin-top: 16px; display: flex; gap: 10px; }
+  .input-area input { flex: 1; padding: 12px 16px; border: 2px solid #e5d9b0; border-radius: 8px; font-family: 'Poppins', sans-serif; font-size: 0.95em; background-color: #fff; }
+  .input-area input:focus { outline: none; border-color: #CBA135; }
+  .input-area button { padding: 12px 26px; background-color: #CBA135; color: #fff; border: none; border-radius: 8px; cursor: pointer; font-family: 'Poppins', sans-serif; font-size: 0.95em; font-weight: 600; }
+  .input-area button:hover { background-color: #B8902E; }
+  .input-area button:disabled { background: #ccc; cursor: not-allowed; }
+
+  footer { text-align: center; padding: 20px; background-color: #222; color: #fff; margin-top: 40px; margin-left: 30%; }
+  footer p { margin: 0; font-size: 0.88em; }
+
+  @media (max-width: 768px) {
+    .container { flex-direction: column; }
+    .left-column { width: 100%; position: relative; height: auto; }
+    .right-column { width: 100%; margin-left: 0; padding: 20px 16px; }
+    .meta-bar { grid-template-columns: repeat(2, 1fr); }
+    .quick-grid { grid-template-columns: 1fr; }
+    .message.user { margin-left: 20px; }
+    .message.agent, .message.tool-trace, .message.error { margin-right: 20px; }
+    footer { margin-left: 0; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <aside class="left-column">
+    <header>
+      <h1>Lee Yih Ven</h1>
+      <h2>AI Project Portfolio</h2>
+    </header>
+    <section class="intro">
+      <p><strong>Hoo Tim Analytics Agent</strong> — a live AI agent that answers distribution questions for a Selangor snack distributor. Bring your own Gemini API key to experience the agent query real data through a simulated MCP tool layer.</p>
+      <div class="badge">Live Demo • BYO Key • 6,074 orders</div>
+    </section>
+    <section class="link-section">
+      <a class="link-btn" href="https://lyven81.github.io/ai-project/index.html">Home</a>
+    </section>
+    <section class="link-section">
+      <a class="link-btn" href="https://lyven81.github.io/ai-project/hoo-tim-analytics-agent.html">Project Outline</a>
+    </section>
+    <section class="about">
+      <h2>Fictional Company Notice</h2>
+      <p>Hoo Tim Biscuits is a fictional Malaysian snack distributor created for portfolio purposes. Data is synthetic — no affiliation with any real brand.</p>
+      <h2>Business Context</h2>
+      <ul>
+        <li>December 2025 distribution data</li>
+        <li>40 SKUs across 6 categories</li>
+        <li>300 resellers in 9 Selangor districts</li>
+        <li>5 channels: supermarket, minimarket, convenience, petrol, sundry</li>
+      </ul>
+      <h2>How It Works</h2>
+      <ul>
+        <li>You enter your Gemini API key (kept in browser session only)</li>
+        <li>Agent picks MCP tools from a catalog of 5</li>
+        <li>Tools query pre-aggregated data in-browser</li>
+        <li>Gemini 2.0 Flash writes the narrative grounded in real numbers</li>
+      </ul>
+      <h2>Get a Gemini API Key</h2>
+      <p><a href="https://aistudio.google.com/apikey" target="_blank">Google AI Studio → API Keys</a> (free tier available)</p>
+    </section>
+  </aside>
+
+  <main class="right-column">
+    <section class="hero">
+      <h1>🍪 Hoo Tim Analytics Agent</h1>
+      <p>Ask distribution questions — SKU, outlet, district, delivery. Answers grounded in real December 2025 data.</p>
+      <span class="pill">LIVE AGENT + MCP TOOLS</span>
+    </section>
+
+    <div class="meta-bar">
+      <div class="meta-card"><span class="num" id="m-revenue">–</span><span class="lbl">Total Revenue</span></div>
+      <div class="meta-card"><span class="num" id="m-outlets">–</span><span class="lbl">Active Outlets</span></div>
+      <div class="meta-card"><span class="num" id="m-skus">–</span><span class="lbl">SKUs Sold</span></div>
+      <div class="meta-card"><span class="num" id="m-orders">–</span><span class="lbl">Order Lines</span></div>
+    </div>
+
+    <div class="api-card">
+      <div class="api-title"><span class="api-dot" id="api-dot"></span>Gemini API Key</div>
+      <div class="api-row">
+        <input type="password" id="api-key" placeholder="Paste your Gemini API key (starts with AIza…)" autocomplete="off">
+        <button onclick="saveKey()">Activate</button>
+      </div>
+      <div class="api-help">Your key stays in this browser session — it is never sent anywhere except directly to Google's Gemini API. Get a free key at <a href="https://aistudio.google.com/apikey" target="_blank">aistudio.google.com/apikey</a>.</div>
+    </div>
+
+    <div class="mcp-panel">
+      <div class="mcp-title">🔧 MCP Tool Catalog <span style="font-weight:400; color:#7a6a55; font-size:0.82em;">(agent picks relevant tools per question)</span></div>
+      <div class="mcp-tools" id="mcp-tools">
+        <span class="mcp-tool" data-tool="get_aggregate">get_aggregate</span>
+        <span class="mcp-tool" data-tool="get_top_n">get_top_n</span>
+        <span class="mcp-tool" data-tool="get_cross_tab">get_cross_tab</span>
+        <span class="mcp-tool" data-tool="get_delivery_performance">get_delivery_performance</span>
+        <span class="mcp-tool" data-tool="get_time_series">get_time_series</span>
+      </div>
+    </div>
+
+    <div class="quick-section">
+      <div class="section-title">Quick Questions</div>
+      <div class="section-sub">Pick one to see the agent in action, or type your own below.</div>
+
+      <div class="quick-category">
+        <div class="cat-label">Sales Performance</div>
+        <div class="quick-grid">
+          <button class="question-btn" onclick="ask(this.textContent)">Which 10 SKUs generated the highest revenue in December, and what share of total sales?</button>
+          <button class="question-btn" onclick="ask(this.textContent)">Which SKUs are slow movers (bottom 10 by volume)?</button>
+        </div>
+      </div>
+
+      <div class="quick-category">
+        <div class="cat-label">Channel &amp; Outlet</div>
+        <div class="quick-grid">
+          <button class="question-btn" onclick="ask(this.textContent)">How does revenue split across channels, and which channel has the best revenue per outlet?</button>
+          <button class="question-btn" onclick="ask(this.textContent)">Who are the top 20 resellers by revenue, and how much do they concentrate?</button>
+          <button class="question-btn" onclick="ask(this.textContent)">Which resellers ordered below their channel average (at-risk accounts)?</button>
+        </div>
+      </div>
+
+      <div class="quick-category">
+        <div class="cat-label">Geographic Coverage</div>
+        <div class="quick-grid">
+          <button class="question-btn" onclick="ask(this.textContent)">What is the revenue split across the 9 Selangor districts, and which are under-served?</button>
+          <button class="question-btn" onclick="ask(this.textContent)">Which district–channel combinations are strongest vs weakest?</button>
+        </div>
+      </div>
+
+      <div class="quick-category">
+        <div class="cat-label">Category</div>
+        <div class="quick-grid">
+          <button class="question-btn" onclick="ask(this.textContent)">Which product category generated the most December revenue, and what share of total sales?</button>
+          <button class="question-btn" onclick="ask(this.textContent)">How does category mix vary across channels?</button>
+        </div>
+      </div>
+
+      <div class="quick-category">
+        <div class="cat-label">Margin</div>
+        <div class="quick-grid">
+          <button class="question-btn" onclick="ask(this.textContent)">Which category delivers the highest total gross margin (RM profit) in December?</button>
+          <button class="question-btn" onclick="ask(this.textContent)">Which category has the thinnest gross margin % and may need a price review?</button>
+        </div>
+      </div>
+
+      <div class="quick-category">
+        <div class="cat-label">Operations &amp; Delivery</div>
+        <div class="quick-grid">
+          <button class="question-btn" onclick="ask(this.textContent)">What is the on-time delivery rate by district, and which are the worst performers?</button>
+          <button class="question-btn" onclick="ask(this.textContent)">Which channels suffer most from late deliveries, and how many outlets are affected?</button>
+        </div>
+      </div>
+
+      <div class="quick-category">
+        <div class="cat-label">Demand Timing</div>
+        <div class="quick-grid">
+          <button class="question-btn" onclick="ask(this.textContent)">How did daily order volume trend across December, and which days drove the festive spike?</button>
+          <button class="question-btn" onclick="ask(this.textContent)">What percentage of December revenue came from the Christmas–New Year campaign (15–31 Dec) vs the first half (1–14 Dec)?</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-section">
+      <div class="section-title">Agent Conversation</div>
+      <div class="section-sub">Tool calls and data appear as dark terminal lines; the agent's written answer follows.</div>
+      <div class="chat-messages" id="chat"></div>
+      <div class="input-area">
+        <input type="text" id="input" placeholder="Ask anything about distribution — SKUs, outlets, districts, delivery…" onkeypress="if(event.key==='Enter') sendQ()">
+        <button id="send-btn" onclick="sendQ()">Send</button>
+      </div>
+    </div>
+  </main>
+</div>
+
+<footer>
+  <p>&copy; 2025 Lee Yih Ven | Data-Driven Solutions — Fictional Company for Portfolio Purposes</p>
+</footer>
+
+<script>
+const D = window.HOOTIM_DATA;
+
+// ---- Populate meta bar ----
+document.getElementById('m-revenue').textContent = 'RM ' + (D.meta.total_revenue / 1000000).toFixed(2) + 'M';
+document.getElementById('m-outlets').textContent = D.meta.total_outlets;
+document.getElementById('m-skus').textContent = D.meta.total_skus;
+document.getElementById('m-orders').textContent = D.meta.total_rows.toLocaleString();
+
+// ---- API key handling ----
+const apiKeyInput = document.getElementById('api-key');
+const apiDot = document.getElementById('api-dot');
+const sendBtn = document.getElementById('send-btn');
+
+const savedKey = sessionStorage.getItem('hootim_gemini_key');
+if (savedKey) { apiKeyInput.value = savedKey; apiDot.classList.add('ok'); }
+
+function saveKey() {
+  const k = apiKeyInput.value.trim();
+  if (!k) return;
+  sessionStorage.setItem('hootim_gemini_key', k);
+  apiDot.classList.add('ok');
+  addTrace([{ tool: 'system', output: 'API key activated. Agent ready to take questions.' }]);
+}
+
+// ---- MCP tool implementations (in-browser) ----
+const TOOLS = {
+  get_aggregate: (dim) => {
+    const map = { district: D.district, channel: D.channel, category: D.category, sku: D.sku.slice(0, 40) };
+    return map[dim] || null;
+  },
+  get_top_n: (dim, n, direction) => {
+    const sorted = [...(D[dim] || [])];
+    const dir = direction === 'asc' ? 1 : -1;
+    const metric = dim === 'sku' ? 'quantity' : 'revenue';
+    sorted.sort((a, b) => dir * (a[metric] - b[metric]));
+    return sorted.slice(0, n);
+  },
+  get_cross_tab: (rowDim, colDim) => {
+    if (rowDim === 'district' && colDim === 'channel') return D.district_channel_matrix;
+    if (rowDim === 'category' && colDim === 'channel') return D.category_channel_matrix;
+    return null;
+  },
+  get_delivery_performance: (groupBy) => {
+    if (groupBy === 'district') return D.district.map(d => ({ district: d.district, on_time_pct: d.on_time_pct, slightly_late_pct: d.slightly_late_pct, very_late_pct: d.very_late_pct, line_items: d.line_items }));
+    if (groupBy === 'channel') return D.channel.map(c => ({ channel: c.channel, on_time_pct: c.on_time_pct, slightly_late_pct: c.slightly_late_pct, very_late_pct: c.very_late_pct, outlets: c.outlets }));
+    return null;
+  },
+  get_time_series: (period) => {
+    if (period === 'daily') return D.daily_trend;
+    if (period === 'campaign_window') return D.campaign_compare;
+    return null;
+  },
+  get_at_risk_accounts: () => D.at_risk_accounts.slice(0, 20),
+  get_top_resellers: (n) => D.reseller.slice(0, n || 20),
+};
+
+// ---- Keyword-based tool dispatcher ----
+function dispatchTools(question) {
+  const q = question.toLowerCase();
+  const calls = [];
+
+  // SKU questions
+  if (/\bsku\b|highest revenue|top.*product|slow mov|bottom.*sku|bottom.*volume/i.test(question)) {
+    if (/slow|bottom|lowest/.test(q)) {
+      calls.push({ tool: 'get_top_n', args: { dim: 'sku', n: 10, direction: 'asc' }, output: TOOLS.get_top_n('sku', 10, 'asc') });
+    } else {
+      calls.push({ tool: 'get_top_n', args: { dim: 'sku', n: 10, direction: 'desc' }, output: D.sku.slice(0, 10) });
+    }
+  }
+
+  // At-risk accounts
+  if (/at[- ]?risk|below.*average|under.*perform|low.*volume/i.test(question)) {
+    calls.push({ tool: 'get_at_risk_accounts', args: {}, output: TOOLS.get_at_risk_accounts() });
+  }
+
+  // Top resellers
+  if (/top.*reseller|top.*outlet|concentrate|top 20.*customer/i.test(question)) {
+    calls.push({ tool: 'get_top_resellers', args: { n: 20 }, output: TOOLS.get_top_resellers(20) });
+  }
+
+  // District × channel cross-tab
+  if (/district.*channel|channel.*district|district.*combination/i.test(question)) {
+    calls.push({ tool: 'get_cross_tab', args: { row: 'district', col: 'channel' }, output: D.district_channel_matrix });
+  }
+
+  // Category × channel cross-tab
+  if (/category.*channel|channel.*category|category mix.*channel|mix vary|mix across/i.test(question)) {
+    calls.push({ tool: 'get_cross_tab', args: { row: 'category', col: 'channel' }, output: D.category_channel_matrix });
+  }
+
+  // District breakdown
+  if (/district|selangor|geograph|under.?served/i.test(question) && !calls.find(c => c.tool === 'get_cross_tab')) {
+    calls.push({ tool: 'get_aggregate', args: { dim: 'district' }, output: D.district });
+  }
+
+  // Channel breakdown
+  if (/channel|supermarket|minimarket|convenience|petrol|sundry|revenue per outlet/i.test(question) && !calls.find(c => c.tool === 'get_cross_tab')) {
+    calls.push({ tool: 'get_aggregate', args: { dim: 'channel' }, output: D.channel });
+  }
+
+  // Category
+  if (/\bcategor|product category|category mix/i.test(question) && !calls.find(c => c.tool === 'get_cross_tab' && c.args.row === 'category')) {
+    calls.push({ tool: 'get_aggregate', args: { dim: 'category' }, output: D.category });
+  }
+
+  // Margin
+  if (/margin|profit|gross/i.test(question)) {
+    if (!calls.find(c => c.tool === 'get_aggregate' && c.args.dim === 'category')) {
+      calls.push({ tool: 'get_aggregate', args: { dim: 'category' }, output: D.category });
+    }
+  }
+
+  // Delivery
+  if (/deliver|on[- ]?time|late|sla|logistic/i.test(question)) {
+    const groupBy = /channel/i.test(question) ? 'channel' : 'district';
+    calls.push({ tool: 'get_delivery_performance', args: { group_by: groupBy }, output: TOOLS.get_delivery_performance(groupBy) });
+  }
+
+  // Time / campaign
+  if (/daily|trend|spike|day.*month|day of week/i.test(question)) {
+    calls.push({ tool: 'get_time_series', args: { period: 'daily' }, output: D.daily_trend });
+  }
+  if (/christmas|new year|campaign|15[- ]?31|first half|second half/i.test(question)) {
+    calls.push({ tool: 'get_time_series', args: { period: 'campaign_window' }, output: D.campaign_compare });
+  }
+
+  // Fallback — always supply meta + top skus if nothing matched
+  if (calls.length === 0) {
+    calls.push({ tool: 'get_aggregate', args: { dim: 'category' }, output: D.category });
+    calls.push({ tool: 'get_top_n', args: { dim: 'sku', n: 10, direction: 'desc' }, output: D.sku.slice(0, 10) });
+  }
+
+  return calls;
+}
+
+// ---- Highlight active MCP tools ----
+function highlightTools(calls) {
+  document.querySelectorAll('.mcp-tool').forEach(el => el.classList.remove('active'));
+  const names = new Set(calls.map(c => c.tool));
+  document.querySelectorAll('.mcp-tool').forEach(el => {
+    if (names.has(el.dataset.tool)) el.classList.add('active');
+  });
+}
+
+// ---- Chat UI ----
+const chat = document.getElementById('chat');
+const input = document.getElementById('input');
+
+function addMsg(text, cls) {
+  const div = document.createElement('div');
+  div.className = 'message ' + cls;
+  if (cls === 'user') div.textContent = text;
+  else div.innerHTML = text;
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+  return div;
+}
+
+function addTrace(calls) {
+  const div = document.createElement('div');
+  div.className = 'message tool-trace';
+  const lines = calls.map(c => {
+    const args = c.args ? JSON.stringify(c.args) : '{}';
+    const rowCount = Array.isArray(c.output) ? c.output.length + ' rows' : (c.output && typeof c.output === 'object' ? Object.keys(c.output).length + ' keys' : 'ok');
+    return `<span class="trace-line">▸ <span class="trace-key">${c.tool}</span>(${args}) → <span class="trace-val">${rowCount}</span></span>`;
+  }).join('');
+  div.innerHTML = lines;
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+// ---- Minimal markdown renderer (tables, bold, bullets, headings) ----
+function renderMarkdown(md) {
+  let html = md;
+  html = html.replace(/^### (.*$)/gm, '<h3>$1</h3>');
+  html = html.replace(/^## (.*$)/gm, '<h3>$1</h3>');
+  html = html.replace(/^# (.*$)/gm, '<h3>$1</h3>');
+  html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+
+  // Tables
+  html = html.replace(/((?:\|.+\|\n)+)/g, (table) => {
+    const rows = table.trim().split('\n').filter(r => r.trim());
+    if (rows.length < 2) return table;
+    let t = '<table>';
+    rows.forEach((row, i) => {
+      if (row.match(/^\|[\s\-:|]+\|$/)) return;
+      const cells = row.split('|').filter((c, idx, arr) => idx > 0 && idx < arr.length - 1);
+      const tag = i === 0 ? 'th' : 'td';
+      t += '<tr>' + cells.map(c => `<${tag}>${c.trim()}</${tag}>`).join('') + '</tr>';
+    });
+    t += '</table>';
+    return t;
+  });
+
+  html = html.replace(/^[-*] (.+)$/gm, '<li>$1</li>');
+  html = html.replace(/((?:<li>.+<\/li>\n?)+)/g, '<ul>$1</ul>');
+  html = html.replace(/\n{2,}/g, '</p><p>');
+  html = html.replace(/\n/g, '<br>');
+  html = '<p>' + html + '</p>';
+  html = html.replace(/<p><\/p>/g, '').replace(/<p>(<h3>.*?<\/h3>)<\/p>/g, '$1').replace(/<p>(<table>.*?<\/table>)<\/p>/gs, '$1').replace(/<p>(<ul>.*?<\/ul>)<\/p>/gs, '$1');
+  return html;
+}
+
+// ---- Send a question to the agent ----
+function ask(text) {
+  input.value = text;
+  sendQ();
+}
+
+async function sendQ() {
+  const apiKey = (apiKeyInput.value || '').trim();
+  if (!apiKey) {
+    addMsg('Please paste your Gemini API key at the top of the page first — then press Activate.', 'error');
+    apiKeyInput.focus();
+    return;
+  }
+  const text = input.value.trim();
+  if (!text) return;
+
+  input.value = '';
+  sendBtn.disabled = true;
+  addMsg(text, 'user');
+
+  // Step 1: dispatch tools
+  const calls = dispatchTools(text);
+  highlightTools(calls);
+  addTrace(calls);
+
+  // Step 2: build context for LLM
+  const toolContext = calls.map(c => `### ${c.tool}(${JSON.stringify(c.args)})\n${JSON.stringify(c.output).slice(0, 12000)}`).join('\n\n');
+
+  const systemPrompt = `You are the Hoo Tim Analytics Agent — an AI distribution analyst for a fictional Malaysian snack distributor covering all 9 Selangor districts in December 2025.
+
+CONTEXT:
+- 40 SKUs across 6 categories (Layer Cakes, Wafer Sticks, Chocolate Wafers, Cream Crackers, Premium, Festive Gift Packs)
+- 300 resellers across 5 channels (Supermarket, Minimarket, Convenience Store, Petrol Station, Sundry Shop)
+- 9 districts (Petaling, Klang, Hulu Langat, Gombak, Sepang, Kuala Langat, Hulu Selangor, Kuala Selangor, Sabak Bernam)
+- Unit of sale: carton. Currency: RM.
+- Total: RM ${D.meta.total_revenue.toLocaleString()} revenue, ${D.meta.total_rows.toLocaleString()} order lines.
+
+RESPONSE RULES:
+- Ground every number in the tool output below. Do not invent figures.
+- Use markdown with a clean table for the main breakdown, then a short "Insight" paragraph and a "Recommendation" bullet.
+- Keep answers under 250 words unless the question demands more detail.
+- Use "RM" prefix for money, comma thousands, round to nearest RM.
+- The audience is a Malaysian SME business owner — practical, non-technical language.
+
+MCP TOOL OUTPUTS:
+${toolContext}`;
+
+  const loader = addMsg('<em>Agent is analyzing data…</em>', 'agent');
+
+  try {
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        system_instruction: { parts: [{ text: systemPrompt }] },
+        contents: [{ role: 'user', parts: [{ text }] }],
+        generationConfig: { temperature: 0.2, maxOutputTokens: 1400 }
+      })
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error.message);
+    const answer = data.candidates?.[0]?.content?.parts?.[0]?.text || 'No response.';
+    loader.innerHTML = '<span class="agent-label">Hoo Tim Analytics Agent</span>' + renderMarkdown(answer);
+  } catch (e) {
+    loader.className = 'message error';
+    loader.innerHTML = '⚠️ ' + e.message + '<br><br>Check your API key and try again. Free keys are available at <a href="https://aistudio.google.com/apikey" target="_blank">aistudio.google.com/apikey</a>.';
+  }
+
+  sendBtn.disabled = false;
+  input.focus();
+}
+</script>
+</body>
+</html>
