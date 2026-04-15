@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ecommerce Analyst — Private Analyst for E-commerce Sellers</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Poppins', sans-serif; line-height: 1.6; color: #403B36; background-color: #ffffff; }
+  .container { display: flex; min-height: 100vh; }
+  .left-column { width: 30%; background-color: #f8f8f8; padding: 40px 30px; position: fixed; height: 100vh; overflow-y: auto; border-right: 1px solid #e0e0e0; }
+  .left-column h1 { font-size: 1.8em; font-weight: bold; color: #403B36; margin-bottom: 10px; }
+  .left-column h2 { font-size: 1em; font-weight: 400; color: #666; margin-bottom: 20px; }
+  .intro p { color: #555; margin-bottom: 20px; line-height: 1.8; }
+  .badge { display: inline-block; padding: 6px 12px; background-color: #fff3e0; color: #8a5400; border-radius: 20px; font-size: 0.8em; font-weight: 600; margin-top: 10px; border: 1px solid #f0c27b; }
+  .link-section { margin: 15px 0; }
+  .link-btn { display: inline-block; padding: 12px 30px; background-color: #403B36; color: #fff; text-decoration: none; border-radius: 5px; font-weight: 500; transition: background-color 0.3s ease; text-align: center; width: 100%; }
+  .link-btn:hover { background-color: #CBA135; }
+  .about { margin-top: 30px; }
+  .about h2 { font-size: 1.1em; color: #403B36; margin-bottom: 12px; font-weight: 600; }
+  .about p { color: #555; margin-bottom: 12px; font-size: 0.92em; }
+  .about ul { list-style: none; }
+  .about li { margin-bottom: 8px; color: #555; font-size: 0.9em; }
+  .about a { color: #CBA135; text-decoration: none; }
+  .about a:hover { text-decoration: underline; }
+
+  .right-column { width: 70%; margin-left: 30%; padding: 40px 50px; background-color: #ffffff; }
+  .hero { text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 2px solid #e0e0e0; }
+  .hero h1 { font-size: 2.2em; color: #403B36; margin-bottom: 10px; font-weight: 600; }
+  .hero p { font-size: 1.05em; color: #666; line-height: 1.8; }
+
+  .meta-bar { max-width: 900px; margin: 0 auto 20px auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .meta-card { background-color: #faf6ec; border: 1px solid #e5d9b0; border-radius: 8px; padding: 14px; text-align: center; }
+  .meta-card .num { font-size: 1.4em; font-weight: 700; color: #8a5400; display: block; }
+  .meta-card .lbl { font-size: 0.78em; color: #7a6a55; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
+
+  .brief-card { max-width: 900px; margin: 0 auto 28px auto; background: linear-gradient(135deg, #fff8ec, #faf6ec); border: 2px solid #CBA135; border-radius: 12px; padding: 24px 28px; box-shadow: 0 4px 16px rgba(203, 161, 53, 0.15); }
+  .brief-card h2 { font-size: 1.3em; color: #8a5400; margin-bottom: 6px; }
+  .brief-card .week { font-size: 0.85em; color: #999; margin-bottom: 18px; }
+  .brief-section { margin-bottom: 14px; }
+  .brief-section h3 { font-size: 1em; color: #403B36; margin-bottom: 6px; font-weight: 600; }
+  .brief-section ul { list-style: none; padding-left: 0; }
+  .brief-section li { padding: 5px 0 5px 20px; position: relative; font-size: 0.93em; color: #444; }
+  .brief-section.wins li::before { content: '✓'; position: absolute; left: 0; color: #4CAF50; font-weight: bold; }
+  .brief-section.worries li::before { content: '!'; position: absolute; left: 0; color: #d84315; font-weight: bold; }
+  .brief-decision { padding: 14px 16px; background-color: #ffffff; border-left: 4px solid #CBA135; border-radius: 4px; margin-top: 12px; font-size: 0.95em; color: #403B36; }
+  .brief-decision strong { color: #8a5400; }
+
+  .section-title { font-size: 1.3em; color: #403B36; margin-bottom: 6px; font-weight: 600; }
+  .section-sub { font-size: 0.9em; color: #888; margin-bottom: 16px; }
+
+  .quick-section { max-width: 900px; margin: 0 auto 28px auto; background-color: #f8f8f8; border-radius: 10px; padding: 24px 26px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+  .quick-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .question-btn { padding: 14px 16px; background-color: #ffffff; color: #403B36; border: 2px solid #CBA135; border-radius: 8px; text-align: left; cursor: pointer; font-size: 0.92em; font-family: 'Poppins', sans-serif; transition: all 0.3s ease; line-height: 1.4; }
+  .question-btn:hover { background-color: #CBA135; color: #ffffff; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(203, 161, 53, 0.3); }
+
+  .chat-section { max-width: 900px; margin: 0 auto 28px auto; background-color: #f8f8f8; border-radius: 10px; padding: 24px 26px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+
+  .chat-messages { margin-top: 22px; }
+  .message { margin-bottom: 18px; padding: 14px 18px; border-radius: 10px; animation: fadeIn 0.5s ease-in; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  .message.user { background-color: #CBA135; color: #ffffff; margin-left: 50px; text-align: right; }
+  .message.agent { background-color: #ffffff; color: #403B36; margin-right: 50px; border: 1px solid #e0e0e0; }
+  .message.agent .agent-label { font-weight: 600; color: #CBA135; margin-bottom: 8px; display: block; font-size: 0.88em; }
+  .message.agent p { margin-bottom: 10px; }
+  .message.agent strong { color: #8a5400; }
+  .message.agent table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 0.88em; }
+  .message.agent th, .message.agent td { border: 1px solid #e0e0e0; padding: 7px 10px; text-align: left; }
+  .message.agent th { background-color: #faf6ec; font-weight: 600; color: #8a5400; }
+  .chart-wrap { max-width: 100%; margin: 14px 0; background: #ffffff; padding: 12px; border-radius: 6px; }
+
+  .input-area { margin: 16px 0 0 0; display: flex; gap: 10px; }
+  .input-area input { flex: 1; padding: 14px 18px; border: 2px solid #e0e0e0; border-radius: 8px; font-family: 'Poppins', sans-serif; font-size: 1em; background-color: #fff; }
+  .input-area input:focus { outline: none; border-color: #CBA135; }
+  .input-area button { padding: 14px 30px; background-color: #CBA135; color: #fff; border: none; border-radius: 8px; cursor: pointer; font-family: 'Poppins', sans-serif; font-size: 1em; font-weight: 600; }
+  .input-area button:hover { background-color: #B8902E; }
+
+  .demo-notice { max-width: 900px; margin: 0 auto 20px auto; padding: 24px 28px; background: linear-gradient(135deg, #faf6ec, #fff8ec); border: 1px solid #e5d9b0; border-radius: 12px; display: flex; align-items: center; gap: 24px; }
+  .demo-notice-icon { flex-shrink: 0; }
+  .demo-notice-text { font-size: 0.95em; color: #5a3a28; line-height: 1.7; }
+  .demo-notice-text strong { color: #8a5400; font-weight: 600; }
+
+  footer { text-align: center; padding: 26px 20px; background-color: #222; color: #fff; margin-top: 50px; margin-left: 30%; }
+  footer p { margin: 0; font-size: 0.9em; }
+
+  @media (max-width: 768px) {
+    .container { flex-direction: column; }
+    .left-column { width: 100%; position: relative; height: auto; }
+    .right-column { width: 100%; margin-left: 0; padding: 30px 20px; }
+    .meta-bar { grid-template-columns: repeat(2, 1fr); }
+    .quick-grid { grid-template-columns: 1fr; }
+    .demo-notice { flex-direction: column; text-align: center; }
+    .message.user { margin-left: 20px; }
+    .message.agent { margin-right: 20px; }
+    footer { margin-left: 0; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <aside class="left-column">
+    <header>
+      <h1>Lee Yih Ven</h1>
+      <h2>AI Project Portfolio</h2>
+    </header>
+    <section class="intro">
+      <p><strong>Ecommerce Analyst</strong> — a private analyst for mid-size e-commerce sellers on any platform. Ask plain-language questions about your sales data, get a proactive Monday morning brief, and spot margin leaks before they eat your profit.</p>
+      <div class="badge">Static Demo • 34,500 orders • 16 Malaysian states</div>
+    </section>
+    <section class="link-section">
+      <a class="link-btn" href="https://lyven81.github.io/ai-project/index.html">Home</a>
+    </section>
+    <section class="link-section">
+      <a class="link-btn" href="https://lyven81.github.io/ai-project/ecommerce-analyst.html">Project Outline</a>
+    </section>
+    <section class="link-section">
+      <a class="link-btn" href="https://lyven81.github.io/ai-project/ecommerce-analyst-source.html">Source Code</a>
+    </section>
+    <section class="about">
+      <h2>About This App</h2>
+      <p>Built for the solo or 2-5 person Malaysian e-commerce seller running RM30K–RM300K/month GMV across multiple categories. The seller's CSV stays on their own instance — no consultant sees it, no competitor-leak risk.</p>
+      <p>Answers come from pre-computed analysis on the full 34,500-row dataset (localized to Malaysian states). Live version with LLM Q&amp;A and weekly scheduled briefs runs on Cloud Run.</p>
+      <ul>
+        <li>Email: <a href="mailto:yven81@gmail.com">yven81@gmail.com</a></li>
+        <li>Phone: +6014-9207099</li>
+      </ul>
+    </section>
+  </aside>
+
+  <main class="right-column">
+    <div class="hero">
+      <h1>Ecommerce Analyst</h1>
+      <p>Your private e-commerce analyst — answers your sales questions and ships a Monday morning brief,<br>without sharing your data with anyone.</p>
+    </div>
+
+    <div class="meta-bar" id="metaBar"></div>
+
+    <div class="brief-card" id="briefCard"></div>
+
+    <div class="quick-section">
+      <h3 class="section-title">⚡ 6 Common Questions — One Click</h3>
+      <p class="section-sub">Click any question below to see a grounded answer with numbers and chart.</p>
+      <div id="quickQuestions" class="quick-grid"></div>
+    </div>
+
+    <div class="chat-section">
+      <h3 class="section-title">💬 Ask Anything</h3>
+      <p class="section-sub">Type any question about the data — the analyst answers in plain language.</p>
+      <div class="chat-messages" id="chatMessages"></div>
+      <div class="input-area">
+        <input type="text" id="customInput" placeholder="e.g. which category has the worst returns?" />
+        <button onclick="askCustom()">Ask</button>
+      </div>
+    </div>
+
+    <div class="demo-notice">
+      <div class="demo-notice-icon">
+        <svg viewBox="0 0 120 90" xmlns="http://www.w3.org/2000/svg" width="120" height="90">
+          <rect x="10" y="20" width="65" height="60" rx="4" fill="#fff" stroke="#CBA135" stroke-width="2"/>
+          <path d="M 60 20 L 75 20 L 75 35 Z" fill="#faf6ec" stroke="#CBA135" stroke-width="2"/>
+          <line x1="20" y1="38" x2="65" y2="38" stroke="#CBA135" stroke-width="1.5"/>
+          <line x1="20" y1="48" x2="65" y2="48" stroke="#CBA135" stroke-width="1.5"/>
+          <line x1="20" y1="58" x2="55" y2="58" stroke="#CBA135" stroke-width="1.5"/>
+          <line x1="20" y1="68" x2="60" y2="68" stroke="#CBA135" stroke-width="1.5"/>
+          <text x="42" y="32" text-anchor="middle" font-family="Poppins" font-size="8" font-weight="700" fill="#8a5400">CSV</text>
+          <g transform="translate(78, 48)">
+            <circle cx="18" cy="18" r="18" fill="#CBA135"/>
+            <path d="M 18 8 L 18 22 M 12 16 L 18 22 L 24 16" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          </g>
+        </svg>
+      </div>
+      <div class="demo-notice-text">
+        <strong>This is a demo site.</strong> The actual app will enable CSV upload — drop your own e-commerce transaction export and the analyst will run live queries against it. In this demo, all answers are pre-computed from the full 34,500-row localized dataset so you can see exactly what the analyst produces.
+      </div>
+    </div>
+  </main>
+</div>
+
+<footer>
+  <p>© 2025 Lee Yih Ven | Data-Driven Solutions</p>
+</footer>
+
+<script>
+let ANSWERS = null;
+
+ANSWERS = {
+  "q1_profit_by_category": {
+    "question": "What's eating my margin? (profit by category)",
+    "summary": "Across your 34,500 orders, your best-performing category is **Electronics** (RM344,372 total margin, 55.72 per order). Your weakest is **Grocery** (RM-9,188 margin, -2.26 per order). Overall net margin sits around 28.12 per order — the gap between Electronics and Grocery is where the leak usually hides.",
+    "table": [
+      {
+        "category": "Electronics",
+        "orders": 6180,
+        "revenue": "RM3,319,206",
+        "total_margin": "RM344,372",
+        "margin_per_order": "55.72",
+        "return_rate": "7.3%"
+      },
+      {
+        "category": "Home",
+        "orders": 5487,
+        "revenue": "RM1,077,682",
+        "total_margin": "RM262,634",
+        "margin_per_order": "47.86",
+        "return_rate": "5.7%"
+      },
+      {
+        "category": "Sports",
+        "orders": 4171,
+        "revenue": "RM629,826",
+        "total_margin": "RM160,521",
+        "margin_per_order": "38.49",
+        "return_rate": "4.9%"
+      },
+      {
+        "category": "Fashion",
+        "orders": 6254,
+        "revenue": "RM471,546",
+        "total_margin": "RM128,815",
+        "margin_per_order": "20.60",
+        "return_rate": "8.3%"
+      },
+      {
+        "category": "Beauty",
+        "orders": 4103,
+        "revenue": "RM153,019",
+        "total_margin": "RM49,197",
+        "margin_per_order": "11.99",
+        "return_rate": "3.8%"
+      },
+      {
+        "category": "Toys",
+        "orders": 4247,
+        "revenue": "RM132,014",
+        "total_margin": "RM33,669",
+        "margin_per_order": "7.93",
+        "return_rate": "4.9%"
+      },
+      {
+        "category": "Grocery",
+        "orders": 4058,
+        "revenue": "RM82,001",
+        "total_margin": "RM-9,188",
+        "margin_per_order": "-2.26",
+        "return_rate": "1.3%"
+      }
+    ],
+    "chart": {
+      "type": "bar",
+      "labels": [
+        "Electronics",
+        "Home",
+        "Sports",
+        "Fashion",
+        "Beauty",
+        "Toys",
+        "Grocery"
+      ],
+      "values": [
+        344372.0,
+        262634.0,
+        160521.0,
+        128815.0,
+        49197.0,
+        33669.0,
+        -9188.0
+      ],
+      "label": "Total margin (RM)"
+    }
+  },
+  "q2_state_shipping": {
+    "question": "Which states are unprofitable to ship to?",
+    "summary": "Your strongest state is **Selangor** (RM219,521 margin across 7,581 orders). Your weakest is **Perlis** (RM8,748 margin, 5.0% return rate). East Malaysia (Sabah, Sarawak) typically has higher shipping cost and return risk — if return rate there pushes past 10%, the orders stop being profitable after fulfillment.",
+    "table": [
+      {
+        "state": "Selangor",
+        "orders": 7581,
+        "revenue": "RM1,321,435",
+        "shipping_cost": "RM46,978",
+        "margin": "RM219,521",
+        "return_rate": "4.9%"
+      },
+      {
+        "state": "Kuala Lumpur",
+        "orders": 6151,
+        "revenue": "RM1,029,483",
+        "shipping_cost": "RM37,787",
+        "margin": "RM172,516",
+        "return_rate": "5.6%"
+      },
+      {
+        "state": "Johor",
+        "orders": 4165,
+        "revenue": "RM713,354",
+        "shipping_cost": "RM25,508",
+        "margin": "RM115,911",
+        "return_rate": "5.9%"
+      },
+      {
+        "state": "Penang",
+        "orders": 3412,
+        "revenue": "RM538,872",
+        "shipping_cost": "RM20,802",
+        "margin": "RM88,956",
+        "return_rate": "5.4%"
+      },
+      {
+        "state": "Perak",
+        "orders": 2459,
+        "revenue": "RM421,235",
+        "shipping_cost": "RM15,096",
+        "margin": "RM70,339",
+        "return_rate": "5.1%"
+      },
+      {
+        "state": "Sarawak",
+        "orders": 2115,
+        "revenue": "RM378,419",
+        "shipping_cost": "RM13,071",
+        "margin": "RM62,119",
+        "return_rate": "5.6%"
+      },
+      {
+        "state": "Sabah",
+        "orders": 1778,
+        "revenue": "RM285,638",
+        "shipping_cost": "RM10,859",
+        "margin": "RM47,615",
+        "return_rate": "6.9%"
+      },
+      {
+        "state": "Kedah",
+        "orders": 1383,
+        "revenue": "RM244,564",
+        "shipping_cost": "RM8,587",
+        "margin": "RM40,156",
+        "return_rate": "6.9%"
+      },
+      {
+        "state": "Pahang",
+        "orders": 1034,
+        "revenue": "RM169,858",
+        "shipping_cost": "RM6,365",
+        "margin": "RM29,698",
+        "return_rate": "4.9%"
+      },
+      {
+        "state": "Negeri Sembilan",
+        "orders": 1017,
+        "revenue": "RM169,987",
+        "shipping_cost": "RM6,150",
+        "margin": "RM27,634",
+        "return_rate": "5.6%"
+      },
+      {
+        "state": "Melaka",
+        "orders": 1021,
+        "revenue": "RM169,840",
+        "shipping_cost": "RM6,305",
+        "margin": "RM27,193",
+        "return_rate": "5.5%"
+      },
+      {
+        "state": "Kelantan",
+        "orders": 693,
+        "revenue": "RM112,381",
+        "shipping_cost": "RM4,256",
+        "margin": "RM18,888",
+        "return_rate": "4.2%"
+      },
+      {
+        "state": "Terengganu",
+        "orders": 665,
+        "revenue": "RM114,752",
+        "shipping_cost": "RM4,099",
+        "margin": "RM18,063",
+        "return_rate": "5.7%"
+      },
+      {
+        "state": "Labuan",
+        "orders": 367,
+        "revenue": "RM72,067",
+        "shipping_cost": "RM2,348",
+        "margin": "RM11,638",
+        "return_rate": "6.3%"
+      },
+      {
+        "state": "Putrajaya",
+        "orders": 316,
+        "revenue": "RM67,614",
+        "shipping_cost": "RM1,942",
+        "margin": "RM11,026",
+        "return_rate": "7.0%"
+      },
+      {
+        "state": "Perlis",
+        "orders": 343,
+        "revenue": "RM55,794",
+        "shipping_cost": "RM2,093",
+        "margin": "RM8,748",
+        "return_rate": "5.0%"
+      }
+    ],
+    "chart": {
+      "type": "bar",
+      "labels": [
+        "Selangor",
+        "Kuala Lumpur",
+        "Johor",
+        "Penang",
+        "Perak",
+        "Sarawak",
+        "Sabah",
+        "Kedah",
+        "Pahang",
+        "Negeri Sembilan",
+        "Melaka",
+        "Kelantan",
+        "Terengganu",
+        "Labuan",
+        "Putrajaya",
+        "Perlis"
+      ],
+      "values": [
+        219521.0,
+        172516.0,
+        115911.0,
+        88956.0,
+        70339.0,
+        62119.0,
+        47615.0,
+        40156.0,
+        29698.0,
+        27634.0,
+        27193.0,
+        18888.0,
+        18063.0,
+        11638.0,
+        11026.0,
+        8748.0
+      ],
+      "label": "Margin by state (RM)"
+    }
+  },
+  "q3_returns": {
+    "question": "Which products and states have the worst returns?",
+    "summary": "You had **1,903 returns** out of 34,500 orders (5.5% return rate). Top category for returns is **Fashion** (518 returns). Top state for return *rate* is **Putrajaya** (7.0%) vs your lowest at 4.2% in Kelantan. The gap between those two states is where your silent margin leak lives.",
+    "table": [
+      {
+        "state": "Putrajaya",
+        "return_rate": "7.0%"
+      },
+      {
+        "state": "Sabah",
+        "return_rate": "6.9%"
+      },
+      {
+        "state": "Kedah",
+        "return_rate": "6.9%"
+      },
+      {
+        "state": "Labuan",
+        "return_rate": "6.3%"
+      },
+      {
+        "state": "Johor",
+        "return_rate": "5.9%"
+      },
+      {
+        "state": "Terengganu",
+        "return_rate": "5.7%"
+      },
+      {
+        "state": "Kuala Lumpur",
+        "return_rate": "5.6%"
+      },
+      {
+        "state": "Negeri Sembilan",
+        "return_rate": "5.6%"
+      },
+      {
+        "state": "Sarawak",
+        "return_rate": "5.6%"
+      },
+      {
+        "state": "Melaka",
+        "return_rate": "5.5%"
+      }
+    ],
+    "chart": {
+      "type": "bar",
+      "labels": [
+        "Putrajaya",
+        "Sabah",
+        "Kedah",
+        "Labuan",
+        "Johor",
+        "Terengganu",
+        "Kuala Lumpur",
+        "Negeri Sembilan",
+        "Sarawak",
+        "Melaka"
+      ],
+      "values": [
+        7.0,
+        6.9,
+        6.9,
+        6.3,
+        5.9,
+        5.7,
+        5.6,
+        5.6,
+        5.6,
+        5.5
+      ],
+      "label": "Return rate % by state (top 10)"
+    }
+  },
+  "q4_discount_roi": {
+    "question": "Are my discounts actually profitable?",
+    "summary": "Across your discount bands: **no-discount orders** average 30.07 margin each. **11-15% discounts** drop to 24.95. **26%+ discounts** land at 19.43 per order. If your highest discount band is below break-even, the volume lift isn't paying — you're buying sales with margin you won't get back.",
+    "table": [
+      {
+        "discount_band": "No discount",
+        "orders": 18939,
+        "revenue": "RM3,388,995",
+        "total_margin": "RM569,522",
+        "margin_per_order": "30.07"
+      },
+      {
+        "discount_band": "1-5%",
+        "orders": 6176,
+        "revenue": "RM1,022,010",
+        "total_margin": "RM169,622",
+        "margin_per_order": "27.46"
+      },
+      {
+        "discount_band": "6-10%",
+        "orders": 4159,
+        "revenue": "RM672,167",
+        "total_margin": "RM108,306",
+        "margin_per_order": "26.04"
+      },
+      {
+        "discount_band": "11-15%",
+        "orders": 2795,
+        "revenue": "RM437,214",
+        "total_margin": "RM69,740",
+        "margin_per_order": "24.95"
+      },
+      {
+        "discount_band": "16-25%",
+        "orders": 1727,
+        "revenue": "RM251,605",
+        "total_margin": "RM39,152",
+        "margin_per_order": "22.67"
+      },
+      {
+        "discount_band": "26%+",
+        "orders": 704,
+        "revenue": "RM93,301",
+        "total_margin": "RM13,678",
+        "margin_per_order": "19.43"
+      }
+    ],
+    "chart": {
+      "type": "bar",
+      "labels": [
+        "No discount",
+        "1-5%",
+        "6-10%",
+        "11-15%",
+        "16-25%",
+        "26%+"
+      ],
+      "values": [
+        30.07,
+        27.46,
+        26.04,
+        24.95,
+        22.67,
+        19.43
+      ],
+      "label": "Margin per order (RM) by discount band"
+    }
+  },
+  "q5_top_cohort": {
+    "question": "Who are my best customers (age × gender)?",
+    "summary": "Your most profitable cohort is **Females aged 55+** — 4,536 orders, RM122,438 total margin. Your weakest is **Others aged <25** (RM5,626 margin). This is where to point your ad targeting — double down on the top cohort, and ask why the weakest cohort isn't converting.",
+    "table": [
+      {
+        "age": "55+",
+        "gender": "Female",
+        "orders": 4536,
+        "revenue": "RM744,600",
+        "margin": "RM122,438"
+      },
+      {
+        "age": "55+",
+        "gender": "Male",
+        "orders": 4328,
+        "revenue": "RM714,079",
+        "margin": "RM120,854"
+      },
+      {
+        "age": "45-54",
+        "gender": "Female",
+        "orders": 3273,
+        "revenue": "RM576,009",
+        "margin": "RM94,359"
+      },
+      {
+        "age": "25-34",
+        "gender": "Male",
+        "orders": 3232,
+        "revenue": "RM565,571",
+        "margin": "RM92,474"
+      },
+      {
+        "age": "35-44",
+        "gender": "Male",
+        "orders": 3176,
+        "revenue": "RM550,926",
+        "margin": "RM92,434"
+      },
+      {
+        "age": "25-34",
+        "gender": "Female",
+        "orders": 3185,
+        "revenue": "RM536,993",
+        "margin": "RM88,475"
+      },
+      {
+        "age": "35-44",
+        "gender": "Female",
+        "orders": 3246,
+        "revenue": "RM530,222",
+        "margin": "RM88,397"
+      },
+      {
+        "age": "45-54",
+        "gender": "Male",
+        "orders": 3075,
+        "revenue": "RM512,396",
+        "margin": "RM84,342"
+      },
+      {
+        "age": "<25",
+        "gender": "Female",
+        "orders": 2578,
+        "revenue": "RM465,472",
+        "margin": "RM77,297"
+      },
+      {
+        "age": "<25",
+        "gender": "Male",
+        "orders": 2499,
+        "revenue": "RM450,082",
+        "margin": "RM72,933"
+      },
+      {
+        "age": "55+",
+        "gender": "Other",
+        "orders": 373,
+        "revenue": "RM56,228",
+        "margin": "RM10,005"
+      },
+      {
+        "age": "45-54",
+        "gender": "Other",
+        "orders": 261,
+        "revenue": "RM43,511",
+        "margin": "RM6,958"
+      },
+      {
+        "age": "35-44",
+        "gender": "Other",
+        "orders": 256,
+        "revenue": "RM42,418",
+        "margin": "RM6,798"
+      },
+      {
+        "age": "25-34",
+        "gender": "Other",
+        "orders": 261,
+        "revenue": "RM44,942",
+        "margin": "RM6,629"
+      },
+      {
+        "age": "<25",
+        "gender": "Other",
+        "orders": 221,
+        "revenue": "RM31,840",
+        "margin": "RM5,626"
+      }
+    ],
+    "chart": {
+      "type": "bar",
+      "labels": [
+        "Female 55+",
+        "Male 55+",
+        "Female 45-54",
+        "Male 25-34",
+        "Male 35-44",
+        "Female 25-34",
+        "Female 35-44",
+        "Male 45-54",
+        "Female <25",
+        "Male <25",
+        "Other 55+",
+        "Other 45-54",
+        "Other 35-44",
+        "Other 25-34",
+        "Other <25"
+      ],
+      "values": [
+        122438.0,
+        120854.0,
+        94359.0,
+        92474.0,
+        92434.0,
+        88475.0,
+        88397.0,
+        84342.0,
+        77297.0,
+        72933.0,
+        10005.0,
+        6958.0,
+        6798.0,
+        6629.0,
+        5626.0
+      ],
+      "label": "Margin by cohort (RM)"
+    }
+  },
+  "q6_delivery": {
+    "question": "How's my delivery performance across states?",
+    "summary": "Average delivery across all orders is **2.7 days**. Fastest: **Kuala Lumpur** at 1.3 days. Slowest: **Labuan** at 6.8 days. Late deliveries correlate with higher returns — if a state's average is above 6 days, expect return rate to tick up. Check if your courier for Labuan needs switching.",
+    "table": [
+      {
+        "state": "Kuala Lumpur",
+        "avg_days": "1.3"
+      },
+      {
+        "state": "Selangor",
+        "avg_days": "1.3"
+      },
+      {
+        "state": "Putrajaya",
+        "avg_days": "1.4"
+      },
+      {
+        "state": "Negeri Sembilan",
+        "avg_days": "2.2"
+      },
+      {
+        "state": "Melaka",
+        "avg_days": "2.4"
+      },
+      {
+        "state": "Penang",
+        "avg_days": "2.5"
+      },
+      {
+        "state": "Johor",
+        "avg_days": "2.6"
+      },
+      {
+        "state": "Perak",
+        "avg_days": "2.8"
+      },
+      {
+        "state": "Kedah",
+        "avg_days": "3.5"
+      },
+      {
+        "state": "Pahang",
+        "avg_days": "3.8"
+      },
+      {
+        "state": "Perlis",
+        "avg_days": "4.5"
+      },
+      {
+        "state": "Terengganu",
+        "avg_days": "4.8"
+      },
+      {
+        "state": "Kelantan",
+        "avg_days": "5.0"
+      },
+      {
+        "state": "Sabah",
+        "avg_days": "6.2"
+      },
+      {
+        "state": "Sarawak",
+        "avg_days": "6.4"
+      },
+      {
+        "state": "Labuan",
+        "avg_days": "6.8"
+      }
+    ],
+    "chart": {
+      "type": "bar",
+      "labels": [
+        "Kuala Lumpur",
+        "Selangor",
+        "Putrajaya",
+        "Negeri Sembilan",
+        "Melaka",
+        "Penang",
+        "Johor",
+        "Perak",
+        "Kedah",
+        "Pahang",
+        "Perlis",
+        "Terengganu",
+        "Kelantan",
+        "Sabah",
+        "Sarawak",
+        "Labuan"
+      ],
+      "values": [
+        1.3,
+        1.3,
+        1.4,
+        2.2,
+        2.4,
+        2.5,
+        2.6,
+        2.8,
+        3.5,
+        3.8,
+        4.5,
+        4.8,
+        5.0,
+        6.2,
+        6.4,
+        6.8
+      ],
+      "label": "Avg delivery days by state"
+    }
+  },
+  "monday_brief": {
+    "week_of": "05 Sep 2025 - 11 Sep 2025",
+    "wins": [
+      "Revenue RM54,449 this week — -7.6% vs last week.",
+      "Top category: **Electronics** contributed RM3,109 in margin.",
+      "Return rate held at 6.3% (+2.5pp vs last week)."
+    ],
+    "worries": [
+      "**Putrajaya** return rate is 33.3% this week — well above your average.",
+      "**Grocery** category margin dropped to RM-139 — worst performer of the 7.",
+      "Discount orders (≥15%) averaged 17.20 margin per order — check if the volume lift is worth it."
+    ],
+    "decision": "**Pause or reprice your weakest SKUs in Putrajaya this week.** Shipping plus returns is eating the margin — better to skip those orders than ship them at a loss. If you still want the volume, raise the price there by 10-15% to offset the risk."
+  },
+  "ask_anything_examples": [
+    {
+      "q": "Show me top 5 products by profit",
+      "a": "Top 5 products by total margin across your 34,500 orders are dominated by high-margin Electronics items. The #1 product contributes around RM53,525 in margin. Ask for the specific product list and I'll pull it from the CSV."
+    },
+    {
+      "q": "What's my best day of the week for sales?",
+      "a": "Your strongest day is **Tuesday** with RM866,319 in revenue. Weakest: **Saturday** at RM810,366. This matters for when you schedule ads and Flash Deals."
+    },
+    {
+      "q": "Am I losing money in any state?",
+      "a": "In absolute margin, no — every state is positive. But margin per order varies widely: Selangor nets higher per-order margin than Perlis. The hidden loss is when shipping subsidies + returns in a state push the order below its break-even. Ask me to isolate any state."
+    },
+    {
+      "q": "Compare male vs female customer spending",
+      "a": "Female: 16,818 orders, RM2,853,297 revenue, RM470,966 margin. Male: 16,310 orders, RM2,793,055 revenue, RM463,036 margin."
+    },
+    {
+      "q": "Which category has the highest return rate?",
+      "a": "**Fashion** tops return rate at 8.3%, vs your best-behaved category **Grocery** at 1.3%. Returns in the top category deserve a product-quality review."
+    }
+  ],
+  "meta": {
+    "total_orders": 34500,
+    "total_revenue_rm": 5865293,
+    "return_rate_pct": 5.5,
+    "total_margin_rm": 970019,
+    "avg_margin_per_order_rm": 28.12,
+    "states_covered": 16,
+    "categories": 7,
+    "date_range": "Sep 2023 - Sep 2025"
+  }
+};
+
+const QUICK_KEYS = [
+  'q1_profit_by_category', 'q2_state_shipping', 'q3_returns',
+  'q4_discount_roi', 'q5_top_cohort', 'q6_delivery'
+];
+
+renderMeta();
+renderBrief();
+renderQuickQuestions();
+
+function renderMeta() {
+  const m = ANSWERS.meta;
+  document.getElementById('metaBar').innerHTML = `
+    <div class="meta-card"><span class="num">${m.total_orders.toLocaleString()}</span><div class="lbl">Orders</div></div>
+    <div class="meta-card"><span class="num">RM ${(m.total_revenue_rm/1000000).toFixed(2)}M</span><div class="lbl">Revenue</div></div>
+    <div class="meta-card"><span class="num">${m.return_rate_pct}%</span><div class="lbl">Return rate</div></div>
+    <div class="meta-card"><span class="num">${m.states_covered}</span><div class="lbl">States covered</div></div>
+  `;
+}
+
+function renderBrief() {
+  const b = ANSWERS.monday_brief;
+  document.getElementById('briefCard').innerHTML = `
+    <h2>📅 Monday Morning Brief</h2>
+    <div class="week">Week of ${b.week_of}</div>
+    <div class="brief-section wins">
+      <h3>3 Wins</h3>
+      <ul>${b.wins.map(w => `<li>${renderMd(w)}</li>`).join('')}</ul>
+    </div>
+    <div class="brief-section worries">
+      <h3>3 Worries</h3>
+      <ul>${b.worries.map(w => `<li>${renderMd(w)}</li>`).join('')}</ul>
+    </div>
+    <div class="brief-section">
+      <h3>1 Decision to Make This Week</h3>
+      <div class="brief-decision">${renderMd(b.decision)}</div>
+    </div>
+  `;
+}
+
+function renderQuickQuestions() {
+  const container = document.getElementById('quickQuestions');
+  container.innerHTML = QUICK_KEYS.map(k => {
+    const q = ANSWERS[k].question;
+    return `<button class="question-btn" onclick="showAnswer('${k}')">${q}</button>`;
+  }).join('');
+}
+
+function showAnswer(key) {
+  document.getElementById('chatMessages').innerHTML = '';
+  const a = ANSWERS[key];
+  addMessage('user', a.question);
+  const tableHtml = a.table ? renderTable(a.table) : '';
+  const chartId = 'chart-' + Math.random().toString(36).slice(2, 8);
+  const chartHtml = a.chart ? `<div class="chart-wrap"><canvas id="${chartId}" height="120"></canvas></div>` : '';
+  addMessage('agent', `<p>${renderMd(a.summary)}</p>${chartHtml}${tableHtml}`);
+  if (a.chart) setTimeout(() => drawChart(chartId, a.chart), 50);
+}
+
+function askCustom() {
+  const input = document.getElementById('customInput');
+  const q = input.value.trim();
+  if (!q) return;
+  input.value = '';
+  document.getElementById('chatMessages').innerHTML = '';
+  addMessage('user', q);
+  const example = findClosestExample(q);
+  if (example) {
+    addMessage('agent', `<p>${renderMd(example.a)}</p>`);
+  } else {
+    addMessage('agent', `<p>In the live version, the analyst runs your question against your full CSV. In this static demo, here are some example questions you can try:</p><ul>${ANSWERS.ask_anything_examples.map(ex => `<li style="margin:6px 0"><em>"${ex.q}"</em></li>`).join('')}</ul>`);
+  }
+}
+
+function findClosestExample(q) {
+  const qLower = q.toLowerCase();
+  const examples = ANSWERS.ask_anything_examples || [];
+  let best = null;
+  let bestScore = 0;
+  examples.forEach(ex => {
+    const exWords = ex.q.toLowerCase().split(/\W+/);
+    const qWords = qLower.split(/\W+/);
+    const overlap = exWords.filter(w => w.length > 3 && qWords.includes(w)).length;
+    if (overlap > bestScore) { bestScore = overlap; best = ex; }
+  });
+  return bestScore >= 2 ? best : null;
+}
+
+function addMessage(role, html) {
+  const msgs = document.getElementById('chatMessages');
+  const div = document.createElement('div');
+  div.className = 'message ' + role;
+  if (role === 'agent') html = '<span class="agent-label">Ecommerce Analyst</span>' + html;
+  div.innerHTML = html;
+  msgs.appendChild(div);
+  div.scrollIntoView({ behavior: 'smooth', block: 'end' });
+}
+
+function renderTable(rows) {
+  if (!rows || !rows.length) return '';
+  const cols = Object.keys(rows[0]);
+  const visible = rows.slice(0, 10);
+  return `<table><thead><tr>${cols.map(c => `<th>${c}</th>`).join('')}</tr></thead><tbody>${visible.map(r => `<tr>${cols.map(c => `<td>${r[c]}</td>`).join('')}</tr>`).join('')}</tbody></table>${rows.length > 10 ? `<p style="font-size:0.85em;color:#888;margin-top:4px">Showing 10 of ${rows.length} rows.</p>` : ''}`;
+}
+
+function drawChart(id, cfg) {
+  const ctx = document.getElementById(id);
+  if (!ctx) return;
+  new Chart(ctx, {
+    type: cfg.type || 'bar',
+    data: {
+      labels: cfg.labels,
+      datasets: [{
+        label: cfg.label || '',
+        data: cfg.values,
+        backgroundColor: '#CBA135',
+        borderColor: '#8a5400',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: true, position: 'bottom' } },
+      scales: { y: { beginAtZero: true } }
+    }
+  });
+}
+
+function renderMd(s) {
+  return s.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+}
+
+document.getElementById('customInput').addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') askCustom();
+});
+</script>
+</body>
+</html>

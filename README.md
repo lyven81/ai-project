@@ -2,7 +2,7 @@
 
 [![Portfolio Website](https://img.shields.io/badge/Portfolio-Live-green?logo=vercel)](https://lyven81.github.io/ai-project/)
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-black?logo=github)](https://github.com/lyven81/ai-project)
-[![Projects](https://img.shields.io/badge/Projects-61-blue)](#-featured-projects)
+[![Projects](https://img.shields.io/badge/Projects-62-blue)](#-featured-projects)
 [![AI Powered](https://img.shields.io/badge/AI-Powered-orange?logo=tensorflow)](https://github.com/lyven81/ai-project)
 
 **Innovative AI Solutions for Modern Challenges** - A curated collection of production-ready AI applications showcasing expertise in computer vision, natural language processing, document processing, and creative AI technologies.
@@ -13,7 +13,7 @@
 
 ## 🌟 Portfolio Overview
 
-This repository contains **61 AI applications** built in this repo (some published to the portfolio homepage, others retained as archived builds) demonstrating proficiency across multiple AI domains. Each project includes comprehensive documentation, live demos, and complete source code with deployment configurations.
+This repository contains **62 AI applications** built in this repo (some published to the portfolio homepage, others retained as archived builds) demonstrating proficiency across multiple AI domains. Each project includes comprehensive documentation, live demos, and complete source code with deployment configurations.
 
 **🎯 Portfolio Highlights:**
 - **15+ AI Technologies** integrated across projects
@@ -40,6 +40,7 @@ Each project is classified by its AI architecture pattern, based on how the syst
 | Project | Why Agentic |
 |---|---|
 | [Business Intelligence Agent](./projects/business-intelligence-agent/) | NL query → plans analysis → writes code → executes → returns results |
+| [Ecommerce Analyst](./ecommerce-analyst.html) | Private analyst for mid-size e-commerce sellers. Ask about margins, returns, shipping; get a Monday brief |
 | [Customer Segmentation Agent](./projects/customer-segmentation-agent/) | Autonomously profiles customers → segments → generates campaigns |
 | [Data Consulting Business Analyst](./projects/data-consulting-business-analyst/) | 4-agent architecture: research → competitor intel → opportunity → strategy |
 | [Stock Analysis Agent](./projects/stock-analysis-agent/) | 5-agent architecture: screening → fundamentals → moat → dividends → reporting |
@@ -137,7 +138,7 @@ Each project is classified by its AI architecture pattern, based on how the syst
 | Multi-Agent Orchestration | 2 | 4% |
 | Interactive Learning | 2 | 4% |
 
-**Total: 61 projects**
+**Total: 62 projects**
 
 > Note: As of Apr 9, 2026, 16 projects were unpublished from the live portfolio homepage display to sharpen focus. They remain in the repo and are still counted here as built work.
 
@@ -489,6 +490,7 @@ All projects are production-deployed and accessible via live demos:
 | Data Consulting Business Analysis Agent | [Launch in Colab](https://colab.research.google.com/drive/1BZ1m_XsI5q7CHvdopcCK53Wlw0sCt1-j) | Business Intelligence |
 | Customer Segmentation Agent | [Launch in Colab](https://colab.research.google.com/drive/1UfEqslRGbYY4qOcv2SCDrj1e0dC5jqJl) | Business Intelligence |
 | Business Intelligence Agent | [Launch in Colab](https://colab.research.google.com/drive/10wkxsg7Crcdz9oa3rFKlJ6Jtez1CB3xf) | Business Intelligence |
+| Ecommerce Analyst | [Launch Demo](https://lyven81.github.io/ai-project/projects/ecommerce-analyst/demo.html) | Business Intelligence |
 | Kopitiam Digital Waiter | [Launch App](https://kopitiam-digital-waiter-169218045868.us-west1.run.app/) | Business Intelligence |
 | MyPropLex | [Launch Demo](https://lyven81.github.io/ai-project/projects/myproplex/demo.html) | Business Intelligence |
 | Social Media Marketer | [Launch Demo](https://lyven81.github.io/ai-project/projects/social-media-marketer/demo.html) | Business Intelligence |

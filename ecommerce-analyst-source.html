@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ecommerce Analyst - Source Code</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #222; background-color: #ffffff; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        .back-nav { margin-bottom: 20px; }
+        .back-nav a { color: #007BFF; text-decoration: none; font-size: 1rem; }
+        .back-nav a:hover { text-decoration: underline; }
+        .project-header { text-align: center; margin-bottom: 40px; padding: 40px 0; background: linear-gradient(135deg, #E91E63, #AD1457); color: white; border-radius: 10px; }
+        .project-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        .project-header p { font-size: 1.2rem; opacity: 0.9; }
+        .content-section { margin: 40px 0; padding: 30px; background-color: #f9f9f9; border-radius: 8px; border-left: 5px solid #E91E63; }
+        .content-section h2 { color: #E91E63; margin-bottom: 20px; font-size: 1.8rem; }
+        .content-section h3 { color: #333; margin: 20px 0 10px 0; font-size: 1.3rem; }
+        .code-block { background-color: #1e1e1e; color: #d4d4d4; border-radius: 5px; padding: 20px; margin: 15px 0; font-family: 'Courier New', monospace; overflow-x: auto; font-size: 0.88em; white-space: pre-wrap; line-height: 1.5; }
+        .file-tree { background-color: #f4f4f4; border: 1px solid #ddd; border-radius: 5px; padding: 20px; font-family: 'Courier New', monospace; font-size: 0.95em; white-space: pre; line-height: 1.7; color: #333; }
+        .file-label { background-color: #fce4ec; color: #880e4f; padding: 4px 10px; border-radius: 4px; font-family: 'Courier New', monospace; font-size: 0.9em; display: inline-block; margin: 10px 0 5px 0; font-weight: 600; }
+        .explanation { margin: 12px 0; color: #444; }
+        .demo-btn { display: inline-block; background-color: #007BFF; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; margin: 0 10px; font-weight: bold; transition: background-color 0.3s; }
+        .demo-btn:hover { background-color: #0056b3; }
+        .demo-btn.secondary { background-color: #E91E63; }
+        .demo-btn.secondary:hover { background-color: #AD1457; }
+        .demo-links { text-align: center; margin: 30px 0; }
+        @media (max-width: 768px) { .project-header h1 { font-size: 2rem; } .container { padding: 15px; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="ecommerce-analyst.html">← Back to Showcase</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>📊 Ecommerce Analyst — Source Code</h1>
+            <p>Private analyst for mid-size Malaysian e-commerce sellers</p>
+        </div>
+
+        <div class="content-section">
+            <h2>📁 Project Structure</h2>
+            <div class="file-tree">projects/ecommerce-analyst/
+├── demo.html              Self-contained static demo (answers inlined)
+├── data_prep.py           Cleans the CSV, localizes regions, regenerates delivery times
+├── precompute_answers.py  Runs 6 quick-actions + Monday brief + examples on full data
+├── problem-statement.md   What we're building and why
+├── project-outline.md     Compiled plan (features, tech, screens, demo)
+├── user-guide.md          Plain-language how-to for the seller
+├── system-prompt.txt      LLM system prompt for live v1.5
+└── data/
+    ├── sample-150.csv     Random 150-row sample (representative view)
+    └── answers.json       Pre-computed demo responses (inlined into demo.html)</div>
+        </div>
+
+        <div class="content-section">
+            <h2>🔧 Key Code Snippets</h2>
+
+            <p class="explanation">The three core files each do one thing. Together they take a raw 34,500-row e-commerce CSV and produce a self-contained static demo page.</p>
+
+            <span class="file-label">data_prep.py — Localize regions and delivery times</span>
+            <p class="explanation">The raw dataset has generic region values (West, South, etc.) and uniform random delivery times that all collapse to the same mean per state. This script fixes both by remapping regions to all 16 Malaysian states with realistic population-weighted distribution, then regenerating delivery times with a per-state logistics mean (1 day Klang Valley, 6–7 days East Malaysia).</p>
+            <div class="code-block">STATE_DELIVERY_MEAN = {
+    "Selangor": 1.2, "Kuala Lumpur": 1.1, "Putrajaya": 1.3,
+    "Negeri Sembilan": 2.2, "Melaka": 2.4, "Johor": 2.6,
+    "Perak": 2.8, "Penang": 2.5,
+    "Kedah": 3.5, "Pahang": 3.8,
+    "Perlis": 4.5, "Terengganu": 4.8, "Kelantan": 5.0,
+    "Sabah": 6.2, "Sarawak": 6.4, "Labuan": 6.8
+}
+
+if "region" in df.columns:
+    rng = np.random.default_rng(seed=42)
+    df["region"] = rng.choice(MALAYSIAN_STATES, size=len(df), p=STATE_WEIGHTS)
+
+if "delivery_time_days" in df.columns:
+    rng = np.random.default_rng(seed=7)
+    means = df["region"].map(STATE_DELIVERY_MEAN).values
+    noise = rng.normal(0, 0.6, size=len(df))
+    df["delivery_time_days"] = np.clip(np.round(means + noise), 1, 9).astype(int)</div>
+
+            <span class="file-label">precompute_answers.py — Monday brief auto-generation</span>
+            <p class="explanation">The Monday brief is not a static string — it's computed every time from the last 7 days of data. This snippet shows how the "3 worries" entries are built: the script finds the state with the highest return rate this week, the weakest category by margin, and the discount band that's dragging margin down — each worded in plain language with specific numbers.</p>
+            <div class="code-block">max_date = df["order_date"].max()
+week_start = max_date - pd.Timedelta(days=6)
+this_week = df[df["order_date"] >= week_start]
+
+this_state_returns = this_week.groupby("region")["returned"].apply(
+    lambda s: (s == "Yes").mean() * 100
+).sort_values(ascending=False)
+worst_state = this_state_returns.index[0]
+
+answers["monday_brief"] = {
+    "week_of": week_start.strftime("%d %b %Y") + " - " + max_date.strftime("%d %b %Y"),
+    "worries": [
+        f"**{worst_state}** return rate is {this_state_returns.iloc[0]:.1f}% this week "
+        f"— well above your average.",
+        f"**{this_cat.index[-1]}** category margin dropped to "
+        f"{fmt_rm(this_cat.iloc[-1])} — worst performer of the 7.",
+        f"Discount orders (≥15%) averaged {disc_margin:.2f} margin per order — "
+        f"check if the volume lift is worth it."
+    ],
+    "decision": (
+        f"**Pause or reprice your weakest SKUs in {worst_state} this week.** "
+        f"Shipping plus returns is eating the margin — better to skip those orders "
+        f"than ship them at a loss."
+    )
+}</div>
+
+            <span class="file-label">demo.html — Rendering pre-computed answers</span>
+            <p class="explanation">The demo page is fully self-contained. It imports Chart.js from a CDN, inlines the answers JSON directly as a JavaScript object, and renders the 6 quick-action buttons, Monday brief card, and ask-anything chat with no backend at all. Each quick-action click clears the chat area and renders the pre-computed answer with its table and Chart.js bar chart.</p>
+            <div class="code-block">const QUICK_KEYS = [
+  'q1_profit_by_category', 'q2_state_shipping', 'q3_returns',
+  'q4_discount_roi', 'q5_top_cohort', 'q6_delivery'
+];
+
+function showAnswer(key) {
+  document.getElementById('chatMessages').innerHTML = '';
+  const a = ANSWERS[key];
+  addMessage('user', a.question);
+  const tableHtml = a.table ? renderTable(a.table) : '';
+  const chartId = 'chart-' + Math.random().toString(36).slice(2, 8);
+  const chartHtml = a.chart
+    ? `&lt;div class="chart-wrap"&gt;&lt;canvas id="${chartId}" height="120"&gt;&lt;/canvas&gt;&lt;/div&gt;`
+    : '';
+  addMessage('agent', `&lt;p&gt;${renderMd(a.summary)}&lt;/p&gt;${chartHtml}${tableHtml}`);
+  if (a.chart) setTimeout(() =&gt; drawChart(chartId, a.chart), 50);
+}</div>
+
+            <span class="file-label">system-prompt.txt — AI character for live v1.5</span>
+            <p class="explanation">The live version uses Gemini 2.5 Flash with this system prompt. Two constraints that matter for a Malaysian SME audience: (1) never mention specific platforms by name (keeps it generic), (2) never hedge with "it depends" when the data gives a clear answer — name a number, name a state, name a SKU.</p>
+            <div class="code-block">You are the Ecommerce Analyst, an AI assistant inside the Ecommerce
+Analyst app for mid-size Malaysian e-commerce sellers.
+
+Your job is to act like a private, trusted analyst who works only
+for this seller — answering questions about their sales data in
+plain language, pointing out blind spots they didn't know to ask
+about, and writing a short Monday morning brief every week.
+
+Always respond in a tone that is warm, direct, Malay-flavored
+English — like a trusted friend who happens to understand numbers.
+Short sentences. Concrete numbers. One actionable takeaway per
+answer.
+
+Never:
+- Share the seller's data with any third party
+- Mention any specific e-commerce platform by name
+- Hedge with "it depends" when the data gives a clear answer —
+  name a number, name a state, name a SKU</div>
+        </div>
+
+        <div class="demo-links">
+            <a href="ecommerce-analyst.html" class="demo-btn">← Back to Showcase</a>
+            <a href="https://github.com/lyven81/ai-project/tree/main/projects/ecommerce-analyst" class="demo-btn secondary">📖 View Full Source on GitHub</a>
+        </div>
+    </div>
+</body>
+</html>
