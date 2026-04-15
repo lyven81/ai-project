@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hoo Tim Analytics Agent — Source Code</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #222; background: #fff; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        .back-nav a { color: #B45309; text-decoration: none; }
+        .back-nav a:hover { text-decoration: underline; }
+        .header { text-align: center; padding: 40px 0; background: linear-gradient(135deg,#B45309,#7C2D12); color: #fff; border-radius: 10px; margin-bottom: 30px; }
+        .header h1 { font-size: 2.2rem; margin-bottom: 10px; }
+        .header p { opacity: 0.9; }
+        .section { margin: 30px 0; padding: 25px; background: #faf6ec; border-left: 5px solid #B45309; border-radius: 8px; }
+        .section h2 { color: #B45309; margin-bottom: 15px; }
+        .file-tree { font-family: monospace; background: #f4f4f4; padding: 18px; border-radius: 6px; white-space: pre; overflow-x: auto; }
+        pre { background: #1e1e1e; color: #d4d4d4; padding: 16px; border-radius: 6px; overflow-x: auto; font-size: 0.85rem; }
+        .explain { background: #fff; border: 1px solid #e5d9b0; padding: 15px; border-radius: 6px; margin: 10px 0; }
+        .explain h4 { color: #B45309; margin-bottom: 8px; }
+        .explain code { background: #fff3e0; color: #8a5400; padding: 2px 6px; border-radius: 3px; font-family: 'Courier New', monospace; font-size: 0.92em; }
+        ul { margin-left: 20px; }
+        footer { text-align: center; padding: 20px; background-color: #333; color: white; margin-top: 40px; border-radius: 8px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav"><a href="hoo-tim-analytics-agent.html">← Back to Showcase</a></nav>
+
+        <div class="header">
+            <h1>🍪 Hoo Tim Analytics Agent — Source Code</h1>
+            <p>Live AI agent + MCP tools, BYO Gemini key, 100% browser-side</p>
+        </div>
+
+        <div class="section">
+            <h2>📁 File Structure</h2>
+            <div class="file-tree">projects/hoo-tim-analytics-agent/
+├── demo.html         # Two-panel UI + tool dispatcher + Gemini call
+├── data.js           # 129 KB of pre-aggregated distribution views
+├── precompute.py     # Reads dataset.csv, emits data.js (11 views)
+├── dataset.csv       # 6,074 synthetic order lines (Dec 2025)
+└── README.md         # Project summary and architecture</div>
+        </div>
+
+        <div class="section">
+            <h2>🎯 Key Code Highlights</h2>
+
+            <div class="explain">
+                <h4>1. MCP tools — in-browser query layer</h4>
+                <p>Five deterministic tools run directly against the pre-aggregated <code>window.HOOTIM_DATA</code> object. No server, no calls out. Each tool returns pure JSON for Gemini to narrate.</p>
+            </div>
+<pre>const TOOLS = {
+  get_aggregate: (dim) => {
+    const map = { district: D.district, channel: D.channel,
+                  category: D.category, sku: D.sku.slice(0, 40) };
+    return map[dim] || null;
+  },
+  get_top_n: (dim, n, direction) => {
+    const sorted = [...(D[dim] || [])];
+    const dir = direction === 'asc' ? 1 : -1;
+    const metric = dim === 'sku' ? 'quantity' : 'revenue';
+    sorted.sort((a, b) => dir * (a[metric] - b[metric]));
+    return sorted.slice(0, n);
+  },
+  get_cross_tab: (rowDim, colDim) => { /* district × channel, category × channel */ },
+  get_delivery_performance: (groupBy) => { /* on-time / late % */ },
+  get_time_series: (period) => { /* daily trend or campaign window */ },
+};</pre>
+
+            <div class="explain">
+                <h4>2. Keyword-based tool dispatcher</h4>
+                <p>Rather than round-trip function calling, a lightweight regex matcher picks relevant tools from the user's question. This keeps latency low and cost predictable — one Gemini call per question.</p>
+            </div>
+<pre>function dispatchTools(question) {
+  const q = question.toLowerCase();
+  const calls = [];
+
+  if (/\bsku\b|slow mov|bottom.*sku/.test(q)) {
+    calls.push({ tool: 'get_top_n', args: { dim: 'sku', n: 10,
+                 direction: /slow|bottom/.test(q) ? 'asc' : 'desc' },
+                 output: TOOLS.get_top_n('sku', 10, ...) });
+  }
+  if (/district.*channel|channel.*district/.test(q)) {
+    calls.push({ tool: 'get_cross_tab',
+                 args: { row: 'district', col: 'channel' },
+                 output: D.district_channel_matrix });
+  }
+  if (/deliver|on[- ]?time|late/.test(q)) {
+    const groupBy = /channel/.test(q) ? 'channel' : 'district';
+    calls.push({ tool: 'get_delivery_performance',
+                 args: { group_by: groupBy },
+                 output: TOOLS.get_delivery_performance(groupBy) });
+  }
+  // ...9 more dispatch rules
+  return calls;
+}</pre>
+
+            <div class="explain">
+                <h4>3. Precompute step — aggregate once, ship tiny</h4>
+                <p>The raw dataset is 6,074 rows × 14 columns (~950 KB). Shipping it to the browser would be wasteful. <code>precompute.py</code> rolls it into 11 aggregated views totalling 129 KB — enough for every preset question.</p>
+            </div>
+<pre># precompute.py excerpt
+by_district = defaultdict(lambda: {"revenue": 0, "deliveries": defaultdict(int), ...})
+for r in rows:
+    by_district[r["district"]]["revenue"] += r["revenue"]
+    by_district[r["district"]]["deliveries"][classify_delivery(r)] += 1
+
+district_table = [{
+    "district": d,
+    "revenue": round(v["revenue"], 2),
+    "on_time_pct": round(v["deliveries"]["on_time"] / total_d * 100, 1),
+    "slightly_late_pct": round(v["deliveries"]["slightly_late"] / total_d * 100, 1),
+    "very_late_pct": round(v["deliveries"]["very_late"] / total_d * 100, 1),
+    ...
+} for d, v in by_district.items()]</pre>
+
+            <div class="explain">
+                <h4>4. Grounded Gemini call — strict "don't invent"</h4>
+                <p>The system prompt pins the agent to the tool output. Gemini 2.0 Flash is cheap, fast, and obedient with temperature 0.2. The MCP outputs are inlined so the model has no excuse to hallucinate numbers.</p>
+            </div>
+<pre>const systemPrompt = `You are the Hoo Tim Analytics Agent...
+
+RESPONSE RULES:
+- Ground every number in the tool output below. Do not invent figures.
+- Use markdown with a clean table, then a short "Insight" paragraph
+  and a "Recommendation" bullet.
+- Keep answers under 250 words unless more detail is demanded.
+- Use "RM" prefix for money, comma thousands, round to nearest RM.
+- Audience: Malaysian SME business owner — practical language.
+
+MCP TOOL OUTPUTS:
+${toolContext}`;
+
+await fetch(`https://generativelanguage.googleapis.com/v1beta/
+    models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    system_instruction: { parts: [{ text: systemPrompt }] },
+    contents: [{ role: 'user', parts: [{ text }] }],
+    generationConfig: { temperature: 0.2, maxOutputTokens: 1400 }
+  })
+});</pre>
+
+            <div class="explain">
+                <h4>5. BYO-key security — sessionStorage only</h4>
+                <p>The user's Gemini key is kept in <code>sessionStorage</code> — it disappears when the tab closes. It is never sent anywhere except directly to <code>generativelanguage.googleapis.com</code>.</p>
+            </div>
+<pre>const savedKey = sessionStorage.getItem('hootim_gemini_key');
+if (savedKey) { apiKeyInput.value = savedKey; apiDot.classList.add('ok'); }
+
+function saveKey() {
+  const k = apiKeyInput.value.trim();
+  if (!k) return;
+  sessionStorage.setItem('hootim_gemini_key', k);
+  apiDot.classList.add('ok');
+}</pre>
+
+            <div class="explain">
+                <h4>6. Live tool trace — transparent reasoning</h4>
+                <p>Every question renders a dark terminal-style trace line showing which MCP tools were called, their arguments, and the row count returned. Users can see exactly what the agent looked at before writing the answer.</p>
+            </div>
+<pre>function addTrace(calls) {
+  const lines = calls.map(c => {
+    const rowCount = Array.isArray(c.output)
+      ? c.output.length + ' rows'
+      : Object.keys(c.output).length + ' keys';
+    return `&lt;span class="trace-line"&gt;▸
+      &lt;span class="trace-key"&gt;${c.tool}&lt;/span&gt;
+      (${JSON.stringify(c.args)}) →
+      &lt;span class="trace-val"&gt;${rowCount}&lt;/span&gt;
+      &lt;/span&gt;`;
+  }).join('');
+  // append to chat…
+}</pre>
+        </div>
+
+        <div class="section">
+            <h2>🔗 Full Source</h2>
+            <p>All files live in the portfolio repo:</p>
+            <p><a href="https://github.com/lyven81/ai-project/tree/main/projects/hoo-tim-analytics-agent" target="_blank">github.com/lyven81/ai-project/tree/main/projects/hoo-tim-analytics-agent</a></p>
+        </div>
+
+        <nav class="back-nav" style="text-align:center; margin-top: 40px;">
+            <a href="hoo-tim-analytics-agent.html">← Back to Showcase</a> |
+            <a href="index.html">Back to Portfolio</a>
+        </nav>
+
+        <footer>
+            <p>&copy; 2025 Lee Yih Ven | Data-Driven Solutions</p>
+        </footer>
+    </div>
+</body>
+</html>
