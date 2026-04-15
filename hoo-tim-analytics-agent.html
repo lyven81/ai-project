@@ -35,14 +35,15 @@
         .metric-label { color: #666; font-size: 0.9rem; margin-top: 5px; }
         .tool-list { background: white; border: 1px solid #e5d9b0; border-radius: 8px; padding: 20px; margin: 15px 0; }
         .tool-list code { background: #fff3e0; color: #8a5400; padding: 2px 8px; border-radius: 4px; font-family: 'Courier New', monospace; font-size: 0.92em; }
-        .question-list { columns: 2; column-gap: 24px; }
-        .question-list li { break-inside: avoid; margin-bottom: 8px; }
+        .questions-container { counter-reset: qnum; }
+        .question-list { list-style: none; padding-left: 0; }
+        .question-list li { margin-bottom: 10px; padding: 10px 14px 10px 44px; background: white; border: 1px solid #e5d9b0; border-radius: 6px; position: relative; counter-increment: qnum; }
+        .question-list li::before { content: counter(qnum); position: absolute; left: 12px; top: 50%; transform: translateY(-50%); background: #B45309; color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; }
         @media (max-width: 768px) {
             .project-header h1 { font-size: 2rem; }
             .project-header p { font-size: 1rem; }
             .demo-btn { margin: 5px; padding: 10px 20px; }
             .container { padding: 15px; }
-            .question-list { columns: 1; }
         }
     </style>
 </head>
@@ -108,44 +109,50 @@
             <h2>❓ 15 Preset Questions</h2>
             <p>Organised by analytical focus area — each one answerable from the dataset.</p>
 
-            <h3>Sales Performance</h3>
-            <ul class="question-list">
-                <li>Which 10 SKUs generated the highest revenue, and what share of total sales?</li>
-                <li>Which SKUs are slow movers (bottom 10 by volume)?</li>
-            </ul>
+            <div class="questions-container">
+                <h3>Sales Performance</h3>
+                <ul class="question-list">
+                    <li>Which 10 SKUs generated the highest revenue, and what share of total sales?</li>
+                    <li>Which SKUs are slow movers (bottom 10 by volume)?</li>
+                </ul>
 
-            <h3>Channel &amp; Outlet Intelligence</h3>
-            <ul class="question-list">
-                <li>Revenue split across channels, and best revenue per outlet?</li>
-                <li>Top 20 resellers by revenue and their concentration?</li>
-                <li>Resellers ordering below their channel average (at-risk)?</li>
-            </ul>
+                <h3>Channel &amp; Outlet Intelligence</h3>
+                <ul class="question-list">
+                    <li>Revenue split across channels, and best revenue per outlet?</li>
+                    <li>Top 20 resellers by revenue and their concentration?</li>
+                    <li>Resellers ordering below their channel average (at-risk)?</li>
+                </ul>
 
-            <h3>Geographic Coverage</h3>
-            <ul class="question-list">
-                <li>Revenue split across the 9 Selangor districts, and under-served ones?</li>
-                <li>Strongest vs weakest district–channel combinations?</li>
-            </ul>
+                <h3>Geographic Coverage</h3>
+                <ul class="question-list">
+                    <li>Revenue split across the 9 Selangor districts, and under-served ones?</li>
+                    <li>Strongest vs weakest district–channel combinations?</li>
+                </ul>
 
-            <h3>Category &amp; Margin</h3>
-            <ul class="question-list">
-                <li>Top category by December revenue, and its share?</li>
-                <li>Category mix variation across channels?</li>
-                <li>Category with highest total gross margin (RM profit)?</li>
-                <li>Category with thinnest gross margin % for price review?</li>
-            </ul>
+                <h3>Category</h3>
+                <ul class="question-list">
+                    <li>Top category by December revenue, and its share?</li>
+                    <li>Category mix variation across channels?</li>
+                </ul>
 
-            <h3>Operations &amp; Delivery</h3>
-            <ul class="question-list">
-                <li>On-time delivery rate by district, and worst performers?</li>
-                <li>Channels suffering most from late deliveries?</li>
-            </ul>
+                <h3>Margin</h3>
+                <ul class="question-list">
+                    <li>Category with highest total gross margin (RM profit)?</li>
+                    <li>Category with thinnest gross margin % for price review?</li>
+                </ul>
 
-            <h3>Demand Timing</h3>
-            <ul class="question-list">
-                <li>Daily order volume trend across December, and festive spike days?</li>
-                <li>Christmas–New Year (15–31 Dec) revenue share vs first half (1–14 Dec)?</li>
-            </ul>
+                <h3>Operations &amp; Delivery</h3>
+                <ul class="question-list">
+                    <li>On-time delivery rate by district, and worst performers?</li>
+                    <li>Channels suffering most from late deliveries?</li>
+                </ul>
+
+                <h3>Demand Timing</h3>
+                <ul class="question-list">
+                    <li>Daily order volume trend across December, and festive spike days?</li>
+                    <li>Christmas–New Year (15–31 Dec) revenue share vs first half (1–14 Dec)?</li>
+                </ul>
+            </div>
         </div>
 
         <div class="content-section">
