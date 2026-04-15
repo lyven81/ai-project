@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wee Auto Car Care - Source Code</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #222; background-color: #ffffff; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        .back-nav { margin-bottom: 20px; }
+        .back-nav a { color: #007BFF; text-decoration: none; font-size: 1rem; }
+        .back-nav a:hover { text-decoration: underline; }
+
+        .project-header {
+            text-align: center; margin-bottom: 40px; padding: 40px 0;
+            background: linear-gradient(135deg, #0D9488, #0F766E); color: white; border-radius: 10px;
+        }
+        .project-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        .project-header p { font-size: 1.2rem; opacity: 0.9; }
+
+        .badges { display: flex; justify-content: center; gap: 10px; margin: 20px 0; flex-wrap: wrap; }
+        .badge { background-color: rgba(255, 255, 255, 0.2); color: white; padding: 5px 12px; border-radius: 15px; font-size: 0.9rem; }
+
+        .content-section {
+            margin: 40px 0; padding: 30px; background-color: #f9f9f9; border-radius: 8px;
+            border-left: 5px solid #0D9488;
+        }
+        .content-section h2 { color: #0D9488; margin-bottom: 20px; font-size: 1.8rem; }
+        .content-section h3 { color: #333; margin: 20px 0 10px 0; font-size: 1.3rem; }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #f0fdfa, #ccfbf1); padding: 20px;
+            border-radius: 10px; border-left: 5px solid #0D9488; margin: 20px 0;
+        }
+
+        .code-container {
+            background-color: #1e1e1e; border-radius: 8px; padding: 20px;
+            margin: 20px 0; overflow-x: auto;
+        }
+        .code-header {
+            color: #5eead4; font-weight: bold; margin-bottom: 15px; font-size: 1.1rem;
+            border-bottom: 1px solid #333; padding-bottom: 10px;
+        }
+        .code-block {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 14px; line-height: 1.5; color: #d4d4d4; white-space: pre;
+        }
+        .code-comment { color: #6a9955; font-style: italic; }
+        .code-keyword { color: #569cd6; }
+        .code-string { color: #ce9178; }
+        .code-function { color: #dcdcaa; }
+        .code-number { color: #b5cea8; }
+
+        .file-tree {
+            background-color: #1e1e1e; color: #d4d4d4; padding: 20px;
+            border-radius: 8px; font-family: 'Consolas', monospace; font-size: 14px;
+            line-height: 1.6; white-space: pre;
+        }
+
+        .demo-links { text-align: center; margin: 30px 0; }
+        .demo-btn {
+            display: inline-block; background-color: #0D9488; color: white;
+            padding: 12px 25px; text-decoration: none; border-radius: 5px;
+            margin: 0 10px; font-weight: bold;
+        }
+        .demo-btn:hover { background-color: #0F766E; }
+        .demo-btn.secondary { background-color: #475569; }
+        .demo-btn.secondary:hover { background-color: #334155; }
+
+        @media (max-width: 768px) {
+            .project-header h1 { font-size: 2rem; }
+            .container { padding: 15px; }
+            .demo-btn { margin: 5px; padding: 10px 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="wee-auto-car-care.html">← Back to Project Overview</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>🔧 Wee Auto Car Care</h1>
+            <p>Core source: seed generator, 4-state bookability logic, interactive booking</p>
+
+            <div class="badges">
+                <span class="badge">Python 3</span>
+                <span class="badge">Vanilla JS</span>
+                <span class="badge">CSS Grid</span>
+                <span class="badge">localStorage</span>
+            </div>
+        </div>
+
+        <div class="highlight-box">
+            <h3>🔍 About This Code Showcase</h3>
+            <p><strong>This curated showcase walks through the core logic behind Wee Auto Car Care: how the seed is generated with density and skill constraints, how the 4-state bookability classifier works, and how the interactive New Booking modal validates against both bay and mechanic availability.</strong></p>
+            <p>Full HTML markup and styling are omitted for clarity. The source focuses on the decision logic that differentiates this dashboard from a naive free/busy grid.</p>
+        </div>
+
+        <div class="content-section">
+            <h2>📁 Project Structure</h2>
+            <div class="file-tree">projects/wee-auto-car-care/
+├── generate_seed.py          # Reproducible 12-day booking seed generator
+├── build_dashboard.py        # HTML template builder (embeds JSON)
+├── workshop_bookings.json    # 142 seed bookings — source of truth
+└── demo.html                 # Self-contained interactive dashboard (~96KB)</div>
+        </div>
+
+        <div class="content-section">
+            <h2>🌱 Seed Generator — Density + Skill Constraints</h2>
+            <p><code>generate_seed.py</code> builds 142 bookings across 12 days (Mar 2–14, 2026, Sundays closed) while enforcing: no day 100% booked, each mechanic keeps ≥2 free slots/day, multi-slot jobs (timing belt 3h, AC compressor 3h) book consecutive slots on the same bay + mechanic.</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 generate_seed.py — Service catalog + mechanic skills</div>
+                <div class="code-block"><span class="code-keyword">SERVICES</span> = [
+    <span class="code-comment"># name, duration_min, price_rm, skill, bay</span>
+    (<span class="code-string">"Tyre Replacement (4 wheels)"</span>, <span class="code-number">45</span>,  <span class="code-number">60</span>,  <span class="code-string">"tyre"</span>,        <span class="code-string">"BAY1"</span>),
+    (<span class="code-string">"Hunter Alignment"</span>,            <span class="code-number">60</span>,  <span class="code-number">80</span>,  <span class="code-string">"alignment"</span>,   <span class="code-string">"BAY3"</span>),
+    (<span class="code-string">"Timing Belt Replacement"</span>,     <span class="code-number">180</span>, <span class="code-number">450</span>, <span class="code-string">"timing_belt"</span>, <span class="code-string">"BAY2"</span>),
+    (<span class="code-string">"AC Service"</span>,                  <span class="code-number">75</span>,  <span class="code-number">180</span>, <span class="code-string">"ac_service"</span>,  <span class="code-string">"BAY2"</span>),
+    <span class="code-comment"># ... 11 more services</span>
+]
+
+<span class="code-keyword">MECHANICS</span> = {
+    <span class="code-string">"Shamsul"</span>: [<span class="code-string">"oil"</span>, <span class="code-string">"spark_plug"</span>, <span class="code-string">"diagnostic"</span>, <span class="code-string">"timing_belt"</span>,
+                <span class="code-string">"ac_topup"</span>, <span class="code-string">"ac_service"</span>, <span class="code-string">"ac_compressor"</span>, <span class="code-string">"battery"</span>,
+                <span class="code-string">"tyre"</span>, <span class="code-string">"rotation"</span>, <span class="code-string">"balancing"</span>],
+    <span class="code-string">"Vishnu"</span>:  [<span class="code-string">"tyre"</span>, <span class="code-string">"rotation"</span>, <span class="code-string">"balancing"</span>, <span class="code-string">"alignment"</span>,
+                <span class="code-string">"oil"</span>, <span class="code-string">"spark_plug"</span>, <span class="code-string">"ac_topup"</span>, <span class="code-string">"battery"</span>],
+    <span class="code-string">"Albert"</span>:  [<span class="code-string">"tyre"</span>, <span class="code-string">"rotation"</span>, <span class="code-string">"oil"</span>, <span class="code-string">"battery"</span>],
+}
+
+<span class="code-comment"># Only Vishnu has "alignment" -> Bay 3 can only be worked by Vishnu.
+# Only Shamsul has timing_belt / ac_service / ac_compressor.</span></div>
+            </div>
+
+            <div class="code-container">
+                <div class="code-header">📄 generate_seed.py — Placement with constraint checks</div>
+                <div class="code-block"><span class="code-keyword">while</span> placed &lt; target <span class="code-keyword">and</span> attempts &lt; <span class="code-number">800</span>:
+    attempts += <span class="code-number">1</span>
+    svc = random.choices(SERVICES, weights=SERVICE_WEIGHTS)[<span class="code-number">0</span>]
+    name, dur, price, skill, bay = svc
+    n = slots_needed(dur)  <span class="code-comment"># ceil(duration / 60)</span>
+    start_idx = random.randint(<span class="code-number">0</span>, <span class="code-number">8</span> - n)
+
+    <span class="code-comment"># Bay must be free across all occupied slots</span>
+    <span class="code-keyword">if</span> any(schedule[bay][start_idx + i] <span class="code-keyword">is not</span> <span class="code-keyword">None</span>
+           <span class="code-keyword">for</span> i <span class="code-keyword">in</span> range(n)):
+        <span class="code-keyword">continue</span>
+
+    <span class="code-comment"># Pick a mechanic with the required skill, free across all slots</span>
+    eligibles = [m <span class="code-keyword">for</span> m, skills <span class="code-keyword">in</span> MECHANICS.items()
+                 <span class="code-keyword">if</span> skill <span class="code-keyword">in</span> skills]
+    chosen = next(
+        (m <span class="code-keyword">for</span> m <span class="code-keyword">in</span> eligibles
+         <span class="code-keyword">if</span> all(<span class="code-keyword">not</span> mech_busy[m][start_idx + i]
+                <span class="code-keyword">for</span> i <span class="code-keyword">in</span> range(n))),
+        <span class="code-keyword">None</span>)
+    <span class="code-keyword">if not</span> chosen:
+        <span class="code-keyword">continue</span>
+
+    <span class="code-comment"># Keep at least 2 free slots per mechanic per day</span>
+    <span class="code-keyword">if</span> sum(mech_busy[chosen]) + n &gt; <span class="code-number">6</span>:
+        <span class="code-keyword">continue</span>
+
+    <span class="code-comment"># Place the booking; mark bay + mechanic busy</span>
+    place_booking(booking, schedule, mech_busy, bay, chosen, start_idx, n)
+    placed += n</div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🧠 4-State Bookability Classifier</h2>
+            <p>The heart of the dashboard. For every empty cell in the bay grid, compute whether it is truly <em>bookable</em> (qualified mechanic free) or merely <em>idle</em> (bay free, but no one can work it).</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 demo.html — freeSlotAnalysis()</div>
+                <div class="code-block"><span class="code-keyword">function</span> <span class="code-function">freeSlotAnalysis</span>(bay, slotIdx, mechBusy) {
+  <span class="code-comment">// 1. Which mechanics are free at this slot?</span>
+  <span class="code-keyword">const</span> freeMechs = MECHANICS.filter(m =&gt; !mechBusy[m][slotIdx]);
+
+  <span class="code-comment">// 2. Which services is this bay capable of hosting?</span>
+  <span class="code-keyword">const</span> baySvcs = SERVICE_CATALOG.filter(s =&gt; s.bay === bay);
+
+  <span class="code-comment">// 3. For each service the bay can host, is ANY free mechanic qualified?</span>
+  <span class="code-keyword">const</span> bookableServices = [];
+  <span class="code-keyword">const</span> bookableMechs = <span class="code-keyword">new</span> Set();
+  baySvcs.forEach(svc =&gt; {
+    <span class="code-keyword">const</span> qualified = freeMechs.filter(
+      m =&gt; MECHANIC_SKILLS[m].includes(svc.skill)
+    );
+    <span class="code-keyword">if</span> (qualified.length &gt; <span class="code-number">0</span>) {
+      bookableServices.push(svc);
+      qualified.forEach(m =&gt; bookableMechs.add(m));
+    }
+  });
+
+  <span class="code-comment">// 4. Classify: if zero services bookable, the bay is IDLE</span>
+  <span class="code-keyword">if</span> (bookableServices.length === <span class="code-number">0</span>) {
+    <span class="code-keyword">return</span> { state: <span class="code-string">"idle"</span>, reason: idleReason(bay, freeMechs) };
+  }
+  <span class="code-keyword">return</span> {
+    state: <span class="code-string">"bookable"</span>,
+    mechanics: MECHANICS.filter(m =&gt; bookableMechs.has(m)),
+    services: bookableServices,
+  };
+}</div>
+            </div>
+
+            <p><strong>Example:</strong> Mar 14, 1pm. Bay 3 is empty. Vishnu (only alignment-skilled mechanic) is busy doing tyre rotation in Bay 1. A naive grid shows Bay 3 as "free." This function flags it as <code>IDLE — "No alignment-skilled mechanic free"</code>, which prevents the taukey from wrongly telling a customer to come for alignment.</p>
+        </div>
+
+        <div class="content-section">
+            <h2>➕ Interactive New Booking — Validation</h2>
+            <p>The New Booking modal dynamically filters dropdowns so the taukey can never submit an impossible booking. The slot dropdown only shows slots where the service's required bay is free. The mechanic dropdown only shows skill-matched mechanics who are free across all occupied slots.</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 demo.html — refreshSlotsAndMechanics()</div>
+                <div class="code-block"><span class="code-keyword">function</span> <span class="code-function">refreshSlotsAndMechanics</span>() {
+  <span class="code-keyword">const</span> date = document.getElementById(<span class="code-string">"f-date"</span>).value;
+  <span class="code-keyword">const</span> svcName = document.getElementById(<span class="code-string">"f-service"</span>).value;
+  <span class="code-keyword">const</span> svc = SERVICE_CATALOG.find(s =&gt; s.name === svcName);
+  <span class="code-keyword">const</span> dur = SERVICE_DURATIONS()[svcName];
+  <span class="code-keyword">const</span> n = slotsNeeded(dur);
+  <span class="code-keyword">const</span> sched = computeSchedule(date);  <span class="code-comment">// bayBusy + mechBusy from state.bookings</span>
+
+  <span class="code-comment">// Slot dropdown: only list slots where bay is free across n consecutive slots</span>
+  <span class="code-keyword">const</span> slotSel = document.getElementById(<span class="code-string">"f-slot"</span>);
+  slotSel.innerHTML = <span class="code-string">""</span>;
+  <span class="code-keyword">for</span> (<span class="code-keyword">let</span> i = <span class="code-number">0</span>; i &lt;= <span class="code-number">8</span> - n; i++) {
+    <span class="code-keyword">const</span> free = Array.from({length: n}, (_, k) =&gt; !sched.bayBusy[svc.bay][i+k])
+                      .every(Boolean);
+    <span class="code-keyword">if</span> (free) {
+      <span class="code-keyword">const</span> opt = <span class="code-keyword">new</span> Option(
+        <span class="code-string">`${SLOT_LABELS[i]} (${n &gt; 1 ? n + <span class="code-string">" slots"</span> : <span class="code-string">"1 slot"</span>}, ready ${readyTimeStr(SLOTS[i], dur)})`</span>,
+        SLOTS[i]
+      );
+      slotSel.add(opt);
+    }
+  }
+  refreshMechanicOnly();  <span class="code-comment">// Chained: mechanic dropdown depends on selected slot</span>
+}
+
+<span class="code-keyword">function</span> <span class="code-function">refreshMechanicOnly</span>() {
+  <span class="code-comment">// Filter: mechanic must have required skill AND be free across n slots</span>
+  <span class="code-keyword">const</span> qualified = MECHANICS.filter(
+    m =&gt; MECHANIC_SKILLS[m].includes(svc.skill)
+  );
+  <span class="code-keyword">const</span> avail = qualified.filter(m =&gt;
+    Array.from({length: n}, (_, k) =&gt; !sched.mechBusy[m][startIdx+k]).every(Boolean)
+  );
+  <span class="code-comment">// Populate dropdown with only qualified + free mechanics</span>
+  avail.forEach(m =&gt; mechSel.add(<span class="code-keyword">new</span> Option(m, m)));
+}</div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>💾 localStorage Sandbox — Each Visitor Isolated</h2>
+            <p>The dashboard is demo-ready without a backend because each visitor's edits persist in their own browser under a versioned storage key. Reset restores the canonical seed.</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 demo.html — State management</div>
+                <div class="code-block"><span class="code-keyword">const</span> STORAGE_KEY = <span class="code-string">"wee-auto-bookings-v1"</span>;
+
+<span class="code-keyword">function</span> <span class="code-function">cloneInitial</span>() {
+  <span class="code-keyword">return</span> JSON.parse(JSON.stringify(WORKSHOP_DATA));
+}
+<span class="code-keyword">function</span> <span class="code-function">loadState</span>() {
+  <span class="code-keyword">try</span> {
+    <span class="code-keyword">const</span> raw = localStorage.getItem(STORAGE_KEY);
+    <span class="code-keyword">return</span> raw ? JSON.parse(raw) : <span class="code-keyword">null</span>;
+  } <span class="code-keyword">catch</span> (e) { <span class="code-keyword">return</span> <span class="code-keyword">null</span>; }
+}
+<span class="code-keyword">function</span> <span class="code-function">saveState</span>() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+<span class="code-keyword">function</span> <span class="code-function">resetState</span>() {
+  localStorage.removeItem(STORAGE_KEY);
+  state = cloneInitial();
+  renderAll();
+}
+
+<span class="code-comment">// On page load: use saved edits if any, else fresh seed</span>
+<span class="code-keyword">let</span> state = loadState() || cloneInitial();</div>
+            </div>
+
+            <p><strong>Production upgrade path:</strong> replace <code>loadState / saveState</code> with <code>fetch("/api/bookings")</code> calls to a FastAPI backend. The render functions and validation logic stay identical — only the state layer swaps.</p>
+        </div>
+
+        <div class="demo-links">
+            <a href="projects/wee-auto-car-care/demo.html" target="_blank" class="demo-btn">🚀 Try Live Demo</a>
+            <a href="wee-auto-car-care.html" class="demo-btn secondary">← Back to Project Overview</a>
+        </div>
+
+        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+            <a href="index.html">← Back to Portfolio</a> |
+            <a href="project-categories.html">View All Categories</a>
+        </nav>
+    </div>
+</body>
+</html>

@@ -2,7 +2,7 @@
 
 [![Portfolio Website](https://img.shields.io/badge/Portfolio-Live-green?logo=vercel)](https://lyven81.github.io/ai-project/)
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-black?logo=github)](https://github.com/lyven81/ai-project)
-[![Projects](https://img.shields.io/badge/Projects-62-blue)](#-featured-projects)
+[![Projects](https://img.shields.io/badge/Projects-63-blue)](#-featured-projects)
 [![AI Powered](https://img.shields.io/badge/AI-Powered-orange?logo=tensorflow)](https://github.com/lyven81/ai-project)
 
 **Innovative AI Solutions for Modern Challenges** - A curated collection of production-ready AI applications showcasing expertise in computer vision, natural language processing, document processing, and creative AI technologies.
@@ -13,7 +13,7 @@
 
 ## 🌟 Portfolio Overview
 
-This repository contains **62 AI applications** built in this repo (some published to the portfolio homepage, others retained as archived builds) demonstrating proficiency across multiple AI domains. Each project includes comprehensive documentation, live demos, and complete source code with deployment configurations.
+This repository contains **63 AI applications** built in this repo (some published to the portfolio homepage, others retained as archived builds) demonstrating proficiency across multiple AI domains. Each project includes comprehensive documentation, live demos, and complete source code with deployment configurations.
 
 **🎯 Portfolio Highlights:**
 - **15+ AI Technologies** integrated across projects
@@ -138,7 +138,7 @@ Each project is classified by its AI architecture pattern, based on how the syst
 | Multi-Agent Orchestration | 2 | 4% |
 | Interactive Learning | 2 | 4% |
 
-**Total: 62 projects**
+**Total: 63 projects**
 
 > Note: As of Apr 9, 2026, 16 projects were unpublished from the live portfolio homepage display to sharpen focus. They remain in the repo and are still counted here as built work.
 
@@ -281,6 +281,12 @@ Each project is classified by its AI architecture pattern, based on how the syst
 - **Live Demo:** [ai-profile-badminton-court-booking--662370080553.us-west1.run.app](https://ai-profile-badminton-court-booking--662370080553.us-west1.run.app/)
 - **Tech Stack:** Python, FastAPI, Google Gemini 2.5 Flash, TinyDB, Pydantic, Docker
 - **AI Capabilities:** M5 pattern (code-as-action) for agentic workflows, LLM generates executable Python code for booking operations, dynamic time-based pricing (4 tiers: daytime/nighttime × weekday/weekend), multi-hour bookings with per-hour pricing breakdown, automatic conflict detection and double-booking prevention, 24/7 operations with midnight-crossing bookings, revenue tracking and financial analytics, Malaysian localization (IC numbers, RM currency), natural language processing for flexible date/time parsing, safe code execution in controlled namespace
+
+#### [Wee Auto Car Care](./wee-auto-car-care.html)
+**Live bay and mechanic dashboard for independent car workshops**
+- **Live Demo:** [Launch Demo](https://lyven81.github.io/ai-project/projects/wee-auto-car-care/demo.html)
+- **Tech Stack:** Vanilla HTML/CSS/JS, Python 3 seed generator, localStorage, static hosting
+- **AI Capabilities:** 4-state bookability classifier (BOOKABLE / IDLE / BUSY / MULTI) that surfaces the hidden "bay free but no qualified mechanic" state; skill + bay + slot cross-validation prevents impossible bookings; interactive New Booking modal filters dropdowns in real time; 142-booking seed across 12 days with density, mechanic, and multi-slot constraints; per-visitor localStorage sandbox for demo isolation
 
 ### 🤖 Conversational AI & Specialized Chatbots
 
