@@ -185,9 +185,71 @@
             font-size: 1.15rem;
             color: rgba(255, 255, 255, 0.6);
             font-weight: 300;
-            margin-bottom: 40px;
+            margin-bottom: 28px;
             line-height: 1.7;
         }
+
+        .search-wrap {
+            position: relative;
+            max-width: 480px;
+            margin: 0 auto 28px auto;
+        }
+        .search-input {
+            width: 100%;
+            padding: 14px 20px 14px 44px;
+            border: 1px solid rgba(201, 168, 76, 0.35);
+            border-radius: 8px;
+            background: rgba(30, 27, 24, 0.7);
+            backdrop-filter: blur(8px);
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .search-input::placeholder { color: rgba(255,255,255,0.4); }
+        .search-input:focus { border-color: #C9A84C; }
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(201, 168, 76, 0.6);
+            font-size: 1rem;
+            pointer-events: none;
+        }
+        .search-results {
+            position: absolute;
+            top: calc(100% + 6px);
+            left: 0;
+            right: 0;
+            background: #1E1B18;
+            border: 1px solid rgba(201, 168, 76, 0.25);
+            border-radius: 8px;
+            max-height: 360px;
+            overflow-y: auto;
+            display: none;
+            z-index: 100;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+        }
+        .search-results.active { display: block; }
+        .search-result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            border-bottom: 1px solid rgba(201, 168, 76, 0.08);
+            cursor: pointer;
+            transition: background 0.15s;
+            text-decoration: none;
+            color: #fff;
+        }
+        .search-result-item:hover { background: rgba(201, 168, 76, 0.1); }
+        .search-result-item:last-child { border-bottom: none; }
+        .sr-name { font-weight: 500; font-size: 0.9rem; }
+        .sr-cat { font-size: 0.72rem; color: rgba(201,168,76,0.7); font-weight: 500; letter-spacing: 0.3px; }
+        .sr-desc { font-size: 0.78rem; color: rgba(255,255,255,0.45); margin-top: 2px; }
+        .sr-empty { padding: 16px; text-align: center; color: rgba(255,255,255,0.35); font-size: 0.85rem; }
 
         .btn-gold {
             display: inline-block;
@@ -649,6 +711,11 @@
         <span class="hero-tag">PORTFOLIO</span>
         <h1>AI Projects</h1>
         <p class="hero-tagline">64 production-ready apps across 7 categories</p>
+        <div class="search-wrap">
+            <span class="search-icon">&#x1F50D;</span>
+            <input type="text" class="search-input" id="projectSearch" placeholder="Search projects by name, category, or keyword..." autocomplete="off">
+            <div class="search-results" id="searchResults"></div>
+        </div>
         <a href="#categories" class="btn-gold">Explore Projects</a>
     </div>
 </section>
@@ -1022,6 +1089,104 @@ function swapProject(clickedCard) {
 
     document.getElementById('featured').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
+
+// ── Project Search ──────────────────────────────────────────────
+var projectDB = [
+  {n:"Leadership Team",c:"AI Agents",d:"AI boardroom for property agents with six manager subagents",demo:"projects/leadership-team/demo.html",details:"leadership-team.html"},
+  {n:"E-Commerce Advisor",c:"AI Agents",d:"Analyze 34,500 orders with six pre-built tools",demo:"projects/sme-business-advisor/demo.html",details:"sme-business-advisor.html"},
+  {n:"E-Commerce Advisor (MCP)",c:"AI Agents",d:"Live data connection through MCP server",demo:"projects/sme-advisor-mcp/demo.html",details:"sme-advisor-mcp.html"},
+  {n:"E-Commerce Advisor (Database)",c:"AI Agents",d:"Open-ended queries against 34,500 orders via AlloyDB",demo:"projects/sme-advisor-alloydb/demo.html",details:"sme-advisor-alloydb.html"},
+  {n:"F&B Sales Reporter",c:"AI Agents",d:"Daily revenue, top items, and peak hours for restaurants",demo:"#",details:"#"},
+  {n:"Retail Stock Tracker",c:"AI Agents",d:"Stock levels, reorder alerts, and supplier performance",demo:"#",details:"#"},
+  {n:"HR Insights",c:"AI Agents",d:"Headcount, salary benchmarks, and performance scores",demo:"#",details:"#"},
+  {n:"Campaign ROI Calculator",c:"AI Agents",d:"Spend, conversions, and ROI across ad channels",demo:"#",details:"#"},
+  {n:"Delivery Tracker",c:"AI Agents",d:"Delivery times and carrier reliability analysis",demo:"#",details:"#"},
+  {n:"Student Performance",c:"AI Agents",d:"Scores, attendance, and subject-level analysis",demo:"#",details:"#"},
+  {n:"Property Manager",c:"AI Agents",d:"Occupancy rates, rental income, and vacancy tracking",demo:"#",details:"#"},
+  {n:"F&B Sales Reporter (MCP)",c:"AI Agents",d:"POS data connected live through MCP",demo:"#",details:"#"},
+  {n:"Retail Stock Tracker (MCP)",c:"AI Agents",d:"Inventory data pulled from supplier spreadsheet in real time",demo:"#",details:"#"},
+  {n:"HR Insights (MCP)",c:"AI Agents",d:"Employee data connected to HR spreadsheet",demo:"#",details:"#"},
+  {n:"Campaign ROI (MCP)",c:"AI Agents",d:"Google Ads and Facebook data pulled live through MCP",demo:"#",details:"#"},
+  {n:"Delivery Tracker (MCP)",c:"AI Agents",d:"Courier tracking data connected live",demo:"#",details:"#"},
+  {n:"Student Performance (MCP)",c:"AI Agents",d:"Exam scores from Google Classroom, always fresh",demo:"#",details:"#"},
+  {n:"Property Manager (MCP)",c:"AI Agents",d:"Booking and tenant data updated on every query",demo:"#",details:"#"},
+  {n:"F&B Sales (Database)",c:"AI Agents",d:"Combine filters and date ranges in one question",demo:"#",details:"#"},
+  {n:"Retail Stock (Database)",c:"AI Agents",d:"Join inventory and sales data in a single question",demo:"#",details:"#"},
+  {n:"HR Insights (Database)",c:"AI Agents",d:"Cross-reference salary, leave, and performance data",demo:"#",details:"#"},
+  {n:"Campaign ROI (Database)",c:"AI Agents",d:"Cross-campaign analysis with open-ended queries",demo:"#",details:"#"},
+  {n:"Delivery Tracker (Database)",c:"AI Agents",d:"Query shipment history across carriers and routes",demo:"#",details:"#"},
+  {n:"Student Performance (Database)",c:"AI Agents",d:"Cross-reference scores, attendance, and teachers",demo:"#",details:"#"},
+  {n:"Property Manager (Database)",c:"AI Agents",d:"Query tenants, leases, payments, and vacancies",demo:"#",details:"#"},
+  {n:"Wee Auto Car Care",c:"Booking System",d:"Bay and mechanic dashboard for car workshops with 4-state bookability",demo:"projects/wee-auto-car-care/demo.html",details:"wee-auto-car-care.html"},
+  {n:"Kereta Sewa Jalan-jalan",c:"Booking System",d:"AI car rental agent for Klang Valley fleet",demo:"projects/car-rental-booking-agent/demo.html",details:"car-rental-booking-agent.html"},
+  {n:"Badminton Court Booking Agent",c:"Booking System",d:"Smart pricing and instant conflict checks for courts",demo:"projects/badminton-booking-agent/demo.html",details:"badminton-booking-agent.html"},
+  {n:"Soon Heng Air-Cond Service",c:"Booking System",d:"WhatsApp service agent for aircon business in Seremban",demo:"projects/soon-heng-aircon-agent/demo.html",details:"soon-heng-aircon-agent.html"},
+  {n:"Hire Gardener",c:"Booking System",d:"AI handles vendor hunt over WhatsApp — quotes and booking",demo:"projects/hire-gardener/demo.html",details:"hire-gardener.html"},
+  {n:"Kopitiam Digital Waiter",c:"Business Automation",d:"Real-time sales tracker for Malaysian kopitiam owners",demo:"https://kopitiam-digital-waiter-169218045868.us-west1.run.app/",details:"kopitiam-digital-waiter.html"},
+  {n:"Banana Lab",c:"Business Automation",d:"AI writes a new 50-prompt pack every Monday",demo:"projects/banana-lab/demo.html",details:"banana-lab.html"},
+  {n:"Marketing Agency",c:"Business Automation",d:"Weekly blog + 4 LinkedIn posts in one command",demo:"projects/marketing-agency/demo.html",details:"marketing-agency.html"},
+  {n:"Hoo Tim Analytics Agent",c:"Business Intelligence",d:"Live AI agent + MCP tools for Selangor snack distributor",demo:"projects/hoo-tim-analytics-agent/demo.html",details:"hoo-tim-analytics-agent.html"},
+  {n:"Ecommerce Analyst",c:"Business Intelligence",d:"Private analyst for mid-size e-commerce sellers",demo:"projects/ecommerce-analyst/demo.html",details:"ecommerce-analyst.html"},
+  {n:"Bright Path Tuition Centre",c:"Business Intelligence",d:"AI management assistant for premium tuition centres",demo:"bright-path-tuition/demo.html",details:"bright-path-tuition.html"},
+  {n:"Good Company",c:"Business Intelligence",d:"Reads quarter reports and runs 7-step stock analysis",demo:"projects/good-company/demo.html",details:"good-company.html"},
+  {n:"Football Assistant Coach",c:"Business Intelligence",d:"AI coaches 22 players and picks Starting XI",demo:"projects/football-assistant-coach/demo.html",details:"football-assistant-coach.html"},
+  {n:"TrendMate",c:"Business Intelligence",d:"Shopee and Lazada trend and pricing research",demo:"projects/trendmate/demo.html",details:"trendmate.html"},
+  {n:"Long View",c:"Business Intelligence",d:"27 OSINT sources swept with AI summaries and alerts",demo:"projects/long-view/demo.html",details:"long-view.html"},
+  {n:"MyPropLex",c:"Business Intelligence",d:"Malaysian property law research agent — NLC, HDA, STA, RPGT",demo:"projects/myproplex/demo.html",details:"myproplex.html"},
+  {n:"Social Media Marketer",c:"Business Intelligence",d:"5 AI agents compete on the same budget across channels",demo:"projects/social-media-marketer/demo.html",details:"social-media-marketer.html"},
+  {n:"Stock Analysis Agent",c:"Business Intelligence",d:"Investment report on Malaysian stocks — moat, dividends, fundamentals",demo:"projects/stock-analysis-agent/demo.html",details:"stock-analysis-agent.html"},
+  {n:"Science Learning Materials Builder",c:"Business Intelligence",d:"Complete science lesson packs for any grade level",demo:"apps/science-builder.html",details:"science-learning-materials-builder.html"},
+  {n:"Public Sentiment Collection Agent",c:"Business Intelligence",d:"Track public sentiment by region with bias detection",demo:"projects/public-sentiment-collection-agent/demo.html",details:"public-sentiment-agent.html"},
+  {n:"Data Consulting Business Analyst",c:"Business Intelligence",d:"Market scanning and competitor mapping with AI",demo:"projects/data-consulting-business-analyst/demo.html",details:"data-consulting-agent.html"},
+  {n:"Stock Manager",c:"Business Intelligence",d:"Three AI agents restock inventory via Google Sheets",demo:"projects/stock-manager/demo.html",details:"stock-manager.html"},
+  {n:"Mentor",c:"Conversational AI",d:"AI advisor for solo service founders grounded in proven frameworks",demo:"projects/mentor/demo.html",details:"mentor.html"},
+  {n:"Skyread",c:"Conversational AI",d:"Daily horoscope with real planetary movement insights — EN/ZH",demo:"projects/skyread/demo.html",details:"skyread.html"},
+  {n:"Wiseman",c:"Conversational AI",d:"Five-panel cosmic reading in Mandarin from birth date",demo:"projects/wiseman/demo.html",details:"wiseman.html"},
+  {n:"Tarot Guru",c:"Conversational AI",d:"AI picks the right spread and writes a narrative tarot reading",demo:"projects/tarot-guru/demo.html",details:"tarot-guru.html"},
+  {n:"Master Wong",c:"Conversational AI",d:"I Ching readings in plain Mandarin",demo:"projects/master-wong/demo.html",details:"master-wong.html"},
+  {n:"Chinese Traditional Calendar",c:"Conversational AI",d:"Auspicious dates in natural language with traditional calendar guidance",demo:"projects/chinese-calender/demo.html",details:"chinese-traditional-calendar.html"},
+  {n:"Feng Shui Consultant",c:"Conversational AI",d:"Traditional Feng Shui consultation — space optimization and directional analysis",demo:"projects/fengshui-chatbot/demo.html",details:"fengshui-chatbot.html"},
+  {n:"Horoscope Chatbot",c:"Conversational AI",d:"Zodiac Q&A chatbot",demo:"projects/horoscope-chatbot/demo.html",details:"horoscope-chatbot.html"},
+  {n:"Unusual Coloring Book",c:"Creative AI",d:"Choose-your-own-adventure coloring book with AI illustrations",demo:"projects/unusual-coloring-book/demo.html",details:"unusual-coloring-book.html"},
+  {n:"Sarawak Laksa",c:"Creative AI",d:"Interactive guide to Kuching's most iconic dish",demo:"projects/sarawak-laksa/index.html",details:"sarawak-laksa.html"},
+  {n:"Nine Year Plan 2022-2031",c:"Creative AI",d:"Reference guide to the Bahai Nine Year Plan",demo:"projects/nine-year-plan/index.html",details:"nine-year-plan.html"},
+  {n:"Back-to-School",c:"Creative AI",d:"5 AI copywriters turn one brief into a full BM campaign",demo:"projects/back-to-school-campaign/demo.html",details:"back-to-school-campaign.html"},
+  {n:"Claude PDF Summarizer",c:"Document Processing",d:"Upload any PDF and get a structured AI summary instantly",demo:"https://summarizer-218391175125.asia-southeast1.run.app/",details:"ai-pdf-summarizer.html"},
+  {n:"Expense Tracker AI",c:"Document Processing",d:"Snap a receipt and AI categorizes it — no data leaves your device",demo:"https://expense-tracker-ai-169218045868.us-west1.run.app/",details:"expense-tracker-ai.html"},
+  {n:"PDF-to-Audio Reader",c:"Document Processing",d:"Turn any PDF into navigable audio with chapter structure",demo:"https://pdf-to-audio-reader-169218045868.us-west1.run.app/",details:"pdf-to-audio-reader.html"},
+  {n:"Bahai Chinese Translation Workbench",c:"Document Processing",d:"AI-assisted translation pipeline for Sacred Writings into Chinese",demo:"projects/bahai-chinese-translation-workbench/demo.html",details:"bahai-chinese-translation-workbench.html"}
+];
+
+var searchInput = document.getElementById('projectSearch');
+var searchResults = document.getElementById('searchResults');
+
+searchInput.addEventListener('input', function() {
+    var q = this.value.trim().toLowerCase();
+    if (q.length < 2) { searchResults.classList.remove('active'); return; }
+    var matches = projectDB.filter(function(p) {
+        return p.n.toLowerCase().indexOf(q) !== -1 || p.c.toLowerCase().indexOf(q) !== -1 || p.d.toLowerCase().indexOf(q) !== -1;
+    });
+    if (matches.length === 0) {
+        searchResults.innerHTML = '<div class="sr-empty">No projects found for "' + q + '"</div>';
+    } else {
+        searchResults.innerHTML = matches.slice(0, 10).map(function(p) {
+            return '<a class="search-result-item" href="' + p.details + '">' +
+                '<div><div class="sr-name">' + p.n + '</div><div class="sr-desc">' + p.d + '</div></div>' +
+                '<div class="sr-cat">' + p.c + '</div></a>';
+        }).join('');
+        if (matches.length > 10) {
+            searchResults.innerHTML += '<div class="sr-empty">' + (matches.length - 10) + ' more results...</div>';
+        }
+    }
+    searchResults.classList.add('active');
+});
+
+searchInput.addEventListener('blur', function() {
+    setTimeout(function() { searchResults.classList.remove('active'); }, 200);
+});
+searchInput.addEventListener('focus', function() {
+    if (this.value.trim().length >= 2) searchResults.classList.add('active');
+});
 </script>
 
 </body>
