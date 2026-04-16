@@ -2,7 +2,7 @@
 
 [![Portfolio Website](https://img.shields.io/badge/Portfolio-Live-green?logo=vercel)](https://lyven81.github.io/ai-project/)
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-black?logo=github)](https://github.com/lyven81/ai-project)
-[![Projects](https://img.shields.io/badge/Projects-63-blue)](#-featured-projects)
+[![Projects](https://img.shields.io/badge/Projects-64-blue)](#-featured-projects)
 [![AI Powered](https://img.shields.io/badge/AI-Powered-orange?logo=tensorflow)](https://github.com/lyven81/ai-project)
 
 **Innovative AI Solutions for Modern Challenges** - A curated collection of production-ready AI applications showcasing expertise in computer vision, natural language processing, document processing, and creative AI technologies.
@@ -13,7 +13,7 @@
 
 ## 🌟 Portfolio Overview
 
-This repository contains **63 AI applications** built in this repo (some published to the portfolio homepage, others retained as archived builds) demonstrating proficiency across multiple AI domains. Each project includes comprehensive documentation, live demos, and complete source code with deployment configurations.
+This repository contains **64 AI applications** built in this repo (some published to the portfolio homepage, others retained as archived builds) demonstrating proficiency across multiple AI domains. Each project includes comprehensive documentation, live demos, and complete source code with deployment configurations.
 
 **🎯 Portfolio Highlights:**
 - **15+ AI Technologies** integrated across projects
@@ -106,6 +106,7 @@ Each project is classified by its AI architecture pattern, based on how the syst
 | [MyPropLex](./projects/myproplex/) | Legal Q&A, prompt-driven |
 | [Chinese Calendar](./projects/chinese-calender/) | Calendar lookup, prompt-based |
 | [TrendMate](./projects/trendmate/) | Fashion trend Q&A |
+| [Back-to-School](./back-to-school-campaign.html) | 5 AI copywriters generate a coordinated 5-channel BM marketing campaign from one brief |
 | [Mentor](./projects/mentor/) | Unified-voice advisor with keyword retrieval + session memory |
 
 ### Hybrid Tools (5 projects)
@@ -132,14 +133,14 @@ Each project is classified by its AI architecture pattern, based on how the syst
 | Category | Count | % |
 |---|---|---|
 | RPA (fixed pipelines) | 19 | 33% |
-| LLM Chatbots | 15 | 26% |
+| LLM Chatbots | 16 | 27% |
 | Agentic AI | 11 | 19% |
 | Hybrid Tools | 5 | 9% |
 | RAG | 3 | 5% |
 | Multi-Agent Orchestration | 2 | 4% |
 | Interactive Learning | 2 | 4% |
 
-**Total: 63 projects**
+**Total: 64 projects**
 
 > Note: As of Apr 9, 2026, 16 projects were unpublished from the live portfolio homepage display to sharpen focus. They remain in the repo and are still counted here as built work.
 

@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Back-to-School — 5-Channel Campaign Writer</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Poppins', sans-serif; line-height: 1.6; color: #403B36; background-color: #ffffff; }
+  .container { display: flex; min-height: 100vh; }
+
+  /* ---- Left Panel: Campaign Brief ---- */
+  .left-column { width: 35%; background-color: #f8f8f8; padding: 30px 24px; position: fixed; height: 100vh; overflow-y: auto; border-right: 1px solid #e0e0e0; }
+  .left-column h1 { font-size: 1.6em; font-weight: bold; color: #403B36; margin-bottom: 4px; }
+  .left-column h2 { font-size: 0.95em; font-weight: 400; color: #666; margin-bottom: 16px; }
+  .badge { display: inline-block; padding: 5px 10px; background-color: #fff3e0; color: #8a5400; border-radius: 20px; font-size: 0.75em; font-weight: 600; margin-bottom: 16px; border: 1px solid #f0c27b; }
+
+  .form-section { margin-bottom: 14px; }
+  .form-section label { display: block; font-size: 0.82em; font-weight: 600; color: #5a3a28; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.4px; }
+  .form-section input, .form-section textarea, .form-section select {
+    width: 100%; padding: 9px 12px; border: 1px solid #d4c9b0; border-radius: 6px;
+    font-family: 'Poppins', sans-serif; font-size: 0.88em; background: #fff; color: #403B36;
+  }
+  .form-section textarea { resize: vertical; min-height: 60px; }
+  .form-section input:focus, .form-section textarea:focus, .form-section select:focus { outline: none; border-color: #CBA135; }
+
+  .preset-section { margin-bottom: 16px; }
+  .preset-section .preset-label { font-size: 0.78em; color: #8a5400; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; margin-bottom: 8px; }
+  .preset-btn { display: block; width: 100%; padding: 10px 14px; margin-bottom: 6px; background: #fff; border: 1px solid #e5d9b0; border-radius: 8px; text-align: left; cursor: pointer; font-family: 'Poppins', sans-serif; font-size: 0.82em; color: #403B36; transition: all 0.2s ease; }
+  .preset-btn:hover { background: #CBA135; color: #fff; border-color: #CBA135; }
+
+  .generate-btn { width: 100%; padding: 14px; background: #CBA135; color: #fff; border: none; border-radius: 8px; font-family: 'Poppins', sans-serif; font-size: 1em; font-weight: 600; cursor: pointer; margin-top: 8px; transition: background 0.2s; }
+  .generate-btn:hover { background: #B8902E; }
+  .generate-btn:disabled { background: #ccc; cursor: not-allowed; }
+
+  .nav-links { margin-top: 20px; border-top: 1px solid #e0d5c8; padding-top: 14px; }
+  .nav-links a { display: block; padding: 8px 0; color: #5a3a28; text-decoration: none; font-size: 0.85em; border-bottom: 1px dotted #d4c9b0; }
+  .nav-links a:hover { color: #CBA135; }
+
+  /* ---- Right Panel: Output ---- */
+  .right-column { width: 65%; margin-left: 35%; padding: 30px 40px; background-color: #ffffff; }
+
+  .hero { text-align: center; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 2px solid #e0e0e0; }
+  .hero h1 { font-size: 1.8em; color: #403B36; margin-bottom: 6px; font-weight: 600; }
+  .hero p { font-size: 0.95em; color: #666; line-height: 1.6; }
+  .hero .pill { display: inline-block; margin-top: 8px; padding: 4px 12px; background: #fff3e0; color: #8a5400; border-radius: 16px; font-size: 0.75em; font-weight: 600; letter-spacing: 0.4px; }
+
+  .writer-bar { max-width: 900px; margin: 0 auto 18px auto; display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+  .writer-card { background: #faf6ec; border: 1px solid #e5d9b0; border-radius: 8px; padding: 10px 8px; text-align: center; }
+  .writer-card .icon { font-size: 1.4em; display: block; margin-bottom: 4px; }
+  .writer-card .name { font-size: 0.7em; font-weight: 600; color: #8a5400; text-transform: uppercase; letter-spacing: 0.3px; }
+
+  .api-card { max-width: 900px; margin: 0 auto 18px auto; background: linear-gradient(135deg, #1a1915, #2a2722); border: 2px solid #CBA135; border-radius: 12px; padding: 16px 20px; color: #f0e9d8; }
+  .api-card .api-title { font-size: 0.92em; font-weight: 600; color: #CBA135; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+  .api-card .api-dot { width: 8px; height: 8px; border-radius: 50%; background: #e57373; display: inline-block; }
+  .api-card .api-dot.ok { background: #7ed957; }
+  .api-card .api-row { display: flex; gap: 10px; align-items: center; margin-top: 6px; }
+  .api-card input { flex: 1; padding: 9px 14px; border: 1px solid #555; background: #0e0d0a; color: #f0e9d8; border-radius: 6px; font-family: 'Courier New', monospace; font-size: 0.88em; }
+  .api-card input:focus { outline: none; border-color: #CBA135; }
+  .api-card button { padding: 9px 16px; background: #CBA135; color: #1a1915; border: none; border-radius: 6px; font-family: 'Poppins', sans-serif; font-weight: 600; cursor: pointer; }
+  .api-card button:hover { background: #d4b34e; }
+  .api-card .api-help { font-size: 0.76em; color: #b8ad8e; margin-top: 8px; }
+  .api-card .api-help a { color: #CBA135; text-decoration: none; }
+
+  /* ---- Tabs ---- */
+  .tabs-container { max-width: 900px; margin: 0 auto 20px auto; }
+  .tab-bar { display: flex; border-bottom: 2px solid #e0e0e0; margin-bottom: 0; }
+  .tab-btn { flex: 1; padding: 12px 8px; background: none; border: none; border-bottom: 3px solid transparent; font-family: 'Poppins', sans-serif; font-size: 0.82em; font-weight: 600; color: #999; cursor: pointer; text-align: center; transition: all 0.2s; }
+  .tab-btn:hover { color: #403B36; }
+  .tab-btn.active { color: #8a5400; border-bottom-color: #CBA135; }
+  .tab-panel { display: none; background: #faf6ec; border: 1px solid #e5d9b0; border-top: none; border-radius: 0 0 10px 10px; padding: 20px 24px; min-height: 200px; }
+  .tab-panel.active { display: block; }
+  .tab-panel .channel-label { font-size: 0.78em; font-weight: 600; color: #8a5400; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+  .tab-panel .copy-output { white-space: pre-wrap; font-size: 0.9em; line-height: 1.8; color: #403B36; min-height: 100px; }
+  .tab-panel .copy-output.placeholder { color: #b0a090; font-style: italic; }
+  .copy-btn { margin-top: 12px; padding: 8px 20px; background: #403B36; color: #fff; border: none; border-radius: 6px; font-family: 'Poppins', sans-serif; font-size: 0.82em; font-weight: 600; cursor: pointer; }
+  .copy-btn:hover { background: #CBA135; }
+  .copy-btn.copied { background: #7ed957; color: #1a1915; }
+  .regen-btn { margin-top: 12px; margin-left: 8px; padding: 8px 20px; background: none; color: #8a5400; border: 1px solid #CBA135; border-radius: 6px; font-family: 'Poppins', sans-serif; font-size: 0.82em; font-weight: 600; cursor: pointer; }
+  .regen-btn:hover { background: #fff3e0; }
+
+  .empty-state { max-width: 900px; margin: 40px auto; text-align: center; color: #b0a090; }
+  .empty-state .big-icon { font-size: 3em; margin-bottom: 12px; }
+  .empty-state p { font-size: 0.95em; }
+
+  .loading-spinner { display: inline-block; width: 18px; height: 18px; border: 2px solid #e5d9b0; border-top-color: #CBA135; border-radius: 50%; animation: spin 0.8s linear infinite; vertical-align: middle; margin-right: 8px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  footer { text-align: center; padding: 20px; background-color: #222; color: #fff; margin-top: 40px; margin-left: 35%; }
+  footer p { margin: 0; font-size: 0.85em; }
+
+  @media (max-width: 900px) {
+    .container { flex-direction: column; }
+    .left-column { width: 100%; position: relative; height: auto; }
+    .right-column { width: 100%; margin-left: 0; padding: 20px 16px; }
+    .writer-bar { grid-template-columns: repeat(3, 1fr); }
+    .tab-btn { font-size: 0.72em; padding: 10px 4px; }
+    footer { margin-left: 0; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <aside class="left-column">
+    <header>
+      <h1>Back-to-School</h1>
+      <h2>5-Channel Campaign Writer</h2>
+    </header>
+    <div class="badge">Live Demo — BYO Gemini Key</div>
+
+    <div class="preset-section">
+      <div class="preset-label">Preset Campaigns</div>
+      <button class="preset-btn" onclick="loadPreset('jan')">Back to School (Januari)</button>
+      <button class="preset-btn" onclick="loadPreset('jun')">Pertengahan Tahun (Jun)</button>
+      <button class="preset-btn" onclick="loadPreset('clearance')">Akhir Tahun (Clearance)</button>
+    </div>
+
+    <div class="form-section">
+      <label>Nama Kedai</label>
+      <input type="text" id="f-store" placeholder="Contoh: Kiddoz Uniform House">
+    </div>
+    <div class="form-section">
+      <label>Lokasi</label>
+      <input type="text" id="f-location" placeholder="Contoh: Bangi, Selangor">
+    </div>
+    <div class="form-section">
+      <label>Produk & Harga</label>
+      <textarea id="f-products" placeholder="Contoh: Set lengkap baju sekolah dari RM89. Baju putih, pinafore, seluar sukan, kasut sekolah, stokin, beg."></textarea>
+    </div>
+    <div class="form-section">
+      <label>Kempen & Tarikh</label>
+      <input type="text" id="f-campaign" placeholder="Contoh: Back to School Januari 2026, sedia stok semua saiz">
+    </div>
+    <div class="form-section">
+      <label>Sasaran Pelanggan</label>
+      <input type="text" id="f-audience" placeholder="Contoh: Ibu bapa pelajar sekolah rendah di Bangi">
+    </div>
+    <div class="form-section">
+      <label>Nada Penulisan</label>
+      <select id="f-tone">
+        <option value="bm-santai">BM Santai (Casual)</option>
+        <option value="bm-formal">BM Formal</option>
+        <option value="campur">Campur (BM-English Mix)</option>
+      </select>
+    </div>
+
+    <button class="generate-btn" id="gen-btn" onclick="generateCampaign()">Jana Kempen</button>
+
+    <div class="nav-links">
+      <a href="https://lyven81.github.io/ai-project/index.html">Home — AI Project Portfolio</a>
+      <a href="https://lyven81.github.io/ai-project/back-to-school-campaign.html">Project Outline</a>
+    </div>
+  </aside>
+
+  <main class="right-column">
+    <section class="hero">
+      <h1>Back-to-School</h1>
+      <p>Satu brief, lima penulis AI, lima platform — semua dalam Bahasa Melayu.</p>
+      <span class="pill">5 PENULIS — 5 PLATFORM — 1 KEMPEN</span>
+    </section>
+
+    <div class="writer-bar">
+      <div class="writer-card"><span class="icon">💬</span><span class="name">WhatsApp</span></div>
+      <div class="writer-card"><span class="icon">📸</span><span class="name">Instagram</span></div>
+      <div class="writer-card"><span class="icon">📧</span><span class="name">Email</span></div>
+      <div class="writer-card"><span class="icon">📝</span><span class="name">Blog</span></div>
+      <div class="writer-card"><span class="icon">🔍</span><span class="name">SEO</span></div>
+    </div>
+
+    <div class="api-card">
+      <div class="api-title"><span class="api-dot" id="api-dot"></span>Gemini API Key</div>
+      <div class="api-row">
+        <input type="password" id="api-key" placeholder="Paste your Gemini API key (starts with AIza...)" autocomplete="off">
+        <button onclick="saveKey()">Activate</button>
+      </div>
+      <div class="api-help">Key stays in your browser session only — never sent anywhere except Google. Get a free key at <a href="https://aistudio.google.com/apikey" target="_blank">aistudio.google.com/apikey</a>.</div>
+    </div>
+
+    <div id="empty-state" class="empty-state">
+      <div class="big-icon">✍️</div>
+      <p>Fill in the brief on the left (or pick a preset), then click <strong>Jana Kempen</strong>.<br>Five AI copywriters will each produce copy for their channel — all in Bahasa Melayu.</p>
+    </div>
+
+    <div id="tabs-container" class="tabs-container" style="display:none;">
+      <div class="tab-bar">
+        <button class="tab-btn active" onclick="switchTab('whatsapp')">💬 WhatsApp</button>
+        <button class="tab-btn" onclick="switchTab('instagram')">📸 Instagram</button>
+        <button class="tab-btn" onclick="switchTab('email')">📧 Email</button>
+        <button class="tab-btn" onclick="switchTab('blog')">📝 Blog</button>
+        <button class="tab-btn" onclick="switchTab('seo')">🔍 SEO</button>
+      </div>
+      <div id="panel-whatsapp" class="tab-panel active">
+        <div class="channel-label">Penulis WhatsApp — Broadcast Pendek & Urgent</div>
+        <div class="copy-output placeholder" id="out-whatsapp">Generating...</div>
+        <button class="copy-btn" onclick="copyText('whatsapp')">Salin</button>
+        <button class="regen-btn" onclick="regenChannel('whatsapp')">Jana Semula</button>
+      </div>
+      <div id="panel-instagram" class="tab-panel">
+        <div class="channel-label">Penulis Instagram — Caption & Hashtag</div>
+        <div class="copy-output placeholder" id="out-instagram">Generating...</div>
+        <button class="copy-btn" onclick="copyText('instagram')">Salin</button>
+        <button class="regen-btn" onclick="regenChannel('instagram')">Jana Semula</button>
+      </div>
+      <div id="panel-email" class="tab-panel">
+        <div class="channel-label">Penulis Email — 3-Email Drip Sequence</div>
+        <div class="copy-output placeholder" id="out-email">Generating...</div>
+        <button class="copy-btn" onclick="copyText('email')">Salin</button>
+        <button class="regen-btn" onclick="regenChannel('email')">Jana Semula</button>
+      </div>
+      <div id="panel-blog" class="tab-panel">
+        <div class="channel-label">Penulis Blog — Cerita & Storytelling</div>
+        <div class="copy-output placeholder" id="out-blog">Generating...</div>
+        <button class="copy-btn" onclick="copyText('blog')">Salin</button>
+        <button class="regen-btn" onclick="regenChannel('blog')">Jana Semula</button>
+      </div>
+      <div id="panel-seo" class="tab-panel">
+        <div class="channel-label">Penulis SEO — Google Search Optimized</div>
+        <div class="copy-output placeholder" id="out-seo">Generating...</div>
+        <button class="copy-btn" onclick="copyText('seo')">Salin</button>
+        <button class="regen-btn" onclick="regenChannel('seo')">Jana Semula</button>
+      </div>
+    </div>
+  </main>
+</div>
+
+<footer>
+  <p>&copy; 2025 Lee Yih Ven | Data-Driven Solutions</p>
+</footer>
+
+<script>
+// ---- Presets ----
+const PRESETS = {
+  jan: {
+    store: 'Kiddoz Uniform House',
+    location: 'Bangi, Selangor',
+    products: 'Set lengkap baju sekolah dari RM89. Baju putih RM25, pinafore RM35, seluar sukan RM20, kasut sekolah hitam RM45, stokin 3 pasang RM12, beg sekolah dari RM55. Sedia stok semua saiz — 5 tahun hingga 12 tahun.',
+    campaign: 'Back to School Januari 2026 — Sekolah buka 2 Januari. Stok sedia, semua saiz ada. Walk-in atau WhatsApp.',
+    audience: 'Ibu bapa pelajar sekolah rendah di Bangi dan sekitar Kajang/Putrajaya'
+  },
+  jun: {
+    store: 'Kiddoz Uniform House',
+    location: 'Bangi, Selangor',
+    products: 'Baju sekolah ganti — baju putih RM25, seluar/skirt RM30, kasut sekolah RM45. Set sukan lengkap RM38. Diskaun 10% untuk pembelian 3 helai ke atas.',
+    campaign: 'Pertengahan Tahun Jun 2026 — Anak dah besar, baju dah ketat? Tukar sekarang sebelum sesi baru.',
+    audience: 'Ibu bapa yang anak sudah mula membesar dan perlukan saiz baru untuk sesi kedua'
+  },
+  clearance: {
+    store: 'Kiddoz Uniform House',
+    location: 'Bangi, Selangor',
+    products: 'Clearance akhir tahun — semua baju sekolah diskaun 30%. Baju putih RM18 (biasa RM25), kasut RM32 (biasa RM45). Beg sekolah 40% off. Stok terhad.',
+    campaign: 'Year-End Clearance November 2026 — Beli sekarang untuk tahun depan, harga tahun ini. Stok terhad, siapa cepat dia dapat.',
+    audience: 'Ibu bapa yang bijak merancang — beli awal untuk Januari depan dengan harga clearance'
+  }
+};
+
+function loadPreset(key) {
+  const p = PRESETS[key];
+  document.getElementById('f-store').value = p.store;
+  document.getElementById('f-location').value = p.location;
+  document.getElementById('f-products').value = p.products;
+  document.getElementById('f-campaign').value = p.campaign;
+  document.getElementById('f-audience').value = p.audience;
+}
+
+// ---- API Key ----
+const apiKeyInput = document.getElementById('api-key');
+const apiDot = document.getElementById('api-dot');
+const saved = sessionStorage.getItem('bts_gemini_key');
+if (saved) { apiKeyInput.value = saved; apiDot.classList.add('ok'); }
+
+function saveKey() {
+  const k = apiKeyInput.value.trim();
+  if (!k) return;
+  sessionStorage.setItem('bts_gemini_key', k);
+  apiDot.classList.add('ok');
+}
+
+// ---- Tabs ----
+function switchTab(channel) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelector(`.tab-btn[onclick="switchTab('${channel}')"]`).classList.add('active');
+  document.getElementById('panel-' + channel).classList.add('active');
+}
+
+// ---- Copy to clipboard ----
+function copyText(channel) {
+  const el = document.getElementById('out-' + channel);
+  if (el.classList.contains('placeholder')) return;
+  navigator.clipboard.writeText(el.textContent).then(() => {
+    const btn = el.parentElement.querySelector('.copy-btn');
+    btn.textContent = 'Disalin!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Salin'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+// ---- Build brief string ----
+function buildBrief() {
+  return `Nama Kedai: ${document.getElementById('f-store').value}
+Lokasi: ${document.getElementById('f-location').value}
+Produk & Harga: ${document.getElementById('f-products').value}
+Kempen & Tarikh: ${document.getElementById('f-campaign').value}
+Sasaran Pelanggan: ${document.getElementById('f-audience').value}`;
+}
+
+function getToneInstruction() {
+  const tone = document.getElementById('f-tone').value;
+  if (tone === 'bm-formal') return 'Gunakan Bahasa Melayu formal dan sopan. Sesuai untuk surat rasmi dan email profesional.';
+  if (tone === 'campur') return 'Gunakan campuran Bahasa Melayu dan English (Manglish). Contoh: "Jom grab sekarang, limited stock je!"';
+  return 'Gunakan Bahasa Melayu santai dan mesra. Tulis macam kawan bercakap — pendek, direct, dan mudah faham.';
+}
+
+// ---- System prompt for the 5-writer team ----
+function buildSystemPrompt(brief, toneInstruction) {
+  return `Kamu adalah pasukan 5 penulis iklan profesional. Setiap penulis menulis untuk satu platform dengan gaya tersendiri.
+
+ARAHAN NADA:
+${toneInstruction}
+
+BRIEF KEMPEN:
+${brief}
+
+PERANAN SETIAP PENULIS:
+
+1. PENULIS WHATSAPP
+- Tulis broadcast pendek, 4-6 baris sahaja.
+- Mesti ada urgency dan CTA jelas (contoh: "Balas 1 untuk tempah").
+- Tulis macam mesej peribadi dari pemilik kedai.
+- Tiada hashtag, tiada link.
+
+2. PENULIS INSTAGRAM
+- Baris pertama mesti hook (soalan atau kenyataan berani).
+- 3-5 perenggan pendek.
+- Akhiri dengan 5-8 hashtag BM yang relevan.
+- Emoji boleh digunakan tetapi jangan berlebihan.
+
+3. PENULIS EMAIL
+- Tulis 3 email berturutan (sequence):
+  Email 1 (Teaser): Subject line + 2 perenggan pendek — tarik minat.
+  Email 2 (Tawaran): Subject line + butiran produk & harga — beri sebab untuk beli.
+  Email 3 (Last Call): Subject line + urgency — stok terhad, tarikh tutup.
+- Setiap email ada greeting dengan placeholder [Nama] dan satu CTA.
+
+4. PENULIS BLOG
+- Tulis 300-500 patah perkataan.
+- Mula dengan cerita ibu bapa yang relatable.
+- Masukkan butiran produk secara natural dalam cerita.
+- Akhiri dengan CTA lembut.
+
+5. PENULIS SEO
+- Tulis satu perenggan 150-200 patah perkataan, dioptimumkan untuk Google.
+- Sasarkan kata kunci seperti "baju sekolah murah [lokasi]", "uniform sekolah [lokasi]".
+- Letak kata kunci secara natural — jangan stuff.
+- Sertakan satu meta description (maksimum 155 aksara).
+
+PERATURAN:
+- Tulis SEMUA output dalam Bahasa Melayu (ikut arahan nada di atas).
+- Gunakan HANYA fakta dari brief. Jangan reka harga, produk, atau alamat yang tiada dalam brief.
+- Jangan guna "terbaik di Malaysia" atau dakwaan superlatif melainkan brief menyatakan demikian.
+- Setiap output platform mesti boleh berdiri sendiri — pembaca yang hanya nampak satu platform mesti faham mesej penuh kempen.
+
+FORMAT OUTPUT:
+Balas dalam JSON yang sah dengan 5 kunci: "whatsapp", "instagram", "email", "blog", "seo".
+Setiap nilai adalah string lengkap untuk platform tersebut.
+Jangan tambah apa-apa teks di luar JSON. Jangan wrap dalam markdown code block.`;
+}
+
+// ---- Generate full campaign ----
+async function generateCampaign() {
+  const apiKey = (apiKeyInput.value || '').trim();
+  if (!apiKey) {
+    alert('Sila masukkan Gemini API key terlebih dahulu.');
+    apiKeyInput.focus();
+    return;
+  }
+
+  const store = document.getElementById('f-store').value.trim();
+  if (!store) {
+    alert('Sila masukkan nama kedai.');
+    return;
+  }
+
+  const brief = buildBrief();
+  const toneInstruction = getToneInstruction();
+  const systemPrompt = buildSystemPrompt(brief, toneInstruction);
+
+  const genBtn = document.getElementById('gen-btn');
+  genBtn.disabled = true;
+  genBtn.innerHTML = '<span class="loading-spinner"></span>Sedang menjana...';
+
+  // Show tabs, hide empty state
+  document.getElementById('empty-state').style.display = 'none';
+  document.getElementById('tabs-container').style.display = 'block';
+
+  const channels = ['whatsapp', 'instagram', 'email', 'blog', 'seo'];
+  channels.forEach(ch => {
+    const el = document.getElementById('out-' + ch);
+    el.textContent = 'Sedang menjana...';
+    el.classList.add('placeholder');
+  });
+
+  try {
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${apiKey}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        system_instruction: { parts: [{ text: systemPrompt }] },
+        contents: [{ role: 'user', parts: [{ text: `Janakan kempen 5-channel berdasarkan brief di atas. Output JSON sahaja.` }] }],
+        generationConfig: { temperature: 0.7, maxOutputTokens: 8000 }
+      })
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error.message);
+
+    let raw = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    // Strip markdown code fences if present
+    raw = raw.replace(/^```json?\s*/i, '').replace(/\s*```$/i, '').trim();
+
+    const output = JSON.parse(raw);
+
+    channels.forEach(ch => {
+      const el = document.getElementById('out-' + ch);
+      if (output[ch]) {
+        el.textContent = output[ch];
+        el.classList.remove('placeholder');
+      } else {
+        el.textContent = 'Tiada output untuk channel ini.';
+      }
+    });
+
+  } catch (e) {
+    channels.forEach(ch => {
+      const el = document.getElementById('out-' + ch);
+      el.textContent = 'Ralat: ' + e.message;
+      el.classList.add('placeholder');
+    });
+  }
+
+  genBtn.disabled = false;
+  genBtn.textContent = 'Jana Kempen';
+}
+
+// ---- Regenerate single channel ----
+async function regenChannel(channel) {
+  const apiKey = (apiKeyInput.value || '').trim();
+  if (!apiKey) { alert('Sila masukkan Gemini API key.'); return; }
+
+  const brief = buildBrief();
+  const toneInstruction = getToneInstruction();
+
+  const channelNames = {
+    whatsapp: 'PENULIS WHATSAPP',
+    instagram: 'PENULIS INSTAGRAM',
+    email: 'PENULIS EMAIL',
+    blog: 'PENULIS BLOG',
+    seo: 'PENULIS SEO'
+  };
+
+  const el = document.getElementById('out-' + channel);
+  el.textContent = 'Sedang menjana semula...';
+  el.classList.add('placeholder');
+
+  const prompt = `Kamu adalah ${channelNames[channel]} dari pasukan kempen.
+
+ARAHAN NADA:
+${toneInstruction}
+
+BRIEF KEMPEN:
+${brief}
+
+Tulis semula output untuk platform ${channel} sahaja. Guna gaya berbeza dari versi sebelum ini tetapi kekal dengan brief yang sama. Output teks sahaja, tiada JSON.`;
+
+  try {
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${apiKey}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ role: 'user', parts: [{ text: prompt }] }],
+        generationConfig: { temperature: 0.8, maxOutputTokens: 1200 }
+      })
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error.message);
+
+    const text = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Tiada output.';
+    el.textContent = text;
+    el.classList.remove('placeholder');
+  } catch (e) {
+    el.textContent = 'Ralat: ' + e.message;
+  }
+}
+</script>
+</body>
+</html>

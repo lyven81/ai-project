@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Back-to-School — Source Code</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #222; background-color: #ffffff; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        .back-nav { margin-bottom: 20px; }
+        .back-nav a { color: #007BFF; text-decoration: none; font-size: 1rem; }
+        .back-nav a:hover { text-decoration: underline; }
+
+        .project-header { text-align: center; margin-bottom: 40px; padding: 40px 20px; background: linear-gradient(135deg, #FF5722, #E64A19); color: white; border-radius: 10px; }
+        .project-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        .project-header p { font-size: 1.2rem; opacity: 0.9; }
+        .badges { display: flex; justify-content: center; gap: 10px; margin: 20px 0; flex-wrap: wrap; }
+        .badge { background-color: rgba(255,255,255,0.2); color: white; padding: 5px 12px; border-radius: 15px; font-size: 0.9rem; }
+
+        .content-section { margin: 40px 0; padding: 30px; background-color: #f9f9f9; border-radius: 8px; border-left: 5px solid #FF5722; }
+        .content-section h2 { color: #FF5722; margin-bottom: 20px; font-size: 1.8rem; }
+        .content-section h3 { color: #333; margin: 20px 0 10px 0; font-size: 1.3rem; }
+
+        .code-block { background-color: #1e1e1e; color: #d4d4d4; border-radius: 8px; padding: 20px; margin: 15px 0; font-family: 'Courier New', monospace; font-size: 0.85rem; overflow-x: auto; line-height: 1.7; white-space: pre-wrap; }
+        .code-block .comment { color: #6a9955; }
+        .code-block .keyword { color: #569cd6; }
+        .code-block .string { color: #ce9178; }
+        .code-block .function { color: #dcdcaa; }
+
+        .file-tree { background: #f4f4f4; border: 1px solid #ddd; border-radius: 5px; padding: 20px; margin: 15px 0; font-family: monospace; line-height: 2; }
+
+        @media (max-width: 768px) {
+            .project-header h1 { font-size: 2rem; }
+            .container { padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="back-to-school-campaign.html">&larr; Back to Showcase</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>Back-to-School</h1>
+            <p>Source Code Walkthrough</p>
+            <div class="badges">
+                <span class="badge">Gemini 2.5 Flash-Lite</span>
+                <span class="badge">Vanilla JS</span>
+                <span class="badge">BYO-Key</span>
+                <span class="badge">Single HTML</span>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>File Structure</h2>
+            <div class="file-tree">
+projects/back-to-school-campaign/<br>
+├── demo.html &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# The complete app (single self-contained file)<br>
+├── problem-statement.md &nbsp;&nbsp;&nbsp;# Business context and persona<br>
+├── project-outline.md &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Full design document<br>
+├── system-prompt.txt &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# The 5-writer system prompt sent to Gemini<br>
+└── user-guide.md &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Plain-language usage instructions
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>1. Preset Campaign Briefs</h2>
+            <p>Three preset briefs are hardcoded as JavaScript objects. Each fills the form with a complete campaign for Kiddoz Uniform House in Bangi — the user can try the app instantly without typing anything.</p>
+            <div class="code-block"><span class="keyword">const</span> PRESETS = {
+  <span class="string">jan</span>: {
+    store: <span class="string">'Kiddoz Uniform House'</span>,
+    location: <span class="string">'Bangi, Selangor'</span>,
+    products: <span class="string">'Set lengkap baju sekolah dari RM89. Baju putih RM25, pinafore RM35, seluar sukan RM20, kasut sekolah hitam RM45...'</span>,
+    campaign: <span class="string">'Back to School Januari 2026 — Sekolah buka 2 Januari. Stok sedia, semua saiz ada.'</span>,
+    audience: <span class="string">'Ibu bapa pelajar sekolah rendah di Bangi dan sekitar Kajang/Putrajaya'</span>
+  },
+  <span class="string">jun</span>: { <span class="comment">/* Mid-year preset */</span> },
+  <span class="string">clearance</span>: { <span class="comment">/* Year-end clearance preset */</span> }
+};</div>
+        </div>
+
+        <div class="content-section">
+            <h2>2. The 5-Writer System Prompt</h2>
+            <p>The core of the app is a structured system prompt that defines 5 specialist copywriter personas. Each writer has strict format rules matching their platform's reading behaviour. The prompt enforces Bahasa Melayu output and prevents hallucinated prices or products.</p>
+            <div class="code-block"><span class="keyword">function</span> <span class="function">buildSystemPrompt</span>(brief, toneInstruction) {
+  <span class="keyword">return</span> <span class="string">`Kamu adalah pasukan 5 penulis iklan profesional.
+Setiap penulis menulis untuk satu platform dengan gaya tersendiri.
+
+ARAHAN NADA:
+${toneInstruction}
+
+BRIEF KEMPEN:
+${brief}
+
+PERANAN SETIAP PENULIS:
+
+1. PENULIS WHATSAPP — 4-6 baris, urgency, CTA jelas
+2. PENULIS INSTAGRAM — Hook + 3-5 perenggan + hashtag BM
+3. PENULIS EMAIL — 3-email drip (Teaser → Tawaran → Last Call)
+4. PENULIS BLOG — 300-500 patah perkataan, cerita relatable
+5. PENULIS SEO — 150-200 patah perkataan, kata kunci natural
+
+FORMAT OUTPUT:
+JSON dengan 5 kunci: "whatsapp", "instagram", "email", "blog", "seo"`</span>;
+}</div>
+        </div>
+
+        <div class="content-section">
+            <h2>3. Tone Selector</h2>
+            <p>Three BM tone options change the writing instruction injected into the system prompt. All three stay within Malay-dominant range — there is no full-English option.</p>
+            <div class="code-block"><span class="keyword">function</span> <span class="function">getToneInstruction</span>() {
+  <span class="keyword">const</span> tone = document.getElementById(<span class="string">'f-tone'</span>).value;
+  <span class="keyword">if</span> (tone === <span class="string">'bm-formal'</span>)
+    <span class="keyword">return</span> <span class="string">'Gunakan Bahasa Melayu formal dan sopan.'</span>;
+  <span class="keyword">if</span> (tone === <span class="string">'campur'</span>)
+    <span class="keyword">return</span> <span class="string">'Gunakan campuran BM dan English (Manglish).'</span>;
+  <span class="keyword">return</span> <span class="string">'Gunakan BM santai dan mesra. Tulis macam kawan bercakap.'</span>;
+}</div>
+        </div>
+
+        <div class="content-section">
+            <h2>4. BYO-Key Gemini API Call</h2>
+            <p>The app calls Gemini 2.5 Flash-Lite directly from the browser. The API key is stored in sessionStorage — never persisted to disk, never sent anywhere except Google's API endpoint. Temperature 0.7 gives creative variety while keeping the copy grounded in the brief.</p>
+            <div class="code-block"><span class="keyword">const</span> res = <span class="keyword">await</span> <span class="function">fetch</span>(
+  <span class="string">`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${apiKey}`</span>,
+  {
+    method: <span class="string">'POST'</span>,
+    headers: { <span class="string">'Content-Type'</span>: <span class="string">'application/json'</span> },
+    body: JSON.stringify({
+      system_instruction: { parts: [{ text: systemPrompt }] },
+      contents: [{ role: <span class="string">'user'</span>, parts: [{ text: <span class="string">'Janakan kempen 5-channel.'</span> }] }],
+      generationConfig: { temperature: 0.7, maxOutputTokens: 8000 }
+    })
+  }
+);</div>
+        </div>
+
+        <div class="content-section">
+            <h2>5. JSON Parsing &amp; Tab Rendering</h2>
+            <p>Gemini returns a JSON object with 5 keys. The app strips any markdown code fences (Gemini sometimes wraps JSON in ```), parses the result, and populates each tab panel.</p>
+            <div class="code-block"><span class="keyword">let</span> raw = data.candidates?.[0]?.content?.parts?.[0]?.text || <span class="string">''</span>;
+<span class="comment">// Strip markdown code fences if present</span>
+raw = raw.replace(<span class="string">/^```json?\s*/i</span>, <span class="string">''</span>).replace(<span class="string">/\s*```$/i</span>, <span class="string">''</span>).trim();
+<span class="keyword">const</span> output = JSON.parse(raw);
+
+channels.forEach(ch => {
+  <span class="keyword">const</span> el = document.getElementById(<span class="string">'out-'</span> + ch);
+  el.textContent = output[ch] || <span class="string">'Tiada output untuk channel ini.'</span>;
+});</div>
+        </div>
+
+        <div class="content-section">
+            <h2>6. Per-Channel Regeneration</h2>
+            <p>Each channel tab has a "Jana Semula" button that regenerates only that writer's output — using a separate, single-writer prompt at a slightly higher temperature (0.8) to produce a different take on the same brief.</p>
+            <div class="code-block"><span class="keyword">async function</span> <span class="function">regenChannel</span>(channel) {
+  <span class="keyword">const</span> prompt = <span class="string">`Kamu adalah ${channelNames[channel]} dari pasukan kempen.
+Tulis semula output untuk platform ${channel} sahaja.
+Guna gaya berbeza dari versi sebelum ini.`</span>;
+
+  <span class="comment">// Uses temperature 0.8 for creative variation</span>
+  generationConfig: { temperature: 0.8, maxOutputTokens: 1200 }
+}</div>
+        </div>
+
+        <nav class="back-nav" style="margin-top: 40px; text-align: center;">
+            <a href="back-to-school-campaign.html">&larr; Back to Showcase</a> &nbsp;|&nbsp;
+            <a href="index.html">Home</a>
+        </nav>
+    </div>
+</body>
+</html>
