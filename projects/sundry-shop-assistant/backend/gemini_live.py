@@ -131,17 +131,16 @@ class GeminiLive:
                                 if server_content:
                                     if server_content.model_turn:
                                         for part in server_content.model_turn.parts:
-                                            # Audio output
+                                            # Audio output — the only part we forward.
+                                            # We intentionally ignore part.text because native-audio
+                                            # models emit internal reasoning ("thinking") as text
+                                            # alongside the spoken answer. The clean final answer
+                                            # lives in output_transcription below.
                                             if part.inline_data:
                                                 if inspect.iscoroutinefunction(audio_output_callback):
                                                     await audio_output_callback(part.inline_data.data)
                                                 else:
                                                     audio_output_callback(part.inline_data.data)
-                                            # Text output (when response_modalities=TEXT)
-                                            if part.text:
-                                                await event_queue.put(
-                                                    {"type": "gemini", "text": part.text}
-                                                )
 
                                     if (
                                         server_content.input_transcription
