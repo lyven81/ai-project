@@ -36,8 +36,8 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-MODEL = os.getenv("MODEL", "gemini-3.1-flash-live-preview")
-VOICE_NAME = os.getenv("VOICE_NAME", "Puck")
+MODEL = os.getenv("MODEL", "gemini-2.5-flash-native-audio-latest")
+VOICE_NAME = os.getenv("VOICE_NAME", "Aoede")
 
 if not GEMINI_API_KEY:
     logger.warning("GEMINI_API_KEY not set — /ws will fail until provided.")
@@ -73,8 +73,9 @@ async def healthz():
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
     """Bridge browser <-> Gemini Live."""
-    mode = websocket.query_params.get("mode", "audio").lower()
-    response_modality = "TEXT" if mode == "text" else "AUDIO"
+    # Native-audio models only support AUDIO modality; text-out is handled
+    # client-side by muting playback while still rendering the transcript.
+    response_modality = "AUDIO"
 
     await websocket.accept()
     logger.info(f"WebSocket accepted (mode={response_modality})")

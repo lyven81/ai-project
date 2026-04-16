@@ -26,8 +26,8 @@ const client = new GeminiClient({
       } catch (err) {
         console.error("Parse error:", err);
       }
-    } else {
-      // Binary audio bytes from Gemini
+    } else if (state.outputMode === "voice") {
+      // Binary audio bytes from Gemini — only play when user wants voice out
       media.playAudio(event.data);
     }
   },
@@ -120,7 +120,7 @@ async function connectSession() {
   try {
     await media.initializeAudio();
     setStatus("Bersambung...", true);
-    client.connect(state.outputMode === "voice" ? "audio" : "text");
+    client.connect("audio");
   } catch (err) {
     console.error("Connect failed:", err);
     addMessage("Tak boleh connect ke backend. Make sure server dah start.", "agent");
@@ -199,16 +199,11 @@ function setMode(group, mode) {
     $("#text-input").classList.toggle("active", mode === "text");
     if (mode === "text") stopMic();
   } else if (group === "output") {
-    const changed = state.outputMode !== mode;
     state.outputMode = mode;
     localStorage.setItem("ssa_output_mode", mode);
-    // Output mode change requires session reconnect (Live API sets modality at connect)
-    if (changed && state.connected) {
-      setStatus("Tukar mode...", true);
-      stopMic();
-      client.disconnect();
-      setTimeout(() => connectSession(), 300);
-    }
+    // Toggle is UI-only — session always runs in AUDIO modality.
+    // Text-out simply stops playback; transcript is always rendered.
+    if (mode === "text") media.stopAudioPlayback();
   }
 
   $$(`.mode-btn[data-group="${group}"]`).forEach((btn) => {
