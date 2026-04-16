@@ -13,6 +13,7 @@ Original file is located at
 # Import libraries
 from __future__ import annotations
 import json
+import os
 import pandas as pd
 import re
 import io
@@ -27,7 +28,7 @@ import google.generativeai as genai
 print("✅ All libraries imported successfully!")
 
 # Option 1: Direct API key (for testing)
-GEMINI_API_KEY = "AIzaSyBc6_k7gWDAwo0n442rOOqY8UTn_u133ME0"  # Replace with your key
+GEMINI_API_KEY = os.environ.get("GOOGLE_API_KEY", "your-gemini-api-key-here")  # Set via environment variable
 
 def print_html(content: str, title: str = ""):
     """
