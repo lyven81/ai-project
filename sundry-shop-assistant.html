@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sundry Shop Assistant - Voice Advisor for Busy Malaysian Kedai Runcit Owners</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #222;
+            background-color: #ffffff;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .back-nav { margin-bottom: 20px; }
+        .back-nav a {
+            color: #007BFF;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+        .back-nav a:hover { text-decoration: underline; }
+
+        .project-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #E91E63, #AD1457);
+            color: white;
+            border-radius: 10px;
+        }
+
+        .project-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .project-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .demo-links { text-align: center; margin: 30px 0; }
+
+        .demo-btn {
+            display: inline-block;
+            background-color: #007BFF;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .demo-btn:hover { background-color: #0056b3; }
+
+        .demo-btn.secondary { background-color: #E91E63; }
+        .demo-btn.secondary:hover { background-color: #AD1457; }
+
+        .content-section {
+            margin: 40px 0;
+            padding: 30px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border-left: 5px solid #E91E63;
+        }
+
+        .content-section h2 {
+            color: #E91E63;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .content-section h3 {
+            color: #333;
+            margin: 20px 0 10px 0;
+            font-size: 1.3rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .feature-item {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+
+        .feature-item h4 {
+            color: #E91E63;
+            margin-bottom: 10px;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .tech-item {
+            background-color: #E91E63;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .code-block {
+            background-color: #f4f4f4;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: monospace;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .metric-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid #E91E63;
+        }
+
+        .metric-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #E91E63;
+        }
+
+        .metric-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .tool-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .tool-tag {
+            background-color: #fce4ec;
+            border: 1px solid #f8bbd0;
+            color: #880e4f;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            text-align: center;
+            font-family: monospace;
+        }
+
+        @media (max-width: 768px) {
+            .project-header h1 { font-size: 2rem; }
+            .project-header p { font-size: 1rem; }
+            .badges { justify-content: center; }
+            .demo-btn { margin: 5px; padding: 10px 20px; }
+            .container { padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="index.html">← Back to Portfolio</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>🏪 Sundry Shop Assistant</h1>
+            <p>Voice advisor for busy Malaysian kedai runcit owners</p>
+
+            <div class="badges">
+                <span class="badge">Gemini Live API</span>
+                <span class="badge">MCP Tools</span>
+                <span class="badge">FastAPI</span>
+                <span class="badge">WebSocket</span>
+                <span class="badge">pandas</span>
+                <span class="badge">Cloud Run</span>
+            </div>
+        </div>
+
+        <div class="demo-links">
+            <a href="https://sundry-shop-assistant-522143897885.asia-southeast1.run.app" target="_blank" class="demo-btn">🚀 Launch Live Demo</a>
+            <a href="sundry-shop-assistant-source.html" class="demo-btn secondary">📁 View Source Code</a>
+        </div>
+
+        <div class="content-section">
+            <h2>📋 Project Overview & Problem Statement</h2>
+            <p><strong>Challenge:</strong> Small Malaysian kedai runcit (sundry shop) operators stand behind the counter from 7am to 10pm. Their POS records every sale, but there's no practical way to query that data during the working day — dashboards require stopping work to read a screen. Reorder decisions, loyalty program judgments, and category-level pricing all end up being made on gut feel because the data is locked behind a dashboard the owner never opens.</p>
+
+            <p><strong>Solution:</strong> Sundry Shop Assistant is a mobile web advisor that answers the owner's business questions in natural Malay, backed by ten analytical tools that run over the shop's POS dataset. The owner asks — <em>"kategori paling laku?"</em>, <em>"member atau visitor spend lebih?"</em>, <em>"cash atau card lebih banyak?"</em> — and gets concrete numbers with recommendations in seconds, without having to read a dashboard.</p>
+
+            <h3>Key Benefits</h3>
+            <ul>
+                <li><strong>Data access without stopping work:</strong> Ask questions aloud or by text — answers arrive in seconds</li>
+                <li><strong>Conversational Malay, not corporate:</strong> Santai Bahasa Malaysia — the tone of a trusted younger family member, not a government circular</li>
+                <li><strong>Ten specialized analysis tools:</strong> Category ranking, member vs visitor, payment mix, basket stats, gender breakdown, weekly trends, and more</li>
+                <li><strong>Four I/O modes:</strong> Switch between voice/text input and voice/text output any time — matches changing shop conditions through the day</li>
+                <li><strong>MCP-style tool architecture:</strong> Swappable for a real POS data source; the agent never invents numbers</li>
+                <li><strong>Always-visible transcript:</strong> Every question and answer logged for end-of-day review</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>🖥️ Application Features</h2>
+
+            <div class="features-grid">
+                <div class="feature-item">
+                    <h4>📊 Ten Analytical Tools</h4>
+                    <p>Ten purpose-built tools query the sales dataset directly: total sales, top day, weekly breakdown, category ranking, slowest movers, member vs visitor, gender spend, payment mix, payment by customer type, and basket statistics.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>🎙️ Four I/O Modes</h4>
+                    <p>Independent toggles for input (voice or text) and output (voice or text). Switch any time — voice when hands are free, text when a customer stands within earshot. No restart needed between modes.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>💬 Santai Malay Register</h4>
+                    <p>The agent (Adam) speaks conversational Bahasa Malaysia, not formal bahasa baku. Uses "tak", "dah", "ni", "Pak", and code-switches to English for brand names and business terms — the way Malaysian SME owners actually talk.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>📝 Transcript & Verification</h4>
+                    <p>Every question and answer appears as a scrollable text log — doubles as verification (catches mishearings) and end-of-day review. Owner can scroll up to revisit any earlier question.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>🎯 Dataset-Grounded Answers</h4>
+                    <p>The agent never invents numbers. Every figure comes from a tool call against the actual sales dataset. If the data can't answer (e.g. asking about a period outside the dataset window), the agent says so clearly.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>⚡ Sub-Second Tool Latency</h4>
+                    <p>The pandas-backed tool layer returns answers in under 100ms, keeping conversational flow natural. Tool responses are streamed back during the turn so the agent can speak without awkward silences.</p>
+                </div>
+            </div>
+
+            <h3>Ten Analytical Tools</h3>
+            <div class="tool-grid">
+                <div class="tool-tag">get_total_sales</div>
+                <div class="tool-tag">get_top_day</div>
+                <div class="tool-tag">get_weekly_summary</div>
+                <div class="tool-tag">get_sales_by_category</div>
+                <div class="tool-tag">get_slowest_category</div>
+                <div class="tool-tag">compare_member_vs_visitor</div>
+                <div class="tool-tag">compare_gender</div>
+                <div class="tool-tag">get_payment_mix</div>
+                <div class="tool-tag">get_payment_by_customer_type</div>
+                <div class="tool-tag">get_basket_stats</div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🤖 AI Integration & Intelligence</h2>
+
+            <div class="features-grid">
+                <div class="feature-item">
+                    <h4>🧠 Gemini Live API (Preview)</h4>
+                    <p>Powered by <code>gemini-3.1-flash-live-preview</code>. Native audio understanding and generation in over 70 languages, including natural-sounding Bahasa Malaysia — no separate speech-to-text or text-to-speech layer.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>🔧 Native Function Calling</h4>
+                    <p>All ten tools are declared as Gemini function declarations. During a session, the model autonomously chooses which tool to call based on the question, receives the result, and speaks the answer — all mid-conversation.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>📡 MCP-Style Tool Bridge</h4>
+                    <p>Tools follow an MCP-style contract (name, description, schema, handler). The bridge can be swapped from in-process pandas queries to a real MCP server without changing the Gemini-side declarations.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>🎯 Non-Overlapping Tool Schemas</h4>
+                    <p>Each tool's description is crafted to be crisp and non-overlapping — a deliberate design choice because in a voice conversation, wrong tool selection creates awkward silence that's harder to recover from than in text chat.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>🎚️ Streaming with Barge-In</h4>
+                    <p>Responses stream back as the model generates them. The owner can interrupt at any point — audio playback stops immediately, recognition takes over, and the new question is processed without losing conversation context.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>🗣️ Santai Persona Prompt</h4>
+                    <p>The agent's system prompt explicitly enforces casual Malay register, short spoken answers (under 30 seconds), tool-grounded numbers only, and honest acknowledgment of dataset limits — no corporate filler, no hallucinated figures.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🛠️ Technical Architecture & Implementation</h2>
+
+            <h3>Frontend Stack</h3>
+            <div class="tech-stack">
+                <span class="tech-item">Vanilla JavaScript</span>
+                <span class="tech-item">Web Audio API</span>
+                <span class="tech-item">AudioWorklet</span>
+                <span class="tech-item">WebSocket Client</span>
+                <span class="tech-item">HTML5 + CSS3</span>
+                <span class="tech-item">Poppins (Google Fonts)</span>
+            </div>
+
+            <h3>Backend Stack</h3>
+            <div class="tech-stack">
+                <span class="tech-item">FastAPI 0.128</span>
+                <span class="tech-item">Uvicorn (ASGI)</span>
+                <span class="tech-item">google-genai 1.70</span>
+                <span class="tech-item">pandas 2.3</span>
+                <span class="tech-item">Python 3.11</span>
+                <span class="tech-item">WebSockets</span>
+            </div>
+
+            <h3>Deployment & Infrastructure</h3>
+            <div class="tech-stack">
+                <span class="tech-item">Google Cloud Run</span>
+                <span class="tech-item">Docker</span>
+                <span class="tech-item">asia-southeast1 (Singapore)</span>
+                <span class="tech-item">Session Affinity</span>
+                <span class="tech-item">Ephemeral Tokens</span>
+            </div>
+
+            <h3>System Architecture</h3>
+            <ul>
+                <li><strong>Persistent WebSocket Backend:</strong> FastAPI hosts a <code>/ws</code> endpoint that bridges the browser to Gemini Live via the google-genai SDK. 16kHz PCM flows in from the mic; 24kHz PCM flows back from the model.</li>
+                <li><strong>MCP Tool Layer:</strong> <code>mcp_tools.py</code> defines ten pandas-backed functions over <code>dataset.csv</code>. Each returns a JSON-serializable dict; results are sent to the model via <code>session.send_tool_response()</code>.</li>
+                <li><strong>Tool Bridge:</strong> <code>tool_bridge.py</code> translates the MCP tool set into Gemini <code>FunctionDeclaration</code> objects registered in <code>LiveConnectConfig</code>.</li>
+                <li><strong>Session Modality:</strong> Response modality (AUDIO or TEXT) is set per session via a <code>?mode=</code> query parameter — switching modes reconnects the session in ~500ms.</li>
+                <li><strong>Audio Pipeline:</strong> Browser AudioWorklet captures raw PCM from the microphone, downsamples to 16kHz Int16, ships bytes over WebSocket. Incoming audio is decoded to 24kHz Float32 and scheduled for playback with barge-in support.</li>
+                <li><strong>Santai System Prompt:</strong> A 3,686-character system instruction loaded at session start enforces casual Malay tone, short answers, tool-grounded numbers, and polite admission of dataset limits.</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>📖 Development Setup & Installation Guide</h2>
+
+            <h3>Prerequisites</h3>
+            <ul>
+                <li><strong>Python 3.11+</strong></li>
+                <li><strong>Gemini API Key</strong> from Google AI Studio</li>
+                <li><strong>Chrome or Edge</strong> (for Web Audio API support)</li>
+            </ul>
+
+            <h3>Quick Start Installation</h3>
+            <div class="code-block"># Clone the repository
+git clone https://github.com/lyven81/ai-project.git
+cd ai-project/projects/sundry-shop-assistant
+
+# Copy the environment template and add your API key
+cp .env.example .env
+# Edit .env and paste your GEMINI_API_KEY
+
+# Double-click run-local.bat (Windows)
+# It creates the venv, installs deps, starts the server, opens the browser</div>
+
+            <h3>Environment Configuration</h3>
+            <div class="code-block"># Required
+GEMINI_API_KEY=your_gemini_api_key_here
+
+# Optional overrides
+MODEL=gemini-3.1-flash-live-preview
+VOICE_NAME=Puck
+PORT=8000</div>
+
+            <h3>Manual Run (if not using the batch file)</h3>
+            <div class="code-block">python -m venv .venv
+.venv\Scripts\activate
+pip install -r backend/requirements.txt
+cd backend
+python main.py
+# Open http://localhost:8000</div>
+        </div>
+
+        <div class="content-section">
+            <h2>🚀 Deployment on Google Cloud Run</h2>
+
+            <div class="code-block">gcloud run deploy sundry-shop-assistant \
+    --source . \
+    --region asia-southeast1 \
+    --allow-unauthenticated \
+    --set-env-vars "GEMINI_API_KEY=...,MODEL=gemini-3.1-flash-live-preview,VOICE_NAME=Puck" \
+    --memory 1Gi \
+    --cpu 1 \
+    --timeout 3600 \
+    --concurrency 10 \
+    --min-instances 0 \
+    --max-instances 3 \
+    --session-affinity</div>
+
+            <h3>Production Notes</h3>
+            <ul>
+                <li><code>--timeout 3600</code> is required because WebSocket connections are long-lived</li>
+                <li><code>--session-affinity</code> ensures a user's audio stream stays pinned to one instance</li>
+                <li><code>--min-instances 0</code> scales to zero when idle — no standing cost</li>
+                <li><code>--max-instances 3</code> caps concurrent instances as a cost guardrail</li>
+                <li>Gemini Live API bills per audio second — set a Cloud Run budget alert before sharing the URL publicly</li>
+                <li>Preview model (<code>gemini-3.1-flash-live-preview</code>) means version-pin <code>google-genai</code> in <code>requirements.txt</code> and expect occasional schema shifts before GA</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>📊 Key Metrics</h2>
+
+            <div class="metrics">
+                <div class="metric-card">
+                    <div class="metric-number">10</div>
+                    <div class="metric-label">MCP Analytical Tools</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">4</div>
+                    <div class="metric-label">I/O Modes</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">150</div>
+                    <div class="metric-label">Row Demo Dataset</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">&lt; 1s</div>
+                    <div class="metric-label">Tool Call Latency</div>
+                </div>
+            </div>
+
+            <h3>Business Value</h3>
+            <ul>
+                <li><strong>Operational visibility without downtime:</strong> Owner queries the business mid-shift without stopping work — the data advisor is available at spoken or tap-to-speak latency</li>
+                <li><strong>Vernacular-first interface:</strong> Santai Bahasa Malaysia removes the language friction that keeps older SME owners out of English-only POS dashboards</li>
+                <li><strong>Reorder decisions grounded in data:</strong> Category ranking and slow-mover tools replace gut-feel reordering with real figures from actual sales</li>
+                <li><strong>Loyalty program evaluation:</strong> Member-vs-visitor comparisons surface whether the stamp card is actually moving basket size — a question most kedai runcit owners never quantify</li>
+                <li><strong>Payment strategy insight:</strong> Payment mix tools reveal the true cash vs digital split by customer segment, informing e-wallet acceptance and terminal placement decisions</li>
+                <li><strong>Template-ready architecture:</strong> The MCP + Live API pattern generalizes to other hands-busy SME verticals (car workshop, biscuit factory, tuition center) with config-only changes</li>
+            </ul>
+        </div>
+
+        <div class="demo-links">
+            <a href="https://sundry-shop-assistant-522143897885.asia-southeast1.run.app" target="_blank" class="demo-btn">🚀 Try Live Demo</a>
+            <a href="https://github.com/lyven81/ai-project/tree/main/projects/sundry-shop-assistant" class="demo-btn secondary">📖 Full Source Code</a>
+        </div>
+
+        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+            <a href="index.html">← Back to Portfolio</a> |
+            <a href="project-categories.html">View All Categories</a>
+        </nav>
+    </div>
+</body>
+</html>

@@ -1,0 +1,24 @@
+I want to build Sundry Shop Assistant, a voice-first Malay business advisor that lets a Malaysian sundry shop owner ask his own sales data business questions aloud and hear the answers spoken back, for a 52-year-old BM-speaking kedai runcit owner in Kajang named Pak Ahmad. The AI agent inside the app is named Adam.
+
+The app should solve this problem: Pak Ahmad has rich sales data inside his POS but cannot stop serving customers to type into a dashboard during his 15-hour working day, so every reorder and loyalty decision is made on gut feel. Existing POS dashboards are English-only and visual, delivery-platform analytics only cover delivery revenue, and bookkeepers are too expensive and too slow.
+
+Core features required:
+1. Voice Q&A in Malay — owner taps mic, speaks a question in BM, agent transcribes, queries the data, streams a spoken BM answer back with barge-in support
+2. MCP-backed sales tools — 8 tools exposed over the 150-row sundry shop sales dataset (top categories, compare weeks, member vs visitor, payment mix, basket size, daily trend, reorder hints, gender breakdown)
+3. 4-mode I/O toggle — user chooses input (voice or text) and output (voice or text) independently, switchable any time during the session
+4. Always-visible transcript — scrollable log of every question and answer, acts as verification and end-of-day review
+5. Six BM preset question chips for first-time discovery
+
+Main screens:
+- Welcome / Mode Select: app title in BM, two toggles (input mode, output mode), large green Mula button, 6 preset question chips at the bottom
+- Conversation: mic button or text input field (based on input toggle), live transcript panel showing every Q and A, optional small chart area for comparison answers
+
+User flow: Welcome → tap Mula → Conversation → tap mic + speak BM question → agent transcribes + runs MCP tool + streams BM audio + shows text → follow up or barge in → continue asking.
+
+UI style: Mobile-first portrait layout, off-white background with green accent (#10B981), Poppins typography, single-column conversation view, large tap targets for older thumb users, high-contrast readable text, clear BM labels instead of icon-only buttons.
+
+Tech stack: Gemini Live API (gemini-3.1-flash-live-preview), Vanilla JS + Web Audio API frontend, FastAPI + WebSocket + MCP client backend, Pandas-in-memory over CSV database, deployed on Google Cloud Run (owner-pays). For the portfolio demo, use Web Speech API (browser-native speech-to-text and text-to-speech) with hardcoded BM answers — upgrade to Live API + MCP backend on Cloud Run for the production build.
+
+What makes this different: The only voice-first Malay business advisor that sits on the owner's own sales data via MCP, with 4-mode I/O that adapts to changing shop conditions through the day — no POS dashboard, delivery platform, or generic voice assistant offers this for a Malaysian kedai runcit owner.
+
+Please start by setting up the project structure and building the Welcome screen and the Conversation screen with the 4-mode I/O toggle working end-to-end using Web Speech API.

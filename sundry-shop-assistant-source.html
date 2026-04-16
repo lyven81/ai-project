@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sundry Shop Assistant - Source Code</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #222;
+            background-color: #ffffff;
+        }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+
+        .back-nav { margin-bottom: 20px; }
+        .back-nav a { color: #007BFF; text-decoration: none; font-size: 1rem; }
+        .back-nav a:hover { text-decoration: underline; }
+
+        .project-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #E91E63, #AD1457);
+            color: white;
+            border-radius: 10px;
+        }
+        .project-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        .project-header p { font-size: 1.2rem; opacity: 0.9; }
+
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        .badge {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .content-section {
+            margin: 40px 0;
+            padding: 30px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border-left: 5px solid #E91E63;
+        }
+        .content-section h2 { color: #E91E63; margin-bottom: 20px; font-size: 1.8rem; }
+        .content-section h3 { color: #333; margin: 20px 0 10px 0; font-size: 1.3rem; }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #fce4ec, #f8bbd0);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #E91E63;
+            margin: 20px 0;
+        }
+
+        .code-container {
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        .code-header {
+            color: #f48fb1;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .code-block {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.55;
+            color: #d4d4d4;
+            white-space: pre;
+        }
+
+        .file-tree {
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 13px;
+            padding: 20px;
+            border-radius: 8px;
+            line-height: 1.7;
+            white-space: pre;
+        }
+
+        .demo-links { text-align: center; margin: 30px 0; }
+        .demo-btn {
+            display: inline-block;
+            background-color: #007BFF;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            font-weight: bold;
+        }
+        .demo-btn:hover { background-color: #0056b3; }
+        .demo-btn.secondary { background-color: #E91E63; }
+        .demo-btn.secondary:hover { background-color: #AD1457; }
+
+        @media (max-width: 768px) {
+            .project-header h1 { font-size: 2rem; }
+            .container { padding: 15px; }
+            .code-block, .file-tree { font-size: 12px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="sundry-shop-assistant.html">← Back to Showcase</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>🏪 Sundry Shop Assistant — Source Code</h1>
+            <p>Voice advisor for busy Malaysian kedai runcit owners</p>
+
+            <div class="badges">
+                <span class="badge">FastAPI</span>
+                <span class="badge">google-genai</span>
+                <span class="badge">WebSocket</span>
+                <span class="badge">pandas</span>
+                <span class="badge">Vanilla JS</span>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>📁 Project Structure</h2>
+            <p>The app has three layers: a vanilla JavaScript frontend that handles mic capture and audio playback, a FastAPI backend that hosts the Gemini Live session, and a pandas-backed MCP-style tool layer that queries the sales dataset.</p>
+
+            <div class="file-tree">sundry-shop-assistant/
+├── Dockerfile                 ← Cloud Run container definition
+├── .dockerignore              ← Exclude .venv, __pycache__, .env from image
+├── .env.example               ← Template for GEMINI_API_KEY
+├── index.html                 ← Welcome + Conversation screens
+├── dataset.csv                ← 150 rows of POS transactions (March 2024)
+├── system-prompt.txt          ← Santai BM persona rules for Adam
+├── run-local.bat              ← One-click local dev (creates venv, runs server)
+├── README.md                  ← Project overview
+├── deploy.md                  ← Cloud Run deployment guide
+│
+├── backend/                   ← FastAPI + Gemini Live + MCP bridge
+│   ├── main.py                ← WebSocket /ws endpoint, serves static
+│   ├── gemini_live.py         ← Live API session wrapper + tool loop
+│   ├── tool_bridge.py         ← 10 Gemini FunctionDeclarations
+│   ├── mcp_tools.py           ← 10 pandas-backed tool functions
+│   └── requirements.txt       ← Pinned Python deps
+│
+├── css/
+│   └── style.css              ← Mobile-first Poppins UI, pink accent
+│
+└── js/
+    ├── pcm-processor.js       ← AudioWorklet for PCM capture
+    ├── media-handler.js       ← 16kHz mic in, 24kHz audio out
+    ├── gemini-client.js       ← WebSocket wrapper (mode=audio|text)
+    └── app.js                 ← UI logic, I/O toggles, event wiring</div>
+        </div>
+
+        <div class="content-section">
+            <h2>🔧 MCP Tool Definitions</h2>
+            <p>Each tool is a regular Python function over the sales DataFrame. Return values must be JSON-serializable (native Python types — no numpy). The contract matches MCP's <code>tools/list</code> shape, making it swappable for a real MCP server later.</p>
+
+            <div class="code-container">
+                <div class="code-header">backend/mcp_tools.py — get_sales_by_category</div>
+<div class="code-block">def get_sales_by_category() -> dict:
+    """Revenue and transaction count by product category, ranked best to worst."""
+    df = _load()
+    grouped = df.groupby("Product Category")["Total Sales"].agg(
+        ["sum", "count", "mean"]
+    )
+    grouped = grouped.sort_values("sum", ascending=False)
+    return {
+        "categories": [
+            {
+                "category": cat,
+                "revenue_rm": round(float(row["sum"]), 2),
+                "transactions": int(row["count"]),
+                "avg_basket_rm": round(float(row["mean"]), 2),
+            }
+            for cat, row in grouped.iterrows()
+        ]
+    }
+
+
+# Public mapping — registered with Gemini via tool_bridge.py
+ALL_TOOLS = {
+    "get_total_sales": get_total_sales,
+    "get_top_day": get_top_day,
+    "get_weekly_summary": get_weekly_summary,
+    "get_sales_by_category": get_sales_by_category,
+    "get_slowest_category": get_slowest_category,
+    "compare_member_vs_visitor": compare_member_vs_visitor,
+    "compare_gender": compare_gender,
+    "get_payment_mix": get_payment_mix,
+    "get_payment_by_customer_type": get_payment_by_customer_type,
+    "get_basket_stats": get_basket_stats,
+}</div>
+            </div>
+
+            <div class="highlight-box">
+                <strong>Why native Python types matter:</strong> <code>pandas</code> returns numpy types (<code>np.int64</code>, <code>np.float64</code>) which fail to serialize in the Gemini function-response payload. Every numeric return goes through <code>int()</code> or <code>float()</code> explicitly.
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>📜 Tool Bridge — FunctionDeclarations for Gemini</h2>
+            <p>Each tool is declared to Gemini with a crisp description. Descriptions must be non-overlapping — in a voice conversation, the wrong tool choice causes awkward silence that's harder to recover from than in text chat.</p>
+
+            <div class="code-container">
+                <div class="code-header">backend/tool_bridge.py</div>
+<div class="code-block">from google.genai import types
+from mcp_tools import ALL_TOOLS
+
+_FUNCTION_DECLARATIONS = [
+    types.FunctionDeclaration(
+        name="get_sales_by_category",
+        description=(
+            "Rank all product categories by revenue, including "
+            "transaction count and average basket per category. "
+            "Use this for 'kategori paling laku?' or 'top categories'."
+        ),
+        parameters=types.Schema(type=types.Type.OBJECT, properties={}),
+    ),
+    types.FunctionDeclaration(
+        name="compare_member_vs_visitor",
+        description=(
+            "Compare Member vs Visitor customers: revenue share, "
+            "average basket, and transaction count. Use this for "
+            "loyalty program questions like 'member atau visitor "
+            "spend lebih?'."
+        ),
+        parameters=types.Schema(type=types.Type.OBJECT, properties={}),
+    ),
+    # ... 8 more declarations
+]
+
+def get_tools() -> list[types.Tool]:
+    return [types.Tool(function_declarations=_FUNCTION_DECLARATIONS)]
+
+def get_tool_mapping() -> dict:
+    return ALL_TOOLS</div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🎙️ Gemini Live Session — Tool Call Loop</h2>
+            <p>The heart of the app. When the model emits a tool call during a voice session, the Python handler runs, the result is sent back via <code>session.send_tool_response()</code>, and the model continues speaking with the real numbers.</p>
+
+            <div class="code-container">
+                <div class="code-header">backend/gemini_live.py — receive_loop excerpt</div>
+<div class="code-block">async for response in session.receive():
+    server_content = response.server_content
+    tool_call = response.tool_call
+
+    if server_content:
+        if server_content.model_turn:
+            for part in server_content.model_turn.parts:
+                if part.inline_data:
+                    # Audio bytes streamed back to browser
+                    await audio_output_callback(part.inline_data.data)
+
+        # Input/output transcripts for the UI transcript panel
+        if server_content.input_transcription:
+            await event_queue.put({
+                "type": "user",
+                "text": server_content.input_transcription.text
+            })
+
+    # Tool call handling — this is where MCP meets Live API
+    if tool_call:
+        function_responses = []
+        for fc in tool_call.function_calls:
+            func_name = fc.name
+            args = fc.args or {}
+
+            if func_name in self.tool_mapping:
+                tool_func = self.tool_mapping[func_name]
+                loop = asyncio.get_running_loop()
+                result = await loop.run_in_executor(
+                    None, lambda: tool_func(**args)
+                )
+
+                function_responses.append(
+                    types.FunctionResponse(
+                        name=func_name,
+                        id=fc.id,
+                        response={"result": result},
+                    )
+                )
+
+        # Send all tool results back; model resumes speaking
+        await session.send_tool_response(
+            function_responses=function_responses
+        )</div>
+            </div>
+
+            <div class="highlight-box">
+                <strong>Latency matters more than MCP:</strong> During the tool call, the agent's audio stream pauses. If the tool takes 3+ seconds, the owner hears awkward silence. Every tool in this app returns in under 100ms via in-memory pandas — a deliberate latency choice over a more "correct" but slower MCP client/server hop.
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🌐 WebSocket Bridge — Browser to Gemini</h2>
+            <p>The FastAPI endpoint accepts either PCM audio bytes (when the owner speaks) or JSON text (when they type). The <code>?mode=</code> query parameter sets whether Gemini responds with audio or text — switching modes reconnects the session.</p>
+
+            <div class="code-container">
+                <div class="code-header">backend/main.py — /ws endpoint</div>
+<div class="code-block">@app.websocket("/ws")
+async def websocket_endpoint(websocket: WebSocket):
+    mode = websocket.query_params.get("mode", "audio").lower()
+    response_modality = "TEXT" if mode == "text" else "AUDIO"
+
+    await websocket.accept()
+
+    audio_input_queue = asyncio.Queue()
+    text_input_queue = asyncio.Queue()
+
+    async def audio_output_callback(data: bytes):
+        await websocket.send_bytes(data)
+
+    gemini = GeminiLive(
+        api_key=GEMINI_API_KEY,
+        model=MODEL,
+        response_modality=response_modality,
+        voice_name=VOICE_NAME,
+    )
+
+    async def receive_from_client():
+        while True:
+            message = await websocket.receive()
+            if message.get("bytes") is not None:
+                # Raw PCM 16kHz from the mic
+                await audio_input_queue.put(message["bytes"])
+            elif message.get("text") is not None:
+                # JSON {"text": "..."} from keyboard input
+                payload = json.loads(message["text"])
+                await text_input_queue.put(payload["text"])
+
+    # Run both loops in parallel — Gemini session drives the events
+    async for event in gemini.start_session(
+        audio_input_queue=audio_input_queue,
+        text_input_queue=text_input_queue,
+        audio_output_callback=audio_output_callback,
+    ):
+        await websocket.send_json(event)</div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🎚️ Frontend Audio Pipeline</h2>
+            <p>An <code>AudioWorkletProcessor</code> captures PCM frames from the mic, the main-thread handler downsamples to 16kHz Int16, and raw bytes are shipped over WebSocket. Incoming 24kHz Float32 is scheduled for playback with a "next start time" cursor so audio frames don't overlap.</p>
+
+            <div class="code-container">
+                <div class="code-header">js/media-handler.js — audio capture</div>
+<div class="code-block">async startAudio(onAudioData) {
+    await this.initializeAudio();
+
+    this.mediaStream = await navigator.mediaDevices.getUserMedia({
+        audio: true,
+    });
+    const source = this.audioContext.createMediaStreamSource(this.mediaStream);
+    this.audioWorkletNode = new AudioWorkletNode(
+        this.audioContext,
+        "pcm-processor"
+    );
+
+    this.audioWorkletNode.port.onmessage = (event) => {
+        if (this.isRecording) {
+            const downsampled = this.downsampleBuffer(
+                event.data,
+                this.audioContext.sampleRate,
+                16000  // Gemini Live expects 16kHz
+            );
+            const pcm16 = this.convertFloat32ToInt16(downsampled);
+            onAudioData(pcm16);  // Sends bytes over WebSocket
+        }
+    };
+
+    source.connect(this.audioWorkletNode);
+    this.isRecording = true;
+}</div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>💬 Santai Bahasa Malaysia System Prompt</h2>
+            <p>The system instruction is the single biggest lever for the agent's feel. It explicitly enforces casual Malay register and gives examples of formal-vs-santai to prevent the model from defaulting to bahasa baku.</p>
+
+            <div class="code-container">
+                <div class="code-header">system-prompt.txt — excerpt</div>
+<div class="code-block">You are Adam, an AI assistant inside Sundry Shop Assistant
+for Malaysian sundry shop (kedai runcit) owners.
+
+## Language style — Bahasa Malaysia santai (casual)
+
+Speak Bahasa Malaysia santai, NOT formal bahasa baku. The owner
+is a 52-year-old uncle running his own shop, not a government
+officer at a meeting.
+
+Santai style rules:
+- Use "tak" not "tidak", "dah" not "sudah", "ni" not "ini"
+- Softeners: "lah", "kan", "eh", "je", "Pak", "Bos"
+- Code-switch to English for business terms ("transaksi",
+  "basket", "average", "member", "card", "cash", "compare")
+- Address the owner as "Pak" or "Bos" consistently
+
+Examples of formal vs santai:
+
+Formal (WRONG): "Jualan hari ini adalah sebanyak RM 847.23
+                 dengan 23 transaksi."
+Santai (RIGHT): "Hari ni dah RM 847, Pak. Dua puluh tiga
+                 transaksi setakat ni."
+
+## Never
+- Invent numbers — always call an MCP tool before stating a figure
+- Speak in long monologues — keep every answer under 30 seconds
+- Use heavy English jargon (revenue, conversion, SKU) when BM has
+  natural equivalents (jualan, untung, barang)</div>
+            </div>
+        </div>
+
+        <div class="demo-links">
+            <a href="https://sundry-shop-assistant-522143897885.asia-southeast1.run.app" target="_blank" class="demo-btn">🚀 Try Live Demo</a>
+            <a href="https://github.com/lyven81/ai-project/tree/main/projects/sundry-shop-assistant" class="demo-btn secondary">📖 Full Source on GitHub</a>
+        </div>
+
+        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+            <a href="sundry-shop-assistant.html">← Back to Showcase</a> |
+            <a href="index.html">Portfolio Home</a>
+        </nav>
+    </div>
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sundry Shop Assistant — Adam</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+
+  <!-- WELCOME SCREEN -->
+  <section id="welcome-screen" class="screen active">
+    <div class="container">
+      <header class="welcome-header">
+        <div class="logo">🏪</div>
+        <h1>Sundry Shop Assistant</h1>
+        <p class="tagline">Cakap dengan data jualan anda, dalam Bahasa Malaysia.</p>
+        <p class="agent-intro">Agent: <strong>Adam</strong></p>
+      </header>
+
+      <div class="welcome-card">
+        <h2>Cara nak guna</h2>
+        <p>
+          Tekan <strong>Mula</strong>. Pilih nak <strong>cakap</strong> atau <strong>taip</strong>.
+          Pilih nak <strong>dengar</strong> atau <strong>baca</strong>. Tanya apa-apa pasal
+          jualan kedai — Adam jawab santai je, tak formal.
+        </p>
+      </div>
+
+      <button id="start-btn" class="primary-btn">Mula</button>
+
+      <div class="preset-chips-welcome">
+        <p class="preset-label">Contoh soalan:</p>
+        <div class="chips">
+          <span class="chip">Hari ni jualan berapa?</span>
+          <span class="chip">Kategori paling laku?</span>
+          <span class="chip">Member atau visitor spend lebih?</span>
+          <span class="chip">Cash atau card?</span>
+          <span class="chip">Average basket berapa?</span>
+          <span class="chip">Minggu ni macam mana?</span>
+        </div>
+      </div>
+
+      <footer class="welcome-footer">
+        <p>Demo window: Mac 2024 · 150 transaksi · Kedai runcit Kajang</p>
+        <p>Powered by Gemini Live API · MCP tools atas dataset jualan</p>
+      </footer>
+    </div>
+  </section>
+
+  <!-- CONVERSATION SCREEN -->
+  <section id="conversation-screen" class="screen">
+    <div class="container">
+      <header class="conv-header">
+        <button id="back-btn" class="back-btn" aria-label="Back to welcome">‹</button>
+        <div class="header-title">
+          <h2>Adam</h2>
+          <span class="status-dot" id="status-dot"></span>
+          <span class="status-text" id="status-text">Sedia</span>
+        </div>
+      </header>
+
+      <div class="mode-toggles">
+        <div class="toggle-group">
+          <span class="toggle-label">Input:</span>
+          <button class="mode-btn active" data-mode="voice" data-group="input">🎙️ Cakap</button>
+          <button class="mode-btn" data-mode="text" data-group="input">⌨️ Taip</button>
+        </div>
+        <div class="toggle-group">
+          <span class="toggle-label">Output:</span>
+          <button class="mode-btn active" data-mode="voice" data-group="output">🔊 Dengar</button>
+          <button class="mode-btn" data-mode="text" data-group="output">📄 Baca</button>
+        </div>
+      </div>
+
+      <div class="input-area">
+        <div id="voice-input" class="input-panel active">
+          <button id="mic-btn" class="mic-btn" aria-label="Tekan untuk bertanya">
+            <span class="mic-icon">🎙️</span>
+            <span class="mic-label">Tekan untuk bertanya</span>
+          </button>
+        </div>
+
+        <div id="text-input" class="input-panel">
+          <form id="text-form">
+            <input type="text" id="text-question" placeholder="Taip soalan anda di sini..." autocomplete="off" />
+            <button type="submit" class="send-btn">Hantar</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="preset-chips-inline">
+        <div class="chips">
+          <button class="chip chip-clickable" data-preset="Hari ni jualan berapa?">Jualan hari ni?</button>
+          <button class="chip chip-clickable" data-preset="Kategori apa paling laku?">Kategori paling laku?</button>
+          <button class="chip chip-clickable" data-preset="Member atau visitor siapa spend lebih?">Member atau visitor?</button>
+          <button class="chip chip-clickable" data-preset="Cash atau card lebih banyak?">Cash atau card?</button>
+          <button class="chip chip-clickable" data-preset="Average basket berapa?">Average basket?</button>
+          <button class="chip chip-clickable" data-preset="Minggu ni macam mana?">Minggu ni macam mana?</button>
+        </div>
+      </div>
+
+      <div class="transcript" id="transcript">
+        <div class="message agent">
+          <div class="bubble">
+            Apa khabar Pak! Saya Adam. Tekan mic kalau nak tanya pasal jualan kedai — apa-apa je boleh. Santai je.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- pcm-processor.js is loaded as AudioWorklet by media-handler.js, not via script tag -->
+  <script src="/js/media-handler.js" defer></script>
+  <script src="/js/gemini-client.js" defer></script>
+  <script src="/js/app.js" defer></script>
+</body>
+</html>

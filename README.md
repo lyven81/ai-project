@@ -2,7 +2,7 @@
 
 [![Portfolio Website](https://img.shields.io/badge/Portfolio-Live-green?logo=vercel)](https://lyven81.github.io/ai-project/)
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-black?logo=github)](https://github.com/lyven81/ai-project)
-[![Projects](https://img.shields.io/badge/Projects-64-blue)](#-featured-projects)
+[![Projects](https://img.shields.io/badge/Projects-65-blue)](#-featured-projects)
 [![AI Powered](https://img.shields.io/badge/AI-Powered-orange?logo=tensorflow)](https://github.com/lyven81/ai-project)
 
 **Innovative AI Solutions for Modern Challenges** - A curated collection of production-ready AI applications showcasing expertise in computer vision, natural language processing, document processing, and creative AI technologies.
@@ -13,7 +13,7 @@
 
 ## 🌟 Portfolio Overview
 
-This repository contains **64 AI applications** built in this repo (some published to the portfolio homepage, others retained as archived builds) demonstrating proficiency across multiple AI domains. Each project includes comprehensive documentation, live demos, and complete source code with deployment configurations.
+This repository contains **65 AI applications** built in this repo (some published to the portfolio homepage, others retained as archived builds) demonstrating proficiency across multiple AI domains. Each project includes comprehensive documentation, live demos, and complete source code with deployment configurations.
 
 **🎯 Portfolio Highlights:**
 - **15+ AI Technologies** integrated across projects
@@ -140,7 +140,7 @@ Each project is classified by its AI architecture pattern, based on how the syst
 | Multi-Agent Orchestration | 2 | 4% |
 | Interactive Learning | 2 | 4% |
 
-**Total: 64 projects**
+**Total: 65 projects**
 
 > Note: As of Apr 9, 2026, 16 projects were unpublished from the live portfolio homepage display to sharpen focus. They remain in the repo and are still counted here as built work.
 
@@ -185,6 +185,12 @@ Each project is classified by its AI architecture pattern, based on how the syst
 - **AI Capabilities:** AI-assisted translation of Baha'i Sacred Writings into Chinese, three-stage pipeline with human review and terminology glossary
 
 ### 📊 Business Intelligence & Analytics Agents
+
+#### [Sundry Shop Assistant](./sundry-shop-assistant.html)
+**Voice advisor for busy Malaysian kedai runcit owners — 10 MCP tools over POS sales data, santai Bahasa Malaysia**
+- **Live Demo:** [Launch App](https://sundry-shop-assistant-522143897885.asia-southeast1.run.app)
+- **Tech Stack:** Gemini Live API, FastAPI, WebSocket, MCP Tools, pandas, Cloud Run
+- **AI Capabilities:** 10 pandas-backed analytical tools (category ranking, member vs visitor, payment mix, basket stats, gender breakdown), native Gemini function calling during live audio session, santai BM conversational register (not formal bahasa baku), 4-mode I/O toggle (voice/text input × voice/text output), sub-second tool latency, transcript log for verification
 
 #### [Leadership Team](./leadership-team.html)
 **Autonomous AI boardroom for independent property agents — 6 manager agents run a weekly listing review and write minutes to disk**
