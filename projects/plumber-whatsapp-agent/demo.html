@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plumber WhatsApp Agent — Jamal Plumbing Services</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Poppins', sans-serif; background: #e5ddd5; height: 100vh; display: flex; justify-content: center; align-items: center; }
+
+/* Landing screen */
+.landing { background: #fff; border-radius: 12px; padding: 40px 32px; max-width: 420px; width: 90%; text-align: center; box-shadow: 0 4px 24px rgba(0,0,0,0.12); }
+.landing h1 { font-size: 22px; color: #075E54; margin-bottom: 6px; }
+.landing .subtitle { font-size: 13px; color: #667; margin-bottom: 24px; line-height: 1.5; }
+.landing .agent-avatar { width: 80px; height: 80px; border-radius: 50%; background: #075E54; color: #fff; font-size: 36px; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; }
+.landing label { display: block; text-align: left; font-size: 12px; color: #555; margin-bottom: 6px; font-weight: 500; }
+.landing input { width: 100%; padding: 12px 14px; border: 1.5px solid #ccc; border-radius: 8px; font-size: 14px; font-family: 'Poppins', sans-serif; margin-bottom: 16px; }
+.landing input:focus { outline: none; border-color: #075E54; }
+.landing button { width: 100%; padding: 14px; background: #25D366; color: #fff; border: none; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: 'Poppins', sans-serif; }
+.landing button:hover { background: #1ebe5a; }
+.landing .note { font-size: 11px; color: #999; margin-top: 12px; line-height: 1.4; }
+.landing .error { color: #d32f2f; font-size: 12px; margin-bottom: 12px; display: none; }
+
+/* Chat screen */
+.chat-container { display: none; flex-direction: column; width: 100%; max-width: 480px; height: 100vh; background: #e5ddd5; }
+.chat-header { background: #075E54; color: #fff; padding: 12px 16px; display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+.chat-header .avatar { width: 40px; height: 40px; border-radius: 50%; background: #128C7E; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 600; }
+.chat-header .info h2 { font-size: 15px; font-weight: 600; }
+.chat-header .info p { font-size: 11px; opacity: 0.85; }
+
+.chat-messages { flex: 1; overflow-y: auto; padding: 12px 16px; display: flex; flex-direction: column; gap: 6px; }
+.msg { max-width: 82%; padding: 8px 12px; border-radius: 8px; font-size: 13.5px; line-height: 1.45; word-wrap: break-word; position: relative; }
+.msg .time { font-size: 10px; color: #999; float: right; margin-left: 10px; margin-top: 4px; }
+.msg-in { background: #fff; align-self: flex-start; border-top-left-radius: 0; }
+.msg-out { background: #DCF8C6; align-self: flex-end; border-top-right-radius: 0; }
+.msg-system { background: #ffeeba; align-self: center; font-size: 11px; color: #665; padding: 4px 12px; border-radius: 6px; text-align: center; }
+
+.typing-indicator { display: none; align-self: flex-start; background: #fff; padding: 10px 16px; border-radius: 8px; border-top-left-radius: 0; font-size: 13px; color: #999; }
+.typing-indicator .dots span { animation: blink 1.4s infinite both; }
+.typing-indicator .dots span:nth-child(2) { animation-delay: 0.2s; }
+.typing-indicator .dots span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes blink { 0%,80%,100% { opacity: 0.3; } 40% { opacity: 1; } }
+
+.chat-input { background: #f0f0f0; padding: 8px 12px; display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+.chat-input input { flex: 1; padding: 10px 14px; border: none; border-radius: 24px; font-size: 14px; font-family: 'Poppins', sans-serif; background: #fff; }
+.chat-input input:focus { outline: none; }
+.chat-input button { width: 42px; height: 42px; border-radius: 50%; background: #075E54; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.chat-input button svg { fill: #fff; width: 20px; height: 20px; }
+.chat-input button:disabled { background: #a0a0a0; cursor: not-allowed; }
+
+/* Booking card */
+.booking-card { background: #f0faf0; border: 1px solid #b8e6b8; border-radius: 8px; padding: 12px; margin-top: 4px; font-size: 12.5px; line-height: 1.6; }
+.booking-card .card-title { font-weight: 600; color: #075E54; margin-bottom: 4px; font-size: 13px; }
+.booking-card .card-row { display: flex; justify-content: space-between; }
+.booking-card .card-label { color: #666; }
+.booking-card .card-value { font-weight: 500; color: #333; }
+
+/* Cost comparison banner */
+.cost-banner { background: #e8f5e9; border-left: 3px solid #25D366; padding: 8px 12px; margin: 8px 0; font-size: 11px; color: #555; line-height: 1.5; align-self: center; max-width: 90%; border-radius: 4px; }
+.cost-banner strong { color: #075E54; }
+
+@media (min-width: 481px) {
+  .chat-container { height: 96vh; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,0.15); margin: 2vh 0; }
+}
+</style>
+</head>
+<body>
+
+<!-- Landing Screen -->
+<div class="landing" id="landing">
+  <div class="agent-avatar">J</div>
+  <h1>Plumber WhatsApp Agent</h1>
+  <p class="subtitle">Demo: AI agent that handles plumbing inquiries on WhatsApp for Jamal Plumbing Services (PJ, Subang Jaya, Shah Alam)</p>
+  <label for="apiKey">Google Gemini API Key</label>
+  <input type="password" id="apiKey" placeholder="Paste your Gemini API key here">
+  <div class="error" id="error">Please enter a valid API key.</div>
+  <button onclick="startChat()">Start Chat</button>
+  <p class="note">Your API key is used client-side only. Nothing is stored on any server. Get a free key at <a href="https://aistudio.google.com" target="_blank">aistudio.google.com</a></p>
+</div>
+
+<!-- Chat Screen -->
+<div class="chat-container" id="chatContainer">
+  <div class="chat-header">
+    <div class="avatar">J</div>
+    <div class="info">
+      <h2>Jamal</h2>
+      <p>Plumbing Services — PJ, Subang, Shah Alam</p>
+    </div>
+  </div>
+  <div class="chat-messages" id="messages">
+    <!-- Cost comparison banner -->
+    <div class="cost-banner">
+      <strong>Why this architecture?</strong> This agent uses ~1,000 tokens/turn — only service config + conversation history sent to the LLM. General-purpose frameworks (OpenClaw, n8n agents) use ~5,000 tokens/turn. <strong>4-5x more cost-efficient</strong> for a single-purpose agent.
+    </div>
+  </div>
+  <div class="typing-indicator" id="typing">
+    <span class="dots"><span>.</span><span>.</span><span>.</span></span> Jamal is typing
+  </div>
+  <div class="chat-input">
+    <input type="text" id="userInput" placeholder="Type a message..." onkeydown="if(event.key==='Enter')sendMessage()">
+    <button id="sendBtn" onclick="sendMessage()">
+      <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+    </button>
+  </div>
+</div>
+
+<script>
+let API_KEY = '';
+let conversationHistory = [];
+let scheduleData = null;
+let systemPrompt = '';
+
+const EMBEDDED_SCHEDULE = {
+  "meta": {
+    "business_name": "Jamal Plumbing Services",
+    "plumber": "Jamal",
+    "service_area": ["Petaling Jaya", "Subang Jaya", "Shah Alam"],
+    "demo_period_start": "2026-03-30",
+    "demo_period_end": "2026-04-05",
+    "operating_hours": "09:00-18:00",
+    "slot_duration_minutes": 60,
+    "slots_per_day": 9,
+    "days_open": "Monday to Sunday"
+  },
+  "services": [
+    {"name": "Pipe Leak Repair", "name_ms": "Paip bocor", "duration_slots": 2, "price_rm": 200, "includes": "Labour + basic materials (tape, sealant, connector)"},
+    {"name": "Clogged Drain", "name_ms": "Sinki/drain tersumbat", "duration_slots": 1, "price_rm": 120, "includes": "Labour + drain snake"},
+    {"name": "Tap Replacement", "name_ms": "Tukar tap/paip", "duration_slots": 1, "price_rm": 100, "includes": "Labour only (customer supplies tap)"},
+    {"name": "Toilet Repair", "name_ms": "Tandas rosak", "duration_slots": 1, "price_rm": 150, "includes": "Labour + standard parts"},
+    {"name": "Toilet Repair (Major)", "name_ms": "Tandas rosak teruk", "duration_slots": 2, "price_rm": 280, "includes": "Labour + cistern set"},
+    {"name": "Water Heater Install", "name_ms": "Pasang/tukar water heater", "duration_slots": 2, "price_rm": 300, "includes": "Labour + piping (unit by customer)"},
+    {"name": "Sink Installation", "name_ms": "Pasang sinki", "duration_slots": 2, "price_rm": 250, "includes": "Labour + piping + sealant"},
+    {"name": "Pipe Burst (Emergency)", "name_ms": "Paip pecah", "duration_slots": 2, "price_rm": 350, "includes": "Labour + replacement pipe + fittings"},
+    {"name": "Water Pump Repair", "name_ms": "Repair/tukar water pump", "duration_slots": 2, "price_rm": 300, "includes": "Labour + wiring (pump by customer)"},
+    {"name": "Bathroom Renovation Plumbing", "name_ms": "Plumbing renovation bilik air", "duration_slots": 3, "price_rm": 600, "includes": "Labour + all piping and fittings"}
+  ],
+  "bookings": [
+    {"booking_id":"JOB001","date":"2026-03-30","start_slot":"09:00","slots_occupied":2,"slot_list":["09:00","10:00"],"service":"Pipe Leak Repair","service_ms":"Paip bocor","duration_hours":2,"price_rm":200,"customer_name":"Jessica Tan","address":"8, Jalan 17/12, Seksyen 17, Petaling Jaya","phone":"010-859 5506","status":"confirmed"},
+    {"booking_id":"JOB002","date":"2026-03-30","start_slot":"14:00","slots_occupied":2,"slot_list":["14:00","15:00"],"service":"Water Heater Install","service_ms":"Pasang/tukar water heater","duration_hours":2,"price_rm":300,"customer_name":"Rohana Abdul Rahman","address":"3-2, Pangsapuri Kelana Puteri, Kelana Jaya","phone":"012-854 2679","status":"confirmed"},
+    {"booking_id":"JOB003","date":"2026-03-30","start_slot":"17:00","slots_occupied":1,"slot_list":["17:00"],"service":"Toilet Repair","service_ms":"Tandas rosak","duration_hours":1,"price_rm":150,"customer_name":"Muhammad Danial","address":"31, Jalan SS18/6, Subang Jaya","phone":"018-132 1488","status":"confirmed"},
+    {"booking_id":"JOB004","date":"2026-03-31","start_slot":"12:00","slots_occupied":1,"slot_list":["12:00"],"service":"Clogged Drain","service_ms":"Sinki/drain tersumbat","duration_hours":1,"price_rm":120,"customer_name":"Ng Chee Ming","address":"31, Jalan SS18/6, Subang Jaya","phone":"010-674 4257","status":"confirmed"},
+    {"booking_id":"JOB005","date":"2026-03-31","start_slot":"17:00","slots_occupied":1,"slot_list":["17:00"],"service":"Toilet Repair","service_ms":"Tandas rosak","duration_hours":1,"price_rm":150,"customer_name":"Lim Boon Keng","address":"3-2, Pangsapuri Kelana Puteri, Kelana Jaya","phone":"019-703 5557","status":"confirmed"},
+    {"booking_id":"JOB006","date":"2026-03-31","start_slot":"09:00","slots_occupied":1,"slot_list":["09:00"],"service":"Toilet Repair","service_ms":"Tandas rosak","duration_hours":1,"price_rm":150,"customer_name":"Priya Devi","address":"28, Persiaran Kayangan, Shah Alam","phone":"012-814 7924","status":"confirmed"},
+    {"booking_id":"JOB007","date":"2026-04-01","start_slot":"10:00","slots_occupied":2,"slot_list":["10:00","11:00"],"service":"Sink Installation","service_ms":"Pasang sinki","duration_hours":2,"price_rm":250,"customer_name":"Noraini Ibrahim","address":"17, Jalan 5/32A, Seksyen 5, Petaling Jaya","phone":"012-320 6514","status":"confirmed"},
+    {"booking_id":"JOB008","date":"2026-04-01","start_slot":"15:00","slots_occupied":2,"slot_list":["15:00","16:00"],"service":"Pipe Burst (Emergency)","service_ms":"Paip pecah","duration_hours":2,"price_rm":350,"customer_name":"Nur Aisyah","address":"8, Jalan 17/12, Seksyen 17, Petaling Jaya","phone":"018-199 6881","status":"confirmed"},
+    {"booking_id":"JOB009","date":"2026-04-01","start_slot":"13:00","slots_occupied":1,"slot_list":["13:00"],"service":"Toilet Repair","service_ms":"Tandas rosak","duration_hours":1,"price_rm":150,"customer_name":"Suresh a/l Murugan","address":"12, Jalan SS2/55, Petaling Jaya","phone":"019-649 3045","status":"confirmed"},
+    {"booking_id":"JOB010","date":"2026-04-02","start_slot":"15:00","slots_occupied":1,"slot_list":["15:00"],"service":"Toilet Repair","service_ms":"Tandas rosak","duration_hours":1,"price_rm":150,"customer_name":"Muhammad Danial","address":"8-3, Pangsapuri USJ 1, Subang Jaya","phone":"016-949 6925","status":"confirmed"},
+    {"booking_id":"JOB011","date":"2026-04-02","start_slot":"10:00","slots_occupied":1,"slot_list":["10:00"],"service":"Tap Replacement","service_ms":"Tukar tap/paip","duration_hours":1,"price_rm":100,"customer_name":"Siti Nurhaliza","address":"15, Jalan Bougainvillea 3, Shah Alam","phone":"013-891 5741","status":"confirmed"},
+    {"booking_id":"JOB012","date":"2026-04-02","start_slot":"12:00","slots_occupied":1,"slot_list":["12:00"],"service":"Toilet Repair","service_ms":"Tandas rosak","duration_hours":1,"price_rm":150,"customer_name":"Vijay Kumar","address":"8, Jalan 17/12, Seksyen 17, Petaling Jaya","phone":"018-384 8428","status":"confirmed"},
+    {"booking_id":"JOB013","date":"2026-04-02","start_slot":"14:00","slots_occupied":1,"slot_list":["14:00"],"service":"Tap Replacement","service_ms":"Tukar tap/paip","duration_hours":1,"price_rm":100,"customer_name":"Fatimah binti Abdullah","address":"22, Jalan USJ 6/2P, Subang Jaya","phone":"017-314 5374","status":"confirmed"},
+    {"booking_id":"JOB014","date":"2026-04-03","start_slot":"09:00","slots_occupied":3,"slot_list":["09:00","10:00","11:00"],"service":"Bathroom Renovation Plumbing","service_ms":"Plumbing renovation bilik air","duration_hours":3,"price_rm":600,"customer_name":"Raj Kumar","address":"19, Jalan Alam Megah 1, Shah Alam","phone":"011-723 3803","status":"confirmed"},
+    {"booking_id":"JOB015","date":"2026-04-03","start_slot":"12:00","slots_occupied":1,"slot_list":["12:00"],"service":"Tap Replacement","service_ms":"Tukar tap/paip","duration_hours":1,"price_rm":100,"customer_name":"Fatimah binti Abdullah","address":"45, Jalan USJ 2/1, Subang Jaya","phone":"018-376 4598","status":"confirmed"},
+    {"booking_id":"JOB016","date":"2026-04-03","start_slot":"15:00","slots_occupied":1,"slot_list":["15:00"],"service":"Toilet Repair","service_ms":"Tandas rosak","duration_hours":1,"price_rm":150,"customer_name":"Zainab binti Omar","address":"8, Jalan 17/12, Seksyen 17, Petaling Jaya","phone":"013-680 6155","status":"confirmed"},
+    {"booking_id":"JOB017","date":"2026-04-04","start_slot":"13:00","slots_occupied":2,"slot_list":["13:00","14:00"],"service":"Toilet Repair (Major)","service_ms":"Tandas rosak teruk","duration_hours":2,"price_rm":280,"customer_name":"Azman Yusof","address":"15, Jalan Bougainvillea 3, Shah Alam","phone":"019-505 8517","status":"confirmed"},
+    {"booking_id":"JOB018","date":"2026-04-04","start_slot":"11:00","slots_occupied":1,"slot_list":["11:00"],"service":"Clogged Drain","service_ms":"Sinki/drain tersumbat","duration_hours":1,"price_rm":120,"customer_name":"Rohana Abdul Rahman","address":"7, Jalan Kristal 7/47, Seksyen 7, Shah Alam","phone":"016-864 8019","status":"confirmed"},
+    {"booking_id":"JOB019","date":"2026-04-04","start_slot":"15:00","slots_occupied":1,"slot_list":["15:00"],"service":"Toilet Repair","service_ms":"Tandas rosak","duration_hours":1,"price_rm":150,"customer_name":"Syafiq Hassan","address":"3-2, Pangsapuri Kelana Puteri, Kelana Jaya","phone":"012-621 9085","status":"confirmed"},
+    {"booking_id":"JOB020","date":"2026-04-04","start_slot":"09:00","slots_occupied":1,"slot_list":["09:00"],"service":"Clogged Drain","service_ms":"Sinki/drain tersumbat","duration_hours":1,"price_rm":120,"customer_name":"Vijay Kumar","address":"8, Jalan 17/12, Seksyen 17, Petaling Jaya","phone":"012-742 3621","status":"confirmed"},
+    {"booking_id":"JOB021","date":"2026-04-05","start_slot":"10:00","slots_occupied":2,"slot_list":["10:00","11:00"],"service":"Water Pump Repair","service_ms":"Repair/tukar water pump","duration_hours":2,"price_rm":300,"customer_name":"Suresh a/l Murugan","address":"15, Jalan Bougainvillea 3, Shah Alam","phone":"018-710 2040","status":"confirmed"},
+    {"booking_id":"JOB022","date":"2026-04-05","start_slot":"16:00","slots_occupied":1,"slot_list":["16:00"],"service":"Clogged Drain","service_ms":"Sinki/drain tersumbat","duration_hours":1,"price_rm":120,"customer_name":"Ng Chee Ming","address":"17, Jalan 5/32A, Seksyen 5, Petaling Jaya","phone":"010-796 2876","status":"confirmed"},
+    {"booking_id":"JOB023","date":"2026-04-05","start_slot":"17:00","slots_occupied":1,"slot_list":["17:00"],"service":"Toilet Repair","service_ms":"Tandas rosak","duration_hours":1,"price_rm":150,"customer_name":"Priya Devi","address":"17, Jalan 5/32A, Seksyen 5, Petaling Jaya","phone":"017-214 5808","status":"confirmed"}
+  ]
+};
+
+function loadSchedule() {
+  scheduleData = EMBEDDED_SCHEDULE;
+}
+
+function buildSystemPrompt() {
+  const svcList = scheduleData.services.map(s =>
+    `- ${s.name_ms} (${s.name}): RM${s.price_rm}, ${s.duration_slots} jam. ${s.includes}`
+  ).join('\n');
+
+  const bookingsByDate = {};
+  for (const b of scheduleData.bookings) {
+    if (!bookingsByDate[b.date]) bookingsByDate[b.date] = [];
+    bookingsByDate[b.date].push(b);
+  }
+
+  const days = ['Ahad','Isnin','Selasa','Rabu','Khamis','Jumaat','Sabtu'];
+  let scheduleText = 'JADUAL JAMAL (30 Mac - 5 April 2026):\n';
+  const allSlots = ['09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00'];
+
+  const startDate = new Date('2026-03-30');
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(startDate);
+    d.setDate(d.getDate() + i);
+    const ds = d.toISOString().slice(0,10);
+    const dayName = days[d.getDay()];
+    const dayBookings = bookingsByDate[ds] || [];
+
+    const occupiedSlots = new Set();
+    for (const b of dayBookings) {
+      for (const s of b.slot_list) occupiedSlots.add(s);
+    }
+    const freeSlots = allSlots.filter(s => !occupiedSlots.has(s));
+
+    const bookedDesc = dayBookings.map(b =>
+      `  ${b.slot_list.join('-')} (${b.slots_occupied}jam): ${b.service_ms} - ${b.customer_name} @ ${b.address}`
+    ).join('\n');
+
+    scheduleText += `\n${ds} (${dayName}):\n`;
+    scheduleText += `  BOOKED:\n${bookedDesc || '  (tiada)'}\n`;
+    scheduleText += `  FREE SLOTS: ${freeSlots.join(', ') || '(penuh)'}\n`;
+  }
+
+  systemPrompt = `You are Jamal, a plumber based in the Klang Valley. You answer customer WhatsApp messages about plumbing problems.
+
+You speak bahasa santai — casual, friendly, short messages. Mix Malay and English naturally, like a real Malaysian tradesman texting. Use "saya" and "awak". Keep messages 2-4 sentences max. Never sound formal or robotic.
+
+You NEVER reveal that you are AI, a bot, or an assistant. You ARE Jamal. If asked "are you a bot?", deflect naturally: "Haha bukan la, saya memang Jamal. Busy sikit tadi, tengah kerja."
+
+Service area: Petaling Jaya, Subang Jaya, Shah Alam only.
+If customer outside area: "Alamak, saya cover PJ, Subang, Shah Alam je. Boleh try cari tukang paip area sana."
+
+SERVICES AND FIXED PRICES (always quote ONE fixed price, never a range):
+${svcList}
+
+CONVERSATION FLOW (follow strictly in order, do NOT skip steps):
+1. GREET — greet warmly, ask what the problem is, check their area (PJ/Subang/Shah Alam). If outside area, politely decline and end chat.
+2. SCOPE — ask where exactly in the house, is it urgent, request photo if problem is unclear. Do NOT quote price until you understand the problem.
+3. QUOTE — once you know the job type, state the fixed price, what's included, and how long it takes. Then ask "Nak saya datang?" or similar to move toward booking.
+4. BOOK — if customer says yes, check the schedule below. Offer 2-3 free slots. Multi-hour jobs need consecutive free slots. NEVER double-book. Ask for their address.
+5. CLOSE — end the conversation with a thank you.
+   - If booking confirmed: repeat job, date, time, address, price. Say "Nanti saya WhatsApp before sampai. Terima kasih!"
+   - If customer says no/not now: say "Ok takpe, kalau ada masalah lagi boleh WhatsApp saya bila-bila. Terima kasih!" and stop.
+   - If customer stops replying or says bye at any step: thank them and stop.
+
+STRICT RULES:
+- You are a PLUMBER. Only discuss plumbing problems. If customer asks about anything unrelated (relationship advice, cooking, politics, general chat), redirect politely: "Haha saya tukang paip je boss, benda lain saya tak reti la. Ada masalah paip boleh tanya saya!"
+- Follow the 5 steps IN ORDER. Do not skip from greeting to booking. Do not quote before scoping.
+- Every conversation must end at Step 5 — either with a confirmed booking or a polite close. Do not keep the conversation going after Step 5.
+- Do not offer services not in your price list.
+- Do not negotiate prices. The price is fixed.
+
+${scheduleText}
+
+BOOKING RULES:
+- Operating hours: 9 AM - 6 PM (last slot starts 5 PM).
+- A 2-hour job at 10:00 occupies 10:00 and 11:00. Both must be free.
+- A 3-hour job needs 3 consecutive free slots.
+- If requested day is full, offer next available day.
+- After booking, respond with a confirmation that includes: job type, date, time, address, price.
+
+LANGUAGE RULES:
+- Never say "bergantung", "lebih kurang", "tengok keadaan"
+- Never use formal Malay ("anda", "kami", "perkhidmatan")
+- Never sound like a customer service script
+- Keep every message under 4 sentences
+- Be warm but professional — friendly neighbor who is a great plumber`;
+}
+
+function now() {
+  const d = new Date();
+  return d.getHours().toString().padStart(2,'0') + ':' + d.getMinutes().toString().padStart(2,'0');
+}
+
+function addMessage(text, type) {
+  const container = document.getElementById('messages');
+  const div = document.createElement('div');
+  div.className = `msg msg-${type}`;
+
+  // Check if this is a confirmation message (contains booking details)
+  if (type === 'in' && text.includes('Ok settle') || type === 'in' && text.includes('confirm') || type === 'in' && text.includes('Confirm')) {
+    div.innerHTML = text.replace(/\n/g, '<br>') + `<span class="time">${now()}</span>`;
+  } else {
+    div.innerHTML = text.replace(/\n/g, '<br>') + `<span class="time">${now()}</span>`;
+  }
+
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+}
+
+function showTyping() {
+  document.getElementById('typing').style.display = 'block';
+  document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
+}
+
+function hideTyping() {
+  document.getElementById('typing').style.display = 'none';
+}
+
+async function callGemini(userMessage) {
+  conversationHistory.push({ role: 'user', parts: [{ text: userMessage }] });
+
+  const body = {
+    system_instruction: { parts: [{ text: systemPrompt }] },
+    contents: conversationHistory,
+    generationConfig: {
+      temperature: 0.7,
+      maxOutputTokens: 300,
+    }
+  };
+
+  const res = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    }
+  );
+
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`API error: ${res.status} — ${err}`);
+  }
+
+  const data = await res.json();
+  const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Maaf, ada masalah teknikal. Cuba lagi ya.';
+
+  conversationHistory.push({ role: 'model', parts: [{ text: reply }] });
+
+  // Keep conversation history manageable (last 20 turns)
+  if (conversationHistory.length > 20) {
+    conversationHistory = conversationHistory.slice(-20);
+  }
+
+  return reply;
+}
+
+async function startChat() {
+  const key = document.getElementById('apiKey').value.trim();
+  if (!key) {
+    document.getElementById('error').style.display = 'block';
+    return;
+  }
+  API_KEY = key;
+
+  loadSchedule();
+  buildSystemPrompt();
+
+  document.getElementById('landing').style.display = 'none';
+  document.getElementById('chatContainer').style.display = 'flex';
+
+  // Jamal sends first message
+  showTyping();
+  setTimeout(() => {
+    hideTyping();
+    addMessage('Ha, salam! Jamal ni. Ada masalah paip ke, sinki ke? Boleh saya tolong. Area mana awak?', 'in');
+  }, 1200);
+}
+
+async function sendMessage() {
+  const input = document.getElementById('userInput');
+  const text = input.value.trim();
+  if (!text) return;
+
+  input.value = '';
+  addMessage(text, 'out');
+
+  document.getElementById('sendBtn').disabled = true;
+  showTyping();
+
+  try {
+    const reply = await callGemini(text);
+    // Simulate typing delay based on reply length
+    const delay = Math.min(Math.max(reply.length * 15, 800), 2500);
+    setTimeout(() => {
+      hideTyping();
+      addMessage(reply, 'in');
+      document.getElementById('sendBtn').disabled = false;
+    }, delay);
+  } catch (e) {
+    hideTyping();
+    addMessage('Alamak, ada error: ' + e.message, 'in');
+    document.getElementById('sendBtn').disabled = false;
+  }
+}
+</script>
+</body>
+</html>

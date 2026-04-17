@@ -2,7 +2,7 @@
 
 [![Portfolio Website](https://img.shields.io/badge/Portfolio-Live-green?logo=vercel)](https://lyven81.github.io/ai-project/)
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-black?logo=github)](https://github.com/lyven81/ai-project)
-[![Projects](https://img.shields.io/badge/Projects-65-blue)](#-featured-projects)
+[![Projects](https://img.shields.io/badge/Projects-66-blue)](#-featured-projects)
 [![AI Powered](https://img.shields.io/badge/AI-Powered-orange?logo=tensorflow)](https://github.com/lyven81/ai-project)
 
 **Innovative AI Solutions for Modern Challenges** - A curated collection of production-ready AI applications showcasing expertise in computer vision, natural language processing, document processing, and creative AI technologies.
@@ -13,7 +13,7 @@
 
 ## 🌟 Portfolio Overview
 
-This repository contains **65 AI applications** built in this repo (some published to the portfolio homepage, others retained as archived builds) demonstrating proficiency across multiple AI domains. Each project includes comprehensive documentation, live demos, and complete source code with deployment configurations.
+This repository contains **66 AI applications** built in this repo (some published to the portfolio homepage, others retained as archived builds) demonstrating proficiency across multiple AI domains. Each project includes comprehensive documentation, live demos, and complete source code with deployment configurations.
 
 **🎯 Portfolio Highlights:**
 - **15+ AI Technologies** integrated across projects
@@ -140,7 +140,7 @@ Each project is classified by its AI architecture pattern, based on how the syst
 | Multi-Agent Orchestration | 2 | 4% |
 | Interactive Learning | 2 | 4% |
 
-**Total: 65 projects**
+**Total: 66 projects**
 
 > Note: As of Apr 9, 2026, 16 projects were unpublished from the live portfolio homepage display to sharpen focus. They remain in the repo and are still counted here as built work.
 
@@ -295,6 +295,12 @@ Each project is classified by its AI architecture pattern, based on how the syst
 - **Live Demo:** [Launch Demo](https://lyven81.github.io/ai-project/projects/wee-auto-car-care/demo.html)
 - **Tech Stack:** Vanilla HTML/CSS/JS, Python 3 seed generator, localStorage, static hosting
 - **AI Capabilities:** 4-state bookability classifier (BOOKABLE / IDLE / BUSY / MULTI) that surfaces the hidden "bay free but no qualified mechanic" state; skill + bay + slot cross-validation prevents impossible bookings; interactive New Booking modal filters dropdowns in real time; 142-booking seed across 12 days with density, mechanic, and multi-slot constraints; per-visitor localStorage sandbox for demo isolation
+
+#### [Plumber WhatsApp Agent](./plumber-whatsapp-agent.html)
+**WhatsApp booking agent for solo plumbers**
+- **Live Demo:** [Try Demo](https://lyven81.github.io/ai-project/projects/plumber-whatsapp-agent/demo.html)
+- **Tech Stack:** Vanilla HTML/CSS/JS, Google Gemini Flash (BYO key), GitHub Pages
+- **AI Capabilities:** Bahasa santai persona indistinguishable from a real Malaysian plumber; strict 5-step guided conversation flow (greet → scope → quote → book → close); fixed-price quoting from config; schedule-aware booking with multi-slot conflict detection; plumbing-only guardrails; 4-5x more token-efficient than framework-based agents (~1,000 tokens/turn vs ~5,000)
 
 ### 🤖 Conversational AI & Specialized Chatbots
 

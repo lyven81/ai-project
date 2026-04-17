@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plumber WhatsApp Agent - Source Code</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #222; background-color: #ffffff; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        .back-nav { margin-bottom: 20px; }
+        .back-nav a { color: #007BFF; text-decoration: none; font-size: 1rem; }
+        .back-nav a:hover { text-decoration: underline; }
+        .project-header { text-align: center; margin-bottom: 40px; padding: 40px 0; background: linear-gradient(135deg, #0D9488, #075E54); color: white; border-radius: 10px; }
+        .project-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        .project-header p { font-size: 1.2rem; opacity: 0.9; }
+        .badges { display: flex; justify-content: center; gap: 10px; margin: 20px 0; flex-wrap: wrap; }
+        .badge { background-color: rgba(255,255,255,0.2); color: white; padding: 5px 12px; border-radius: 15px; font-size: 0.9rem; }
+        .content-section { margin: 40px 0; padding: 30px; background-color: #f9f9f9; border-radius: 8px; border-left: 5px solid #0D9488; }
+        .content-section h2 { color: #0D9488; margin-bottom: 20px; font-size: 1.8rem; }
+        .content-section h3 { color: #333; margin: 20px 0 10px 0; font-size: 1.3rem; }
+        .highlight-box { background: linear-gradient(135deg, #f0fdfa, #ccfbf1); padding: 20px; border-radius: 10px; border-left: 5px solid #0D9488; margin: 20px 0; }
+        .code-container { background-color: #1e1e1e; border-radius: 8px; padding: 20px; margin: 20px 0; overflow-x: auto; }
+        .code-header { color: #5eead4; font-weight: bold; margin-bottom: 15px; font-size: 1.1rem; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        .code-block { font-family: 'Consolas', 'Monaco', 'Courier New', monospace; font-size: 14px; line-height: 1.5; color: #d4d4d4; white-space: pre-wrap; }
+        .code-comment { color: #6a9955; font-style: italic; }
+        .code-keyword { color: #569cd6; }
+        .code-string { color: #ce9178; }
+        .code-function { color: #dcdcaa; }
+        .code-number { color: #b5cea8; }
+        .demo-links { text-align: center; margin: 30px 0; }
+        .demo-btn { display: inline-block; background-color: #007BFF; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; margin: 0 10px; font-weight: bold; transition: background-color 0.3s; }
+        .demo-btn:hover { background-color: #0056b3; }
+        .demo-btn.secondary { background-color: #28a745; }
+        .demo-btn.secondary:hover { background-color: #218838; }
+        @media (max-width: 768px) {
+            .project-header h1 { font-size: 2rem; }
+            .project-header p { font-size: 1rem; }
+            .demo-btn { margin: 5px; padding: 10px 20px; }
+            .container { padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="plumber-whatsapp-agent.html">&larr; Back to Project Overview</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>Plumber WhatsApp Agent</h1>
+            <p>Source Code & System Prompt Architecture</p>
+            <div class="badges">
+                <span class="badge">Gemini Flash</span>
+                <span class="badge">HTML/CSS/JS</span>
+                <span class="badge">System Prompt Engineering</span>
+                <span class="badge">Bahasa Santai</span>
+            </div>
+        </div>
+
+        <div class="highlight-box">
+            <h3>About This Code Showcase</h3>
+            <p><strong>This curated code showcase demonstrates how Jamal's WhatsApp agent works — from the system prompt that defines his personality and conversation flow, to the schedule-aware booking logic, to the lean token architecture that makes it 4-5x cheaper than framework-based agents.</strong></p>
+            <p>The entire app runs client-side in a single HTML file with no backend. The intelligence comes from a carefully engineered system prompt injected into each Gemini API call.</p>
+        </div>
+
+        <div class="content-section">
+            <h2>Core: System Prompt Architecture</h2>
+            <p>The system prompt is the brain of the agent. It defines Jamal's personality, the 5-step conversation flow, fixed pricing, schedule data, and strict guardrails — all in a single prompt injected on every API call.</p>
+
+            <div class="code-container">
+                <div class="code-header">system-prompt.txt — Personality & Language Rules</div>
+                <div class="code-block"><span class="code-keyword">You are Jamal</span>, a plumber based in the Klang Valley.
+You answer customer WhatsApp messages about plumbing problems.
+
+You speak <span class="code-string">bahasa santai</span> — casual, friendly, short messages.
+Mix Malay and English naturally, like a real Malaysian tradesman texting.
+Use <span class="code-string">"saya"</span> and <span class="code-string">"awak"</span>. Keep messages 2-4 sentences max.
+
+You <span class="code-keyword">NEVER</span> reveal that you are AI, a bot, or an assistant.
+You ARE Jamal. If asked <span class="code-string">"are you a bot?"</span>, deflect naturally:
+<span class="code-string">"Haha bukan la, saya memang Jamal. Busy sikit tadi, tengah kerja."</span></div>
+            </div>
+
+            <div class="code-container">
+                <div class="code-header">system-prompt.txt — Strict 5-Step Conversation Flow</div>
+                <div class="code-block"><span class="code-keyword">CONVERSATION FLOW</span> (follow strictly in order, do NOT skip steps):
+
+<span class="code-number">1.</span> <span class="code-keyword">GREET</span> — greet warmly, ask what the problem is, check their area
+   (PJ/Subang/Shah Alam). If outside area, politely decline and end chat.
+
+<span class="code-number">2.</span> <span class="code-keyword">SCOPE</span> — ask where exactly in the house, is it urgent, request
+   photo if problem is unclear. Do NOT quote price until you understand.
+
+<span class="code-number">3.</span> <span class="code-keyword">QUOTE</span> — once you know the job type, state the fixed price,
+   what's included, and how long it takes. Then ask "Nak saya datang?"
+
+<span class="code-number">4.</span> <span class="code-keyword">BOOK</span> — if customer says yes, check the schedule. Offer 2-3
+   free slots. Multi-hour jobs need consecutive free slots. Ask for address.
+
+<span class="code-number">5.</span> <span class="code-keyword">CLOSE</span> — end with a thank you.
+   - Booking confirmed: repeat job, date, time, address, price.
+   - Customer says no: <span class="code-string">"Ok takpe, boleh WhatsApp saya bila-bila."</span>
+   - Customer leaves at any step: thank them and stop.</div>
+            </div>
+
+            <div class="code-container">
+                <div class="code-header">system-prompt.txt — Guardrails</div>
+                <div class="code-block"><span class="code-keyword">STRICT RULES:</span>
+- You are a PLUMBER. Only discuss plumbing problems.
+  If customer asks about anything unrelated:
+  <span class="code-string">"Haha saya tukang paip je boss, benda lain saya tak reti la."</span>
+- Follow the 5 steps IN ORDER. Do not skip from greeting to booking.
+- Every conversation must end at Step 5.
+- Do not offer services not in your price list.
+- Do not negotiate prices. The price is fixed.
+- Never say <span class="code-string">"bergantung"</span>, <span class="code-string">"lebih kurang"</span>, or <span class="code-string">"tengok keadaan"</span>.</div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Schedule-Aware Booking Logic</h2>
+            <p>The 7-day schedule is embedded directly in the HTML and injected into the system prompt. The LLM reads the free/booked slots and reasons about availability in natural language.</p>
+
+            <div class="code-container">
+                <div class="code-header">demo.html — Building the Schedule Prompt</div>
+                <div class="code-block"><span class="code-keyword">function</span> <span class="code-function">buildSystemPrompt</span>() {
+  <span class="code-comment">// Build service list from config</span>
+  <span class="code-keyword">const</span> svcList = scheduleData.services.map(s =&gt;
+    <span class="code-string">`- ${s.name_ms} (${s.name}): RM${s.price_rm}, ${s.duration_slots} jam`</span>
+  ).join(<span class="code-string">'\n'</span>);
+
+  <span class="code-comment">// Group bookings by date</span>
+  <span class="code-keyword">const</span> bookingsByDate = {};
+  <span class="code-keyword">for</span> (<span class="code-keyword">const</span> b <span class="code-keyword">of</span> scheduleData.bookings) {
+    <span class="code-keyword">if</span> (!bookingsByDate[b.date]) bookingsByDate[b.date] = [];
+    bookingsByDate[b.date].push(b);
+  }
+
+  <span class="code-comment">// For each day, compute occupied vs free slots</span>
+  <span class="code-keyword">const</span> allSlots = [<span class="code-string">'09:00'</span>,<span class="code-string">'10:00'</span>,...,<span class="code-string">'17:00'</span>];
+  <span class="code-keyword">for</span> (<span class="code-keyword">let</span> i = <span class="code-number">0</span>; i &lt; <span class="code-number">7</span>; i++) {
+    <span class="code-keyword">const</span> occupiedSlots = <span class="code-keyword">new</span> Set();
+    <span class="code-keyword">for</span> (<span class="code-keyword">const</span> b <span class="code-keyword">of</span> dayBookings) {
+      <span class="code-keyword">for</span> (<span class="code-keyword">const</span> s <span class="code-keyword">of</span> b.slot_list) occupiedSlots.add(s);
+    }
+    <span class="code-keyword">const</span> freeSlots = allSlots.filter(s =&gt; !occupiedSlots.has(s));
+
+    <span class="code-comment">// Inject into prompt: "FREE SLOTS: 11:00, 12:00, 13:00, 16:00"</span>
+    scheduleText += <span class="code-string">`FREE SLOTS: ${freeSlots.join(', ')}\n`</span>;
+  }
+}</div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Gemini API Integration</h2>
+            <p>Each user message is sent to Gemini Flash with the full system prompt and conversation history. The response is rendered as a WhatsApp-style chat bubble.</p>
+
+            <div class="code-container">
+                <div class="code-header">demo.html — Client-Side Gemini API Call</div>
+                <div class="code-block"><span class="code-keyword">async function</span> <span class="code-function">callGemini</span>(userMessage) {
+  conversationHistory.push({
+    role: <span class="code-string">'user'</span>,
+    parts: [{ text: userMessage }]
+  });
+
+  <span class="code-keyword">const</span> body = {
+    system_instruction: { parts: [{ text: systemPrompt }] },
+    contents: conversationHistory,
+    generationConfig: {
+      temperature: <span class="code-number">0.7</span>,
+      maxOutputTokens: <span class="code-number">300</span>,
+    }
+  };
+
+  <span class="code-keyword">const</span> res = <span class="code-keyword">await</span> fetch(
+    <span class="code-string">`https://generativelanguage.googleapis.com/v1beta/models/
+     gemini-2.0-flash:generateContent?key=${API_KEY}`</span>,
+    { method: <span class="code-string">'POST'</span>, headers: { <span class="code-string">'Content-Type'</span>: <span class="code-string">'application/json'</span> },
+      body: JSON.stringify(body) }
+  );
+
+  <span class="code-keyword">const</span> data = <span class="code-keyword">await</span> res.json();
+  <span class="code-keyword">const</span> reply = data.candidates?.[<span class="code-number">0</span>]?.content?.parts?.[<span class="code-number">0</span>]?.text;
+
+  conversationHistory.push({ role: <span class="code-string">'model'</span>, parts: [{ text: reply }] });
+
+  <span class="code-comment">// Keep conversation manageable (last 20 turns)</span>
+  <span class="code-keyword">if</span> (conversationHistory.length &gt; <span class="code-number">20</span>) {
+    conversationHistory = conversationHistory.slice(-<span class="code-number">20</span>);
+  }
+
+  <span class="code-keyword">return</span> reply;
+}</div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Booking Seed Generator</h2>
+            <p>A Python script generates realistic booking data for the 7-day demo period. It follows the same pattern as the Wee Auto Car Care project — anchor multi-slot bookings placed first, then random single-slot jobs fill to ~50% capacity.</p>
+
+            <div class="code-container">
+                <div class="code-header">generate_seed.py — Booking Generation Logic</div>
+                <div class="code-block"><span class="code-comment"># Target ~50% occupancy across 7 days (63 total slots)</span>
+TARGET = {
+    <span class="code-string">"2026-03-30"</span>: <span class="code-number">5</span>,   <span class="code-comment"># Mon</span>
+    <span class="code-string">"2026-03-31"</span>: <span class="code-number">3</span>,   <span class="code-comment"># Tue</span>
+    <span class="code-string">"2026-04-01"</span>: <span class="code-number">5</span>,   <span class="code-comment"># Wed</span>
+    <span class="code-string">"2026-04-02"</span>: <span class="code-number">4</span>,   <span class="code-comment"># Thu</span>
+    <span class="code-string">"2026-04-03"</span>: <span class="code-number">5</span>,   <span class="code-comment"># Fri</span>
+    <span class="code-string">"2026-04-04"</span>: <span class="code-number">5</span>,   <span class="code-comment"># Sat</span>
+    <span class="code-string">"2026-04-05"</span>: <span class="code-number">4</span>,   <span class="code-comment"># Sun</span>
+}
+<span class="code-comment"># Total: 31 slot-units out of 63 = 49.2%</span>
+
+<span class="code-comment"># Anchor multi-slot jobs for demo variety</span>
+ANCHORS = {
+    <span class="code-string">"2026-03-30"</span>: [(<span class="code-string">"09:00"</span>, <span class="code-string">"Pipe Leak Repair"</span>),      <span class="code-comment"># 2 slots</span>
+                   (<span class="code-string">"14:00"</span>, <span class="code-string">"Water Heater Install"</span>)], <span class="code-comment"># 2 slots</span>
+    <span class="code-string">"2026-04-03"</span>: [(<span class="code-string">"09:00"</span>, <span class="code-string">"Bathroom Renovation"</span>)],  <span class="code-comment"># 3 slots</span>
+}</div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Production Deployment Architecture</h2>
+            <p>This demo runs client-side with a BYO API key. In production, the following additions are needed:</p>
+
+            <div class="code-container">
+                <div class="code-header">Production Architecture</div>
+                <div class="code-block"><span class="code-keyword">DEMO</span> (this page):
+  Customer Browser → Gemini API → Browser renders reply
+  <span class="code-comment">// Single user, single tab, no persistence</span>
+
+<span class="code-keyword">PRODUCTION</span>:
+  Customer WhatsApp → WhatsApp Business API (Twilio)
+    → Backend Server (Flask/FastAPI on Cloud Run)
+    → LLM API (Gemini/Claude)
+    → Backend → WhatsApp API → Customer WhatsApp
+
+  <span class="code-comment">// Session management additions:</span>
+  + SQLite/Firestore for conversation persistence
+  + <span class="code-number">24</span>-hour session timeout with follow-up message
+    (<span class="code-string">"Hi, masih nak book tak?"</span>)
+  + Per-phone-number conversation threads
+  + Multi-customer concurrent support</div>
+            </div>
+
+            <h3>Key Design Decisions</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>Embedded schedule over fetch():</strong> Schedule data is baked into the HTML as a JS object — avoids CORS/file:// issues, works everywhere without a server</li>
+                <li><strong>System prompt over function calling:</strong> The LLM reasons about slot availability in natural language rather than through structured tool calls — simpler, cheaper, and sufficient for a single-plumber schedule</li>
+                <li><strong>Conversation history pruning:</strong> Only the last 20 turns are sent per API call — keeps token cost predictable even in long conversations</li>
+                <li><strong>BYO key over server-pays:</strong> Visitor supplies their own Gemini API key — zero hosting cost, no rate limiting needed, educational for the visitor</li>
+                <li><strong>Bahasa santai over formal Malay:</strong> Casual tone matches how real Malaysian tradesmen actually text — builds trust and makes the AI persona believable</li>
+            </ul>
+        </div>
+
+        <div class="demo-links">
+            <a href="projects/plumber-whatsapp-agent/demo.html" class="demo-btn">Try Live Demo</a>
+            <a href="plumber-whatsapp-agent.html" class="demo-btn secondary">View Full Project Details</a>
+        </div>
+
+        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+            <a href="index.html">&larr; Back to Portfolio</a> |
+            <a href="plumber-whatsapp-agent.html">View Project Overview</a>
+        </nav>
+    </div>
+</body>
+</html>
