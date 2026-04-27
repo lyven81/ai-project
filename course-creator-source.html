@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Creator - Source Code</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #222;
+            background-color: #ffffff;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .back-nav {
+            margin-bottom: 20px;
+        }
+
+        .back-nav a {
+            color: #007BFF;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .back-nav a:hover {
+            text-decoration: underline;
+        }
+
+        .project-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #4299E1, #2B6CB0);
+            color: white;
+            border-radius: 10px;
+        }
+
+        .project-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .project-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .content-section {
+            margin: 40px 0;
+            padding: 30px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border-left: 5px solid #4299E1;
+        }
+
+        .content-section h2 {
+            color: #2B6CB0;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .content-section h3 {
+            color: #333;
+            margin: 20px 0 10px 0;
+            font-size: 1.3rem;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #EFF6FF, #DBEAFE);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #4299E1;
+            margin: 20px 0;
+        }
+
+        .code-container {
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        .code-header {
+            color: #4299E1;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .code-block {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #d4d4d4;
+            white-space: pre;
+        }
+
+        .code-comment { color: #6a9955; font-style: italic; }
+        .code-keyword { color: #569cd6; }
+        .code-string { color: #ce9178; }
+        .code-function { color: #dcdcaa; }
+        .code-number { color: #b5cea8; }
+        .code-class { color: #4ec9b0; }
+        .code-decorator { color: #c586c0; }
+
+        .demo-links {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .demo-btn {
+            display: inline-block;
+            background-color: #007BFF;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .demo-btn:hover { background-color: #0056b3; }
+
+        .demo-btn.secondary { background-color: #2B6CB0; }
+        .demo-btn.secondary:hover { background-color: #1E4E8C; }
+
+        .file-tree {
+            background-color: #f4f4f4;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.9rem;
+            white-space: pre;
+            color: #333;
+        }
+
+        @media (max-width: 768px) {
+            .project-header h1 { font-size: 2rem; }
+            .project-header p { font-size: 1rem; }
+            .demo-btn { margin: 5px; padding: 10px 20px; }
+            .container { padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="course-creator.html">← Back to Project Overview</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>🤝 Course Creator</h1>
+            <p>Quality content built by a coordinated AI agent team</p>
+
+            <div class="badges">
+                <span class="badge">Google ADK</span>
+                <span class="badge">A2A Protocol</span>
+                <span class="badge">Gemini 2.5 Pro</span>
+                <span class="badge">Python</span>
+                <span class="badge">Cloud Run</span>
+            </div>
+        </div>
+
+        <div class="highlight-box">
+            <h3>🔍 About This Code Showcase</h3>
+            <p><strong>This page walks through the five files that define the multi-agent pipeline:</strong> the four agents (Researcher, Judge, Content Builder, Orchestrator) and the shared authenticated HTTP client that lets them call each other securely on Cloud Run.</p>
+            <p>The pattern is reusable — swap the agent prompts and you have a generic <em>gather → validate → build → deliver</em> system. Deployment scripts and Dockerfiles are in the GitHub repo.</p>
+        </div>
+
+        <div class="content-section">
+            <h2>📁 Project Structure</h2>
+            <div class="file-tree">course-creator/
+├── agents/
+│   ├── researcher/         # Researcher agent — Google Search
+│   │   ├── agent.py
+│   │   ├── adk_app.py
+│   │   └── Dockerfile
+│   ├── judge/              # Judge agent — Pydantic-structured verdict
+│   │   ├── agent.py
+│   │   └── Dockerfile
+│   ├── content_builder/    # Content Builder — synthesises the course
+│   │   ├── agent.py
+│   │   └── Dockerfile
+│   └── orchestrator/       # Orchestrator — wires the others together
+│       ├── agent.py
+│       └── Dockerfile
+├── app/                    # FastAPI web frontend (5th Cloud Run service)
+│   ├── main.py
+│   ├── frontend/
+│   └── Dockerfile
+├── shared/                 # Files symlinked into every agent
+│   ├── a2a_utils.py
+│   ├── adk_app.py
+│   └── authenticated_httpx.py
+├── deploy.sh               # One-shot deploy of all 5 Cloud Run services
+├── run_local.sh            # Start all agents + app locally on ports 8000–8004
+└── pyproject.toml</div>
+        </div>
+
+        <div class="content-section">
+            <h2>🔍 Researcher Agent — Google Search Tool</h2>
+            <p>The Researcher is the simplest of the four. It is a standard ADK <code>Agent</code> with one tool: <code>google_search</code>. Its only job is to gather web information and produce a clear summary that the Judge will then evaluate.</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 agents/researcher/agent.py</div>
+                <div class="code-block">
+<span class="code-keyword">from</span> google.adk.agents <span class="code-keyword">import</span> Agent
+<span class="code-keyword">from</span> google.adk.tools.google_search_tool <span class="code-keyword">import</span> google_search
+
+
+MODEL = <span class="code-string">"gemini-2.5-pro"</span>
+
+researcher = <span class="code-function">Agent</span>(
+    name=<span class="code-string">"researcher"</span>,
+    model=MODEL,
+    description=<span class="code-string">"Gathers information on a topic using Google Search."</span>,
+    instruction=<span class="code-string">"""
+    You are an expert researcher. Your goal is to find comprehensive and
+    accurate information on the user's topic.
+    Use the `google_search` tool to find relevant information.
+    Summarize your findings clearly.
+    If you receive feedback that your research is insufficient,
+    use the feedback to refine your next search.
+    """</span>,
+    tools=[google_search],
+)
+
+root_agent = researcher
+</div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>⚖️ Judge Agent — Pydantic-Structured Verdict</h2>
+            <p>The Judge is the quality gate. Instead of returning free-form prose, it returns a <code>JudgeFeedback</code> Pydantic schema with a <code>status</code> field set to either <strong>pass</strong> or <strong>fail</strong>. This deterministic shape is what lets the Orchestrator branch the loop without any text parsing.</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 agents/judge/agent.py</div>
+                <div class="code-block">
+<span class="code-keyword">from</span> typing <span class="code-keyword">import</span> Literal
+<span class="code-keyword">from</span> google.adk.agents <span class="code-keyword">import</span> Agent
+<span class="code-keyword">from</span> pydantic <span class="code-keyword">import</span> BaseModel, Field
+
+MODEL = <span class="code-string">"gemini-2.5-pro"</span>
+
+<span class="code-comment"># 1. Structured output schema — the Orchestrator depends on this exact shape</span>
+<span class="code-keyword">class</span> <span class="code-class">JudgeFeedback</span>(BaseModel):
+    <span class="code-string">"""Structured feedback from the Judge agent."""</span>
+    status: Literal[<span class="code-string">"pass"</span>, <span class="code-string">"fail"</span>] = <span class="code-function">Field</span>(
+        description=<span class="code-string">"Whether the research is sufficient ('pass') or needs more work ('fail')."</span>
+    )
+    feedback: str = <span class="code-function">Field</span>(
+        description=<span class="code-string">"Detailed feedback on what is missing. If 'pass', a brief confirmation."</span>
+    )
+
+<span class="code-comment"># 2. The agent itself — note the strict editor instruction and disallow_transfer flags</span>
+judge = <span class="code-function">Agent</span>(
+    name=<span class="code-string">"judge"</span>,
+    model=MODEL,
+    description=<span class="code-string">"Evaluates research findings for completeness and accuracy."</span>,
+    instruction=<span class="code-string">"""
+    You are a strict editor.
+    Evaluate the 'research_findings' against the user's original request.
+    If the findings are missing key info, return status='fail'.
+    If they are comprehensive, return status='pass'.
+    """</span>,
+    output_schema=JudgeFeedback,
+    <span class="code-comment"># Disallow delegation — this agent only emits the schema</span>
+    disallow_transfer_to_parent=<span class="code-keyword">True</span>,
+    disallow_transfer_to_peers=<span class="code-keyword">True</span>,
+)
+
+root_agent = judge
+</div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🎯 Orchestrator — A2A Composition with LoopAgent</h2>
+            <p>This is the heart of the system. The Orchestrator does not run the other agents in-process — it calls them as remote services using <code>RemoteA2aAgent</code>. It then composes them with <code>LoopAgent</code> (research + judge cycle) and <code>SequentialAgent</code> (loop → content builder).</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 agents/orchestrator/agent.py — Remote agent connections</div>
+                <div class="code-block">
+<span class="code-keyword">import</span> os
+<span class="code-keyword">from</span> google.adk.agents <span class="code-keyword">import</span> BaseAgent, LoopAgent, SequentialAgent
+<span class="code-keyword">from</span> google.adk.agents.remote_a2a_agent <span class="code-keyword">import</span> RemoteA2aAgent
+<span class="code-keyword">from</span> authenticated_httpx <span class="code-keyword">import</span> create_authenticated_client
+
+<span class="code-comment"># Each remote agent is just a URL — A2A handles the rest</span>
+researcher_url = os.environ.get(
+    <span class="code-string">"RESEARCHER_AGENT_CARD_URL"</span>,
+    <span class="code-string">"http://localhost:8001/a2a/agent/.well-known/agent-card.json"</span>,
+)
+researcher = <span class="code-function">RemoteA2aAgent</span>(
+    name=<span class="code-string">"researcher"</span>,
+    agent_card=researcher_url,
+    description=<span class="code-string">"Gathers information using Google Search."</span>,
+    after_agent_callback=<span class="code-function">create_save_output_callback</span>(<span class="code-string">"research_findings"</span>),
+    httpx_client=<span class="code-function">create_authenticated_client</span>(researcher_url),
+)
+
+judge_url = os.environ.get(<span class="code-string">"JUDGE_AGENT_CARD_URL"</span>, <span class="code-string">"http://localhost:8002/a2a/agent/.well-known/agent-card.json"</span>)
+judge = <span class="code-function">RemoteA2aAgent</span>(
+    name=<span class="code-string">"judge"</span>,
+    agent_card=judge_url,
+    description=<span class="code-string">"Evaluates research."</span>,
+    after_agent_callback=<span class="code-function">create_save_output_callback</span>(<span class="code-string">"judge_feedback"</span>),
+    httpx_client=<span class="code-function">create_authenticated_client</span>(judge_url),
+)
+
+content_builder_url = os.environ.get(<span class="code-string">"CONTENT_BUILDER_AGENT_CARD_URL"</span>, <span class="code-string">"http://localhost:8003/a2a/agent/.well-known/agent-card.json"</span>)
+content_builder = <span class="code-function">RemoteA2aAgent</span>(
+    name=<span class="code-string">"content_builder"</span>,
+    agent_card=content_builder_url,
+    description=<span class="code-string">"Builds the course."</span>,
+    httpx_client=<span class="code-function">create_authenticated_client</span>(content_builder_url),
+)
+</div>
+            </div>
+
+            <div class="code-container">
+                <div class="code-header">📄 agents/orchestrator/agent.py — Custom EscalationChecker</div>
+                <div class="code-block">
+<span class="code-comment"># Custom BaseAgent — reads the Judge's verdict, decides whether to break the loop</span>
+<span class="code-keyword">class</span> <span class="code-class">EscalationChecker</span>(BaseAgent):
+    <span class="code-string">"""Checks the judge's feedback and escalates (breaks the loop) if it passed."""</span>
+
+    <span class="code-keyword">async def</span> <span class="code-function">_run_async_impl</span>(self, ctx: InvocationContext):
+        feedback = ctx.session.state.<span class="code-function">get</span>(<span class="code-string">"judge_feedback"</span>)
+
+        is_pass = <span class="code-keyword">False</span>
+        <span class="code-keyword">if</span> isinstance(feedback, dict) <span class="code-keyword">and</span> feedback.<span class="code-function">get</span>(<span class="code-string">"status"</span>) == <span class="code-string">"pass"</span>:
+            is_pass = <span class="code-keyword">True</span>
+
+        <span class="code-keyword">if</span> is_pass:
+            <span class="code-comment"># escalate=True tells the parent LoopAgent to STOP looping</span>
+            <span class="code-keyword">yield</span> <span class="code-function">Event</span>(author=self.name, actions=<span class="code-function">EventActions</span>(escalate=<span class="code-keyword">True</span>))
+        <span class="code-keyword">else</span>:
+            <span class="code-comment"># Continue — LoopAgent will run another iteration</span>
+            <span class="code-keyword">yield</span> <span class="code-function">Event</span>(author=self.name)
+
+escalation_checker = <span class="code-function">EscalationChecker</span>(name=<span class="code-string">"escalation_checker"</span>)
+</div>
+            </div>
+
+            <div class="code-container">
+                <div class="code-header">📄 agents/orchestrator/agent.py — Pipeline composition</div>
+                <div class="code-block">
+<span class="code-comment"># LoopAgent runs Researcher → Judge → EscalationChecker repeatedly</span>
+<span class="code-comment"># until the EscalationChecker yields escalate=True, OR max_iterations is hit</span>
+research_loop = <span class="code-function">LoopAgent</span>(
+    name=<span class="code-string">"research_loop"</span>,
+    description=<span class="code-string">"Iteratively researches and judges until quality standards are met."</span>,
+    sub_agents=[researcher, judge, escalation_checker],
+    max_iterations=<span class="code-number">3</span>,
+)
+
+<span class="code-comment"># SequentialAgent runs the research loop, then hands off to the Content Builder</span>
+root_agent = <span class="code-function">SequentialAgent</span>(
+    name=<span class="code-string">"course_creation_pipeline"</span>,
+    description=<span class="code-string">"A pipeline that researches a topic and then builds a course from it."</span>,
+    sub_agents=[research_loop, content_builder],
+)
+</div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🔐 Service-to-Service Auth — authenticated_httpx</h2>
+            <p>This is what makes the A2A architecture safe in production. Every HTTP call between agents on Cloud Run carries a Google identity token. The receiving service rejects calls that aren't signed by an authorised service account.</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 shared/authenticated_httpx.py</div>
+                <div class="code-block">
+<span class="code-keyword">def</span> <span class="code-function">create_authenticated_client</span>(remote_service_url: str, timeout: float = <span class="code-number">600.0</span>):
+    <span class="code-string">"""httpx.AsyncClient that signs each request with a Google identity token.
+       In Cloud Run: token comes from the Compute Metadata server.
+       Locally: token comes from the gcloud CLI.
+    """</span>
+
+    <span class="code-keyword">class</span> <span class="code-class">_IdentityTokenAuth</span>(httpx.Auth):
+        <span class="code-keyword">def</span> <span class="code-function">__init__</span>(self, remote_service_url: str):
+            parsed_url = <span class="code-function">urlparse</span>(remote_service_url)
+            self.root_url = f<span class="code-string">"{parsed_url.scheme}://{parsed_url.netloc}"</span>
+            self.session = <span class="code-keyword">None</span>
+
+        <span class="code-keyword">def</span> <span class="code-function">auth_flow</span>(self, request):
+            <span class="code-keyword">if</span> self.session:
+                id_token = self.session.credentials.token
+            <span class="code-keyword">else</span>:
+                <span class="code-comment"># In Cloud Run — fetch from metadata server</span>
+                credentials = <span class="code-function">fetch_id_token_credentials</span>(audience=self.root_url)
+                credentials.<span class="code-function">refresh</span>(<span class="code-function">Request</span>())
+                self.session = <span class="code-function">AuthorizedSession</span>(credentials)
+                id_token = self.session.credentials.token
+
+            <span class="code-keyword">if</span> id_token:
+                request.headers[<span class="code-string">"Authorization"</span>] = f<span class="code-string">"Bearer {id_token}"</span>
+            <span class="code-keyword">yield</span> request
+
+    <span class="code-keyword">return</span> httpx.<span class="code-function">AsyncClient</span>(auth=<span class="code-function">_IdentityTokenAuth</span>(remote_service_url), follow_redirects=<span class="code-keyword">True</span>, timeout=timeout)
+</div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>⚙️ Technical Implementation Notes</h2>
+            <h3>Why a LoopAgent + EscalationChecker?</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>Deterministic loop control:</strong> The Judge's Pydantic schema means the EscalationChecker reads <code>feedback["status"] == "pass"</code> with no text parsing</li>
+                <li><strong>Hard stop at 3 iterations:</strong> Even if the Judge always says "fail", the loop terminates — protects against runaway costs</li>
+                <li><strong>State-based handoff:</strong> Each agent writes its output to <code>ctx.session.state</code> via an <code>after_agent_callback</code> so the next agent in the chain can read it</li>
+            </ul>
+
+            <h3>Why RemoteA2aAgent instead of in-process imports?</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>Independent deployment:</strong> Each agent has its own Dockerfile, its own Cloud Run revision, its own scaling policy</li>
+                <li><strong>Service discovery:</strong> An <code>agent-card.json</code> at <code>/.well-known/</code> exposes capability metadata — the Orchestrator uses it to introspect the remote agent</li>
+                <li><strong>Language-agnostic boundary:</strong> Today every agent is Python, but the A2A protocol is JSON-RPC over HTTP — any of these agents could be rewritten in Go or TypeScript without changing the others</li>
+                <li><strong>Auth at the network boundary:</strong> Every call is signed and verified, not just trusted because it's "in the same script"</li>
+            </ul>
+
+            <h3>Why Vertex AI instead of API keys?</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>No key rotation:</strong> Each Cloud Run service has its own service account; Vertex auth piggybacks on Google IAM</li>
+                <li><strong>Audit trail:</strong> Every Gemini call is logged against a service account, not a shared API key</li>
+                <li><strong>Project-level cost attribution:</strong> Token spend shows up in the same GCP billing line as everything else, with per-service breakdown</li>
+            </ul>
+        </div>
+
+        <div class="demo-links">
+            <a href="https://course-creator-662370080553.us-west1.run.app/" target="_blank" class="demo-btn">🚀 Try Live Demo</a>
+            <a href="course-creator.html" class="demo-btn secondary">📖 View Full Project Details</a>
+        </div>
+
+        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+            <a href="index.html">← Back to Portfolio</a> |
+            <a href="course-creator.html">View Project Overview</a>
+        </nav>
+    </div>
+</body>
+</html>

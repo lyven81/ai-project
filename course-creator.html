@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Creator - Multi-Agent ADK + A2A System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #222;
+            background-color: #ffffff;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .back-nav {
+            margin-bottom: 20px;
+        }
+
+        .back-nav a {
+            color: #007BFF;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .back-nav a:hover {
+            text-decoration: underline;
+        }
+
+        .project-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #4299E1, #2B6CB0);
+            color: white;
+            border-radius: 10px;
+        }
+
+        .project-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .project-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .demo-links {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .demo-btn {
+            display: inline-block;
+            background-color: #007BFF;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .demo-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .demo-btn.secondary {
+            background-color: #2B6CB0;
+        }
+
+        .demo-btn.secondary:hover {
+            background-color: #1E4E8C;
+        }
+
+        .content-section {
+            margin: 40px 0;
+            padding: 30px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border-left: 5px solid #4299E1;
+        }
+
+        .content-section h2 {
+            color: #2B6CB0;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .content-section h3 {
+            color: #333;
+            margin: 20px 0 10px 0;
+            font-size: 1.3rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .feature-item {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+
+        .feature-item h4 {
+            color: #2B6CB0;
+            margin-bottom: 10px;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .tech-item {
+            background-color: #4299E1;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .video-section {
+            margin: 40px 0;
+            padding: 30px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border-left: 5px solid #4299E1;
+        }
+
+        .video-section h2 {
+            color: #2B6CB0;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 8px;
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 8px;
+        }
+
+        .code-block {
+            background-color: #f4f4f4;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: monospace;
+            overflow-x: auto;
+            white-space: pre;
+        }
+
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .metric-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid #4299E1;
+        }
+
+        .metric-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2B6CB0;
+        }
+
+        .metric-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .compare-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .compare-table th,
+        .compare-table td {
+            padding: 12px 14px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            font-size: 0.95rem;
+        }
+
+        .compare-table th {
+            background-color: #4299E1;
+            color: white;
+        }
+
+        .compare-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        @media (max-width: 768px) {
+            .project-header h1 {
+                font-size: 2rem;
+            }
+
+            .project-header p {
+                font-size: 1rem;
+            }
+
+            .badges {
+                justify-content: center;
+            }
+
+            .demo-btn {
+                margin: 5px;
+                padding: 10px 20px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+
+            .compare-table th,
+            .compare-table td {
+                font-size: 0.85rem;
+                padding: 8px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="index.html">← Back to Portfolio</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>🤝 Course Creator</h1>
+            <p>AI agent team builds quality courses on any topic</p>
+
+            <div class="badges">
+                <span class="badge">Google ADK</span>
+                <span class="badge">A2A Protocol</span>
+                <span class="badge">Gemini 2.5 Pro</span>
+                <span class="badge">Vertex AI</span>
+                <span class="badge">Cloud Run</span>
+                <span class="badge">Python</span>
+            </div>
+        </div>
+
+        <div class="demo-links">
+            <a href="https://course-creator-662370080553.us-west1.run.app/" target="_blank" class="demo-btn">🚀 Launch Live Demo</a>
+            <a href="course-creator-source.html" class="demo-btn secondary">📁 View Source Code</a>
+        </div>
+
+        <div class="content-section">
+            <h2>📋 Project Overview & Problem Statement</h2>
+            <p><strong>Challenge:</strong> Building a course on a new topic — even a short one — typically takes hours of research, fact-checking, and writing. Single-LLM tools rush straight to writing, often producing content that sounds confident but contains gaps or errors. Visitors and students don't always notice, but the credibility damage is real.</p>
+
+            <p><strong>Solution:</strong> Course Creator is a team of four specialised AI agents that divide the work the way a small editorial team would. A Researcher gathers information, a Judge reviews it for completeness, a Content Builder turns the approved research into structured course material, and an Orchestrator coordinates the handoffs. Each agent runs as its own Cloud Run service and talks to the others over Google's <strong>A2A (Agent-to-Agent) protocol</strong>.</p>
+
+            <h3>Key Benefits</h3>
+            <ul>
+                <li><strong>Real Quality Gating:</strong> The Judge can reject the Researcher's output and trigger another round (up to 3 iterations) before any course writing begins</li>
+                <li><strong>Topic Flexibility:</strong> Works on any subject the Researcher can find sources for — no domain training, no fine-tuning</li>
+                <li><strong>Independently Scalable:</strong> Each agent is its own Cloud Run service, so the slow agent (usually Researcher) can scale alone without spinning up the others</li>
+                <li><strong>Modular Upgrades:</strong> Swap the Researcher for a different model or provider tomorrow by changing one URL — the Orchestrator code stays the same</li>
+                <li><strong>Provenance:</strong> Every fact in the final course is traceable through Cloud Run logs back to the agent that produced it</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>🔁 What Makes This Different — A2A Multi-Agent</h2>
+
+            <p>Most AI multi-agent demos run inside a single Python process — one container, one runtime, all agents sharing memory. This build doesn't. Each of the four agents runs as a separate Cloud Run microservice and communicates over Google's <strong>Agent-to-Agent (A2A) protocol</strong> — standard JSON-RPC over HTTP, with each agent publishing an "agent card" at <code>/.well-known/agent-card.json</code> describing what it does.</p>
+
+            <p>Think of it as the difference between a small startup where everyone shouts across one room, and a real company with departments, formal handoffs, and each team in its own building. Both can produce work, but only the second can scale, swap members, or audit the trail.</p>
+
+            <h3>Single-Process Multi-Agent vs. A2A</h3>
+            <table class="compare-table">
+                <thead>
+                    <tr>
+                        <th>Dimension</th>
+                        <th>Single-Process (CrewAI / LangGraph in one script)</th>
+                        <th>A2A (this build)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Code layout</strong></td>
+                        <td>One script imports all agents</td>
+                        <td>Each agent is its own deployable service</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Failure blast radius</strong></td>
+                        <td>One agent bug crashes the pipeline</td>
+                        <td>Other agents keep responding; only the failing one is degraded</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Scaling</strong></td>
+                        <td>Scale everything together</td>
+                        <td>Scale only the slow agent</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Upgrades</strong></td>
+                        <td>Swap an agent → rewrite imports across the codebase</td>
+                        <td>Swap an agent → change one URL in the Orchestrator</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Observability</strong></td>
+                        <td>One log stream, hard to attribute</td>
+                        <td>Per-agent Cloud Run logs + HTTP traces between hops</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Auth boundary</strong></td>
+                        <td>Trust everything in-process</td>
+                        <td>Service-to-service IAM at every call</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>What This Means For The Output</h3>
+            <ul>
+                <li><strong>Higher accuracy:</strong> The Judge actually rejects bad research and forces a re-run before writing — single-process demos often skip this loop because it is tedious to wire</li>
+                <li><strong>Auditable provenance:</strong> Every fact in the final course can be traced back to the Researcher run that produced it, via HTTP traces and Cloud Run logs</li>
+                <li><strong>Replaceable agents:</strong> Try a Claude Researcher next quarter without touching the Judge or Content Builder</li>
+                <li><strong>Same answer, more reliable infrastructure:</strong> The course content is the same shape as a single-agent output, but the system around it is enterprise-grade</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>🖥️ Application Features</h2>
+
+            <div class="features-grid">
+                <div class="feature-item">
+                    <h4>🔍 Researcher Agent</h4>
+                    <p>Independent Cloud Run service that uses Google Search via the ADK <code>google_search_tool</code> to gather information on the requested topic. Saves findings to the shared session state for the Judge.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>⚖️ Judge Agent</h4>
+                    <p>Strict editor that evaluates the Researcher's findings against the original request. Returns a Pydantic-structured response (<code>status: pass | fail</code>) so the Orchestrator can branch deterministically.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>✍️ Content Builder Agent</h4>
+                    <p>Turns approved research into well-structured Markdown course material. No tools, no external calls — pure synthesis from the verified findings.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>🎯 Orchestrator Agent</h4>
+                    <p>Front-door agent that wires the others together using ADK's <code>LoopAgent</code> and <code>SequentialAgent</code>. Talks to remote agents via <code>RemoteA2aAgent</code> with authenticated httpx clients.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>🔁 EscalationChecker</h4>
+                    <p>Custom <code>BaseAgent</code> that reads the Judge's verdict and decides whether to break the research loop (status pass) or run another iteration (status fail), up to a maximum of 3 rounds.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>🌐 Web App Frontend</h4>
+                    <p>FastAPI web app deployed as a fifth Cloud Run service. Sends the user's topic to the Orchestrator, displays per-agent progress, and renders the final Markdown course.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🤖 AI Integration & Intelligence</h2>
+
+            <div class="features-grid">
+                <div class="feature-item">
+                    <h4>🧠 Gemini 2.5 Pro via Vertex AI</h4>
+                    <p>Every agent runs on Gemini 2.5 Pro through Vertex AI (<code>GOOGLE_GENAI_USE_VERTEXAI=true</code>). No API keys passed around — service accounts handle auth at the Cloud Run boundary.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>🔍 Google Search Tool</h4>
+                    <p>The Researcher agent uses ADK's built-in <code>google_search_tool</code> to fetch live web context. Search results feed into the LLM's reasoning before it writes its findings.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>📋 Pydantic Structured Output</h4>
+                    <p>The Judge returns a <code>JudgeFeedback</code> schema (status + feedback fields) instead of free-form text. This lets the EscalationChecker make a deterministic decision without parsing prose.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>🔄 Quality Loop with Max Iterations</h4>
+                    <p>The <code>LoopAgent</code> wraps Researcher → Judge → EscalationChecker and re-runs the cycle up to 3 times until the Judge passes the research, then hands off to the Content Builder.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🛠️ Technical Architecture & Implementation</h2>
+
+            <h3>Agent Framework</h3>
+            <div class="tech-stack">
+                <span class="tech-item">Google ADK</span>
+                <span class="tech-item">A2A Protocol</span>
+                <span class="tech-item">RemoteA2aAgent</span>
+                <span class="tech-item">LoopAgent</span>
+                <span class="tech-item">SequentialAgent</span>
+                <span class="tech-item">BaseAgent</span>
+            </div>
+
+            <h3>Backend Stack</h3>
+            <div class="tech-stack">
+                <span class="tech-item">Python 3.11+</span>
+                <span class="tech-item">FastAPI</span>
+                <span class="tech-item">uv (package manager)</span>
+                <span class="tech-item">Pydantic</span>
+                <span class="tech-item">httpx</span>
+                <span class="tech-item">uvicorn</span>
+            </div>
+
+            <h3>AI &amp; Search</h3>
+            <div class="tech-stack">
+                <span class="tech-item">Gemini 2.5 Pro</span>
+                <span class="tech-item">Vertex AI</span>
+                <span class="tech-item">google_search_tool</span>
+            </div>
+
+            <h3>Deployment &amp; Infrastructure</h3>
+            <div class="tech-stack">
+                <span class="tech-item">Google Cloud Run</span>
+                <span class="tech-item">Docker</span>
+                <span class="tech-item">Service-to-Service IAM</span>
+                <span class="tech-item">Agent Cards</span>
+            </div>
+
+            <h3>System Architecture</h3>
+            <ul>
+                <li><strong>5 Independent Cloud Run Services:</strong> Researcher, Judge, Content Builder, Orchestrator, and the Web App — each its own container with its own URL</li>
+                <li><strong>A2A Protocol over HTTP:</strong> Agents discover each other via <code>/.well-known/agent-card.json</code> and call each other with JSON-RPC payloads</li>
+                <li><strong>Authenticated Service-to-Service Calls:</strong> Custom <code>authenticated_httpx</code> client signs every request with a Cloud Run identity token, enforced by IAM</li>
+                <li><strong>Hierarchical Composition:</strong> A <code>LoopAgent</code> wraps the research loop; a <code>SequentialAgent</code> wraps the loop and the Content Builder into a single pipeline</li>
+                <li><strong>Stateful Coordination:</strong> Agents write outputs to the shared session state via <code>after_agent_callback</code> so downstream agents can read them</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>📖 Development Setup &amp; Installation Guide</h2>
+
+            <h3>Prerequisites</h3>
+            <ul>
+                <li><strong>uv</strong> — Python package manager (required for local development)</li>
+                <li><strong>Google Cloud SDK</strong> — for GCP services and authentication</li>
+                <li><strong>Vertex AI</strong> enabled on a Google Cloud project</li>
+            </ul>
+
+            <h3>Quick Start Installation</h3>
+            <div class="code-block"># Clone the repository
+git clone https://github.com/lyven81/course-creator.git
+cd course-creator
+
+# Install dependencies
+uv sync
+
+# Set up Google Cloud credentials
+gcloud auth application-default login
+export GOOGLE_CLOUD_PROJECT=your-project-id
+
+# Run all 4 agents + the web app locally
+./run_local.sh
+
+# Open the app
+open http://localhost:8000</div>
+
+            <h3>Environment Configuration</h3>
+            <div class="code-block">GOOGLE_GENAI_USE_VERTEXAI="true"
+GOOGLE_CLOUD_PROJECT="your-project-id"
+GOOGLE_CLOUD_LOCATION="global"</div>
+
+            <h3>Available Scripts</h3>
+            <ul>
+                <li><code>./run_local.sh</code> — Start all 4 agents + the web app as background uvicorn processes (ports 8001–8004 + 8000)</li>
+                <li><code>./deploy.sh</code> — Deploy each agent + the web app to Cloud Run</li>
+                <li><code>./init.sh</code> — Initialise the Google Cloud project (enable APIs, create service accounts, set IAM)</li>
+                <li><code>uv sync</code> — Install/update dependencies from <code>uv.lock</code></li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>🚀 Deployment on Google Cloud Run</h2>
+
+            <p>Each agent is deployed as a separate Cloud Run service. The Web App is configured with environment variables pointing to each agent's <code>/.well-known/agent-card.json</code> URL so the Orchestrator can discover them.</p>
+
+            <div class="code-block"># One-shot deploy of all services
+./deploy.sh
+
+# Or deploy each service individually
+gcloud run deploy researcher --source agents/researcher
+gcloud run deploy judge --source agents/judge
+gcloud run deploy content-builder --source agents/content_builder
+gcloud run deploy orchestrator --source agents/orchestrator
+gcloud run deploy course-creator --source app</div>
+
+            <h3>Production Notes</h3>
+            <ul>
+                <li>Each agent service is invocable only by other authenticated services in the same project (no public unauthenticated calls)</li>
+                <li>The Web App is the only public endpoint — it holds a service account that can invoke the Orchestrator</li>
+                <li>Set <code>min-instances=0</code> on agent services for cost control during low traffic; the cold start adds a few seconds to the first request</li>
+                <li>Recommend a Cloud Run budget alert + per-service quota cap for safety</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>📊 Key Metrics</h2>
+
+            <div class="metrics">
+                <div class="metric-card">
+                    <div class="metric-number">4</div>
+                    <div class="metric-label">Specialised AI Agents</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">5</div>
+                    <div class="metric-label">Cloud Run Services</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">3</div>
+                    <div class="metric-label">Max Quality-Loop Iterations</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">A2A</div>
+                    <div class="metric-label">Agent-to-Agent Protocol</div>
+                </div>
+            </div>
+
+            <h3>Business Value</h3>
+            <ul>
+                <li><strong>Reusable Pattern:</strong> The 4-agent gather-validate-build-deliver shape applies to many SME use cases beyond courses — marketing campaigns, investment memos, SEO content plans, support knowledge bases</li>
+                <li><strong>Production-Ready Architecture:</strong> Independently deployable, scalable, observable agents — the same architecture larger AI teams use in production</li>
+                <li><strong>Modular Cost Control:</strong> Min-instances=0 and per-agent budgets mean you only pay for the agents that are actually working</li>
+                <li><strong>Vendor Flexibility:</strong> Swap any agent for a different model or provider without rewriting the others</li>
+                <li><strong>Workshop-Validated:</strong> Built end-to-end during the Google PRAI Roadshow Lab 1 codelab — every component is documented and reproducible</li>
+            </ul>
+        </div>
+
+        <div class="demo-links">
+            <a href="https://course-creator-662370080553.us-west1.run.app/" target="_blank" class="demo-btn">🚀 Try Live Demo</a>
+            <a href="https://github.com/lyven81/ai-project/tree/main/projects/course-creator" target="_blank" class="demo-btn secondary">📖 Full Source Code</a>
+        </div>
+
+        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+            <a href="index.html">← Back to Portfolio</a> |
+            <a href="project-categories.html">View All Categories</a>
+        </nav>
+    </div>
+</body>
+</html>
