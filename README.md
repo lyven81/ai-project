@@ -148,7 +148,7 @@ Each project is classified by its AI architecture pattern, based on how the syst
 | Multi-Agent Orchestration | 3 | 4% |
 | Interactive Learning | 2 | 4% |
 
-**Total: 67 projects**
+**Total: 68 projects**
 
 > Note: As of Apr 9, 2026, 16 projects were unpublished from the live portfolio homepage display to sharpen focus. They remain in the repo and are still counted here as built work.
 
