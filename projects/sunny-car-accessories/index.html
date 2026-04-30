@@ -1,0 +1,1910 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sunny Car Accessories — WebMCP Demo</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #403B36;
+  --primary-light: #5A524B;
+  --gold: #CBA135;
+  --gold-light: #E8C55A;
+  --bg: #FCF9F2;
+  --text: #2C2C2C;
+  --card: #FFFFFF;
+  --muted: #6B6560;
+  --border: #E5DFCE;
+  --success: #2D7A3E;
+  --danger: #B83227;
+  --warning: #D4801A;
+  --shadow: 0 4px 20px rgba(64, 59, 54, 0.1);
+  --shadow-lg: 0 10px 40px rgba(64, 59, 54, 0.15);
+  --gradient-dark: linear-gradient(135deg, #403B36 0%, #2C2822 100%);
+  --gradient-gold: linear-gradient(135deg, #CBA135 0%, #E8C55A 100%);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Poppins', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+}
+.container { max-width: 1400px; margin: 0 auto; padding: 0 20px; }
+.hidden { display: none !important; }
+button { font-family: inherit; cursor: pointer; border: none; }
+input, select, textarea { font-family: inherit; }
+
+/* Header */
+.site-header {
+  background: var(--gradient-dark);
+  color: var(--bg);
+  padding: 16px 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow);
+}
+.site-header .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+.brand {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--gold-light);
+  cursor: pointer;
+}
+.nav-controls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex: 1;
+  max-width: 600px;
+}
+#search-input {
+  flex: 1;
+  padding: 10px 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: rgba(255,255,255,0.95);
+  font-size: 0.95rem;
+}
+#cart-button {
+  background: var(--gradient-gold);
+  color: var(--primary);
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  transition: transform 0.2s;
+}
+#cart-button:hover { transform: translateY(-1px); }
+#cart-count {
+  background: var(--primary);
+  color: var(--gold-light);
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+/* View dual-headline below header */
+.headline-strip {
+  background: var(--card);
+  padding: 24px 0;
+  border-bottom: 1px solid var(--border);
+  text-align: center;
+}
+.headline-strip h1 {
+  font-size: 1.6rem;
+  color: var(--primary);
+  margin-bottom: 4px;
+}
+.headline-strip p {
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+/* Hero */
+.hero {
+  position: relative;
+  margin: 30px 0;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+.hero img {
+  width: 100%;
+  height: 380px;
+  object-fit: cover;
+  display: block;
+}
+.hero-text {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 30px;
+  background: linear-gradient(180deg, transparent, rgba(0,0,0,0.75));
+  color: white;
+}
+.hero-text h2 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.hero-text p {
+  font-size: 1.05rem;
+  opacity: 0.95;
+}
+
+/* Section heading */
+.section-heading {
+  font-size: 1.6rem;
+  color: var(--primary);
+  margin: 40px 0 20px;
+  font-weight: 600;
+}
+
+/* Categories */
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+.category-card {
+  background: var(--card);
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.category-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+.category-card img { width: 100%; height: 160px; object-fit: cover; display: block; }
+.category-card h4 {
+  padding: 16px;
+  text-align: center;
+  font-size: 1.1rem;
+  color: var(--primary);
+  font-weight: 600;
+}
+
+/* Product grid */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  margin-bottom: 40px;
+}
+.product-card {
+  background: var(--card);
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: transform 0.2s, box-shadow 0.2s;
+  display: flex;
+  flex-direction: column;
+}
+.product-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+.product-card img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  background: var(--bg);
+  display: block;
+}
+.product-card.img-fallback img { display: none; }
+.product-card.img-fallback::before {
+  content: attr(data-fallback);
+  display: block;
+  height: 220px;
+  background: var(--gradient-gold);
+  color: var(--primary);
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-align: center;
+  padding: 80px 16px;
+}
+.product-card .card-body { padding: 16px; flex: 1; display: flex; flex-direction: column; }
+.product-card .brand {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+.product-card h4 {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--primary);
+  margin-bottom: 8px;
+  flex: 1;
+}
+.product-card .price {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 4px;
+}
+.product-card .rating { font-size: 0.85rem; color: var(--muted); }
+
+/* Filter bar */
+.filter-bar {
+  background: var(--card);
+  padding: 20px;
+  border-radius: 12px;
+  margin: 20px 0 30px;
+  box-shadow: var(--shadow);
+  display: grid;
+  grid-template-columns: 1.2fr 1.2fr 1fr auto auto;
+  gap: 12px;
+  align-items: end;
+}
+.filter-bar label {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+.filter-bar select, .filter-bar input {
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  width: 100%;
+}
+.filter-bar button {
+  padding: 11px 18px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  white-space: nowrap;
+  transition: transform 0.2s;
+}
+.filter-bar .btn-apply {
+  background: var(--gradient-gold);
+  color: var(--primary);
+}
+.filter-bar .btn-clear {
+  background: var(--bg);
+  color: var(--primary);
+  border: 1px solid var(--border);
+}
+.filter-bar button:hover { transform: translateY(-1px); }
+
+/* Back link */
+.back-link {
+  display: inline-block;
+  margin: 20px 0;
+  color: var(--gold);
+  text-decoration: none;
+  font-weight: 500;
+}
+.back-link:hover { color: var(--primary); }
+
+/* Category banner */
+.category-header {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 16px;
+}
+#category-banner {
+  width: 200px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+}
+
+/* Product detail */
+.product-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  background: var(--card);
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: var(--shadow);
+  margin-bottom: 30px;
+}
+.product-image img {
+  width: 100%;
+  border-radius: 12px;
+  background: var(--bg);
+}
+.product-info .brand {
+  font-size: 0.85rem;
+  color: var(--gold);
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+.product-info h2 {
+  font-size: 1.7rem;
+  color: var(--primary);
+  margin-bottom: 12px;
+}
+.product-info .rating { color: var(--muted); margin-bottom: 12px; }
+.product-info .price {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin: 16px 0;
+}
+.product-info .description {
+  color: var(--muted);
+  margin-bottom: 20px;
+  line-height: 1.7;
+}
+.fitment-badge {
+  display: inline-block;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+.fitment-badge.universal { background: #E8F5E9; color: var(--success); }
+.fitment-badge.model-specific { background: #FFF3E0; color: var(--warning); }
+
+/* Variant picker */
+.variant-picker { margin: 20px 0; }
+.variant-picker label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--muted);
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+  display: block;
+}
+.variant-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.variant-btn {
+  padding: 8px 16px;
+  border: 2px solid var(--border);
+  background: var(--card);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: var(--text);
+  font-weight: 500;
+  transition: all 0.2s;
+}
+.variant-btn:hover { border-color: var(--gold); }
+.variant-btn.selected {
+  background: var(--primary);
+  color: var(--gold-light);
+  border-color: var(--primary);
+}
+
+/* Fitment checker */
+.fitment-checker {
+  background: var(--bg);
+  padding: 20px;
+  border-radius: 10px;
+  margin: 20px 0;
+  border-left: 4px solid var(--gold);
+}
+.fitment-checker h4 {
+  color: var(--primary);
+  margin-bottom: 6px;
+  font-size: 1.05rem;
+}
+.fitment-checker p { font-size: 0.88rem; color: var(--muted); margin-bottom: 12px; }
+.fitment-controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr 100px auto;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.fitment-controls select, .fitment-controls input {
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+.fitment-controls button {
+  padding: 8px 16px;
+  background: var(--gradient-gold);
+  color: var(--primary);
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+.fitment-result {
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-size: 0.92rem;
+}
+.fitment-yes { background: #E8F5E9; color: var(--success); }
+.fitment-no { background: #FDECEA; color: var(--danger); }
+.fitment-warning { background: #FFF3E0; color: var(--warning); }
+
+/* Quantity + Add to cart */
+.quantity-picker {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 16px 0;
+}
+.quantity-picker label { font-weight: 500; color: var(--muted); }
+.quantity-picker input {
+  width: 80px;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+.stock-indicator {
+  font-size: 0.88rem;
+  color: var(--success);
+  margin-bottom: 16px;
+}
+.stock-indicator.low { color: var(--warning); }
+.stock-indicator.out { color: var(--danger); }
+.add-to-cart-btn {
+  width: 100%;
+  padding: 14px;
+  background: var(--gradient-dark);
+  color: var(--gold-light);
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: transform 0.2s;
+}
+.add-to-cart-btn:hover { transform: translateY(-1px); }
+
+/* Cart view */
+.view-cart .container, .view-checkout .container { max-width: 900px; }
+.view-cart h2, .view-checkout h2 {
+  color: var(--primary);
+  margin: 30px 0 20px;
+}
+#cart-items { background: var(--card); border-radius: 12px; padding: 8px; box-shadow: var(--shadow); }
+.cart-item {
+  display: grid;
+  grid-template-columns: 80px 1fr auto;
+  gap: 16px;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid var(--border);
+}
+.cart-item:last-child { border-bottom: none; }
+.cart-item img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+  background: var(--bg);
+}
+.cart-item-info .brand {
+  font-size: 0.78rem;
+  color: var(--gold);
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.cart-item-info h4 { font-size: 1rem; color: var(--primary); margin: 4px 0; }
+.cart-item-info .variant { font-size: 0.85rem; color: var(--muted); }
+.cart-item-info .price { font-weight: 600; color: var(--primary); margin-top: 4px; }
+.cart-item button {
+  padding: 8px 14px;
+  background: transparent;
+  color: var(--danger);
+  border: 1px solid var(--danger);
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 0.85rem;
+}
+.cart-item button:hover { background: var(--danger); color: white; }
+.cart-summary {
+  background: var(--card);
+  padding: 24px;
+  border-radius: 12px;
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: var(--shadow);
+}
+.cart-summary .total { font-size: 1.4rem; font-weight: 700; color: var(--primary); }
+.cart-summary button {
+  padding: 12px 28px;
+  background: var(--gradient-dark);
+  color: var(--gold-light);
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+/* Checkout */
+#checkout-form {
+  background: var(--card);
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+}
+#checkout-form h3 {
+  color: var(--primary);
+  margin: 16px 0 12px;
+  font-size: 1.1rem;
+}
+#checkout-form input, #checkout-form textarea {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.95rem;
+}
+#checkout-form textarea { resize: vertical; min-height: 80px; }
+#checkout-form label {
+  display: block;
+  margin-bottom: 8px;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+}
+#checkout-form label:hover { background: var(--bg); }
+#checkout-form input[type="radio"] { width: auto; margin-right: 8px; margin-bottom: 0; }
+.checkout-summary {
+  background: var(--bg);
+  padding: 16px;
+  border-radius: 8px;
+  margin: 20px 0;
+}
+.checkout-line {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  font-size: 0.95rem;
+}
+.checkout-summary > div:last-child {
+  border-top: 2px solid var(--border);
+  padding-top: 10px;
+  margin-top: 10px;
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: var(--primary);
+}
+#checkout-form button[type="submit"] {
+  width: 100%;
+  padding: 14px;
+  background: var(--gradient-dark);
+  color: var(--gold-light);
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+/* Order confirmation */
+.order-confirm {
+  background: var(--card);
+  padding: 50px 30px;
+  border-radius: 15px;
+  box-shadow: var(--shadow);
+  text-align: center;
+  margin: 40px 0;
+}
+.order-confirm h2 {
+  color: var(--success);
+  font-size: 2rem;
+  margin-bottom: 16px;
+}
+.order-confirm p { margin-bottom: 12px; line-height: 1.8; }
+.order-confirm strong { color: var(--primary); }
+.order-confirm button {
+  margin-top: 20px;
+  padding: 12px 28px;
+  background: var(--gradient-gold);
+  color: var(--primary);
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+/* Cart sidebar */
+.cart-sidebar {
+  position: fixed;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 400px;
+  max-width: 100vw;
+  background: var(--card);
+  z-index: 1000;
+  box-shadow: -10px 0 30px rgba(0,0,0,0.15);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s;
+}
+.cart-sidebar.hidden { transform: translateX(100%); display: flex !important; }
+.cart-sidebar-header {
+  padding: 20px;
+  background: var(--gradient-dark);
+  color: var(--gold-light);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.cart-sidebar-header h3 { font-size: 1.2rem; }
+.cart-sidebar-header button {
+  background: transparent;
+  color: var(--gold-light);
+  font-size: 1.2rem;
+  padding: 4px 8px;
+}
+#cart-sidebar-items { flex: 1; overflow-y: auto; padding: 16px; }
+.cart-sidebar-item {
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+.cart-sidebar-item img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 6px;
+  background: var(--bg);
+}
+.cart-sidebar-item h5 { font-size: 0.95rem; color: var(--primary); }
+.cart-sidebar-item .variant { font-size: 0.8rem; color: var(--muted); }
+.cart-sidebar-footer {
+  padding: 20px;
+  border-top: 1px solid var(--border);
+  background: var(--bg);
+}
+.cart-sidebar-footer > div:first-child {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 12px;
+  text-align: right;
+}
+.cart-sidebar-footer button {
+  width: 100%;
+  padding: 12px;
+  background: var(--gradient-gold);
+  color: var(--primary);
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+/* Inspector Panel */
+.inspector-panel {
+  position: fixed;
+  bottom: 0;
+  right: 20px;
+  width: 440px;
+  max-width: calc(100vw - 40px);
+  background: var(--primary);
+  color: var(--bg);
+  border-radius: 12px 12px 0 0;
+  z-index: 90;
+  box-shadow: var(--shadow-lg);
+  font-size: 0.85rem;
+}
+.inspector-header {
+  background: var(--gradient-dark);
+  padding: 10px 14px;
+  border-radius: 12px 12px 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  border-bottom: 2px solid var(--gold);
+}
+#inspector-status {
+  color: var(--gold-light);
+  font-weight: 500;
+  font-size: 0.82rem;
+}
+#inspector-status.error { color: #FFD2C7; }
+.inspector-toggle {
+  background: transparent;
+  color: var(--gold-light);
+  border: 1px solid var(--gold);
+  padding: 2px 10px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  min-width: 28px;
+}
+.inspector-body {
+  max-height: 400px;
+  overflow: hidden;
+  transition: max-height 0.3s;
+}
+.inspector-panel.collapsed .inspector-body { max-height: 0; }
+.inspector-tabs {
+  display: flex;
+  background: var(--primary-light);
+}
+.inspector-tab {
+  flex: 1;
+  padding: 8px 4px;
+  background: transparent;
+  color: var(--bg);
+  font-size: 0.78rem;
+  font-weight: 500;
+  border: none;
+  border-bottom: 2px solid transparent;
+  letter-spacing: 0.3px;
+}
+.inspector-tab.active {
+  border-bottom-color: var(--gold);
+  color: var(--gold-light);
+  background: rgba(0,0,0,0.2);
+}
+.inspector-tab:hover:not(.active) { background: rgba(255,255,255,0.05); }
+.inspector-content {
+  padding: 12px;
+  max-height: 320px;
+  overflow-y: auto;
+}
+.inspector-pane.hidden { display: none; }
+.empty {
+  color: rgba(255,255,255,0.5);
+  text-align: center;
+  padding: 20px 0;
+  font-style: italic;
+  font-size: 0.85rem;
+}
+.tool-entry {
+  background: rgba(255,255,255,0.06);
+  border-radius: 6px;
+  padding: 8px 10px;
+  margin-bottom: 6px;
+}
+.tool-entry summary {
+  cursor: pointer;
+  color: var(--bg);
+  font-size: 0.82rem;
+  outline: none;
+}
+.tool-entry summary strong { color: var(--gold-light); font-family: monospace; }
+.tool-entry summary span.tool-desc { color: rgba(255,255,255,0.7); margin-left: 6px; }
+.tool-entry pre {
+  margin-top: 8px;
+  background: rgba(0,0,0,0.4);
+  padding: 8px;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  overflow-x: auto;
+  color: #DCE0C5;
+  line-height: 1.5;
+}
+.try-entry {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 8px;
+  padding: 8px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 6px;
+}
+.try-entry button {
+  background: var(--gold);
+  color: var(--primary);
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 0.82rem;
+  align-self: flex-start;
+}
+.try-entry button:hover { background: var(--gold-light); }
+.try-entry code {
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.8);
+  background: rgba(0,0,0,0.4);
+  padding: 4px 8px;
+  border-radius: 3px;
+  word-break: break-all;
+  font-family: monospace;
+}
+.log-entry {
+  font-family: monospace;
+  font-size: 0.74rem;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  word-break: break-word;
+}
+.log-entry:last-child { border-bottom: none; }
+.log-ts { color: var(--gold-light); margin-right: 6px; }
+.log-name { color: white; font-weight: 700; }
+.log-result {
+  color: rgba(255,255,255,0.65);
+  margin-top: 4px;
+  padding-left: 12px;
+  font-size: 0.72rem;
+}
+.inspector-pane[data-pane="source"] pre {
+  font-size: 0.7rem;
+  background: rgba(0,0,0,0.4);
+  padding: 10px;
+  border-radius: 6px;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: #DCE0C5;
+  line-height: 1.5;
+  margin: 0;
+}
+.confirm-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+.confirm-modal.hidden { display: none; }
+.confirm-modal-box {
+  background: var(--card);
+  padding: 30px;
+  border-radius: 12px;
+  max-width: 420px;
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+}
+.confirm-modal-box h3 { color: var(--primary); margin-bottom: 12px; }
+.confirm-modal-box p { color: var(--text); margin-bottom: 20px; }
+.confirm-modal-actions { display: flex; gap: 12px; justify-content: center; }
+.confirm-modal-actions button {
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+.btn-allow {
+  background: var(--gradient-gold);
+  color: var(--primary);
+}
+.btn-deny {
+  background: transparent;
+  color: var(--danger);
+  border: 1px solid var(--danger);
+}
+@media (max-width: 768px) {
+  .inspector-panel { width: calc(100vw - 20px); right: 10px; }
+}
+
+/* Footer */
+.site-footer {
+  background: #333;
+  color: white;
+  text-align: center;
+  padding: 20px;
+  margin-top: 40px;
+}
+
+/* Mobile responsive */
+@media (max-width: 968px) {
+  .product-layout { grid-template-columns: 1fr; }
+  .product-grid { grid-template-columns: repeat(2, 1fr); }
+  .category-grid { grid-template-columns: repeat(2, 1fr); }
+  .filter-bar { grid-template-columns: 1fr 1fr; }
+  .cart-sidebar { width: 90vw; }
+}
+@media (max-width: 768px) {
+  .site-header .container { flex-wrap: wrap; }
+  .nav-controls { width: 100%; order: 3; }
+  .hero img { height: 240px; }
+  .hero-text h2 { font-size: 1.5rem; }
+  .product-grid { grid-template-columns: 1fr; }
+  .category-grid { grid-template-columns: 1fr; }
+  .filter-bar { grid-template-columns: 1fr; }
+  .fitment-controls { grid-template-columns: 1fr 1fr; }
+  .category-header { flex-direction: column; align-items: flex-start; }
+  #category-banner { width: 100%; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <div class="brand" onclick="showView('home')">☀️ Sunny Car Accessories</div>
+    <div class="nav-controls">
+      <input type="search" id="search-input" placeholder="Search 18 products..." onkeydown="if(event.key==='Enter') runSearch()">
+      <button id="cart-button" onclick="showView('cart')">🛒 Cart <span id="cart-count">0</span></button>
+    </div>
+  </div>
+</header>
+
+<div class="headline-strip">
+  <h1>WebMCP Demo — Agent-Ready Multi-Category Storefront</h1>
+  <p>Built for Malaysian SMEs · kedai aksesori kereta · agent-callable from any modern browser</p>
+</div>
+
+<main id="app">
+
+  <!-- VIEW: HOME -->
+  <section class="view view-home" data-view="home">
+    <div class="container">
+      <div class="hero">
+        <img src="images/hero/hero-banner.jpg" alt="Sunny Car Accessories Storefront">
+        <div class="hero-text">
+          <h2>Find parts that fit your car</h2>
+          <p>Shop human or agent-assisted. Same store, same prices.</p>
+        </div>
+      </div>
+
+      <h3 class="section-heading">Shop by Category</h3>
+      <div class="category-grid" id="category-grid-home"></div>
+
+      <h3 class="section-heading">Featured Products</h3>
+      <div class="product-grid" id="featured-grid"></div>
+    </div>
+  </section>
+
+  <!-- VIEW: CATEGORY -->
+  <section class="view view-category hidden" data-view="category">
+    <div class="container">
+      <a href="#" class="back-link" onclick="showView('home'); return false">← Back to Home</a>
+      <div class="category-header">
+        <img id="category-banner" src="" alt="">
+        <h2 id="category-title">Category</h2>
+      </div>
+      <div class="filter-bar">
+        <div>
+          <label>Vehicle Make</label>
+          <select id="filter-make" onchange="onMakeChange()">
+            <option value="">All Makes</option>
+            <option value="Honda">Honda</option>
+            <option value="Toyota">Toyota</option>
+            <option value="Perodua">Perodua</option>
+            <option value="Proton">Proton</option>
+          </select>
+        </div>
+        <div>
+          <label>Vehicle Model</label>
+          <select id="filter-model"><option value="">All Models</option></select>
+        </div>
+        <div>
+          <label>Max Price (RM)</label>
+          <input type="number" id="filter-max-price" placeholder="e.g. 200" min="0">
+        </div>
+        <button class="btn-apply" onclick="applyFilters()">Apply</button>
+        <button class="btn-clear" onclick="clearFilters()">Clear</button>
+      </div>
+      <div class="product-grid" id="category-grid"></div>
+    </div>
+  </section>
+
+  <!-- VIEW: PRODUCT -->
+  <section class="view view-product hidden" data-view="product">
+    <div class="container" id="product-detail"></div>
+  </section>
+
+  <!-- VIEW: CART -->
+  <section class="view view-cart hidden" data-view="cart">
+    <div class="container">
+      <a href="#" class="back-link" onclick="showView('home'); return false">← Continue Shopping</a>
+      <h2>Your Cart</h2>
+      <div id="cart-items"></div>
+      <div class="cart-summary" id="cart-summary"></div>
+    </div>
+  </section>
+
+  <!-- VIEW: CHECKOUT -->
+  <section class="view view-checkout hidden" data-view="checkout">
+    <div class="container">
+      <a href="#" class="back-link" onclick="showView('cart'); return false">← Back to Cart</a>
+      <h2>Checkout</h2>
+      <form id="checkout-form" onsubmit="placeOrder(event); return false">
+        <h3>Delivery Information</h3>
+        <input type="text" placeholder="Full Name" required value="Lee Yih Ven">
+        <input type="email" placeholder="Email" required value="yven81@gmail.com">
+        <input type="tel" placeholder="Phone (e.g. +60 12-345 6789)" required value="+60 12-345 6789">
+        <textarea placeholder="Delivery Address" required>123 Jalan Merdeka, Kuala Lumpur</textarea>
+
+        <h3>Payment Method</h3>
+        <label><input type="radio" name="payment" value="DuitNow" checked> DuitNow QR</label>
+        <label><input type="radio" name="payment" value="FPX"> Online Banking (FPX)</label>
+        <label><input type="radio" name="payment" value="COD"> Cash on Delivery</label>
+
+        <div class="checkout-summary" id="checkout-summary"></div>
+
+        <button type="submit">Place Order</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- VIEW: ORDER CONFIRMATION -->
+  <section class="view view-track hidden" data-view="track">
+    <div class="container">
+      <div class="order-confirm" id="order-confirm-content"></div>
+    </div>
+  </section>
+
+</main>
+
+<aside id="cart-sidebar" class="cart-sidebar hidden">
+  <div class="cart-sidebar-header">
+    <h3>Cart</h3>
+    <button onclick="closeCart()">✕</button>
+  </div>
+  <div id="cart-sidebar-items"></div>
+  <div class="cart-sidebar-footer">
+    <div>Total: RM <span id="cart-sidebar-total">0</span></div>
+    <button onclick="closeCart(); showView('cart');">View Cart</button>
+  </div>
+</aside>
+
+<aside id="inspector-panel" class="inspector-panel">
+  <div class="inspector-header" onclick="toggleInspector()">
+    <span id="inspector-status">⚙️ WebMCP Inspector — initializing…</span>
+    <button class="inspector-toggle" id="inspector-toggle-btn" onclick="event.stopPropagation(); toggleInspector();">−</button>
+  </div>
+  <div class="inspector-body">
+    <div class="inspector-tabs">
+      <button class="inspector-tab active" data-tab="tools" onclick="switchInspectorTab('tools')">Tools</button>
+      <button class="inspector-tab" data-tab="try" onclick="switchInspectorTab('try')">Try as Agent</button>
+      <button class="inspector-tab" data-tab="log" onclick="switchInspectorTab('log')">Log</button>
+      <button class="inspector-tab" data-tab="source" onclick="switchInspectorTab('source')">Source</button>
+    </div>
+    <div class="inspector-content">
+      <div class="inspector-pane" data-pane="tools"></div>
+      <div class="inspector-pane hidden" data-pane="try"></div>
+      <div class="inspector-pane hidden" data-pane="log"></div>
+      <div class="inspector-pane hidden" data-pane="source"></div>
+    </div>
+  </div>
+</aside>
+
+<div class="confirm-modal hidden" id="confirm-modal">
+  <div class="confirm-modal-box">
+    <h3 id="confirm-title">Agent action</h3>
+    <p id="confirm-message">An agent is about to take an action.</p>
+    <div class="confirm-modal-actions">
+      <button class="btn-deny" onclick="resolveConfirm(false)">Deny</button>
+      <button class="btn-allow" onclick="resolveConfirm(true)">Allow once</button>
+    </div>
+  </div>
+</div>
+
+<footer class="site-footer">
+  © 2026 Sunny Car Accessories
+</footer>
+
+<script>
+// ==================== CATALOG (18 SKUs) ====================
+const CATALOG = [
+  // Interior
+  { sku:'INT-001', name:'Premium Leather Seat Cover Set', brand:'AutoLuxe', category:'interior', price:280,
+    image:'images/products/int-001-leather-seat-cover.jpg',
+    description:'5-piece premium leather seat cover set with reinforced stitching. Universal fit, machine-washable, includes headrest covers.',
+    variantType:'color', variants:['Black','Beige','Grey','Brown','Red'], fitment:'universal', stock:12, rating:4.5, reviews:87 },
+  { sku:'INT-002', name:'3D Floor Mats', brand:'TerraGuard', category:'interior', price:180,
+    image:'images/products/int-002-3d-floor-mats.jpg',
+    description:'3D moulded rubber floor mats with raised edges to trap dirt and water. Custom-fit to specific car models.',
+    variantType:null, variants:[], fitment:['Honda','Toyota','Perodua','Proton'], stock:25, rating:4.7, reviews:156 },
+  { sku:'INT-003', name:'LED Steering Wheel Cover', brand:'GripPro', category:'interior', price:65,
+    image:'images/products/int-003-steering-wheel-cover.jpg',
+    description:'Padded leather steering wheel cover with subtle LED accent stitching. Available in 3 sizes.',
+    variantType:'size', variants:['37cm','38cm','40cm'], fitment:'universal', stock:40, rating:4.3, reviews:64 },
+  { sku:'INT-004', name:'Air Freshener Set (3-pack)', brand:'FreshDrive', category:'interior', price:25,
+    image:'images/products/int-004-air-freshener-set.jpg',
+    description:'Hanging car air fresheners. Pick your scent — long-lasting fragrance for up to 30 days.',
+    variantType:'scent', variants:['Lemon','Ocean','Vanilla','Pine'], fitment:'universal', stock:100, rating:4.1, reviews:230 },
+
+  // Exterior
+  { sku:'EXT-001', name:'LED Fog Light Pair', brand:'NightVision', category:'exterior', price:220,
+    image:'images/products/ext-001-led-fog-light.jpg',
+    description:'High-output LED fog light pair with chrome housing. IP67 waterproof, plug-and-play installation.',
+    variantType:'color', variants:['White','Yellow'], fitment:'universal', stock:18, rating:4.4, reviews:92 },
+  { sku:'EXT-002', name:'Body Side Moulding', brand:'TrimGuard', category:'exterior', price:95,
+    image:'images/products/ext-002-side-moulding.jpg',
+    description:'Black rubber side door moulding with chrome accent. Universal fit, 3M adhesive backing included.',
+    variantType:null, variants:[], fitment:'universal', stock:30, rating:4.0, reviews:47 },
+  { sku:'EXT-003', name:'Side Mirror Cover Set', brand:'StyleAuto', category:'exterior', price:85,
+    image:'images/products/ext-003-mirror-cover.jpg',
+    description:'Glossy black side mirror covers — easy clip-on installation. Custom-fit by car model.',
+    variantType:null, variants:[], fitment:['Honda','Toyota','Perodua','Proton'], stock:22, rating:4.2, reviews:68 },
+  { sku:'EXT-004', name:'Car Sun Shade', brand:'SunBlock', category:'exterior', price:45,
+    image:'images/products/ext-004-sun-shade.jpg',
+    description:'Reflective foil windshield sun shade. Folds flat for easy storage. 3 sizes for different vehicles.',
+    variantType:'size', variants:['Small','Medium','Large'], fitment:'universal', stock:80, rating:4.5, reviews:145 },
+
+  // Performance
+  { sku:'PERF-001', name:'Synthetic Engine Oil 5W-30 (4L)', brand:'Castrol', category:'performance', price:165,
+    image:'images/products/perf-001-engine-oil.jpg',
+    description:'Fully synthetic 5W-30 motor oil for modern engines. 4L bottle. Pick your preferred brand.',
+    variantType:'brand', variants:['Castrol','Shell','Mobil'], fitment:'universal', stock:60, rating:4.8, reviews:312 },
+  { sku:'PERF-002', name:'Brake Pad Set (Front)', brand:'Bosch', category:'performance', price:145,
+    image:'images/products/perf-002-brake-pad.jpg',
+    description:'OEM-quality front brake pad set. Low-dust ceramic compound. Custom-fit by car model.',
+    variantType:null, variants:[], fitment:['Honda','Toyota','Perodua','Proton'], stock:28, rating:4.6, reviews:178 },
+  { sku:'PERF-003', name:'Engine Air Filter', brand:'K&N', category:'performance', price:55,
+    image:'images/products/perf-003-air-filter.jpg',
+    description:'High-flow engine air filter. Improves throttle response. Custom-fit by car model.',
+    variantType:null, variants:[], fitment:['Honda','Toyota','Perodua','Proton'], stock:45, rating:4.4, reviews:95 },
+  { sku:'PERF-004', name:'Premium Wiper Blade Pair', brand:'Bosch', category:'performance', price:75,
+    image:'images/products/perf-004-wiper-blade.jpg',
+    description:'Silicone wiper blade pair — streak-free wipe even in heavy rain. Available in 3 sizes.',
+    variantType:'size', variants:['16"','18"','20"'], fitment:'universal', stock:70, rating:4.5, reviews:220 },
+  { sku:'PERF-005', name:'Car Battery 12V 70Ah', brand:'Bosch', category:'performance', price:450,
+    image:'images/products/perf-005-car-battery.jpg',
+    description:'Maintenance-free 12V 70Ah lead-acid battery. 18-month warranty. Pick your preferred brand.',
+    variantType:'brand', variants:['Bosch','Yokohama','Amaron'], fitment:'universal', stock:15, rating:4.7, reviews:142 },
+
+  // Tech
+  { sku:'TECH-001', name:'4K Dashcam with Night Vision', brand:'AutoVision', category:'tech', price:380,
+    image:'images/products/tech-001-dashcam.jpg',
+    description:'4K UHD dashcam with WDR night vision and 32GB SD card included. Loop recording, motion detection.',
+    variantType:'color', variants:['Black','Grey'], fitment:'universal', stock:20, rating:4.6, reviews:189 },
+  { sku:'TECH-002', name:'Bluetooth Car Charger', brand:'PowerLink', category:'tech', price:65,
+    image:'images/products/tech-002-bluetooth-charger.jpg',
+    description:'Dual-USB car charger with built-in Bluetooth audio receiver. Stream music + charge two devices.',
+    variantType:null, variants:[], fitment:'universal', stock:90, rating:4.2, reviews:105 },
+  { sku:'TECH-003', name:'7-inch GPS Navigator', brand:'NaviPro', category:'tech', price:285,
+    image:'images/products/tech-003-gps-navigator.jpg',
+    description:'Portable 7-inch touchscreen GPS pre-loaded with Malaysia maps. Free lifetime map updates.',
+    variantType:null, variants:[], fitment:'universal', stock:12, rating:4.4, reviews:76 },
+  { sku:'TECH-004', name:'Reverse Camera with Display', brand:'SafeReverse', category:'tech', price:195,
+    image:'images/products/tech-004-reverse-camera.jpg',
+    description:'Wireless reverse camera kit with 4-inch LCD display. Plug-and-play, no wiring through cabin.',
+    variantType:null, variants:[], fitment:'universal', stock:25, rating:4.3, reviews:88 },
+  { sku:'TECH-005', name:'6.5" Car Audio Speaker Pair', brand:'Pioneer', category:'tech', price:220,
+    image:'images/products/tech-005-audio-speaker.jpg',
+    description:'6.5-inch 2-way coaxial speakers. 60W RMS each. Sold as a matched pair for front or rear install.',
+    variantType:'brand', variants:['Pioneer','Sony'], fitment:'universal', stock:32, rating:4.5, reviews:124 }
+];
+
+const CATEGORIES = [
+  { id:'interior', name:'Interior', banner:'images/categories/interior.jpg' },
+  { id:'exterior', name:'Exterior', banner:'images/categories/exterior.jpg' },
+  { id:'performance', name:'Performance', banner:'images/categories/performance.jpg' },
+  { id:'tech', name:'Tech', banner:'images/categories/tech.jpg' }
+];
+
+const VEHICLE_MODELS = {
+  Honda:   ['Civic','City','Jazz','CR-V','HR-V'],
+  Toyota:  ['Vios','Corolla','Camry','Hilux','Yaris'],
+  Perodua: ['Myvi','Axia','Bezza','Aruz','Alza'],
+  Proton:  ['Saga','Persona','X70','X50','Iriz']
+};
+
+// ==================== STATE ====================
+const state = {
+  currentView: 'home',
+  currentSku: null,
+  currentCategory: null,
+  filters: { make:'', model:'', maxPrice:0 },
+  cart: [],
+  orderId: null,
+  vehicleFitment: null
+};
+
+// ==================== CART ====================
+function loadCart() {
+  try {
+    const s = localStorage.getItem('sca_cart');
+    state.cart = s ? JSON.parse(s) : [];
+  } catch (e) { state.cart = []; }
+  updateCartCount();
+}
+function saveCart() {
+  localStorage.setItem('sca_cart', JSON.stringify(state.cart));
+  updateCartCount();
+}
+function updateCartCount() {
+  const count = state.cart.reduce((s,i) => s + i.quantity, 0);
+  document.getElementById('cart-count').textContent = count;
+}
+function cartTotal() {
+  return state.cart.reduce((s,i) => s + i.price * i.quantity, 0);
+}
+function addToCart(sku, variant, quantity) {
+  const p = CATALOG.find(x => x.sku === sku);
+  if (!p) return { success:false, error:'SKU not found' };
+  const key = sku + (variant ? ':' + variant : '');
+  const existing = state.cart.find(i => i.key === key);
+  if (existing) {
+    existing.quantity += quantity;
+  } else {
+    state.cart.push({ key, sku, name:p.name, brand:p.brand, price:p.price, variant, quantity, image:p.image });
+  }
+  saveCart();
+  return { success:true, cartCount: state.cart.reduce((s,i)=>s+i.quantity,0), cartTotal: cartTotal() };
+}
+function removeFromCart(key) {
+  state.cart = state.cart.filter(i => i.key !== key);
+  saveCart();
+  if (state.currentView === 'cart') renderCart();
+  if (!document.getElementById('cart-sidebar').classList.contains('hidden')) renderCartSidebar();
+  return { success:true, cartCount: state.cart.reduce((s,i)=>s+i.quantity,0) };
+}
+function openCart() {
+  renderCartSidebar();
+  document.getElementById('cart-sidebar').classList.remove('hidden');
+}
+function closeCart() {
+  document.getElementById('cart-sidebar').classList.add('hidden');
+}
+
+// ==================== VIEW ROUTER ====================
+function showView(viewName, params = {}) {
+  state.currentView = viewName;
+  document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
+  const view = document.querySelector(`[data-view="${viewName}"]`);
+  if (view) view.classList.remove('hidden');
+
+  if (viewName === 'home') renderHome();
+  else if (viewName === 'category') renderCategory(params.category || state.currentCategory);
+  else if (viewName === 'product') renderProduct(params.sku || state.currentSku);
+  else if (viewName === 'cart') renderCart();
+  else if (viewName === 'checkout') renderCheckout();
+  else if (viewName === 'track') renderTrack();
+
+  // Swap WebMCP tool surface for this view (per-page scoping demo)
+  if (typeof updateWebMCPContext === 'function') updateWebMCPContext();
+
+  window.scrollTo(0, 0);
+}
+
+// ==================== RENDER HOME ====================
+function renderHome() {
+  const cats = document.getElementById('category-grid-home');
+  cats.innerHTML = CATEGORIES.map(c => `
+    <div class="category-card" onclick="showView('category', { category: '${c.id}' })">
+      <img src="${c.banner}" alt="${c.name}" onerror="this.style.display='none'">
+      <h4>${c.name}</h4>
+    </div>`).join('');
+
+  const featured = [...CATALOG].sort((a,b) => b.rating - a.rating).slice(0, 4);
+  document.getElementById('featured-grid').innerHTML = featured.map(productCard).join('');
+}
+
+function productCard(p) {
+  return `
+    <div class="product-card" onclick="showView('product', { sku: '${p.sku}' })" data-fallback="${p.brand} · ${p.name} · RM ${p.price}">
+      <img src="${p.image}" alt="${p.name}" onerror="this.parentElement.classList.add('img-fallback')">
+      <div class="card-body">
+        <div class="brand">${p.brand}</div>
+        <h4>${p.name}</h4>
+        <div class="price">RM ${p.price}</div>
+        <div class="rating">⭐ ${p.rating} (${p.reviews})</div>
+      </div>
+    </div>`;
+}
+
+// ==================== RENDER CATEGORY ====================
+function renderCategory(catId) {
+  state.currentCategory = catId;
+  const cat = CATEGORIES.find(c => c.id === catId);
+  if (!cat) return;
+  document.getElementById('category-title').textContent = cat.name;
+  document.getElementById('category-banner').src = cat.banner;
+  document.getElementById('category-banner').alt = cat.name;
+
+  let products = CATALOG.filter(p => p.category === catId);
+  // Apply filters
+  if (state.filters.make) {
+    products = products.filter(p => p.fitment === 'universal' || (Array.isArray(p.fitment) && p.fitment.includes(state.filters.make)));
+  }
+  if (state.filters.maxPrice > 0) {
+    products = products.filter(p => p.price <= state.filters.maxPrice);
+  }
+
+  const grid = document.getElementById('category-grid');
+  if (products.length === 0) {
+    grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--muted);padding:40px;">No products match the filters. <a href="#" onclick="clearFilters();return false">Clear filters</a></p>';
+  } else {
+    grid.innerHTML = products.map(productCard).join('');
+  }
+}
+
+function onMakeChange() {
+  const make = document.getElementById('filter-make').value;
+  const modelSel = document.getElementById('filter-model');
+  if (make && VEHICLE_MODELS[make]) {
+    modelSel.innerHTML = '<option value="">All Models</option>' +
+      VEHICLE_MODELS[make].map(m => `<option value="${m}">${m}</option>`).join('');
+  } else {
+    modelSel.innerHTML = '<option value="">All Models</option>';
+  }
+}
+function applyFilters() {
+  state.filters.make = document.getElementById('filter-make').value;
+  state.filters.model = document.getElementById('filter-model').value;
+  state.filters.maxPrice = parseInt(document.getElementById('filter-max-price').value) || 0;
+  renderCategory(state.currentCategory);
+}
+function clearFilters() {
+  state.filters = { make:'', model:'', maxPrice:0 };
+  document.getElementById('filter-make').value = '';
+  document.getElementById('filter-model').innerHTML = '<option value="">All Models</option>';
+  document.getElementById('filter-max-price').value = '';
+  renderCategory(state.currentCategory);
+}
+
+// ==================== RENDER PRODUCT DETAIL ====================
+function renderProduct(sku) {
+  state.currentSku = sku;
+  const p = CATALOG.find(x => x.sku === sku);
+  if (!p) return;
+
+  const variantPicker = p.variantType ? `
+    <div class="variant-picker">
+      <label>${p.variantType.toUpperCase()}</label>
+      <div class="variant-options">
+        ${p.variants.map(v => `<button class="variant-btn" data-variant="${v}">${v}</button>`).join('')}
+      </div>
+    </div>` : '';
+
+  const fitmentBadge = p.fitment === 'universal'
+    ? '<div class="fitment-badge universal">✓ Universal Fit</div>'
+    : '<div class="fitment-badge model-specific">⚠ Vehicle-specific — check fitment</div>';
+
+  const fitmentChecker = p.fitment !== 'universal' ? `
+    <div class="fitment-checker">
+      <h4>Check Fitment</h4>
+      <p>This part fits specific vehicle makes only. Confirm before adding to cart.</p>
+      <div class="fitment-controls">
+        <select id="fit-make">
+          <option value="">Make</option>
+          ${Object.keys(VEHICLE_MODELS).map(m => `<option value="${m}">${m}</option>`).join('')}
+        </select>
+        <select id="fit-model"><option value="">Model</option></select>
+        <input type="number" id="fit-year" placeholder="Year" min="2000" max="2026" value="2020">
+        <button onclick="runFitmentCheck()">Check</button>
+      </div>
+      <div id="fitment-result"></div>
+    </div>` : '';
+
+  const stockClass = p.stock === 0 ? 'out' : (p.stock < 10 ? 'low' : '');
+  const stockText = p.stock === 0 ? 'Out of stock' : `In stock (${p.stock} available)`;
+
+  document.getElementById('product-detail').innerHTML = `
+    <a href="#" class="back-link" onclick="showView('category', { category: '${p.category}' }); return false">← Back to ${CATEGORIES.find(c=>c.id===p.category).name}</a>
+    <div class="product-layout">
+      <div class="product-image">
+        <img src="${p.image}" alt="${p.name}" onerror="this.style.background='linear-gradient(135deg,#CBA135,#E8C55A)'; this.alt='${p.brand} · ${p.name}'">
+      </div>
+      <div class="product-info">
+        <div class="brand">${p.brand}</div>
+        <h2>${p.name}</h2>
+        <div class="rating">⭐ ${p.rating} (${p.reviews} reviews)</div>
+        <div class="price">RM ${p.price}</div>
+        <p class="description">${p.description}</p>
+        ${fitmentBadge}
+        ${variantPicker}
+        ${fitmentChecker}
+        <div class="quantity-picker">
+          <label>Quantity:</label>
+          <input type="number" id="quantity" value="1" min="1" max="${p.stock}">
+        </div>
+        <div class="stock-indicator ${stockClass}">${stockText}</div>
+        <button class="add-to-cart-btn" onclick="addToCartFromUI('${p.sku}')" ${p.stock === 0 ? 'disabled' : ''}>
+          ${p.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
+        </button>
+      </div>
+    </div>
+  `;
+
+  document.querySelectorAll('.variant-btn').forEach(btn => {
+    btn.onclick = () => {
+      document.querySelectorAll('.variant-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+    };
+  });
+
+  const fm = document.getElementById('fit-make');
+  if (fm) {
+    fm.onchange = () => {
+      const m = fm.value;
+      const ms = document.getElementById('fit-model');
+      if (m && VEHICLE_MODELS[m]) {
+        ms.innerHTML = '<option value="">Model</option>' + VEHICLE_MODELS[m].map(x => `<option value="${x}">${x}</option>`).join('');
+      } else {
+        ms.innerHTML = '<option value="">Model</option>';
+      }
+    };
+  }
+}
+
+function runFitmentCheck() {
+  const make = document.getElementById('fit-make').value;
+  const model = document.getElementById('fit-model').value;
+  const year = document.getElementById('fit-year').value;
+  const p = CATALOG.find(x => x.sku === state.currentSku);
+  const result = document.getElementById('fitment-result');
+
+  if (!make || !model || !year) {
+    result.className = 'fitment-result fitment-warning';
+    result.innerHTML = '⚠ Please select make, model, and year.';
+    return;
+  }
+
+  const fits = Array.isArray(p.fitment) && p.fitment.includes(make);
+  if (fits) {
+    state.vehicleFitment = { make, model, year };
+    result.className = 'fitment-result fitment-yes';
+    result.innerHTML = `✅ <strong>Fits your vehicle.</strong> ${make} ${model} ${year} is compatible with this part.`;
+  } else {
+    result.className = 'fitment-result fitment-no';
+    result.innerHTML = `❌ <strong>Does NOT fit.</strong> Compatible makes: ${p.fitment.join(', ')}.`;
+  }
+}
+
+function addToCartFromUI(sku) {
+  const p = CATALOG.find(x => x.sku === sku);
+  const variantBtn = document.querySelector('.variant-btn.selected');
+  const variant = variantBtn ? variantBtn.dataset.variant : null;
+  const quantity = parseInt(document.getElementById('quantity').value) || 1;
+
+  if (p.variantType && !variant) {
+    alert(`Please select a ${p.variantType}.`);
+    return;
+  }
+  addToCart(sku, variant, quantity);
+  openCart();
+}
+
+// ==================== RENDER CART ====================
+function renderCart() {
+  const items = state.cart;
+  const list = document.getElementById('cart-items');
+  if (items.length === 0) {
+    list.innerHTML = '<p style="padding:40px;text-align:center;color:var(--muted);">Your cart is empty. <a href="#" onclick="showView(\'home\');return false">Browse products</a></p>';
+    document.getElementById('cart-summary').innerHTML = '';
+    return;
+  }
+  list.innerHTML = items.map(i => `
+    <div class="cart-item">
+      <img src="${i.image}" alt="${i.name}" onerror="this.style.background='var(--gradient-gold)'">
+      <div class="cart-item-info">
+        <div class="brand">${i.brand}</div>
+        <h4>${i.name}</h4>
+        ${i.variant ? `<div class="variant">Variant: ${i.variant}</div>` : ''}
+        <div class="price">RM ${i.price} × ${i.quantity} = RM ${(i.price * i.quantity).toFixed(0)}</div>
+      </div>
+      <button onclick="removeFromCart('${i.key}')">Remove</button>
+    </div>`).join('');
+  document.getElementById('cart-summary').innerHTML = `
+    <div class="total">Total: RM ${cartTotal().toFixed(0)}</div>
+    <button onclick="showView('checkout')">Proceed to Checkout</button>`;
+}
+
+function renderCartSidebar() {
+  const items = state.cart;
+  const sidebar = document.getElementById('cart-sidebar-items');
+  if (items.length === 0) {
+    sidebar.innerHTML = '<p style="padding:20px;text-align:center;color:var(--muted);">Cart is empty</p>';
+  } else {
+    sidebar.innerHTML = items.map(i => `
+      <div class="cart-sidebar-item">
+        <img src="${i.image}" alt="${i.name}" onerror="this.style.background='var(--gradient-gold)'">
+        <div>
+          <h5>${i.name}</h5>
+          ${i.variant ? `<div class="variant">${i.variant}</div>` : ''}
+          <div>RM ${i.price} × ${i.quantity}</div>
+        </div>
+      </div>`).join('');
+  }
+  document.getElementById('cart-sidebar-total').textContent = cartTotal().toFixed(0);
+}
+
+// ==================== RENDER CHECKOUT ====================
+function renderCheckout() {
+  if (state.cart.length === 0) {
+    showView('cart');
+    return;
+  }
+  const summary = document.getElementById('checkout-summary');
+  summary.innerHTML = state.cart.map(i => `
+    <div class="checkout-line">
+      <span>${i.name}${i.variant ? ` (${i.variant})` : ''} × ${i.quantity}</span>
+      <span>RM ${(i.price * i.quantity).toFixed(0)}</span>
+    </div>`).join('') + `
+    <div>Total: RM ${cartTotal().toFixed(0)}</div>`;
+}
+
+function placeOrder(event) {
+  if (event) event.preventDefault();
+  const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
+  const orderId = 'SCA-' + Date.now().toString(36).toUpperCase();
+  const total = cartTotal();
+  const itemsCount = state.cart.length;
+  const items = [...state.cart];
+
+  state.orderId = orderId;
+  state.cart = [];
+  saveCart();
+
+  sessionStorage.setItem('sca_lastOrder', JSON.stringify({ id:orderId, total, payment:paymentMethod, items, count:itemsCount }));
+  showView('track');
+  return { success:true, orderId, total };
+}
+
+// ==================== RENDER ORDER CONFIRMATION ====================
+function renderTrack() {
+  let order;
+  try { order = JSON.parse(sessionStorage.getItem('sca_lastOrder') || '{}'); } catch(e) { order = {}; }
+  const itemsList = (order.items || []).map(i => `
+    <div class="checkout-line">
+      <span>${i.name}${i.variant ? ` (${i.variant})` : ''} × ${i.quantity}</span>
+      <span>RM ${(i.price * i.quantity).toFixed(0)}</span>
+    </div>`).join('');
+
+  document.getElementById('order-confirm-content').innerHTML = `
+    <h2>✅ Order Confirmed</h2>
+    <p>Order ID: <strong>${order.id || 'N/A'}</strong></p>
+    <p>Total: <strong>RM ${(order.total || 0).toFixed(0)}</strong> via ${order.payment || 'N/A'}</p>
+    <div style="background:var(--bg);padding:16px;border-radius:8px;margin:20px 0;text-align:left;">
+      ${itemsList || '<p>No items.</p>'}
+    </div>
+    <p>Delivery: 3–5 business days within Klang Valley.</p>
+    <button onclick="showView('home')">Continue Shopping</button>
+  `;
+}
+
+// ==================== SEARCH ====================
+function runSearch() {
+  const q = document.getElementById('search-input').value.trim().toLowerCase();
+  if (!q) { showView('home'); return; }
+
+  // Find matching products and route to category view filtered by search
+  const matches = CATALOG.filter(p =>
+    p.name.toLowerCase().includes(q) ||
+    p.brand.toLowerCase().includes(q) ||
+    p.description.toLowerCase().includes(q)
+  );
+
+  if (matches.length === 0) {
+    alert(`No products found matching "${q}". Try: dashcam, oil, brake, mat, fog`);
+    return;
+  }
+  // Show all matches as a "search results" pseudo-category
+  renderSearchResults(q, matches);
+}
+
+function renderSearchResults(query, matches) {
+  state.currentCategory = null;
+  state.currentView = 'category';
+  document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
+  document.querySelector('[data-view="category"]').classList.remove('hidden');
+
+  document.getElementById('category-title').textContent = `Search: "${query}" (${matches.length} result${matches.length>1?'s':''})`;
+  document.getElementById('category-banner').src = 'images/hero/hero-banner.jpg';
+  document.getElementById('category-banner').alt = 'Search results';
+  document.getElementById('category-grid').innerHTML = matches.map(productCard).join('');
+  window.scrollTo(0, 0);
+}
+
+// ==================== WEBMCP LAYER ====================
+// Tool definitions — each one is a typed contract
+const TOOLS = {
+  searchAccessories: {
+    name: 'searchAccessories',
+    description: 'Search car accessories by keyword, category, price, or vehicle make. Returns matching products.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        query: { type: 'string', description: 'Search keywords matched against name, brand, description' },
+        category: { type: 'string', enum: ['interior','exterior','performance','tech'], description: 'Filter by category' },
+        maxPrice: { type: 'number', description: 'Maximum price in MYR' },
+        vehicleMake: { type: 'string', enum: ['Honda','Toyota','Perodua','Proton'], description: 'Show only universal-fit + parts that fit this make' }
+      }
+    },
+    execute: async (params = {}) => {
+      let results = [...CATALOG];
+      if (params.query) {
+        const q = String(params.query).toLowerCase();
+        results = results.filter(p => p.name.toLowerCase().includes(q) || p.brand.toLowerCase().includes(q) || p.description.toLowerCase().includes(q));
+      }
+      if (params.category) results = results.filter(p => p.category === params.category);
+      if (params.maxPrice) results = results.filter(p => p.price <= params.maxPrice);
+      if (params.vehicleMake) results = results.filter(p => p.fitment === 'universal' || (Array.isArray(p.fitment) && p.fitment.includes(params.vehicleMake)));
+      renderSearchResults(params.query || '(filtered)', results);
+      return { type:'text', text: JSON.stringify({ count: results.length, products: results.map(p => ({ sku:p.sku, name:p.name, brand:p.brand, price:p.price })) }) };
+    }
+  },
+  getProductDetails: {
+    name: 'getProductDetails',
+    description: 'Get full details for a specific product by SKU including price, variants, stock, fitment, ratings.',
+    inputSchema: {
+      type: 'object',
+      properties: { sku: { type: 'string', description: 'Product SKU (e.g. INT-001)' } },
+      required: ['sku']
+    },
+    execute: async ({ sku }) => {
+      const p = CATALOG.find(x => x.sku === sku);
+      if (!p) return { type:'text', text: JSON.stringify({ error: 'SKU not found' }) };
+      showView('product', { sku });
+      return { type:'text', text: JSON.stringify({ sku:p.sku, name:p.name, brand:p.brand, price:p.price, description:p.description, variantType:p.variantType, variants:p.variants, fitment:p.fitment, stock:p.stock, rating:p.rating, reviews:p.reviews }) };
+    }
+  },
+  checkFitment: {
+    name: 'checkFitment',
+    description: 'Check whether a part fits a specific vehicle. Returns fit/no-fit verdict with compatible makes.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        sku: { type: 'string', description: 'Product SKU to check' },
+        vehicleMake: { type: 'string', enum: ['Honda','Toyota','Perodua','Proton'] },
+        vehicleModel: { type: 'string', description: 'e.g. Civic, Myvi, Saga' },
+        year: { type: 'number', description: 'Vehicle model year' }
+      },
+      required: ['sku','vehicleMake']
+    },
+    execute: async ({ sku, vehicleMake, vehicleModel, year }) => {
+      const p = CATALOG.find(x => x.sku === sku);
+      if (!p) return { type:'text', text: JSON.stringify({ error:'SKU not found' }) };
+      if (p.fitment === 'universal') {
+        return { type:'text', text: JSON.stringify({ fits:true, reason:'Universal fit', sku, vehicleMake, vehicleModel, year }) };
+      }
+      const fits = Array.isArray(p.fitment) && p.fitment.includes(vehicleMake);
+      return { type:'text', text: JSON.stringify({ fits, sku, vehicleMake, vehicleModel, year, compatibleMakes: p.fitment }) };
+    }
+  },
+  addToCart: {
+    name: 'addToCart',
+    description: 'Add a product to the shopping cart with specific variant and quantity.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        sku: { type: 'string', description: 'Product SKU' },
+        variant: { type: 'string', description: 'Selected variant (color, size, brand, scent — depends on product)' },
+        quantity: { type: 'integer', minimum: 1, description: 'Number of units to add' }
+      },
+      required: ['sku','quantity']
+    },
+    execute: async ({ sku, variant, quantity }) => {
+      const result = addToCart(sku, variant || null, quantity);
+      openCart();
+      return { type:'text', text: JSON.stringify(result) };
+    }
+  },
+  getCart: {
+    name: 'getCart',
+    description: 'Read-only: get current cart contents and total. Safe — no confirmation prompt.',
+    inputSchema: { type: 'object', properties: {} },
+    execute: async () => {
+      return { type:'text', text: JSON.stringify({ items: state.cart, total: cartTotal(), count: state.cart.reduce((s,i)=>s+i.quantity,0), currency:'MYR' }) };
+    }
+  },
+  removeFromCart: {
+    name: 'removeFromCart',
+    description: 'Remove a line item from the cart by its key (sku + variant).',
+    inputSchema: {
+      type: 'object',
+      properties: { key: { type: 'string', description: 'Cart line item key (e.g. INT-001:Black)' } },
+      required: ['key']
+    },
+    execute: async ({ key }) => {
+      const result = removeFromCart(key);
+      return { type:'text', text: JSON.stringify(result) };
+    }
+  },
+  checkout: {
+    name: 'checkout',
+    description: 'Place the order. Triggers requestUserInteraction() for human confirmation before charging.',
+    inputSchema: {
+      type: 'object',
+      properties: { paymentMethod: { type: 'string', enum: ['DuitNow','FPX','COD'], description: 'Payment method' } },
+      required: ['paymentMethod']
+    },
+    execute: async ({ paymentMethod }) => {
+      if (state.cart.length === 0) return { type:'text', text: JSON.stringify({ success:false, error:'Cart is empty' }) };
+      const total = cartTotal();
+      const confirmed = await webMCP.requestUserInteraction({
+        title: 'Confirm purchase',
+        message: `Agent is about to place order: RM ${total.toFixed(0)} via ${paymentMethod}. Approve?`
+      });
+      if (!confirmed) return { type:'text', text: JSON.stringify({ success:false, reason:'User declined' }) };
+      const radio = document.querySelector(`input[name="payment"][value="${paymentMethod}"]`);
+      if (radio) radio.checked = true;
+      const result = placeOrder(null);
+      return { type:'text', text: JSON.stringify(result) };
+    }
+  }
+};
+
+// Per-view tool surface — demonstrates WebMCP's killer per-page scoping feature
+const VIEW_TOOLS = {
+  home:     ['searchAccessories'],
+  category: ['searchAccessories','getProductDetails'],
+  product:  ['getProductDetails','checkFitment','addToCart'],
+  cart:     ['getCart','removeFromCart'],
+  checkout: ['getCart','checkout'],
+  track:    []
+};
+
+// WebMCP wrapper — uses real navigator.modelContext if present, falls back to local registry
+const webMCP = {
+  tools: [],
+  log: [],
+  isSupported: () => 'modelContext' in navigator,
+  provideContext({ tools }) {
+    this.tools = tools;
+    if (this.isSupported() && navigator.modelContext.provideContext) {
+      try { navigator.modelContext.provideContext({ tools }); } catch (e) { console.warn('WebMCP error:', e); }
+    }
+    updateInspectorPanel();
+  },
+  async invokeTool(name, params = {}) {
+    const tool = this.tools.find(t => t.name === name);
+    if (!tool) {
+      this.log.push({ ts: timeStamp(), name, params, result: { error: 'Tool not registered on this view' } });
+      updateInspectorPanel();
+      return { error: 'Tool not registered on this view' };
+    }
+    const entry = { ts: timeStamp(), name, params, result: null };
+    this.log.push(entry);
+    updateInspectorPanel();
+    try {
+      const result = await tool.execute(params);
+      entry.result = result;
+      updateInspectorPanel();
+      return result;
+    } catch (e) {
+      entry.result = { error: e.message };
+      updateInspectorPanel();
+      return { error: e.message };
+    }
+  },
+  async requestUserInteraction({ title, message }) {
+    return new Promise(resolve => {
+      document.getElementById('confirm-title').textContent = title || 'Agent action';
+      document.getElementById('confirm-message').textContent = message || 'An agent is about to take an action.';
+      document.getElementById('confirm-modal').classList.remove('hidden');
+      window._confirmResolve = resolve;
+    });
+  }
+};
+
+function resolveConfirm(allowed) {
+  document.getElementById('confirm-modal').classList.add('hidden');
+  if (window._confirmResolve) {
+    window._confirmResolve(allowed);
+    window._confirmResolve = null;
+  }
+}
+
+function timeStamp() {
+  const d = new Date();
+  return d.toTimeString().slice(0, 8);
+}
+
+// Hook view changes into tool surface swap (the per-page scoping demo)
+function updateWebMCPContext() {
+  const viewToolNames = VIEW_TOOLS[state.currentView] || [];
+  const tools = viewToolNames.map(n => TOOLS[n]).filter(Boolean);
+  webMCP.provideContext({ tools });
+}
+
+// ==================== INSPECTOR PANEL ====================
+function updateInspectorPanel() {
+  const status = document.getElementById('inspector-status');
+  if (webMCP.isSupported()) {
+    status.innerHTML = `✅ WebMCP active · ${webMCP.tools.length} tool${webMCP.tools.length !== 1 ? 's' : ''} on <strong>${state.currentView}</strong> view`;
+    status.classList.remove('error');
+  } else {
+    status.innerHTML = `⚠️ WebMCP not detected · running in compatibility mode · ${webMCP.tools.length} tool${webMCP.tools.length !== 1 ? 's' : ''} on <strong>${state.currentView}</strong>`;
+    status.classList.add('error');
+  }
+  const activeTab = document.querySelector('.inspector-tab.active')?.dataset.tab || 'tools';
+  renderInspectorPane(activeTab);
+}
+
+function switchInspectorTab(tab) {
+  document.querySelectorAll('.inspector-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+  document.querySelectorAll('.inspector-pane').forEach(p => p.classList.toggle('hidden', p.dataset.pane !== tab));
+  renderInspectorPane(tab);
+}
+
+function toggleInspector() {
+  const panel = document.getElementById('inspector-panel');
+  panel.classList.toggle('collapsed');
+  document.getElementById('inspector-toggle-btn').textContent = panel.classList.contains('collapsed') ? '+' : '−';
+}
+
+function renderInspectorPane(tab) {
+  const pane = document.querySelector(`[data-pane="${tab}"]`);
+  if (!pane) return;
+  if (tab === 'tools') {
+    pane.innerHTML = webMCP.tools.length === 0
+      ? '<p class="empty">No tools registered on this view.</p>'
+      : webMCP.tools.map(t => `
+          <details class="tool-entry">
+            <summary><strong>${t.name}</strong><span class="tool-desc">${escapeHTML(t.description)}</span></summary>
+            <pre>${escapeHTML(JSON.stringify(t.inputSchema, null, 2))}</pre>
+          </details>`).join('');
+  } else if (tab === 'try') {
+    if (webMCP.tools.length === 0) {
+      pane.innerHTML = '<p class="empty">No tools available to try on this view.</p>';
+      return;
+    }
+    pane.innerHTML = webMCP.tools.map(t => {
+      const sample = sampleParamsFor(t.name);
+      const sampleStr = JSON.stringify(sample);
+      return `
+        <div class="try-entry">
+          <button onclick='runFromInspector("${t.name}", ${JSON.stringify(sample).replace(/"/g, "&quot;")})'>▶ Run ${t.name}</button>
+          <code>${escapeHTML(sampleStr)}</code>
+        </div>`;
+    }).join('');
+  } else if (tab === 'log') {
+    pane.innerHTML = webMCP.log.length === 0
+      ? '<p class="empty">No tool invocations yet. Click any "Try as Agent" button to start.</p>'
+      : [...webMCP.log].slice(-12).reverse().map(l => `
+          <div class="log-entry">
+            <span class="log-ts">${l.ts}</span><span class="log-name">${l.name}</span>(${escapeHTML(JSON.stringify(l.params))})
+            ${l.result ? `<div class="log-result">→ ${escapeHTML(typeof l.result === 'object' ? JSON.stringify(l.result).slice(0, 280) : String(l.result).slice(0, 280))}${(typeof l.result === 'object' && JSON.stringify(l.result).length > 280) ? '…' : ''}</div>` : '<div class="log-result">⏳ pending…</div>'}
+          </div>`).join('');
+  } else if (tab === 'source') {
+    pane.innerHTML = `<pre>${escapeHTML(getSourceForView(state.currentView))}</pre>`;
+  }
+}
+
+function sampleParamsFor(toolName) {
+  const firstSku = state.currentSku || (state.currentCategory ? CATALOG.find(p => p.category === state.currentCategory)?.sku : null) || 'INT-001';
+  const firstCart = state.cart[0];
+  return {
+    searchAccessories: { query: 'dashcam', maxPrice: 500 },
+    getProductDetails: { sku: firstSku },
+    checkFitment:      { sku: firstSku, vehicleMake: 'Honda', vehicleModel: 'Civic', year: 2020 },
+    addToCart:         { sku: firstSku, variant: 'Black', quantity: 1 },
+    getCart:           {},
+    removeFromCart:    { key: firstCart?.key || 'INT-001:Black' },
+    checkout:          { paymentMethod: 'DuitNow' }
+  }[toolName] || {};
+}
+
+async function runFromInspector(toolName, params) {
+  await webMCP.invokeTool(toolName, params);
+  switchInspectorTab('log');
+}
+
+function getSourceForView(viewName) {
+  const tools = VIEW_TOOLS[viewName] || [];
+  if (tools.length === 0) return `// View: ${viewName}\n// No tools registered on this view.\n// (Order tracking is post-purchase; nothing for an agent to do here.)`;
+  const toolDefs = tools.map(t => {
+    const tool = TOOLS[t];
+    return `  {\n    name: "${tool.name}",\n    description: "${tool.description}",\n    inputSchema: ${JSON.stringify(tool.inputSchema, null, 4).split('\n').map((l,i) => i===0 ? l : '    ' + l).join('\n')},\n    execute: async (params) => { /* business logic */ }\n  }`;
+  }).join(',\n');
+  return `// View: ${viewName}\n// On this view, the page calls:\n\nnavigator.modelContext.provideContext({\n  tools: [\n${toolDefs}\n  ]\n});\n\n// Agents on this view see ${tools.length} tool${tools.length !== 1 ? 's' : ''}; navigating to another\n// view swaps the surface to whatever's relevant there.`;
+}
+
+function escapeHTML(s) {
+  return String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+}
+
+// Detect agent-invoked form submissions (deck slide 13)
+document.addEventListener('submit', (e) => {
+  if (e.agentInvoked) {
+    console.log('[WebMCP] Form was submitted by an agent, not a human');
+    webMCP.log.push({ ts: timeStamp(), name: '(form submit)', params: { agentInvoked: true }, result: { detected: 'agent submission' } });
+    updateInspectorPanel();
+  }
+});
+
+// ==================== INIT ====================
+document.addEventListener('DOMContentLoaded', () => {
+  loadCart();
+  showView('home');
+  updateInspectorPanel();
+});
+</script>
+</body>
+</html>

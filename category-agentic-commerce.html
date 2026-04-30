@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Agentic Commerce | Lee Yih Ven</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      line-height: 1.6;
+      background-color: #ffffff;
+      color: #222;
+    }
+
+    header {
+      text-align: center;
+      padding: 50px 20px 30px;
+      background: #f9f9f9;
+      border-bottom: 1px solid #eee;
+      margin-bottom: 40px;
+    }
+
+    header h1 {
+      font-size: 2.2rem;
+      font-weight: 600;
+      color: #222;
+      margin-bottom: 8px;
+    }
+
+    header p {
+      font-size: 1rem;
+      color: #555;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    nav {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    nav a {
+      color: #007BFF;
+      text-decoration: none;
+      margin: 0 15px;
+      font-size: 1rem;
+    }
+
+    nav a:hover { text-decoration: underline; }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 20px 60px;
+    }
+
+    .category-section { margin-bottom: 50px; }
+
+    .category-header {
+      border-left: 4px solid #CBA135;
+      padding-left: 16px;
+      margin-bottom: 24px;
+    }
+
+    .category-header h2 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #222;
+      margin-bottom: 4px;
+    }
+
+    .category-header p {
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    .intro {
+      background: linear-gradient(135deg, #FFF8E7, #FFFAEC);
+      border-left: 4px solid #CBA135;
+      padding: 18px 24px;
+      border-radius: 8px;
+      margin-bottom: 32px;
+    }
+
+    .intro p {
+      font-size: 0.95rem;
+      color: #5A524B;
+      margin-bottom: 8px;
+    }
+
+    .intro p:last-child { margin-bottom: 0; }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    .project-card {
+      background: #f9f9f9;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .project-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+    }
+
+    .project-visual {
+      height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      color: #fff;
+    }
+
+    .project-body {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .project-name {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: #222;
+      margin-bottom: 6px;
+    }
+
+    .project-desc {
+      font-size: 0.9rem;
+      color: #555;
+      flex: 1;
+      margin-bottom: 14px;
+    }
+
+    .project-buttons {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-demo, .btn-details {
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      text-decoration: none;
+      flex: 1;
+      text-align: center;
+      transition: opacity 0.2s;
+    }
+
+    .btn-demo {
+      background: #CBA135;
+      color: #2C2822;
+    }
+
+    .btn-details {
+      background: #fff;
+      color: #5A524B;
+      border: 1px solid #CBA135;
+    }
+
+    .btn-demo:hover, .btn-details:hover { opacity: 0.85; }
+
+    .placeholder {
+      background: #f9f9f9;
+      border: 2px dashed #ddd;
+      padding: 24px;
+      border-radius: 8px;
+      text-align: center;
+      color: #888;
+    }
+
+    .placeholder h3 { color: #555; font-size: 1rem; margin-bottom: 6px; font-weight: 500; }
+    .placeholder p { font-size: 0.85rem; color: #888; }
+
+    .tech-stack {
+      max-width: 1100px;
+      margin: 0 auto 60px;
+      padding: 24px 20px;
+      border-top: 1px solid #eee;
+      text-align: center;
+    }
+
+    .tech-stack-label {
+      font-size: 0.8rem;
+      color: #888;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    .tech-stack-items {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .tech-tag {
+      background: #f4efd9;
+      color: #6B5410;
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-size: 0.85rem;
+    }
+
+    footer {
+      background: #333;
+      color: white;
+      text-align: center;
+      padding: 24px;
+      font-size: 0.92rem;
+    }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(10px);
+      animation: fadeInUp 0.5s ease forwards;
+    }
+
+    @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+
+    @media (max-width: 768px) {
+      header h1 { font-size: 1.8rem; }
+      .projects-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 class="fade-in">Agentic Commerce</h1>
+  <p class="fade-in">Browser-native storefronts that AI agents can shop on directly — through the W3C WebMCP standard, not pixel-clicking.</p>
+</header>
+
+<nav>
+  <a href="index.html">Home</a>
+  <a href="project-categories.html">Project Categories</a>
+  <a href="contact.html">Contact</a>
+</nav>
+
+<div class="container">
+
+  <div class="intro fade-in">
+    <p><strong>What is agentic commerce?</strong> The next wave of e-commerce, where AI shopping agents (Auto Browser, Gemini, Claude, ChatGPT agents) browse and buy on behalf of users. Today's agents do this by screenshotting and guessing at "Add to Cart" buttons — slow, fragile, and prone to abandoned carts and wrong-variant orders.</p>
+    <p><strong>WebMCP changes that.</strong> Websites expose typed callable tools (<code>addToCart</code>, <code>checkout</code>, <code>checkFitment</code>) directly to agents through <code>navigator.modelContext</code>. 89% fewer tokens, deterministic results, no broken pixel-clicks when CSS changes. First-mover positioning for Malaysian SMEs entering the agent-traffic era.</p>
+  </div>
+
+  <section class="category-section fade-in">
+    <div class="category-header">
+      <h2>🛒 All Projects — Agentic Commerce</h2>
+      <p>Multi-category storefronts with WebMCP-registered tools. 1 project (more on the way).</p>
+    </div>
+    <div class="projects-grid">
+
+      <div class="project-card">
+        <div class="project-visual" style="background: linear-gradient(135deg, #403B36, #CBA135);">☀️</div>
+        <div class="project-body">
+          <h3 class="project-name">Sunny Car Accessories</h3>
+          <p class="project-desc">Malaysian neighborhood car-accessory storefront, agent-ready out of the box. 18 SKUs, 4 categories, 7 WebMCP tools with per-view scoping. The killer tool: <code>checkFitment</code> — pixel-clicking agents can't do this reliably.</p>
+          <div class="project-buttons">
+            <a href="projects/sunny-car-accessories/index.html" class="btn-demo" target="_blank">Live Demo</a>
+            <a href="sunny-car-accessories-source.html" class="btn-details">View Details</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card placeholder">
+        <h3>Sundry Shop / Kedai Runcit</h3>
+        <p>Coming soon — multi-category simple-attribute retail (the 90% of MY SME case).</p>
+      </div>
+
+      <div class="project-card placeholder">
+        <h3>Sneaker Boutique</h3>
+        <p>Coming soon — single-category high-variant niche.</p>
+      </div>
+
+      <div class="project-card placeholder">
+        <h3>Electrical Appliances</h3>
+        <p>Coming soon — multi-category with per-category typed schemas (TVs ≠ fridges ≠ washers).</p>
+      </div>
+
+      <div class="project-card placeholder">
+        <h3>Pet Food Shop</h3>
+        <p>Coming soon — multi-category recurring-purchase retail.</p>
+      </div>
+
+    </div>
+  </section>
+
+</div>
+
+<div class="tech-stack">
+  <div class="tech-stack-label">Built with</div>
+  <div class="tech-stack-items">
+    <span class="tech-tag">WebMCP (W3C incubation)</span>
+    <span class="tech-tag">navigator.modelContext</span>
+    <span class="tech-tag">Vanilla JavaScript</span>
+    <span class="tech-tag">Single-file HTML</span>
+    <span class="tech-tag">localStorage</span>
+    <span class="tech-tag">Imagen 3 product imagery</span>
+  </div>
+</div>
+
+<footer>
+  <p>&copy; 2026 Lee Yih Ven | AI Project Portfolio</p>
+</footer>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const els = document.querySelectorAll('.fade-in');
+    els.forEach((el, i) => {
+      el.style.animationDelay = `${i * 0.1}s`;
+    });
+  });
+</script>
+
+</body>
+</html>
