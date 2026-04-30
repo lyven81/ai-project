@@ -1,368 +1,355 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sunny Car Accessories — Browser-Native Agentic Commerce with WebMCP | Lee Yih Ven</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-* { margin:0; padding:0; box-sizing:border-box; }
-body { font-family:'Poppins',sans-serif; line-height:1.6; background:#FCF9F2; color:#2C2C2C; }
-header.page-header {
-  background: linear-gradient(135deg,#403B36 0%,#2C2822 100%);
-  color: #FCF9F2;
-  padding: 60px 20px 50px;
-  text-align: center;
-}
-header.page-header h1 { font-size:2.4rem; color:#E8C55A; margin-bottom:10px; }
-header.page-header .tagline { font-size:1.1rem; opacity:0.9; max-width:760px; margin:0 auto 20px; }
-header.page-header .meta {
-  display: inline-flex; gap: 20px; flex-wrap: wrap; justify-content: center;
-  font-size: 0.9rem; opacity: 0.8;
-}
-header.page-header .meta span::before { content: "· "; opacity: 0.6; }
-header.page-header .meta span:first-child::before { content: ""; }
-nav.breadcrumb { text-align:center; padding:18px; background:#fff; border-bottom:1px solid #E5DFCE; }
-nav.breadcrumb a { color:#CBA135; text-decoration:none; margin:0 15px; font-size:0.95rem; font-weight:500; }
-nav.breadcrumb a:hover { text-decoration:underline; }
-.container { max-width: 1100px; margin: 0 auto; padding: 50px 20px; }
-.cta-buttons { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:24px; }
-.cta { padding:14px 28px; border-radius:8px; font-weight:600; text-decoration:none; transition:transform 0.2s; display:inline-block; }
-.cta-primary { background: linear-gradient(135deg,#CBA135,#E8C55A); color:#403B36; }
-.cta-secondary { background:transparent; color:#E8C55A; border:2px solid #CBA135; }
-.cta:hover { transform: translateY(-2px); }
-section { margin-bottom: 50px; }
-section h2 {
-  font-size: 1.7rem;
-  color: #403B36;
-  margin-bottom: 20px;
-  padding-bottom: 10px;
-  border-bottom: 3px solid #CBA135;
-}
-section h3 {
-  color: #5A524B;
-  margin: 24px 0 12px;
-  font-size: 1.2rem;
-}
-section p { margin-bottom: 14px; }
-.callout {
-  background: linear-gradient(135deg, #FFF8E7, #FFFAEC);
-  border-left: 4px solid #CBA135;
-  padding: 18px 22px;
-  border-radius: 8px;
-  margin: 20px 0;
-}
-.callout strong { color: #403B36; }
-.disclaimer {
-  background: #FFF3E0;
-  border-left: 4px solid #D4801A;
-  padding: 18px 22px;
-  border-radius: 8px;
-  margin: 20px 0;
-  font-size: 0.92rem;
-}
-.disclaimer strong { color: #8B5A1A; }
-.value-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 18px;
-  margin: 20px 0;
-}
-.value-card {
-  background: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 2px 12px rgba(64,59,54,0.08);
-  border-top: 3px solid #CBA135;
-}
-.value-card h4 { color: #403B36; font-size: 1.05rem; margin-bottom: 8px; }
-.value-card p { font-size: 0.92rem; color: #5A524B; margin: 0; }
-.test-table, .tool-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 16px 0;
-  background: #fff;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-}
-.test-table th, .test-table td, .tool-table th, .tool-table td {
-  padding: 12px 14px;
-  text-align: left;
-  border-bottom: 1px solid #E5DFCE;
-  font-size: 0.92rem;
-}
-.test-table th, .tool-table th { background: #403B36; color: #E8C55A; font-weight: 600; }
-.test-table td.pass { color: #2D7A3E; font-weight: 600; }
-.test-table tr:last-child td { border-bottom: none; }
-code, pre { font-family: 'Courier New', monospace; }
-code { background: #F4EFD9; padding: 2px 6px; border-radius: 3px; font-size: 0.88em; color: #6B5410; }
-pre { background:#2C2822; color:#DCE0C5; padding:16px; border-radius:8px; overflow-x:auto; font-size:0.85rem; line-height:1.5; margin: 12px 0; }
-.compare-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin: 20px 0;
-}
-.compare-col {
-  background: #fff;
-  padding: 18px;
-  border-radius: 8px;
-  border: 1px solid #E5DFCE;
-}
-.compare-col.before { border-top: 4px solid #B83227; }
-.compare-col.after { border-top: 4px solid #2D7A3E; }
-.compare-col h4 { margin-bottom: 10px; font-size: 1.05rem; }
-.compare-col.before h4 { color: #B83227; }
-.compare-col.after h4 { color: #2D7A3E; }
-.compare-col ul { padding-left: 20px; font-size: 0.9rem; color: #5A524B; }
-.compare-col li { margin-bottom: 6px; }
-ul.steps {
-  background: #fff;
-  padding: 16px 16px 16px 36px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-  margin: 12px 0;
-}
-ul.steps li { margin-bottom: 8px; line-height: 1.5; }
-footer {
-  background: #333;
-  color: white;
-  text-align: center;
-  padding: 24px;
-  margin-top: 40px;
-  font-size: 0.92rem;
-}
-footer a { color: #E8C55A; text-decoration: none; }
-@media (max-width: 768px) {
-  header.page-header h1 { font-size: 1.6rem; }
-  .compare-grid { grid-template-columns: 1fr; }
-  .container { padding: 30px 16px; }
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sunny Car Accessories - Source Code</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #222; background-color: #ffffff; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        .back-nav { margin-bottom: 20px; }
+        .back-nav a { color: #007BFF; text-decoration: none; font-size: 1rem; }
+        .back-nav a:hover { text-decoration: underline; }
+        .project-header { text-align: center; margin-bottom: 40px; padding: 40px 0; background: linear-gradient(135deg, #B8860B, #8B6914); color: white; border-radius: 10px; }
+        .project-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        .project-header p { font-size: 1.2rem; opacity: 0.9; }
+        .badges { display: flex; justify-content: center; gap: 10px; margin: 20px 0; flex-wrap: wrap; }
+        .badge { background-color: rgba(255,255,255,0.2); color: white; padding: 5px 12px; border-radius: 15px; font-size: 0.9rem; }
+        .content-section { margin: 40px 0; padding: 30px; background-color: #f9f9f9; border-radius: 8px; border-left: 5px solid #B8860B; }
+        .content-section h2 { color: #B8860B; margin-bottom: 20px; font-size: 1.8rem; }
+        .content-section h3 { color: #333; margin: 20px 0 10px 0; font-size: 1.3rem; }
+        .highlight-box { background: linear-gradient(135deg, #FFF9E6, #FFEFC1); padding: 20px; border-radius: 10px; border-left: 5px solid #B8860B; margin: 20px 0; }
+        .code-container { background-color: #1e1e1e; border-radius: 8px; padding: 20px; margin: 20px 0; overflow-x: auto; }
+        .code-header { color: #FFD580; font-weight: bold; margin-bottom: 15px; font-size: 1.1rem; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        .code-block { font-family: 'Consolas', 'Monaco', 'Courier New', monospace; font-size: 14px; line-height: 1.5; color: #d4d4d4; white-space: pre-wrap; }
+        .code-comment { color: #6a9955; font-style: italic; }
+        .code-keyword { color: #569cd6; }
+        .code-string { color: #ce9178; }
+        .code-function { color: #dcdcaa; }
+        .code-number { color: #b5cea8; }
+        .code-property { color: #9cdcfe; }
+        .demo-links { text-align: center; margin: 30px 0; }
+        .demo-btn { display: inline-block; background-color: #007BFF; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; margin: 0 10px; font-weight: bold; transition: background-color 0.3s; }
+        .demo-btn:hover { background-color: #0056b3; }
+        .demo-btn.secondary { background-color: #28a745; }
+        .demo-btn.secondary:hover { background-color: #218838; }
+        @media (max-width: 768px) {
+            .project-header h1 { font-size: 2rem; }
+            .project-header p { font-size: 1rem; }
+            .demo-btn { margin: 5px; padding: 10px 20px; }
+            .container { padding: 15px; }
+        }
+    </style>
 </head>
 <body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="sunny-car-accessories.html">&larr; Back to Project Overview</a>
+        </nav>
 
-<header class="page-header">
-  <h1>☀️ Sunny Car Accessories</h1>
-  <p class="tagline">Browser-native agentic commerce demo built with WebMCP — a multi-category Malaysian car accessory storefront agents can actually shop on, instead of screenshotting.</p>
-  <div class="meta">
-    <span>Single static HTML</span>
-    <span>18 SKUs · 4 categories</span>
-    <span>7 WebMCP tools, per-view scoped</span>
-    <span>Shipped 2026-04-30</span>
-  </div>
-  <div class="cta-buttons">
-    <a href="projects/sunny-car-accessories/index.html" class="cta cta-primary" target="_blank">▶ Try the Live Demo</a>
-    <a href="category-agentic-commerce.html" class="cta cta-secondary">← Agentic Commerce</a>
-  </div>
-</header>
+        <div class="project-header">
+            <h1>Sunny Car Accessories</h1>
+            <p>Source Code & WebMCP Architecture</p>
+            <div class="badges">
+                <span class="badge">WebMCP (W3C)</span>
+                <span class="badge">navigator.modelContext</span>
+                <span class="badge">Per-View Scoping</span>
+                <span class="badge">Inspector Panel</span>
+            </div>
+        </div>
 
-<nav class="breadcrumb">
-  <a href="index.html">Home</a>
-  <a href="project-categories.html">Project Categories</a>
-  <a href="category-agentic-commerce.html">Agentic Commerce</a>
-  <a href="contact.html">Contact</a>
-</nav>
+        <div class="highlight-box">
+            <h3>About This Code Showcase</h3>
+            <p><strong>This curated code showcase walks through the WebMCP integration in Sunny Car Accessories — from how 7 typed tools are defined, to how the per-view tool surface swaps as the user navigates, to the Inspector Panel that proves the demo is genuinely active.</strong></p>
+            <p>The entire app runs client-side in a single static HTML file. The WebMCP layer is purely additive — humans see a normal storefront; agents see a typed contract via <code>navigator.modelContext</code>.</p>
+        </div>
 
-<div class="container">
+        <div class="content-section">
+            <h2>Core: Tool Definitions (TOOLS object)</h2>
+            <p>Each tool is a typed contract — name, human-readable description, JSON inputSchema for the agent to read, and an async <code>execute()</code> handler that runs the business logic and returns structured JSON.</p>
 
-<section>
-  <h2>What this is</h2>
-  <p><strong>Sunny Car Accessories</strong> is a working multi-category e-commerce storefront — 18 sneakers… sorry, 18 car-accessory SKUs across Interior / Exterior / Performance / Tech — that exposes structured tools to AI agents via the proposed <strong>WebMCP</strong> W3C web standard (<code>navigator.modelContext</code>).</p>
-  <p>Humans see a normal storefront. Agents see a typed contract: <em>"Here are my 7 tools, here are their parameters, here's how to call them."</em> No screenshotting. No pixel-clicking. No abandoned agent carts.</p>
-  <div class="callout">
-    <strong>Why this matters now:</strong> WebMCP shipped stable in Chrome 146 (April 2026). It's the first time websites can natively expose structured tools to AI agents in the browser. For Malaysian SMEs, this is the agent-friendly storefront layer that turns "we have a website" into "any AI agent can shop here." First-mover positioning on a real W3C standard, not vendor-locked.
-  </div>
-</section>
+            <div class="code-container">
+                <div class="code-header">index.html — checkFitment (the killer demo tool)</div>
+                <div class="code-block"><span class="code-keyword">const</span> TOOLS = {
+  <span class="code-property">checkFitment</span>: {
+    <span class="code-property">name</span>: <span class="code-string">'checkFitment'</span>,
+    <span class="code-property">description</span>: <span class="code-string">'Check whether a part fits a specific vehicle.'</span>,
+    <span class="code-property">inputSchema</span>: {
+      <span class="code-property">type</span>: <span class="code-string">'object'</span>,
+      <span class="code-property">properties</span>: {
+        <span class="code-property">sku</span>: { type: <span class="code-string">'string'</span>, description: <span class="code-string">'Product SKU to check'</span> },
+        <span class="code-property">vehicleMake</span>: { type: <span class="code-string">'string'</span>, enum: [<span class="code-string">'Honda'</span>,<span class="code-string">'Toyota'</span>,<span class="code-string">'Perodua'</span>,<span class="code-string">'Proton'</span>] },
+        <span class="code-property">vehicleModel</span>: { type: <span class="code-string">'string'</span>, description: <span class="code-string">'e.g. Civic, Myvi, Saga'</span> },
+        <span class="code-property">year</span>: { type: <span class="code-string">'number'</span>, description: <span class="code-string">'Vehicle model year'</span> }
+      },
+      <span class="code-property">required</span>: [<span class="code-string">'sku'</span>, <span class="code-string">'vehicleMake'</span>]
+    },
+    <span class="code-property">execute</span>: <span class="code-keyword">async</span> ({ sku, vehicleMake, vehicleModel, year }) =&gt; {
+      <span class="code-keyword">const</span> p = CATALOG.find(x =&gt; x.sku === sku);
+      <span class="code-keyword">if</span> (!p) <span class="code-keyword">return</span> { type: <span class="code-string">'text'</span>, text: JSON.stringify({ error: <span class="code-string">'SKU not found'</span> }) };
+      <span class="code-keyword">if</span> (p.fitment === <span class="code-string">'universal'</span>) {
+        <span class="code-keyword">return</span> { type: <span class="code-string">'text'</span>, text: JSON.stringify({ fits: <span class="code-keyword">true</span>, reason: <span class="code-string">'Universal fit'</span> }) };
+      }
+      <span class="code-keyword">const</span> fits = Array.isArray(p.fitment) &amp;&amp; p.fitment.includes(vehicleMake);
+      <span class="code-keyword">return</span> { type: <span class="code-string">'text'</span>, text: JSON.stringify({ fits, sku, vehicleMake, compatibleMakes: p.fitment }) };
+    }
+  }
+  <span class="code-comment">// ... 6 more tools: searchAccessories, getProductDetails, addToCart, getCart, removeFromCart, checkout</span>
+};</div>
+            </div>
+        </div>
 
-<section>
-  <h2>Try It</h2>
-  <p>The demo is a single static HTML file — no backend, no hosted services, no API keys. Open it, browse like a human, then open the WebMCP Inspector Panel (bottom-right) to see what agents see.</p>
-  <h3>Two paths to test</h3>
-  <ul class="steps">
-    <li><strong>Path 1 — Shop as a human.</strong> Click categories, add to cart, check out. Standard shop UX. The Inspector Panel sits unobtrusive in the corner.</li>
-    <li><strong>Path 2 — Try as an agent.</strong> Open the Inspector → "Try as Agent" tab → click any "▶ Run [tool]" button. The page reacts to typed function calls, not pixel clicks. Watch the Log tab record every invocation with parameters + structured JSON results.</li>
-  </ul>
-  <h3>Console verification (for skeptical visitors)</h3>
-  <p>Open DevTools (F12) → Console tab → paste:</p>
-<pre>'modelContext' in navigator;
-// → true (Chrome 146+) or false (other browsers — Inspector still runs in compatibility mode)
+        <div class="content-section">
+            <h2>Per-View Tool Scoping (the killer feature)</h2>
+            <p>WebMCP's design choice: agents see only the 3–5 tools relevant to where they currently are. Tool surface morphs on every view change. <code>provideContext()</code> is called fresh per view.</p>
 
-navigator.modelContext.tools.map(t =&gt; t.name);
-// → list of tools registered on the current view
+            <div class="code-container">
+                <div class="code-header">index.html — VIEW_TOOLS map + updateWebMCPContext()</div>
+                <div class="code-block"><span class="code-comment">// Per-view tool surface — demonstrates per-page scoping</span>
+<span class="code-keyword">const</span> VIEW_TOOLS = {
+  <span class="code-property">home</span>:     [<span class="code-string">'searchAccessories'</span>],
+  <span class="code-property">category</span>: [<span class="code-string">'searchAccessories'</span>, <span class="code-string">'getProductDetails'</span>],
+  <span class="code-property">product</span>:  [<span class="code-string">'getProductDetails'</span>, <span class="code-string">'checkFitment'</span>, <span class="code-string">'addToCart'</span>],
+  <span class="code-property">cart</span>:     [<span class="code-string">'getCart'</span>, <span class="code-string">'removeFromCart'</span>],
+  <span class="code-property">checkout</span>: [<span class="code-string">'getCart'</span>, <span class="code-string">'checkout'</span>],
+  <span class="code-property">track</span>:    []  <span class="code-comment">// post-purchase: nothing for agents to do</span>
+};
 
-await webMCP.invokeTool('checkFitment', {
-  sku: 'INT-002', vehicleMake: 'Honda', vehicleModel: 'Civic', year: 2020
-});
-// → { type: "text", text: '{"fits":true,...}' }</pre>
-  <h3>For the gold-standard test — Auto Browser</h3>
-  <p>Install <a href="https://autobrowser.dev" target="_blank">Auto Browser</a> (the first WebMCP-aware AI agent), point it at this demo, type natural language: <em>"find me a black running… er, dashcam under RM 500 and add it to my cart."</em> Watch a real agent chain searchAccessories → getProductDetails → addToCart entirely through the typed contract.</p>
-</section>
-
-<section>
-  <h2>Tier 1 Test Results — Verified Working 2026-04-30</h2>
-  <p>The demo was tested end-to-end on Chrome 147 with experimental web platform features enabled. All five test cases passed:</p>
-  <table class="test-table">
-    <tr>
-      <th>Test</th>
-      <th>What was checked</th>
-      <th>Result</th>
-    </tr>
-    <tr>
-      <td><strong>1A — Per-view tool scoping</strong></td>
-      <td>Inspector status badge updates across views (Home → 1 tool, Category → 2, Product → 3, Cart → 2, Checkout → 2)</td>
-      <td class="pass">✓ Pass</td>
-    </tr>
-    <tr>
-      <td><strong>1B — Try as Agent playground</strong></td>
-      <td>Clicking <code>▶ Run checkFitment</code> on a product page executes the tool and updates page state without any human button click on the UI</td>
-      <td class="pass">✓ Pass</td>
-    </tr>
-    <tr>
-      <td><strong>1C — requestUserInteraction()</strong></td>
-      <td>Running the <code>checkout</code> tool from the Inspector triggers the "Allow once / Deny" confirmation modal before placing the order</td>
-      <td class="pass">✓ Pass</td>
-    </tr>
-    <tr>
-      <td><strong>1D — Source tab proof</strong></td>
-      <td>The Source tab shows the actual <code>navigator.modelContext.provideContext()</code> registration code per view, demonstrating the per-view scoping is real (not faked)</td>
-      <td class="pass">✓ Pass</td>
-    </tr>
-    <tr>
-      <td><strong>Status badge accuracy</strong></td>
-      <td>"WebMCP active · N tools on [view name]" updates correctly on every view transition</td>
-      <td class="pass">✓ Pass</td>
-    </tr>
-  </table>
-  <div class="callout">
-    <strong>What this proves:</strong> per-view tool scoping (the killer WebMCP feature) works as designed. Agents on the cart page see cart-management tools. Agents on the checkout page see <code>checkout</code> with its mandatory human-in-the-loop gate. This isn't simulated — it's <code>provideContext()</code> being called fresh on each view, exactly per the W3C spec.
-  </div>
-  <div class="disclaimer">
-    <strong>Browser-support disclaimer.</strong> WebMCP is in W3C incubation as of April 2026. The <code>navigator.modelContext</code> API is currently flag-gated even on Chrome 147 stable — the deck's "146+ stable" claim is aspirational; live API access requires <code>chrome://flags/#enable-experimental-web-platform-features</code> or a similar flag enabled.
-    <br><br>
-    On any browser without the API, the Inspector Panel runs in <strong>compatibility mode</strong> — it still demonstrates exactly what tools an agent would see, the per-view scoping, the JSON schemas, and the confirmation flow. The only thing that doesn't work in compat mode is the link to a real external agent (which requires the browser to expose the API). The same code switches automatically to live agent integration the moment the browser enables WebMCP — no code change needed on this page.
-    <br><br>
-    <strong>To see the green ✅ today:</strong> Chrome 147 → <code>chrome://flags</code> → search "model context" or enable Experimental Web Platform Features → relaunch → reload this page.
-  </div>
-</section>
-
-<section>
-  <h2>Why It Matters — 5 Business Values for Merchants</h2>
-  <p>Why a Malaysian SME should add WebMCP to their existing storefront:</p>
-  <div class="value-grid">
-    <div class="value-card">
-      <h4>1. Get found by AI shopping agents</h4>
-      <p>Customers are increasingly asking ChatGPT, Gemini, Claude, and Auto Browser to <em>do</em> the shopping — not just search. Agents pick websites they can reliably interact with. WebMCP-enabled is to AI agents what mobile-friendly was to Google in 2015. First-mover visibility on agent-driven traffic.</p>
-    </div>
-    <div class="value-card">
-      <h4>2. Higher checkout conversion from agent traffic</h4>
-      <p>Without WebMCP, agents shop by screenshotting and guessing — abandoned carts, wrong variants added, price drift. With WebMCP, the agent calls <code>addToCart({sku, variant, quantity})</code> directly. Recovered checkouts. No "I ordered red, got blue" disputes.</p>
-    </div>
-    <div class="value-card">
-      <h4>3. 24/7 customer support deflection</h4>
-      <p>Tools like <code>getStockLevel</code>, <code>checkFitment</code>, <code>getReturnPolicy</code> let agents answer pre-sale questions without the customer pinging WhatsApp / FB Messenger. Hours of staff time saved on FAQ-tier queries — especially valuable for solo SMEs where the owner is the support desk.</p>
-    </div>
-    <div class="value-card">
-      <h4>4. A "public API" at frontend-developer cost</h4>
-      <p>Most SMEs would like to expose APIs but can't justify the cost (gateway, OAuth, docs, versioning). WebMCP gives 80% of the API value at 10% of the cost. A frontend dev adds tool registrations to existing pages — no new servers, no auth tokens to issue.</p>
-    </div>
-    <div class="value-card">
-      <h4>5. Measurable agent-traffic analytics</h4>
-      <p><code>submitEvent.agentInvoked</code> flags when an agent (not a human) took an action. For the first time, sites can split traffic into human vs agent and measure separately. Board-level question <em>"how much revenue came from AI-mediated purchases?"</em> gets a real answer.</p>
-    </div>
-  </div>
-</section>
-
-<section>
-  <h2>How It Works</h2>
-  <h3>The paradigm shift, in one comparison</h3>
-  <div class="compare-grid">
-    <div class="compare-col before">
-      <h4>Before — Inference-based pixel-clicking</h4>
-      <ul>
-        <li>Parse raw HTML / take screenshots</li>
-        <li>LLM guesses which element is "Add to Cart"</li>
-        <li>Simulate mouse click at (x, y)</li>
-        <li>Hope the DOM hasn't changed</li>
-        <li>Retry when CSS update breaks everything</li>
-        <li>2,000–5,000+ tokens per page</li>
-      </ul>
-    </div>
-    <div class="compare-col after">
-      <h4>After — Contract-based WebMCP</h4>
-      <ul>
-        <li>Website registers tools explicitly</li>
-        <li>Agent discovers tools + JSON schemas</li>
-        <li>Direct call: <code>addToCart({sku, variant, qty})</code></li>
-        <li>Structured JSON response returned</li>
-        <li>UI changes don't break the contract</li>
-        <li>20–100 tokens per call (89% reduction)</li>
-      </ul>
-    </div>
-  </div>
-
-  <h3>The 7 tools registered by this demo</h3>
-  <table class="tool-table">
-    <tr><th>Tool</th><th>Purpose</th><th>Registered on view(s)</th></tr>
-    <tr><td><code>searchAccessories</code></td><td>Search 18 SKUs by keyword/category/price/vehicle make</td><td>Home, Category</td></tr>
-    <tr><td><code>getProductDetails</code></td><td>Full details for a SKU — variants, stock, fitment, ratings</td><td>Category, Product</td></tr>
-    <tr><td><code>checkFitment</code> 🔑</td><td>Verify a part fits a specific vehicle (the killer demo tool — pixel-clicking can't do this reliably)</td><td>Product</td></tr>
-    <tr><td><code>addToCart</code></td><td>Add a product with typed variant + quantity</td><td>Product</td></tr>
-    <tr><td><code>getCart</code></td><td>Read-only cart contents and total</td><td>Cart, Checkout</td></tr>
-    <tr><td><code>removeFromCart</code></td><td>Remove a line item by key</td><td>Cart</td></tr>
-    <tr><td><code>checkout</code></td><td>Place the order — gated by mandatory <code>requestUserInteraction()</code></td><td>Checkout</td></tr>
-  </table>
-
-  <h3>Per-view tool scoping (WebMCP's killer feature)</h3>
-  <p>Tool surface morphs as the user (or agent) navigates. On the homepage, only <code>searchAccessories</code> is registered. Walk to a product page — three more tools appear (and search disappears since it's not the action context). Hit checkout — destructive tools (<code>checkout</code>) appear with mandatory human confirmation; cart-mutation tools disappear because they don't belong in the finalize step.</p>
-  <p>This is what slide 20 of the WebMCP deck means by <em>"tools naturally scoped per page (3–5, not 43)."</em> Agents see 3–5 contextual tools at a time, not a monolithic API surface. Lower token cost, better tool selection, security boundary built in.</p>
-  <pre>// Implemented via:
-function updateWebMCPContext() {
-  const tools = VIEW_TOOLS[state.currentView]
-    .map(name =&gt; TOOLS[name]);
-  navigator.modelContext.provideContext({ tools });
+<span class="code-comment">// Hooked into showView() — fires on EVERY view transition</span>
+<span class="code-keyword">function</span> <span class="code-function">updateWebMCPContext</span>() {
+  <span class="code-keyword">const</span> viewToolNames = VIEW_TOOLS[state.currentView] || [];
+  <span class="code-keyword">const</span> tools = viewToolNames.map(n =&gt; TOOLS[n]).filter(Boolean);
+  webMCP.provideContext({ tools });
 }
-// Called on every view transition.</pre>
 
-  <h3>Architecture extension — single-category vs multi-category</h3>
-  <p>This demo is multi-category (Interior, Exterior, Performance, Tech). The same WebMCP pattern scales to single-category niches (sneakers, watches, perfumes) — fewer schemas, smaller tool surface. <strong>Multi-category is the harder case</strong> because each category may have its own typed schema; if the pattern works here, it works for single-category too. Reference: <code>webmcp-knowledge-base.md §19</code>.</p>
-</section>
+<span class="code-keyword">function</span> <span class="code-function">showView</span>(viewName, params = {}) {
+  state.currentView = viewName;
+  <span class="code-comment">// ... show/hide view DOM ...</span>
+  <span class="code-keyword">if</span> (viewName === <span class="code-string">'home'</span>) renderHome();
+  <span class="code-comment">// ... other render branches ...</span>
+  updateWebMCPContext();  <span class="code-comment">// ← swap tool surface here</span>
+  window.scrollTo(<span class="code-number">0</span>, <span class="code-number">0</span>);
+}</div>
+            </div>
+        </div>
 
-<section>
-  <h2>Tech stack</h2>
-  <ul>
-    <li><strong>Single-file static HTML</strong> — no backend, no framework, no build step</li>
-    <li><strong>Vanilla JavaScript</strong> with localStorage for cart persistence</li>
-    <li><strong>WebMCP <code>navigator.modelContext</code></strong> API (W3C incubation, Chrome 146+ stable)</li>
-    <li><strong>Brown/gold theme</strong> matching the data-analyst-portfolio design system</li>
-    <li><strong>Custom Inspector Panel</strong> — 4 tabs (Tools / Try as Agent / Log / Source) for live WebMCP introspection</li>
-    <li><strong>AI-generated product imagery</strong> — 18 product photos + 1 hero + 4 category banners via Imagen 3</li>
-  </ul>
-</section>
+        <div class="content-section">
+            <h2>WebMCP Wrapper (real API + compatibility fallback)</h2>
+            <p>The <code>webMCP</code> wrapper uses <code>navigator.modelContext</code> when present, falls back to a local registry otherwise. This makes the Inspector Panel work identically across browsers — a real Chrome 146+ install vs a compatibility-mode browser show the same UI behavior.</p>
 
-<section>
-  <h2>What's next</h2>
-  <p>This is Demo #1 in the <em>Pau AI Agent-Ready Storefront</em> series. Planned follow-ups:</p>
-  <ul class="steps">
-    <li><strong>Sundry shop / kedai runcit</strong> — multi-category, simple-attribute retail (the 90% of Malaysian SME case)</li>
-    <li><strong>Sneaker boutique</strong> — single-category, high-variant niche</li>
-    <li><strong>Electrical appliances</strong> — multi-category with high schema variance per category (TVs ≠ fridges ≠ washers)</li>
-    <li><strong>Pet food shop</strong> — multi-category recurring-purchase retail</li>
-  </ul>
-  <p>All four use the same WebMCP webstore template — see <code>02_Pau-AI/template/webmcp-webstore/</code>.</p>
-</section>
+            <div class="code-container">
+                <div class="code-header">index.html — webMCP wrapper</div>
+                <div class="code-block"><span class="code-keyword">const</span> webMCP = {
+  <span class="code-property">tools</span>: [],
+  <span class="code-property">log</span>: [],
+  <span class="code-property">isSupported</span>: () =&gt; <span class="code-string">'modelContext'</span> <span class="code-keyword">in</span> navigator,
 
-<div style="text-align:center; margin: 40px 0;">
-  <a href="projects/sunny-car-accessories/index.html" class="cta cta-primary" target="_blank">▶ Try the Live Demo</a>
-</div>
+  <span class="code-function">provideContext</span>({ tools }) {
+    <span class="code-keyword">this</span>.tools = tools;
+    <span class="code-keyword">if</span> (<span class="code-keyword">this</span>.isSupported() &amp;&amp; navigator.modelContext.provideContext) {
+      <span class="code-keyword">try</span> {
+        navigator.modelContext.provideContext({ tools });  <span class="code-comment">// real API</span>
+      } <span class="code-keyword">catch</span> (e) { console.warn(<span class="code-string">'WebMCP error:'</span>, e); }
+    }
+    updateInspectorPanel();
+  },
 
-</div>
+  <span class="code-keyword">async</span> <span class="code-function">invokeTool</span>(name, params = {}) {
+    <span class="code-keyword">const</span> tool = <span class="code-keyword">this</span>.tools.find(t =&gt; t.name === name);
+    <span class="code-keyword">if</span> (!tool) <span class="code-keyword">return</span> { error: <span class="code-string">'Tool not registered on this view'</span> };
 
-<footer>
-  <p>&copy; 2026 Lee Yih Ven | <a href="index.html">AI Project Portfolio</a> · Demo concept inspired by Vin Lim's "Browser-Native Agentic Commerce with WebMCP" deck (Google Developer Expert)</p>
-</footer>
+    <span class="code-keyword">const</span> entry = { ts: timeStamp(), name, params, result: <span class="code-keyword">null</span> };
+    <span class="code-keyword">this</span>.log.push(entry);
+    updateInspectorPanel();
 
+    <span class="code-keyword">try</span> {
+      <span class="code-keyword">const</span> result = <span class="code-keyword">await</span> tool.execute(params);
+      entry.result = result;
+      updateInspectorPanel();
+      <span class="code-keyword">return</span> result;
+    } <span class="code-keyword">catch</span> (e) {
+      entry.result = { error: e.message };
+      <span class="code-keyword">return</span> { error: e.message };
+    }
+  },
+
+  <span class="code-keyword">async</span> <span class="code-function">requestUserInteraction</span>({ title, message }) {
+    <span class="code-keyword">return</span> <span class="code-keyword">new</span> Promise(resolve =&gt; {
+      <span class="code-comment">// Show custom modal — Allow once / Deny — resolves the Promise</span>
+      document.getElementById(<span class="code-string">'confirm-title'</span>).textContent = title;
+      document.getElementById(<span class="code-string">'confirm-message'</span>).textContent = message;
+      document.getElementById(<span class="code-string">'confirm-modal'</span>).classList.remove(<span class="code-string">'hidden'</span>);
+      window._confirmResolve = resolve;
+    });
+  }
+};</div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>requestUserInteraction() — Human-in-the-Loop on Checkout</h2>
+            <p>The destructive <code>checkout</code> tool gates execution behind a mandatory human confirmation. Even if an agent invokes it autonomously, the order cannot proceed without explicit user approval — Allow once / Deny.</p>
+
+            <div class="code-container">
+                <div class="code-header">index.html — checkout tool definition</div>
+                <div class="code-block"><span class="code-property">checkout</span>: {
+  <span class="code-property">name</span>: <span class="code-string">'checkout'</span>,
+  <span class="code-property">description</span>: <span class="code-string">'Place the order. Triggers requestUserInteraction() before charging.'</span>,
+  <span class="code-property">inputSchema</span>: {
+    type: <span class="code-string">'object'</span>,
+    properties: { paymentMethod: { type: <span class="code-string">'string'</span>, enum: [<span class="code-string">'DuitNow'</span>,<span class="code-string">'FPX'</span>,<span class="code-string">'COD'</span>] } },
+    required: [<span class="code-string">'paymentMethod'</span>]
+  },
+  <span class="code-property">execute</span>: <span class="code-keyword">async</span> ({ paymentMethod }) =&gt; {
+    <span class="code-keyword">if</span> (state.cart.length === <span class="code-number">0</span>)
+      <span class="code-keyword">return</span> { type: <span class="code-string">'text'</span>, text: JSON.stringify({ success: <span class="code-keyword">false</span>, error: <span class="code-string">'Cart is empty'</span> }) };
+
+    <span class="code-keyword">const</span> total = cartTotal();
+
+    <span class="code-comment">// ← THE GATE — pauses execution, waits for user approval</span>
+    <span class="code-keyword">const</span> confirmed = <span class="code-keyword">await</span> webMCP.requestUserInteraction({
+      title: <span class="code-string">'Confirm purchase'</span>,
+      message: <span class="code-string">`Agent is about to place order: RM ${total.toFixed(0)} via ${paymentMethod}. Approve?`</span>
+    });
+
+    <span class="code-keyword">if</span> (!confirmed)
+      <span class="code-keyword">return</span> { type: <span class="code-string">'text'</span>, text: JSON.stringify({ success: <span class="code-keyword">false</span>, reason: <span class="code-string">'User declined'</span> }) };
+
+    <span class="code-keyword">const</span> result = placeOrder(<span class="code-keyword">null</span>);
+    <span class="code-keyword">return</span> { type: <span class="code-string">'text'</span>, text: JSON.stringify(result) };
+  }
+}</div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Inspector Panel — 4 Tabs of Live Introspection</h2>
+            <p>The Inspector Panel is the proof layer that turns the invisible WebMCP API into a visible demonstration. Status badge updates per view; 4 tabs show live tools, run sample invocations, log results, and reveal the source code that produced the surface.</p>
+
+            <div class="code-container">
+                <div class="code-header">index.html — updateInspectorPanel() + tab switching</div>
+                <div class="code-block"><span class="code-keyword">function</span> <span class="code-function">updateInspectorPanel</span>() {
+  <span class="code-keyword">const</span> status = document.getElementById(<span class="code-string">'inspector-status'</span>);
+  <span class="code-keyword">if</span> (webMCP.isSupported()) {
+    status.innerHTML = <span class="code-string">`✅ WebMCP active · ${webMCP.tools.length} tool${webMCP.tools.length !== 1 ? 's' : ''} on &lt;strong&gt;${state.currentView}&lt;/strong&gt; view`</span>;
+  } <span class="code-keyword">else</span> {
+    status.innerHTML = <span class="code-string">`⚠️ WebMCP not detected · running in compatibility mode · ${webMCP.tools.length} tools on ${state.currentView}`</span>;
+  }
+  <span class="code-keyword">const</span> activeTab = document.querySelector(<span class="code-string">'.inspector-tab.active'</span>)?.dataset.tab || <span class="code-string">'tools'</span>;
+  renderInspectorPane(activeTab);
+}
+
+<span class="code-keyword">function</span> <span class="code-function">renderInspectorPane</span>(tab) {
+  <span class="code-keyword">const</span> pane = document.querySelector(<span class="code-string">`[data-pane="${tab}"]`</span>);
+
+  <span class="code-keyword">if</span> (tab === <span class="code-string">'tools'</span>) {
+    <span class="code-comment">// Live list of registered tools — expandable to show inputSchema JSON</span>
+    pane.innerHTML = webMCP.tools.map(t =&gt; <span class="code-string">`
+      &lt;details class="tool-entry"&gt;
+        &lt;summary&gt;&lt;strong&gt;${t.name}&lt;/strong&gt; — ${t.description}&lt;/summary&gt;
+        &lt;pre&gt;${JSON.stringify(t.inputSchema, null, 2)}&lt;/pre&gt;
+      &lt;/details&gt;`</span>).join(<span class="code-string">''</span>);
+  } <span class="code-keyword">else if</span> (tab === <span class="code-string">'try'</span>) {
+    <span class="code-comment">// Buttons that invoke tools with sample params — demonstrates tool calls work</span>
+    pane.innerHTML = webMCP.tools.map(t =&gt; {
+      <span class="code-keyword">const</span> sample = sampleParamsFor(t.name);
+      <span class="code-keyword">return</span> <span class="code-string">`&lt;button onclick='runFromInspector("${t.name}", ${JSON.stringify(sample)})'&gt;
+                ▶ Run ${t.name}&lt;/button&gt;`</span>;
+    }).join(<span class="code-string">''</span>);
+  } <span class="code-keyword">else if</span> (tab === <span class="code-string">'log'</span>) {
+    <span class="code-comment">// Timestamped log of every tool call — agent or human-triggered</span>
+    pane.innerHTML = webMCP.log.slice(-<span class="code-number">12</span>).reverse().map(l =&gt; <span class="code-string">`
+      ${l.ts} ${l.name}(${JSON.stringify(l.params)}) → ${JSON.stringify(l.result)}`</span>).join(<span class="code-string">''</span>);
+  } <span class="code-keyword">else if</span> (tab === <span class="code-string">'source'</span>) {
+    <span class="code-comment">// Shows the actual provideContext() code that produced this view's surface</span>
+    pane.innerHTML = <span class="code-string">`&lt;pre&gt;${getSourceForView(state.currentView)}&lt;/pre&gt;`</span>;
+  }
+}</div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>agentInvoked Detection</h2>
+            <p>Per WebMCP spec slide 13: <code>submitEvent.agentInvoked</code> tells the form handler "this submission came from an agent, not a human." Useful for analytics splits (agent traffic vs human traffic) and merchant-side fraud / bot detection.</p>
+
+            <div class="code-container">
+                <div class="code-header">index.html — global form submit listener</div>
+                <div class="code-block"><span class="code-comment">// Detect agent-invoked form submissions</span>
+document.addEventListener(<span class="code-string">'submit'</span>, (e) =&gt; {
+  <span class="code-keyword">if</span> (e.agentInvoked) {
+    console.log(<span class="code-string">'[WebMCP] Form was submitted by an agent, not a human'</span>);
+    webMCP.log.push({
+      ts: timeStamp(),
+      name: <span class="code-string">'(form submit)'</span>,
+      params: { agentInvoked: <span class="code-keyword">true</span> },
+      result: { detected: <span class="code-string">'agent submission'</span> }
+    });
+    updateInspectorPanel();
+    <span class="code-comment">// In production: also log to BigQuery / merchant analytics</span>
+  }
+});</div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Catalog Data Model</h2>
+            <p>The 18-SKU catalog is a JS array. Each product has SKU, name, brand, category, price, image, description, variantType (color / size / brand / scent / null), variants array, fitment (universal | array of compatible vehicle makes), stock, rating, reviews. Same shape parameterizes any retail vertical via the WebMCP webstore template.</p>
+
+            <div class="code-container">
+                <div class="code-header">index.html — sample CATALOG entries</div>
+                <div class="code-block"><span class="code-keyword">const</span> CATALOG = [
+  {
+    <span class="code-property">sku</span>: <span class="code-string">'INT-001'</span>,
+    <span class="code-property">name</span>: <span class="code-string">'Premium Leather Seat Cover Set'</span>,
+    <span class="code-property">brand</span>: <span class="code-string">'AutoLuxe'</span>,
+    <span class="code-property">category</span>: <span class="code-string">'interior'</span>,
+    <span class="code-property">price</span>: <span class="code-number">280</span>,
+    <span class="code-property">image</span>: <span class="code-string">'images/products/int-001-leather-seat-cover.jpg'</span>,
+    <span class="code-property">description</span>: <span class="code-string">'5-piece premium leather seat cover set...'</span>,
+    <span class="code-property">variantType</span>: <span class="code-string">'color'</span>,
+    <span class="code-property">variants</span>: [<span class="code-string">'Black'</span>,<span class="code-string">'Beige'</span>,<span class="code-string">'Grey'</span>,<span class="code-string">'Brown'</span>,<span class="code-string">'Red'</span>],
+    <span class="code-property">fitment</span>: <span class="code-string">'universal'</span>,
+    <span class="code-property">stock</span>: <span class="code-number">12</span>,
+    <span class="code-property">rating</span>: <span class="code-number">4.5</span>,
+    <span class="code-property">reviews</span>: <span class="code-number">87</span>
+  },
+  {
+    <span class="code-property">sku</span>: <span class="code-string">'INT-002'</span>,
+    <span class="code-property">name</span>: <span class="code-string">'3D Floor Mats'</span>,
+    <span class="code-property">brand</span>: <span class="code-string">'TerraGuard'</span>,
+    <span class="code-property">category</span>: <span class="code-string">'interior'</span>,
+    <span class="code-property">price</span>: <span class="code-number">180</span>,
+    <span class="code-property">variantType</span>: <span class="code-keyword">null</span>,
+    <span class="code-property">variants</span>: [],
+    <span class="code-property">fitment</span>: [<span class="code-string">'Honda'</span>,<span class="code-string">'Toyota'</span>,<span class="code-string">'Perodua'</span>,<span class="code-string">'Proton'</span>],  <span class="code-comment">// model-specific!</span>
+    <span class="code-property">stock</span>: <span class="code-number">25</span>,
+    <span class="code-property">rating</span>: <span class="code-number">4.7</span>,
+    <span class="code-property">reviews</span>: <span class="code-number">156</span>
+  }
+  <span class="code-comment">// ... 16 more SKUs</span>
+];</div>
+            </div>
+
+            <h3>Key Design Decisions</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>Single-file static HTML over framework:</strong> No build step, deployable to any static host (GitHub Pages, S3, Cloudflare). Per-view scoping demonstrated via JS state machine, not React/Vue routing.</li>
+                <li><strong>webMCP wrapper over direct API:</strong> Lets the Inspector Panel work identically with or without browser support — critical for the "compatibility mode" honest disclosure</li>
+                <li><strong>Per-view tool scoping over monolithic surface:</strong> Demonstrates the killer WebMCP feature; better security posture (destructive tools only on relevant pages); lower agent token cost (3-5 tools at a time, not 7)</li>
+                <li><strong>Custom confirm modal over native dialog():</strong> Brand-consistent UI, async Promise-based, polyfills <code>requestUserInteraction()</code> when the spec API isn't yet available</li>
+                <li><strong>localStorage cart over server session:</strong> Zero backend; cart survives page reload; works on file:// for offline demo testing</li>
+            </ul>
+        </div>
+
+        <div class="demo-links">
+            <a href="projects/sunny-car-accessories/index.html" class="demo-btn">Try Live Demo</a>
+            <a href="sunny-car-accessories.html" class="demo-btn secondary">View Full Project Details</a>
+        </div>
+
+        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+            <a href="index.html">&larr; Back to Portfolio</a> |
+            <a href="sunny-car-accessories.html">View Project Overview</a>
+        </nav>
+    </div>
 </body>
 </html>

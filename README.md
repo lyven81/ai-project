@@ -54,6 +54,13 @@ Each project is classified by its AI architecture pattern, based on how the syst
 | [SME Advisor AlloyDB](./projects/sme-advisor-alloydb/) | Retrieval-augmented advisor grounded in AlloyDB vector store |
 | [Marketing Agency](./projects/marketing-agency/) | 6-skill content pipeline with brand voice enforcement and lead feedback loop |
 
+### Agent-Callable Storefronts (1 project)
+*Browser-native storefronts that expose typed tools to AI agents via the W3C WebMCP standard. Not agentic AI itself — but the surface AI agents shop on.*
+
+| Project | Why Agent-Callable |
+|---|---|
+| [Sunny Car Accessories](./sunny-car-accessories.html) | 18 SKUs, 7 WebMCP tools per-view scoped, `checkFitment` lets agents verify part compatibility before adding to cart — pixel-clicking agents can't do this reliably |
+
 ### RAG — Retrieval-Augmented Generation (3 projects)
 *Query → retrieve from knowledge base or external data → augment → LLM → output.*
 
