@@ -92,6 +92,42 @@
         </div>
 
         <div class="content-section">
+            <h2>How to Experience This Demo — 3 Test Paths</h2>
+            <p>The UI is intentionally identical to a regular static-HTML storefront. <strong>This is what WebMCP does — it adds an invisible agent-callable layer on top of a normal-looking shop.</strong> A skeptical visitor who isn't told about WebMCP would never notice the difference. The 3 paths below let you experience exactly what's different about a WebMCP-enabled store versus a non-WebMCP one.</p>
+
+            <div class="features-grid">
+                <div class="feature-item">
+                    <h4>Path 1 — Browse as a Human</h4>
+                    <p><strong>What it looks like:</strong> Click categories, pick a product, add to cart, check out. Standard e-commerce UX.</p>
+                    <p><strong>What's happening:</strong> Pure static interaction. <strong>No LLM involved anywhere.</strong> The Inspector Panel sits unobtrusive in the corner — a normal shopper won't notice it.</p>
+                    <p><strong>Cost:</strong> zero. <strong>Difference vs non-WebMCP store:</strong> none visible to the human user.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>Path 2 — Try as Agent (Inspector buttons)</h4>
+                    <p><strong>What it looks like:</strong> Open the Inspector Panel → Try as Agent tab → click any "▶ Run [tool]" button.</p>
+                    <p><strong>What's happening:</strong> The page invokes its own registered WebMCP tools with sample params and shows the typed JSON result in the Log tab. <strong>Still no LLM.</strong> This simulates exactly what a real AI agent would call.</p>
+                    <p><strong>Cost:</strong> zero. <strong>Difference vs non-WebMCP store:</strong> a non-WebMCP page has nothing for these buttons to invoke — they wouldn't exist or would do nothing.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>Path 3 — Real Auto Browser test</h4>
+                    <p><strong>What it looks like:</strong> Visitor installs <a href="https://autobrowser.dev" target="_blank">Auto Browser</a> (the first WebMCP-aware AI agent), points it at the demo URL, types natural language: <em>"Find me a dashcam under RM 500 and add it to my cart."</em></p>
+                    <p><strong>What's happening:</strong> Auto Browser does the LLM reasoning, decides which tool to call (<code>searchAccessories</code>, then <code>addToCart</code>), calls it via <code>navigator.modelContext</code>, gets typed JSON back. <strong>The LLM cost belongs to Auto Browser, not the demo.</strong></p>
+                    <p><strong>Cost:</strong> zero on the merchant side. <strong>Difference vs non-WebMCP store:</strong> Auto Browser cannot reliably shop on a non-WebMCP store — it would screenshot, guess at "Add to Cart," click pixel coordinates, and probably abandon the cart mid-checkout.</p>
+                </div>
+            </div>
+
+            <h3>The merchant-side cost story</h3>
+            <ul>
+                <li><strong>Cost to host:</strong> zero (GitHub Pages free tier; works on any static host)</li>
+                <li><strong>Cost to operate:</strong> zero (no API calls from the page itself)</li>
+                <li><strong>Cost when an agent visits:</strong> zero on the merchant side — <em>the agent pays its own LLM cost</em></li>
+            </ul>
+            <p>This is the strongest WebMCP value for Malaysian SMEs: <strong>agent-ready storefront with zero ongoing AI cost — agents pay their own way.</strong> Compare this to "AI shopping assistant" SaaS subscriptions (RM 200/month per merchant) that route through the SaaS's LLM endpoint.</p>
+        </div>
+
+        <div class="content-section">
             <h2>Application Features</h2>
             <div class="features-grid">
                 <div class="feature-item">
