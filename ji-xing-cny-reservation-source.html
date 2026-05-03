@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ji Xing 吉星饭厅 — Source Code</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #222; background-color: #ffffff; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        .back-nav { margin-bottom: 20px; }
+        .back-nav a { color: #007BFF; text-decoration: none; font-size: 1rem; }
+        .back-nav a:hover { text-decoration: underline; }
+        .project-header { text-align: center; margin-bottom: 40px; padding: 40px 0; background: linear-gradient(135deg, #B8860B, #8B6914); color: white; border-radius: 10px; }
+        .project-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        .project-header p { font-size: 1.2rem; opacity: 0.9; }
+        .badges { display: flex; justify-content: center; gap: 10px; margin: 20px 0; flex-wrap: wrap; }
+        .badge { background-color: rgba(255,255,255,0.2); color: white; padding: 5px 12px; border-radius: 15px; font-size: 0.9rem; }
+        .content-section { margin: 40px 0; padding: 30px; background-color: #f9f9f9; border-radius: 8px; border-left: 5px solid #B8860B; }
+        .content-section h2 { color: #B8860B; margin-bottom: 20px; font-size: 1.8rem; }
+        .content-section h3 { color: #333; margin: 20px 0 10px 0; font-size: 1.3rem; }
+        .highlight-box { background: linear-gradient(135deg, #FFF9E6, #FFEFC1); padding: 20px; border-radius: 10px; border-left: 5px solid #B8860B; margin: 20px 0; }
+        .code-container { background-color: #1e1e1e; border-radius: 8px; padding: 20px; margin: 20px 0; overflow-x: auto; }
+        .code-header { color: #FFD580; font-weight: bold; margin-bottom: 15px; font-size: 1.1rem; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        .code-block { font-family: 'Consolas', 'Monaco', 'Courier New', monospace; font-size: 14px; line-height: 1.5; color: #d4d4d4; white-space: pre-wrap; }
+        .code-comment { color: #6a9955; font-style: italic; }
+        .code-keyword { color: #569cd6; }
+        .code-string { color: #ce9178; }
+        .code-function { color: #dcdcaa; }
+        .code-number { color: #b5cea8; }
+        .code-property { color: #9cdcfe; }
+        .demo-links { text-align: center; margin: 30px 0; }
+        .demo-btn { display: inline-block; background-color: #007BFF; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; margin: 0 10px; font-weight: bold; transition: background-color 0.3s; }
+        .demo-btn:hover { background-color: #0056b3; }
+        .demo-btn.secondary { background-color: #28a745; }
+        .demo-btn.secondary:hover { background-color: #218838; }
+        @media (max-width: 768px) {
+            .project-header h1 { font-size: 2rem; }
+            .project-header p { font-size: 1rem; }
+            .demo-btn { margin: 5px; padding: 10px 20px; }
+            .container { padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="ji-xing-cny-reservation.html">&larr; Back to Project Overview</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>Ji Xing 吉星饭厅</h1>
+            <p>Source Code &amp; WebMCP Architecture</p>
+            <div class="badges">
+                <span class="badge">WebMCP (W3C)</span>
+                <span class="badge">7 Typed Tools</span>
+                <span class="badge">Per-View Scoping</span>
+                <span class="badge">Bilingual UI</span>
+                <span class="badge">Schema.org</span>
+            </div>
+        </div>
+
+        <div class="highlight-box">
+            <h3>About This Code Showcase</h3>
+            <p><strong>This curated walkthrough covers the WebMCP layer in Ji Xing 吉星饭厅 — how the 7 reservation tools are defined, how the per-view tool surface swaps as the user moves through the booking flow, how destructive actions are gated by <code>requestUserInteraction()</code>, and how Schema.org structured data drives bilingual SEO.</strong></p>
+            <p>The entire app is one self-contained <code>index.html</code> (~2,000 lines). No backend, no build step, no LLM calls from the page itself — agents that visit pay their own LLM cost via <code>navigator.modelContext</code>.</p>
+        </div>
+
+        <div class="content-section">
+            <h2>Core: Tool Definitions (TOOLS object)</h2>
+            <p>Each tool is a typed contract — name, human-readable description, JSON inputSchema for the agent to read, and an async <code>execute()</code> handler that runs the business logic and returns structured JSON. The killer demo tool is <code>checkAvailability</code> — the CNY equivalent of Sunny Car Accessories' <code>checkFitment</code>.</p>
+
+            <div class="code-container">
+                <div class="code-header">index.html — checkAvailability (the killer demo tool)</div>
+                <div class="code-block"><span class="code-keyword">const</span> TOOLS = {
+  <span class="code-property">checkAvailability</span>: {
+    <span class="code-property">name</span>: <span class="code-string">'checkAvailability'</span>,
+    <span class="code-property">description</span>: <span class="code-string">'Check available tables for a CNY date and sitting. Returns availability by table type. Lunch sittings closed on Reunion Eve &amp; Day 1.'</span>,
+    <span class="code-property">inputSchema</span>: {
+      <span class="code-property">type</span>: <span class="code-string">'object'</span>,
+      <span class="code-property">properties</span>: {
+        <span class="code-property">date</span>:        { type: <span class="code-string">'string'</span>, format: <span class="code-string">'date'</span> },
+        <span class="code-property">sitting</span>:     { type: <span class="code-string">'string'</span>, enum: [<span class="code-string">'lunch-1'</span>,<span class="code-string">'lunch-2'</span>,<span class="code-string">'dinner-1'</span>,<span class="code-string">'dinner-2'</span>] },
+        <span class="code-property">partySize</span>:   { type: <span class="code-string">'integer'</span>, enum: [<span class="code-number">6</span>, <span class="code-number">8</span>, <span class="code-number">10</span>] },
+        <span class="code-property">seatingType</span>: { type: <span class="code-string">'string'</span>, enum: [<span class="code-string">'mainHall'</span>,<span class="code-string">'privateRoom'</span>,<span class="code-string">'any'</span>] }
+      },
+      <span class="code-property">required</span>: [<span class="code-string">'date'</span>, <span class="code-string">'sitting'</span>, <span class="code-string">'partySize'</span>]
+    },
+    <span class="code-property">execute</span>: <span class="code-keyword">async</span> ({ date, sitting, partySize, seatingType = <span class="code-string">'any'</span> }) =&gt; {
+      <span class="code-comment">// Date-window guard</span>
+      <span class="code-keyword">if</span> (date &lt; SLOT_PERIOD.start || date &gt; SLOT_PERIOD.end) {
+        <span class="code-keyword">return</span> { type: <span class="code-string">'text'</span>, text: <span class="code-string">`Reservations only 14-22 Feb 2026. Date ${date} outside window.`</span> };
+      }
+      <span class="code-comment">// Peak-day rule — Reunion Eve &amp; Day 1: dinner only</span>
+      <span class="code-keyword">if</span> (PEAK_DAYS.includes(date) &amp;&amp; sitting.startsWith(<span class="code-string">'lunch'</span>)) {
+        <span class="code-keyword">return</span> { type: <span class="code-string">'text'</span>, text: <span class="code-string">`Lunch closed on Reunion Eve &amp; Day 1. Dinner only.`</span> };
+      }
+      <span class="code-keyword">const</span> remaining = <span class="code-function">tablesRemainingForSitting</span>(date, sitting, partySize);
+      <span class="code-keyword">return</span> { type: <span class="code-string">'json'</span>, data: {
+        date, sitting, partySize,
+        <span class="code-property">tablesRemaining</span>: remaining,           <span class="code-comment">// { mainHall, privateRoom, vipRoom, total }</span>
+        <span class="code-property">compatibleSets</span>: CATALOG.filter(s =&gt; s.pax === partySize)
+      }};
+    }
+  }
+  <span class="code-comment">// 6 more tools: searchSetMenus, getSetMenuDetails, reserveTable,</span>
+  <span class="code-comment">//                getReservation, modifyReservation, cancelReservation</span>
+};</div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Per-View Tool Scoping (the killer feature)</h2>
+            <p>WebMCP's design choice: agents see only the 2–3 tools relevant to where they currently are. Tool surface morphs on every view change. <code>provideContext()</code> is called fresh per view. Destructive tools (<code>reserveTable</code>, <code>cancelReservation</code>) live ONLY on the views where the user is in that intent — agents on the homepage cannot accidentally cancel a booking.</p>
+
+            <div class="code-container">
+                <div class="code-header">index.html — VIEW_TOOLS map + refreshWebMCPTools()</div>
+                <div class="code-block"><span class="code-comment">// Per-view tool surface — agents see only what's relevant where they are</span>
+<span class="code-keyword">const</span> VIEW_TOOLS = {
+  <span class="code-property">home</span>:           [<span class="code-string">'searchSetMenus'</span>, <span class="code-string">'getSetMenuDetails'</span>],
+  <span class="code-string">'set-detail'</span>:   [<span class="code-string">'getSetMenuDetails'</span>, <span class="code-string">'checkAvailability'</span>],
+  <span class="code-property">booking</span>:        [<span class="code-string">'checkAvailability'</span>, <span class="code-string">'reserveTable'</span>],         <span class="code-comment">// destructive lives here</span>
+  <span class="code-property">confirmation</span>:   [<span class="code-string">'getReservation'</span>],                          <span class="code-comment">// read-only follow-up</span>
+  <span class="code-property">manage</span>:         [<span class="code-string">'getReservation'</span>, <span class="code-string">'modifyReservation'</span>, <span class="code-string">'cancelReservation'</span>]
+};
+
+<span class="code-comment">// Fires on EVERY showView() transition</span>
+<span class="code-keyword">function</span> <span class="code-function">refreshWebMCPTools</span>(viewName) {
+  <span class="code-keyword">const</span> toolNames = VIEW_TOOLS[viewName] || [];
+  <span class="code-keyword">const</span> tools = toolNames.map(name =&gt; TOOLS[name]).filter(Boolean);
+  <span class="code-keyword">if</span> (APP_STATE.webmcpActive &amp;&amp; navigator.modelContext.provideContext) {
+    <span class="code-keyword">try</span> {
+      navigator.modelContext.<span class="code-function">provideContext</span>({ tools });   <span class="code-comment">// W3C WebMCP API</span>
+    } <span class="code-keyword">catch</span> (e) { console.warn(<span class="code-string">'[webmcp] provideContext failed'</span>, e); }
+  }
+  <span class="code-function">refreshInspectorPanel</span>(toolNames);   <span class="code-comment">// Update Inspector UI</span>
+}</div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>requestUserInteraction() — Human-in-the-Loop on Destructive Actions</h2>
+            <p>Three tools are destructive: <code>reserveTable</code> places a reservation + 50% deposit, <code>modifyReservation</code> changes an existing booking, <code>cancelReservation</code> deletes a booking. All three pause for explicit user confirmation via the W3C-spec <code>requestUserInteraction()</code> API — with a custom-modal polyfill for browsers without native support.</p>
+
+            <div class="code-container">
+                <div class="code-header">index.html — requestUserConfirmation with polyfill fallback</div>
+                <div class="code-block"><span class="code-keyword">async function</span> <span class="code-function">requestUserConfirmation</span>(opts) {
+  <span class="code-comment">// Try native WebMCP API first (Chrome 146+ with flags)</span>
+  <span class="code-keyword">if</span> (APP_STATE.webmcpActive &amp;&amp; navigator.modelContext.requestUserInteraction) {
+    <span class="code-keyword">try</span> {
+      <span class="code-keyword">const</span> result = <span class="code-keyword">await</span> navigator.modelContext.<span class="code-function">requestUserInteraction</span>(opts);
+      <span class="code-keyword">return</span> !!result;
+    } <span class="code-keyword">catch</span> (e) { <span class="code-comment">/* fall through to polyfill */</span> }
+  }
+  <span class="code-comment">// Custom-modal fallback for browsers without WebMCP</span>
+  <span class="code-keyword">return await</span> <span class="code-function">showCustomConfirmModal</span>(opts);
+}
+
+<span class="code-comment">// Used by reserveTable.execute(), modifyReservation, cancelReservation:</span>
+<span class="code-keyword">const</span> ok = <span class="code-keyword">await</span> <span class="code-function">requestUserConfirmation</span>({
+  <span class="code-property">title</span>: <span class="code-string">'Confirm Cancellation · 确认取消'</span>,
+  <span class="code-property">message</span>: <span class="code-string">`Cancel reservation ${ref}? ${policy} This action cannot be undone.`</span>,
+  <span class="code-property">confirmText</span>: <span class="code-string">'Cancel Booking · 取消预订'</span>,
+  <span class="code-property">cancelText</span>:  <span class="code-string">'Keep Booking · 保留预订'</span>,
+  <span class="code-property">destructive</span>: <span class="code-keyword">true</span>      <span class="code-comment">// styles confirm button red</span>
+});
+<span class="code-keyword">if</span> (!ok) <span class="code-keyword">return</span> { type: <span class="code-string">'text'</span>, text: <span class="code-string">'Cancellation declined'</span> };</div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Mock Inventory — 480 Slots × 9 Days</h2>
+            <p>The CNY 2026 slot grid runs 14–22 February. 30 tables per restaurant, 15 bookable per sitting (50/50 booking-vs-walk-in mid-tier MY pattern), sliced by party size. Pre-filled booking density creates the demo's scarcity narrative — Reunion Eve dinner-2 is 14/15 booked (1 table left), driving urgency in the agent narrative.</p>
+
+            <div class="code-container">
+                <div class="code-header">index.html — INVENTORY generator</div>
+                <div class="code-block"><span class="code-keyword">function</span> <span class="code-function">generateInventory</span>() {
+  <span class="code-keyword">const</span> inv = {};
+  <span class="code-comment">// Per-sitting bookable allocation: 6→3, 8→4, 10→4, PRs→1 each (small/medium/large/VIP) = 15</span>
+  <span class="code-keyword">const</span> baseBookable = { <span class="code-number">6</span>: <span class="code-number">3</span>, <span class="code-number">8</span>: <span class="code-number">4</span>, <span class="code-number">10</span>: <span class="code-number">4</span>,
+                          small_pr: <span class="code-number">1</span>, medium_pr: <span class="code-number">1</span>, large_pr: <span class="code-number">1</span>, vip_pr: <span class="code-number">1</span> };
+
+  <span class="code-comment">// Demo scarcity profiles — drives the urgency narrative</span>
+  <span class="code-keyword">const</span> profiles = {
+    veryTight: { <span class="code-number">6</span>:<span class="code-number">3</span>, <span class="code-number">8</span>:<span class="code-number">3</span>, <span class="code-number">10</span>:<span class="code-number">4</span>, small_pr:<span class="code-number">1</span>, medium_pr:<span class="code-number">1</span>, large_pr:<span class="code-number">1</span>, vip_pr:<span class="code-number">1</span> },  <span class="code-comment">// 14/15</span>
+    tight:     { <span class="code-number">6</span>:<span class="code-number">2</span>, <span class="code-number">8</span>:<span class="code-number">3</span>, <span class="code-number">10</span>:<span class="code-number">3</span>, small_pr:<span class="code-number">1</span>, medium_pr:<span class="code-number">1</span>, large_pr:<span class="code-number">1</span>, vip_pr:<span class="code-number">1</span> },  <span class="code-comment">// 12/15</span>
+    busy:      { <span class="code-number">6</span>:<span class="code-number">2</span>, <span class="code-number">8</span>:<span class="code-number">3</span>, <span class="code-number">10</span>:<span class="code-number">2</span>, small_pr:<span class="code-number">0</span>, medium_pr:<span class="code-number">1</span>, large_pr:<span class="code-number">1</span>, vip_pr:<span class="code-number">0</span> },  <span class="code-comment">//  9/15</span>
+    moderate:  { <span class="code-number">6</span>:<span class="code-number">1</span>, <span class="code-number">8</span>:<span class="code-number">2</span>, <span class="code-number">10</span>:<span class="code-number">1</span>, small_pr:<span class="code-number">0</span>, medium_pr:<span class="code-number">0</span>, large_pr:<span class="code-number">1</span>, vip_pr:<span class="code-number">0</span> },  <span class="code-comment">//  5/15</span>
+    light:     { <span class="code-number">6</span>:<span class="code-number">1</span>, <span class="code-number">8</span>:<span class="code-number">1</span>, <span class="code-number">10</span>:<span class="code-number">1</span>, small_pr:<span class="code-number">0</span>, medium_pr:<span class="code-number">0</span>, large_pr:<span class="code-number">0</span>, vip_pr:<span class="code-number">0</span> }   <span class="code-comment">//  3/15</span>
+  };
+
+  ALL_DATES.forEach(d =&gt; {
+    inv[d.date] = {};
+    <span class="code-keyword">const</span> isPeak = PEAK_DAYS.includes(d.date);
+    <span class="code-comment">// Reunion Eve &amp; Day 1: dinner only — no lunch sittings</span>
+    <span class="code-keyword">const</span> sittingsForDay = isPeak
+      ? [<span class="code-string">'dinner-1'</span>, <span class="code-string">'dinner-2'</span>]
+      : [<span class="code-string">'lunch-1'</span>, <span class="code-string">'lunch-2'</span>, <span class="code-string">'dinner-1'</span>, <span class="code-string">'dinner-2'</span>];
+    sittingsForDay.forEach(s =&gt; {
+      <span class="code-keyword">const</span> profile = <span class="code-function">pickDemoProfile</span>(d.date, s);   <span class="code-comment">// Reunion Eve = veryTight</span>
+      inv[d.date][s] = { bookable: { ...baseBookable }, booked: { ...profiles[profile] } };
+    });
+  });
+  <span class="code-keyword">return</span> inv;
+}</div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Bilingual SEO — Schema.org Structured Data</h2>
+            <p>Three JSON-LD blocks in the document <code>&lt;head&gt;</code> drive Google's rich snippets and Knowledge Graph entries. The <code>FAQPage</code> markup is paired with the visible FAQ section so the same content powers both human readers and SERP rich snippets — bilingual content captures both English and Chinese keyword searches.</p>
+
+            <div class="code-container">
+                <div class="code-header">index.html — Schema.org JSON-LD blocks</div>
+                <div class="code-block"><span class="code-comment">&lt;!-- Block 1: Restaurant + ReserveAction (drives "Reserve" button in SERP) --&gt;</span>
+&lt;script type="application/ld+json"&gt;
+{
+  <span class="code-string">"@context"</span>: <span class="code-string">"https://schema.org"</span>,
+  <span class="code-string">"@type"</span>: <span class="code-string">"Restaurant"</span>,
+  <span class="code-string">"name"</span>: <span class="code-string">"Ji Xing 吉星饭厅"</span>,
+  <span class="code-string">"address"</span>: {
+    <span class="code-string">"@type"</span>: <span class="code-string">"PostalAddress"</span>,
+    <span class="code-string">"streetAddress"</span>: <span class="code-string">"No. 8, Jalan Nanas"</span>,
+    <span class="code-string">"addressLocality"</span>: <span class="code-string">"Kuching"</span>,
+    <span class="code-string">"postalCode"</span>: <span class="code-string">"93400"</span>,
+    <span class="code-string">"addressRegion"</span>: <span class="code-string">"Sarawak"</span>,
+    <span class="code-string">"addressCountry"</span>: <span class="code-string">"MY"</span>
+  },
+  <span class="code-string">"servesCuisine"</span>: [<span class="code-string">"Cantonese"</span>, <span class="code-string">"Chinese"</span>],
+  <span class="code-string">"priceRange"</span>: <span class="code-string">"RM 688 - RM 1,288 per set menu"</span>,
+  <span class="code-string">"acceptsReservations"</span>: <span class="code-string">"True"</span>,
+  <span class="code-string">"potentialAction"</span>: {
+    <span class="code-string">"@type"</span>: <span class="code-string">"ReserveAction"</span>,
+    <span class="code-string">"target"</span>: <span class="code-string">"...?view=booking"</span>,
+    <span class="code-string">"result"</span>: { <span class="code-string">"@type"</span>: <span class="code-string">"FoodEstablishmentReservation"</span> }
+  }
+}
+&lt;/script&gt;
+
+<span class="code-comment">&lt;!-- Block 2: FAQPage — surfaces 15 Q&amp;As as rich snippets --&gt;</span>
+&lt;script type="application/ld+json"&gt;
+{
+  <span class="code-string">"@context"</span>: <span class="code-string">"https://schema.org"</span>,
+  <span class="code-string">"@type"</span>: <span class="code-string">"FAQPage"</span>,
+  <span class="code-string">"mainEntity"</span>: [
+    { <span class="code-string">"@type"</span>:<span class="code-string">"Question"</span>,
+      <span class="code-string">"name"</span>:<span class="code-string">"When are CNY 2026 reservations open?"</span>,
+      <span class="code-string">"acceptedAnswer"</span>:{<span class="code-string">"@type"</span>:<span class="code-string">"Answer"</span>,<span class="code-string">"text"</span>:<span class="code-string">"...1 Jan 2026 – 31 Jan 2027..."</span>}}
+    <span class="code-comment">// 14 more Q&amp;As covering deposit, dietary, halal, private rooms, etc.</span>
+  ]
+}
+&lt;/script&gt;</div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Bilingual Course Data — CATALOG Structure</h2>
+            <p>Six set menus, each with a bilingual description, 8–10 courses (each with bilingual name + bilingual description), auspicious highlights, and dietary options. <code>privateRoomAllowed</code> + <code>exclusiveVipRoom</code> drive the booking-form seating selector.</p>
+
+            <div class="code-container">
+                <div class="code-header">index.html — CATALOG sample (10-pax Set B, the signature)</div>
+                <div class="code-block">{
+  <span class="code-property">id</span>: <span class="code-string">'10b'</span>,
+  <span class="code-property">name</span>: <span class="code-string">'吉星 Lucky Star Signature Set B'</span>,
+  <span class="code-property">nameEn</span>: <span class="code-string">'Lucky Star Signature Set B'</span>,
+  <span class="code-property">pax</span>: <span class="code-number">10</span>, <span class="code-property">price</span>: <span class="code-number">1288</span>, <span class="code-property">perPax</span>: <span class="code-number">129</span>, <span class="code-property">courses</span>: <span class="code-number">10</span>, <span class="code-property">tier</span>: <span class="code-string">'signature'</span>,
+  <span class="code-property">image</span>: <span class="code-string">'images/menus/10-pax-set-b.jpeg'</span>,
+  <span class="code-property">description</span>: <span class="code-string">'Signature flagship — Lobster yee sang · cheese-baked lobster · suckling pig · bird\'s nest finale. VIP Room INCLUDED.'</span>,
+  <span class="code-property">courseList</span>: [
+    {
+      <span class="code-property">name</span>: <span class="code-string">'龙虾鲍鱼捞生'</span>,
+      <span class="code-property">nameEn</span>: <span class="code-string">'Lobster &amp; Abalone Yee Sang'</span>,
+      <span class="code-property">desc</span>: <span class="code-string">'Sliced fresh Boston lobster and South African abalone with gold-leaf crackers. ⭐ Signature.'</span>,
+      <span class="code-property">descZh</span>: <span class="code-string">'波士顿龙虾刺身配南非鲍鱼薄片，金箔脆片，⭐ 招牌捞生。'</span>,
+      <span class="code-property">auspicious</span>: <span class="code-string">'步步高升 — rising fortune'</span>
+    }
+    <span class="code-comment">// ... 9 more courses with bilingual desc/descZh</span>
+  ],
+  <span class="code-property">auspiciousHighlights</span>: [
+    { <span class="code-property">symbol</span>: <span class="code-string">'龙虾'</span>, <span class="code-property">meaning</span>: <span class="code-string">'strength'</span> },
+    { <span class="code-property">symbol</span>: <span class="code-string">'燕窝'</span>, <span class="code-property">meaning</span>: <span class="code-string">'longevity'</span> },
+    { <span class="code-property">symbol</span>: <span class="code-string">'乳猪'</span>, <span class="code-property">meaning</span>: <span class="code-string">'peace &amp; unity'</span> }
+  ],
+  <span class="code-property">dietaryOptions</span>: [<span class="code-string">'none'</span>,<span class="code-string">'noPork'</span>,<span class="code-string">'noBeef'</span>,<span class="code-string">'pescatarian'</span>,<span class="code-string">'vegetarian'</span>,<span class="code-string">'noShellfish'</span>],
+  <span class="code-property">privateRoomAllowed</span>: <span class="code-keyword">false</span>,        <span class="code-comment">// 10b is exclusively in VIP Room</span>
+  <span class="code-property">privateRoomSurcharge</span>: <span class="code-number">0</span>,
+  <span class="code-property">exclusiveVipRoom</span>: <span class="code-keyword">true</span>           <span class="code-comment">// reserveTable rejects vipRoom for any other set</span>
+}</div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>Project Files</h2>
+            <div class="code-container">
+                <div class="code-header">projects/ji-xing-cny-reservation/</div>
+                <div class="code-block">projects/ji-xing-cny-reservation/
+  index.html             <span class="code-comment"># Main app — multi-view SPA + WebMCP layer + Inspector Panel + bilingual UI (~2,000 lines)</span>
+  README.md              <span class="code-comment"># Project description + Auto Browser test instructions</span>
+  images/
+    logo.jpeg            <span class="code-comment"># 吉 brand mark (gold on dark brown circle)</span>
+    hero.jpeg            <span class="code-comment"># CNY banquet hero banner — yee sang prosperity toss</span>
+    menus/               <span class="code-comment"># 6 set-menu hero images, AI-generated via Imagen 3</span>
+      6-pax-set-a.jpeg
+      6-pax-set-b.jpeg
+      8-pax-set-a.jpeg
+      8-pax-set-b.jpeg
+      10-pax-set-a.jpeg
+      10-pax-set-b.jpeg
+  menu/                  <span class="code-comment"># Per-set markdown reference (6 files for menu detail)</span>
+    6-pax-set-a-menu.md
+    6-pax-set-b-menu.md
+    8-pax-set-a-menu.md
+    8-pax-set-b-menu.md
+    10-pax-set-a-menu.md
+    10-pax-set-b-menu.md</div>
+            </div>
+        </div>
+
+        <div class="demo-links">
+            <a href="projects/ji-xing-cny-reservation/index.html" class="demo-btn">Try Live Demo</a>
+            <a href="ji-xing-cny-reservation.html" class="demo-btn secondary">Back to Project Overview</a>
+        </div>
+
+        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+            <a href="ji-xing-cny-reservation.html">&larr; Project Overview</a> |
+            <a href="index.html">Portfolio Home</a> |
+            <a href="category-agentic-commerce.html">Agentic Commerce</a>
+        </nav>
+    </div>
+</body>
+</html>

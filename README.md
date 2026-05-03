@@ -2,7 +2,7 @@
 
 [![Portfolio Website](https://img.shields.io/badge/Portfolio-Live-green?logo=vercel)](https://lyven81.github.io/ai-project/)
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-black?logo=github)](https://github.com/lyven81/ai-project)
-[![Projects](https://img.shields.io/badge/Projects-67-blue)](#-featured-projects)
+[![Projects](https://img.shields.io/badge/Projects-68-blue)](#-featured-projects)
 [![AI Powered](https://img.shields.io/badge/AI-Powered-orange?logo=tensorflow)](https://github.com/lyven81/ai-project)
 
 **Innovative AI Solutions for Modern Challenges** - A curated collection of production-ready AI applications showcasing expertise in computer vision, natural language processing, document processing, and creative AI technologies.
@@ -13,7 +13,7 @@
 
 ## 🌟 Portfolio Overview
 
-This repository contains **67 AI applications** built in this repo (some published to the portfolio homepage, others retained as archived builds) demonstrating proficiency across multiple AI domains. Each project includes comprehensive documentation, live demos, and complete source code with deployment configurations.
+This repository contains **68 AI applications** built in this repo (some published to the portfolio homepage, others retained as archived builds) demonstrating proficiency across multiple AI domains. Each project includes comprehensive documentation, live demos, and complete source code with deployment configurations.
 
 **🎯 Portfolio Highlights:**
 - **15+ AI Technologies** integrated across projects
@@ -54,12 +54,13 @@ Each project is classified by its AI architecture pattern, based on how the syst
 | [SME Advisor AlloyDB](./projects/sme-advisor-alloydb/) | Retrieval-augmented advisor grounded in AlloyDB vector store |
 | [Marketing Agency](./projects/marketing-agency/) | 6-skill content pipeline with brand voice enforcement and lead feedback loop |
 
-### Agent-Callable Storefronts (1 project)
+### Agent-Callable Storefronts (2 projects)
 *Browser-native storefronts that expose typed tools to AI agents via the W3C WebMCP standard. Not agentic AI itself — but the surface AI agents shop on.*
 
 | Project | Why Agent-Callable |
 |---|---|
 | [Sunny Car Accessories](./sunny-car-accessories.html) | 18 SKUs, 7 WebMCP tools per-view scoped, `checkFitment` lets agents verify part compatibility before adding to cart — pixel-clicking agents can't do this reliably |
+| [Ji Xing 吉星饭厅 — CNY Reservation](./ji-xing-cny-reservation.html) | Bilingual CNY festival reservation page · 6 set menus (RM 688–1,288) · 7 WebMCP tools · `checkAvailability` returns typed JSON of mainHall/privateRoom/VIP table counts per sitting |
 
 ### RAG — Retrieval-Augmented Generation (3 projects)
 *Query → retrieve from knowledge base or external data → augment → LLM → output.*
@@ -148,7 +149,7 @@ Each project is classified by its AI architecture pattern, based on how the syst
 | Multi-Agent Orchestration | 3 | 4% |
 | Interactive Learning | 2 | 4% |
 
-**Total: 68 projects**
+**Total: 69 projects**
 
 > Note: As of Apr 9, 2026, 16 projects were unpublished from the live portfolio homepage display to sharpen focus. They remain in the repo and are still counted here as built work.
 
