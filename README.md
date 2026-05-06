@@ -2,7 +2,7 @@
 
 [![Portfolio Website](https://img.shields.io/badge/Portfolio-Live-green?logo=vercel)](https://lyven81.github.io/ai-project/)
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-black?logo=github)](https://github.com/lyven81/ai-project)
-[![Projects](https://img.shields.io/badge/Projects-68-blue)](#-featured-projects)
+[![Projects](https://img.shields.io/badge/Projects-69-blue)](#-featured-projects)
 [![AI Powered](https://img.shields.io/badge/AI-Powered-orange?logo=tensorflow)](https://github.com/lyven81/ai-project)
 
 **Innovative AI Solutions for Modern Challenges** - A curated collection of production-ready AI applications showcasing expertise in computer vision, natural language processing, document processing, and creative AI technologies.
@@ -13,7 +13,7 @@
 
 ## 🌟 Portfolio Overview
 
-This repository contains **68 AI applications** built in this repo (some published to the portfolio homepage, others retained as archived builds) demonstrating proficiency across multiple AI domains. Each project includes comprehensive documentation, live demos, and complete source code with deployment configurations.
+This repository contains **69 AI applications** built in this repo (some published to the portfolio homepage, others retained as archived builds) demonstrating proficiency across multiple AI domains. Each project includes comprehensive documentation, live demos, and complete source code with deployment configurations.
 
 **🎯 Portfolio Highlights:**
 - **15+ AI Technologies** integrated across projects
@@ -26,7 +26,7 @@ This repository contains **68 AI applications** built in this repo (some publish
 
 Each project is classified by its AI architecture pattern, based on how the system processes queries, uses tools, and makes decisions.
 
-### Multi-Agent Orchestration (3 projects)
+### Multi-Agent Orchestration (4 projects)
 *Multiple specialized agents chained in sequence, each with its own tools and instructions.*
 
 | Project | Why Multi-Agent |
@@ -34,6 +34,7 @@ Each project is classified by its AI architecture pattern, based on how the syst
 | [Stock Manager](./projects/stock-manager/) | 3-agent ADK pipeline: Sales Analyst → Inventory Checker → Restock Decider → Google Sheets |
 | [Leadership Team](./leadership-team.html) | 6 manager subagents (Engineering, Research, Marketing, Editor, Coordinator, Mentor) run a weekly boardroom and write minutes to disk |
 | [Course Creator](./course-creator.html) | 4-agent ADK pipeline (Researcher → Judge → Content Builder + Orchestrator) talking over A2A protocol on Cloud Run |
+| [Bookshelf](./bookshelf.html) | 4-agent ADK pipeline (Researcher → Judge → Content Builder + Orchestrator) for Malaysian bookstore inventory — pandas data tool computes exact metrics, Pydantic Judge gates the loop |
 
 ### Agentic AI (11 projects)
 *Orchestrator with planning, tools, memory, and feedback loops. Autonomous decision-making.*

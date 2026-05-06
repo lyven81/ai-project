@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bookshelf — Ask anything about your shop</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body class="landing-page">
+    <div class="container">
+        <header>
+            <div class="logo">📚 Bookshelf</div>
+        </header>
+        <main class="hero-section">
+            <h1>Ask anything about your shop.</h1>
+            <p class="subtitle">
+                Your AI business advisor reads your sales data and tells you what to push,
+                drop, restock, and source — in plain Malaysian English.
+            </p>
+
+            <form id="ask-form" class="hero-form">
+                <input
+                    type="text"
+                    id="question-input"
+                    placeholder="What do you want to know? e.g. Which products should I drop?"
+                    autocomplete="off"
+                    required
+                />
+                <button type="submit" id="ask-button">
+                    <span>Ask</span>
+                </button>
+            </form>
+
+            <div class="example-chips">
+                <button class="chip" data-q="What should I do with my inventory?">What should I do with my inventory?</button>
+                <button class="chip" data-q="Which products should I drop?">Which products should I drop?</button>
+                <button class="chip" data-q="When do I need to stock for school season?">When do I need to stock for school season?</button>
+            </div>
+
+            <div id="progress-container" class="progress-container hidden">
+                <div class="agent-status">
+                    <div class="status-icon"><div class="spinner"></div></div>
+                    <div id="status-text" class="status-text">Working on it...</div>
+                </div>
+                <div class="progress-steps">
+                    <div class="step" id="step-researcher">
+                        <div class="step-icon">🔍</div>
+                        <div class="step-label">Researching</div>
+                    </div>
+                    <div class="step" id="step-judge">
+                        <div class="step-icon">⚖️</div>
+                        <div class="step-label">Checking</div>
+                    </div>
+                    <div class="step" id="step-builder">
+                        <div class="step-icon">✍️</div>
+                        <div class="step-label">Writing</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="brief-container" class="brief-container hidden">
+                <div class="brief-header">
+                    <h2>Your Brief</h2>
+                    <div>
+                        <button id="copy-brief" class="secondary-btn small">Copy</button>
+                        <button id="ask-another" class="secondary-btn small">Ask Another</button>
+                    </div>
+                </div>
+                <article id="brief-content" class="brief-content"></article>
+            </div>
+        </main>
+    </div>
+    <script src="/app.js"></script>
+</body>
+</html>

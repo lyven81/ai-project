@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bookshelf - Source Code</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #222; background-color: #ffffff; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        .back-nav { margin-bottom: 20px; }
+        .back-nav a { color: #007BFF; text-decoration: none; font-size: 1rem; }
+        .back-nav a:hover { text-decoration: underline; }
+
+        .project-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #4299E1, #2B6CB0);
+            color: white;
+            border-radius: 10px;
+        }
+        .project-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        .project-header p { font-size: 1.2rem; opacity: 0.9; }
+
+        .content-section {
+            margin: 40px 0;
+            padding: 30px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border-left: 5px solid #4299E1;
+        }
+        .content-section h2 { color: #2B6CB0; margin-bottom: 20px; font-size: 1.8rem; }
+        .content-section h3 { color: #333; margin: 20px 0 10px; font-size: 1.2rem; }
+        .content-section p { margin-bottom: 12px; }
+        .content-section ul, .content-section ol { margin: 8px 0 12px 24px; }
+        .content-section li { margin-bottom: 6px; }
+        .content-section strong { color: #2B6CB0; }
+
+        .file-tree {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 18px 22px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.88rem;
+            line-height: 1.7;
+            white-space: pre;
+            overflow-x: auto;
+            margin: 16px 0;
+        }
+
+        .code-container {
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 16px 0;
+            overflow-x: auto;
+        }
+        .code-header {
+            color: #4ade80;
+            font-weight: bold;
+            margin-bottom: 12px;
+            font-size: 1rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 8px;
+            font-family: 'Courier New', monospace;
+        }
+        .code-block {
+            color: #d4d4d4;
+            font-family: 'Courier New', monospace;
+            font-size: 0.88rem;
+            line-height: 1.55;
+            white-space: pre;
+            overflow-x: auto;
+        }
+
+        .keyword { color: #c586c0; }
+        .string { color: #ce9178; }
+        .comment { color: #6a9955; font-style: italic; }
+        .func { color: #dcdcaa; }
+        .type { color: #4ec9b0; }
+
+        .demo-links { text-align: center; margin: 30px 0; }
+        .demo-btn {
+            display: inline-block;
+            background-color: #007BFF;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px 10px;
+            font-weight: bold;
+        }
+        .demo-btn:hover { background-color: #0056b3; }
+        .demo-btn.secondary { background-color: #28a745; }
+        .demo-btn.secondary:hover { background-color: #218838; }
+
+        @media (max-width: 600px) {
+            .project-header h1 { font-size: 1.8rem; }
+            .content-section { padding: 18px; }
+            .demo-btn { display: block; margin: 8px 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="back-nav">
+            <a href="bookshelf.html">← Back to Showcase</a>
+        </div>
+
+        <div class="project-header">
+            <h1>📚 Bookshelf — Source Code</h1>
+            <p>Multi-Agent Inventory Planner for Malaysian Bookstores</p>
+        </div>
+
+        <div class="content-section">
+            <h2>📁 Project Structure</h2>
+            <p>Each agent is its own self-contained service with its own <code>agent.py</code> (the ADK agent definition) and <code>adk_app.py</code> (a thin wrapper invoking the shared CLI). The web app does NOT import ADK — it talks to the Orchestrator service over HTTP/SSE.</p>
+
+            <div class="file-tree">projects/bookshelf/
+├── pyproject.toml              ← deps pinned to ADK 1.27.x + a2a-sdk 0.3.x
+├── start.bat                   ← spawns 5 services on Windows
+├── stop.bat                    ← kills processes on ports 8000-8004
+├── README.md
+├── .env.example
+├── shared/                     ← Course Creator's shared infra verbatim
+│   ├── adk_app.py              ← click CLI wrapping ADK's fast_api.get_fast_api_app
+│   ├── a2a_utils.py            ← agent-card URL rewriting middleware
+│   └── authenticated_httpx.py  ← Cloud Run identity-token client
+├── agents/
+│   ├── researcher/
+│   │   ├── agent.py            ← Agent + FunctionTool calling data_tool
+│   │   ├── data_tool.py        ← pandas: per-SKU + seasonal + aging metrics
+│   │   ├── adk_app.py          ← thin wrapper to shared.adk_app.main
+│   │   └── Dockerfile
+│   ├── judge/
+│   │   ├── agent.py            ← Pydantic JudgeVerdict structured output
+│   │   ├── adk_app.py
+│   │   └── Dockerfile
+│   ├── content_builder/
+│   │   ├── agent.py            ← writes the final Markdown brief
+│   │   └── adk_app.py
+│   └── orchestrator/
+│       ├── agent.py            ← LoopAgent + SequentialAgent + EscalationChecker
+│       └── adk_app.py
+├── app/                        ← web app (no ADK imports)
+│   ├── main.py                 ← FastAPI thin client over /run_sse
+│   └── frontend/
+│       ├── index.html          ← single ask bar
+│       ├── app.js              ← progress strip + Markdown render
+│       └── style.css
+├── scripts/                    ← per-agent runner .bat files
+└── sample_briefs/              ← 5 captured briefs (the static demo data)</div>
+        </div>
+
+        <div class="content-section">
+            <h2>🧠 Code Walkthrough — The Five Important Files</h2>
+            <p>Skip the boilerplate. These are the files that show how the system actually works.</p>
+        </div>
+
+        <div class="content-section">
+            <h2>1️⃣ Researcher — calls a deterministic pandas tool</h2>
+            <p>The Researcher's job is mostly to tell Gemini "call <code>get_sales_metrics</code> and pass the result through verbatim." All the analytical work happens in <code>data_tool.py</code> — exact aggregates, exact rankings, exact aging classification.</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 agents/researcher/agent.py</div>
+                <div class="code-block"><span class="keyword">from</span> google.adk.agents <span class="keyword">import</span> Agent
+<span class="keyword">from</span> google.adk.tools <span class="keyword">import</span> FunctionTool
+<span class="keyword">from</span> data_tool <span class="keyword">import</span> analyse_sales_data_summary
+
+MODEL = os.environ.get(<span class="string">"BOOKSHELF_MODEL"</span>, <span class="string">"gemini-2.5-flash"</span>)
+
+<span class="keyword">def</span> <span class="func">get_sales_metrics</span>() -> <span class="type">str</span>:
+    <span class="string">"""Read the bookshelf sales dataset and return structured metrics as a JSON string."""</span>
+    <span class="keyword">return</span> analyse_sales_data_summary(top_n=<span class="type">30</span>)
+
+sales_metrics_tool = FunctionTool(func=get_sales_metrics)
+
+researcher = Agent(
+    name=<span class="string">"researcher"</span>,
+    model=MODEL,
+    description=(<span class="string">"Reads the bookshelf sales dataset and produces structured metrics."</span>),
+    instruction=(
+        <span class="string">"You are the Data Researcher for Bookshelf...\n"</span>
+        <span class="string">"1. Call the `get_sales_metrics` tool to load the latest sales analytics.\n"</span>
+        <span class="string">"2. Return the JSON string from the tool VERBATIM as your response."</span>
+    ),
+    tools=[sales_metrics_tool],
+)
+
+root_agent = researcher</div>
+            </div>
+
+            <h3>The data_tool is what makes the numbers exact</h3>
+            <p>The agent prompt does the routing; the pandas code does the math. This is the difference between Bookshelf and a chat-on-document tool — aggregates are computed before the LLM ever sees them.</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 agents/researcher/data_tool.py — aging classification (excerpt)</div>
+                <div class="code-block">last_sale = df.groupby(<span class="string">"Product"</span>)[<span class="string">"OrderDate"</span>].max().reset_index()
+last_sale.columns = [<span class="string">"Product"</span>, <span class="string">"_last_sale_dt"</span>]
+sku_agg = sku_agg.merge(last_sale, on=<span class="string">"Product"</span>, how=<span class="string">"left"</span>)
+data_max_date = df[<span class="string">"OrderDate"</span>].max()
+sku_agg[<span class="string">"days_since_last_sale"</span>] = (data_max_date - sku_agg[<span class="string">"_last_sale_dt"</span>]).dt.days.astype(<span class="type">int</span>)
+
+<span class="keyword">def</span> <span class="func">_aging_class</span>(days: <span class="type">int</span>) -> <span class="type">str</span>:
+    <span class="keyword">if</span> days <= <span class="type">30</span>:  <span class="keyword">return</span> <span class="string">"fresh"</span>
+    <span class="keyword">if</span> days <= <span class="type">90</span>:  <span class="keyword">return</span> <span class="string">"slowing"</span>
+    <span class="keyword">if</span> days <= <span class="type">180</span>: <span class="keyword">return</span> <span class="string">"stale"</span>
+    <span class="keyword">return</span> <span class="string">"stuck"</span>
+
+sku_agg[<span class="string">"aging_class"</span>] = sku_agg[<span class="string">"days_since_last_sale"</span>].apply(_aging_class)</div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>2️⃣ Judge — Pydantic structured output as a quality gate</h2>
+            <p>The Judge does not free-text its verdict. It emits a typed <code>JudgeVerdict</code> with status / issues / confidence / feedback. The orchestrator's EscalationChecker reads <code>verdict.status</code> directly — no string parsing, no regex.</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 agents/judge/agent.py</div>
+                <div class="code-block"><span class="keyword">from typing import</span> Literal
+<span class="keyword">from</span> google.adk.agents <span class="keyword">import</span> Agent
+<span class="keyword">from</span> pydantic <span class="keyword">import</span> BaseModel, Field
+
+<span class="keyword">class</span> <span class="type">JudgeVerdict</span>(BaseModel):
+    status: Literal[<span class="string">"pass"</span>, <span class="string">"fail"</span>] = Field(...)
+    issues: <span class="type">list</span>[<span class="type">str</span>] = Field(default_factory=<span class="type">list</span>)
+    confidence: <span class="type">float</span> = Field(ge=<span class="type">0.0</span>, le=<span class="type">1.0</span>)
+    feedback: <span class="type">str</span> = Field(...)
+
+judge = Agent(
+    name=<span class="string">"judge"</span>,
+    model=MODEL,
+    description=(<span class="string">"Validates the Researcher's metrics for completeness and red flags."</span>),
+    instruction=(<span class="string">"You are a strict, independent forensic auditor...\n"</span>
+                 <span class="string">"Check completeness, data quality, plausibility, coverage, duplicate risk.\n"</span>
+                 <span class="string">"Return JudgeVerdict. Set status='pass' unless serious problems."</span>),
+    output_schema=JudgeVerdict,         <span class="comment"># forces structured decoding</span>
+    disallow_transfer_to_parent=<span class="type">True</span>,
+    disallow_transfer_to_peers=<span class="type">True</span>,
+)
+
+root_agent = judge</div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>3️⃣ Orchestrator — the LoopAgent + EscalationChecker pattern</h2>
+            <p>This is the workshop's core "specialised agents + quality loop" pattern. <code>LoopAgent</code> retries the Researcher → Judge → EscalationChecker chain up to 3 times. The EscalationChecker is a 5-line deterministic Python class that decides whether to break the loop. Not every component needs an LLM.</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 agents/orchestrator/agent.py</div>
+                <div class="code-block"><span class="keyword">from</span> google.adk.agents <span class="keyword">import</span> BaseAgent, LoopAgent, SequentialAgent
+<span class="keyword">from</span> google.adk.agents.remote_a2a_agent <span class="keyword">import</span> RemoteA2aAgent
+<span class="keyword">from</span> google.adk.events <span class="keyword">import</span> Event, EventActions
+
+<span class="comment"># --- Three remote agents reachable via A2A ---</span>
+researcher = RemoteA2aAgent(
+    name=<span class="string">"researcher"</span>,
+    agent_card=os.environ[<span class="string">"RESEARCHER_AGENT_CARD_URL"</span>],
+    after_agent_callback=create_save_output_callback(<span class="string">"research_findings"</span>),
+    httpx_client=create_authenticated_client(researcher_url),
+)
+<span class="comment"># judge, content_builder defined the same way...</span>
+
+<span class="comment"># --- 5-line deterministic checker that breaks the loop on pass ---</span>
+<span class="keyword">class</span> <span class="type">EscalationChecker</span>(BaseAgent):
+    <span class="keyword">async def</span> <span class="func">_run_async_impl</span>(self, ctx):
+        feedback = ctx.session.state.get(<span class="string">"judge_feedback"</span>) <span class="keyword">or</span> {}
+        is_pass = <span class="keyword">isinstance</span>(feedback, <span class="type">dict</span>) <span class="keyword">and</span> feedback.get(<span class="string">"status"</span>) == <span class="string">"pass"</span>
+        <span class="keyword">if</span> is_pass:
+            <span class="keyword">yield</span> Event(author=self.name, actions=EventActions(escalate=<span class="type">True</span>))
+        <span class="keyword">else</span>:
+            <span class="keyword">yield</span> Event(author=self.name)
+
+<span class="comment"># --- The pipeline ---</span>
+research_loop = LoopAgent(
+    name=<span class="string">"research_loop"</span>,
+    sub_agents=[researcher, judge, EscalationChecker(name=<span class="string">"escalation_checker"</span>)],
+    max_iterations=<span class="type">3</span>,
+)
+
+root_agent = SequentialAgent(
+    name=<span class="string">"bookshelf_pipeline"</span>,
+    sub_agents=[research_loop, content_builder],
+)</div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>4️⃣ Web App — thin HTTP/SSE client (no ADK imports)</h2>
+            <p>The most important architectural decision. The web app does NOT instantiate <code>Runner</code> in-process. It speaks HTTP/SSE to the orchestrator service. This means the web app and the agents can scale independently, and the web app stays small.</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 app/main.py — talking to the orchestrator over SSE</div>
+                <div class="code-block"><span class="keyword">from</span> httpx_sse <span class="keyword">import</span> aconnect_sse
+<span class="keyword">from</span> google.genai <span class="keyword">import</span> types <span class="keyword">as</span> genai_types
+
+<span class="keyword">async def</span> <span class="func">query_agent</span>(origin, agent, user_id, message, session_id):
+    client = <span class="keyword">await</span> get_client(origin)
+    request = {
+        <span class="string">"appName"</span>: agent,
+        <span class="string">"userId"</span>: user_id,
+        <span class="string">"sessionId"</span>: session_id,
+        <span class="string">"newMessage"</span>: {<span class="string">"role"</span>: <span class="string">"user"</span>, <span class="string">"parts"</span>: [{<span class="string">"text"</span>: message}]},
+        <span class="string">"streaming"</span>: <span class="type">False</span>,
+    }
+    <span class="keyword">async with</span> aconnect_sse(client, <span class="string">"POST"</span>, f<span class="string">"{origin}/run_sse"</span>, json=request) <span class="keyword">as</span> es:
+        <span class="keyword">async for</span> server_event <span class="keyword">in</span> es.aiter_sse():
+            <span class="keyword">yield</span> server_event.json()
+
+<span class="comment"># Per-author progress messages stream to the frontend as ndjson lines</span>
+<span class="keyword">async def</span> <span class="func">event_generator</span>():
+    <span class="keyword">async for</span> event <span class="keyword">in</span> events:
+        <span class="keyword">if</span> event[<span class="string">"author"</span>] == <span class="string">"researcher"</span>:
+            <span class="keyword">yield</span> json.dumps({<span class="string">"type"</span>: <span class="string">"progress"</span>, <span class="string">"text"</span>: <span class="string">"🔍 Researcher reading data..."</span>}) + <span class="string">"\n"</span>
+        <span class="comment"># ...etc for judge, content_builder...</span>
+        <span class="keyword">if</span> event.get(<span class="string">"author"</span>) == <span class="string">"content_builder"</span> <span class="keyword">and</span> event.get(<span class="string">"content"</span>):
+            content = genai_types.Content.model_validate(event[<span class="string">"content"</span>])
+            final_text += content.parts[<span class="type">0</span>].text</div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>5️⃣ Content Builder — reasons over the metrics + question</h2>
+            <p>Receives <code>research_findings</code> (the metrics JSON), <code>judge_feedback</code> (the verdict), and the user's question via session state. Classifies SKUs into the 6-bucket taxonomy and writes a focused 600-word brief.</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 agents/content_builder/agent.py — the 6-class taxonomy in the system prompt</div>
+                <div class="code-block">instruction=(
+    <span class="string">"You are the Bookshelf business advisor for a Malaysian SME book shop owner.\n\n"</span>
+    <span class="string">"INPUTS (in session state):\n"</span>
+    <span class="string">"- 'research_findings' — JSON with sku_metrics, seasonal_indices, channel_breakdown, etc.\n"</span>
+    <span class="string">"- 'judge_feedback' — the Judge's verdict\n"</span>
+    <span class="string">"- The user's original message — what the shop owner asked.\n\n"</span>
+    <span class="string">"Classify relevant SKUs into one of 6 actions:\n"</span>
+    <span class="string">"- push: top-quartile revenue, healthy margin (>30%), velocity > 50 u/mo\n"</span>
+    <span class="string">"- hold: steady, no concerning signals\n"</span>
+    <span class="string">"- drop: declining velocity OR margin <15%\n"</span>
+    <span class="string">"- restock-seasonal: clear seasonal_indices peak in next 90 days\n"</span>
+    <span class="string">"- discontinue: velocity <3 u/mo AND no future demand (e.g. discontinued exam syllabus,\n"</span>
+    <span class="string">"  or aging_class='stale'/'stuck' meaning >90 days since last sale)\n"</span>
+    <span class="string">"- source-similar: category gap visible\n\n"</span>
+    <span class="string">"AGING SIGNAL: each SKU has aging_class (fresh/slowing/stale/stuck)...\n"</span>
+    <span class="string">"STYLE: Plain English. Every recommendation cites a specific RM/%/units/month.\n"</span>
+    <span class="string">"Return ONLY the Markdown brief — no preamble, no closing remarks."</span>
+)</div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🔧 Implementation Notes Worth Mentioning</h2>
+
+            <h3>Pinning ADK to a known-good version</h3>
+            <p>Initial build used <code>google-adk &gt;= 0.1.0</code> with no upper bound. ADK 1.28+ removed APIs the code depended on. Fix: pin to <code>&gt;= 1.27.4, &lt; 2.0.0</code> — same as the Course Creator reference build.</p>
+
+            <h3>UTF-8 mode on Windows</h3>
+            <p>ADK's CLI uses Python's default <code>write_text()</code>, which on Windows is cp1252. Em-dashes in agent instructions wrote as 0x97, then re-read as UTF-8 → crash. Fix: <code>set PYTHONUTF8=1</code> in <code>start.bat</code> before any Python call.</p>
+
+            <h3>Localhost auth bypass</h3>
+            <p>Course Creator's <code>authenticated_httpx</code> requires Google Cloud identity tokens for inter-agent calls — perfect for Cloud Run, but local dev fails because <code>fetch_id_token_credentials</code> can't auth without ADC. Wrapped: when the URL is <code>localhost</code>/<code>127.0.0.1</code>, return a plain <code>httpx.AsyncClient</code>; otherwise call <code>create_authenticated_client</code>.</p>
+
+            <h3>Aging slice in the trim window</h3>
+            <p>Sending all 385 SKUs to the LLM blows context. Default trim is top 30 + bottom 30 by revenue. But aging-stale SKUs (e.g. <em>Pakej UPSR Lengkap</em> at RM 6,560) sit mid-revenue and got dropped. Fix: <code>analyse_sales_data_summary</code> also keeps every SKU with <code>aging_class</code> in {slowing, stale, stuck}, deduplicated.</p>
+        </div>
+
+        <div class="demo-links">
+            <a href="bookshelf.html" class="demo-btn">← Back to Showcase</a>
+            <a href="https://github.com/lyven81/ai-project/tree/main/projects/bookshelf" target="_blank" class="demo-btn secondary">📦 View on GitHub</a>
+        </div>
+    </div>
+</body>
+</html>

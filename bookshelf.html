@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bookshelf - Multi-Agent Inventory Planner for Malaysian Bookstores</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #222;
+            background-color: #ffffff;
+        }
+
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+
+        .back-nav { margin-bottom: 20px; }
+        .back-nav a { color: #007BFF; text-decoration: none; font-size: 1rem; }
+        .back-nav a:hover { text-decoration: underline; }
+
+        .project-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #4299E1, #2B6CB0);
+            color: white;
+            border-radius: 10px;
+        }
+        .project-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        .project-header p { font-size: 1.2rem; opacity: 0.95; }
+
+        .badges { display: flex; justify-content: center; gap: 10px; margin: 20px 0; flex-wrap: wrap; }
+        .badge { background-color: rgba(255,255,255,0.2); color: white; padding: 5px 12px; border-radius: 15px; font-size: 0.9rem; }
+
+        .demo-links { text-align: center; margin: 30px 0; }
+        .demo-btn {
+            display: inline-block;
+            background-color: #007BFF;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px 10px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        .demo-btn:hover { background-color: #0056b3; }
+        .demo-btn.secondary { background-color: #28a745; }
+        .demo-btn.secondary:hover { background-color: #218838; }
+
+        .content-section {
+            margin: 40px 0;
+            padding: 30px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border-left: 5px solid #4299E1;
+        }
+        .content-section h2 { color: #2B6CB0; margin-bottom: 20px; font-size: 1.8rem; }
+        .content-section h3 { color: #333; margin: 24px 0 12px; font-size: 1.2rem; }
+        .content-section p { margin-bottom: 16px; }
+        .content-section ul, .content-section ol { margin: 12px 0 12px 28px; }
+        .content-section li { margin-bottom: 8px; }
+        .content-section strong { color: #2B6CB0; }
+        .content-section code { background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-size: 0.92em; }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 18px;
+            margin-top: 16px;
+        }
+        .feature-item {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 18px;
+        }
+        .feature-item h4 { color: #2B6CB0; margin-bottom: 8px; font-size: 1.05rem; }
+        .feature-item p { font-size: 0.95rem; margin-bottom: 0; }
+
+        .tech-stack { display: flex; gap: 8px; flex-wrap: wrap; margin: 8px 0 24px; }
+        .tech-item {
+            background: #4299E1;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+        }
+
+        .code-block {
+            background: #1a202c;
+            color: #e2e8f0;
+            padding: 16px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.88rem;
+            white-space: pre-wrap;
+            overflow-x: auto;
+            margin: 12px 0;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin: 16px 0;
+        }
+        .metric-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 18px;
+            text-align: center;
+        }
+        .metric-card .num { font-size: 1.8rem; font-weight: 700; color: #2B6CB0; display: block; }
+        .metric-card .label { font-size: 0.9rem; color: #475569; margin-top: 4px; display: block; }
+
+        .compare-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0 8px;
+            font-size: 0.95rem;
+            background: #ffffff;
+        }
+        .compare-table th, .compare-table td {
+            border: 1px solid #e2e8f0;
+            padding: 10px 14px;
+            text-align: left;
+            vertical-align: top;
+        }
+        .compare-table th { background: #edf2f7; color: #2B6CB0; font-weight: 700; }
+        .compare-table td.win { background: #f0fff4; color: #2f855a; font-weight: 600; }
+        .compare-table td.lose { background: #fff5f5; color: #c53030; }
+        .compare-table td.tie { background: #fffaf0; color: #b7791f; }
+
+        .arch-diagram {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 16px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.88rem;
+            line-height: 1.8;
+            color: #2d3748;
+            text-align: center;
+            white-space: pre;
+            overflow-x: auto;
+        }
+
+        .limitation-box {
+            background: #fffaf0;
+            border-left: 4px solid #ed8936;
+            padding: 16px 20px;
+            border-radius: 6px;
+            margin: 16px 0;
+        }
+        .limitation-box h4 { color: #c05621; margin-bottom: 6px; }
+        .limitation-box p { font-size: 0.95rem; margin-bottom: 0; color: #7b341e; }
+
+        .bottom-nav {
+            text-align: center;
+            margin: 40px 0 20px;
+        }
+        .bottom-nav a {
+            color: #007BFF;
+            text-decoration: none;
+            margin: 0 12px;
+            font-weight: 500;
+        }
+        .bottom-nav a:hover { text-decoration: underline; }
+
+        @media (max-width: 600px) {
+            .project-header h1 { font-size: 1.8rem; }
+            .project-header p { font-size: 1rem; }
+            .content-section { padding: 18px; }
+            .demo-btn { display: block; margin: 8px 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="back-nav">
+            <a href="index.html">← Back to Portfolio</a>
+        </div>
+
+        <div class="project-header">
+            <h1>📚 Bookshelf</h1>
+            <p>Multi-Agent Inventory Planner for Malaysian Bookstores</p>
+            <div class="badges">
+                <span class="badge">Multi-Agent System</span>
+                <span class="badge">Google ADK</span>
+                <span class="badge">A2A Protocol</span>
+                <span class="badge">Gemini 2.5 Flash</span>
+                <span class="badge">FastAPI</span>
+                <span class="badge">pandas</span>
+            </div>
+        </div>
+
+        <div class="demo-links">
+            <a href="projects/bookshelf/demo.html" class="demo-btn">🚀 Launch Demo</a>
+            <a href="bookshelf-source.html" class="demo-btn secondary">📁 View Source Code</a>
+        </div>
+
+        <div class="content-section">
+            <h2>📋 Project Overview &amp; Problem Statement</h2>
+            <p><strong>Challenge:</strong> Malaysian SME bookstore owners sit on tens of thousands of sales rows but rarely turn the data into stocking decisions. Pareto analysis, dead-stock detection, seasonal pre-stocking, and aging clearance each require hours of pivot-table work. Most owners run on intuition and miss obsolete syllabi (UPSR was abolished in 2021), dormant religious titles, and pre-school-season restocking windows.</p>
+
+            <p><strong>Solution:</strong> Bookshelf is a 4-agent decision-support system where the owner asks any business question in plain Malaysian English and receives a focused brief grounded in their actual sales data. A deterministic pandas tool computes exact metrics; a Pydantic-typed Judge gates the research; a Content Builder turns the validated metrics into a 600-word actionable brief.</p>
+
+            <h3>What the owner can do</h3>
+            <ul>
+                <li>Ask any inventory question — Pareto, dead stock, seasonal timing, aging, margin ranking</li>
+                <li>Get specific SKUs with exact RM impact, not vague guidance</li>
+                <li>Spot structurally obsolete inventory (e.g. discontinued exam syllabi the owner forgot to clear)</li>
+                <li>Plan pre-school-season stock-up dates from the actual seasonal index per subcategory</li>
+                <li>Trust the numbers — they come from pandas aggregation, not LLM approximation</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>🧠 Why a Multi-Agent System Beats a Chat-on-Document Tool</h2>
+            <p>Tools like Google NotebookLM let an owner upload a CSV and ask questions. They are fast, polished, and free. Bookshelf is slower (~140 seconds per question vs sub-10 seconds) and operationally heavier. The trade is intentional — chat-on-document tools hit a wall on numerical aggregation and quality validation. Bookshelf is built for decisions worth thousands of ringgit, where exact numbers and a quality gate matter more than speed.</p>
+
+            <table class="compare-table">
+                <thead>
+                    <tr>
+                        <th>Question type</th>
+                        <th>Chat-on-document tool (e.g. NotebookLM)</th>
+                        <th>Bookshelf multi-agent system</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Exact aggregates ("RM impact of dropping these 8 SKUs")</td>
+                        <td class="lose">Approximates from chunks — often wrong by 5–20%</td>
+                        <td class="win">pandas computes exactly</td>
+                    </tr>
+                    <tr>
+                        <td>Ranked lists by computed metric ("top 10 by velocity × margin")</td>
+                        <td class="lose">Cannot sort the whole 100k rows in one prompt</td>
+                        <td class="win">data_tool sorts deterministically before LLM sees it</td>
+                    </tr>
+                    <tr>
+                        <td>Quality validation before recommendations</td>
+                        <td class="lose">Single LLM call, no validation</td>
+                        <td class="win">Judge agent gates the brief; loops up to 3× on fail</td>
+                    </tr>
+                    <tr>
+                        <td>Speed for casual exploration</td>
+                        <td class="win">Sub-10s response</td>
+                        <td class="lose">~140s end-to-end</td>
+                    </tr>
+                    <tr>
+                        <td>Multimodal output (audio overview, mind map, quizzes)</td>
+                        <td class="win">Built-in</td>
+                        <td class="tie">Not in Phase 1</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Where Bookshelf is structurally better</h3>
+            <p>The real value of building a system isn't beating NotebookLM at chat. It's that a system can do four things NotebookLM cannot:</p>
+            <ul>
+                <li><strong>Live POS integration</strong> — Bookshelf can hook directly to a Square / SAP-BO BS1 / Excel export and re-run nightly. NotebookLM needs a fresh upload every time.</li>
+                <li><strong>Push delivery, not pull chat</strong> — Bookshelf can become a Monday WhatsApp message: <em>"This week: drop these 5 SKUs (RM 320 stuck), pre-stock these 8 for school season (Dec 28 cutoff)."</em> NotebookLM is a tab the owner has to remember to open.</li>
+                <li><strong>Structured outputs the shop's systems can consume</strong> — Bookshelf can emit a CSV of "discontinue" SKUs straight into the POS for clearance pricing. NotebookLM emits prose only.</li>
+                <li><strong>Privacy-preserving deployment</strong> — Some shops won't upload sales data to a public chat tool. Bookshelf can run on the customer's own Cloud Run + private database.</li>
+            </ul>
+
+            <p>The Phase 1 build proves the architecture. The wedges above (Phase 4+) are where the system pays back the complexity premium.</p>
+        </div>
+
+        <div class="content-section">
+            <h2>🏗️ Architecture &amp; Execution Flow</h2>
+
+            <div class="arch-diagram">USER question
+     │
+     ▼
+┌──────────────────────────────────────────────────────────┐
+│  Web App (FastAPI, port 8000)                            │
+│  Thin HTTP/SSE client — does NOT import ADK              │
+└──────────────────────────────────────────────────────────┘
+     │  POST /run_sse
+     ▼
+┌──────────────────────────────────────────────────────────┐
+│  Orchestrator agent (port 8004)                          │
+│  SequentialAgent:                                         │
+│    LoopAgent(max_iterations=3) [                          │
+│      Researcher → Judge → EscalationChecker              │
+│    ] → Content Builder                                    │
+└──────────────────────────────────────────────────────────┘
+     │  RemoteA2aAgent over HTTP (A2A protocol)
+     ▼
+┌─────────────┐  ┌──────────┐  ┌─────────────────┐
+│ Researcher  │  │  Judge   │  │ Content Builder │
+│ (port 8001) │  │  (8002)  │  │     (8003)      │
+│ pandas      │  │ Pydantic │  │ Markdown brief  │
+│ data_tool   │  │ verdict  │  │ + 6-class SKU   │
+└─────────────┘  └──────────┘  └─────────────────┘</div>
+
+            <h3>Why split it this way</h3>
+            <ul>
+                <li><strong>Researcher</strong> calls a deterministic pandas tool — the same input always yields the same metrics dict. The LLM is just the wrapper that decides when to call it.</li>
+                <li><strong>Judge</strong> emits a Pydantic <code>JudgeVerdict</code> (status / issues / confidence / feedback) with structured-output decoding — no string parsing.</li>
+                <li><strong>EscalationChecker</strong> is a 5-line deterministic Python class that breaks the LoopAgent on Judge pass. Not every component needs an LLM.</li>
+                <li><strong>Content Builder</strong> reads the Researcher's JSON + Judge's verdict + the user's original question and produces a focused 600-word brief.</li>
+                <li><strong>Each agent is its own Cloud Run service.</strong> Independently scaled, independently deployed, discoverable via A2A agent cards (<code>/.well-known/agent-card.json</code>).</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>🖥️ Application Features</h2>
+
+            <div class="features-grid">
+                <div class="feature-item">
+                    <h4>🗨️ Single ask-anything bar</h4>
+                    <p>One text input. Owner types any inventory question — broad ("what should I do?") or specific ("should I drop Naruto Vol 5?"). No menu navigation, no upload step.</p>
+                </div>
+                <div class="feature-item">
+                    <h4>📊 Deterministic data tool</h4>
+                    <p>pandas computes per-SKU revenue, margin, velocity, Pareto rank, last-sale date, aging class, seasonal indices, channel breakdown. Output JSON-serialised so the Judge can validate it byte-for-byte.</p>
+                </div>
+                <div class="feature-item">
+                    <h4>⚖️ Quality-gated loop</h4>
+                    <p>Judge runs after Researcher and emits status="pass" or "fail" with structured feedback. EscalationChecker breaks the loop on pass; on fail, Researcher reruns with the feedback. Max 3 iterations.</p>
+                </div>
+                <div class="feature-item">
+                    <h4>🏷️ 6-class SKU taxonomy</h4>
+                    <p>Content Builder classifies SKUs into push / hold / drop / restock-seasonal / discontinue / source-similar — not just "good" vs "bad". Each action maps to a different shop-floor decision.</p>
+                </div>
+                <div class="feature-item">
+                    <h4>🇲🇾 Malaysian retail context</h4>
+                    <p>Built-in awareness of KSSR/KSSM workbook tiers, SPM/UPSR exam syllabi (UPSR abolished 2021), Ramadan dip, January back-to-school spike, school-bulk vs in-store channel mix.</p>
+                </div>
+                <div class="feature-item">
+                    <h4>📅 Aging detection</h4>
+                    <p>Each SKU gets an aging_class (fresh / slowing / stale / stuck) based on days since last sale. Aging-stale SKUs are preserved in the LLM context even when they're mid-revenue, so dormant titles surface.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🧪 Sample Outputs (from real agent runs)</h2>
+            <p>Five questions captured live from the running pipeline against 101,990 rows of Malaysian bookstore sales data (Jan 2024 – Dec 2025). Click <a href="projects/bookshelf/demo.html"><strong>Launch Demo</strong></a> to browse them.</p>
+
+            <div class="features-grid">
+                <div class="feature-item">
+                    <h4>1. What's selling best?</h4>
+                    <p>Top 6 SKUs are SPM/Form-5 workbooks &amp; the Casio fx-570 calculator — RM 693k revenue, 39.6% margin on the top SKU. Surfaced as <strong>push</strong> actions.</p>
+                </div>
+                <div class="feature-item">
+                    <h4>2. Which to drop?</h4>
+                    <p>Caught the entire UPSR-syllabus cluster (4 SKUs, RM 16,980 stuck) as <strong>discontinue</strong>. UPSR was abolished in Malaysia in 2021.</p>
+                </div>
+                <div class="feature-item">
+                    <h4>3. When to stock for school season?</h4>
+                    <p>SPM workbooks peak January (index 1.31) and December (1.18). Form 5 KSSM peaks January (1.59) and December (1.38). Pre-stock by November.</p>
+                </div>
+                <div class="feature-item">
+                    <h4>4. Aging clearance?</h4>
+                    <p>3 stale SKUs surfaced — <em>Tuhan Manusia</em> (152 days dormant), <em>Pakej UPSR Lengkap</em> (140 days), <em>般若心经</em> (96 days). RM 8,447 to clear.</p>
+                </div>
+                <div class="feature-item">
+                    <h4>5. Best margin to push?</h4>
+                    <p>Modul SPM Matematik — 43.7% margin, RM 418k revenue, 546 units/month. Bundle with Add Math &amp; Sciences (all 42–43% margin).</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🛠️ Technical Stack &amp; Implementation</h2>
+
+            <h3>Frontend</h3>
+            <div class="tech-stack">
+                <span class="tech-item">Vanilla HTML/JS</span>
+                <span class="tech-item">marked.js</span>
+                <span class="tech-item">Server-Sent Events</span>
+                <span class="tech-item">CSS (Inter font)</span>
+            </div>
+
+            <h3>Backend / Agents</h3>
+            <div class="tech-stack">
+                <span class="tech-item">Python 3.11+</span>
+                <span class="tech-item">FastAPI 0.124</span>
+                <span class="tech-item">uvicorn 0.40</span>
+                <span class="tech-item">Google ADK 1.27</span>
+                <span class="tech-item">A2A SDK 0.3</span>
+                <span class="tech-item">Gemini 2.5 Flash</span>
+                <span class="tech-item">Pydantic 2.x</span>
+                <span class="tech-item">pandas 2.x</span>
+                <span class="tech-item">openpyxl</span>
+            </div>
+
+            <h3>Deployment (planned)</h3>
+            <div class="tech-stack">
+                <span class="tech-item">Google Cloud Run</span>
+                <span class="tech-item">Docker (per agent)</span>
+                <span class="tech-item">A2A protocol over HTTP</span>
+                <span class="tech-item">authenticated_httpx</span>
+            </div>
+
+            <h3>How the agents talk to each other</h3>
+            <ul>
+                <li><strong>A2A protocol over HTTP.</strong> Each agent service exposes <code>/.well-known/agent-card.json</code> describing its capabilities. The orchestrator's <code>RemoteA2aAgent</code> loads the card and proxies calls.</li>
+                <li><strong>Session state shared across the loop.</strong> <code>after_agent_callback</code> writes each agent's output (research_findings, judge_feedback) into <code>session.state</code>, so downstream agents read it without re-passing it.</li>
+                <li><strong>Authenticated transport.</strong> On Cloud Run, inter-agent calls carry Google identity tokens via <code>authenticated_httpx</code>. Locally, auth is bypassed (localhost detection).</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>📖 Run It Locally</h2>
+
+            <h3>Prerequisites</h3>
+            <ul>
+                <li><strong>Python 3.11+</strong></li>
+                <li><strong>Gemini API key</strong> — free at <a href="https://aistudio.google.com/apikey" target="_blank">aistudio.google.com/apikey</a></li>
+            </ul>
+
+            <h3>Quick start (Windows)</h3>
+            <div class="code-block"># Clone the repo
+git clone https://github.com/lyven81/ai-project.git
+cd ai-project/projects/bookshelf
+
+# Install dependencies
+pip install -e .
+
+# Set your Gemini key
+copy .env.example .env
+# Edit .env and paste GOOGLE_API_KEY=AIza...
+
+# Start all 5 services (5 cmd windows open)
+start.bat
+# Browser opens at http://localhost:8000</div>
+
+            <h3>What start.bat does</h3>
+            <ul>
+                <li>Loads <code>.env</code></li>
+                <li>Spawns 4 agent services in dedicated cmd windows: Researcher (8001), Judge (8002), Content Builder (8003), Orchestrator (8004)</li>
+                <li>Spawns the web app on port 8000</li>
+                <li>Sets <code>PYTHONUTF8=1</code> globally (em-dash encoding fix on Windows)</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>📊 Real-Run Metrics</h2>
+
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <span class="num">101,990</span>
+                    <span class="label">sales rows analysed</span>
+                </div>
+                <div class="metric-card">
+                    <span class="num">385</span>
+                    <span class="label">unique SKUs</span>
+                </div>
+                <div class="metric-card">
+                    <span class="num">RM 18.87M</span>
+                    <span class="label">revenue dataset</span>
+                </div>
+                <div class="metric-card">
+                    <span class="num">~140s</span>
+                    <span class="label">end-to-end pipeline</span>
+                </div>
+                <div class="metric-card">
+                    <span class="num">4 agents</span>
+                    <span class="label">researcher · judge · checker · builder</span>
+                </div>
+                <div class="metric-card">
+                    <span class="num">5</span>
+                    <span class="label">captured sample briefs</span>
+                </div>
+            </div>
+
+            <h3>Business value the captured briefs surfaced</h3>
+            <ul>
+                <li><strong>Discontinue 4 UPSR-syllabus SKUs (RM 16,980 stuck).</strong> The agents caught the whole cluster because UPSR was abolished in 2021 — Malaysian retail context the LLM applied without being told the specific SKU names.</li>
+                <li><strong>Aging clearance window of RM 8,447</strong> on 3 SKUs dormant 96–152 days, including a discontinued exam-prep title.</li>
+                <li><strong>Pre-school-season stock-up by Nov 28 / Dec 28</strong> for Form 5 KSSM and Std 1–6 KSSR — backed by exact seasonal indices (1.59× January, 1.38× December).</li>
+                <li><strong>Highest-margin push: Modul SPM Matematik at 43.7% margin</strong>, currently doing RM 418k/year — bundle with Add Math &amp; Sciences for cross-sell.</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>🚧 Honest Limitations (Phase 1)</h2>
+            <p>Bookshelf Phase 1 is a portfolio demonstration of the multi-agent architecture, not a production tool. These are the gaps you would close to take it to a paying SME client:</p>
+
+            <div class="limitation-box">
+                <h4>No live data pull</h4>
+                <p>Currently reads a bundled <code>dataset.xlsx</code>. To be useful daily, the Researcher would need a connector to the shop's live POS (Square, SAP-BO BS1, daily Excel export, or AlloyDB).</p>
+            </div>
+
+            <div class="limitation-box">
+                <h4>No web search for sourcing</h4>
+                <p>The brief can flag <em>"this category has a sourcing gap"</em> but cannot recommend specific products to add. Phase 3 would add a Trend Spotter agent with <code>google_search</code> for Malaysian distributor leads.</p>
+            </div>
+
+            <div class="limitation-box">
+                <h4>Slower than a chat tool</h4>
+                <p>~140 seconds per question because the pipeline runs 4 LLM calls + the pandas read. Acceptable for daily/weekly briefs, too slow for casual exploration. NotebookLM wins here.</p>
+            </div>
+
+            <div class="limitation-box">
+                <h4>Pull-only delivery</h4>
+                <p>The owner has to open the app and ask. Phase 4 would push the Monday morning brief to WhatsApp / email automatically — that's the real workflow win.</p>
+            </div>
+
+            <div class="limitation-box">
+                <h4>Single-tenant local-only deploy</h4>
+                <p>No multi-shop tenant model, no auth on the web app, no data isolation. Cloud Run deployment for Phase 1 is planned but not in scope tonight.</p>
+            </div>
+
+            <div class="limitation-box">
+                <h4>Mid-tier SKU coverage capped at the trim window</h4>
+                <p>The LLM sees top 30 + bottom 30 + all aging-stale SKUs (~71 of 385). A specific question about a mid-tier non-aging SKU may get a generic "this is a hold" answer. Phase 2 would add a <code>query_sku(name)</code> direct lookup.</p>
+            </div>
+        </div>
+
+        <div class="demo-links">
+            <a href="projects/bookshelf/demo.html" class="demo-btn">🚀 Launch Demo</a>
+            <a href="bookshelf-source.html" class="demo-btn secondary">📁 View Source Code</a>
+        </div>
+
+        <div class="bottom-nav">
+            <a href="index.html">← Back to Portfolio</a>
+            <a href="project-categories.html">View All Categories</a>
+        </div>
+    </div>
+</body>
+</html>
