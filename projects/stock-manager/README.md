@@ -2,7 +2,7 @@
 
 Smart restocking system for a steam bun shop, built with Google ADK multi-agent architecture.
 
-**Live Demo:** [https://stock-manager-522143897885.asia-southeast1.run.app](https://stock-manager-522143897885.asia-southeast1.run.app)
+**Live Demo:** [Browser-side BYO-key Gemini demo](./demo.html) (the Cloud Run + AlloyDB backend was retired on 2026-05-07 after the Top 100 evaluation closed; static demo runs entirely in the browser using your own Gemini API key)
 
 ## Problem
 
