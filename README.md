@@ -2,7 +2,7 @@
 
 [![Portfolio Website](https://img.shields.io/badge/Portfolio-Live-green?logo=vercel)](https://lyven81.github.io/ai-project/)
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-black?logo=github)](https://github.com/lyven81/ai-project)
-[![Projects](https://img.shields.io/badge/Projects-69-blue)](#-featured-projects)
+[![Projects](https://img.shields.io/badge/Projects-70-blue)](#-featured-projects)
 [![AI Powered](https://img.shields.io/badge/AI-Powered-orange?logo=tensorflow)](https://github.com/lyven81/ai-project)
 
 **Innovative AI Solutions for Modern Challenges** - A curated collection of production-ready AI applications showcasing expertise in computer vision, natural language processing, document processing, and creative AI technologies.
@@ -13,7 +13,7 @@
 
 ## 🌟 Portfolio Overview
 
-This repository contains **69 AI applications** built in this repo (some published to the portfolio homepage, others retained as archived builds) demonstrating proficiency across multiple AI domains. Each project includes comprehensive documentation, live demos, and complete source code with deployment configurations.
+This repository contains **70 AI applications** built in this repo (some published to the portfolio homepage, others retained as archived builds) demonstrating proficiency across multiple AI domains. Each project includes comprehensive documentation, live demos, and complete source code with deployment configurations.
 
 **🎯 Portfolio Highlights:**
 - **15+ AI Technologies** integrated across projects
@@ -150,7 +150,7 @@ Each project is classified by its AI architecture pattern, based on how the syst
 | Multi-Agent Orchestration | 3 | 4% |
 | Interactive Learning | 2 | 4% |
 
-**Total: 69 projects**
+**Total: 70 projects**
 
 > Note: As of Apr 9, 2026, 16 projects were unpublished from the live portfolio homepage display to sharpen focus. They remain in the repo and are still counted here as built work.
 
@@ -273,6 +273,12 @@ Each project is classified by its AI architecture pattern, based on how the syst
 - **Live Demo:** [Launch Demo](https://lyven81.github.io/ai-project/bright-path-tuition/demo.html)
 - **Tech Stack:** Gemini 2.5 Flash, FastAPI, SQLite, Python, GitHub Pages
 - **AI Capabilities:** NL-to-SQL agent across 7 tables (185 children, 22 specialists, 63 classes). Year 4 mastery anchor, P5/P6 secondary-readiness escalation, specialist quality audit, gap-to-fix recommendations. Built for Malaysia's post-UPSR PBD + UASA era.
+
+#### [North Star Learning Center](./north-star-learning-center.html)
+**Supportive AI ecosystem for Malaysian small-class tuition centres — three role views (manager / teacher / parent)**
+- **Live Demo:** [Launch Demo](https://north-star-learning-center-522143897885.asia-southeast1.run.app)
+- **Tech Stack:** Gemini 2.0 Flash, FastAPI, SQLite, Python 3.11, Google Cloud Run
+- **AI Capabilities:** 8 MCP-style deterministic tools + 2 live Gemini calls (parent_story ~2.5s, draft_peer_note ~1.1s). Critical escalation auto-detect, Help-a-Colleague peer-mentor links as a first-class relationship, anti-surveillance design — never scores wellbeing, discipline, or collaboration. Built for Build With AI 2026 KL MyHack hackathon.
 
 ### 🤖 Business Automation & Booking Systems
 

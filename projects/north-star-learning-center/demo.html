@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>North Star Learning Center — AI Ecosystem for Personalized Education</title>
+<style>
+  :root {
+    --gold: #B45309;
+    --gold-dark: #7C2D12;
+    --cream: #FFF8E7;
+    --paper: #FDFBF4;
+    --ink: #2D2D2D;
+    --muted: #6B6256;
+    --line: #E5D9B0;
+    --green: #059669;
+    --amber: #D97706;
+    --blue: #2563EB;
+    --red: #B91C1C;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--cream); color: var(--ink); line-height: 1.55;
+  }
+  header {
+    background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+    color: white; padding: 18px 24px;
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;
+  }
+  header h1 {
+    margin: 0; font-size: 1.25rem; font-weight: 700; letter-spacing: -0.01em;
+  }
+  header .subtitle { font-size: 0.85rem; opacity: 0.85; margin-top: 2px; }
+  .role-switcher { display: flex; gap: 6px; flex-wrap: wrap; }
+  .role-btn {
+    padding: 8px 14px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25);
+    color: white; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-family: inherit;
+  }
+  .role-btn:hover { background: rgba(255,255,255,0.25); }
+  .role-btn.active { background: white; color: var(--gold-dark); border-color: white; font-weight: 600; }
+  .vertical-toggle {
+    margin-left: 8px; padding: 8px 12px;
+    background: rgba(0,0,0,0.2); color: white; border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-family: inherit;
+  }
+
+  main { max-width: 960px; margin: 24px auto; padding: 0 16px; }
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  .screen-header {
+    background: var(--paper); border-left: 4px solid var(--gold); padding: 16px 20px;
+    border-radius: 6px; margin-bottom: 18px;
+  }
+  .screen-header h2 { margin: 0 0 4px 0; color: var(--gold-dark); font-size: 1.2rem; }
+  .screen-header .greeting { color: var(--muted); font-size: 0.95rem; }
+
+  .panel {
+    background: var(--paper); border-radius: 8px; padding: 18px 22px; margin-bottom: 16px;
+    border: 1px solid var(--line);
+  }
+  .panel h3 {
+    margin: 0 0 12px 0; font-size: 0.95rem; color: var(--gold-dark);
+    text-transform: uppercase; letter-spacing: 0.04em; font-weight: 700;
+  }
+  .panel h3 .count { color: var(--muted); font-weight: 400; }
+
+  .item {
+    padding: 12px 14px; border-left: 3px solid var(--line); margin-bottom: 10px;
+    background: white; border-radius: 4px;
+  }
+  .item .name { font-weight: 600; color: var(--ink); }
+  .item .meta { color: var(--muted); font-size: 0.9rem; margin-top: 2px; }
+  .item .suggestion {
+    margin-top: 8px; padding: 8px 10px; background: var(--cream); border-radius: 4px;
+    font-size: 0.92rem; color: var(--ink);
+  }
+  .item .suggestion strong { color: var(--gold-dark); }
+  .item.urgent  { border-left-color: var(--red); }
+  .item.critical{ border-left-color: var(--amber); }
+  .item.anchor  { border-left-color: var(--gold); }
+  .item.warning { border-left-color: var(--amber); }
+
+  .btn {
+    display: inline-block; padding: 8px 16px; border-radius: 5px; cursor: pointer;
+    font-size: 0.88rem; font-family: inherit; font-weight: 600; border: none;
+    background: var(--gold); color: white; text-decoration: none;
+  }
+  .btn:hover { background: var(--gold-dark); }
+  .btn.secondary { background: white; color: var(--gold-dark); border: 1px solid var(--gold); }
+
+  .stats-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px;
+  }
+  .stat-card {
+    background: white; border-radius: 6px; padding: 12px 14px; border: 1px solid var(--line);
+    text-align: center;
+  }
+  .stat-num { font-size: 1.5rem; font-weight: 700; color: var(--gold-dark); }
+  .stat-label { font-size: 0.78rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+
+  .capacity-row {
+    display: flex; justify-content: space-between; padding: 7px 0; border-bottom: 1px dashed var(--line);
+  }
+  .capacity-row:last-child { border-bottom: none; }
+  .capacity-row .open { color: var(--gold-dark); font-weight: 600; }
+
+  .letter {
+    background: var(--paper); padding: 32px 40px; border-radius: 8px;
+    font-family: Georgia, 'Times New Roman', serif; line-height: 1.75;
+    border: 1px solid var(--line); white-space: pre-wrap;
+  }
+  .letter-meta {
+    font-size: 0.85rem; color: var(--muted); border-bottom: 1px solid var(--line);
+    padding-bottom: 14px; margin-bottom: 20px;
+  }
+  .letter-ai-source {
+    margin-top: 16px; padding: 8px 12px; background: var(--cream); border-radius: 4px;
+    font-size: 0.78rem; color: var(--muted); font-style: italic;
+  }
+
+  .lab-group {
+    background: white; padding: 10px 14px; margin: 6px 0; border-radius: 4px;
+    border-left: 3px solid var(--green); font-size: 0.93rem;
+  }
+  .lab-group strong { color: var(--gold-dark); }
+
+  .peer-mentor {
+    background: linear-gradient(135deg, var(--cream), white);
+    border: 2px solid var(--gold); border-radius: 8px; padding: 16px 20px; margin-top: 16px;
+  }
+  .peer-mentor h4 {
+    margin: 0 0 8px 0; color: var(--gold-dark); font-size: 0.95rem;
+    text-transform: uppercase; letter-spacing: 0.04em;
+  }
+
+  .directory-section { margin-bottom: 18px; }
+  .directory-section h4 { color: var(--gold-dark); margin: 0 0 8px 0; font-size: 1rem; }
+  .directory-row {
+    display: flex; justify-content: space-between; padding: 6px 0;
+    border-bottom: 1px dashed var(--line);
+  }
+
+  .ai-callout {
+    background: linear-gradient(135deg, #FEF3C7, #FDE68A); border-left: 4px solid var(--gold);
+    padding: 14px 18px; border-radius: 4px; margin: 14px 0;
+  }
+  .ai-callout strong { color: var(--gold-dark); }
+
+  .back-link {
+    color: var(--gold-dark); text-decoration: none; font-size: 0.9rem; cursor: pointer;
+    display: inline-block; margin-bottom: 12px;
+  }
+  .back-link:hover { text-decoration: underline; }
+
+  .loading { color: var(--muted); font-style: italic; padding: 12px; }
+  .footer { text-align: center; color: var(--muted); font-size: 0.8rem; padding: 24px; }
+
+  @media (max-width: 640px) {
+    header { padding: 14px 16px; }
+    header h1 { font-size: 1.05rem; }
+    .role-btn { font-size: 0.78rem; padding: 6px 10px; }
+    main { padding: 0 12px; }
+    .letter { padding: 22px 22px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1 id="centre-name">North Star Learning Center</h1>
+    <div class="subtitle" id="centre-subtitle">Subang · AI ecosystem for personalized small-class education</div>
+  </div>
+  <div class="role-switcher">
+    <button class="role-btn active" data-role="manager">Manager</button>
+    <button class="role-btn" data-role="teacher">Teacher (David Chen)</button>
+    <button class="role-btn" data-role="parent">Parent (Arun's family)</button>
+    <button class="role-btn" data-role="directory">Centre Directory</button>
+  </div>
+</header>
+
+<main>
+
+  <!-- ===================== MANAGER ===================== -->
+  <section class="screen active" id="screen-manager">
+    <div class="screen-header">
+      <h2>Manager Home — Cikgu Mei</h2>
+      <div class="greeting">Selamat pagi. Here's your week.</div>
+    </div>
+    <div id="manager-content"><div class="loading">Loading...</div></div>
+  </section>
+
+  <!-- ===================== MANAGER DRILL-IN ===================== -->
+  <section class="screen" id="screen-escalation">
+    <a class="back-link" onclick="setRole('manager')">&larr; Back to Manager Home</a>
+    <div id="escalation-content"><div class="loading">Loading...</div></div>
+  </section>
+
+  <!-- ===================== TEACHER ===================== -->
+  <section class="screen" id="screen-teacher">
+    <div class="screen-header">
+      <h2 id="teacher-h2">Teacher Home — Teacher David Chen</h2>
+      <div class="greeting" id="teacher-sub">Selamat pagi. Here's your week.</div>
+    </div>
+    <div id="teacher-content"><div class="loading">Loading...</div></div>
+  </section>
+
+  <!-- ===================== PARENT ===================== -->
+  <section class="screen" id="screen-parent">
+    <div class="screen-header">
+      <h2>Parent Update — For Arun Prakash's Family</h2>
+      <div class="greeting">Monthly update generated by the centre</div>
+    </div>
+    <div id="parent-content"><div class="loading">Drafting the letter with Gemini...</div></div>
+  </section>
+
+  <!-- ===================== DIRECTORY ===================== -->
+  <section class="screen" id="screen-directory">
+    <div class="screen-header">
+      <h2>Centre Directory</h2>
+      <div class="greeting">Static structure overview — visit when needed</div>
+    </div>
+    <div id="directory-content"><div class="loading">Loading...</div></div>
+  </section>
+
+  <div class="footer">North Star Learning Center · Built for MyHack 2026 · Gemini + Cloud Run + SQLite</div>
+</main>
+
+<script>
+const FEATURED_TEACHER = "T021";
+const FEATURED_STUDENT = "S105";
+
+// ========================================================
+// Routing
+// ========================================================
+function setRole(role) {
+  document.querySelectorAll(".role-btn").forEach(b => {
+    b.classList.toggle("active", b.dataset.role === role);
+  });
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  if (role === "manager")    { show("screen-manager");   loadManager(); }
+  if (role === "teacher")    { show("screen-teacher");   loadTeacher(); }
+  if (role === "parent")     { show("screen-parent");    loadParent();  }
+  if (role === "directory")  { show("screen-directory"); loadDirectory(); }
+  if (role === "escalation") { show("screen-escalation"); loadEscalation(FEATURED_STUDENT); }
+}
+function show(id) { document.getElementById(id).classList.add("active"); }
+document.querySelectorAll(".role-btn").forEach(b => b.addEventListener("click", () => setRole(b.dataset.role)));
+
+// ========================================================
+// Manager Home
+// ========================================================
+async function loadManager() {
+  const root = document.getElementById("manager-content");
+  root.innerHTML = '<div class="loading">Loading...</div>';
+  const r = await fetch(`/api/manager/home`);
+  const d = await r.json();
+  const cfg = d.config;
+
+  const attention = d.attention.map(a => `
+    <div class="item ${a.risk === 'urgent' ? 'urgent' : a.risk === 'anchor' ? 'anchor' : 'critical'}">
+      <div class="name">${a.name} (${a.level})${a.subject ? ' — ' + a.subject : ''} ${a.note || a.gap !== null && a.gap !== undefined ? '— gap ' + a.gap : ''}</div>
+      <div class="meta">Current specialist: ${a.tutor_name}</div>
+      <div class="suggestion">
+        <strong>AI suggests:</strong> ${a.risk === 'anchor'
+          ? 'Year 4 is a key year. He needs extra help — keep his current teacher and try a new approach.'
+          : 'Review this pairing and plan a small change.'}
+      </div>
+      <button class="btn" style="margin-top:8px" onclick="setRole('escalation')">Review</button>
+    </div>
+  `).join("");
+
+  const wb = d.wellbeing.map(t => `
+    <div class="item warning">
+      <div class="name">${t.name}</div>
+      <div class="meta">${t.subject}</div>
+      <div class="suggestion">${t.issue}</div>
+      <button class="btn secondary" style="margin-top:8px">Check in</button>
+    </div>
+  `).join("");
+
+  const capacity = d.snapshot.open_by_band.map(b => `
+    <div class="capacity-row"><span>${b.category}</span><span class="open">${b.open} open</span></div>
+  `).join("");
+
+  root.innerHTML = `
+    <div class="panel">
+      <h3>Needs your attention <span class="count">(${d.attention.length})</span></h3>
+      ${attention || '<div class="loading">All clear this week.</div>'}
+    </div>
+
+    <div class="panel">
+      <h3>Teacher check-in <span class="count">(${d.wellbeing.length})</span></h3>
+      ${wb || '<div class="loading">No flags this week.</div>'}
+    </div>
+
+    <div class="panel">
+      <h3>Parent stories ready</h3>
+      <div class="item">
+        <div class="name">${d.parent_stories_drafted} monthly stories drafted by Gemini.</div>
+        <div class="suggestion">Review and send via WhatsApp.</div>
+        <button class="btn" style="margin-top:8px" onclick="setRole('parent')">Open one (Arun's letter)</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3>${cfg.centre_name} this week</h3>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-num">${d.snapshot.students_count}</div><div class="stat-label">${cfg.actor_child}</div></div>
+        <div class="stat-card"><div class="stat-num">${d.snapshot.tutors_count}</div><div class="stat-label">${cfg.actor_specialist}</div></div>
+        <div class="stat-card"><div class="stat-num">${d.snapshot.classes_count}</div><div class="stat-label">${cfg.actor_class}</div></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3>Capacity <span class="count">(${d.snapshot.total_open_slots} slots open)</span></h3>
+      ${capacity}
+      <button class="btn secondary" style="margin-top:14px" onclick="setRole('directory')">Centre Directory ›</button>
+    </div>
+  `;
+}
+
+// ========================================================
+// Manager drill-in (Critical Escalation)
+// ========================================================
+async function loadEscalation(sid) {
+  const root = document.getElementById("escalation-content");
+  root.innerHTML = '<div class="loading">Loading...</div>';
+  const r = await fetch(`/api/manager/escalation/${sid}`);
+  const d = await r.json();
+  root.innerHTML = `
+    <div class="screen-header">
+      <h2>${d.student.name} (${d.student.level}, age ${d.student.age})</h2>
+      <div class="greeting">Critical escalation drill-in</div>
+    </div>
+
+    <div class="panel">
+      <h3>The situation</h3>
+      <div class="item">
+        <div class="name">Subject: ${d.situation.subject || '—'}</div>
+        <div class="meta">Current label: <strong>${d.situation.current_label || '—'}</strong>${d.situation.current_score ? ' · score ' + d.situation.current_score : ''}</div>
+        <div class="meta">Current specialist: ${d.situation.current_specialist}</div>
+        <div class="meta">Pairing health: ${d.situation.pairing_health || '—'}</div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3>The story</h3>
+      <div class="item"><div class="meta" style="color: var(--ink); font-size: 0.95rem;">${d.story}</div></div>
+    </div>
+
+    <div class="panel">
+      <h3>What the AI suggests</h3>
+      <div class="ai-callout">
+        <strong>${d.ai_suggestion.headline}</strong>
+        <div style="margin-top:8px">${d.ai_suggestion.rationale || ''}</div>
+        ${d.ai_suggestion.based_on ? '<div class="meta" style="margin-top:6px">Based on: ' + d.ai_suggestion.based_on + '</div>' : ''}
+      </div>
+      <button class="btn">Approve suggestion</button>
+      <button class="btn secondary" style="margin-left:8px">Decline & note why</button>
+    </div>
+  `;
+}
+
+// ========================================================
+// Teacher Home (David Chen)
+// ========================================================
+async function loadTeacher() {
+  const root = document.getElementById("teacher-content");
+  root.innerHTML = '<div class="loading">Loading...</div>';
+  const r = await fetch(`/api/teacher/${FEATURED_TEACHER}/home`);
+  const d = await r.json();
+
+  const tutor = d.tutor;
+  const yrs = 2026 - parseInt(tutor.join_date.substring(0,4));
+  const tier = yrs >= 8 ? "Senior" : yrs >= 5 ? "Experienced" : yrs >= 3 ? "Mid-career" : "Junior";
+  document.getElementById("teacher-h2").textContent = `Teacher Home — ${tutor.name} (${tier}, ${yrs} yrs)`;
+  document.getElementById("teacher-sub").textContent = `${tutor.band} ${tutor.subject || ''} · ${tutor.employment_type}`;
+
+  const classes = d.classes.map(c => `
+    <div class="item">
+      <div class="name">${c.level} ${c.subject} (${c.class_id})</div>
+      <div class="meta">${c.enrolled}/${c.max_students} children · ${c.day_of_week || '—'} ${c.start_time || ''}</div>
+    </div>
+  `).join("");
+
+  const needs = d.needs_help.map(n => `
+    <div class="item critical">
+      <div class="name">${n.name} (${n.level})</div>
+      <div class="meta">${n.issue}</div>
+      <div class="suggestion"><strong>Try:</strong> ${n.suggestion}</div>
+      <button class="btn secondary" style="margin-top:8px">Mark tried</button>
+    </div>
+  `).join("");
+
+  const celebrate = d.celebrate.map(c => `<div class="item" style="border-left-color: var(--green);"><div class="meta">${c}</div></div>`).join("");
+
+  let lab = "";
+  if (d.lab_grouping) {
+    const groups = d.lab_grouping.groups.map((g, i) => `
+      <div class="lab-group">
+        <strong>Group ${i+1}:</strong> ${g.members.join(' · ')}
+        <div style="margin-top:5px; color: var(--muted); font-size: 0.86rem; font-style: italic;">
+          Why this combo: ${g.note}
+        </div>
+      </div>
+    `).join("");
+    lab = `
+      <div class="panel">
+        <h3>This month's lab (${d.lab_grouping.date} — ${d.lab_grouping.class_name})</h3>
+        <div style="margin-bottom: 10px; color: var(--muted); font-size: 0.9rem;">AI suggested groups for ${d.lab_grouping.class_id}:</div>
+        ${groups}
+        <div style="margin-top: 12px;">
+          <button class="btn">Approve grouping</button>
+          <button class="btn secondary" style="margin-left:8px">Adjust</button>
+          <button class="btn secondary" style="margin-left:8px">Log session</button>
+        </div>
+      </div>`;
+  }
+
+  let peer = "";
+  if (d.peer_mentor) {
+    const pm = d.peer_mentor;
+    const jyrs = 2026 - parseInt(pm.junior_join.substring(0,4));
+    peer = `
+      <div class="peer-mentor">
+        <h4>Help a colleague</h4>
+        <div><strong>${pm.junior_name}</strong> (Junior · ${jyrs} yrs · ${pm.junior_band} ${pm.junior_subject})</div>
+        <div style="margin-top:6px; color: var(--muted); font-size: 0.92rem;">${pm.reason}</div>
+        <div class="suggestion" style="margin-top: 10px;"><strong>Suggestion:</strong> ${pm.suggestion}</div>
+        <button class="btn" style="margin-top: 10px;" onclick="draftFriendlyNote('${pm.link_id}')">Send a friendly note</button>
+        <div id="peer-note-container" style="display:none; margin-top: 14px;"></div>
+      </div>
+    `;
+  }
+
+  root.innerHTML = `
+    <div class="panel"><h3>Your classes this week</h3>${classes}</div>
+    <div class="panel"><h3>Children who need a little help <span class="count">(${d.needs_help.length})</span></h3>${needs}</div>
+    <div class="panel"><h3>Celebrate this</h3>${celebrate}</div>
+    ${lab}
+    ${peer}
+  `;
+}
+
+// ========================================================
+// Parent Home (Arun's letter, AI-generated)
+// ========================================================
+async function loadParent() {
+  const root = document.getElementById("parent-content");
+  root.innerHTML = '<div class="loading">Drafting the letter with Gemini...</div>';
+  const r = await fetch(`/api/parent/${FEATURED_STUDENT}/story`);
+  const d = await r.json();
+  root.innerHTML = `
+    <div class="letter">
+      <div class="letter-meta">
+        For the family of <strong>${d.student}</strong> (${d.level})<br/>
+        Primary subject this month: ${d.primary_subject || '—'} · with ${d.primary_specialist || '—'}
+      </div>
+${d.story}
+      <div class="letter-ai-source">Drafted by ${d.ai_source} · Reviewed by centre manager before sending</div>
+    </div>
+    <div style="text-align:center; margin-top: 16px;">
+      <button class="btn">Approve & send via WhatsApp</button>
+      <button class="btn secondary" style="margin-left: 8px;">Edit before sending</button>
+    </div>
+  `;
+}
+
+// ========================================================
+// Centre Directory
+// ========================================================
+async function loadDirectory() {
+  const root = document.getElementById("directory-content");
+  root.innerHTML = '<div class="loading">Loading...</div>';
+  const r = await fetch("/api/directory");
+  const d = await r.json();
+
+  // Group teachers by subject across bands
+  const subjMap = {};
+  for (const row of d.teachers_by_subject_band) {
+    const key = row.subject || "Preschool";
+    subjMap[key] = (subjMap[key] || 0) + row.cnt;
+  }
+  const subjRows = Object.entries(subjMap).map(([s, n]) => `
+    <div class="directory-row"><span>${s}</span><span><strong>${n}</strong> specialists</span></div>
+  `).join("");
+
+  // Level breakdown
+  let preschool = 0, p13 = 0, p46 = 0;
+  for (const row of d.teachers_by_subject_band) {
+    if (row.band === "preschool") preschool += row.cnt;
+    else if (row.band === "P1-P3") p13 += row.cnt;
+    else if (row.band === "P4-P6") p46 += row.cnt;
+  }
+
+  const senRows = Object.entries(d.seniority).map(([k, v]) => `
+    <div class="directory-row"><span>${k}</span><span><strong>${v}</strong></span></div>
+  `).join("");
+
+  root.innerHTML = `
+    <div class="panel">
+      <h3>Classes by band</h3>
+      <div class="directory-row"><span>Preschool</span><span><strong>${d.classes_by_band.Preschool}</strong> classes</span></div>
+      <div class="directory-row"><span>P1–P3 band</span><span><strong>${d.classes_by_band["P1-P3"]}</strong> classes</span></div>
+      <div class="directory-row"><span>P4–P6 band</span><span><strong>${d.classes_by_band["P4-P6"]}</strong> classes</span></div>
+      <div class="directory-row" style="font-weight:600;"><span>Total</span><span><strong>${d.classes_by_band.Total}</strong> classes (cap 10)</span></div>
+    </div>
+
+    <div class="panel">
+      <h3>Teachers by subject</h3>
+      ${subjRows}
+    </div>
+
+    <div class="panel">
+      <h3>Teachers by learning level</h3>
+      <div class="directory-row"><span>Preschool</span><span><strong>${preschool}</strong> specialists</span></div>
+      <div class="directory-row"><span>P1–P3 band</span><span><strong>${p13}</strong> specialists</span></div>
+      <div class="directory-row"><span>P4–P6 band</span><span><strong>${p46}</strong> specialists</span></div>
+    </div>
+
+    <div class="panel">
+      <h3>Teachers by seniority</h3>
+      ${senRows}
+    </div>
+  `;
+}
+
+// ========================================================
+// Draft a friendly peer-mentor note (Gemini live)
+// ========================================================
+async function draftFriendlyNote(linkId) {
+  const container = document.getElementById('peer-note-container');
+  container.style.display = 'block';
+  container.innerHTML = '<div class="loading">Drafting with Gemini...</div>';
+  try {
+    const r = await fetch(`/api/peer-mentor/${linkId}/draft-note`);
+    const d = await r.json();
+    container.innerHTML = `
+      <div style="padding: 14px 16px; background: white; border-radius: 6px; border: 2px dashed var(--gold);">
+        <div style="font-size: 0.78rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 8px;">
+          Draft note (preview)
+        </div>
+        <div style="font-family: Georgia, serif; line-height: 1.65; color: var(--ink);">${d.draft}</div>
+        <div style="margin-top: 12px;">
+          <button class="btn">Send to Teacher Ravi</button>
+          <button class="btn secondary" style="margin-left: 6px">Edit</button>
+          <button class="btn secondary" style="margin-left: 6px" onclick="document.getElementById('peer-note-container').style.display='none'">Cancel</button>
+        </div>
+        <div style="margin-top: 10px; font-size: 0.76rem; color: var(--muted); font-style: italic;">
+          Drafted by ${d.source} · Review and edit before sending
+        </div>
+      </div>`;
+  } catch (e) {
+    container.innerHTML = `<div style="color: var(--red); padding: 10px;">Could not draft note: ${e}</div>`;
+  }
+}
+
+// Boot
+setRole("manager");
+</script>
+</body>
+</html>

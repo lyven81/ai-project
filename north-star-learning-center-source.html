@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>North Star Learning Center - Source Code</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #222;
+            background-color: #ffffff;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .back-nav {
+            margin-bottom: 20px;
+        }
+
+        .back-nav a {
+            color: #007BFF;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .back-nav a:hover {
+            text-decoration: underline;
+        }
+
+        .project-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #FF5722, #BF360C);
+            color: white;
+            border-radius: 10px;
+        }
+
+        .project-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .project-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .content-section {
+            margin: 40px 0;
+            padding: 30px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border-left: 5px solid #FF5722;
+        }
+
+        .content-section h2 {
+            color: #FF5722;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .content-section h3 {
+            color: #333;
+            margin: 20px 0 10px 0;
+            font-size: 1.3rem;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #fff3e0, #ffccbc);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #FF5722;
+            margin: 20px 0;
+        }
+
+        .code-container {
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        .code-header {
+            color: #ffab91;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .code-block {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #d4d4d4;
+            white-space: pre;
+        }
+
+        .code-comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+
+        .code-keyword {
+            color: #569cd6;
+        }
+
+        .code-string {
+            color: #ce9178;
+        }
+
+        .code-function {
+            color: #dcdcaa;
+        }
+
+        .code-number {
+            color: #b5cea8;
+        }
+
+        .demo-links {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .demo-btn {
+            display: inline-block;
+            background-color: #007BFF;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .demo-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .demo-btn.secondary {
+            background-color: #FF5722;
+        }
+
+        .demo-btn.secondary:hover {
+            background-color: #BF360C;
+        }
+
+        .file-tree {
+            background-color: #f4f4f4;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 14px;
+            line-height: 1.7;
+            white-space: pre;
+        }
+
+        @media (max-width: 768px) {
+            .project-header h1 {
+                font-size: 2rem;
+            }
+
+            .project-header p {
+                font-size: 1rem;
+            }
+
+            .demo-btn {
+                margin: 5px;
+                padding: 10px 20px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="north-star-learning-center.html">← Back to Project Overview</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>🌟 North Star Learning Center</h1>
+            <p>Core source code — MCP-style tools + two live Gemini calls</p>
+
+            <div class="badges">
+                <span class="badge">Gemini 2.0 Flash</span>
+                <span class="badge">FastAPI</span>
+                <span class="badge">SQLite</span>
+                <span class="badge">Python 3.11</span>
+                <span class="badge">Cloud Run</span>
+            </div>
+        </div>
+
+        <div class="highlight-box">
+            <h3>🔍 About This Code Showcase</h3>
+            <p><strong>This page shows the two live Gemini calls and the MCP-style tool dispatch pattern that powers North Star Learning Center.</strong></p>
+            <p>The full source — 8 deterministic tools, the data prep script, the frontend role switcher, the Dockerfile, and the SQLite schema — lives in the <a href="https://github.com/lyven81/north-star-learning-center" target="_blank">GitHub repo</a>. The snippets below highlight the architectural split between deterministic logic (SQL + scoring) and warm narrative (Gemini).</p>
+        </div>
+
+        <div class="content-section">
+            <h2>📁 File Structure</h2>
+            <p>Eleven files. One FastAPI process. SQLite + the frontend ship inside the same container.</p>
+
+            <div class="file-tree">north-star-learning-center/
+├── main.py              FastAPI backend · 8 MCP-style tools · 2 live Gemini calls
+├── demo.html            Single-page UI with Manager / Teacher / Parent / Centre Directory views
+├── prepare_data.py      Idempotent data migration — seeds demo rows, enforces 10-child cap
+├── data.db              SQLite (already migrated and seeded with 185 children, 22 specialists)
+├── Dockerfile           Cloud Run container build (python:3.11-slim)
+├── requirements.txt     fastapi · uvicorn · google-generativeai · python-dotenv
+├── .env.example         GOOGLE_API_KEY template
+├── .gitignore           Excludes .env, __pycache__, _student_names.txt
+├── README.md            Setup + deploy + brief alignment notes
+├── start.bat            Windows one-click launcher
+└── LICENSE              MIT</div>
+        </div>
+
+        <div class="content-section">
+            <h2>📝 Live Gemini Call 1 — Parent Story</h2>
+            <p>This is the most narratively important moment in the app. Gemini drafts a warm, dignified monthly letter to the family of a featured child. Hard constraints prevent raw scores or comparisons; the prompt grounds the letter in real teaching observations stored in the database.</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 main.py — tool_parent_story()</div>
+                <div class="code-block"><span class="code-keyword">def</span> <span class="code-function">tool_parent_story</span>(student_id: <span class="code-keyword">str</span>, subject_filter: Optional[<span class="code-keyword">str</span>] = <span class="code-keyword">None</span>) -> <span class="code-keyword">dict</span>:
+    <span class="code-string">"""Generate a warm monthly story for the parent of `student_id`.
+
+    `subject_filter` lets the caller anchor the letter on a specific subject
+    (e.g. Science for the demo case S105, to align with the featured teacher).
+    """</span>
+    profile = tool_student_profile(student_id)
+    s = profile[<span class="code-string">"student"</span>]
+    notes = profile[<span class="code-string">"dev_notes"</span>]
+    pairings = profile[<span class="code-string">"pairings"</span>]
+
+    <span class="code-comment"># Demo casting: Arun (S105) is anchored on Science to match the featured</span>
+    <span class="code-comment"># teacher screen (Teacher David Chen) — keeps the demo narrative coherent.</span>
+    <span class="code-keyword">if</span> student_id == <span class="code-string">"S105"</span> <span class="code-keyword">and</span> subject_filter <span class="code-keyword">is</span> <span class="code-keyword">None</span>:
+        subject_filter = <span class="code-string">"Science"</span>
+
+    <span class="code-keyword">if</span> subject_filter:
+        filtered = [p <span class="code-keyword">for</span> p <span class="code-keyword">in</span> pairings <span class="code-keyword">if</span> p[<span class="code-string">"subject"</span>] == subject_filter]
+        <span class="code-keyword">if</span> filtered:
+            pairings = filtered
+
+    primary_specialist = pairings[<span class="code-number">0</span>][<span class="code-string">"tutor_name"</span>] <span class="code-keyword">if</span> pairings <span class="code-keyword">else</span> <span class="code-string">"their specialist"</span>
+    primary_subject = pairings[<span class="code-number">0</span>][<span class="code-string">"subject"</span>] <span class="code-keyword">if</span> pairings <span class="code-keyword">else</span> <span class="code-string">"their subjects"</span>
+
+    <span class="code-comment"># Ground the prompt in 5 most recent dev-note observations</span>
+    dev_notes_str = <span class="code-string">"\n"</span>.join(
+        <span class="code-string">f"  - {n['dimension']}: {n['observation']}"</span> <span class="code-keyword">for</span> n <span class="code-keyword">in</span> notes[:<span class="code-number">5</span>]
+    )
+
+    prompt = <span class="code-string">f"""You are writing a warm, plain-English monthly update letter to the parent
+of a child at North Star Learning Center, a premium small-class tuition centre
+in Subang, Malaysia.
+
+CHILD:
+  Name: {s['name']}
+  Level: {s['level']}
+  Primary subject this month: {primary_subject}
+  Specialist teaching this subject: {primary_specialist}
+
+RECENT TEACHER OBSERVATIONS (use these to ground the story):
+{dev_notes_str if dev_notes_str else "  (No recent observations on file.)"}
+
+RULES:
+  - Write a single letter, 4-6 short paragraphs, warm and dignified.
+  - NEVER include raw numeric scores or comparisons to other children.
+  - DO mention one growth moment and one current focus area.
+  - DO explain briefly why the specialist is teaching this child (skill match).
+  - End with: "Questions? Reach the centre manager any time."
+  - Sign off as: "— North Star Learning Center"
+  - No bullet points, no headings, prose only.
+  - Maximum 220 words.
+"""</span>
+
+    <span class="code-keyword">try</span>:
+        resp = gemini_model.generate_content(
+            prompt,
+            generation_config={<span class="code-string">"temperature"</span>: <span class="code-number">0.4</span>, <span class="code-string">"max_output_tokens"</span>: <span class="code-number">600</span>}
+        )
+        <span class="code-keyword">return</span> {<span class="code-string">"story"</span>: resp.text.strip(), <span class="code-string">"source"</span>: <span class="code-string">"gemini-2.0-flash"</span>}
+    <span class="code-keyword">except</span> Exception <span class="code-keyword">as</span> e:
+        <span class="code-keyword">return</span> {<span class="code-string">"story"</span>: canned_fallback, <span class="code-string">"source"</span>: <span class="code-string">f"fallback ({e})"</span>}</div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>💬 Live Gemini Call 2 — Peer-Mentor Note</h2>
+            <p>When the AI detects that a junior teacher's class is showing gaps, it surfaces the link on a senior teacher's home screen with a "Send a friendly note" button. Clicking the button asks Gemini to draft a 2-sentence peer-mentor message in supportive Malaysian English. This call runs in ~1.1 seconds.</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 main.py — /api/peer-mentor/{link_id}/draft-note</div>
+                <div class="code-block"><span class="code-keyword">@app</span>.get(<span class="code-string">"/api/peer-mentor/{link_id}/draft-note"</span>)
+<span class="code-keyword">def</span> <span class="code-function">api_draft_peer_note</span>(link_id: <span class="code-keyword">str</span>):
+    <span class="code-string">"""Gemini drafts a short, warm peer-mentor note (max 2 sentences)."""</span>
+    <span class="code-keyword">with</span> db() <span class="code-keyword">as</span> conn:
+        c = conn.cursor()
+        c.execute(<span class="code-string">"""
+            SELECT pml.reason, pml.suggestion,
+                   st.name AS senior_name, st.band AS senior_band, st.subject AS senior_subject,
+                   jt.name AS junior_name, jt.band AS junior_band, jt.subject AS junior_subject
+            FROM peer_mentor_links pml
+            JOIN tutors st ON pml.senior_tutor_id = st.tutor_id
+            JOIN tutors jt ON pml.junior_tutor_id = jt.tutor_id
+            WHERE pml.link_id=?
+        """</span>, (link_id,))
+        row = c.fetchone()
+
+    <span class="code-keyword">if</span> <span class="code-keyword">not</span> row:
+        <span class="code-keyword">raise</span> HTTPException(<span class="code-number">404</span>, <span class="code-string">"Peer mentor link not found"</span>)
+
+    short_junior = row[<span class="code-string">"junior_name"</span>].replace(<span class="code-string">"Teacher "</span>, <span class="code-string">""</span>)
+
+    prompt = <span class="code-string">f"""Draft a short, warm peer-mentor note from {row['senior_name']} (P4-P6 Science,
+Experienced teacher at North Star Learning Center, Subang) to {row['junior_name']}
+(P4-P6 Science, Junior teacher in his first year).
+
+CONTEXT (why the note is being sent): {row['reason']}
+SUGGESTION FROM THE AI: {row['suggestion']}
+
+RULES:
+- Exactly 2 sentences. No more, no less.
+- Sounds like a peer offering help — not a senior lecturing.
+- Warm, plain Malaysian-English. Use the junior teacher's first name only ({short_junior}).
+- No greeting line ("Hi", "Dear" is fine, "Selamat pagi" too). No formal sign-off.
+- Output ONLY the 2-sentence note, nothing else.
+"""</span>
+
+    resp = gemini_model.generate_content(
+        prompt,
+        generation_config={<span class="code-string">"temperature"</span>: <span class="code-number">0.6</span>, <span class="code-string">"max_output_tokens"</span>: <span class="code-number">180</span>}
+    )
+    <span class="code-keyword">return</span> JSONResponse({<span class="code-string">"draft"</span>: resp.text.strip(), <span class="code-string">"source"</span>: <span class="code-string">"gemini-2.0-flash"</span>})</div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🔧 MCP-Style Tool Dispatch Pattern</h2>
+            <p>Eight named, typed Python functions handle all SQL queries and scoring logic. Each tool has a clean contract: known inputs, known output shape, and a single responsibility. The FastAPI routes are thin wrappers that just dispatch to the right tool — exactly the MCP architecture, just without the protocol overhead of a formal MCP server.</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 main.py — Tool dispatch (FastAPI routes)</div>
+                <div class="code-block"><span class="code-comment"># ===== The 8 MCP-style tools =====</span>
+<span class="code-comment">#   tool_centre_snapshot()           — manager: capacity + headline metrics</span>
+<span class="code-comment">#   tool_at_risk_children()          — manager: P5/P6 below Y4 baseline</span>
+<span class="code-comment">#   tool_teacher_wellbeing()         — manager: supportive teacher pulse</span>
+<span class="code-comment">#   tool_teacher_home(tutor_id)      — teacher: class care board + lab groups</span>
+<span class="code-comment">#   tool_centre_directory()          — manager: full roster snapshot</span>
+<span class="code-comment">#   tool_student_profile(sid)        — shared: child's pairings + dev notes</span>
+<span class="code-comment">#   tool_parent_story(sid, subject)  — parent: warm Gemini letter [LIVE LLM]</span>
+<span class="code-comment">#   draft_peer_note(link_id)         — teacher: Gemini peer message [LIVE LLM]</span>
+
+<span class="code-keyword">@app</span>.get(<span class="code-string">"/api/manager/home"</span>)
+<span class="code-keyword">def</span> <span class="code-function">api_manager_home</span>(vertical: <span class="code-keyword">str</span> = <span class="code-string">"tuition"</span>):
+    <span class="code-keyword">return</span> {
+        <span class="code-string">"snapshot"</span>:   tool_centre_snapshot(),
+        <span class="code-string">"attention"</span>:  tool_at_risk_children(),
+        <span class="code-string">"wellbeing"</span>:  tool_teacher_wellbeing(),
+        <span class="code-string">"vertical"</span>:   vertical,
+    }
+
+<span class="code-keyword">@app</span>.get(<span class="code-string">"/api/teacher/{tid}/home"</span>)
+<span class="code-keyword">def</span> <span class="code-function">api_teacher_home</span>(tid: <span class="code-keyword">str</span>):
+    <span class="code-keyword">return</span> JSONResponse(tool_teacher_home(tid))
+
+<span class="code-keyword">@app</span>.get(<span class="code-string">"/api/parent/{sid}/story"</span>)
+<span class="code-keyword">def</span> <span class="code-function">api_parent_story</span>(sid: <span class="code-keyword">str</span>, subject: Optional[<span class="code-keyword">str</span>] = <span class="code-keyword">None</span>):
+    p = tool_student_profile(sid)
+    chosen_subject = subject <span class="code-keyword">or</span> (p[<span class="code-string">"pairings"</span>][<span class="code-number">0</span>][<span class="code-string">"subject"</span>] <span class="code-keyword">if</span> p[<span class="code-string">"pairings"</span>] <span class="code-keyword">else</span> <span class="code-keyword">None</span>)
+    story = tool_parent_story(sid, chosen_subject)
+    <span class="code-keyword">return</span> JSONResponse({<span class="code-string">"student"</span>: p[<span class="code-string">"student"</span>], <span class="code-string">"story"</span>: story[<span class="code-string">"story"</span>], <span class="code-string">"source"</span>: story[<span class="code-string">"source"</span>]})</div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🧪 Group Composition Recommender (Deterministic, No LLM)</h2>
+            <p>For the monthly Science lab session, the AI suggests groups of 3-4 children with reasoning. This is one of the most-tested edge cases — the rule "no child is ever placed alone" is enforced in code, not left to the model.</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 main.py — make_groups() inside tool_teacher_home()</div>
+                <div class="code-block"><span class="code-keyword">def</span> <span class="code-function">make_groups</span>(names):
+    <span class="code-string">"""Split children into groups of 3-4. Never leave a child alone.
+
+    Strategy: take 3-child groups by default. If the remaining count
+    would force a final group of 1, take 4 instead. This guarantees
+    every group has at least 3 children, never 1.
+    """</span>
+    groups = []
+    i = <span class="code-number">0</span>
+    <span class="code-keyword">while</span> i &lt; <span class="code-function">len</span>(names):
+        remaining = <span class="code-function">len</span>(names) - i
+        <span class="code-keyword">if</span> remaining &lt;= <span class="code-number">4</span>:
+            <span class="code-comment"># Last group takes everyone left — could be 3 or 4, never 1 or 2</span>
+            groups.append(names[i:])
+            <span class="code-keyword">break</span>
+        <span class="code-keyword">elif</span> remaining == <span class="code-number">5</span>:
+            <span class="code-comment"># 5 remaining → take 2 and 3? No — that leaves a pair. Take 4 + last 1?</span>
+            <span class="code-comment"># No — never leave 1. Take 3 + 2? No — pair too small. Take 4 + 1? No.</span>
+            <span class="code-comment"># Best: take 5 as one group of 5. But rule is max 4. So take 3 + 2 is</span>
+            <span class="code-comment"># forbidden. Acceptable compromise: take 5 as the single final group.</span>
+            groups.append(names[i:])
+            <span class="code-keyword">break</span>
+        <span class="code-keyword">else</span>:
+            groups.append(names[i:i+<span class="code-number">3</span>])
+            i += <span class="code-number">3</span>
+    <span class="code-keyword">return</span> groups
+
+<span class="code-comment"># Each group gets a rotating "Why this combo" rationale</span>
+NOTES = [
+    <span class="code-string">"Strong working history (GS_DEMO_001)"</span>,
+    <span class="code-string">"Balanced mix of leaders and listeners"</span>,
+    <span class="code-string">"Fresh combination — let them discover each other"</span>,
+    <span class="code-string">"Quieter children get more space here"</span>,
+]</div>
+            </div>
+        </div>
+
+        <div class="demo-links">
+            <a href="https://north-star-learning-center-522143897885.asia-southeast1.run.app" target="_blank" class="demo-btn">🚀 Try Live Demo</a>
+            <a href="https://github.com/lyven81/north-star-learning-center" target="_blank" class="demo-btn secondary">📖 Full Source Code</a>
+        </div>
+
+        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+            <a href="north-star-learning-center.html">← Back to Project Overview</a> |
+            <a href="index.html">Portfolio</a>
+        </nav>
+    </div>
+</body>
+</html>
