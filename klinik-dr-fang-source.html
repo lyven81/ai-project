@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Klinik Dr Fang Front-Desk Assistant - Source Code</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #222; background-color: #ffffff; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        .back-nav { margin-bottom: 20px; }
+        .back-nav a { color: #E91E63; text-decoration: none; font-size: 1rem; }
+        .back-nav a:hover { text-decoration: underline; }
+        .project-header { text-align: center; margin-bottom: 40px; padding: 40px 0; background: linear-gradient(135deg, #E91E63, #AD1457); color: white; border-radius: 10px; }
+        .project-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        .project-header p { font-size: 1.2rem; opacity: 0.9; }
+        .badges { display: flex; justify-content: center; gap: 10px; margin: 20px 0; flex-wrap: wrap; }
+        .badge { background-color: rgba(255, 255, 255, 0.2); color: white; padding: 5px 12px; border-radius: 15px; font-size: 0.9rem; }
+        .content-section { margin: 40px 0; padding: 30px; background-color: #f9f9f9; border-radius: 8px; border-left: 5px solid #E91E63; }
+        .content-section h2 { color: #E91E63; margin-bottom: 20px; font-size: 1.8rem; }
+        .content-section h3 { color: #333; margin: 20px 0 10px 0; font-size: 1.3rem; }
+        .highlight-box { background: linear-gradient(135deg, #fce4ec, #f8bbd0); padding: 20px; border-radius: 10px; border-left: 5px solid #E91E63; margin: 20px 0; }
+        .code-container { background-color: #1e1e1e; border-radius: 8px; padding: 20px; margin: 20px 0; overflow-x: auto; }
+        .code-header { color: #f48fb1; font-weight: bold; margin-bottom: 15px; font-size: 1.1rem; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        .code-block { font-family: 'Consolas', 'Monaco', 'Courier New', monospace; font-size: 14px; line-height: 1.5; color: #d4d4d4; white-space: pre; }
+        .code-comment { color: #6a9955; font-style: italic; }
+        .code-keyword { color: #569cd6; }
+        .code-string { color: #ce9178; }
+        .code-function { color: #dcdcaa; }
+        .code-number { color: #b5cea8; }
+        .demo-links { text-align: center; margin: 30px 0; }
+        .demo-btn { display: inline-block; background-color: #E91E63; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; margin: 0 10px; font-weight: bold; transition: background-color 0.3s; }
+        .demo-btn:hover { background-color: #AD1457; }
+        .demo-btn.secondary { background-color: #607D8B; }
+        .demo-btn.secondary:hover { background-color: #455A64; }
+        @media (max-width: 768px) {
+            .project-header h1 { font-size: 2rem; }
+            .project-header p { font-size: 1rem; }
+            .demo-btn { margin: 5px; padding: 10px 20px; }
+            .container { padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="klinik-dr-fang.html">← Back to Project Overview</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>🩺 Klinik Dr Fang Front-Desk Assistant</h1>
+            <p>The Governed Tool Layer & No-Free-SQL Guarantee</p>
+
+            <div class="badges">
+                <span class="badge">Python</span>
+                <span class="badge">MCP Toolbox Pattern</span>
+                <span class="badge">SQLite (read-only)</span>
+                <span class="badge">tools.yaml</span>
+            </div>
+        </div>
+
+        <div class="highlight-box">
+            <h3>🔍 About This Code Showcase</h3>
+            <p><strong>These snippets show the heart of the build: a declarative toolset that is the agent's entire universe, and the governed gate that can execute nothing but those fixed, parameterized queries.</strong></p>
+            <p>Synthetic-data generation and the conversational layer are omitted here for clarity. The full project is on GitHub.</p>
+        </div>
+
+        <div class="content-section">
+            <h2>🧾 The Toolset Is the Agent's Universe — tools.yaml</h2>
+            <p>Each tool's SQL is fixed; the agent supplies only bound parameter values. There is deliberately no <code>execute_sql</code>, no <code>list_tables</code>, and no natural-language-to-SQL tool.</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 toolbox/tools.yaml — a tool + the deliberate exclusions</div>
+                <div class="code-block"><span class="code-keyword">sources</span>:
+  klinik-db:
+    kind: sqlite
+    database: ../data/klinik.db   <span class="code-comment"># opened read-only by the runner</span>
+
+<span class="code-keyword">tools</span>:
+  list_inactive_patients:
+    kind: sqlite-sql
+    source: klinik-db
+    description: Lapsing / recall list. Returns name + last visit only.
+    parameters:
+      - name: since_date
+        type: string
+        description: Cut-off ISO date.
+    statement: |
+      SELECT p.name, MAX(cn.visit_date) AS last_visit
+      FROM patients p JOIN case_notes cn ON cn.patient_id = p.id
+      GROUP BY p.id
+      HAVING MAX(cn.visit_date) &lt; :since_date
+      ORDER BY last_visit;
+
+<span class="code-keyword">toolsets</span>:
+  front_desk:                      <span class="code-comment"># scoping = access control</span>
+    - condition_trend
+    - list_inactive_patients
+    - cluster_recent_symptoms
+    <span class="code-comment"># ...10 tools total</span>
+
+<span class="code-comment"># DELIBERATELY EXCLUDED (available in MCP Toolbox, switched OFF on purpose):</span>
+<span class="code-comment">#   execute_sql   — would let the agent author arbitrary SQL.  NOT defined.</span>
+<span class="code-comment">#   list_tables   — schema reconnaissance.                     NOT defined.</span>
+<span class="code-comment">#   any NL2SQL    — natural-language-to-SQL generation.        NOT defined.</span></div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🔒 The Governed Gate — tool_runner.py</h2>
+            <p>One component touches the database. It refuses any unknown tool, any unexpected parameter, and opens the connection read-only. There is no code path that runs caller-supplied SQL.</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 agent/tool_runner.py — refusal logic + read-only connection</div>
+                <div class="code-block"><span class="code-keyword">class</span> <span class="code-function">GovernedToolset</span>:
+    <span class="code-keyword">def</span> <span class="code-function">__init__</span>(self, toolset_name=<span class="code-string">"front_desk"</span>):
+        cfg = yaml.safe_load(open(TOOLS_YAML))
+        names = cfg[<span class="code-string">"toolsets"</span>][toolset_name]
+        self.loaded = {n: cfg[<span class="code-string">"tools"</span>][n] <span class="code-keyword">for</span> n <span class="code-keyword">in</span> names}  <span class="code-comment"># scoping</span>
+        <span class="code-comment"># READ-ONLY connection (layer 4). Any write is impossible.</span>
+        self.con = sqlite3.connect(<span class="code-string">f"file:{db_path}?mode=ro"</span>, uri=<span class="code-keyword">True</span>)
+
+    <span class="code-keyword">def</span> <span class="code-function">run</span>(self, name, **params):
+        <span class="code-keyword">if</span> name <span class="code-keyword">not in</span> self.loaded:
+            <span class="code-keyword">raise</span> ValueError(
+                <span class="code-string">f"Tool '{name}' is not in this agent's toolset. "</span>
+                <span class="code-string">f"No such capability exists — refused."</span>)
+        spec = self.loaded[name]
+        self._check_params(name, spec, params)        <span class="code-comment"># reject unknown params</span>
+        <span class="code-keyword">if</span> spec[<span class="code-string">"kind"</span>] == <span class="code-string">"sqlite-sql"</span>:
+            <span class="code-comment"># fixed statement, BOUND named params — never concatenated</span>
+            <span class="code-keyword">return</span> [dict(r) <span class="code-keyword">for</span> r <span class="code-keyword">in</span> self.con.execute(spec[<span class="code-string">"statement"</span>], params)]
+        ...
+
+    <span class="code-keyword">def</span> <span class="code-function">_check_params</span>(self, name, spec, params):
+        declared = {p[<span class="code-string">"name"</span>] <span class="code-keyword">for</span> p <span class="code-keyword">in</span> spec.get(<span class="code-string">"parameters"</span>, [])}
+        unknown = set(params) - declared
+        <span class="code-keyword">if</span> unknown:
+            <span class="code-keyword">raise</span> ValueError(<span class="code-string">f"{name}: unknown parameter(s) {sorted(unknown)} — refused."</span>)</div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🛡️ Proving It — guardrails_demo.py</h2>
+            <p>Every test below is supposed to fail. Running the script confirms the four governance layers are real, not rhetorical.</p>
+
+            <div class="code-container">
+                <div class="code-header">📄 demo/guardrails_demo.py — everything here should be refused</div>
+                <div class="code-block"><span class="code-comment"># Layer 1: no execute_sql tool exists at all</span>
+expect_refused(<span class="code-string">"Call a generic execute_sql tool"</span>,
+               <span class="code-keyword">lambda</span>: ts.run(<span class="code-string">"execute_sql"</span>, sql=<span class="code-string">"SELECT * FROM patients"</span>))
+
+<span class="code-comment"># Layer 2: the agent cannot smuggle in extra parameters</span>
+expect_refused(<span class="code-string">"Inject an unexpected parameter"</span>,
+               <span class="code-keyword">lambda</span>: ts.run(<span class="code-string">"list_inactive_patients"</span>,
+                              since_date=<span class="code-string">"2025-06-01"</span>,
+                              extra=<span class="code-string">"'; DROP TABLE patients;--"</span>))
+
+<span class="code-comment"># Layer 4: the connection itself is read-only</span>
+<span class="code-keyword">def</span> <span class="code-function">attempt_write</span>():
+    ts.con.execute(<span class="code-string">"DELETE FROM appointments WHERE status='no-show'"</span>)
+expect_refused(<span class="code-string">"Direct write on the read-only connection"</span>, attempt_write)
+
+<span class="code-comment"># RESULT: all guardrails held — no free SQL, no writes, no data dumps.</span></div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>⚙️ Why This Design</h2>
+            <h3>Key Decisions</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>Declarative over imperative:</strong> capabilities live in <code>tools.yaml</code>, not scattered through code — easy to audit, easy to scope per role</li>
+                <li><strong>Defense in depth:</strong> layer 1 prevents free SQL by design; layer 4 (read-only) contains the blast radius if any assumption ever broke</li>
+                <li><strong>Bounded columns:</strong> recall and segment tools return only the columns needed — a recall list is name + due-date, never full clinical notes</li>
+                <li><strong>Two runtimes, one contract:</strong> the official MCP Toolbox binary and the dependency-free local runner honour the same fixed statements</li>
+            </ul>
+            <h3>Why SQLite</h3>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>Right-sized:</strong> a single-file database is the correct store for a one-desk clinic — matching infrastructure to the business is the consulting judgment</li>
+                <li><strong>Portable demo:</strong> the same file runs in the browser via sql.js, so the live demo costs nothing to host</li>
+                <li><strong>Same pattern scales up:</strong> swap the source for Cloud SQL / AlloyDB and the governance story is unchanged</li>
+            </ul>
+        </div>
+
+        <div class="demo-links">
+            <a href="projects/klinik-dr-fang/demo.html" target="_blank" class="demo-btn">🚀 Try Live Demo</a>
+            <a href="klinik-dr-fang.html" class="demo-btn secondary">📖 View Full Project Details</a>
+        </div>
+
+        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+            <a href="index.html">← Back to Portfolio</a> |
+            <a href="klinik-dr-fang.html">View Project Overview</a>
+        </nav>
+    </div>
+</body>
+</html>

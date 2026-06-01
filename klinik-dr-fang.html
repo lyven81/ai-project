@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Klinik Dr Fang Front-Desk Assistant - Pattern-Finding AI for Clinics</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #222; background-color: #ffffff; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        .back-nav { margin-bottom: 20px; }
+        .back-nav a { color: #E91E63; text-decoration: none; font-size: 1rem; }
+        .back-nav a:hover { text-decoration: underline; }
+        .project-header { text-align: center; margin-bottom: 40px; padding: 40px 0; background: linear-gradient(135deg, #E91E63, #AD1457); color: white; border-radius: 10px; }
+        .project-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        .project-header p { font-size: 1.2rem; opacity: 0.9; }
+        .badges { display: flex; justify-content: center; gap: 10px; margin: 20px 0; flex-wrap: wrap; }
+        .badge { background-color: rgba(255, 255, 255, 0.2); color: white; padding: 5px 12px; border-radius: 15px; font-size: 0.9rem; }
+        .demo-links { text-align: center; margin: 30px 0; }
+        .demo-btn { display: inline-block; background-color: #E91E63; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; margin: 0 10px; font-weight: bold; transition: background-color 0.3s; }
+        .demo-btn:hover { background-color: #AD1457; }
+        .demo-btn.secondary { background-color: #607D8B; }
+        .demo-btn.secondary:hover { background-color: #455A64; }
+        .content-section { margin: 40px 0; padding: 30px; background-color: #f9f9f9; border-radius: 8px; border-left: 5px solid #E91E63; }
+        .content-section h2 { color: #E91E63; margin-bottom: 20px; font-size: 1.8rem; }
+        .content-section h3 { color: #333; margin: 20px 0 10px 0; font-size: 1.3rem; }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin: 20px 0; }
+        .feature-item { background: white; padding: 20px; border-radius: 8px; border: 1px solid #ddd; }
+        .feature-item h4 { color: #E91E63; margin-bottom: 10px; }
+        .tech-stack { display: flex; flex-wrap: wrap; gap: 10px; margin: 15px 0; }
+        .tech-item { background-color: #E91E63; color: white; padding: 5px 12px; border-radius: 15px; font-size: 0.9rem; }
+        .code-block { background-color: #f4f4f4; border: 1px solid #ddd; border-radius: 5px; padding: 15px; margin: 15px 0; font-family: monospace; overflow-x: auto; white-space: pre; }
+        .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin: 20px 0; }
+        .metric-card { background: white; padding: 20px; border-radius: 8px; text-align: center; border: 2px solid #E91E63; }
+        .metric-number { font-size: 2rem; font-weight: bold; color: #E91E63; }
+        .metric-label { color: #666; font-size: 0.9rem; }
+        .callout { background:#fce4ec; border:1px solid #f8bbd0; border-radius:8px; padding:18px; margin:18px 0; }
+        .callout strong { color:#AD1457; }
+        @media (max-width: 768px) {
+            .project-header h1 { font-size: 2rem; }
+            .project-header p { font-size: 1rem; }
+            .badges { justify-content: center; }
+            .demo-btn { margin: 5px; padding: 10px 20px; }
+            .container { padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="index.html">← Back to Portfolio</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>🩺 Klinik Dr Fang Front-Desk Assistant</h1>
+            <p>Front-desk AI for clinics that can't leak patient data</p>
+
+            <div class="badges">
+                <span class="badge">MCP Toolbox Pattern</span>
+                <span class="badge">SQLite (read-only)</span>
+                <span class="badge">Gemini Flash (BYOK)</span>
+                <span class="badge">sql.js / WebAssembly</span>
+                <span class="badge">Semantic Search</span>
+                <span class="badge">Python</span>
+            </div>
+        </div>
+
+        <div class="demo-links">
+            <a href="projects/klinik-dr-fang/demo.html" target="_blank" class="demo-btn">🚀 Launch Live Demo</a>
+            <a href="klinik-dr-fang-source.html" class="demo-btn secondary">📁 View Source Code</a>
+        </div>
+
+        <div class="content-section">
+            <h2>📋 Project Overview & Problem Statement</h2>
+            <p><strong>Challenge:</strong> A single-doctor clinic wants quick answers to operational, population-level questions about its patient records — <em>"are we seeing a lot of similar cases lately?"</em>, <em>"who hasn't been in for a year?"</em> — without anyone learning to write database queries. But wiring an LLM straight to patient data is exactly the risk a clinic can't take: a cleverly worded prompt could make the model dump every record or run a destructive query. For privacy-sensitive data, "it usually behaves" is not good enough.</p>
+
+            <p><strong>Solution:</strong> A front-desk assistant that surfaces <strong>patterns</strong> across patient records in plain language — while being <strong>structurally incapable</strong> of leaking data or running its own SQL. The agent never touches the database. Between it and the data sits a governed tool layer (the MCP Toolbox for Databases pattern): a fixed set of pre-written, parameterized queries that are the only actions the agent can take.</p>
+
+            <div class="callout">
+                <strong>The headline isn't "I built an AI agent."</strong> It's "I built one a privacy-sensitive clinic could actually trust." The differentiator is data governance over novelty.
+            </div>
+
+            <h3>Key Benefits</h3>
+            <ul>
+                <li><strong>Pattern-finding in plain language:</strong> symptom clusters, condition trends, lapsing patients, frequent attenders — no query writing</li>
+                <li><strong>No free SQL, ever:</strong> the agent has no mechanism to author SQL — that capability simply does not exist for it</li>
+                <li><strong>Read-only by design:</strong> the database connection cannot insert, update, or delete</li>
+                <li><strong>Right-sized:</strong> a single-file SQLite database — the correct store for a one-desk clinic, not a shortcut</li>
+                <li><strong>Runs free:</strong> the live demo executes the real database in your browser; the conversational layer is bring-your-own-key</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>🖥️ Application Features</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <h4>🔬 Symptom Clustering</h4>
+                    <p>Groups recent presenting complaints into clusters of similar symptoms — an early-outbreak signal that surfaces a grouping nobody explicitly searched for.</p>
+                </div>
+                <div class="feature-item">
+                    <h4>📈 Condition Trends</h4>
+                    <p>Shows whether a condition (e.g. suspected dengue) is becoming more common across recent months, returning the monthly shape for the agent to explain.</p>
+                </div>
+                <div class="feature-item">
+                    <h4>👥 Patient Segmentation</h4>
+                    <p>Segments the whole patient base by visit frequency and average spend — High-frequency, Regular, Occasional groups — at summary level only.</p>
+                </div>
+                <div class="feature-item">
+                    <h4>📞 Lapsing-Patient Recall</h4>
+                    <p>Lists patients not seen in over a year — a recall list returning name and last-visit date only, never clinical notes.</p>
+                </div>
+                <div class="feature-item">
+                    <h4>⚠️ Frequent Attenders & Spikes</h4>
+                    <p>Flags patients visiting unusually often, and the top presenting complaints in a given month to catch any unusual spike.</p>
+                </div>
+                <div class="feature-item">
+                    <h4>🗓️ No-Show & Demand Patterns</h4>
+                    <p>No-show rate by weekday and busiest-day analysis — operational patterns for staffing and scheduling decisions.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🤖 AI Integration & Intelligence</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <h4>🧠 Reasoning, Not Querying</h4>
+                    <p>Gemini Flash reasons about <em>which</em> approved tool to call and explains the result in plain language. Its intelligence goes into understanding the question — never into writing SQL.</p>
+                </div>
+                <div class="feature-item">
+                    <h4>🔒 The No-Free-SQL Guarantee</h4>
+                    <p>Four governance layers: the toolset is the agent's entire universe (no <code>execute_sql</code>), the SQL is fixed with only values bound, toolset scoping controls access, and the database user is read-only.</p>
+                </div>
+                <div class="feature-item">
+                    <h4>🔎 Semantic Search</h4>
+                    <p>Vector embeddings on case notes power "find cases that resemble this one" and symptom clustering — meaning-based matching, not just keywords.</p>
+                </div>
+                <div class="feature-item">
+                    <h4>🔑 Bring-Your-Own-Key (BYOK)</h4>
+                    <p>The live conversational layer uses your own free Gemini key, held in your browser only. Nothing is hard-coded or committed; the data layer and guardrails cost nothing to run.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🛠️ Technical Architecture & Implementation</h2>
+
+            <h3>Agent & Tool Layer</h3>
+            <div class="tech-stack">
+                <span class="tech-item">Google Gemini Flash</span>
+                <span class="tech-item">MCP Toolbox for Databases pattern</span>
+                <span class="tech-item">tools.yaml (declarative)</span>
+                <span class="tech-item">Python</span>
+            </div>
+
+            <h3>Data & Semantic Search</h3>
+            <div class="tech-stack">
+                <span class="tech-item">SQLite (read-only)</span>
+                <span class="tech-item">Vector embeddings</span>
+                <span class="tech-item">Cosine similarity</span>
+            </div>
+
+            <h3>Live Browser Demo</h3>
+            <div class="tech-stack">
+                <span class="tech-item">sql.js / WebAssembly</span>
+                <span class="tech-item">Client-side SQL</span>
+                <span class="tech-item">GitHub Pages (static)</span>
+            </div>
+
+            <h3>System Architecture</h3>
+            <ul>
+                <li><strong>Flow:</strong> user question → agent picks a tool → governed toolset runs the fixed query → agent explains the result</li>
+                <li><strong>Governed gate:</strong> a single component touches the database, and it can execute nothing but the tools declared in <code>tools.yaml</code></li>
+                <li><strong>Bound parameters:</strong> the agent supplies parameter <em>values</em> only — it cannot add a <code>WHERE</code>, change a <code>LIMIT</code>, or inject a <code>UNION</code></li>
+                <li><strong>Read-only connection:</strong> opened in <code>mode=ro</code>; writes are physically impossible even if every layer above were bypassed</li>
+                <li><strong>Two runtimes:</strong> the official MCP Toolbox binary (production) and a dependency-free local runner (the demo) honour the same fixed statements</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>📖 Development Setup & Installation Guide</h2>
+
+            <h3>Prerequisites</h3>
+            <ul>
+                <li><strong>Python 3.10+</strong></li>
+                <li><strong>Gemini API key</strong> (free, from Google AI Studio) — only for live conversational mode</li>
+            </ul>
+
+            <h3>Quick Start</h3>
+            <div class="code-block"># Clone the repository
+git clone https://github.com/lyven81/ai-project.git
+cd ai-project/projects/klinik-dr-fang
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Build the synthetic SQLite database
+python data/generate_data.py
+
+# Prove the guardrails (everything should be refused)
+python demo/guardrails_demo.py
+
+# Chat — deterministic mode (no LLM, zero cost)
+python agent/agent.py
+
+# Chat — live mode (Gemini, bring-your-own-key)
+python agent/agent.py --live</div>
+
+            <h3>Bring-Your-Own-Key Configuration</h3>
+            <div class="code-block"># Get a free key at https://aistudio.google.com/apikey
+# Copy the template and paste your key (the .env file is git-ignored)
+cp .env.example .env
+# .env contents:
+GEMINI_API_KEY=your_key_here</div>
+        </div>
+
+        <div class="content-section">
+            <h2>🚀 Deployment</h2>
+
+            <h3>Live Demo (GitHub Pages — free, no key)</h3>
+            <p>The interactive demo loads the real synthetic SQLite database in the browser via sql.js and runs the same fixed, parameterized queries client-side. No server, no key, nothing to install — it works on free static hosting.</p>
+
+            <h3>Production Notes</h3>
+            <ul>
+                <li>The same <code>tools.yaml</code> deploys to the official MCP Toolbox for Databases binary on Cloud Run for a real enterprise database (Cloud SQL / AlloyDB)</li>
+                <li>The conversational layer uses bring-your-own-key — a shared key is never embedded in the page</li>
+                <li>The database tier is rarely the biggest cost line; model usage is. At demo scale it is cents on the Gemini Flash tier</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>📊 Key Metrics</h2>
+
+            <div class="metrics">
+                <div class="metric-card">
+                    <div class="metric-number">10</div>
+                    <div class="metric-label">Pre-Approved Tools</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">4</div>
+                    <div class="metric-label">Governance Layers</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">0</div>
+                    <div class="metric-label">Free-SQL Capabilities</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">RM 0</div>
+                    <div class="metric-label">Cost to Run the Demo</div>
+                </div>
+            </div>
+
+            <h3>Business Value</h3>
+            <ul>
+                <li><strong>Trust by design:</strong> a privacy-sensitive clinic can put this on its front desk because data exposure is structurally impossible, not merely discouraged</li>
+                <li><strong>Analytics without a query language:</strong> segmentation, recall, trend and clustering delivered as plain conversation</li>
+                <li><strong>Right-sized infrastructure:</strong> matching a single-file database to a one-desk clinic is the consulting judgment, not a shortcut</li>
+                <li><strong>Portable pattern:</strong> the same governed-tool architecture scales up to enterprise databases without changing the safety story</li>
+            </ul>
+        </div>
+
+        <div class="demo-links">
+            <a href="projects/klinik-dr-fang/demo.html" target="_blank" class="demo-btn">🚀 Try Live Demo</a>
+            <a href="https://github.com/lyven81/ai-project/tree/main/projects/klinik-dr-fang" class="demo-btn secondary">📖 Full Source Code</a>
+        </div>
+
+        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+            <a href="index.html">← Back to Portfolio</a> |
+            <a href="project-categories.html">View All Categories</a>
+        </nav>
+    </div>
+</body>
+</html>

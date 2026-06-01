@@ -1,11 +1,11 @@
-# 🤖 Lee Yih Ven - AI Project Portfolio
+# 🤖 Lee Yih Ven — AI Project Portfolio
 
 [![Portfolio Website](https://img.shields.io/badge/Portfolio-Live-green?logo=vercel)](https://lyven81.github.io/ai-project/)
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-black?logo=github)](https://github.com/lyven81/ai-project)
-[![Projects](https://img.shields.io/badge/Projects-70-blue)](#-featured-projects)
+[![Projects](https://img.shields.io/badge/Projects-49-blue)](#projects-by-category)
 [![AI Powered](https://img.shields.io/badge/AI-Powered-orange?logo=tensorflow)](https://github.com/lyven81/ai-project)
 
-**Innovative AI Solutions for Modern Challenges** - A curated collection of production-ready AI applications showcasing expertise in computer vision, natural language processing, document processing, and creative AI technologies.
+**49 production AI apps across 8 business categories** — each one solves a real, named pain point with a working demo you can click and try today.
 
 <div align="center">
 <img width="1200" height="400" alt="AI Portfolio Banner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
@@ -13,569 +13,491 @@
 
 ## 🌟 Portfolio Overview
 
-This repository contains **70 AI applications** built in this repo (some published to the portfolio homepage, others retained as archived builds) demonstrating proficiency across multiple AI domains. Each project includes comprehensive documentation, live demos, and complete source code with deployment configurations.
-
-**🎯 Portfolio Highlights:**
-- **15+ AI Technologies** integrated across projects
-- **Production Deployments** on Google Cloud Platform
-- **Full-Stack Development** with modern frameworks
-- **Professional Documentation** with setup guides and technical details
-- **Real-World Applications** solving practical problems with AI
-
-## AI Architecture Classification
-
-Each project is classified by its AI architecture pattern, based on how the system processes queries, uses tools, and makes decisions.
-
-### Multi-Agent Orchestration (4 projects)
-*Multiple specialized agents chained in sequence, each with its own tools and instructions.*
-
-| Project | Why Multi-Agent |
-|---|---|
-| [Stock Manager](./projects/stock-manager/) | 3-agent ADK pipeline: Sales Analyst → Inventory Checker → Restock Decider → Google Sheets |
-| [Leadership Team](./leadership-team.html) | 6 manager subagents (Engineering, Research, Marketing, Editor, Coordinator, Mentor) run a weekly boardroom and write minutes to disk |
-| [Course Creator](./course-creator.html) | 4-agent ADK pipeline (Researcher → Judge → Content Builder + Orchestrator) talking over A2A protocol on Cloud Run |
-| [Bookshelf](./bookshelf.html) | 4-agent ADK pipeline (Researcher → Judge → Content Builder + Orchestrator) for Malaysian bookstore inventory — pandas data tool computes exact metrics, Pydantic Judge gates the loop |
-
-### Agentic AI (11 projects)
-*Orchestrator with planning, tools, memory, and feedback loops. Autonomous decision-making.*
-
-| Project | Why Agentic |
-|---|---|
-| [Business Intelligence Agent](./projects/business-intelligence-agent/) | NL query → plans analysis → writes code → executes → returns results |
-| [Ecommerce Analyst](./ecommerce-analyst.html) | Private analyst for mid-size e-commerce sellers. Ask about margins, returns, shipping; get a Monday brief |
-| [Hoo Tim Analytics Agent](./hoo-tim-analytics-agent.html) | Live AI agent + 5 MCP tools for a Selangor snack distributor — BYO Gemini key, 6,074 order lines, 300 resellers across 9 districts |
-| [Customer Segmentation Agent](./projects/customer-segmentation-agent/) | Autonomously profiles customers → segments → generates campaigns |
-| [Data Consulting Business Analyst](./projects/data-consulting-business-analyst/) | 4-agent architecture: research → competitor intel → opportunity → strategy |
-| [Stock Analysis Agent](./projects/stock-analysis-agent/) | 5-agent architecture: screening → fundamentals → moat → dividends → reporting |
-| [Public Sentiment Collection Agent](./projects/public-sentiment-collection-agent/) | 5-agent architecture: listening → sentiment → visualization → export → packaging |
-| [Sales Dashboard Agent](./projects/sales-dashboard-agent/) | Autonomous sales KPI analysis and dashboard generation |
-| [Time Series Analysis Agent](./projects/time-series-analysis-agent/) | Autonomous forecasting and trend detection pipeline |
-| [SME Business Advisor](./projects/sme-business-advisor/) | ADK-based advisor agent for Malaysian SMEs (Gen AI Academy track) |
-| [SME Advisor MCP](./projects/sme-advisor-mcp/) | MCP-connected advisor agent with tool integration |
-| [SME Advisor AlloyDB](./projects/sme-advisor-alloydb/) | Retrieval-augmented advisor grounded in AlloyDB vector store |
-| [Marketing Agency](./projects/marketing-agency/) | 6-skill content pipeline with brand voice enforcement and lead feedback loop |
-
-### Agent-Callable Storefronts (2 projects)
-*Browser-native storefronts that expose typed tools to AI agents via the W3C WebMCP standard. Not agentic AI itself — but the surface AI agents shop on.*
-
-| Project | Why Agent-Callable |
-|---|---|
-| [Sunny Car Accessories](./sunny-car-accessories.html) | 18 SKUs, 7 WebMCP tools per-view scoped, `checkFitment` lets agents verify part compatibility before adding to cart — pixel-clicking agents can't do this reliably |
-| [Ji Xing 吉星饭厅 — CNY Reservation](./ji-xing-cny-reservation.html) | Bilingual CNY festival reservation page · 6 set menus (RM 688–1,288) · 7 WebMCP tools · `checkAvailability` returns typed JSON of mainHall/privateRoom/VIP table counts per sitting |
-
-### RAG — Retrieval-Augmented Generation (3 projects)
-*Query → retrieve from knowledge base or external data → augment → LLM → output.*
-
-| Project | Why RAG |
-|---|---|
-| [Claude PDF Summarizer](./projects/claude-pdf-summarizer/) | Upload doc → retrieve content → summarize |
-| [Long View](./projects/long-view/) | 27 OSINT sources → delta detection → LLM synthesis → briefing |
-| [Good Company](./projects/good-company/) | Quarter report PDFs → 7-step phased stock analysis → scorecard |
-
-### RPA — Robotic Process Automation (19 projects)
-*Uses tools (APIs, image processing) but follows a fixed pipeline. No autonomous planning.*
-
-| Project | Why RPA |
-|---|---|
-| [AI Background Changer](./projects/ai-background-changer/) | Upload → subject preservation → background replace → output |
-| [AI Coloring Book for Kids](./projects/ai-coloring-book-for-kids/) | Theme → generate page → interactive coloring |
-| [AI Photo Editor](./projects/ai-photo-editor/) | Upload → apply AI edits → output |
-| [AI Profile Picture Stylist](./projects/ai-profile-picture-stylist/) | Upload → 4 professional styles → output |
-| [Coloring Book Generator](./projects/coloring-book-generator/) | Prompt → generate pages → PDF output |
-| [Image Recipe Generator](./projects/image-recipe-generator/) | Upload food photo → extract recipe → output |
-| [PDF-to-Audio Reader](./projects/pdf-to-audio-reader/) | Upload PDF → TTS → audio output |
-| [Polaroid Moments Generator](./projects/polaroid-moments-generator/) | Upload → vintage Polaroid style → output |
-| [Polaroid Moments Generator 3](./projects/polaroid-moments-generator-3/) | Upload → extended Polaroid style set → output |
-| [Unusual Coloring Book](./projects/unusual-coloring-book/) | Story path → illustrate → color → export |
-| [Expense Tracker AI](./projects/expense-tracker-ai/) | Receipt → OCR → categorize → analytics |
-| [AI Avatar Hairstyle Generator](./projects/ai-avatar-hairstyle-generator/) | Upload → restyle hair → output |
-| [AI Expression Generator](./projects/ai-expression-generator/) | Upload → regenerate facial expression → output |
-| [AI Group Photo Generator](./projects/ai-group-photo-generator/) | Multiple photos → composite group shot |
-| [Pose Perfect AI](./projects/pose-perfect-ai/) | Upload → pose correction/restyle → output |
-| [Virtual Try-On Studio](./projects/virtual-try-on-studio/) | Upload person + garment → try-on composite |
-| [AI Recipe Generator](./ai-recipe-generator.html) | Ingredients → recipe generation → output |
-| [AI Storybook Generator](./ai-storybook-generator.html) | Prompt → illustrated storybook pages |
-| [Gemini Image Editor](./gemini-image-editor.html) | Upload → Gemini-powered edits → output |
-
-### LLM Chatbots (15 projects)
-*Query → system prompt → LLM → output. No tools, no memory, no planning.*
-
-| Project | Why LLM Chatbot |
-|---|---|
-| [Fengshui Chatbot](./projects/fengshui-chatbot/) | Prompt-driven feng shui consultation |
-| [Horoscope Chatbot](./projects/horoscope-chatbot/) | Zodiac Q&A, no tools or memory |
-| [Master Wong](./projects/master-wong/) | I Ching readings, prompt-based |
-| [Skyread](./projects/skyread/) | Daily horoscope generation |
-| [Tarot Guru](./projects/tarot-guru/) | Card interpretation, prompt-driven |
-| [Wiseman](./projects/wiseman/) | Chinese philosophy Q&A |
-| [Kopitiam Digital Waiter](./projects/kopitiam-digital-waiter/) | Menu-based ordering, prompt-driven |
-| [Football Assistant Coach](./projects/football-assistant-coach/) | Strategy Q&A, no external tools |
-| [Nine Year Plan](./projects/nine-year-plan/) | Reference Q&A, prompt-based |
-| [Sarawak Laksa](./projects/sarawak-laksa/) | Curated knowledge, prompt-based |
-| [Banana Lab](./projects/banana-lab/) | Prompt pack generation |
-| [MyPropLex](./projects/myproplex/) | Legal Q&A, prompt-driven |
-| [Chinese Calendar](./projects/chinese-calender/) | Calendar lookup, prompt-based |
-| [TrendMate](./projects/trendmate/) | Fashion trend Q&A |
-| [Back-to-School](./back-to-school-campaign.html) | 5 AI copywriters generate a coordinated 5-channel BM marketing campaign from one brief |
-| [Mentor](./projects/mentor/) | Unified-voice advisor with keyword retrieval + session memory |
-
-### Hybrid Tools (5 projects)
-*Uses LLM + external tools but not fully autonomous — some decision logic without full orchestration.*
-
-| Project | Why Hybrid |
-|---|---|
-| [Badminton Booking Agent](./projects/badminton-booking-agent/) | Code-as-action pattern with LLM but follows booking flow |
-| [Hire Gardener](./projects/hire-gardener/) | WhatsApp + vendor matching, semi-structured |
-| [Social Media Marketer](./projects/social-media-marketer/) | Multi-agent simulation but fixed evaluation loop |
-| [Car Rental Booking Agent](./projects/car-rental-booking-agent/) | LLM-assisted rental booking flow with fixed pipeline |
-| [Soon Heng Aircon Agent](./projects/soon-heng-aircon-agent/) | WhatsApp-based service booking agent with structured flow |
-
-### Interactive Learning Tools (2 projects)
-*Educational content generation with structured pedagogical output.*
-
-| Project | Why Learning Tool |
-|---|---|
-| [Science Learning Materials Builder](./projects/science-learning-materials-builder/) | 4-agent lesson plan generator with curriculum alignment |
-| [Thematic Outline Puzzles](./projects/thematic-outline-puzzles/) | Structured puzzle content generation |
-
-### Architecture Summary
-
-| Category | Count | % |
-|---|---|---|
-| RPA (fixed pipelines) | 19 | 33% |
-| LLM Chatbots | 16 | 27% |
-| Agentic AI | 11 | 19% |
-| Hybrid Tools | 5 | 9% |
-| RAG | 3 | 5% |
-| Multi-Agent Orchestration | 3 | 4% |
-| Interactive Learning | 2 | 4% |
-
-**Total: 70 projects**
-
-> Note: As of Apr 9, 2026, 16 projects were unpublished from the live portfolio homepage display to sharpen focus. They remain in the repo and are still counted here as built work.
-
-## 🚀 Live Portfolio Website
-
-**[🌟 View Interactive Portfolio](https://lyven81.github.io/ai-project/)** - Experience all projects through the live demo website with organized categories and direct links to applications.
-
-## 🏆 Featured Projects
-
-### 📸 Computer Vision & Image Processing
-
-#### [AI Photo Editor](./projects/ai-photo-editor/)
-**Professional-grade AI-powered photo editing with intelligent enhancement**
-- **Live Demo:** [gemini-image-editor-169218045868.us-west1.run.app](https://gemini-image-editor-169218045868.us-west1.run.app/)
-- **Tech Stack:** React, TypeScript, Vite, Google Gemini AI
-- **AI Capabilities:** Intelligent photo optimization, real-time filters, advanced image processing
-
-### 📄 Document Processing & Analysis
-
-#### [Claude PDF Summarizer](./projects/claude-pdf-summarizer/)
-**Intelligent document processing with multi-language AI summarization**
-- **Live Demo:** [summarizer-218391175125.asia-southeast1.run.app](https://summarizer-218391175125.asia-southeast1.run.app/)
-- **Tech Stack:** Python, Streamlit, Claude 3 Haiku API, PDF Processing
-- **AI Capabilities:** Multi-language summarization, executive/simple/kids formats, key insights extraction
-
-#### [Expense Tracker AI](./projects/expense-tracker-ai/)
-**Intelligent expense tracking with AI-powered receipt processing using Google Gemini**
-- **Live Demo:** [expense-tracker-ai-169218045868.us-west1.run.app](https://expense-tracker-ai-169218045868.us-west1.run.app/)
-- **Tech Stack:** React, TypeScript, Gemini AI, Recharts, Local Storage
-- **AI Capabilities:** Receipt OCR processing, automatic data extraction, smart categorization, expense analytics
-
-#### [PDF-to-Audio Reader](./projects/pdf-to-audio-reader/)
-**Convert PDF documents into natural-sounding audio with AI-powered structuring**
-- **Live Demo:** [pdf-to-audio-reader-169218045868.us-west1.run.app](https://pdf-to-audio-reader-169218045868.us-west1.run.app/)
-- **Tech Stack:** React, TypeScript, Gemini AI, Web Speech API, PDF.js
-- **AI Capabilities:** Document structure analysis, text-to-speech conversion, synchronized highlighting, chapter navigation
-
-#### [Bahai Chinese Translation Workbench](./projects/bahai-chinese-translation-workbench/)
-**Sacred text translation pipeline with human governance**
-- **Live Demo:** [Demo](https://lyven81.github.io/ai-project/projects/bahai-chinese-translation-workbench/demo.html)
-- **Tech Stack:** AI-assisted translation pipeline, terminology glossary, human review workflow
-- **AI Capabilities:** AI-assisted translation of Baha'i Sacred Writings into Chinese, three-stage pipeline with human review and terminology glossary
-
-### 📊 Business Intelligence & Analytics Agents
-
-#### [Sundry Shop Assistant](./sundry-shop-assistant.html)
-**Voice advisor for busy Malaysian kedai runcit owners — 10 MCP tools over POS sales data, santai Bahasa Malaysia**
-- **Live Demo:** [Launch App](https://sundry-shop-assistant-522143897885.asia-southeast1.run.app)
-- **Tech Stack:** Gemini Live API, FastAPI, WebSocket, MCP Tools, pandas, Cloud Run
-- **AI Capabilities:** 10 pandas-backed analytical tools (category ranking, member vs visitor, payment mix, basket stats, gender breakdown), native Gemini function calling during live audio session, santai BM conversational register (not formal bahasa baku), 4-mode I/O toggle (voice/text input × voice/text output), sub-second tool latency, transcript log for verification
-
-#### [Leadership Team](./leadership-team.html)
-**Autonomous AI boardroom for independent property agents — 6 manager agents run a weekly listing review and write minutes to disk**
-- **Live Demo:** [Launch Boardroom](./projects/leadership-team/demo.html)
-- **Tech Stack:** Claude Code, Subagents, Skills, HTML/CSS/JS, Markdown state files
-- **AI Capabilities:** 7-seat Zoom-style boardroom UI tailored to a one-person property agency, 6 specialised manager subagents (Engineering/portal automation, Research/comparables, Marketing/leads, Editor/listing copy, Coordinator/viewings, Mentor/deal strategy), `run board meeting` walks through every active listing + pipeline, `check approvals` surfaces price cuts and counter-offers, persistent agency state (listings, buyers, deals) grounded in Markdown
-
-#### [Good Company](./projects/good-company/)
-**Stock research assistant that reads quarter report PDFs and runs a 7-step analysis to determine if a company is a good business and worth investing in**
-- **Live Demo:** [Demo (Dialog Group)](./projects/good-company/demo.html)
-- **Tech Stack:** Python, FastAPI, Gemini 2.5 Flash, PyMuPDF, Vanilla JS, marked.js
-- **AI Capabilities:** 7-step phased analysis (company overview, forensic check, verdict, valuation, bull/bear debate, personal risk check, final scorecard), local PDF reading, 7 visualization types (metric cards, scorecards, verdict badges, range bars, scenario cards), one-click report copy, plain-language output with Goldman Sachs analytical depth
-
-#### [Stock Analysis Agent](./projects/stock-analysis-agent/)
-**Multi-agent investment research system with automated stock screening and fundamental analysis**
-- **Live Demo:** [Google Colab](https://colab.research.google.com/drive/1Wji69Sq-IqhtMEJTlxIkQ39ZZ5JAXR6w)
-- **Tech Stack:** Python, Gemini 2.0 Flash, Yahoo Finance API, Tavily API, Matplotlib
-- **AI Capabilities:** 5-agent architecture (screening, fundamentals, business moat, dividends, reporting), investment yardstick scoring (0-100 points), web-powered competitive analysis, automated report generation with visualizations, Malaysian stock market analysis
-
-#### [Science Learning Materials Builder](./projects/science-learning-materials-builder/)
-**4-agent educational content generator for age-appropriate science lessons aligned with NGSS standards**
-- **Live Demo:** [Google Colab](https://colab.research.google.com/drive/1p390KHKMQ9xcaDQ7eQTQJjdlX1JTxpmn)
-- **Tech Stack:** Python, Gemini 2.0 Flash, Tavily API, WeasyPrint, Markdown Processing
-- **AI Capabilities:** Curriculum research (web search + NGSS validation), visual illustration prompts, 3rd-grade reading level content writing, quiz generation (5 MC + 2 SA), hands-on activities, markdown + PDF export
-
-#### [Data Consulting Business Analysis Agent](./projects/data-consulting-business-analyst/)
-**Automated market intelligence system for data analytics consulting firms - 100x faster than manual research**
-- **Live Demo:** [Google Colab](https://colab.research.google.com/drive/1BZ1m_XsI5q7CHvdopcCK53Wlw0sCt1-j)
-- **Tech Stack:** Python, Gemini 2.0 Flash, Tavily API, Matplotlib, Seaborn, NetworkX
-- **AI Capabilities:** 4-agent architecture (industry research, competitor intelligence, opportunity analysis, strategic reporting), web-powered trend discovery, competitive capability matrix mapping, white-space opportunity detection, 2x2 strategic opportunity maps, executive-ready markdown reports with embedded visualizations
-
-#### [Football Assistant Coach](./projects/football-assistant-coach/)
-**AI-powered player selection system that evaluates 22 players across 4 training sessions and recommends the optimal Starting XI**
-- **Live Demo:** [Launch Demo](https://lyven81.github.io/ai-project/projects/football-assistant-coach/demo.html)
-- **Tech Stack:** Python, Claude Haiku, Streamlit, Plotly, Pandas, Anthropic SDK
-- **AI Capabilities:** 22 position-specific AI coach personas, team chemistry scoring (max 50 pts) weighted above individual performance (max 35 pts), formation-aware selection engine, hybrid formation advisor, rolling form calculation (60/40 two-week average), transfer risk detection
-
-#### [Social Media Marketer](./projects/social-media-marketer/)
-**Multi-agent simulation that reveals which marketing channel delivers the best ROI — and which one to cut**
-- **Live Demo:** [Launch Demo](https://lyven81.github.io/ai-project/projects/social-media-marketer/demo.html)
-- **Tech Stack:** Python, Claude Haiku, Streamlit, Plotly, Pandas, Anthropic SDK
-- **AI Capabilities:** 5 competing AI agents with distinct personas, structured JSON decision-making, economic scoring engine, CMO-level recommendations, real-time simulation progress, downloadable markdown reports
-
-#### [Business Intelligence Agent](./projects/business-intelligence-agent/)
-**General-purpose data analytics agent that answers business questions from any CSV dataset using natural language**
-- **Live Demo:** [Google Colab](https://colab.research.google.com/drive/10wkxsg7Crcdz9oa3rFKlJ6Jtez1CB3xf)
-- **Tech Stack:** Python, Gemini 2.0 Flash, Pandas, NumPy, Matplotlib, Seaborn
-- **AI Capabilities:** Automatic schema detection and analysis, natural language to Pandas/NumPy code generation, safe sandboxed execution environment, automatic visualization generation, multi-pattern support (filtering, aggregation, grouping), error handling with status tracking, exploratory data analysis
-
-#### [Kopitiam Digital Waiter](./projects/kopitiam-digital-waiter/)
-**Real-time sales tracker and digital logbook for Malaysian Kopitiam owners with AI-powered business tips**
-- **Live Demo:** [kopitiam-digital-waiter-169218045868.us-west1.run.app](https://kopitiam-digital-waiter-169218045868.us-west1.run.app/)
-- **Tech Stack:** React 19, TypeScript, Express.js, SQLite, Vite, Tailwind CSS, Recharts, Gemini AI
-- **AI Capabilities:** AI-powered contextual quick tips, milestone sales alerts, busy hour analytics, daily revenue trend visualization, real-time item performance ranking
-
-#### [MyPropLex](./projects/myproplex/)
-**AI-powered Malaysian property law research assistant for lawyers and conveyancers**
-- **Live Demo:** [Launch Demo](https://lyven81.github.io/ai-project/projects/myproplex/demo.html)
-- **Tech Stack:** Python, Claude Sonnet 4.6, Tavily Search API, Streamlit
-- **AI Capabilities:** ReAct agent loop with web search, Malaysian property law specialist (NLC, HDA, STA, RPGT, RERA), 3-sentence cited answers, 10 preset questions, conversation memory
-
-#### [TrendMate](./projects/trendmate/)
-**AI market research assistant for Malaysian online fashion sellers on Shopee, Lazada, and TikTok Shop**
-- **Live Demo:** [Launch Demo](https://lyven81.github.io/ai-project/projects/trendmate/demo.html)
-- **Tech Stack:** Python, Claude Sonnet 4.6, Tavily Search API, Streamlit
-- **AI Capabilities:** ReAct agent loop with web search, Malaysian fashion market specialist, trend/pricing/supplier/seasonal research, 3-sentence actionable answers, 10 preset questions
-
-#### [Bright Path Tuition Centre](./bright-path-tuition.html)
-**AI management assistant for premium small-class tuition centres**
-- **Live Demo:** [Launch Demo](https://lyven81.github.io/ai-project/bright-path-tuition/demo.html)
-- **Tech Stack:** Gemini 2.5 Flash, FastAPI, SQLite, Python, GitHub Pages
-- **AI Capabilities:** NL-to-SQL agent across 7 tables (185 children, 22 specialists, 63 classes). Year 4 mastery anchor, P5/P6 secondary-readiness escalation, specialist quality audit, gap-to-fix recommendations. Built for Malaysia's post-UPSR PBD + UASA era.
-
-#### [North Star Learning Center](./north-star-learning-center.html)
-**Supportive AI ecosystem for Malaysian small-class tuition centres — three role views (manager / teacher / parent)**
-- **Live Demo:** [Launch Demo](https://north-star-learning-center-522143897885.asia-southeast1.run.app)
-- **Tech Stack:** Gemini 2.0 Flash, FastAPI, SQLite, Python 3.11, Google Cloud Run
-- **AI Capabilities:** 8 MCP-style deterministic tools + 2 live Gemini calls (parent_story ~2.5s, draft_peer_note ~1.1s). Critical escalation auto-detect, Help-a-Colleague peer-mentor links as a first-class relationship, anti-surveillance design — never scores wellbeing, discipline, or collaboration. Built for Build With AI 2026 KL MyHack hackathon.
-
-### 🤖 Business Automation & Booking Systems
-
-#### [Hire Gardener](./projects/hire-gardener/)
-**AI agent that finds, negotiates with, and hires a grass cutting service entirely via WhatsApp**
-- **Live Demo:** [Try Demo](https://lyven81.github.io/ai-project/projects/hire-gardener/demo.html)
-- **Tech Stack:** Python, Streamlit, Ollama, Llama3, Meta WhatsApp Cloud API
-- **AI Capabilities:** 6-stage vendor communication workflow, Llama3 vendor persona simulation, pluggable mock/live mode switch, natural Malaysian English/Malay conversation, AI job completion verification
-
-#### [Banana Lab](./projects/banana-lab/)
-**Automated AI prompt pack store — Claude writes, packages, and lists a new 50-prompt product every Monday**
-- **Live Demo:** [View Store](https://lyven81.github.io/ai-project/projects/banana-lab/demo.html)
-- **Tech Stack:** Python 3, Claude API (claude-sonnet-4-6), schedule library, Gmail SMTP, Static HTML/CSS, Gumroad
-- **AI Capabilities:** Automated niche research (avoids duplicates), batched 50-prompt generation (2 API calls), structured JSON output, Markdown product files with ready-to-paste Gumroad listing copy, self-updating website
-
-#### [Marketing Agency](./projects/marketing-agency/)
-**Autonomous content marketing system that produces weekly blog posts, LinkedIn drafts, and lead follow-ups for solo consultancy firms**
-- **Live Demo:** [Launch Demo](https://lyven81.github.io/ai-project/projects/marketing-agency/demo.html)
-- **Tech Stack:** Python, FastAPI, Jinja2, httpx, Claude Code Skills, Ollama
-- **AI Capabilities:** 6-skill content pipeline chaining, brand voice enforcement, lead urgency scoring via Ollama, campaign phase-aware topic selection, dual-brand content (analytics + AI solutions), feedback loop connecting lead data to topic selection
-
-#### [Badminton Court Booking Agent](./projects/badminton-booking-agent/)
-**AI-powered agentic workflow for intelligent badminton court booking management using code-as-action pattern**
-- **Live Demo:** [ai-profile-badminton-court-booking--662370080553.us-west1.run.app](https://ai-profile-badminton-court-booking--662370080553.us-west1.run.app/)
-- **Tech Stack:** Python, FastAPI, Google Gemini 2.5 Flash, TinyDB, Pydantic, Docker
-- **AI Capabilities:** M5 pattern (code-as-action) for agentic workflows, LLM generates executable Python code for booking operations, dynamic time-based pricing (4 tiers: daytime/nighttime × weekday/weekend), multi-hour bookings with per-hour pricing breakdown, automatic conflict detection and double-booking prevention, 24/7 operations with midnight-crossing bookings, revenue tracking and financial analytics, Malaysian localization (IC numbers, RM currency), natural language processing for flexible date/time parsing, safe code execution in controlled namespace
-
-#### [Wee Auto Car Care](./wee-auto-car-care.html)
-**Live bay and mechanic dashboard for independent car workshops**
-- **Live Demo:** [Launch Demo](https://lyven81.github.io/ai-project/projects/wee-auto-car-care/demo.html)
-- **Tech Stack:** Vanilla HTML/CSS/JS, Python 3 seed generator, localStorage, static hosting
-- **AI Capabilities:** 4-state bookability classifier (BOOKABLE / IDLE / BUSY / MULTI) that surfaces the hidden "bay free but no qualified mechanic" state; skill + bay + slot cross-validation prevents impossible bookings; interactive New Booking modal filters dropdowns in real time; 142-booking seed across 12 days with density, mechanic, and multi-slot constraints; per-visitor localStorage sandbox for demo isolation
-
-#### [Plumber WhatsApp Agent](./plumber-whatsapp-agent.html)
-**WhatsApp booking agent for solo plumbers**
-- **Live Demo:** [Try Demo](https://lyven81.github.io/ai-project/projects/plumber-whatsapp-agent/demo.html)
-- **Tech Stack:** Vanilla HTML/CSS/JS, Google Gemini Flash (BYO key), GitHub Pages
-- **AI Capabilities:** Bahasa santai persona indistinguishable from a real Malaysian plumber; strict 5-step guided conversation flow (greet → scope → quote → book → close); fixed-price quoting from config; schedule-aware booking with multi-slot conflict detection; plumbing-only guardrails; 4-5x more token-efficient than framework-based agents (~1,000 tokens/turn vs ~5,000)
-
-### 🤖 Conversational AI & Specialized Chatbots
-
-#### [Mentor](./mentor.html)
-**AI advisor for solo founders of service and expert businesses — grounded in proven frameworks, not generic chatbot fluff**
-- **Live Demo:** [Launch Demo](https://lyven81.github.io/ai-project/projects/mentor/demo.html)
-- **Tech Stack:** Python Flask, Claude Haiku 4.5, Anthropic SDK, Vanilla JS, marked.js
-- **AI Capabilities:** Unified-voice synthesis of multiple expert sources, keyword-retrieval grounding, two-layer context (always-on reality + retrieved frameworks), strict output contract (≤2 paragraphs, ≤3 sentences each), candid but encouraging tone, session memory for natural follow-ups, persistent chat log archive
-
-#### [Tarot Guru](./projects/tarot-guru/)
-**AI-powered personal tarot reading app that uses cards as a mirror for reflection and clarity**
-- **Live Demo:** [Launch Demo](https://lyven81.github.io/ai-project/projects/tarot-guru/demo.html)
-- **Tech Stack:** Node.js, Express, Claude Opus API, Vanilla JS, Local JSON Storage
-- **AI Capabilities:** Context-aware spread recommendation (1 / 3-card / Celtic Cross), narrative reading connected to user's specific question, follow-up chat with session memory, session archive as timestamped JSON files
-
-#### [Wiseman · 智者](./projects/wiseman/)
-**Daily cosmic reading in Mandarin Chinese combining Bazi, Western horoscope, planetary astrology, and Chinese zodiac**
-- **Live Demo:** [Launch Demo](https://lyven81.github.io/ai-project/projects/wiseman/demo.html)
-- **Tech Stack:** Node.js, Express, Claude Opus API, Vanilla JS, Daily JSON Cache
-- **AI Capabilities:** 5-panel dashboard (八字/星座/行星/生肖/综合解读), personalized to birth date and zodiac signs, one reading per day cached for instant reload, floating chat for follow-up questions in Mandarin
-
-#### [Master Wong · 王师父](./projects/master-wong/)
-**Personal I Ching oracle powered by Claude AI — readings in plain conversational Mandarin Chinese**
-- **Live Demo:** [Launch Demo](https://lyven81.github.io/ai-project/projects/master-wong/demo.html)
-- **Tech Stack:** Node.js, Express, Claude Sonnet API, Vanilla JS, Three-Coin Casting Engine
-- **AI Capabilities:** Traditional three-coin casting mechanic, AI-recommended reading type (单卦/变卦/对比卦), situation-specific interpretation in plain Mandarin, changing line analysis, follow-up chat with hexagram context
-
-#### [Long View · Crucix](./projects/long-view/)
-**OSINT intelligence aggregator with 27 data sources, 3D globe visualization, and multi-LLM briefings**
-- **Live Demo:** [Launch Demo](https://lyven81.github.io/ai-project/projects/long-view/demo.html)
-- **Tech Stack:** Node.js 22+, Express, Multi-LLM (Claude/OpenAI/Gemini/Codex), WebGL/Three.js, Telegram Bot, Discord Bot, Docker
-- **AI Capabilities:** 27 OSINT source aggregation, delta engine for meaningful change detection, provider-agnostic LLM synthesis, 3D globe visualization, Telegram/Discord push alerts, configurable 15-minute sweep cycle
-
-#### [Chinese Traditional Calendar with AI Consultant (中華傳統日曆)](./projects/chinese-calender/)
-**Revolutionary conversational AI-powered traditional Chinese lunar calendar with personalized auspicious date consultation**
-- **Live Demo:** [chinese-calender-169218045868.asia-southeast1.run.app](https://chinese-calender-169218045868.asia-southeast1.run.app/)
-- **Tech Stack:** Python, FastAPI, Progressive Web App, Conversational AI, Traditional Chinese Calendar Algorithms
-- **AI Capabilities:** Natural language calendar consultation, personalized auspicious date recommendations, cultural education, intent recognition, real-time chat interface
-
-#### [Professional Astrology Consultant (專業星座顧問)](./projects/horoscope-chatbot/)
-**AI-powered personalized horoscope readings and astrological insights**
-- **Live Demo:** [horoscope-chatbot-218391175125.asia-southeast1.run.app](https://horoscope-chatbot-218391175125.asia-southeast1.run.app/)
-- **Tech Stack:** Python, Streamlit, Claude API, Traditional Chinese NLP
-- **AI Capabilities:** Personalized readings, cultural context understanding, astrological analysis
-
-#### [Professional Feng Shui Consultant (專業風水顧問)](./projects/fengshui-chatbot/)
-**Expert Feng Shui consultation with AI assistance and traditional wisdom**
-- **Live Demo:** [fengshui-chatbot-218391175125.asia-southeast1.run.app](https://fengshui-chatbot-218391175125.asia-southeast1.run.app/)
-- **Tech Stack:** Python, Streamlit, Claude API, Cultural Knowledge Processing
-- **AI Capabilities:** Space optimization recommendations, traditional wisdom integration, personalized advice
-
-#### [Skyread](./projects/skyread/)
-**Daily horoscope app that explains the planetary movements behind every reading for grounded, credible insights**
-- **Live Demo:** [ais-dev-m2gjhpuvdrj3c3mly7e6rr-168381537832.asia-east1.run.app](https://ais-dev-m2gjhpuvdrj3c3mly7e6rr-168381537832.asia-east1.run.app)
-- **Tech Stack:** React, TypeScript, Vite, Gemini AI, Framer Motion, Tailwind CSS
-- **AI Capabilities:** Schema-enforced structured horoscope generation, bilingual EN/ZH AI output, real planetary movement explanations (Sky Explainer), Sky Snapshot panel, smart daily caching with localStorage
-
-### 🎨 Creative AI & Content Generation
-
-#### [Unusual Coloring Book](./projects/unusual-coloring-book/)
-**Step inside Cinderella — choose your own story path, watch the AI illustrate it, colour it in, export to PDF**
-- **Source Code:** [unusual-coloring-book-source.html](https://lyven81.github.io/ai-project/unusual-coloring-book-source.html)
-- **Tech Stack:** React 18 + TypeScript, Python FastAPI, Gemini 3 Flash, Gemini Nano Banana 2, HTML5 Canvas, jsPDF
-- **AI Capabilities:** On-demand illustration generation per story path, image editing via text instruction, server-side image caching
-
-#### [AI Storybook Generator](./projects/ai-storybook-generator/)
-**Interactive storybook creation with AI-generated narratives and coloring book illustrations for educational engagement**
-- **Live Demo:** [ai-storybook-color-create-662370080553.us-west1.run.app](https://ai-storybook-color-create-662370080553.us-west1.run.app/)
-- **Tech Stack:** React 19.1+, TypeScript 5.8+, Gemini 2.5 Flash, Imagen 4.0, Canvas API, Interactive Design
-- **AI Capabilities:** Multi-page story generation, narrative continuity, interactive coloring canvas, drag-and-drop text editing, flood-fill algorithms
-
-#### [Coloring Book Generator](./projects/coloring-book-generator/)
-**AI-powered coloring book generator that creates custom-themed, printable PDF coloring books with age-appropriate complexity**
-- **Live Demo:** [coloring-book-generator-662370080553.us-west1.run.app](https://coloring-book-generator-662370080553.us-west1.run.app/)
-- **Tech Stack:** React 19.1+, TypeScript 5.8+, Gemini 2.5 Flash, Imagen 4.0, PDF Generation, Tailwind CSS
-- **AI Capabilities:** Two-stage AI pipeline, theme interpretation, sequential page creation, age-adaptive complexity, print optimization
-
-#### [Sarawak Laksa](./projects/sarawak-laksa/)
-**Interactive curated reference on Kuching's most iconic dish — ingredients, recipe, where to eat, and cultural context**
-- **Live Demo:** [lyven81.github.io/ai-project/projects/sarawak-laksa/](https://lyven81.github.io/ai-project/projects/sarawak-laksa/)
-- **Tech Stack:** HTML5, CSS3, Vanilla JS, IntersectionObserver, Google Fonts
-- **Features:** 7-section reference site — origin, ingredients, 4-phase recipe, 5 regional variations, 6 Kuching stalls, food culture, notable people
-
-#### [Nine Year Plan 2022–2031](./projects/nine-year-plan/)
-**Interactive reference guide to the Bahá'í Nine Year Plan — overview, core activities, institutions, statistics, and key messages**
-- **Live Demo:** [lyven81.github.io/ai-project/projects/nine-year-plan/](https://lyven81.github.io/ai-project/projects/nine-year-plan/)
-- **Tech Stack:** HTML5, CSS3, Vanilla JS, requestAnimationFrame, IntersectionObserver, Google Fonts
-- **Features:** 8-section reference site — plan overview, history, core activities, framework, institutions, social action, animated stat counters, key messages
+This repo contains **49 completed AI applications**, each with a working demo (live cloud URL or local `demo.html`). Projects are organized by **business use case** — so a reader can scan the list, find the category that matches their work, and immediately see which problems AI can solve there.
+
+**Live site:** [lyven81.github.io/ai-project](https://lyven81.github.io/ai-project/)
+
+## Projects by Category
+
+The 8 categories below match the [live category pages](https://lyven81.github.io/ai-project/project-categories.html) on the site. Each entry shows: **what it does**, **how it's built**, and **what problem it solves** — in simple language.
+
+| # | Category | Count | Audience |
+|---|---|---|---|
+| 1 | [Service Agents](#1-service-agents-6-projects) | 6 | Solo operators, micro-SMEs running on WhatsApp |
+| 2 | [Multi-Agent Decision Systems](#2-multi-agent-decision-systems-7-projects) | 7 | Owners needing research → verdict pipelines |
+| 3 | [Conversational Data Analytics](#3-conversational-data-analytics-7-projects) | 7 | SME owners with data, no analyst |
+| 4 | [Content Automation](#4-content-automation-6-projects) | 6 | Solo consultants, creators, educators |
+| 5 | [Industry Specialist Advisors](#5-industry-specialist-advisors-8-projects) | 8 | Vertical experts (legal, finance, education, retail) |
+| 6 | [Knowledge & Reference Chatbots](#6-knowledge--reference-chatbots-8-projects) | 8 | Consumers seeking guidance in plain language |
+| 7 | [Document & Productivity Tools](#7-document--productivity-tools-5-projects) | 5 | Knowledge workers, accessibility users |
+| 8 | [Agentic Commerce](#8-agentic-commerce-2-projects) | 2 | Storefronts ready for AI shopping agents |
+
+**Total: 49 projects.**
+
+---
+
+### 1. Service Agents (6 projects)
+
+**Who it's for:** Solo operators and micro-SMEs running their business on WhatsApp — plumbers, gardeners, car workshops, aircon technicians, court bookers, car rental.
+
+#### Plumber WhatsApp Agent
+- **What it does:** AI plumber that books jobs via WhatsApp in bahasa santai. 5-step guided flow, fixed pricing.
+- **How it's built:** Vanilla HTML/CSS/JS + Google Gemini 2.0 Flash with bring-your-own-key, hosted on GitHub Pages.
+- **Problem solved:** Solo plumbers in Malaysia miss WhatsApp bookings while on-site and lose 2–3 jobs a week. This agent answers instantly in santai BM, scopes the problem, quotes a fixed price, books an available slot, and confirms — 24/7 with zero missed leads.
+- **Demo:** [Try it](https://lyven81.github.io/ai-project/projects/plumber-whatsapp-agent/demo.html)
+
+#### Kereta Sewa Jalan-jalan
+- **What it does:** AI car rental agent for a 56-vehicle Klang Valley fleet. Books, prices, and tracks cars in plain English.
+- **How it's built:** Python + FastAPI + Google Gemini 2.5 Flash with TinyDB, using a code-as-action agentic pattern.
+- **Problem solved:** Small Malaysian car rental operators juggle phone calls, WhatsApp, and spreadsheets to track a 50+ vehicle fleet, and bookings slip through the cracks. This agent handles the full workflow 24/7 — checking availability, quoting price, collecting details, confirming — all in natural language.
+- **Demo:** [Try it](https://lyven81.github.io/ai-project/projects/car-rental-booking-agent/demo.html)
+
+#### Badminton Court Booking Agent
+- **What it does:** Book courts with smart AI pricing and instant conflict checks. No admin work, runs 24/7.
+- **How it's built:** Python + FastAPI + Google Gemini 2.5 Flash with TinyDB, using code-as-action pattern so the LLM writes Python on the fly per request.
+- **Problem solved:** Court owners need a booking system that handles dynamic pricing (peak/off-peak × weekday/weekend), multi-hour bookings, and complex Malaysian-IC validation — but no off-the-shelf SaaS fits. This agent generates the booking logic dynamically for each conversation.
+- **Demo:** [Try it](https://lyven81.github.io/ai-project/projects/badminton-booking-agent/demo.html)
+
+#### Soon Heng Air-Cond Service
+- **What it does:** WhatsApp customer service agent for an aircon business in Seremban & Nilai. Handles inquiry-to-follow-up in 6 stages.
+- **How it's built:** Vanilla HTML/CSS/JS with a scripted 6-stage demo workflow — no backend, runs anywhere.
+- **Problem solved:** Small aircon service operators lose bookings to faster-responding competitors because they can't reply while on a ladder. This agent answers in seconds, scopes the job, books the slot, sends reminders, and follows up after the job to earn Google reviews — all without the owner typing.
+- **Demo:** [Try it](https://lyven81.github.io/ai-project/projects/soon-heng-aircon-agent/demo.html)
+
+#### Hire Gardener
+- **What it does:** AI agent that finds, negotiates with, and hires a grass cutting service entirely via WhatsApp.
+- **How it's built:** Python + Streamlit + Ollama with Llama3 for local mock mode, plus Meta WhatsApp Cloud API for production.
+- **Problem solved:** Hiring a grass cutter in Malaysia means hours of back-and-forth WhatsApp messages with multiple vendors. This agent runs the full 6-stage workflow on the user's behalf — contacting vendors, collecting quotes, booking, and verifying job completion — while vendors talk naturally to what they think is a human.
+- **Demo:** [Try it](https://lyven81.github.io/ai-project/projects/hire-gardener/demo.html)
+
+#### Wee Auto Car Care
+- **What it does:** Live bay and mechanic dashboard for independent car workshops. Flags "free bay but no qualified mechanic" traps.
+- **How it's built:** Vanilla HTML/CSS/JS with localStorage state and a Python seed generator — a single self-contained HTML file.
+- **Problem solved:** Independent car workshops run on whiteboards and mental models, so they give wrong "come down, we're free" answers when the bay is empty but no mechanic with the right skill is available. This dashboard surfaces the 4-state booking reality (BOOKABLE / IDLE / BUSY / MULTI), preventing lost walk-in revenue.
+- **Demo:** [Try it](https://lyven81.github.io/ai-project/projects/wee-auto-car-care/demo.html)
+
+---
+
+### 2. Multi-Agent Decision Systems (7 projects)
+
+**Who it's for:** Owners and analysts who need a multi-step research → judge → verdict pipeline that they can't run manually inside a deadline.
+
+#### Bookshelf
+- **What it does:** Multi-agent inventory planner for Malaysian bookstores. Pandas data tool + Pydantic Judge + Markdown briefs.
+- **How it's built:** Python + Google ADK (Agent Development Kit) + A2A protocol + Gemini 2.5 Flash + FastAPI, with pandas tool for exact metric computation.
+- **Problem solved:** SME bookstore owners have months of sales data but no analyst to turn it into stocking decisions. This 4-agent system (researcher → judge → builder) returns a 600-word actionable brief — Pareto analysis, dead stock, seasonal pre-stocking — in under 3 minutes.
+- **Demo:** [Try it](https://lyven81.github.io/ai-project/projects/bookshelf/demo.html)
+
+#### Leadership Team
+- **What it does:** Autonomous AI boardroom for independent property agents. 6 manager agents run a weekly listing review and write minutes to disk.
+- **How it's built:** Claude Code with subagents + skills, using Markdown files as a folder-based agency database, plus a static 7-seat boardroom UI.
+- **Problem solved:** An independent property agent is a one-person agency — chasing listings, writing copy, running open houses, no one to strategise with. This 7-seat boardroom runs a weekly review where 6 AI managers (engineering, research, marketing, editor, coordinator, mentor) deliver reports on inventory, leads, content, and strategy, all grounded in a living agency state file.
+- **Demo:** [Try it](https://lyven81.github.io/ai-project/projects/leadership-team/demo.html)
+
+#### Stock Manager
+- **What it does:** 3 AI agents restock a steam bun shop. Checks sales, inventory, and pushes orders to Google Sheets.
+- **How it's built:** Google ADK + Gemini 2.5 Flash + AlloyDB + Google Sheets MCP + FastAPI on Cloud Run.
+- **Problem solved:** A steam bun shop over-orders slow movers and runs out of fast sellers, wasting money and losing sales. This system analyses sales trends, monitors stock, predicts stockouts before they happen, and drops a supplier-grouped purchase order into Google Sheets — all from one plain English question.
+- **Demo:** [Try it](https://lyven81.github.io/ai-project/projects/stock-manager/demo.html)
+
+#### Stock Analysis Agent
+- **What it does:** Complete investment report on any Malaysian stock. AI screens moat, dividends, and fundamentals.
+- **How it's built:** Python + Gemini 2.0 Flash + Yahoo Finance API + Tavily Search + Matplotlib, with a 5-agent pipeline (screening → fundamentals → moat → dividends → reporting).
+- **Problem solved:** Malaysian retail investors open a Bursa quarter report and face 20 pages of numbers — they can't answer the three questions that matter (is this quality, is margin trend real, is the dividend safe). This agent reads the full filing in under 10 minutes and returns a screening verdict, margin analysis, moat inventory, and dividend safety assessment.
+- **Demo:** [Try it](https://lyven81.github.io/ai-project/projects/stock-analysis-agent/demo.html)
+
+#### Public Sentiment Collection Agent
+- **What it does:** Track public sentiment by region with source-bias detection. Produces 10 output files per run automatically.
+- **How it's built:** Python + Gemini 2.0 Flash + Tavily Search + pandas + NumPy, with a 5-agent pipeline (listening → sentiment → visualization → export → packaging).
+- **Problem solved:** A retail owner gets thousands of reviews per quarter across Twitter, Instagram, Facebook, and Google — impossible to read or compare by channel. This pipeline segments by channel, flags products where negative outweighs positive, and surfaces specific SKUs and locations needing urgent attention.
+- **Demo:** [Try it](https://lyven81.github.io/ai-project/projects/public-sentiment-collection-agent/demo.html)
+
+#### Data Consulting Business Analysis Agent
+- **What it does:** Scan your market and map competitors 100× faster. AI finds white-space opportunities and writes the report.
+- **How it's built:** Python + Gemini 2.0 Flash + Tavily Search + Matplotlib + NetworkX, with a 4-agent pipeline (industry research → competitor intel → opportunity → strategy).
+- **Problem solved:** A Malaysian SME with seven-figure monthly revenue has no way to tell which products leak margin, where concentration risk sits, or which strategic move to make first. This pipeline returns a 12-section executive report with pricing flags, SKU portfolio quadrants, and a 90-day action plan in under 15 minutes.
+- **Demo:** [Try it](https://lyven81.github.io/ai-project/projects/data-consulting-business-analyst/demo.html)
+
+#### Social Media Marketer
+- **What it does:** 5 AI agents compete on the same budget across channels. See which channel wins and which to cut.
+- **How it's built:** Python + Claude Haiku + Streamlit + Plotly + Anthropic SDK, with 5 competing AI agents producing structured JSON decisions.
+- **Problem solved:** Digital marketers allocate budget across email, social, paid search, display, and affiliate based on intuition — not evidence. This system runs a competitive multi-agent simulation where 5 channel managers compete on the same budget, revealing which to scale, which to hold, and which to cut.
+- **Demo:** [Try it](https://lyven81.github.io/ai-project/projects/social-media-marketer/demo.html)
+
+---
+
+### 3. Conversational Data Analytics (7 projects)
+
+**Who it's for:** SME owners who have years of data (POS, orders, distribution) but no analyst to ask questions in plain language.
+
+#### Sundry Shop Assistant
+- **What it does:** Voice advisor for busy kedai runcit owners. Ask POS data in Malay, get answers from 10 MCP tools.
+- **How it's built:** Gemini Live API + FastAPI + WebSocket + 10 pandas-backed MCP tools on Cloud Run.
+- **Problem solved:** Busy kedai runcit owners have no time to ask their cash register questions while running the shop. This voice advisor answers in santai BM — "best seller today," "should I reorder Milo," "member vs visitor spend" — without the owner needing to type or remember how to export reports.
+- **Demo:** [Try it](https://sundry-shop-assistant-522143897885.asia-southeast1.run.app)
+
+#### Hoo Tim Analytics Agent
+- **What it does:** Live AI agent + MCP tools for a Selangor snack distributor. Bring your own Gemini key to query real distribution data.
+- **How it's built:** Gemini 2.0 Flash with MCP framework, 5 MCP tools, Vanilla JS, GitHub Pages hosting with BYO key.
+- **Problem solved:** Malaysian FMCG distributors operate on thin margins with 200–400 outlets across 9 districts. This live agent answers distribution questions in seconds — "which outlets are slipping," "best revenue per outlet by channel" — replacing a 2-hour spreadsheet hunt with one plain-English question.
+- **Demo:** [Try it](https://lyven81.github.io/ai-project/projects/hoo-tim-analytics-agent/demo.html)
+
+#### Ecommerce Analyst
+- **What it does:** Private analyst for mid-size e-commerce sellers. Ask about margin leaks and get a Monday brief.
+- **How it's built:** Python + pandas + Chart.js (demo) and FastAPI + Gemini 2.5 Flash on Cloud Run (live).
+- **Problem solved:** Mid-size Malaysian e-commerce sellers (RM30K–RM300K/month) watch sales grow while profit silently erodes from discounts, returns, and shipping — and they have no private analyst. This app lives on the seller's own instance, answering "what's eating my margin" in plain language without sharing data with any human consultant.
+- **Demo:** [Try it](https://lyven81.github.io/ai-project/projects/ecommerce-analyst/demo.html)
+
+#### E-Commerce Advisor
+- **What it does:** Analyse 34,500 orders with 6 pre-built tools (sales, profit, discounts, returns, segments, delivery).
+- **How it's built:** Python + Google ADK + Gemini 2.0 Flash + FastAPI + Docker on Cloud Run.
+- **Problem solved:** SME owners sit on mountains of transaction data but have no analyst. This agent uses 6 specialist tools to answer plain-English business questions, generating Python code per request — no hardcoded report menus to learn.
+- **Demo:** [Try it](https://lyven81.github.io/ai-project/projects/sme-business-advisor/demo.html)
+
+#### E-Commerce Advisor (MCP)
+- **What it does:** Same analytics as the base advisor, but data flows in over MCP — swap CSV/Sheets/DB without rewriting the agent.
+- **How it's built:** Python + Google ADK + MCP Server protocol + Gemini 2.0 Flash + FastAPI + Docker on Cloud Run.
+- **Problem solved:** The base advisor is tightly coupled to one CSV file — changing data source requires rewriting code. This version abstracts the data layer behind MCP so the same agent works against CSV today and Sheets/DB tomorrow.
+- **Demo:** [Try it](https://lyven81.github.io/ai-project/projects/sme-advisor-mcp/demo.html)
+
+#### E-Commerce Advisor (Database)
+- **What it does:** Ask anything. The agent writes the database query — no fixed reports, full flexibility.
+- **How it's built:** Python + Google ADK + Gemini 2.0 Flash + AlloyDB (PostgreSQL) + FastAPI + Docker on Cloud Run.
+- **Problem solved:** Fixed report menus can't answer the unpredictable, open-ended business questions that actually come up in real life. This version stores data in AlloyDB and lets the agent write custom SQL per question, so users ask anything in plain English and the agent translates → executes → answers.
+- **Demo:** [Try it](https://lyven81.github.io/ai-project/projects/sme-advisor-alloydb/demo.html)
+
+#### Klinik Dr Fang Front-Desk Assistant
+- **What it does:** Front-desk AI for a clinic that surfaces patterns in patient records — symptom clusters, trends, lapsing patients — in plain language.
+- **How it's built:** Python + Gemini Flash + an MCP-Toolbox-style governed tool layer over read-only SQLite; live in-browser demo via sql.js.
+- **Problem solved:** A single-doctor clinic wants quick answers about its records but can't risk an LLM leaking patient data or running a destructive query. This assistant is structurally incapable of writing its own SQL or reaching data outside its pre-approved, read-only tools — the deliberate opposite of the free-SQL approach.
+- **Demo:** [Try it](https://lyven81.github.io/ai-project/projects/klinik-dr-fang/demo.html)
+
+---
+
+### 4. Content Automation (6 projects)
+
+**Who it's for:** Solo consultants, creators, educators, retailers — anyone who needs a steady stream of marketing or learning content without hiring a team.
+
+#### Marketing Agency
+- **What it does:** Produces weekly blog + 4 LinkedIn posts in one command. Tracks leads and drafts follow-ups.
+- **How it's built:** Python + FastAPI + Jinja2 + httpx + Claude Code skills chained, with Ollama for local lead scoring.
+- **Problem solved:** Solo consultancy owners know they need consistent content marketing, but producing weekly blogs, LinkedIn posts, and lead follow-ups eats 4–6 hours per week. This autonomous system runs the full weekly pipeline in 25 minutes of human time — 1 blog + 4 LinkedIn drafts + personalised lead follow-ups.
+- **Demo:** [Try it](https://lyven81.github.io/ai-project/projects/marketing-agency/demo.html)
+
+#### Banana Lab
+- **What it does:** Automated AI prompt pack store — Claude writes, packages, and lists a new 50-prompt product every Monday.
+- **How it's built:** Python 3 + Claude Sonnet 4.6 API + `schedule` library + Gmail SMTP + static HTML/CSS, with Gumroad as the storefront.
+- **Problem solved:** Solo product creators spend 40+ hours a week on ideation, writing, packaging, and promotion. Banana Lab automates the entire 50-prompt pack creation on Mondays (15 minutes of API time at RM6–12/month) and emails a P&L report on Sundays, leaving only the manual Gumroad upload.
+- **Demo:** [View store](https://lyven81.github.io/ai-project/projects/banana-lab/demo.html)
+
+#### Course Creator
+- **What it does:** Coordinated team of AI agents research, validate, and write full course materials.
+- **How it's built:** 4-agent ADK pipeline (Researcher → Judge → Content Builder + Orchestrator) talking over A2A protocol on Cloud Run.
+- **Problem solved:** Educators and course sellers can't scale curriculum production to multiple topics in a week without a team of researchers, writers, and reviewers. This system runs the full research → validate → write pipeline as 4 independent Cloud Run agents, producing structured course materials end-to-end.
+- **Demo:** [Try it](https://course-creator-662370080553.us-west1.run.app/)
+
+#### Back-to-School
+- **What it does:** 5 AI copywriters turn one brief into WhatsApp, Instagram, email, blog, and SEO copy — all in Bahasa Melayu.
+- **How it's built:** Vanilla JS + HTML5 + CSS3 + Gemini 2.5 Flash-Lite (BYO key), deployed on GitHub Pages, no backend.
+- **Problem solved:** A children's clothing store owner pushes campaigns across WhatsApp, Instagram, email, blog, and Google search every January and June, in Bahasa Melayu. This gives her 5 platform-specialist AI copywriters — fill one brief, pick a tone (Santai/Formal/Campur), get five ready-to-paste outputs in under 10 seconds at under 1 sen total.
+- **Demo:** [Try it](https://lyven81.github.io/ai-project/projects/back-to-school-campaign/demo.html)
+
+#### Science Learning Materials Builder
+- **What it does:** Build complete science lesson packs for any grade level — curriculum, quizzes, hands-on activities.
+- **How it's built:** Python + Gemini 2.0 Flash + Tavily Search + WeasyPrint running on Google Colab, with a 4-agent pipeline.
+- **Problem solved:** Teachers spend 4+ hours per lesson on research, age-appropriate writing, finding visuals, and assessment design. This system generates complete NGSS-aligned Grade 4 science lessons (3rd-grade reading level, 5 MC + 2 SA quiz, 3 illustration prompts) in 2–3 minutes, exportable to markdown + PDF.
+- **Demo:** [Try it](https://lyven81.github.io/ai-project/apps/science-builder.html)
+
+#### Unusual Coloring Book
+- **What it does:** Step inside Cinderella — choose your own story path, watch AI illustrate it, colour it in, export to PDF.
+- **How it's built:** React 18 + TypeScript frontend with HTML5 Canvas flood-fill, Python FastAPI backend, Gemini 3 Flash image generation, and jsPDF export.
+- **Problem solved:** Children want both a story experience and an interactive coloring activity in one session. This app lets them step into Cinderella, choose from 3 narrative paths per chapter, colour the AI-illustrated scene inline, and export a printable PDF — no waiting for AI text generation (page texts are pre-written).
+- **Demo:** [Try it](https://lyven81.github.io/ai-project/projects/unusual-coloring-book/demo.html)
+
+---
+
+### 5. Industry Specialist Advisors (8 projects)
+
+**Who it's for:** Vertical experts and operators who need an AI advisor that knows the rules and language of one specific industry — education, law, sports, finance, retail.
+
+#### Bright Path Tuition Centre
+- **What it does:** AI management assistant for premium small-class tuition centres. Finds mastery gaps and proposes fixes per child.
+- **How it's built:** Gemini 2.5 Flash + FastAPI + SQLite across 7 tables (185 children, 22 tutors, 63 classes), with NL-to-SQL plus business rules baked into the system prompt.
+- **Problem solved:** Malaysian tuition centre managers lost UPSR and now navigate PBD + UASA continuous assessment with no tools built for the post-UPSR world. This app translates plain English questions into safe SQL queries, applies Year 4 anchoring and P5/P6 secondary-readiness escalation, and returns gap-to-fix recommendations — no SQL knowledge required.
+- **Demo:** [Try it](https://lyven81.github.io/ai-project/bright-path-tuition/demo.html)
+
+#### Football Assistant Coach
+- **What it does:** AI coaches 22 players across 4 training sessions every week. Picks your Starting XI with team chemistry ranked above talent.
+- **How it's built:** Python + Claude Haiku + Streamlit + Plotly + Pandas, with 22 position-specific AI coach personas and weighted scoring (team chemistry 50pt, individual 35pt, universal 15pt).
+- **Problem solved:** Coaches struggle to balance star players vs. team chemistry and can't objectively track form across multiple sessions. This system runs 4 AI-evaluated training weeks, scores 22 players, and recommends an optimal Starting XI with formation-aware selection and transfer-risk detection based on a rolling 60/40 two-week form average.
+- **Demo:** [Try it](https://lyven81.github.io/ai-project/projects/football-assistant-coach/demo.html)
+
+#### TrendMate
+- **What it does:** Know what's selling on Shopee and Lazada before you stock up. Trend and pricing research in 3 sentences.
+- **How it's built:** Python + Claude Sonnet 4.6 + Tavily Search + Streamlit, with a ReAct agent loop.
+- **Problem solved:** Malaysian online fashion sellers on Shopee/Lazada/TikTok Shop make stocking and pricing decisions on gut feel with no dedicated analyst. TrendMate returns fast, data-backed answers on trends, pricing, sourcing, and seasonal prep — in plain, actionable 3-sentence format with evidence and one immediate action step.
+- **Demo:** [Try it](https://lyven81.github.io/ai-project/projects/trendmate/demo.html)
+
+#### MyPropLex
+- **What it does:** Cited answers to Malaysian property law questions in seconds. Covers NLC, HDA, STA, RPGT, RERA.
+- **How it's built:** Python + Claude Sonnet 4.6 + Tavily Search + Streamlit, with ReAct agent and tool-use API fetching from AG Chambers, Bar Council, and CommonLII.
+- **Problem solved:** Malaysian property lawyers spend 2–4 hours a day on manual legal research across case law databases and statutes. MyPropLex answers any property law question in under 2 minutes with plain 3-sentence cited responses (act name, section, caveat) across 8 major property acts.
+- **Demo:** [Try it](https://lyven81.github.io/ai-project/projects/myproplex/demo.html)
+
+#### Mentor
+- **What it does:** AI advisor for solo founders of service and expert businesses — grounded in proven frameworks, not generic chatbot fluff.
+- **How it's built:** Python Flask + Claude Haiku 4.5 + Anthropic SDK, with keyword retrieval over a 5-topic wiki and session memory.
+- **Problem solved:** Solo founders reading generic AI chatbots get theoretical advice disconnected from their real schedule and priorities. Mentor compiles 4 expert sources into one unified voice, grounds every reply in the user's actual week + retrieved frameworks, enforces ≤2 short paragraphs, and keeps a persistent chat log — one .bat file launches it locally.
+- **Demo:** [Try it](https://lyven81.github.io/ai-project/projects/mentor/demo.html)
+
+#### Good Company
+- **What it does:** Reads quarter report PDFs and runs a 7-step analysis. Tells you if a company is worth investing in.
+- **How it's built:** Python + FastAPI + Gemini 2.5 Flash + PyMuPDF + Vanilla JS, with markdown + JSON dual output for visualisations.
+- **Problem solved:** Retail investors skip quarter report analysis or rely on surface metrics; they can't separate "good business" from "good stock." This app reads PDFs locally (never uploads), runs a 7-step phased analysis (company quality → investment fit), and presents verdicts with metric cards, scorecards, and scenario cards — at roughly RM0.02 per report.
+- **Demo:** [Try it](https://lyven81.github.io/ai-project/projects/good-company/demo.html)
+
+#### Long View · Crucix
+- **What it does:** OSINT intelligence aggregator with 27 data sources, 3D globe visualisation, and multi-LLM briefings.
+- **How it's built:** Node.js 22+ + Express + provider-agnostic LLM layer (Claude, OpenAI, Gemini, Codex) + WebGL/Three.js + Telegram and Discord bots.
+- **Problem solved:** Intelligence analysts monitor dozens of streams (financial, geopolitical, climate, health, satellite) and manually synthesise signals — by then the situation has changed. Long View pulls 27 OSINT sources every 15 minutes, detects meaningful deltas, generates AI briefings with any LLM, visualises on a 3D globe, and pushes Telegram/Discord alerts.
+- **Demo:** [Try it](https://lyven81.github.io/ai-project/projects/long-view/demo.html)
+
+#### North Star Learning Center
+- **What it does:** Supportive AI ecosystem for Malaysian small-class tuition centres — three role views (manager / teacher / parent).
+- **How it's built:** Gemini 2.0 Flash + FastAPI + SQLite (185 children, 22 tutors, 44 classes) + 8 MCP-style deterministic tools + 2 live Gemini calls, on Cloud Run.
+- **Problem solved:** Malaysian tuition centres lost UPSR and now drown in PBD + UASA continuous assessment signals — by end-of-term reports, three months of intervention time are gone. North Star surfaces at-risk children in real time, drafts 2-line support suggestions, generates warm monthly parent stories (no raw scores), and nudges senior teachers to peer-mentor juniors — anti-surveillance by design (wellbeing, discipline, collaboration are never scored).
+- **Demo:** [Try it](https://north-star-learning-center-522143897885.asia-southeast1.run.app)
+
+---
+
+### 6. Knowledge & Reference Chatbots (8 projects)
+
+**Who it's for:** Consumers seeking personalised guidance in plain language — daily horoscopes, I Ching, tarot, feng shui, traditional calendar, cultural reference.
+
+#### Skyread
+- **What it does:** Daily horoscope that explains why, not just what. Bilingual EN/ZH with real planetary movement insights.
+- **How it's built:** React + TypeScript + Vite + Gemini AI + Framer Motion + Tailwind CSS, with smart daily localStorage caching.
+- **Problem solved:** Daily horoscope apps give generic predictions with no grounding in actual astronomy. Skyread explains the planetary movements behind each reading, so users get bilingual EN/ZH horoscopes that feel credible rather than mass-produced.
+- **Demo:** [Try it](https://lyven81.github.io/ai-project/projects/skyread/demo.html)
+
+#### Wiseman · 智者
+- **What it does:** Daily cosmic reading in Mandarin combining Bazi, Western horoscope, planetary astrology, and Chinese zodiac.
+- **How it's built:** Node.js + Express + Claude Opus API + Vanilla JS, with daily JSON cache (one reading per user per day).
+- **Problem solved:** Chinese-speaking users want a comprehensive cosmic reading that combines multiple traditions, not separate single-tradition apps. Wiseman gives a 5-panel personalised dashboard (八字/星座/行星/生肖/综合) in Mandarin, cached for the day, with a floating chat for follow-up questions.
+- **Demo:** [Try it](https://lyven81.github.io/ai-project/projects/wiseman/demo.html)
+
+#### Tarot Guru
+- **What it does:** AI-powered personal tarot reading. Uses cards as a mirror for reflection and clarity.
+- **How it's built:** Node.js + Express + Claude Opus API + Vanilla JS, with local JSON archive of past readings.
+- **Problem solved:** Tarot seekers want a reading tailored to their actual question, not a generic card-meaning lookup. This app picks the right spread (1-card / 3-card / Celtic Cross) for the user's question, writes a narrative reading connected to their context, and archives each session for review.
+- **Demo:** [Try it](https://lyven81.github.io/ai-project/projects/tarot-guru/demo.html)
+
+#### Master Wong · 王师父
+- **What it does:** Personal I Ching oracle. Readings in plain conversational Mandarin Chinese.
+- **How it's built:** Node.js + Express + Claude Sonnet API + Vanilla JS, with a traditional three-coin casting engine.
+- **Problem solved:** Traditional I Ching texts are dense and intimidating for modern Mandarin speakers. This app runs the authentic three-coin casting, picks the appropriate reading type (单卦/变卦/对比卦) for the situation, interprets the changing lines, and follows up in plain conversational Mandarin.
+- **Demo:** [Try it](https://lyven81.github.io/ai-project/projects/master-wong/demo.html)
+
+#### Chinese Traditional Calendar · 中華傳統日曆
+- **What it does:** Conversational AI-powered traditional Chinese lunar calendar with personalised auspicious date consultation.
+- **How it's built:** Python + FastAPI + PWA, combining traditional Chinese calendar algorithms with conversational AI.
+- **Problem solved:** Chinese users want auspicious date recommendations for weddings, openings, and moves, but they can't read a 黄历 by themselves and don't want to consult a master every time. This app explains the traditional calendar in natural language and gives personalised guidance in real time.
+- **Demo:** [Try it](https://lyven81.github.io/ai-project/projects/chinese-calender/demo.html)
+
+#### Professional Feng Shui Consultant · 專業風水顧問
+- **What it does:** Expert Feng Shui consultation with AI and traditional wisdom — space optimisation, directional advice.
+- **How it's built:** Python + Streamlit + Claude API.
+- **Problem solved:** Property owners and business operators want Feng Shui advice for a specific space but a real consultation costs RM 500+ and takes a week to book. This app gives personalised space-optimisation recommendations grounded in traditional wisdom for the price of an API call.
+- **Demo:** [Try it](https://lyven81.github.io/ai-project/projects/fengshui-chatbot/demo.html)
+
+#### Nine Year Plan 2022–2031
+- **What it does:** Interactive reference guide to the Bahá'í Nine Year Plan — overview, core activities, institutions, statistics.
+- **How it's built:** HTML5 + CSS3 + Vanilla JS, with `requestAnimationFrame` stat counters and `IntersectionObserver` scroll animations.
+- **Problem solved:** Bahá'í community members need an accessible single-page reference on the Nine Year Plan framework, core activities, and key messages — without scrolling through 100-page PDFs. This app gives an 8-section interactive guide loadable in 2 seconds.
+- **Demo:** [Try it](https://lyven81.github.io/ai-project/projects/nine-year-plan/index.html)
+
+#### Sarawak Laksa
+- **What it does:** Interactive curated reference on Kuching's most iconic dish — ingredients, recipe, where to eat, and cultural context.
+- **How it's built:** HTML5 + CSS3 + Vanilla JS with `IntersectionObserver`-driven section reveals.
+- **Problem solved:** Food enthusiasts and travellers want to understand Sarawak Laksa beyond a restaurant listing — origin, recipe steps, regional variations, where to eat in Kuching, and cultural significance — all in one curated place rather than 20 browser tabs.
+- **Demo:** [Try it](https://lyven81.github.io/ai-project/projects/sarawak-laksa/index.html)
+
+---
+
+### 7. Document & Productivity Tools (5 projects)
+
+**Who it's for:** Knowledge workers, accessibility users, small business owners who need AI to handle documents, receipts, audio conversion, or daily ops dashboards.
+
+#### Claude PDF Summarizer
+- **What it does:** Upload any PDF and get a structured AI summary instantly. Choose executive, simple, or kids format.
+- **How it's built:** Python + Streamlit + Claude 3 Haiku API + PDF processing.
+- **Problem solved:** Knowledge workers receive PDFs in multiple languages and formats but can't read them end-to-end. This app summarises any PDF in the language and format the reader needs — executive (for decision makers), simple (for skim reading), kids (for accessibility) — with key insight extraction.
+- **Demo:** [Try it](https://summarizer-218391175125.asia-southeast1.run.app/)
+
+#### Expense Tracker AI
+- **What it does:** Snap a receipt and AI handles the rest. 8 expense categories tracked locally — no data leaves your device.
+- **How it's built:** React + TypeScript + Gemini AI + Recharts + browser Local Storage.
+- **Problem solved:** People manually type receipts into expense apps and abandon the habit within a month. This app uses OCR + Gemini to extract data from a receipt photo and categorise it automatically — and because everything stays in browser local storage, there's no privacy concern about uploading bank-related data.
+- **Demo:** [Try it](https://expense-tracker-ai-169218045868.us-west1.run.app/)
+
+#### PDF-to-Audio Reader
+- **What it does:** Turn any PDF into an audio reading you can navigate. AI structures chapters and highlights text in sync.
+- **How it's built:** React + TypeScript + Gemini AI + Web Speech API + PDF.js.
+- **Problem solved:** Commuters and accessibility users want to consume PDFs as audio with chapter navigation and synchronised highlighting — not just plain text-to-speech. This app uses AI to analyse the document structure first, then plays it back with text highlighting in sync.
+- **Demo:** [Try it](https://pdf-to-audio-reader-169218045868.us-west1.run.app/)
+
+#### Bahai Chinese Translation Workbench
+- **What it does:** Sacred text translation pipeline with human governance. AI speed + human review for accuracy.
+- **How it's built:** AI-assisted translation pipeline with terminology glossary + human review workflow, three-stage process.
+- **Problem solved:** Bahá'í community translators need to translate sacred writings into Chinese while preserving meaning and maintaining terminology consistency across 27 translators. This workbench combines AI translation speed with a structured human review stage and a shared glossary so terminology stays consistent across the whole corpus.
+- **Demo:** [Try it](https://lyven81.github.io/ai-project/projects/bahai-chinese-translation-workbench/demo.html)
+
+#### Kopitiam Digital Waiter
+- **What it does:** Real-time sales tracker and digital logbook for Malaysian kopitiam owners with AI-powered business tips.
+- **How it's built:** React 19 + TypeScript + Express.js + SQLite + Vite + Tailwind CSS + Recharts + Gemini AI.
+- **Problem solved:** Malaysian kopitiam owners track sales in handwritten logbooks and only realise revenue dips at month-end. This app gives live revenue tracking, busy-hour analytics, milestone sales alerts, and AI-powered contextual quick tips ("you're 10% behind yesterday — push the kopi+kaya combo") in one dashboard.
+- **Demo:** [Try it](https://kopitiam-digital-waiter-169218045868.us-west1.run.app/)
+
+---
+
+### 8. Agentic Commerce (2 projects)
+
+**Who it's for:** Storefront owners who want their site to be shoppable by AI agents reliably — not just by humans clicking.
+
+#### Sunny Car Accessories
+- **What it does:** Agent-ready car-accessory storefront. 18 SKUs, 4 categories, 7 WebMCP tools with per-view scoping. Killer tool: `checkFitment`.
+- **How it's built:** Vanilla JS + static HTML + WebMCP (W3C `navigator.modelContext`) for Chrome 146+.
+- **Problem solved:** AI shopping agents try to shop by taking screenshots and clicking pixel coordinates — which leads to abandoned carts and wrong variants. This storefront exposes a typed contract (7 WebMCP tools) so agents can call `checkFitment` to verify a part matches the customer's car before adding to cart — something pixel-clicking agents simply can't do reliably.
+- **Demo:** [Try it](https://lyven81.github.io/ai-project/projects/sunny-car-accessories/index.html)
+
+#### Ji Xing 吉星饭厅 — CNY Reservation
+- **What it does:** Bilingual CNY reservation page for Malaysian Chinese restaurants. 6 set menus (RM 688–1,288), 7 WebMCP tools. Killer tool: `checkAvailability`.
+- **How it's built:** Vanilla JS + static HTML + WebMCP (W3C `navigator.modelContext`), bilingual EN + 中文, Schema.org structured data.
+- **Problem solved:** Malaysian Chinese restaurants lose CNY revenue to phone-based bookings when customers want online reservations, and AI agents can't navigate multi-step reservation forms reliably. This page exposes 7 typed reservation tools — `checkAvailability` returns mainHall/privateRoom/VIP counts per sitting — so both humans and agents can book without phone tag.
+- **Demo:** [Try it](https://lyven81.github.io/ai-project/projects/ji-xing-cny-reservation/index.html)
+
+---
 
 ## 🛠️ Technical Skills Demonstrated
 
-### **AI & Machine Learning**
-- **Computer Vision:** Pose detection, facial recognition, image processing, AR/3D rendering
-- **Natural Language Processing:** Multi-language support, document summarization, conversational AI
-- **Data Analytics & BI:** Natural language to code generation, time series analysis, automated insights
-- **Image Generation:** AI-powered photo creation, style transfer, composition optimization
-- **Creative AI:** Content generation, recipe creation, vintage photo synthesis
+### AI & Machine Learning
+- **Multi-agent orchestration:** Google ADK, A2A protocol, Claude Code subagents/skills, multi-step research-to-verdict pipelines
+- **Tool use & MCP:** Model Context Protocol (Anthropic), WebMCP (W3C `navigator.modelContext`), 5–10 typed tools per agent
+- **NL-to-SQL / NL-to-code:** Plain English questions → safe SQL or Python execution against real SQLite / AlloyDB / pandas
+- **RAG:** Quarter-report PDF analysis, OSINT delta detection across 27 sources, terminology-glossary translation
+- **Computer vision:** OCR receipt extraction, photo restyling, group-photo composition
 
-### **Frontend Development**
-- **Modern React:** React 18, TypeScript 5.0, modern hooks and concurrent features
-- **Build Tools:** Vite, advanced bundling, code splitting, performance optimization
-- **UI/UX Design:** Responsive design, interactive components, accessibility standards
-- **State Management:** Context API, custom hooks, complex application state
+### Frontend Development
+- **Modern React 18/19 + TypeScript + Vite** for live demos (Skyread, Expense Tracker, PDF Audio Reader, Unusual Coloring Book)
+- **Vanilla JS** for agent-callable storefronts (Sunny Car, Ji Xing) — minimal surface area for WebMCP
+- **Streamlit** for analytical apps (TrendMate, MyPropLex, Football Coach, Social Media Marketer)
+- **Tailwind CSS / Recharts / Plotly / Chart.js** for production dashboards
 
-### **Backend & APIs**
-- **Python Development:** FastAPI, Streamlit, async programming, data processing
-- **AI API Integration:** Google Gemini, Claude 3, OpenAI, specialized computer vision APIs
-- **Database Management:** Data persistence, caching, optimization strategies
-- **API Design:** RESTful services, error handling, rate limiting, security
+### Backend & APIs
+- **Python:** FastAPI, Flask, async pipelines, pandas tool computation, PyMuPDF, WeasyPrint
+- **Node.js:** Express servers for Claude API-backed chatbots (Wiseman, Tarot Guru, Master Wong, Long View)
+- **AI APIs:** Anthropic (Claude Opus / Sonnet 4.6 / Haiku 4.5), Google Gemini (2.0 / 2.5 Flash, Live API), Ollama (local Llama3)
+- **Search tools:** Tavily for ReAct agents (MyPropLex, TrendMate, Sentiment, Data Consulting)
 
-### **Cloud & Deployment**
-- **Google Cloud Platform:** Cloud Run, Container Registry, Build automation
-- **Containerization:** Docker, multi-stage builds, optimization for production
-- **CI/CD Pipelines:** Automated testing, deployment, monitoring
-- **Performance Optimization:** Caching strategies, CDN integration, load balancing
-
-### **Development Tools & Practices**
-- **Version Control:** Git workflows, branching strategies, collaborative development
-- **Code Quality:** ESLint, Prettier, TypeScript strict mode, testing frameworks
-- **Documentation:** Comprehensive README files, API documentation, deployment guides
-- **Security:** Environment variable management, API key security, input validation
+### Cloud & Deployment
+- **Google Cloud Platform:** Cloud Run, Container Registry, AlloyDB
+- **GitHub Pages** for BYO-key live demos (Plumber, Back-to-School, Sundry Shop, Hoo Tim)
+- **Docker** multi-stage builds for production deployments
 
 ## 📁 Repository Structure
 
 ```
 ai-project/
-├── index.html                    # Interactive portfolio homepage
-├── project-categories.html       # Organized project categories
-├── contact.html                  # Contact information
-├── projects/                     # Complete project source code
-│   ├── pose-perfect-ai/         # Computer vision pose analysis
-│   ├── virtual-try-on-studio/   # AR virtual clothing experience
-│   ├── ai-photo-editor/         # AI-powered photo editing
-│   ├── ai-group-photo-generator/ # Group photo composition AI
-│   ├── claude-pdf-summarizer/   # Document processing & summarization
-│   ├── expense-tracker-ai/      # AI-powered expense tracking
-│   ├── pdf-to-audio-reader/     # PDF to audio conversion with AI
-│   ├── time-series-analysis-agent/ # Natural language data analytics
-│   ├── stock-analysis-agent/    # Multi-agent stock analysis
-│   ├── sales-dashboard-agent/   # Natural language analytics
-│   ├── science-learning-materials-builder/ # Educational content generator
-│   ├── public-sentiment-collection-agent/ # Geographic sentiment analysis
-│   ├── data-consulting-business-analyst/ # Market intelligence system
-│   ├── customer-segmentation-agent/ # RFM analysis & targeted campaigns
-│   ├── business-intelligence-agent/ # Natural language data analytics
-│   ├── kopitiam-digital-waiter/ # Real-time Kopitiam sales tracker & analytics
-│   ├── myproplex/               # Malaysian property law research assistant
-│   ├── trendmate/               # Malaysian fashion market research assistant
-│   ├── chinese-calender/        # Conversational AI traditional calendar
-│   ├── horoscope-chatbot/       # Astrology consultation AI
-│   ├── fengshui-chatbot/        # Feng Shui advisory AI
-│   ├── skyread/                 # Daily horoscope with planetary insights
-│   ├── image-recipe-generator/  # Food image to recipe AI
-│   ├── polaroid-moments-generator/ # Vintage photo generation AI
-│   ├── polaroid-moments-generator-3/ # Three-person group photo AI
-│   ├── ai-avatar-hairstyle-generator/ # Virtual hairstyle avatar generation
-│   ├── ai-expression-generator/ # Emotional expression transformation AI
-│   ├── ai-profile-picture-stylist/ # Professional profile picture styling AI
-│   ├── ai-background-changer/   # Natural language background replacement AI
-│   ├── ai-coloring-book-for-kids/ # Educational AI coloring book
-│   ├── ai-storybook-generator/  # Interactive storybook creation with AI narratives
-│   └── coloring-book-generator/ # AI-powered PDF coloring book creation
-└── README.md                    # This comprehensive overview
+├── index.html                       # Live portfolio homepage
+├── project-categories.html          # 8-category overview page
+├── category-*.html                  # 8 category subpages (one per category)
+├── README.md                        # This file
+├── projects/                        # Source code for each project
+│   ├── plumber-whatsapp-agent/      # Service Agents
+│   ├── car-rental-booking-agent/
+│   ├── badminton-booking-agent/
+│   ├── soon-heng-aircon-agent/
+│   ├── hire-gardener/
+│   ├── wee-auto-car-care/
+│   ├── bookshelf/                   # Multi-Agent Decision Systems
+│   ├── leadership-team/
+│   ├── stock-manager/
+│   ├── stock-analysis-agent/
+│   ├── public-sentiment-collection-agent/
+│   ├── data-consulting-business-analyst/
+│   ├── social-media-marketer/
+│   ├── sundry-shop-assistant/       # Conversational Data Analytics
+│   ├── hoo-tim-analytics-agent/
+│   ├── ecommerce-analyst/
+│   ├── sme-business-advisor/
+│   ├── sme-advisor-mcp/
+│   ├── sme-advisor-alloydb/
+│   ├── marketing-agency/            # Content Automation
+│   ├── banana-lab/
+│   ├── course-creator/
+│   ├── back-to-school-campaign/
+│   ├── science-learning-materials-builder/
+│   ├── unusual-coloring-book/
+│   ├── bright-path-tuition/         # Industry Specialist Advisors
+│   ├── football-assistant-coach/
+│   ├── trendmate/
+│   ├── myproplex/
+│   ├── mentor/
+│   ├── good-company/
+│   ├── long-view/
+│   ├── north-star-learning-center/
+│   ├── skyread/                     # Knowledge & Reference Chatbots
+│   ├── wiseman/
+│   ├── tarot-guru/
+│   ├── master-wong/
+│   ├── chinese-calender/
+│   ├── fengshui-chatbot/
+│   ├── nine-year-plan/
+│   ├── sarawak-laksa/
+│   ├── claude-pdf-summarizer/       # Document & Productivity Tools
+│   ├── expense-tracker-ai/
+│   ├── pdf-to-audio-reader/
+│   ├── bahai-chinese-translation-workbench/
+│   ├── kopitiam-digital-waiter/
+│   ├── sunny-car-accessories/       # Agentic Commerce
+│   └── ji-xing-cny-reservation/
+└── apps/                            # Hosted single-page apps (e.g. science-builder.html)
 ```
 
 Each project directory contains:
-- **Complete source code** with production-ready implementations
-- **Comprehensive README** with setup instructions and technical details
-- **Deployment configurations** for cloud platforms
-- **Environment setup guides** and dependency management
-- **Live demo links** and usage examples
+- Complete source code
+- A project-level README with setup instructions and tech details
+- Deployment configuration (Dockerfile, requirements.txt, etc.) where applicable
 
 ## 🚀 Getting Started
 
-### Quick Start for Any Project
 ```bash
 # Clone the repository
 git clone https://github.com/lyven81/ai-project.git
 cd ai-project
 
-# Navigate to specific project
-cd projects/[project-name]
-
-# Follow individual project README for setup
+# Pick a project and follow its README
+cd projects/<project-name>
 ```
 
 ### General Requirements
-- **Node.js 16+** for React-based projects
-- **Python 3.8+** for Streamlit applications
-- **API Keys** for AI services (Gemini, Claude, etc.)
-- **Docker** for containerized deployment (optional)
-
-## 🌐 Live Demos & Deployment
-
-All projects are production-deployed and accessible via live demos:
-
-| Project | Live Demo | Category |
-|---------|-----------|----------|
-| Claude PDF Summarizer | [Launch App](https://summarizer-218391175125.asia-southeast1.run.app/) | Document Processing |
-| Expense Tracker AI | [Launch App](https://expense-tracker-ai-169218045868.us-west1.run.app/) | Document Processing |
-| PDF-to-Audio Reader | [Launch App](https://pdf-to-audio-reader-169218045868.us-west1.run.app/) | Document Processing |
-| Time Series Analysis Agent | [Launch in Colab](https://colab.research.google.com/drive/1ZTfYPQZXObgxqk3hawGu9Sm33EjJX2xA) | Business Intelligence |
-| Stock Analysis Agent | [Launch in Colab](https://colab.research.google.com/drive/1Wji69Sq-IqhtMEJTlxIkQ39ZZ5JAXR6w) | Business Intelligence |
-| Sales Dashboard Agent | [Launch in Colab](https://colab.research.google.com/drive/1ssz7RkCySo4fhzkLdCs5c7gCgkP7ypv7) | Business Intelligence |
-| Science Learning Materials Builder | [Launch in Colab](https://colab.research.google.com/drive/1p390KHKMQ9xcaDQ7eQTQJjdlX1JTxpmn) | Business Intelligence |
-| Public Sentiment Collection Agent | [Launch in Colab](https://colab.research.google.com/drive/1On9i4SrYBVQqG-Fex5up9o3Eo1Y6mWls) | Business Intelligence |
-| Data Consulting Business Analysis Agent | [Launch in Colab](https://colab.research.google.com/drive/1BZ1m_XsI5q7CHvdopcCK53Wlw0sCt1-j) | Business Intelligence |
-| Customer Segmentation Agent | [Launch in Colab](https://colab.research.google.com/drive/1UfEqslRGbYY4qOcv2SCDrj1e0dC5jqJl) | Business Intelligence |
-| Business Intelligence Agent | [Launch in Colab](https://colab.research.google.com/drive/10wkxsg7Crcdz9oa3rFKlJ6Jtez1CB3xf) | Business Intelligence |
-| Ecommerce Analyst | [Launch Demo](https://lyven81.github.io/ai-project/projects/ecommerce-analyst/demo.html) | Business Intelligence |
-| Hoo Tim Analytics Agent | [Launch Demo](https://lyven81.github.io/ai-project/projects/hoo-tim-analytics-agent/demo.html) | Business Intelligence |
-| Kopitiam Digital Waiter | [Launch App](https://kopitiam-digital-waiter-169218045868.us-west1.run.app/) | Business Intelligence |
-| MyPropLex | [Launch Demo](https://lyven81.github.io/ai-project/projects/myproplex/demo.html) | Business Intelligence |
-| Social Media Marketer | [Launch Demo](https://lyven81.github.io/ai-project/projects/social-media-marketer/demo.html) | Business Intelligence |
-| TrendMate | [Launch Demo](https://lyven81.github.io/ai-project/projects/trendmate/demo.html) | Business Intelligence |
-| Hire Gardener | [Launch Demo](https://lyven81.github.io/ai-project/projects/hire-gardener/demo.html) | Business Automation |
-| Chinese Traditional Calendar | [Launch App](https://chinese-calender-169218045868.asia-southeast1.run.app/) | Conversational AI |
-| Astrology Consultant | [Launch App](https://horoscope-chatbot-218391175125.asia-southeast1.run.app/) | Conversational AI |
-| Feng Shui Consultant | [Launch App](https://fengshui-chatbot-218391175125.asia-southeast1.run.app/) | Conversational AI |
-| Skyread | [Launch App](https://ais-dev-m2gjhpuvdrj3c3mly7e6rr-168381537832.asia-east1.run.app) | Conversational AI |
-| AI Recipe Generator | [Launch App](https://image-recipe-generator-218391175125.us-central1.run.app/) | Creative AI |
-| Polaroid Moments Generator | [Launch App](https://polaroid-moments-generator-169218045868.us-west1.run.app/) | Creative AI |
-| AI Profile Picture Stylist | [Launch App](https://ai-profile-picture-stylist-662370080553.us-west1.run.app/) | Creative AI |
-| AI Background Changer | [Launch App](https://ai-background-changer-169218045868.us-west1.run.app/) | Creative AI |
-| AI Coloring Book for Kids | [Launch App](https://ai-coloring-book-for-kids-662370080553.us-west1.run.app/) | Creative AI |
-| AI Storybook Generator | [Launch App](https://ai-storybook-color-create-662370080553.us-west1.run.app/) | Creative AI |
-| Coloring Book Generator | [Launch App](https://coloring-book-generator-662370080553.us-west1.run.app/) | Creative AI |
-| Sarawak Laksa | [Launch Demo](https://lyven81.github.io/ai-project/projects/sarawak-laksa/) | Creative AI |
-| Nine Year Plan 2022–2031 | [Launch Demo](https://lyven81.github.io/ai-project/projects/nine-year-plan/) | Creative AI |
+- **Node.js 18+** for React/Express projects
+- **Python 3.9+** for FastAPI/Streamlit/ADK projects
+- **API keys** for Gemini, Claude, Tavily as needed
+- **Docker** for cloud-deployed apps (optional)
 
 ## 💼 Professional Highlights
 
-### **Production-Ready Applications**
-- All projects deployed on Google Cloud Platform with professional-grade infrastructure
-- Comprehensive error handling, logging, and monitoring
-- Optimized for performance, scalability, and user experience
-- Security best practices implemented throughout
-
-### **Business Impact Demonstration**
-- **Time Savings:** Document processing reduces manual review time by 80%+
-- **User Engagement:** Interactive AI experiences with high retention rates
-- **Innovation:** Cutting-edge AI applications solving real-world problems
-- **Accessibility:** Multi-language support expanding global reach
-
-### **Technical Excellence**
-- **Code Quality:** TypeScript strict mode, comprehensive testing, clean architecture
-- **Performance:** Optimized loading times, efficient AI processing, responsive design
-- **Documentation:** Professional-level documentation exceeding industry standards
-- **Deployment:** Automated CI/CD pipelines with zero-downtime deployments
+- **49 production-ready apps** — each one has a clickable demo (local `demo.html` or live Cloud Run URL)
+- **Built for Malaysian SMEs** — most apps solve a specific local pain point (kedai runcit, tuition centres, plumbers, FMCG distributors)
+- **Anti-vendor-lock-in** — three E-Commerce Advisor variants (CSV / MCP / AlloyDB) show how the same agent runs against any data source
+- **Honest scoping** — no "AI" badge on apps that are scripted demos (Soon Heng, Wee Auto are clearly labelled vanilla JS scripted flows)
 
 ## 📞 Contact & Collaboration
 
-**Portfolio Website:** [ai-project](https://lyven81.github.io/ai-project/)  
-**GitHub Repository:** [lyven81/ai-project](https://github.com/lyven81/ai-project)
-
-This portfolio demonstrates expertise in building production-ready AI applications that combine cutting-edge technology with practical business solutions. Each project showcases different aspects of modern AI development, from computer vision and natural language processing to creative content generation.
+**Portfolio:** [lyven81.github.io/ai-project](https://lyven81.github.io/ai-project/)
+**GitHub:** [github.com/lyven81/ai-project](https://github.com/lyven81/ai-project)
 
 ---
 
-⭐ **Interested in AI solutions for your business? Let's collaborate!** ⭐
-
-*Transforming ideas into intelligent applications through the power of artificial intelligence* 🤖✨
+⭐ **Interested in AI solutions for your business? Let's collaborate.** ⭐

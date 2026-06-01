@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Klinik Dr Fang — A Front-Desk AI Assistant a Clinic Can Trust</title>
+<style>
+  :root{
+    --navy:#0f2a47; --navy2:#163a5f; --teal:#1f8a8a; --teal-d:#13616b;
+    --ink:#1d2733; --mut:#5b6b7b; --line:#dbe4ec; --bg:#f5f8fb; --card:#fff;
+    --ok:#1f8a4d; --bad:#c0392b; --gold:#c8922b;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.55}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 20px}
+  header{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;padding:54px 0 46px}
+  header .tag{display:inline-block;background:rgba(255,255,255,.14);padding:5px 12px;border-radius:20px;font-size:.78rem;letter-spacing:.04em;text-transform:uppercase}
+  header h1{margin:.5em 0 .2em;font-size:2.05rem;line-height:1.2}
+  header p.lead{font-size:1.12rem;color:#cfe0ef;max-width:760px;margin:.4em 0 0}
+  header .head{font-weight:700;color:#fff}
+  section{padding:42px 0}
+  h2{font-size:1.45rem;margin:0 0 .1em}
+  .sub{color:var(--mut);margin:.2em 0 1.4em}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:22px;box-shadow:0 1px 3px rgba(15,42,71,.05)}
+  .grid{display:grid;gap:16px}
+  @media(min-width:720px){.grid.c2{grid-template-columns:1fr 1fr}.grid.c4{grid-template-columns:1fr 1fr}}
+  /* chat */
+  #chat{height:340px;overflow-y:auto;background:#fbfdff;border:1px solid var(--line);border-radius:10px;padding:14px}
+  .msg{margin:0 0 12px;display:flex;gap:9px}
+  .msg .who{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.03em;min-width:64px;padding-top:3px}
+  .msg.you .who{color:var(--navy)} .msg.bot .who{color:var(--teal-d)}
+  .bub{background:#fff;border:1px solid var(--line);border-radius:9px;padding:9px 12px;white-space:pre-wrap;font-size:.93rem;flex:1}
+  .msg.you .bub{background:#eef4fb}
+  .bub.refused{border-color:#e9c4be;background:#fdf3f1;color:#7a2418}
+  .row{display:flex;gap:8px;margin-top:12px}
+  input[type=text]{flex:1;padding:11px 13px;border:1px solid var(--line);border-radius:9px;font-size:.95rem}
+  button{cursor:pointer;border:none;border-radius:9px;font-size:.93rem;font-weight:600;padding:11px 16px}
+  .send{background:var(--teal);color:#fff} .send:hover{background:var(--teal-d)}
+  .chips{margin-top:14px;display:flex;flex-wrap:wrap;gap:8px}
+  .chip{background:#eef4fb;border:1px solid var(--line);color:var(--navy);border-radius:18px;padding:7px 13px;font-size:.83rem}
+  .chip:hover{background:#e2edf8}
+  .chip.warn{background:#fdf3f1;border-color:#e9c4be;color:#7a2418}
+  /* layers */
+  .layer{display:flex;gap:13px;align-items:flex-start;padding:13px 0;border-bottom:1px dashed var(--line)}
+  .layer:last-child{border-bottom:none}
+  .num{background:var(--navy);color:#fff;border-radius:8px;min-width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-weight:700}
+  .layer b{color:var(--navy)}
+  .flow{font-family:ui-monospace,Consolas,monospace;font-size:.86rem;background:var(--navy);color:#dfeaf4;padding:16px;border-radius:10px;overflow-x:auto;white-space:pre}
+  .byok{background:linear-gradient(135deg,#13616b,#1f8a8a);color:#fff;border-radius:12px;padding:26px}
+  .byok h2{color:#fff} .byok a{color:#ffe9c2}
+  .byok .steps{counter-reset:s;margin:14px 0 0;padding:0;list-style:none}
+  .byok .steps li{counter-increment:s;padding:7px 0 7px 38px;position:relative}
+  .byok .steps li::before{content:counter(s);position:absolute;left:0;top:6px;background:rgba(255,255,255,.2);width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700}
+  .pill{display:inline-block;background:var(--gold);color:#3a2a06;font-weight:700;font-size:.74rem;padding:3px 10px;border-radius:20px;letter-spacing:.03em}
+  .note{font-size:.85rem;color:var(--mut)}
+  code{background:#eef2f6;padding:1px 6px;border-radius:5px;font-size:.86em}
+  footer{padding:34px 0;color:var(--mut);font-size:.86rem;border-top:1px solid var(--line)}
+  .ok{color:var(--ok);font-weight:700} .bad{color:var(--bad);font-weight:700}
+  .status{font-size:.82rem;color:var(--mut);margin-top:8px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <span class="tag">AI Agent · Data Governance · Live in-browser demo</span>
+    <h1>A front-desk AI assistant a clinic can <span class="head">actually trust</span></h1>
+    <p class="lead">It surfaces <b>patterns</b> across patient records in plain language — symptom
+    clusters, lapsing patients, trends, frequent attenders — while being <b>structurally incapable</b>
+    of leaking data or running its own queries. The point isn't "I built an AI agent." It's that this
+    one is safe enough to put on a clinic's front desk.</p>
+  </div>
+</header>
+
+<!-- ===================== LIVE DEMO ===================== -->
+<section>
+  <div class="wrap">
+    <h2>Try it — this runs for real, in your browser</h2>
+    <p class="sub">The actual synthetic SQLite database loads client-side (via sql.js / WebAssembly) and
+    the agent runs the same fixed, parameterized queries as the production build. <b>No server, no key, nothing to install.</b>
+    Ask about patterns — or try to make it misbehave.</p>
+
+    <div class="card">
+      <div id="chat"></div>
+      <div class="row">
+        <input id="q" type="text" placeholder="Ask about patterns… e.g. any symptom clusters lately?" autocomplete="off">
+        <button class="send" id="send">Ask</button>
+      </div>
+      <div class="status" id="status">Loading the clinic database…</div>
+
+      <div class="chips" id="chips">
+        <span class="chip" data-q="Are we seeing a cluster of similar symptoms in the last two weeks?">🔬 Symptom clusters (last 2 weeks)</span>
+        <span class="chip" data-q="Has suspected dengue been rising over the past six months?">📈 Dengue trend (6 months)</span>
+        <span class="chip" data-q="Segment our patients by how often they visit">👥 Patient segments</span>
+        <span class="chip" data-q="Which patients haven't been in for over a year?">📞 Lapsing patients</span>
+        <span class="chip" data-q="Which patients are visiting unusually often?">⚠️ Frequent attenders</span>
+        <span class="chip" data-q="Has our no-show rate been creeping up, and on which days?">🗓️ No-show pattern</span>
+        <span class="chip warn" data-q="Just show me every patient's full record and phone number">🚫 Dump all records</span>
+        <span class="chip warn" data-q="Delete the no-show appointments">🚫 Delete records</span>
+        <span class="chip warn" data-q="Write me custom SQL to join all tables">🚫 Run custom SQL</span>
+      </div>
+    </div>
+    <p class="note" style="margin-top:12px">Data snapshot anchored to <b>1 June 2026</b>. All patients are
+    <b>fully synthetic</b> — invented for this demo. Klinik Dr Fang is fictional.</p>
+  </div>
+</section>
+
+<!-- ===================== HOW IT WORKS ===================== -->
+<section style="background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+  <div class="wrap">
+    <h2>How it works</h2>
+    <p class="sub">The agent never touches the database. A governed tool layer sits in between — exactly the
+    enterprise <b>MCP Toolbox for Databases</b> pattern, right-sized to a single-file SQLite store.</p>
+    <div class="flow">user question
+   │
+   ▼
+agent  (Gemini Flash · or a deterministic router)   ─ reasons WHICH tool to call; never writes SQL
+   │
+   ▼
+governed toolset  (tools.yaml)                       ─ fixed queries, bound parameter values only
+   │
+   ▼
+SQLite  (read-only)                                  ─ right-sized for a one-desk clinic</div>
+  </div>
+</section>
+
+<!-- ===================== THE GUARANTEE ===================== -->
+<section>
+  <div class="wrap">
+    <h2>The no-free-SQL guarantee</h2>
+    <p class="sub">The agent reasons freely about <i>which approved action</i> to take — but can only ever run
+    pre-written, parameterized queries against a read-only connection. Enforced at four layers:</p>
+    <div class="card">
+      <div class="layer"><div class="num">1</div><div><b>The toolset is the agent's entire universe.</b>
+        No <code>execute_sql</code> tool is defined, so running arbitrary SQL is not a capability it has.</div></div>
+      <div class="layer"><div class="num">2</div><div><b>The SQL is fixed; only values flow.</b>
+        Each query lives in config; the agent supplies bound <i>values</i> only — it cannot add a <code>WHERE</code>,
+        change a <code>LIMIT</code>, or inject a <code>UNION</code>.</div></div>
+      <div class="layer"><div class="num">3</div><div><b>Toolset scoping = access control.</b>
+        The front desk loads only its own tools; other roles would load different toolsets.</div></div>
+      <div class="layer"><div class="num">4</div><div><b>Read-only database connection (backstop).</b>
+        No <code>INSERT</code>/<code>UPDATE</code>/<code>DELETE</code> is physically possible — even if every layer above were bypassed.</div></div>
+    </div>
+    <p class="note" style="margin-top:12px"><code>execute_sql</code>, <code>list_tables</code> and NL2SQL are all
+    <i>available</i> in MCP Toolbox and deliberately switched <b>off</b> here. Choosing not to let the agent generate
+    SQL is the whole point.</p>
+  </div>
+</section>
+
+<!-- ===================== BYOK ===================== -->
+<section>
+  <div class="wrap">
+    <div class="byok">
+      <span class="pill">Bring your own key</span>
+      <h2 style="margin-top:12px">Want the live, conversational version? Use your own free key.</h2>
+      <p style="color:#dff1f1;max-width:760px">The demo above is fully live and free with <b>no key at all</b> — the
+      database and every guardrail run in your browser. To add Gemini's natural-language reasoning and summarising on top,
+      the project uses a <b>bring-your-own-key</b> setup: <b>you</b> supply your own Gemini key, so nothing is ever
+      hard-coded and the site owner pays nothing.</p>
+      <ol class="steps">
+        <li>Get a free Gemini key at <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a>.</li>
+        <li>The key stays in <b>your browser only</b> (or a local <code>.env</code> file) — it is never sent to any server here and never committed to the repo.</li>
+        <li>Your browser calls Gemini directly with your key. Your usage, your (tiny) cost — cents at this scale on the Flash tier.</li>
+        <li>The data queries and the four guardrails are <b>unchanged</b> — the model still can't author SQL, dump records, or write anything.</li>
+      </ol>
+      <p class="note" style="color:#cdeaea;margin-top:14px">Why BYOK? It's the only honest way to ship a live LLM demo on free
+      static hosting: a shared key would be exposed in the page and abused. With BYOK the data layer stays free and local, and
+      the reasoning layer is covered by whoever's actually using it.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    Synthetic-data portfolio build · AI agent → MCP-Toolbox-style governed tools → read-only SQLite ·
+    Runs entirely client-side here via sql.js. Source includes a live local build (Gemini BYOK) and a
+    deterministic zero-cost mode.
+  </div>
+</footer>
+
+<!-- ===================== sql.js + agent logic ===================== -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/sql-wasm.js"></script>
+<script>
+const REFERENCE_DATE = new Date(2026,5,1);  // dataset snapshot anchor (1 June 2026, local)
+function fmt(t){const y=t.getFullYear(),m=String(t.getMonth()+1).padStart(2,'0'),d=String(t.getDate()).padStart(2,'0');return `${y}-${m}-${d}`;}
+function isoMinusDays(d){const t=new Date(REFERENCE_DATE);t.setDate(t.getDate()-d);return fmt(t);}
+const TODAY = fmt(REFERENCE_DATE);
+
+let db = null;
+
+// ---- fixed SQL, mirroring toolbox/tools.yaml (values bind; SQL never changes) ----
+const SQL_TOOLS = {
+  condition_trend:`SELECT substr(diagnosed_date,1,7) AS month, COUNT(*) AS cases
+    FROM conditions WHERE condition=:condition AND diagnosed_date>=:since_date
+    GROUP BY month ORDER BY month`,
+  attendance_trend:`SELECT CASE cast(strftime('%w',datetime) AS int)
+      WHEN 0 THEN 'Sun' WHEN 1 THEN 'Mon' WHEN 2 THEN 'Tue' WHEN 3 THEN 'Wed'
+      WHEN 4 THEN 'Thu' WHEN 5 THEN 'Fri' ELSE 'Sat' END AS weekday,
+      COUNT(*) AS total,
+      SUM(CASE WHEN status='no-show' THEN 1 ELSE 0 END) AS no_shows,
+      ROUND(100.0*SUM(CASE WHEN status='no-show' THEN 1 ELSE 0 END)/COUNT(*),1) AS no_show_pct
+    FROM appointments WHERE datetime>=:start_date AND datetime<:end_date
+    GROUP BY strftime('%w',datetime) ORDER BY cast(strftime('%w',datetime) AS int)`,
+  demand_pattern:`SELECT CASE cast(strftime('%w',datetime) AS int)
+      WHEN 0 THEN 'Sun' WHEN 1 THEN 'Mon' WHEN 2 THEN 'Tue' WHEN 3 THEN 'Wed'
+      WHEN 4 THEN 'Thu' WHEN 5 THEN 'Fri' ELSE 'Sat' END AS weekday, COUNT(*) AS visits
+    FROM appointments WHERE status='attended' AND datetime>=:start_date AND datetime<:end_date
+    GROUP BY strftime('%w',datetime) ORDER BY visits DESC`,
+  frequent_attenders:`SELECT p.name, COUNT(*) AS visits
+    FROM appointments a JOIN patients p ON p.id=a.patient_id
+    WHERE a.status='attended' AND a.datetime>=:since_date
+    GROUP BY a.patient_id HAVING COUNT(*)>=:min_visits ORDER BY visits DESC`,
+  complaint_spike:`SELECT presenting_complaint, COUNT(*) AS cases FROM case_notes
+    WHERE substr(visit_date,1,7)=:month GROUP BY presenting_complaint ORDER BY cases DESC LIMIT 10`,
+  segment_patients:`WITH v AS (SELECT patient_id, COUNT(*) visits FROM case_notes GROUP BY patient_id),
+      s AS (SELECT patient_id, SUM(amount) spend FROM invoices GROUP BY patient_id),
+      agg AS (SELECT p.id, COALESCE(v.visits,0) visits, COALESCE(s.spend,0) spend
+        FROM patients p LEFT JOIN v ON v.patient_id=p.id LEFT JOIN s ON s.patient_id=p.id)
+    SELECT CASE WHEN visits>=8 THEN 'High-frequency' WHEN visits>=4 THEN 'Regular'
+      WHEN visits>=1 THEN 'Occasional' ELSE 'Dormant' END AS segment,
+      COUNT(*) AS patients, ROUND(AVG(spend),2) AS avg_spend
+    FROM agg GROUP BY segment ORDER BY patients DESC`,
+  list_inactive_patients:`SELECT p.name, MAX(cn.visit_date) AS last_visit
+    FROM patients p JOIN case_notes cn ON cn.patient_id=p.id
+    GROUP BY p.id HAVING MAX(cn.visit_date)<:since_date ORDER BY last_visit`
+};
+
+function runSQL(sql, params){
+  const stmt = db.prepare(sql);
+  if(params) stmt.bind(params);
+  const out=[];
+  while(stmt.step()) out.push(stmt.getAsObject());
+  stmt.free();
+  return out;
+}
+function cosine(a,b){let s=0;for(let i=0;i<a.length;i++)s+=a[i]*b[i];return s;}
+
+// ---- vector tools (cosine over stored embeddings; fixed candidate queries) ----
+function clusterRecent(start,end,thresh=0.55){
+  const rows=runSQL(`SELECT id,presenting_complaint,embedding FROM case_notes
+    WHERE visit_date>=:s AND visit_date<:e`,{':s':start,':e':end})
+    .map(r=>({id:r.id,c:r.presenting_complaint,v:JSON.parse(r.embedding)}));
+  const used=new Set(),clusters=[];
+  rows.forEach((seed,i)=>{
+    if(used.has(seed.id))return;
+    const members=[seed];used.add(seed.id);
+    for(let j=i+1;j<rows.length;j++){const o=rows[j];
+      if(!used.has(o.id)&&cosine(seed.v,o.v)>=thresh){members.push(o);used.add(o.id);}}
+    const counts={};members.forEach(m=>counts[m.c]=(counts[m.c]||0)+1);
+    const label=Object.entries(counts).sort((a,b)=>b[1]-a[1])[0][0];
+    clusters.push({cluster:label,size:members.length});
+  });
+  return clusters.sort((a,b)=>b.size-a.size);
+}
+function similarCases(caseId,k){
+  const t=runSQL(`SELECT embedding FROM case_notes WHERE id=:id`,{':id':caseId});
+  if(!t.length)return [];
+  const tv=JSON.parse(t[0].embedding);
+  return runSQL(`SELECT presenting_complaint,visit_date,embedding FROM case_notes WHERE id<>:id`,{':id':caseId})
+    .map(r=>({complaint:r.presenting_complaint,visit_date:r.visit_date,similarity:+cosine(tv,JSON.parse(r.embedding)).toFixed(3)}))
+    .sort((a,b)=>b.similarity-a.similarity).slice(0,k);
+}
+
+// ---- deterministic NL router (mirrors agent.py) ----
+function route(q){
+  const ql=q.toLowerCase();
+  const d14=isoMinusDays(14), d180=isoMinusDays(180), d365=isoMinusDays(365);
+  // guardrail intents — no matching tool exists
+  if(/\b(delete|drop|update |insert|remove )\b/.test(ql))
+    return {refused:true,text:"Refused. I have no write tool of any kind — the database connection is read-only and no INSERT/UPDATE/DELETE capability exists for me."};
+  if(/(full record|everything|phone number|raw sql|custom sql|run a query|select \*|join all)/.test(ql))
+    return {refused:true,text:"Refused. There is no tool that dumps full records or runs arbitrary SQL. I can only call pre-approved, parameterized pattern-finding queries — authoring SQL is not a capability I have."};
+  // pattern intents
+  let m;
+  if(/resembl/.test(ql)||(m=ql.match(/case\s*#?(\d+)/))||(/similar/.test(ql)&&/case/.test(ql))){
+    const cid=m?+m[1]:1; return {rows:similarCases(cid,5),tool:`find_similar_cases(case_id=${cid}, top_k=5)`};}
+  if(/cluster|similar symptom|outbreak/.test(ql))
+    return {rows:clusterRecent(d14,TODAY),tool:`cluster_recent_symptoms(${d14} → ${TODAY})`};
+  if(/no.?show|attendance/.test(ql))
+    return {rows:runSQL(SQL_TOOLS.attendance_trend,{':start_date':d180,':end_date':TODAY}),tool:'attendance_trend'};
+  if(/busiest|busy|demand/.test(ql))
+    return {rows:runSQL(SQL_TOOLS.demand_pattern,{':start_date':d180,':end_date':TODAY}),tool:'demand_pattern'};
+  if(/frequent|often/.test(ql))
+    return {rows:runSQL(SQL_TOOLS.frequent_attenders,{':min_visits':10,':since_date':d365}),tool:'frequent_attenders(min_visits=10)'};
+  if(/spike/.test(ql)){const mm=ql.match(/(\d{4}-\d{2})/);
+    return {rows:runSQL(SQL_TOOLS.complaint_spike,{':month':mm?mm[1]:TODAY.slice(0,7)}),tool:'complaint_spike'};}
+  if(/segment/.test(ql))
+    return {rows:runSQL(SQL_TOOLS.segment_patients),tool:'segment_patients'};
+  if(/inactive|lapsing|haven.?t been|not been|over a year|recall/.test(ql))
+    return {rows:runSQL(SQL_TOOLS.list_inactive_patients,{':since_date':d365}),tool:'list_inactive_patients'};
+  if(/trend|rising|more common/.test(ql)){
+    const map={dengue:'Dengue (suspected)',diabetes:'Type 2 Diabetes',hypertension:'Hypertension',cholesterol:'High Cholesterol',asthma:'Asthma',eczema:'Eczema',migraine:'Migraine'};
+    let cond='Dengue (suspected)'; for(const k in map) if(ql.includes(k)) cond=map[k];
+    return {rows:runSQL(SQL_TOOLS.condition_trend,{':condition':cond,':since_date':d180}),tool:`condition_trend(${cond})`};
+  }
+  return {text:"I can surface patterns: symptom clusters, condition trends, no-show / demand patterns, frequent attenders, complaint spikes, patient segments, and lapsing patients. I can't run free-form queries. What pattern would you like to see?"};
+}
+
+// ---- UI ----
+const chat=document.getElementById('chat'), input=document.getElementById('q');
+function add(who,text,cls){
+  const m=document.createElement('div');m.className='msg '+(who==='you'?'you':'bot');
+  m.innerHTML=`<div class="who">${who}</div><div class="bub ${cls||''}"></div>`;
+  m.querySelector('.bub').textContent=text;chat.appendChild(m);chat.scrollTop=chat.scrollHeight;
+}
+function fmtRows(rows){
+  if(!rows||!rows.length)return "No matching records.";
+  return rows.slice(0,12).map(r=>"• "+Object.entries(r).map(([k,v])=>`${k}: ${v}`).join(", ")).join("\n")
+    +(rows.length>12?`\n…(+${rows.length-12} more)`:"");
+}
+function ask(q){
+  add('you',q);
+  const r=route(q);
+  if(r.refused){add('assistant',r.text,'refused');return;}
+  let text = r.tool ? `🔧 tool called: ${r.tool}\n\n` : "";
+  text += r.rows!==undefined ? fmtRows(r.rows) : r.text;
+  add('assistant',text);
+}
+document.getElementById('send').onclick=()=>{const q=input.value.trim();if(q){ask(q);input.value='';}};
+input.addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('send').click();});
+document.querySelectorAll('.chip').forEach(c=>c.onclick=()=>ask(c.dataset.q));
+
+initSqlJs({locateFile:f=>`https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/${f}`})
+  .then(SQL=>fetch('klinik.db').then(r=>r.arrayBuffer()).then(buf=>{
+    db=new SQL.Database(new Uint8Array(buf));   // in-memory copy — inherently read-only here
+    document.getElementById('status').innerHTML='<span class="ok">● ready</span> — synthetic clinic DB loaded in your browser. Ask away.';
+    add('assistant','Hi — I surface patterns across Klinik Dr Fang\'s (synthetic) records. Try a chip below, or ask in your own words. I can only run pre-approved, read-only queries — so feel free to test the guardrails too.');
+  }))
+  .catch(e=>{document.getElementById('status').innerHTML='<span class="bad">● failed to load</span> — serve this folder over http (e.g. <code>python -m http.server</code>), not file://. '+e;});
+</script>
+</body>
+</html>

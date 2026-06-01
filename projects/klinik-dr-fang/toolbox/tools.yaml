@@ -1,0 +1,267 @@
+# =============================================================================
+# Klinik Dr Fang — MCP Toolbox for Databases  ::  tools.yaml
+# =============================================================================
+# This file IS the agent's entire universe. The agent can only call the tools
+# defined below. Each tool's SQL is FIXED; the agent supplies parameter VALUES
+# only (bound, never concatenated). There is deliberately NO execute_sql, NO
+# list_tables, and NO natural-language-to-SQL tool — see "DELIBERATELY EXCLUDED"
+# at the bottom. This is the no-free-SQL guarantee, enforced by design.
+#
+# Two runtimes consume this file:
+#   * the official MCP Toolbox for Databases binary (production pattern), and
+#   * agent/tool_runner.py (dependency-free local executor used by the demo).
+# Both honour the same fixed statements and bound parameters.
+# -----------------------------------------------------------------------------
+
+sources:
+  klinik-db:
+    kind: sqlite
+    database: ../data/klinik.db   # opened read-only by the runner (backstop layer 4)
+
+# -----------------------------------------------------------------------------
+# TOOLS — pattern-finding only. Every demo question maps to exactly one tool.
+# Columns are purposeful and bounded: recall/segment tools never return full
+# clinical notes (outline §6 cross-patient data discipline).
+# -----------------------------------------------------------------------------
+tools:
+
+  # ---- Temporal & trend --------------------------------------------------
+  condition_trend:
+    kind: sqlite-sql
+    source: klinik-db
+    description: >
+      Monthly count of a given diagnosed condition since a start date — shows
+      whether a condition is becoming more common over time.
+    parameters:
+      - name: condition
+        type: string
+        description: Condition name, e.g. "Dengue (suspected)" or "Type 2 Diabetes".
+      - name: since_date
+        type: string
+        description: Inclusive ISO start date (YYYY-MM-DD).
+    statement: |
+      SELECT substr(diagnosed_date,1,7) AS month, COUNT(*) AS cases
+      FROM conditions
+      WHERE condition = :condition AND diagnosed_date >= :since_date
+      GROUP BY month ORDER BY month;
+
+  attendance_trend:
+    kind: sqlite-sql
+    source: klinik-db
+    description: >
+      No-show rate by weekday within a date window — reveals whether no-shows
+      are creeping up and on which days.
+    parameters:
+      - name: start_date
+        type: string
+        description: Inclusive ISO start datetime (YYYY-MM-DD).
+      - name: end_date
+        type: string
+        description: Exclusive ISO end datetime (YYYY-MM-DD).
+    statement: |
+      SELECT
+        CASE cast(strftime('%w', datetime) AS int)
+          WHEN 0 THEN 'Sun' WHEN 1 THEN 'Mon' WHEN 2 THEN 'Tue'
+          WHEN 3 THEN 'Wed' WHEN 4 THEN 'Thu' WHEN 5 THEN 'Fri' ELSE 'Sat' END AS weekday,
+        COUNT(*) AS total,
+        SUM(CASE WHEN status='no-show' THEN 1 ELSE 0 END) AS no_shows,
+        ROUND(100.0*SUM(CASE WHEN status='no-show' THEN 1 ELSE 0 END)/COUNT(*),1) AS no_show_pct
+      FROM appointments
+      WHERE datetime >= :start_date AND datetime < :end_date
+      GROUP BY strftime('%w', datetime)
+      ORDER BY cast(strftime('%w', datetime) AS int);
+
+  demand_pattern:
+    kind: sqlite-sql
+    source: klinik-db
+    description: >
+      Attended-visit volume by weekday within a window — when the clinic is
+      busiest.
+    parameters:
+      - name: start_date
+        type: string
+        description: Inclusive ISO start datetime (YYYY-MM-DD).
+      - name: end_date
+        type: string
+        description: Exclusive ISO end datetime (YYYY-MM-DD).
+    statement: |
+      SELECT
+        CASE cast(strftime('%w', datetime) AS int)
+          WHEN 0 THEN 'Sun' WHEN 1 THEN 'Mon' WHEN 2 THEN 'Tue'
+          WHEN 3 THEN 'Wed' WHEN 4 THEN 'Thu' WHEN 5 THEN 'Fri' ELSE 'Sat' END AS weekday,
+        COUNT(*) AS visits
+      FROM appointments
+      WHERE status='attended' AND datetime >= :start_date AND datetime < :end_date
+      GROUP BY strftime('%w', datetime)
+      ORDER BY visits DESC;
+
+  # ---- Anomaly & outlier -------------------------------------------------
+  frequent_attenders:
+    kind: sqlite-sql
+    source: klinik-db
+    description: >
+      Patients with an unusually high number of attended visits since a date.
+      Returns name + visit count only.
+    parameters:
+      - name: min_visits
+        type: integer
+        description: Minimum attended visits to be flagged (e.g. 10).
+      - name: since_date
+        type: string
+        description: Inclusive ISO start date (YYYY-MM-DD).
+    statement: |
+      SELECT p.name, COUNT(*) AS visits
+      FROM appointments a JOIN patients p ON p.id = a.patient_id
+      WHERE a.status='attended' AND a.datetime >= :since_date
+      GROUP BY a.patient_id
+      HAVING COUNT(*) >= :min_visits
+      ORDER BY visits DESC;
+
+  complaint_spike:
+    kind: sqlite-sql
+    source: klinik-db
+    description: >
+      Top presenting complaints in a given month — surfaces any unusual spike.
+    parameters:
+      - name: month
+        type: string
+        description: Month as YYYY-MM.
+    statement: |
+      SELECT presenting_complaint, COUNT(*) AS cases
+      FROM case_notes
+      WHERE substr(visit_date,1,7) = :month
+      GROUP BY presenting_complaint
+      ORDER BY cases DESC
+      LIMIT 10;
+
+  # ---- Segmentation ------------------------------------------------------
+  segment_patients:
+    kind: sqlite-sql
+    source: klinik-db
+    description: >
+      Segments the whole patient base by visit frequency and average spend.
+      Returns segment-level summary only (no individuals).
+    parameters: []
+    statement: |
+      WITH v AS (SELECT patient_id, COUNT(*) AS visits FROM case_notes GROUP BY patient_id),
+           s AS (SELECT patient_id, SUM(amount) AS spend FROM invoices  GROUP BY patient_id),
+           agg AS (
+        SELECT p.id,
+               COALESCE(v.visits,0) AS visits,
+               COALESCE(s.spend,0)  AS spend
+        FROM patients p
+        LEFT JOIN v ON v.patient_id = p.id
+        LEFT JOIN s ON s.patient_id = p.id)
+      SELECT
+        CASE WHEN visits>=8 THEN 'High-frequency'
+             WHEN visits>=4 THEN 'Regular'
+             WHEN visits>=1 THEN 'Occasional'
+             ELSE 'Dormant' END AS segment,
+        COUNT(*) AS patients,
+        ROUND(AVG(spend),2) AS avg_spend
+      FROM agg GROUP BY segment
+      ORDER BY patients DESC;
+
+  list_inactive_patients:
+    kind: sqlite-sql
+    source: klinik-db
+    description: >
+      Patients whose most recent visit is before a cut-off date — the lapsing /
+      recall list. Returns name + last visit date only (never clinical notes).
+    parameters:
+      - name: since_date
+        type: string
+        description: Cut-off ISO date; patients with no visit on/after this are listed.
+    statement: |
+      SELECT p.name, MAX(cn.visit_date) AS last_visit
+      FROM patients p JOIN case_notes cn ON cn.patient_id = p.id
+      GROUP BY p.id
+      HAVING MAX(cn.visit_date) < :since_date
+      ORDER BY last_visit;
+
+  # ---- Similarity & clustering (vector-backed; runner computes cosine) ----
+  # These use a FIXED candidate_statement to fetch a bounded set of embeddings;
+  # the cosine ranking/grouping is fixed app logic. Still no free SQL.
+  cluster_recent_symptoms:
+    kind: vector-cluster
+    source: klinik-db
+    description: >
+      Groups recent presenting complaints into clusters of similar symptoms —
+      an early-outbreak signal. Returns cluster label + size + example.
+    parameters:
+      - name: start_date
+        type: string
+        description: Inclusive ISO start date (YYYY-MM-DD).
+      - name: end_date
+        type: string
+        description: Exclusive ISO end date (YYYY-MM-DD).
+    candidate_statement: |
+      SELECT id, presenting_complaint, embedding
+      FROM case_notes
+      WHERE visit_date >= :start_date AND visit_date < :end_date;
+    similarity_threshold: 0.55
+
+  find_similar_cases:
+    kind: vector-knn
+    source: klinik-db
+    description: >
+      Finds past cases whose presentation most resembles a given case.
+      Returns complaint + visit date + similarity (no full clinical notes).
+    parameters:
+      - name: case_id
+        type: integer
+        description: The case_notes.id to find neighbours for.
+      - name: top_k
+        type: integer
+        description: How many similar cases to return (e.g. 5).
+    target_statement: |
+      SELECT embedding FROM case_notes WHERE id = :case_id;
+    candidate_statement: |
+      SELECT id, presenting_complaint, visit_date, embedding
+      FROM case_notes WHERE id <> :case_id;
+
+  theme_complaints:
+    kind: vector-cluster
+    source: klinik-db
+    description: >
+      Groups a period's complaints into themes and counts each — a thematic
+      summary of what patients came in for.
+    parameters:
+      - name: start_date
+        type: string
+        description: Inclusive ISO start date (YYYY-MM-DD).
+      - name: end_date
+        type: string
+        description: Exclusive ISO end date (YYYY-MM-DD).
+    candidate_statement: |
+      SELECT id, presenting_complaint, embedding
+      FROM case_notes
+      WHERE visit_date >= :start_date AND visit_date < :end_date;
+    similarity_threshold: 0.55
+
+# -----------------------------------------------------------------------------
+# TOOLSETS — scoping = access control. The front desk loads only this set.
+# A different role (e.g. clinic admin) would load a different toolset; the
+# front-desk agent never even learns other tools exist.
+# -----------------------------------------------------------------------------
+toolsets:
+  front_desk:
+    - condition_trend
+    - attendance_trend
+    - demand_pattern
+    - frequent_attenders
+    - complaint_spike
+    - segment_patients
+    - list_inactive_patients
+    - cluster_recent_symptoms
+    - find_similar_cases
+    - theme_complaints
+
+# -----------------------------------------------------------------------------
+# DELIBERATELY EXCLUDED (available in MCP Toolbox, switched OFF here on purpose)
+#   * execute_sql      — would let the agent author arbitrary SQL.  NOT defined.
+#   * list_tables      — schema reconnaissance.                     NOT defined.
+#   * any NL2SQL tool  — natural-language-to-SQL generation.        NOT defined.
+#   * any write tool   — INSERT/UPDATE/DELETE.  Also blocked by read-only user.
+# "We chose not to let the agent generate SQL" is the portfolio statement.
+# -----------------------------------------------------------------------------
