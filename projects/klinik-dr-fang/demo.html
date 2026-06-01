@@ -3,215 +3,195 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Klinik Dr Fang — A Front-Desk AI Assistant a Clinic Can Trust</title>
+<title>Klinik Dr Fang — Front-Desk Assistant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --navy:#0f2a47; --navy2:#163a5f; --teal:#1f8a8a; --teal-d:#13616b;
-    --ink:#1d2733; --mut:#5b6b7b; --line:#dbe4ec; --bg:#f5f8fb; --card:#fff;
-    --ok:#1f8a4d; --bad:#c0392b; --gold:#c8922b;
+    --navy:#1E3A5F; --blue:#4A7FB5; --blue-soft:#EAF1F8; --bg:#F2F6FB;
+    --ink:#27333F; --muted:#6E7E8D; --line:#E3EAF2; --card:#FFFFFF;
+    --boundary:#B07D27; --boundary-bg:#FBF4E4; --safe:#3C8C7C;
+    --shadow:0 1px 2px rgba(30,58,95,.04),0 8px 24px rgba(30,58,95,.06);
+    --shadow-sm:0 1px 2px rgba(30,58,95,.05);
+    --display:'Fraunces',Georgia,serif;
+    --body:'Manrope',-apple-system,BlinkMacSystemFont,sans-serif;
   }
-  *{box-sizing:border-box}
-  body{margin:0;font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.55}
-  .wrap{max-width:1000px;margin:0 auto;padding:0 20px}
-  header{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;padding:54px 0 46px}
-  header .tag{display:inline-block;background:rgba(255,255,255,.14);padding:5px 12px;border-radius:20px;font-size:.78rem;letter-spacing:.04em;text-transform:uppercase}
-  header h1{margin:.5em 0 .2em;font-size:2.05rem;line-height:1.2}
-  header p.lead{font-size:1.12rem;color:#cfe0ef;max-width:760px;margin:.4em 0 0}
-  header .head{font-weight:700;color:#fff}
-  section{padding:42px 0}
-  h2{font-size:1.45rem;margin:0 0 .1em}
-  .sub{color:var(--mut);margin:.2em 0 1.4em}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:22px;box-shadow:0 1px 3px rgba(15,42,71,.05)}
-  .grid{display:grid;gap:16px}
-  @media(min-width:720px){.grid.c2{grid-template-columns:1fr 1fr}.grid.c4{grid-template-columns:1fr 1fr}}
-  /* chat */
-  #chat{height:340px;overflow-y:auto;background:#fbfdff;border:1px solid var(--line);border-radius:10px;padding:14px}
-  .msg{margin:0 0 12px;display:flex;gap:9px}
-  .msg .who{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.03em;min-width:64px;padding-top:3px}
-  .msg.you .who{color:var(--navy)} .msg.bot .who{color:var(--teal-d)}
-  .bub{background:#fff;border:1px solid var(--line);border-radius:9px;padding:9px 12px;white-space:pre-wrap;font-size:.93rem;flex:1}
-  .msg.you .bub{background:#eef4fb}
-  .bub.refused{border-color:#e9c4be;background:#fdf3f1;color:#7a2418}
-  .row{display:flex;gap:8px;margin-top:12px}
-  input[type=text]{flex:1;padding:11px 13px;border:1px solid var(--line);border-radius:9px;font-size:.95rem}
-  button{cursor:pointer;border:none;border-radius:9px;font-size:.93rem;font-weight:600;padding:11px 16px}
-  .send{background:var(--teal);color:#fff} .send:hover{background:var(--teal-d)}
-  .chips{margin-top:14px;display:flex;flex-wrap:wrap;gap:8px}
-  .chip{background:#eef4fb;border:1px solid var(--line);color:var(--navy);border-radius:18px;padding:7px 13px;font-size:.83rem}
-  .chip:hover{background:#e2edf8}
-  .chip.warn{background:#fdf3f1;border-color:#e9c4be;color:#7a2418}
-  /* layers */
-  .layer{display:flex;gap:13px;align-items:flex-start;padding:13px 0;border-bottom:1px dashed var(--line)}
-  .layer:last-child{border-bottom:none}
-  .num{background:var(--navy);color:#fff;border-radius:8px;min-width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-weight:700}
-  .layer b{color:var(--navy)}
-  .flow{font-family:ui-monospace,Consolas,monospace;font-size:.86rem;background:var(--navy);color:#dfeaf4;padding:16px;border-radius:10px;overflow-x:auto;white-space:pre}
-  .byok{background:linear-gradient(135deg,#13616b,#1f8a8a);color:#fff;border-radius:12px;padding:26px}
-  .byok h2{color:#fff} .byok a{color:#ffe9c2}
-  .byok .steps{counter-reset:s;margin:14px 0 0;padding:0;list-style:none}
-  .byok .steps li{counter-increment:s;padding:7px 0 7px 38px;position:relative}
-  .byok .steps li::before{content:counter(s);position:absolute;left:0;top:6px;background:rgba(255,255,255,.2);width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700}
-  .pill{display:inline-block;background:var(--gold);color:#3a2a06;font-weight:700;font-size:.74rem;padding:3px 10px;border-radius:20px;letter-spacing:.03em}
-  .note{font-size:.85rem;color:var(--mut)}
-  code{background:#eef2f6;padding:1px 6px;border-radius:5px;font-size:.86em}
-  footer{padding:34px 0;color:var(--mut);font-size:.86rem;border-top:1px solid var(--line)}
-  .ok{color:var(--ok);font-weight:700} .bad{color:var(--bad);font-weight:700}
-  .status{font-size:.82rem;color:var(--mut);margin-top:8px}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:var(--body);
+    background:radial-gradient(1200px 500px at 80% -10%, #E7F0FA 0%, transparent 60%),var(--bg);
+    color:var(--ink);-webkit-font-smoothing:antialiased;display:flex;height:100vh;overflow:hidden;
+  }
+  .sidebar{width:288px;flex-shrink:0;background:linear-gradient(180deg,#1E3A5F 0%,#1A3354 100%);color:#DCE6F1;padding:26px 22px;display:flex;flex-direction:column;gap:26px}
+  .brand{display:flex;align-items:center;gap:12px}
+  .mark{width:40px;height:40px;border-radius:11px;flex-shrink:0;background:linear-gradient(150deg,#4A7FB5,#6FA0CE);display:grid;place-items:center;box-shadow:0 4px 12px rgba(0,0,0,.18)}
+  .mark svg{width:20px;height:20px}
+  .brand-name{font-family:var(--display);font-size:18px;font-weight:600;color:#fff;letter-spacing:.2px;line-height:1.15}
+  .brand-sub{font-size:11.5px;color:#9DB4CD;letter-spacing:.4px;text-transform:uppercase;margin-top:3px}
+  .status{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:13px;padding:14px 15px}
+  .status-title{font-size:11px;letter-spacing:.6px;text-transform:uppercase;color:#90A8C2;margin-bottom:11px}
+  .pill{display:flex;align-items:center;gap:9px;font-size:13px;color:#D7E3F0;padding:5px 0}
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--safe);box-shadow:0 0 0 3px rgba(60,140,124,.18)}
+  .dot.lock{background:#6FA0CE;box-shadow:0 0 0 3px rgba(111,160,206,.18)}
+  .dot.loading{background:#C9A055;box-shadow:0 0 0 3px rgba(201,160,85,.18)}
+  .tools{flex:1;min-height:0;display:flex;flex-direction:column}
+  .tools-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px}
+  .tools-head h3{font-size:11px;letter-spacing:.6px;text-transform:uppercase;color:#90A8C2;font-weight:600}
+  .tools-count{font-size:11px;color:#6F87A2;background:rgba(255,255,255,.06);padding:2px 8px;border-radius:20px}
+  .tool-list{list-style:none;overflow:auto;display:flex;flex-direction:column;gap:2px;margin:-2px;padding:2px}
+  .tool-list::-webkit-scrollbar{width:5px}
+  .tool-list::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:4px}
+  .tool-list li{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;color:#AFC3D8;padding:7px 9px;border-radius:8px;display:flex;align-items:center;gap:8px}
+  .tool-list li::before{content:"";width:5px;height:5px;border-radius:1.5px;background:#4A7FB5;flex-shrink:0}
+  .tool-list li:hover{background:rgba(255,255,255,.05);color:#E3EDF6}
+  .foot{font-size:11px;color:#6F87A2;line-height:1.5;border-top:1px solid rgba(255,255,255,.07);padding-top:14px}
+  .main{flex:1;display:flex;flex-direction:column;min-width:0}
+  .topbar{padding:18px 32px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);background:rgba(255,255,255,.55);backdrop-filter:blur(8px)}
+  .topbar h1{font-family:var(--display);font-size:19px;font-weight:600;color:var(--navy)}
+  .topbar .meta{font-size:12.5px;color:var(--muted)}
+  .topbar .loc{display:inline-flex;align-items:center;gap:6px}
+  .topbar .loc svg{width:13px;height:13px;opacity:.6}
+  .thread{flex:1;overflow-y:auto;padding:30px 32px 12px;display:flex;flex-direction:column;gap:22px}
+  .thread::-webkit-scrollbar{width:8px}
+  .thread::-webkit-scrollbar-thumb{background:#D2DEEA;border-radius:8px}
+  .row{display:flex;gap:13px;max-width:740px;animation:rise .42s cubic-bezier(.2,.7,.2,1) both}
+  @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .row.user{margin-left:auto;flex-direction:row-reverse}
+  .av{width:34px;height:34px;border-radius:10px;flex-shrink:0;display:grid;place-items:center;font-size:13px;font-weight:700}
+  .av.bot{background:var(--navy);color:#fff}
+  .av.bot svg{width:17px;height:17px}
+  .av.me{background:#DCE6F2;color:var(--navy)}
+  .bubble{font-size:14.5px;line-height:1.55}
+  .row.user .bubble{background:var(--navy);color:#EAF1F8;padding:11px 16px;border-radius:14px 14px 4px 14px;box-shadow:var(--shadow-sm)}
+  .row.bot .bubble{color:var(--ink)}
+  .lead{margin-bottom:12px}
+  .lead b{color:var(--navy);font-weight:600}
+  .badge{display:inline-flex;align-items:center;gap:7px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;color:var(--blue);background:var(--blue-soft);border:1px solid #D6E3F1;padding:4px 10px;border-radius:7px;margin-bottom:11px}
+  .badge svg{width:12px;height:12px}
+  .badge .lbl{color:#7C93A8}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 19px;box-shadow:var(--shadow);max-width:560px}
+  .card h4{font-family:var(--display);font-size:15.5px;color:var(--navy);font-weight:600;margin-bottom:3px}
+  .card .cap{font-size:12.5px;color:var(--muted);margin-bottom:15px}
+  .chart{width:100%;height:118px;display:block}
+  .axis-row{display:flex;justify-content:space-between;font-size:11px;color:#9AAABA;margin-top:7px;padding:0 2px}
+  .delta{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;font-weight:600;color:#C0622E;background:#FBEDE3;padding:3px 9px;border-radius:7px;margin-top:13px}
+  .crow{display:flex;align-items:center;gap:13px;padding:10px 0;border-bottom:1px solid #EEF3F8}
+  .crow:last-child{border-bottom:none}
+  .ref{font-family:ui-monospace,monospace;font-size:12px;color:var(--navy);background:#EEF3F9;padding:3px 8px;border-radius:6px;flex-shrink:0}
+  .desc{flex:1;font-size:13px;color:var(--ink)}
+  .simwrap{width:96px;flex-shrink:0}
+  .simbar{height:6px;border-radius:4px;background:#EAF0F6;overflow:hidden}
+  .simfill{height:100%;border-radius:4px;background:linear-gradient(90deg,#6FA0CE,#4A7FB5)}
+  .simval{font-size:10.5px;color:var(--muted);text-align:right;margin-top:3px}
+  .seg{display:flex;align-items:center;gap:12px;margin:11px 0}
+  .seg-lbl{width:104px;font-size:13px;color:var(--ink);flex-shrink:0}
+  .seg-track{flex:1;height:24px;background:#F0F4F9;border-radius:7px;overflow:hidden;position:relative}
+  .seg-fill{height:100%;border-radius:7px;background:linear-gradient(90deg,#3D6CA0,#4A7FB5);display:flex;align-items:center;justify-content:flex-end;padding-right:9px;color:#fff;font-size:11.5px;font-weight:600;min-width:26px}
+  .seg.lapsing .seg-fill{background:linear-gradient(90deg,#B98A3C,#C9A055)}
+  .lrow{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid #EEF3F8;font-size:13px}
+  .lrow:last-child{border-bottom:none}
+  .lrow .ini{width:30px;height:30px;border-radius:9px;background:#EAF1F8;color:var(--navy);display:grid;place-items:center;font-weight:700;font-size:12px;flex-shrink:0}
+  .lrow .nm{flex:1;color:var(--ink)}
+  .lrow .last{color:var(--muted);font-size:12px}
+  .note{font-size:11.5px;color:#9AAABA;margin-top:13px;display:flex;align-items:center;gap:6px}
+  .note svg{width:12px;height:12px;flex-shrink:0}
+  .refuse{background:var(--boundary-bg);border:1px solid #F0E2C2;border-radius:16px;padding:16px 18px;max-width:560px}
+  .refuse .rh{display:flex;align-items:center;gap:9px;margin-bottom:7px}
+  .refuse .rh svg{width:17px;height:17px}
+  .refuse .rh span{font-weight:600;color:var(--boundary);font-size:13.5px}
+  .refuse p{font-size:14px;line-height:1.55;color:#6A5526}
+  .refuse .why{font-size:11.5px;color:#9C8443;margin-top:10px;font-family:ui-monospace,monospace}
+  .think{display:flex;align-items:center;gap:9px;color:var(--muted);font-size:13px}
+  .think .tdot{width:6px;height:6px;border-radius:50%;background:var(--blue);animation:pulse 1.2s infinite}
+  .think .tdot:nth-child(2){animation-delay:.2s}
+  .think .tdot:nth-child(3){animation-delay:.4s}
+  @keyframes pulse{0%,100%{opacity:.25;transform:scale(.8)}50%{opacity:1;transform:scale(1)}}
+  .composer{padding:14px 32px 22px;border-top:1px solid var(--line);background:rgba(255,255,255,.55);backdrop-filter:blur(8px)}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:13px}
+  .chip{font-size:12.5px;color:var(--navy);background:#fff;border:1px solid #D8E2EE;padding:7px 13px;border-radius:20px;cursor:pointer;transition:all .18s;font-family:var(--body);box-shadow:var(--shadow-sm)}
+  .chip:hover{border-color:var(--blue);background:var(--blue-soft);transform:translateY(-1px)}
+  .chip:disabled{opacity:.4;cursor:default;transform:none}
+  .chip.warn{border-color:#EBD8AE;color:var(--boundary);background:#FCF6E9}
+  .chip.warn:hover{background:#FAF0D8;border-color:#DFC481}
+  .inputbar{display:flex;align-items:center;gap:11px;background:#fff;border:1px solid #D8E2EE;border-radius:13px;padding:6px 6px 6px 17px;box-shadow:var(--shadow-sm)}
+  .inputbar input{flex:1;border:none;outline:none;font-family:var(--body);font-size:14px;color:var(--ink);background:transparent;padding:8px 0}
+  .inputbar input::placeholder{color:#9AAABA}
+  .send{width:38px;height:38px;border-radius:10px;border:none;background:var(--navy);color:#fff;cursor:pointer;display:grid;place-items:center;transition:background .18s}
+  .send:hover{background:#16304E}
+  .send svg{width:17px;height:17px}
+  .disclaimer{text-align:center;font-size:11px;color:#A6B4C2;margin-top:11px}
+  @media(max-width:820px){.sidebar{display:none}.thread,.topbar,.composer{padding-left:18px;padding-right:18px}}
 </style>
 </head>
 <body>
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></div>
+      <div><div class="brand-name">Klinik Dr Fang</div><div class="brand-sub">Front-Desk Assistant</div></div>
+    </div>
+    <div class="status">
+      <div class="status-title">Operating mode</div>
+      <div class="pill"><span class="dot"></span> Read-only access</div>
+      <div class="pill"><span class="dot lock"></span> Approved tools only</div>
+      <div class="pill" id="dbpill"><span class="dot loading" id="dbdot"></span> <span id="dbstat">Loading database…</span></div>
+    </div>
+    <div class="tools">
+      <div class="tools-head"><h3>Approved tools</h3><span class="tools-count">10 · predefined</span></div>
+      <ul class="tool-list">
+        <li>cluster_recent_symptoms</li><li>find_similar_cases</li><li>theme_complaints</li>
+        <li>condition_trend</li><li>attendance_trend</li><li>demand_pattern</li>
+        <li>frequent_attenders</li><li>complaint_spike</li><li>segment_patients</li><li>list_inactive_patients</li>
+      </ul>
+    </div>
+    <div class="foot">Synthetic demonstration data, queried live in your browser. The assistant runs only pre-written, parameterized queries — it cannot author SQL.</div>
+  </aside>
 
-<header>
-  <div class="wrap">
-    <span class="tag">AI Agent · Data Governance · Live in-browser demo</span>
-    <h1>A front-desk AI assistant a clinic can <span class="head">actually trust</span></h1>
-    <p class="lead">It surfaces <b>patterns</b> across patient records in plain language — symptom
-    clusters, lapsing patients, trends, frequent attenders — while being <b>structurally incapable</b>
-    of leaking data or running its own queries. The point isn't "I built an AI agent." It's that this
-    one is safe enough to put on a clinic's front desk.</p>
-  </div>
-</header>
+  <main class="main">
+    <header class="topbar">
+      <h1>Pattern Assistant</h1>
+      <div class="meta"><span class="loc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.3-7-11a7 7 0 1 1 14 0c0 4.7-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg> Petaling Jaya, Selangor</span></div>
+    </header>
 
-<!-- ===================== LIVE DEMO ===================== -->
-<section>
-  <div class="wrap">
-    <h2>Try it — this runs for real, in your browser</h2>
-    <p class="sub">The actual synthetic SQLite database loads client-side (via sql.js / WebAssembly) and
-    the agent runs the same fixed, parameterized queries as the production build. <b>No server, no key, nothing to install.</b>
-    Ask about patterns — or try to make it misbehave.</p>
-
-    <div class="card">
-      <div id="chat"></div>
-      <div class="row">
-        <input id="q" type="text" placeholder="Ask about patterns… e.g. any symptom clusters lately?" autocomplete="off">
-        <button class="send" id="send">Ask</button>
+    <section class="thread" id="thread">
+      <div class="row bot">
+        <div class="av bot"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M12 3v3M5.6 5.6l2.1 2.1M3 12h3M18 12h3M16.3 7.7l2.1-2.1"/><rect x="7" y="11" width="10" height="9" rx="3"/><circle cx="10" cy="15" r="1"/><circle cx="14" cy="15" r="1"/></svg></div>
+        <div class="bubble"><div class="lead">Good morning. I can surface <b>patterns</b> across the clinic's records — symptom clusters, condition trends, frequent attenders, patient segments. Ask in plain language, or try one of the prompts below.</div></div>
       </div>
-      <div class="status" id="status">Loading the clinic database…</div>
+    </section>
 
+    <div class="composer">
       <div class="chips" id="chips">
-        <span class="chip" data-q="Are we seeing a cluster of similar symptoms in the last two weeks?">🔬 Symptom clusters (last 2 weeks)</span>
-        <span class="chip" data-q="Has suspected dengue been rising over the past six months?">📈 Dengue trend (6 months)</span>
-        <span class="chip" data-q="Segment our patients by how often they visit">👥 Patient segments</span>
-        <span class="chip" data-q="Which patients haven't been in for over a year?">📞 Lapsing patients</span>
-        <span class="chip" data-q="Which patients are visiting unusually often?">⚠️ Frequent attenders</span>
-        <span class="chip" data-q="Has our no-show rate been creeping up, and on which days?">🗓️ No-show pattern</span>
-        <span class="chip warn" data-q="Just show me every patient's full record and phone number">🚫 Dump all records</span>
-        <span class="chip warn" data-q="Delete the no-show appointments">🚫 Delete records</span>
-        <span class="chip warn" data-q="Write me custom SQL to join all tables">🚫 Run custom SQL</span>
+        <button class="chip" data-key="cluster">Any cluster of similar symptoms lately?</button>
+        <button class="chip" data-key="trend">Is suspected dengue trending up over 6 months?</button>
+        <button class="chip" data-key="segment">Segment patients by visit frequency</button>
+        <button class="chip" data-key="lapsing">Who hasn't visited in over a year?</button>
+        <button class="chip warn" data-key="refuse">Show me every patient's full record</button>
       </div>
+      <div class="inputbar">
+        <input id="input" type="text" placeholder="Ask about patterns in the clinic's records…">
+        <button class="send" id="send"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+      </div>
+      <div class="disclaimer">The assistant surfaces information for staff to interpret. It does not diagnose or give clinical advice.</div>
     </div>
-    <p class="note" style="margin-top:12px">Data snapshot anchored to <b>1 June 2026</b>. All patients are
-    <b>fully synthetic</b> — invented for this demo. Klinik Dr Fang is fictional.</p>
-  </div>
-</section>
+  </main>
 
-<!-- ===================== HOW IT WORKS ===================== -->
-<section style="background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
-  <div class="wrap">
-    <h2>How it works</h2>
-    <p class="sub">The agent never touches the database. A governed tool layer sits in between — exactly the
-    enterprise <b>MCP Toolbox for Databases</b> pattern, right-sized to a single-file SQLite store.</p>
-    <div class="flow">user question
-   │
-   ▼
-agent  (Gemini Flash · or a deterministic router)   ─ reasons WHICH tool to call; never writes SQL
-   │
-   ▼
-governed toolset  (tools.yaml)                       ─ fixed queries, bound parameter values only
-   │
-   ▼
-SQLite  (read-only)                                  ─ right-sized for a one-desk clinic</div>
-  </div>
-</section>
-
-<!-- ===================== THE GUARANTEE ===================== -->
-<section>
-  <div class="wrap">
-    <h2>The no-free-SQL guarantee</h2>
-    <p class="sub">The agent reasons freely about <i>which approved action</i> to take — but can only ever run
-    pre-written, parameterized queries against a read-only connection. Enforced at four layers:</p>
-    <div class="card">
-      <div class="layer"><div class="num">1</div><div><b>The toolset is the agent's entire universe.</b>
-        No <code>execute_sql</code> tool is defined, so running arbitrary SQL is not a capability it has.</div></div>
-      <div class="layer"><div class="num">2</div><div><b>The SQL is fixed; only values flow.</b>
-        Each query lives in config; the agent supplies bound <i>values</i> only — it cannot add a <code>WHERE</code>,
-        change a <code>LIMIT</code>, or inject a <code>UNION</code>.</div></div>
-      <div class="layer"><div class="num">3</div><div><b>Toolset scoping = access control.</b>
-        The front desk loads only its own tools; other roles would load different toolsets.</div></div>
-      <div class="layer"><div class="num">4</div><div><b>Read-only database connection (backstop).</b>
-        No <code>INSERT</code>/<code>UPDATE</code>/<code>DELETE</code> is physically possible — even if every layer above were bypassed.</div></div>
-    </div>
-    <p class="note" style="margin-top:12px"><code>execute_sql</code>, <code>list_tables</code> and NL2SQL are all
-    <i>available</i> in MCP Toolbox and deliberately switched <b>off</b> here. Choosing not to let the agent generate
-    SQL is the whole point.</p>
-  </div>
-</section>
-
-<!-- ===================== BYOK ===================== -->
-<section>
-  <div class="wrap">
-    <div class="byok">
-      <span class="pill">Bring your own key</span>
-      <h2 style="margin-top:12px">Want the live, conversational version? Use your own free key.</h2>
-      <p style="color:#dff1f1;max-width:760px">The demo above is fully live and free with <b>no key at all</b> — the
-      database and every guardrail run in your browser. To add Gemini's natural-language reasoning and summarising on top,
-      the project uses a <b>bring-your-own-key</b> setup: <b>you</b> supply your own Gemini key, so nothing is ever
-      hard-coded and the site owner pays nothing.</p>
-      <ol class="steps">
-        <li>Get a free Gemini key at <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a>.</li>
-        <li>The key stays in <b>your browser only</b> (or a local <code>.env</code> file) — it is never sent to any server here and never committed to the repo.</li>
-        <li>Your browser calls Gemini directly with your key. Your usage, your (tiny) cost — cents at this scale on the Flash tier.</li>
-        <li>The data queries and the four guardrails are <b>unchanged</b> — the model still can't author SQL, dump records, or write anything.</li>
-      </ol>
-      <p class="note" style="color:#cdeaea;margin-top:14px">Why BYOK? It's the only honest way to ship a live LLM demo on free
-      static hosting: a shared key would be exposed in the page and abused. With BYOK the data layer stays free and local, and
-      the reasoning layer is covered by whoever's actually using it.</p>
-    </div>
-  </div>
-</section>
-
-<footer>
-  <div class="wrap">
-    Synthetic-data portfolio build · AI agent → MCP-Toolbox-style governed tools → read-only SQLite ·
-    Runs entirely client-side here via sql.js. Source includes a live local build (Gemini BYOK) and a
-    deterministic zero-cost mode.
-  </div>
-</footer>
-
-<!-- ===================== sql.js + agent logic ===================== -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/sql-wasm.js"></script>
 <script>
-const REFERENCE_DATE = new Date(2026,5,1);  // dataset snapshot anchor (1 June 2026, local)
-function fmt(t){const y=t.getFullYear(),m=String(t.getMonth()+1).padStart(2,'0'),d=String(t.getDate()).padStart(2,'0');return `${y}-${m}-${d}`;}
-function isoMinusDays(d){const t=new Date(REFERENCE_DATE);t.setDate(t.getDate()-d);return fmt(t);}
-const TODAY = fmt(REFERENCE_DATE);
+// ---------- live engine: real SQLite (sql.js) over the same fixed, parameterized tools ----------
+const REFERENCE_DATE = new Date(2026,5,1);            // dataset snapshot: 1 June 2026
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+function fmtDate(t){const y=t.getFullYear(),m=String(t.getMonth()+1).padStart(2,'0'),d=String(t.getDate()).padStart(2,'0');return `${y}-${m}-${d}`;}
+function minusDays(n){const t=new Date(REFERENCE_DATE);t.setDate(t.getDate()-n);return fmtDate(t);}
+const TODAY=fmtDate(REFERENCE_DATE), D14=minusDays(14), D182=minusDays(182), D365=minusDays(365);
 
-let db = null;
+let db=null, dbReady=false;
+const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
 
-// ---- fixed SQL, mirroring toolbox/tools.yaml (values bind; SQL never changes) ----
-const SQL_TOOLS = {
+const SQL = {
   condition_trend:`SELECT substr(diagnosed_date,1,7) AS month, COUNT(*) AS cases
-    FROM conditions WHERE condition=:condition AND diagnosed_date>=:since_date
-    GROUP BY month ORDER BY month`,
-  attendance_trend:`SELECT CASE cast(strftime('%w',datetime) AS int)
-      WHEN 0 THEN 'Sun' WHEN 1 THEN 'Mon' WHEN 2 THEN 'Tue' WHEN 3 THEN 'Wed'
-      WHEN 4 THEN 'Thu' WHEN 5 THEN 'Fri' ELSE 'Sat' END AS weekday,
-      COUNT(*) AS total,
-      SUM(CASE WHEN status='no-show' THEN 1 ELSE 0 END) AS no_shows,
-      ROUND(100.0*SUM(CASE WHEN status='no-show' THEN 1 ELSE 0 END)/COUNT(*),1) AS no_show_pct
-    FROM appointments WHERE datetime>=:start_date AND datetime<:end_date
-    GROUP BY strftime('%w',datetime) ORDER BY cast(strftime('%w',datetime) AS int)`,
-  demand_pattern:`SELECT CASE cast(strftime('%w',datetime) AS int)
-      WHEN 0 THEN 'Sun' WHEN 1 THEN 'Mon' WHEN 2 THEN 'Tue' WHEN 3 THEN 'Wed'
-      WHEN 4 THEN 'Thu' WHEN 5 THEN 'Fri' ELSE 'Sat' END AS weekday, COUNT(*) AS visits
-    FROM appointments WHERE status='attended' AND datetime>=:start_date AND datetime<:end_date
-    GROUP BY strftime('%w',datetime) ORDER BY visits DESC`,
-  frequent_attenders:`SELECT p.name, COUNT(*) AS visits
-    FROM appointments a JOIN patients p ON p.id=a.patient_id
-    WHERE a.status='attended' AND a.datetime>=:since_date
-    GROUP BY a.patient_id HAVING COUNT(*)>=:min_visits ORDER BY visits DESC`,
-  complaint_spike:`SELECT presenting_complaint, COUNT(*) AS cases FROM case_notes
-    WHERE substr(visit_date,1,7)=:month GROUP BY presenting_complaint ORDER BY cases DESC LIMIT 10`,
+    FROM conditions WHERE condition=:condition AND diagnosed_date>=:since GROUP BY month ORDER BY month`,
   segment_patients:`WITH v AS (SELECT patient_id, COUNT(*) visits FROM case_notes GROUP BY patient_id),
       s AS (SELECT patient_id, SUM(amount) spend FROM invoices GROUP BY patient_id),
       agg AS (SELECT p.id, COALESCE(v.visits,0) visits, COALESCE(s.spend,0) spend
@@ -222,111 +202,135 @@ const SQL_TOOLS = {
     FROM agg GROUP BY segment ORDER BY patients DESC`,
   list_inactive_patients:`SELECT p.name, MAX(cn.visit_date) AS last_visit
     FROM patients p JOIN case_notes cn ON cn.patient_id=p.id
-    GROUP BY p.id HAVING MAX(cn.visit_date)<:since_date ORDER BY last_visit`
+    GROUP BY p.id HAVING MAX(cn.visit_date)<:since ORDER BY last_visit`
 };
-
-function runSQL(sql, params){
-  const stmt = db.prepare(sql);
-  if(params) stmt.bind(params);
-  const out=[];
-  while(stmt.step()) out.push(stmt.getAsObject());
-  stmt.free();
-  return out;
-}
+function run(sql,params){const st=db.prepare(sql);if(params)st.bind(params);const out=[];while(st.step())out.push(st.getAsObject());st.free();return out;}
 function cosine(a,b){let s=0;for(let i=0;i<a.length;i++)s+=a[i]*b[i];return s;}
 
-// ---- vector tools (cosine over stored embeddings; fixed candidate queries) ----
-function clusterRecent(start,end,thresh=0.55){
-  const rows=runSQL(`SELECT id,presenting_complaint,embedding FROM case_notes
+// cluster_recent_symptoms — greedy clustering over stored embeddings, then rank the top cluster's members
+function clusterTop(start,end,thresh){
+  const rows=run(`SELECT id,patient_id,presenting_complaint,embedding FROM case_notes
     WHERE visit_date>=:s AND visit_date<:e`,{':s':start,':e':end})
-    .map(r=>({id:r.id,c:r.presenting_complaint,v:JSON.parse(r.embedding)}));
+    .map(r=>({id:r.id,pid:r.patient_id,c:r.presenting_complaint,v:JSON.parse(r.embedding)}));
   const used=new Set(),clusters=[];
   rows.forEach((seed,i)=>{
-    if(used.has(seed.id))return;
-    const members=[seed];used.add(seed.id);
-    for(let j=i+1;j<rows.length;j++){const o=rows[j];
-      if(!used.has(o.id)&&cosine(seed.v,o.v)>=thresh){members.push(o);used.add(o.id);}}
-    const counts={};members.forEach(m=>counts[m.c]=(counts[m.c]||0)+1);
-    const label=Object.entries(counts).sort((a,b)=>b[1]-a[1])[0][0];
-    clusters.push({cluster:label,size:members.length});
+    if(used.has(seed.id))return; const members=[{...seed,sim:1}]; used.add(seed.id);
+    for(let j=i+1;j<rows.length;j++){const o=rows[j];if(used.has(o.id))continue;
+      const sim=cosine(seed.v,o.v); if(sim>=thresh){members.push({...o,sim});used.add(o.id);}}
+    clusters.push(members);
   });
-  return clusters.sort((a,b)=>b.size-a.size);
-}
-function similarCases(caseId,k){
-  const t=runSQL(`SELECT embedding FROM case_notes WHERE id=:id`,{':id':caseId});
-  if(!t.length)return [];
-  const tv=JSON.parse(t[0].embedding);
-  return runSQL(`SELECT presenting_complaint,visit_date,embedding FROM case_notes WHERE id<>:id`,{':id':caseId})
-    .map(r=>({complaint:r.presenting_complaint,visit_date:r.visit_date,similarity:+cosine(tv,JSON.parse(r.embedding)).toFixed(3)}))
-    .sort((a,b)=>b.similarity-a.similarity).slice(0,k);
+  clusters.sort((a,b)=>b.length-a.length);
+  const top=clusters[0]||[];
+  top.sort((a,b)=>b.sim-a.sim);
+  return {size:top.length, members:top};
 }
 
-// ---- deterministic NL router (mirrors agent.py) ----
-function route(q){
-  const ql=q.toLowerCase();
-  const d14=isoMinusDays(14), d180=isoMinusDays(180), d365=isoMinusDays(365);
-  // guardrail intents — no matching tool exists
-  if(/\b(delete|drop|update |insert|remove )\b/.test(ql))
-    return {refused:true,text:"Refused. I have no write tool of any kind — the database connection is read-only and no INSERT/UPDATE/DELETE capability exists for me."};
-  if(/(full record|everything|phone number|raw sql|custom sql|run a query|select \*|join all)/.test(ql))
-    return {refused:true,text:"Refused. There is no tool that dumps full records or runs arbitrary SQL. I can only call pre-approved, parameterized pattern-finding queries — authoring SQL is not a capability I have."};
-  // pattern intents
-  let m;
-  if(/resembl/.test(ql)||(m=ql.match(/case\s*#?(\d+)/))||(/similar/.test(ql)&&/case/.test(ql))){
-    const cid=m?+m[1]:1; return {rows:similarCases(cid,5),tool:`find_similar_cases(case_id=${cid}, top_k=5)`};}
-  if(/cluster|similar symptom|outbreak/.test(ql))
-    return {rows:clusterRecent(d14,TODAY),tool:`cluster_recent_symptoms(${d14} → ${TODAY})`};
-  if(/no.?show|attendance/.test(ql))
-    return {rows:runSQL(SQL_TOOLS.attendance_trend,{':start_date':d180,':end_date':TODAY}),tool:'attendance_trend'};
-  if(/busiest|busy|demand/.test(ql))
-    return {rows:runSQL(SQL_TOOLS.demand_pattern,{':start_date':d180,':end_date':TODAY}),tool:'demand_pattern'};
-  if(/frequent|often/.test(ql))
-    return {rows:runSQL(SQL_TOOLS.frequent_attenders,{':min_visits':10,':since_date':d365}),tool:'frequent_attenders(min_visits=10)'};
-  if(/spike/.test(ql)){const mm=ql.match(/(\d{4}-\d{2})/);
-    return {rows:runSQL(SQL_TOOLS.complaint_spike,{':month':mm?mm[1]:TODAY.slice(0,7)}),tool:'complaint_spike'};}
-  if(/segment/.test(ql))
-    return {rows:runSQL(SQL_TOOLS.segment_patients),tool:'segment_patients'};
-  if(/inactive|lapsing|haven.?t been|not been|over a year|recall/.test(ql))
-    return {rows:runSQL(SQL_TOOLS.list_inactive_patients,{':since_date':d365}),tool:'list_inactive_patients'};
-  if(/trend|rising|more common/.test(ql)){
-    const map={dengue:'Dengue (suspected)',diabetes:'Type 2 Diabetes',hypertension:'Hypertension',cholesterol:'High Cholesterol',asthma:'Asthma',eczema:'Eczema',migraine:'Migraine'};
-    let cond='Dengue (suspected)'; for(const k in map) if(ql.includes(k)) cond=map[k];
-    return {rows:runSQL(SQL_TOOLS.condition_trend,{':condition':cond,':since_date':d180}),tool:`condition_trend(${cond})`};
+const gear=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>`;
+const botAv=`<div class="av bot"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M12 3v3M5.6 5.6l2.1 2.1M3 12h3M18 12h3M16.3 7.7l2.1-2.1"/><rect x="7" y="11" width="10" height="9" rx="3"/><circle cx="10" cy="15" r="1"/><circle cx="14" cy="15" r="1"/></svg></div>`;
+const infoSvg=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>`;
+const badge=t=>`<div class="badge">${gear}<span>${t}</span><span class="lbl">· approved tool</span></div>`;
+const thread=document.getElementById('thread');
+const scroll=()=>thread.scrollTop=thread.scrollHeight;
+function pad(n){return 'P-'+String(n).padStart(4,'0');}
+function initials(name){return name.split(/\s+/).slice(0,2).map(w=>w[0]).join('').toUpperCase();}
+function monthLabel(iso){const m=+iso.slice(5,7),y=iso.slice(0,4);return MONTHS[m-1]+' '+y;}
+
+// ---------- real responses (rendered into the mockup's card components) ----------
+const responses={
+  cluster(){
+    const {size,members}=clusterTop(D14,TODAY,0.55);
+    if(!size) return `${badge('cluster_recent_symptoms')}<div class="lead">No notable symptom clusters in the last 14 days.</div>`;
+    const rows=members.slice(0,6).map(m=>`<div class="crow"><span class="ref">${pad(m.pid)}</span><span class="desc">${esc(m.c)}</span><div class="simwrap"><div class="simbar"><div class="simfill" style="width:${Math.round(m.sim*100)}%"></div></div><div class="simval">${m.sim.toFixed(2)}</div></div></div>`).join('');
+    return `${badge('cluster_recent_symptoms')}
+      <div class="lead">Yes — over the past two weeks I found a grouping of <b>${size} visit${size>1?'s':''}</b> with closely related presentations. Worth a look as a possible cluster.</div>
+      <div class="card"><h4>Similar presentations · last 14 days</h4>
+        <div class="cap">Matched by meaning (vector similarity), not keywords.</div>${rows}
+        <div class="note">${infoSvg} Patient references only — full notes are not returned in pattern views.</div></div>`;
+  },
+  trend(){
+    const data=run(SQL.condition_trend,{':condition':'Dengue (suspected)',':since':D182});
+    if(data.length<2) return `${badge('condition_trend')}<div class="lead">Not enough history to show a trend.</div>`;
+    const vals=data.map(d=>d.cases), maxV=Math.max(...vals), n=vals.length;
+    const X=i=>10+i*(300/(n-1)), Y=v=>95-(v/maxV)*78;
+    const pts=vals.map((v,i)=>`${X(i).toFixed(0)},${Y(v).toFixed(0)}`).join(' ');
+    const poly=`${pts} ${X(n-1).toFixed(0)},100 10,100`;
+    const dots=vals.map((v,i)=>`<circle cx="${X(i).toFixed(0)}" cy="${Y(v).toFixed(0)}" r="${i===n-1?4:3}" fill="${i===n-1?'#1E3A5F':'#4A7FB5'}"/>`).join('');
+    const axis=data.map(d=>`<span>${MONTHS[+d.month.slice(5,7)-1]}</span>`).join('');
+    const delta=Math.round((vals[n-1]-vals[0])/Math.max(vals[0],1)*100);
+    return `${badge('condition_trend')}
+      <div class="lead"><b>Suspected dengue</b> cases have climbed over the last six months — worth watching with the rainy season.</div>
+      <div class="card"><h4>Dengue (suspected) · monthly</h4><div class="cap">${monthLabel(data[0].month+'-01')} – ${monthLabel(data[n-1].month+'-01')}</div>
+        <svg class="chart" viewBox="0 0 320 118" preserveAspectRatio="none">
+          <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4A7FB5" stop-opacity=".22"/><stop offset="1" stop-color="#4A7FB5" stop-opacity="0"/></linearGradient></defs>
+          <line x1="0" y1="100" x2="320" y2="100" stroke="#E3EAF2"/>
+          <polyline points="${pts}" fill="none" stroke="#4A7FB5" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <polygon points="${poly}" fill="url(#g)"/>${dots}</svg>
+        <div class="axis-row">${axis}</div>
+        <div class="delta"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 17l7-7 4 4 5-6"/></svg> ${delta>=0?'+':''}${delta}% vs. six months ago</div></div>`;
+  },
+  segment(){
+    const data=run(SQL.segment_patients);
+    const total=data.reduce((a,d)=>a+d.patients,0), maxP=Math.max(...data.map(d=>d.patients));
+    const order={'High-frequency':0,'Regular':1,'Occasional':2,'Dormant':3};
+    data.sort((a,b)=>(order[a.segment]??9)-(order[b.segment]??9));
+    const bars=data.map(d=>`<div class="seg"><span class="seg-lbl">${esc(d.segment)}</span><div class="seg-track"><div class="seg-fill" style="width:${Math.max(8,Math.round(d.patients/maxP*100))}%">${d.patients}</div></div></div>`).join('');
+    return `${badge('segment_patients')}
+      <div class="lead">Here's the base split by <b>visit frequency</b>. Use the High-frequency and Dormant ends for outreach.</div>
+      <div class="card"><h4>Patient segments · by visit frequency</h4><div class="cap">Across ${total} patients</div>${bars}
+        <div class="note">${infoSvg} Segmentation logic is a defined tool — not a query the assistant wrote.</div></div>`;
+  },
+  lapsing(){
+    const data=run(SQL.list_inactive_patients,{':since':D365});
+    const rows=data.slice(0,5).map(d=>`<div class="lrow"><div class="ini">${initials(d.name)}</div><div class="nm">${esc(d.name)}</div><div class="last">Last visit · ${monthLabel(d.last_visit)}</div></div>`).join('');
+    return `${badge('list_inactive_patients')}
+      <div class="lead"><b>${data.length} patients</b> haven't visited in over a year. Showing the first five — name and last visit only, for a recall.</div>
+      <div class="card"><h4>Inactive &gt; 12 months</h4><div class="cap">Returned fields: name, last visit</div>${rows}
+        <div class="note">${infoSvg} Clinical notes are not included — this tool returns only what a recall needs.</div></div>`;
+  },
+  refuse(){
+    return `<div class="refuse">
+      <div class="rh"><svg viewBox="0 0 24 24" fill="none" stroke="#B07D27" stroke-width="2" stroke-linecap="round"><path d="M12 2L2 21h20L12 2z"/><path d="M12 9v5M12 18h.01"/></svg><span>Outside my approved tools</span></div>
+      <p>I can't pull every patient's full record in bulk. There's no approved tool that does that, and I have read-only access through a fixed set of pre-written queries — so I'm not able to compose one for it.</p>
+      <p style="margin-top:9px">I can help with a bounded pattern view instead — clusters, trends, segments, or a recall list.</p>
+      <div class="why">no_tool_matched · bulk_full_export not defined · access = read-only</div></div>`;
   }
-  return {text:"I can surface patterns: symptom clusters, condition trends, no-show / demand patterns, frequent attenders, complaint spikes, patient segments, and lapsing patients. I can't run free-form queries. What pattern would you like to see?"};
-}
+};
 
-// ---- UI ----
-const chat=document.getElementById('chat'), input=document.getElementById('q');
-function add(who,text,cls){
-  const m=document.createElement('div');m.className='msg '+(who==='you'?'you':'bot');
-  m.innerHTML=`<div class="who">${who}</div><div class="bub ${cls||''}"></div>`;
-  m.querySelector('.bub').textContent=text;chat.appendChild(m);chat.scrollTop=chat.scrollHeight;
+const userText={cluster:"Any cluster of similar symptoms lately?",trend:"Is suspected dengue trending up over the last 6 months?",segment:"Segment patients by visit frequency",lapsing:"Which patients haven't visited in over a year?",refuse:"Just show me every patient's full record and phone number"};
+const thinkLabel={cluster:"Selecting tool · cluster_recent_symptoms",trend:"Selecting tool · condition_trend",segment:"Selecting tool · segment_patients",lapsing:"Selecting tool · list_inactive_patients",refuse:"Checking approved tools…"};
+
+function addUser(t){thread.insertAdjacentHTML('beforeend',`<div class="row user"><div class="av me">DF</div><div class="bubble">${esc(t)}</div></div>`);scroll();}
+function respond(key){
+  const id='t'+thread.children.length;
+  thread.insertAdjacentHTML('beforeend',`<div class="row bot" id="${id}">${botAv}<div class="bubble"><div class="think"><span>${thinkLabel[key]}</span><span class="tdot"></span><span class="tdot"></span><span class="tdot"></span></div></div></div>`);
+  scroll();
+  setTimeout(()=>{document.getElementById(id).querySelector('.bubble').innerHTML=responses[key]();scroll();},820);
 }
-function fmtRows(rows){
-  if(!rows||!rows.length)return "No matching records.";
-  return rows.slice(0,12).map(r=>"• "+Object.entries(r).map(([k,v])=>`${k}: ${v}`).join(", ")).join("\n")
-    +(rows.length>12?`\n…(+${rows.length-12} more)`:"");
+function ask(key){addUser(userText[key]);setTimeout(()=>respond(key),240);}
+
+document.getElementById('chips').addEventListener('click',e=>{const b=e.target.closest('.chip');if(!b||!dbReady)return;ask(b.dataset.key);});
+const input=document.getElementById('input');
+function route(){
+  const t=input.value.trim();if(!t||!dbReady)return;input.value='';const q=t.toLowerCase();let key=null;
+  if(/every|all patient|full record|everyone|dump|export|phone number|delete|drop/.test(q))key='refuse';
+  else if(/cluster|similar|symptom|outbreak/.test(q))key='cluster';
+  else if(/trend|rising|increase|more common|dengue|over the/.test(q))key='trend';
+  else if(/segment|frequency|group|categor/.test(q))key='segment';
+  else if(/laps|inactive|haven'?t|year|recall|not visit/.test(q))key='lapsing';
+  addUser(t);
+  if(key)setTimeout(()=>respond(key),240);
+  else setTimeout(()=>{thread.insertAdjacentHTML('beforeend',`<div class="row bot">${botAv}<div class="bubble"><div class="lead">I'd route that to one of my approved pattern tools. Try a suggested prompt to see it answer live from the database.</div></div></div>`);scroll();},240);
 }
-function ask(q){
-  add('you',q);
-  const r=route(q);
-  if(r.refused){add('assistant',r.text,'refused');return;}
-  let text = r.tool ? `🔧 tool called: ${r.tool}\n\n` : "";
-  text += r.rows!==undefined ? fmtRows(r.rows) : r.text;
-  add('assistant',text);
-}
-document.getElementById('send').onclick=()=>{const q=input.value.trim();if(q){ask(q);input.value='';}};
-input.addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('send').click();});
-document.querySelectorAll('.chip').forEach(c=>c.onclick=()=>ask(c.dataset.q));
+document.getElementById('send').addEventListener('click',route);
+input.addEventListener('keydown',e=>{if(e.key==='Enter')route();});
 
 initSqlJs({locateFile:f=>`https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/${f}`})
-  .then(SQL=>fetch('klinik.db').then(r=>r.arrayBuffer()).then(buf=>{
-    db=new SQL.Database(new Uint8Array(buf));   // in-memory copy — inherently read-only here
-    document.getElementById('status').innerHTML='<span class="ok">● ready</span> — synthetic clinic DB loaded in your browser. Ask away.';
-    add('assistant','Hi — I surface patterns across Klinik Dr Fang\'s (synthetic) records. Try a chip below, or ask in your own words. I can only run pre-approved, read-only queries — so feel free to test the guardrails too.');
+  .then(S=>fetch('klinik.db').then(r=>r.arrayBuffer()).then(buf=>{
+    db=new S.Database(new Uint8Array(buf));dbReady=true;
+    document.getElementById('dbdot').className='dot';
+    document.getElementById('dbstat').textContent='Database ready';
   }))
-  .catch(e=>{document.getElementById('status').innerHTML='<span class="bad">● failed to load</span> — serve this folder over http (e.g. <code>python -m http.server</code>), not file://. '+e;});
+  .catch(e=>{document.getElementById('dbstat').textContent='Load failed — serve over http';console.error(e);});
 </script>
 </body>
 </html>
