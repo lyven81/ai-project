@@ -1,6 +1,6 @@
 # 10 Pax Set B — 吉星 Lucky Star Signature Set B
 
-**Restaurant:** Ji Xing 吉星饭厅
+**Restaurant:** Jade Star Chinese Dining 吉星饭厅
 **Tier:** Premium (Signature)
 **Price:** RM 1,288 (≈ RM 129/pax)
 **Courses:** 10
@@ -12,7 +12,7 @@
 
 ### 1. 龙虾鲍鱼捞生
 **Lobster & Abalone Yee Sang** ⭐ *Signature*
-Sliced fresh Boston lobster and South African abalone tossed with shredded vegetables, candied citrus, gold-leaf crackers, and Ji Xing's house plum-sesame dressing. The signature toss for the highest tier.
+Sliced fresh Boston lobster and South African abalone tossed with shredded vegetables, candied citrus, gold-leaf crackers, and Jade Star Chinese Dining's house plum-sesame dressing. The signature toss for the highest tier.
 
 ### 2. 鸿运六福拼盘
 **Six Blessings Grand Platter**
@@ -76,4 +76,4 @@ Premium bird's nest slow-cooked with snow fungus and almond. The most auspicious
 - Reservation requires 50% deposit; balance settled on the night
 
 ## Why This Set
-The signature 10-pax Set B is Ji Xing's flagship CNY offering — three signature courses (lobster yee sang, cheese-baked lobster, suckling pig) plus a bird's nest finale. Designed for hosts who want every course to carry an auspicious meaning and visual centrepiece value.
+The signature 10-pax Set B is Jade Star Chinese Dining's flagship CNY offering — three signature courses (lobster yee sang, cheese-baked lobster, suckling pig) plus a bird's nest finale. Designed for hosts who want every course to carry an auspicious meaning and visual centrepiece value.

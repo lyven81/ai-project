@@ -1,6 +1,6 @@
 # 6 Pax Set A — 团圆 Reunion Set A
 
-**Restaurant:** Ji Xing 吉星饭厅
+**Restaurant:** Jade Star Chinese Dining 吉星饭厅
 **Tier:** Value
 **Price:** RM 688 (≈ RM 115/pax)
 **Courses:** 8

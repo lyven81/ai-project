@@ -1,4 +1,4 @@
-# Ji Xing 吉星饭厅 — CNY 2026 Reservation Demo
+# Jade Star Chinese Dining 吉星饭厅 — CNY 2026 Reservation Demo
 
 [![WebMCP](https://img.shields.io/badge/WebMCP-W3C%20spec-CBA135)](https://github.com/webmachinelearning/webmcp)
 [![Status](https://img.shields.io/badge/Status-Demo-2D7A3E)](#)
@@ -47,9 +47,9 @@ No backend, no build step, no real payment processing. Everything runs client-si
 2. Open the demo URL
 3. Try one of these prompts:
 
-> *"Find me a CNY reunion dinner at Ji Xing for 10 people, no pork, around RM 1,500 budget."*
+> *"Find me a CNY reunion dinner at Jade Star Chinese Dining for 10 people, no pork, around RM 1,500 budget."*
 
-> *"Book Ji Xing for Reunion Eve dinner, 6 pax, vegetarian, private room if available."*
+> *"Book Jade Star Chinese Dining for Reunion Eve dinner, 6 pax, vegetarian, private room if available."*
 
 > *"Look up booking JX-CNY26-DEMO1 and change the dietary preference to vegetarian."*
 
@@ -248,7 +248,7 @@ What stays the same:
 
 Demo built by Lee Yih Ven as part of the [lyven81/ai-project](https://github.com/lyven81/ai-project) portfolio.
 
-The Ji Xing 吉星饭厅 brand, address, and content are fictional — created solely for demonstration purposes. Any resemblance to a real restaurant is coincidental.
+The Jade Star Chinese Dining 吉星饭厅 brand, address, and content are fictional — created solely for demonstration purposes. Any resemblance to a real restaurant is coincidental.
 
 WebMCP is a W3C draft specification by the [Web Machine Learning Community Group](https://github.com/webmachinelearning/webmcp), led by Google Chrome and Microsoft Edge.
 

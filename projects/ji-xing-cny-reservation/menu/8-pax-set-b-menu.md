@@ -1,6 +1,6 @@
 # 8 Pax Set B — 鸿福 Grand Blessing Set B
 
-**Restaurant:** Ji Xing 吉星饭厅
+**Restaurant:** Jade Star Chinese Dining 吉星饭厅
 **Tier:** Premium
 **Price:** RM 988 (≈ RM 124/pax)
 **Courses:** 9
@@ -12,7 +12,7 @@
 
 ### 1. 鲍鱼三文鱼捞生
 **Abalone & Salmon Yee Sang (large portion)**
-Sliced South African abalone alongside fresh salmon, tossed with shredded vegetables and Ji Xing's signature plum-sesame dressing. Sized for 8.
+Sliced South African abalone alongside fresh salmon, tossed with shredded vegetables and Jade Star Chinese Dining's signature plum-sesame dressing. Sized for 8.
 
 ### 2. 富贵六福拼盘
 **Six Blessings Combination Platter**

@@ -1,6 +1,6 @@
 # 6 Pax Set B — 富贵 Prosperity Set B
 
-**Restaurant:** Ji Xing 吉星饭厅
+**Restaurant:** Jade Star Chinese Dining 吉星饭厅
 **Tier:** Premium
 **Price:** RM 888 (≈ RM 148/pax)
 **Courses:** 9
@@ -12,7 +12,7 @@
 
 ### 1. 鲍鱼三文鱼捞生
 **Abalone & Salmon Yee Sang**
-Sliced South African abalone alongside fresh salmon, tossed with shredded vegetables, candied citrus, golden crackers, and Ji Xing's signature plum-sesame dressing. Premium upgrade from the standard salmon toss.
+Sliced South African abalone alongside fresh salmon, tossed with shredded vegetables, candied citrus, golden crackers, and Jade Star Chinese Dining's signature plum-sesame dressing. Premium upgrade from the standard salmon toss.
 
 ### 2. 五福临门拼盘
 **Five Blessings Combination Platter**

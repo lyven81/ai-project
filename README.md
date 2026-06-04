@@ -370,7 +370,7 @@ The 8 categories below match the [live category pages](https://lyven81.github.io
 - **Problem solved:** AI shopping agents try to shop by taking screenshots and clicking pixel coordinates — which leads to abandoned carts and wrong variants. This storefront exposes a typed contract (7 WebMCP tools) so agents can call `checkFitment` to verify a part matches the customer's car before adding to cart — something pixel-clicking agents simply can't do reliably.
 - **Demo:** [Try it](https://lyven81.github.io/ai-project/projects/sunny-car-accessories/index.html)
 
-#### Ji Xing 吉星饭厅 — CNY Reservation
+#### Jade Star Chinese Dining 吉星饭厅 — CNY Reservation
 - **What it does:** Bilingual CNY reservation page for Malaysian Chinese restaurants. 6 set menus (RM 688–1,288), 7 WebMCP tools. Killer tool: `checkAvailability`.
 - **How it's built:** Vanilla JS + static HTML + WebMCP (W3C `navigator.modelContext`), bilingual EN + 中文, Schema.org structured data.
 - **Problem solved:** Malaysian Chinese restaurants lose CNY revenue to phone-based bookings when customers want online reservations, and AI agents can't navigate multi-step reservation forms reliably. This page exposes 7 typed reservation tools — `checkAvailability` returns mainHall/privateRoom/VIP counts per sitting — so both humans and agents can book without phone tag.
@@ -389,7 +389,7 @@ The 8 categories below match the [live category pages](https://lyven81.github.io
 
 ### Frontend Development
 - **Modern React 18/19 + TypeScript + Vite** for live demos (Skyread, Expense Tracker, PDF Audio Reader, Unusual Coloring Book)
-- **Vanilla JS** for agent-callable storefronts (Sunny Car, Ji Xing) — minimal surface area for WebMCP
+- **Vanilla JS** for agent-callable storefronts (Sunny Car, Jade Star Chinese Dining) — minimal surface area for WebMCP
 - **Streamlit** for analytical apps (TrendMate, MyPropLex, Football Coach, Social Media Marketer)
 - **Tailwind CSS / Recharts / Plotly / Chart.js** for production dashboards
 

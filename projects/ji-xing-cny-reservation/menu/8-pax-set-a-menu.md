@@ -1,6 +1,6 @@
 # 8 Pax Set A — 喜庆 Joyous Set A
 
-**Restaurant:** Ji Xing 吉星饭厅
+**Restaurant:** Jade Star Chinese Dining 吉星饭厅
 **Tier:** Value
 **Price:** RM 888 (≈ RM 111/pax)
 **Courses:** 9

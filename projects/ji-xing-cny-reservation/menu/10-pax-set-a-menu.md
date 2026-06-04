@@ -1,6 +1,6 @@
 # 10 Pax Set A — 团圆 Grand Reunion Set A
 
-**Restaurant:** Ji Xing 吉星饭厅
+**Restaurant:** Jade Star Chinese Dining 吉星饭厅
 **Tier:** Value
 **Price:** RM 1,088 (≈ RM 109/pax)
 **Courses:** 10
