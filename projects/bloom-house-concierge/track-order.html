@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Track Order — Bloom House</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ivory:#FBF5F0; --cream:#FFFFFF; --blush:#F3D9DC; --blush-soft:#FBEDEE;
+  --rose:#A23E5A; --rose-deep:#7E2A40; --plum:#2E1E26; --plum-soft:#6A555E;
+  --sage:#7E8F66; --sage-soft:#EDF0E6; --gold:#C7A45A; --line:#ECDED7;
+  --shadow:0 24px 60px -28px rgba(46,30,38,.45);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Manrope',sans-serif;color:var(--plum);background:
+  radial-gradient(circle at 12% 10%,#FCEFEF,transparent 38%),
+  radial-gradient(circle at 90% 8%,#F6F0E4,transparent 34%),
+  var(--ivory);min-height:100vh;-webkit-font-smoothing:antialiased}
+.display{font-family:'Cormorant Garamond',serif}
+.shopbar{display:flex;align-items:center;justify-content:space-between;max-width:1120px;margin:0 auto;padding:20px 28px}
+.logo{display:flex;align-items:baseline;gap:10px;text-decoration:none}
+.logo .mark{font-family:'Cormorant Garamond',serif;font-size:1.9rem;font-weight:600;color:var(--rose-deep)}
+.logo .sub{font-size:.7rem;letter-spacing:.26em;text-transform:uppercase;color:var(--sage)}
+.shopnav{display:flex;gap:26px;font-size:.86rem}
+.shopnav a{color:var(--plum-soft);text-decoration:none}
+.shopnav a:hover,.shopnav a.on{color:var(--rose)}
+.wrap{max-width:620px;margin:0 auto;padding:6px 28px 64px}
+.pagehead{text-align:center;padding:10px 0 20px}
+.pagehead .eyebrow{font-size:.72rem;letter-spacing:.24em;text-transform:uppercase;color:var(--sage)}
+.pagehead h1{font-family:'Cormorant Garamond',serif;font-size:2.6rem;font-weight:600;color:var(--plum);margin-top:6px}
+.pagehead p{color:var(--plum-soft);margin-top:6px}
+
+.tracker{background:var(--cream);border:1px solid var(--line);border-radius:18px;padding:28px;box-shadow:var(--shadow)}
+.field label{font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;color:var(--sage);display:block;margin-bottom:7px}
+.inrow{display:flex;gap:10px}
+.inrow input{flex:1;border:1px solid var(--line);border-radius:13px;padding:13px 15px;font-family:'Manrope';font-size:1rem;color:var(--plum);background:var(--ivory)}
+.inrow input:focus{outline:none;border-color:var(--rose);background:#fff}
+.inrow button{border:none;border-radius:13px;background:var(--rose);color:#fff;font-family:'Manrope';font-weight:600;padding:0 22px;cursor:pointer;box-shadow:0 10px 22px -10px var(--rose-deep)}
+.inrow button:hover{transform:translateY(-2px);transition:transform .15s}
+.hint{font-size:.8rem;color:var(--plum-soft);margin-top:10px}
+.hint code{background:var(--blush-soft);color:var(--rose-deep);padding:1px 7px;border-radius:5px;cursor:pointer}
+
+.result{margin-top:20px;display:none}
+.result.show{display:block;animation:rise .3s ease}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.rcard{border:1px solid #d7e0c8;background:linear-gradient(135deg,#fff,var(--sage-soft));border-left:4px solid var(--sage);border-radius:14px;padding:18px 20px}
+.rcard.miss{border-color:var(--blush);background:linear-gradient(135deg,#fff,var(--blush-soft));border-left-color:var(--rose)}
+.rcard .ono{font-family:'Consolas',monospace;font-weight:700;color:var(--rose-deep)}
+.rcard .stat{font-family:'Cormorant Garamond',serif;font-size:1.5rem;color:var(--plum);margin:6px 0 4px;text-transform:capitalize}
+.rcard .eta{color:var(--plum-soft);font-size:.92rem}
+.rcard a{color:var(--rose);font-weight:600;text-decoration:none}
+.steps{display:flex;gap:8px;margin-top:14px}
+.step{flex:1;text-align:center;font-size:.72rem;color:var(--plum-soft)}
+.step .dot{height:8px;border-radius:6px;background:var(--line);margin-bottom:6px}
+.step.on .dot{background:var(--sage)}
+.step.on{color:#4f6235;font-weight:600}
+footer{text-align:center;margin-top:40px;color:#9a8f7e;font-size:.82rem;font-weight:300}
+footer .mark{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--rose)}
+@media(max-width:640px){.shopnav{display:none}}
+</style>
+</head>
+<body>
+  <div class="shopbar">
+    <a class="logo" href="index.html"><span class="mark display">Bloom House</span><span class="sub">Kuala Lumpur</span></a>
+    <nav class="shopnav"><a href="flowers.html">Flowers</a><a href="occasions.html">Occasions</a><a href="gifts.html">Gifts</a><a href="delivery.html">Delivery</a><a href="track-order.html" class="on">Track Order</a></nav>
+  </div>
+
+  <div class="wrap">
+    <div class="pagehead">
+      <div class="eyebrow">Where are my flowers?</div>
+      <h1 class="display">Track Your Order</h1>
+      <p>Enter your order number to see where it is. This reads your order; it never changes it.</p>
+    </div>
+
+    <div class="tracker">
+      <div class="field">
+        <label>Order number</label>
+        <div class="inrow">
+          <input id="ono" type="text" placeholder="e.g. BC10432" onkeydown="if(event.key==='Enter')track()">
+          <button onclick="track()">Track</button>
+        </div>
+        <div class="hint">Try <code onclick="fill('BC10432')">BC10432</code>, <code onclick="fill('BC10500')">BC10500</code> or <code onclick="fill('BC10288')">BC10288</code>.</div>
+      </div>
+      <div class="result" id="result"></div>
+    </div>
+
+    <footer>&copy; 2026 <span class="mark">Bloom House</span> &middot; Kuala Lumpur</footer>
+  </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/sql-wasm.js"></script>
+<script src="data/db.js"></script>
+<script>
+/* Read-only order lookup: one FIXED query against the same bloom-house.db. */
+let DB=null;
+function b64ToBytes(b64){const bin=atob(b64);const n=bin.length;const a=new Uint8Array(n);for(let i=0;i<n;i++)a[i]=bin.charCodeAt(i);return a;}
+initSqlJs({locateFile:f=>'https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/'+f})
+  .then(SQL=>{DB=new SQL.Database(b64ToBytes(window.BLOOM_DB_B64));})
+  .catch(e=>console.error('sql.js failed',e));
+
+function fill(v){document.getElementById('ono').value=v;track();}
+function track(){
+  const no=document.getElementById('ono').value.trim().toUpperCase();
+  const box=document.getElementById('result');
+  if(!no){box.className='result';return;}
+  if(!DB){box.className='result show';box.innerHTML='<div class="rcard miss"><div class="stat">One moment</div><div class="eta">The order system is still loading, please try again in a second.</div></div>';return;}
+  const s=DB.prepare("SELECT status,eta FROM orders WHERE order_no = ?"); s.bind([no]);
+  let row=null; if(s.step()) row=s.getAsObject(); s.free();
+  box.className='result show';
+  if(row){
+    const stages=['being prepared','out for delivery','delivered'];
+    const idx=stages.indexOf(row.status);
+    const steps=['Preparing','Out for delivery','Delivered'].map((label,i)=>
+      '<div class="step'+(i<=idx?' on':'')+'"><div class="dot"></div>'+label+'</div>').join('');
+    box.innerHTML='<div class="rcard"><div class="ono">'+no+'</div><div class="stat">'+row.status+'</div>'+
+      '<div class="eta">Expected '+row.eta+'. You\'ll get a photo once it\'s handed over.</div>'+
+      '<div class="steps">'+steps+'</div></div>';
+  } else {
+    box.innerHTML='<div class="rcard miss"><div class="ono">'+no+'</div><div class="stat">Not found</div>'+
+      '<div class="eta">We couldn\'t find that order number. Double-check your confirmation email, or <a href="index.html">ask Lucy</a>.</div></div>';
+  }
+}
+</script>
+</body>
+</html>

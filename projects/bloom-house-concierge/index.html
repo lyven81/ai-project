@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bloom House — Lucy Concierge</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ivory:#FBF5F0; --cream:#FFFFFF; --blush:#F3D9DC; --blush-soft:#FBEDEE;
+  --rose:#A23E5A; --rose-deep:#7E2A40; --plum:#2E1E26; --plum-soft:#6A555E;
+  --sage:#7E8F66; --sage-soft:#EDF0E6; --gold:#C7A45A; --line:#ECDED7;
+  --shadow:0 24px 60px -28px rgba(46,30,38,.45);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{font-family:'Manrope',sans-serif;color:var(--plum);background:
+  radial-gradient(circle at 12% 10%,#FCEFEF,transparent 38%),
+  radial-gradient(circle at 90% 8%,#F6F0E4,transparent 34%),
+  var(--ivory);min-height:100vh;-webkit-font-smoothing:antialiased}
+.display{font-family:'Cormorant Garamond',serif}
+
+/* storefront bar */
+.shopbar{display:flex;align-items:center;justify-content:space-between;max-width:1120px;margin:0 auto;padding:20px 28px}
+.logo{display:flex;align-items:baseline;gap:10px;text-decoration:none}
+.logo .mark{font-family:'Cormorant Garamond',serif;font-size:1.9rem;font-weight:600;color:var(--rose-deep)}
+.logo .sub{font-size:.7rem;letter-spacing:.26em;text-transform:uppercase;color:var(--sage)}
+.shopnav{display:flex;gap:26px;font-size:.86rem;color:var(--plum-soft)}
+.shopnav a{color:var(--plum-soft);text-decoration:none}
+.shopnav a:hover{color:var(--rose)}
+
+.hero{max-width:1120px;margin:0 auto;padding:4px 28px 20px;text-align:center}
+.hero h1{font-family:'Cormorant Garamond',serif;font-size:2.5rem;font-weight:600;line-height:1.1;color:var(--plum)}
+.hero p{color:var(--plum-soft);margin-top:6px;font-size:1.0rem}
+.hero .ribbon{display:inline-block;margin-top:12px;background:var(--sage-soft);color:#566b3c;border:1px solid #dce4cd;padding:6px 16px;border-radius:30px;font-size:.82rem}
+
+/* stage */
+.stage{max-width:1120px;margin:8px auto 60px;padding:0 28px;display:grid;grid-template-columns:1fr 330px;gap:24px;align-items:start}
+
+/* chat card */
+.chat{background:var(--cream);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column;min-height:640px}
+.chat-head{display:flex;align-items:center;gap:14px;padding:18px 22px;background:linear-gradient(135deg,var(--rose-deep),var(--rose));color:#fff}
+.avatar{width:46px;height:46px;border-radius:50%;background:rgba(255,255,255,.18);display:grid;place-items:center;flex:none;border:1px solid rgba(255,255,255,.3)}
+.chat-head .name{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:600;line-height:1}
+.chat-head .status{font-size:.76rem;opacity:.9;display:flex;align-items:center;gap:6px;margin-top:3px}
+.dot-live{width:7px;height:7px;border-radius:50%;background:#9ad29a;box-shadow:0 0 0 3px rgba(154,210,154,.3)}
+
+.body{flex:1;padding:22px;overflow-y:auto;display:flex;flex-direction:column;gap:14px;min-height:300px}
+.msg{max-width:82%;padding:12px 16px;border-radius:16px;font-size:.95rem;line-height:1.55;animation:rise .3s ease}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.msg.bot{align-self:flex-start;background:var(--blush-soft);border:1px solid var(--blush);border-bottom-left-radius:5px;color:var(--plum)}
+.msg.me{align-self:flex-end;background:var(--rose);color:#fff;border-bottom-right-radius:5px}
+.msg.bot b{color:var(--rose-deep)}
+
+/* product cards */
+.cards{display:flex;flex-direction:column;gap:10px;align-self:flex-start;max-width:90%}
+.pcard{display:flex;gap:14px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px;align-items:center;animation:rise .35s ease}
+.pthumb{width:62px;height:62px;border-radius:11px;flex:none;display:grid;place-items:center}
+.pcard .pname{font-family:'Cormorant Garamond',serif;font-size:1.22rem;font-weight:600;color:var(--plum);line-height:1.1}
+.pcard .preason{font-size:.82rem;color:var(--plum-soft);margin-top:3px}
+.pcard .pprice{font-size:.86rem;color:var(--rose);font-weight:700;margin-top:5px}
+.pcard .pbtn{margin-left:auto;align-self:center;background:var(--sage);color:#fff;border:none;padding:8px 14px;border-radius:9px;font-family:'Manrope';font-weight:600;font-size:.8rem;cursor:pointer;white-space:nowrap;flex:none}
+.pcard .pbtn:hover{filter:brightness(1.05)}
+
+/* handoff banner */
+.handoff{align-self:stretch;background:linear-gradient(135deg,#fff,var(--sage-soft));border:1px solid #d7e0c8;border-left:4px solid var(--sage);border-radius:14px;padding:16px 18px;animation:rise .35s ease}
+.handoff .h-top{display:flex;align-items:center;gap:9px;font-weight:700;color:#4f6235;font-size:.92rem}
+.handoff .summary{margin-top:10px;font-size:.82rem;color:var(--plum-soft);background:#fff;border:1px dashed #d7e0c8;border-radius:10px;padding:11px 13px}
+.handoff .summary i{color:var(--sage);font-style:normal;font-weight:600}
+
+/* typing */
+.typing{align-self:flex-start;display:flex;gap:5px;padding:13px 16px;background:var(--blush-soft);border:1px solid var(--blush);border-radius:16px;border-bottom-left-radius:5px}
+.typing span{width:7px;height:7px;border-radius:50%;background:var(--rose);opacity:.5;animation:blink 1.2s infinite}
+.typing span:nth-child(2){animation-delay:.2s}.typing span:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,60%,100%{opacity:.3;transform:translateY(0)}30%{opacity:1;transform:translateY(-3px)}}
+
+/* prompts: segmented toggle + tidy chip rail */
+.prompts{border-top:1px solid var(--line);padding:14px 22px 4px}
+.seg{display:inline-flex;flex-wrap:wrap;background:var(--ivory);border:1px solid var(--line);border-radius:30px;padding:3px;gap:3px}
+.seg-btn{border:none;background:transparent;color:var(--plum-soft);font-family:'Manrope';font-weight:600;font-size:.76rem;padding:7px 13px;border-radius:30px;cursor:pointer;transition:all .18s}
+.seg-btn.active.help{background:var(--rose);color:#fff}
+.seg-btn.active.human{background:var(--sage);color:#fff}
+.seg-btn.active.decline{background:var(--gold);color:#fff}
+.rail-label{font-size:.72rem;color:var(--plum-soft);margin:11px 2px 7px;letter-spacing:.02em}
+.chip-rail{display:flex;flex-wrap:wrap;gap:7px;max-height:118px;overflow-y:auto;padding:2px 2px 6px;scrollbar-width:thin}
+.chip-rail::-webkit-scrollbar{width:6px}
+.chip-rail::-webkit-scrollbar-thumb{background:var(--line);border-radius:6px}
+.chip{border:1px solid var(--line);background:var(--ivory);color:var(--plum-soft);padding:7px 12px;border-radius:30px;font-size:.78rem;cursor:pointer;font-family:'Manrope';transition:all .18s;line-height:1.2}
+.chip:hover{background:var(--blush-soft);border-color:var(--blush);color:var(--rose-deep)}
+.chip.esc{background:#fff;border-color:#d7e0c8}
+.chip.esc:hover{background:var(--sage-soft);border-color:var(--sage);color:#4f6235}
+.chip.dec{background:#fff;border-color:var(--line)}
+.chip.dec:hover{background:#FBF6EE;border-color:var(--gold);color:#8a6d1f}
+
+.inputrow{display:flex;gap:10px;padding:12px 22px 20px;align-items:flex-end}
+.inputrow textarea{flex:1;resize:none;border:1px solid var(--line);border-radius:14px;padding:12px 15px;font-family:'Manrope';font-size:.95rem;color:var(--plum);background:var(--ivory);max-height:110px}
+.inputrow textarea:focus{outline:none;border-color:var(--rose);background:#fff}
+.send{width:48px;height:48px;border:none;border-radius:14px;background:var(--rose);color:#fff;font-size:1.2rem;cursor:pointer;flex:none;box-shadow:0 10px 22px -10px var(--rose-deep);transition:transform .15s}
+.send:hover{transform:translateY(-2px)}
+
+/* behind the scenes */
+.bts{background:var(--cream);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);padding:22px;position:sticky;top:20px}
+.bts h3{font-family:'Cormorant Garamond',serif;font-size:1.45rem;color:var(--rose-deep);margin-bottom:3px}
+.bts .lead{font-size:.8rem;color:var(--plum-soft);margin-bottom:16px}
+.field{margin-bottom:13px}
+.field label{font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--sage);display:block;margin-bottom:5px}
+.field .val{font-size:.95rem;color:var(--plum);font-weight:600}
+.field .tool{font-family:'Consolas',monospace;font-size:.85rem;color:var(--rose-deep)}
+.bar{height:8px;border-radius:6px;background:var(--ivory);border:1px solid var(--line);overflow:hidden;margin-top:5px}
+.bar > i{display:block;height:100%;background:linear-gradient(90deg,var(--rose),var(--gold));transition:width .4s}
+.decision{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:30px;font-weight:700;font-size:.82rem}
+.decision.answered{background:var(--sage-soft);color:#4f6235;border:1px solid #d7e0c8}
+.decision.escalated{background:var(--blush-soft);color:var(--rose-deep);border:1px solid var(--blush)}
+.decision.declined{background:#FBF6EE;color:#8a6d1f;border:1px solid #ecd9b0}
+.reason{font-size:.82rem;color:var(--plum-soft);margin-top:8px;font-style:italic}
+
+.asset{margin-top:16px;border-top:1px solid var(--line);padding-top:14px}
+.asset .a-lock{display:flex;align-items:center;gap:8px;font-size:.76rem;color:#4f6235;font-weight:600}
+.asset .a-lock .d{width:7px;height:7px;border-radius:50%;background:var(--sage)}
+.asset .a-head{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--sage);margin:12px 0 7px}
+.asset ul{list-style:none;display:flex;flex-direction:column;gap:4px}
+.asset li{font-family:'Consolas',monospace;font-size:.78rem;color:var(--plum-soft)}
+.asset .note{font-size:.72rem;color:var(--plum-soft);margin-top:10px;line-height:1.5}
+
+.bts-handoff{margin-top:14px;border-top:1px solid var(--line);padding-top:14px}
+.bts-handoff .bh-head{display:flex;align-items:center;gap:8px;font-weight:700;color:#4f6235;font-size:.82rem}
+.bts-handoff .bh-summary{margin-top:9px;font-size:.8rem;color:var(--plum-soft);background:var(--sage-soft);border:1px dashed #d7e0c8;border-radius:10px;padding:11px 13px;line-height:1.65}
+.bts-handoff .bh-summary i{color:#4f6235;font-style:normal;font-weight:600}
+
+.log{margin-top:14px;border-top:1px solid var(--line);padding-top:12px}
+.log .l{font-size:.74rem;color:var(--plum-soft);font-family:'Consolas',monospace;padding:3px 0;border-bottom:1px dotted var(--line)}
+.log .l b{color:var(--rose)}
+
+@media(max-width:900px){
+  .stage{grid-template-columns:1fr}
+  .bts{position:static}
+  .shopnav{display:none}
+  .hero h1{font-size:2rem}
+  .chat{min-height:560px}
+}
+</style>
+</head>
+<body>
+
+  <div class="shopbar">
+    <a class="logo" href="index.html"><span class="mark display">Bloom House</span><span class="sub">Kuala Lumpur</span></a>
+    <nav class="shopnav"><a href="flowers.html">Flowers</a><a href="occasions.html">Occasions</a><a href="gifts.html">Gifts</a><a href="delivery.html">Delivery</a><a href="track-order.html">Track Order</a></nav>
+  </div>
+
+  <div class="hero">
+    <h1 class="display">Flowers that say it perfectly</h1>
+    <p>Not sure what to send? Ask Lucy, our flower concierge.</p>
+    <div class="ribbon">&#10048; Same-day delivery across KL &amp; Selangor &middot; 2-day delivery nationwide</div>
+  </div>
+
+  <div class="stage">
+
+    <!-- CHAT -->
+    <div class="chat">
+      <div class="chat-head">
+        <div class="avatar display" style="font-size:1.5rem">L</div>
+        <div>
+          <div class="name">Lucy</div>
+          <div class="status"><span class="dot-live"></span> Flower concierge &middot; here to help</div>
+        </div>
+      </div>
+
+      <div class="body" id="body"></div>
+
+      <div class="prompts">
+        <div class="seg">
+          <button class="seg-btn help active" id="seg-help" onclick="showGroup('help')">Lucy can help &middot; 11</button>
+          <button class="seg-btn human" id="seg-human" onclick="showGroup('human')">To a human &middot; 10</button>
+          <button class="seg-btn decline" id="seg-decline" onclick="showGroup('decline')">Declined &middot; 8</button>
+        </div>
+        <div class="rail-label" id="rail-label">Information questions &mdash; Lucy answers these from the shop's approved tools.</div>
+        <div class="chip-rail" id="rail"></div>
+      </div>
+
+      <div class="inputrow">
+        <textarea id="input" rows="1" placeholder="Ask Lucy anything&hellip;" onkeydown="onKey(event)" oninput="grow(this)"></textarea>
+        <button class="send" onclick="sendMsg()">&#10142;</button>
+      </div>
+    </div>
+
+    <!-- BEHIND THE SCENES -->
+    <aside class="bts">
+      <h3 class="display">Behind the scenes</h3>
+      <div class="lead">How Lucy handled the last message. This panel is for the shop, not the customer.</div>
+
+      <div class="field"><label>Detected intent</label><div class="val" id="f-intent">&mdash;</div></div>
+      <div class="field"><label>Approved tool used</label><div class="val tool" id="f-tool">&mdash;</div></div>
+      <div class="field"><label>Confidence</label><div class="bar"><i id="f-confbar" style="width:0%"></i></div><div class="val" id="f-conf" style="font-size:.8rem;margin-top:4px">&mdash;</div></div>
+      <div class="field"><label>Customer mood</label><div class="val" id="f-mood">&mdash;</div></div>
+      <div class="field"><label>Decision</label><div><span class="decision answered" id="f-decision">Waiting&hellip;</span></div><div class="reason" id="f-reason"></div></div>
+
+      <div class="bts-handoff" id="bts-handoff" style="display:none">
+        <div class="bh-head">&#10048; Passed to Ms. Young (manager)</div>
+        <div class="bh-summary" id="bh-summary"></div>
+      </div>
+
+      <div class="asset">
+        <div class="a-lock"><span class="d"></span> Read-only &middot; cannot refund, cancel, or change orders</div>
+        <div class="a-head">Approved tools &middot; 8 fixed</div>
+        <ul>
+          <li>recommend_bouquets</li>
+          <li>get_delivery_cutoff</li>
+          <li>get_coverage_areas</li>
+          <li>get_care_tips</li>
+          <li>get_hours</li>
+          <li>get_store_location</li>
+          <li>flower_meaning</li>
+          <li>get_order_status</li>
+        </ul>
+        <div class="note">Information-type questions map to one of these eight fixed tools, and Lucy supplies values only. Decision-type requests (refunds, cancellations, order changes, commitments) have no tool, so they go to a human. Private, internal, or non-business questions are politely declined and never transferred.</div>
+      </div>
+
+      <div class="log" id="log"></div>
+    </aside>
+
+  </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/sql-wasm.js"></script>
+<script src="data/db.js"></script>
+<script>
+/* ============================================================
+   BLOOM HOUSE — GOVERNED TOOLSET (klinik-dr-fang style)
+   The agent's whole universe is the 7 fixed tools below.
+   It chooses which tool and supplies parameter values only.
+   No tool can write, refund, cancel, or change an order, so
+   anything out of scope structurally routes to a human.
+   ============================================================ */
+
+/* ---------- LIVE SQLITE (sql.js) — catalogue + orders DB ---------- */
+let DB = null;
+function b64ToBytes(b64){ const bin=atob(b64); const n=bin.length; const a=new Uint8Array(n); for(let i=0;i<n;i++) a[i]=bin.charCodeAt(i); return a; }
+function runRows(sql, params){   /* read-only helper: prepare, bind, step. No write path exists. */
+  if(!DB) return [];
+  const s=DB.prepare(sql); s.bind(params); const out=[];
+  while(s.step()) out.push(s.getAsObject());
+  s.free(); return out;
+}
+initSqlJs({locateFile:f=>'https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/'+f})
+  .then(SQL=>{ DB=new SQL.Database(b64ToBytes(window.BLOOM_DB_B64)); })
+  .catch(e=>console.error('sql.js failed to load', e));
+
+const FLOWER_MEANING = {
+  rose:'Roses speak of love and deep affection',
+  peony:'Peonies carry good fortune and a happy celebration',
+  lily:'Lilies offer grace and quiet comfort',
+  carnation:'Carnations mean gratitude and lasting bonds',
+  tulip:'Tulips bring cheer and a fresh start',
+  hydrangea:'Hydrangeas express heartfelt thanks'
+};
+const COLOURS = {rose:'#C0445F',peony:'#E59AB0',lily:'#EFE7DA',carnation:'#E89AAE',tulip:'#E6A15C',hydrangea:'#C9A6D6'};
+const PHOTO = {'peony-box':'products/images/peony-box.png','lily-pink':'products/images/lily-pink.png','cond-stand':'products/images/cond-stand.png'};
+
+const KB = {
+  sameDay:['kuala lumpur','kl','selangor','petaling jaya','pj','klang','subang','shah alam','puchong','cheras','ampang'],
+  twoDay:['penang','johor','johor bahru','jb','kedah','negeri sembilan','seremban','melaka','malacca','perak','ipoh','pahang'],
+  care:"To keep your flowers fresh: trim the stems, use clean water, keep them out of direct sun, and change the water every two days. Every order also comes with a <b>free personalised card and a photo on delivery</b>.",
+  hours:"Our stores are open daily, <b>9 AM to 6 PM</b>, and our support team is here every day, <b>9 AM to 7 PM</b>, on WhatsApp and email.",
+  store:"Our main store is in <b>Petaling Jaya, Selangor</b>, open daily 9 AM to 6 PM, with a second outlet at <b>KPJ Damansara Specialist Hospital 2</b> in Kuala Lumpur. You're welcome to visit us, or I can arrange a delivery instead."
+};
+function deliveryClass(state){
+  if(!state) return null;
+  if(KB.sameDay.some(s=>state.includes(s)||s.includes(state))) return 'same';
+  if(KB.twoDay.some(s=>state.includes(s)||s.includes(state))) return 'two';
+  return 'other';
+}
+
+/* ---------- THE 7 APPROVED TOOLS (fixed; values flow in) ---------- */
+const TOOLS = {
+  recommend_bouquets({occasion, maxBudget, colour}){   /* FIXED query; agent supplies values only */
+    const FQ = "SELECT id,name,flower,colour,price,url FROM products WHERE occasions LIKE '%,'||?||',%' AND price <= ? AND (?='' OR colour=?) ORDER BY price DESC LIMIT 2";
+    let rows = runRows(FQ, [occasion, maxBudget||99999, colour||'', colour||'']);
+    if(rows.length===0 && colour)
+      rows = runRows("SELECT id,name,flower,colour,price,url FROM products WHERE occasions LIKE '%,'||?||',%' AND price <= ? ORDER BY price DESC LIMIT 2", [occasion, maxBudget||99999]);
+    return rows.map(p => ({...p, reason: FLOWER_MEANING[p.flower] + ', a fitting choice here.'}));
+  },
+  get_delivery_cutoff({state}){
+    const cls = deliveryClass(state);
+    if(cls==='same') return "For <b>Kuala Lumpur and Selangor</b>, order by <b>5 PM</b> for free same-day delivery.";
+    if(cls==='two')  return "We deliver there, but it's a longer trip from our Petaling Jaya store, so it arrives <b>within 2 days</b> rather than same-day.";
+    return "<b>Same-day delivery</b> (order by 5 PM) covers <b>Kuala Lumpur and Selangor</b>. Further states such as Penang and Johor arrive <b>within 2 days</b>, as they are about five hours' drive away.";
+  },
+  get_coverage_areas({state}){
+    const cls = deliveryClass(state);
+    if(cls==='same') return "Yes, we deliver there <b>same-day</b> (order by 5 PM).";
+    if(cls==='two')  return "Yes, we deliver there. As it is a longer trip from our Petaling Jaya store, it arrives <b>within 2 days</b>, not same-day.";
+    return "We deliver <b>same-day in Kuala Lumpur and Selangor</b>, and <b>within 2 days</b> to the rest of Peninsular Malaysia, including Penang and Johor.";
+  },
+  get_care_tips(){ return KB.care; },
+  get_hours(){ return KB.hours; },
+  flower_meaning({flower}){
+    const f = flower && FLOWER_MEANING[flower] ? flower : 'rose';
+    return FLOWER_MEANING[f] + ".";
+  },
+  get_order_status({orderNo}){   /* READ ONLY — fixed SELECT, never writes */
+    const rows = runRows("SELECT status,eta FROM orders WHERE order_no = ?", [orderNo||'']);
+    if(rows.length) return "Order <b>"+orderNo+"</b> is <b>"+rows[0].status+"</b> and should arrive "+rows[0].eta+". You'll get a photo once it's handed over.";
+    return "I couldn't find an order with that number. Please double-check it on your confirmation email.";
+  },
+  get_store_location(){ return KB.store; }
+};
+
+/* ---------- EXCLUDED CAPABILITIES (no tool exists -> human) ---------- */
+const COMPLAINT  = ['wilted','wilt','dead','dying','wrong','damaged','broken','never arrived',"didn't arrive",'did not arrive','charged twice','double charged','charged me twice','missing'];
+const MONEY      = ['refund','money back','overcharged','paid twice','payment failed','charged','billing','invoice'];
+const ORDER_CHG  = ['cancel','change','move the delivery','reschedule','swap','replace','amend','different address','change address','add a teddy','teddy bear','add-on'];
+const CUSTOM_BULK= ['custom','wedding','corporate','bulk','50 bouquet','event arrangement','quotation'];
+const GUARANTEE  = ['guarantee','exactly','sharp','precisely','at 2 pm','by 2pm'];
+const UPSET      = ['angry','furious','terrible','awful','unacceptable','disappointed','upset','ruined','horrible','worst'];
+
+/* ---------- OUT OF BOUNDS (Lucy declines; never transferred) ---------- */
+/* Private staff, internal, supplier, financial, ownership, and non-business topics.
+   Ms. Young is a publicly designated contact, so naming her as the manager is fine;
+   her schedule and personal details are still private. */
+const DEC = {
+  staffCount:   ['how many staff','how many employ','number of staff','how many people work','how many workers','how many florist','team size','how big is your team','how many of you'],
+  staffSchedule:['working today','working tomorrow','working now','on shift','who is working','is anyone working','on duty','day off','your roster','schedule today','who is on','is ms','is mr','is mrs'],
+  staffContact: ['personal phone','personal number','personal contact','personal email','home address','her number','his number','their number','mobile number','handphone','phone number of','number of ms','contact details of','whatsapp number of'],
+  staffName:    ['name of the florist','name of your staff','who made my','who prepared my','which staff','name of the person','who is your florist','staff name','your staff name','name of the lady','name of the guy'],
+  supplier:     ['supplier','where do you buy your flower','where do you get your flower','where are your flowers from','wholesaler','who supplies'],
+  margin:       ['profit','margin','markup','how much do you make','how much do you earn','your cost price'],
+  ownership:    ['who owns','owner of the business','shareholder','who is the boss','company registration','registered owner','who founded'],
+  internal:     ['internal process','how do you run','performance metric','how many orders do you get','your revenue','your sales figure','kpi','how many sales'],
+  nonbiz:       ['weather','are you free','free tonight','are you single','date me','go out with me','tell me a joke','do you love me','are you married','who are you dating','sing a song','your horoscope']
+};
+function declineReason(t){
+  if(matchesAny(t,DEC.staffCount))    return 'staff numbers are private';
+  if(matchesAny(t,DEC.staffSchedule)) return 'staff schedules are private';
+  if(matchesAny(t,DEC.staffContact))  return 'staff personal contact details are private';
+  if(matchesAny(t,DEC.staffName))     return 'staff names are not disclosed';
+  if(matchesAny(t,DEC.supplier))      return 'supplier information is confidential';
+  if(matchesAny(t,DEC.margin))        return 'pricing and profit internals are confidential';
+  if(matchesAny(t,DEC.ownership))     return 'business ownership details are not disclosed';
+  if(matchesAny(t,DEC.internal))      return 'internal processes and metrics are confidential';
+  if(matchesAny(t,DEC.nonbiz))        return 'not related to Bloom House orders';
+  return null;
+}
+
+/* ---------- ROUTING ---------- */
+const OCCASIONS=['birthday','anniversary','condolence','funeral','get-well','get well','congrats','congratulation','love','apology','thank-you','thank you','friendship','just-because'];
+const CONSULT  =['recommend','suggest','what should','looking for','gift for','help me choose','idea','ideas','send flowers','something for','send for','what do you suggest'];
+
+function matchesAny(t,list){ return list.some(w=>t.includes(w)); }
+
+function escalationReason(t){
+  if(matchesAny(t,COMPLAINT))   return {reason:'complaint or failed delivery', situation:'Customer reports a problem with a delivered order.'};
+  if(matchesAny(t,MONEY))       return {reason:'touches money (refund / payment / billing)', situation:'Customer raised a money or billing issue.'};
+  if(matchesAny(t,ORDER_CHG))   return {reason:'asks to change or cancel an order', situation:'Customer wants to change or cancel an existing order.'};
+  if(matchesAny(t,CUSTOM_BULK)) return {reason:'custom, wedding, corporate or bulk request', situation:'Customer needs a custom or bulk arrangement.'};
+  if(matchesAny(t,GUARANTEE))   return {reason:"asks for a delivery-time guarantee Lucy can't promise", situation:'Customer wants a specific-time delivery guarantee.'};
+  if(matchesAny(t,UPSET))       return {reason:'customer sounds upset', situation:'Customer is upset and needs a person.'};
+  return null;
+}
+function moodOf(t){
+  if(matchesAny(t,UPSET)) return 'Upset';
+  if(matchesAny(t,COMPLAINT) || matchesAny(t,GUARANTEE) || t.includes('tomorrow')) return 'Concerned';
+  return 'Calm';
+}
+function extractOccasion(t){
+  for(const o of OCCASIONS){ if(t.includes(o)) return o.replace(' ','-').replace('congratulation','congrats').replace('funeral','condolence').replace('get well','get-well'); }
+  return null;
+}
+function extractBudget(t){ const m = t.match(/(?:rm|under|below|max|up to)\s*\$?\s*(\d{2,4})/i); return m ? parseInt(m[1]) : null; }
+function extractColour(t){ for(const c of ['pink','red','white','purple','yellow','orange']){ if(t.includes(c)) return c; } return null; }
+function extractState(t){ for(const s of [...KB.sameDay,...KB.twoDay]){ if(t.includes(s)) return s; } return null; }
+function extractFlower(t){ for(const f of Object.keys(FLOWER_MEANING)){ if(t.includes(f)) return f; } return null; }
+function extractOrderNo(t){ const m=t.match(/\b(bc\s?\d{3,}|\d{4,})\b/i); return m ? m[0].toUpperCase().replace(/\s/,'') : null; }
+
+/* Pick exactly one approved tool, or null (=> handoff) */
+function pickTool(t){
+  if(extractOccasion(t) || matchesAny(t,CONSULT)) return 'recommend_bouquets';
+  if(matchesAny(t,['where is my order','track my order','track','order number','order status','arrived yet']) || /\b(bc\s?\d{3,}|\d{4,})\b/i.test(t)) return 'get_order_status';
+  if(matchesAny(t,['where is your shop','where are you located','where is your store','store location','shop location','your shop','your store','your outlet','visit your shop','come to your shop','where are you based','your address'])) return 'get_store_location';
+  if(matchesAny(t,['deliver to','do you deliver','do you cover','which areas','what areas','areas do you cover','cover for','where do you deliver'])) return 'get_coverage_areas';
+  if(matchesAny(t,['cut-off','cutoff','same-day','same day','arrive today','still arrive','order now','deliver today','last order'])) return 'get_delivery_cutoff';
+  if(matchesAny(t,['fresh','how long do they last','how long will they last','care','keep them','water','vase'])) return 'get_care_tips';
+  if(matchesAny(t,['open','opening hours','what time are you open','your hours','reach someone','talk to someone','contact you'])) return 'get_hours';
+  if(matchesAny(t,['mean','meaning'])) return 'flower_meaning';
+  return null;
+}
+
+/* ---------- DECIDE ---------- */
+const session = {pending:null};
+function decide(text){
+  const t = text.toLowerCase();
+  const mood = moodOf(t);
+
+  // follow-ups
+  if(session.pending==='occasion'){
+    session.pending=null;
+    const occ = extractOccasion(t) || t.trim();
+    return runConsult(occ, extractBudget(t), extractColour(t), mood);
+  }
+  if(session.pending==='ordernum'){
+    session.pending=null;
+    return {action:'resolve', intent:'order status', tool:'get_order_status', conf:0.9, mood:'Calm',
+            reply:TOOLS.get_order_status({orderNo:extractOrderNo(t)||text.trim()})};
+  }
+
+  // 1. escalation first: an excluded capability or an upset customer always goes to a human
+  const esc = escalationReason(t);
+  if(esc) return {action:'handoff', intent:'escalation', tool:'none', conf:0.9, mood,
+                  reason:esc.reason, situation:esc.situation, orderNo:extractOrderNo(t)};
+
+  // 1b. out of bounds: private / internal / non-business -> decline, do NOT transfer
+  const dec = declineReason(t);
+  if(dec) return {action:'decline', intent:'out of scope', tool:'none', conf:0.9, mood, reason:dec};
+
+  // 2. pick one approved tool
+  const tool = pickTool(t);
+  if(!tool) return {action:'handoff', intent:'unknown', tool:'none', conf:0.3, mood,
+                    reason:'no approved tool matches this request', situation:'Customer asked something outside Lucy’s tools.', orderNo:extractOrderNo(t)};
+
+  // 3. run the chosen tool with extracted parameters
+  if(tool==='recommend_bouquets'){
+    const occ = extractOccasion(t);
+    if(!occ){ session.pending='occasion';
+      return {action:'resolve', intent:'consult', tool:'recommend_bouquets', conf:0.9, mood,
+              reply:"I'd love to help you choose. What's the occasion? For example a birthday, an anniversary, a get-well or a condolence."};
+    }
+    return runConsult(occ, extractBudget(t), extractColour(t), mood);
+  }
+  if(tool==='get_order_status'){
+    const no = extractOrderNo(t);
+    if(!no){ session.pending='ordernum';
+      return {action:'resolve', intent:'order status', tool:'get_order_status', conf:0.9, mood,
+              reply:"Happy to check. What's your order number? It's on your confirmation, usually like BC10432."};
+    }
+    return {action:'resolve', intent:'order status', tool:'get_order_status', conf:0.9, mood, reply:TOOLS.get_order_status({orderNo:no})};
+  }
+  if(tool==='get_delivery_cutoff') return {action:'resolve', intent:'delivery cut-off', tool, conf:0.9, mood, reply:TOOLS.get_delivery_cutoff({state:extractState(t)})};
+  if(tool==='get_coverage_areas')  return {action:'resolve', intent:'coverage', tool, conf:0.9, mood, reply:TOOLS.get_coverage_areas({state:extractState(t)})};
+  if(tool==='get_care_tips')       return {action:'resolve', intent:'flower care', tool, conf:0.9, mood, reply:TOOLS.get_care_tips()};
+  if(tool==='get_hours')           return {action:'resolve', intent:'opening hours', tool, conf:0.9, mood, reply:TOOLS.get_hours()};
+  if(tool==='get_store_location')  return {action:'resolve', intent:'store location', tool, conf:0.9, mood, reply:TOOLS.get_store_location()};
+  if(tool==='flower_meaning')      return {action:'resolve', intent:'flower meaning', tool, conf:0.9, mood, reply:TOOLS.flower_meaning({flower:extractFlower(t)})};
+}
+
+function runConsult(occ, budget, colour, mood){
+  const items = TOOLS.recommend_bouquets({occasion:occ, maxBudget:budget, colour});
+  if(items.length===0) return {action:'resolve', intent:'consult', tool:'recommend_bouquets', conf:0.9, mood,
+        reply:"I don't have something matching that exactly right now. Let me bring in our team to arrange a custom piece."};
+  const intro = "For a <b>"+occ.replace('-',' ')+"</b> gift"+(budget?" under RM"+budget:"")+(colour?", in "+colour:"")+", here are two I'd pick:";
+  return {action:'resolve', intent:'consult', tool:'recommend_bouquets', conf:0.9, mood, reply:intro, cards:items};
+}
+
+/* ---------- RENDER ---------- */
+const body = document.getElementById('body');
+function scrollDown(){ body.scrollTop = body.scrollHeight; }
+function addMsg(html, who){ const d=document.createElement('div'); d.className='msg '+who; d.innerHTML=html; body.appendChild(d); scrollDown(); }
+function flowerSVG(flower){
+  const c = COLOURS[flower]||'#E59AB0';
+  return '<div class="pthumb" style="background:radial-gradient(circle at 50% 45%, '+c+', '+c+'22)">'+
+    '<svg width="34" height="34" viewBox="0 0 24 24" fill="none"><g fill="'+c+'"><circle cx="12" cy="12" r="3"/>'+
+    '<ellipse cx="12" cy="6.5" rx="2.4" ry="3.6"/><ellipse cx="12" cy="17.5" rx="2.4" ry="3.6"/>'+
+    '<ellipse cx="6.5" cy="12" rx="3.6" ry="2.4"/><ellipse cx="17.5" cy="12" rx="3.6" ry="2.4"/>'+
+    '<ellipse cx="8" cy="8" rx="2.6" ry="3" transform="rotate(45 8 8)"/><ellipse cx="16" cy="16" rx="2.6" ry="3" transform="rotate(45 16 16)"/>'+
+    '<ellipse cx="16" cy="8" rx="2.6" ry="3" transform="rotate(-45 16 8)"/><ellipse cx="8" cy="16" rx="2.6" ry="3" transform="rotate(-45 8 16)"/></g>'+
+    '<circle cx="12" cy="12" r="2" fill="#fff" opacity=".55"/></svg></div>';
+}
+function addCards(items){
+  const wrap=document.createElement('div'); wrap.className='cards';
+  items.forEach(p=>{ const c=document.createElement('div'); c.className='pcard';
+    const action = p.url
+      ? '<a class="pbtn" href="'+p.url+'" target="_blank" rel="noopener" style="text-decoration:none;display:inline-flex;align-items:center">View</a>'
+      : '<button class="pbtn" onclick="alert(\'In the live shop this opens the product page.\')">View</button>';
+    const thumb = PHOTO[p.id] ? '<div class="pthumb" style="background-image:url('+PHOTO[p.id]+');background-size:cover;background-position:center"></div>' : flowerSVG(p.flower);
+    c.innerHTML = thumb + '<div><div class="pname">'+p.name+'</div><div class="preason">'+p.reason+'</div><div class="pprice">From RM'+p.price+'</div></div>'+ action;
+    wrap.appendChild(c); });
+  body.appendChild(wrap); scrollDown();
+}
+function showHandoff(s){   /* owner-facing only — the customer never sees this card */
+  document.getElementById('bts-handoff').style.display='block';
+  document.getElementById('bh-summary').innerHTML =
+    '<div><i>Situation:</i> '+s.situation+'</div><div><i>Order:</i> '+(s.orderNo||'not provided')+'</div>'+
+    '<div><i>Mood:</i> '+s.mood+'</div><div><i>Reason:</i> '+s.reason+'</div>';
+}
+function typing(on){ let t=document.getElementById('typing');
+  if(on && !t){ t=document.createElement('div'); t.id='typing'; t.className='typing'; t.innerHTML='<span></span><span></span><span></span>'; body.appendChild(t); scrollDown(); }
+  if(!on && t) t.remove();
+}
+function updateBTS(intent, tool, conf, mood, decision, reason){
+  document.getElementById('f-intent').textContent = intent;
+  document.getElementById('f-tool').textContent = tool!=='none' ? tool : (decision==='Declined' ? 'none → declined' : 'none → handoff');
+  document.getElementById('f-conf').textContent = Math.round(conf*100)+'%';
+  document.getElementById('f-confbar').style.width = Math.round(conf*100)+'%';
+  document.getElementById('f-mood').textContent = mood;
+  const dEl=document.getElementById('f-decision'); dEl.textContent = decision;
+  dEl.className = 'decision '+(decision==='Escalated'?'escalated':(decision==='Declined'?'declined':'answered'));
+  document.getElementById('f-reason').textContent = reason||'';
+  const tag = tool!=='none' ? tool : (decision==='Declined'?'declined':'handoff');
+  const l=document.createElement('div'); l.className='l';
+  l.innerHTML='<b>'+tag+'</b> &middot; '+Math.round(conf*100)+'% &rarr; '+decision;
+  document.getElementById('log').prepend(l);
+}
+
+/* ---------- CONVERSATION ---------- */
+function sendMsg(){
+  const inp=document.getElementById('input'); const text=inp.value.trim(); if(!text) return;
+  addMsg(text,'me'); inp.value=''; grow(inp); typing(true);
+  setTimeout(()=>{
+    typing(false);
+    const out = decide(text);
+    const hd = document.getElementById('bts-handoff');
+    if(out.action==='handoff'){
+      updateBTS(out.intent, 'none', out.conf, out.mood, 'Escalated', out.reason);
+      addMsg("One moment please, let me check this with our manager, Ms. Young.",'bot');
+      showHandoff(out);
+    } else if(out.action==='decline'){
+      updateBTS(out.intent, 'none', out.conf, out.mood, 'Declined', out.reason);
+      hd.style.display='none';
+      addMsg("I'm sorry, but I'm unable to help with that. Is there anything else I can assist you with today?",'bot');
+    } else {
+      updateBTS(out.intent, out.tool, out.conf, out.mood, 'Resolved', '');
+      hd.style.display='none';
+      if(out.reply) addMsg(out.reply,'bot');
+      if(out.cards) addCards(out.cards);
+    }
+  }, 600);
+}
+function quick(text){ document.getElementById('input').value = text; sendMsg(); }
+function onKey(e){ if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); sendMsg(); } }
+function grow(el){ el.style.height='auto'; el.style.height=Math.min(el.scrollHeight,110)+'px'; }
+
+/* ---------- STARTER QUESTIONS (10 + 10) ---------- */
+const HELP = [
+  "Birthday gift for my mum, under RM200, she likes pink",
+  "What should I send for a condolence?",
+  "What's the cut-off for same-day delivery in Johor?",
+  "If I order now, can it still arrive today in KL?",
+  "Do you deliver to Penang?",
+  "Which areas do you cover for same-day?",
+  "How do I keep the flowers fresh?",
+  "What time are you open?",
+  "Where is your shop?",
+  "What do roses mean?",
+  "Where is my order BC10432?"
+];
+const HUMAN = [
+  "The flowers arrived wilted and the event is tomorrow",
+  "Wrong bouquet was delivered, I want a refund",
+  "Please cancel my order",
+  "Change the delivery address to my office",
+  "Can you move the delivery to next Friday?",
+  "I need a custom arrangement for a wedding",
+  "We want 50 bouquets for a corporate event, with an invoice",
+  "My payment failed but I was charged twice",
+  "Can you swap the lilies for roses and add a teddy bear?",
+  "Guarantee it arrives at exactly 2 PM"
+];
+const DECLINE_Q = [
+  "How many staff work in your shop?",
+  "Is Ms. Priscilla working today?",
+  "Can I have Ms. Young's personal phone number?",
+  "How is the weather in KL today?",
+  "Are you free tonight?",
+  "Who supplies your flowers?",
+  "What's your profit margin on a bouquet?",
+  "Who owns the business?"
+];
+function showGroup(g){
+  document.getElementById('seg-help').classList.toggle('active', g==='help');
+  document.getElementById('seg-human').classList.toggle('active', g==='human');
+  document.getElementById('seg-decline').classList.toggle('active', g==='decline');
+  const MAP = {
+    help:   ["Information questions — Lucy answers these from the shop's approved tools.", HELP, ''],
+    human:  ["Decision requests — Lucy has no tool for these, so it hands you to a human.", HUMAN, ' esc'],
+    decline:["Out-of-scope questions (private, internal, or non-business) — Lucy politely declines and does not transfer.", DECLINE_Q, ' dec']
+  };
+  const entry = MAP[g] || MAP.help;
+  document.getElementById('rail-label').textContent = entry[0];
+  const rail=document.getElementById('rail'); rail.innerHTML='';
+  entry[1].forEach(q=>{
+    const c=document.createElement('span'); c.className='chip'+entry[2]; c.textContent=q;
+    c.onclick=()=>quick(q); rail.appendChild(c);
+  });
+}
+
+/* greeting */
+window.addEventListener('load', ()=>{
+  showGroup('help');
+  setTimeout(()=>addMsg("Hello! I'm <b>Lucy</b>, the flower concierge at Bloom House. &#127800; I can help you choose the right flowers, answer delivery questions, or check an order. What's the occasion?",'bot'), 350);
+});
+</script>
+</body>
+</html>

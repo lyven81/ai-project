@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lucy — Bloom House Concierge · Source Code</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ivory:#FBF5F0; --blush:#F3D9DC; --blush-soft:#FAEBEC; --rose:#A23E5A;
+  --rose-deep:#7E2A40; --plum:#2E1E26; --plum-soft:#5C4750; --sage:#7E8F66;
+  --gold:#C7A45A; --line:#EADBD3;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Manrope',sans-serif;line-height:1.65;color:var(--plum);background:var(--ivory);-webkit-font-smoothing:antialiased}
+.container{max-width:1000px;margin:0 auto;padding:32px 24px 80px}
+.display{font-family:'Cormorant Garamond',serif}
+.back-nav{margin-bottom:20px}
+.back-nav a{color:var(--rose);text-decoration:none;font-size:.95rem;font-weight:600}
+.back-nav a:hover{text-decoration:underline}
+
+.project-header{position:relative;text-align:center;margin-bottom:36px;padding:54px 32px;border-radius:20px;overflow:hidden;color:#fff;
+  background:linear-gradient(135deg,var(--rose-deep),var(--rose) 60%,#C26079)}
+.project-header:before{content:"";position:absolute;inset:0;background:
+  radial-gradient(circle at 15% 25%,rgba(255,255,255,.16),transparent 42%),
+  radial-gradient(circle at 88% 78%,rgba(199,164,90,.30),transparent 46%)}
+.project-header h1{position:relative;font-size:3rem;font-weight:600;margin-bottom:8px}
+.project-header p{position:relative;font-size:1.15rem;opacity:.92}
+.badges{position:relative;display:flex;justify-content:center;gap:10px;margin-top:22px;flex-wrap:wrap}
+.badge{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28);color:#fff;padding:6px 14px;border-radius:20px;font-size:.82rem}
+
+.highlight-box{background:linear-gradient(135deg,var(--blush-soft),#fff);padding:24px 26px;border-radius:14px;border-left:5px solid var(--rose);margin:24px 0}
+.highlight-box h3{font-family:'Cormorant Garamond',serif;font-size:1.5rem;color:var(--rose-deep);margin-bottom:10px}
+.highlight-box p{margin-bottom:10px;color:var(--plum-soft)}
+.highlight-box p strong{color:var(--plum)}
+code{background:var(--blush);color:var(--rose-deep);padding:1px 6px;border-radius:5px;font-family:'Consolas','Monaco',monospace;font-size:.86em}
+
+.content-section{margin:32px 0;padding:32px;background:#fff;border-radius:16px;border:1px solid var(--line);box-shadow:0 16px 44px -26px rgba(46,30,38,.3)}
+.content-section h2{font-family:'Cormorant Garamond',serif;color:var(--rose-deep);margin-bottom:14px;font-size:1.9rem;line-height:1.1}
+.content-section h3{color:var(--plum);margin:22px 0 10px;font-size:1.05rem}
+.content-section > p{color:var(--plum-soft);margin-bottom:6px}
+
+.code-container{background:#241820;border-radius:12px;padding:22px;margin:18px 0;overflow-x:auto}
+.code-header{color:var(--gold);font-weight:700;margin-bottom:14px;font-size:1rem;border-bottom:1px solid #3c2c34;padding-bottom:10px;font-family:'Consolas','Monaco',monospace}
+.code-block{font-family:'Consolas','Monaco','Courier New',monospace;font-size:13.5px;line-height:1.55;color:#e7d9df;white-space:pre-wrap}
+.c-comment{color:#9a8b93;font-style:italic}
+.c-kw{color:#e58fb0}
+.c-str{color:#d8b48a}
+.c-fn{color:#cdb06a}
+.c-num{color:#a9c08a}
+.c-prop{color:#c7a9f0}
+
+ul.decisions{margin:14px 0;padding-left:0;list-style:none}
+ul.decisions li{position:relative;padding-left:28px;margin-bottom:12px;color:var(--plum-soft)}
+ul.decisions li:before{content:"\2748";position:absolute;left:0;top:1px;color:var(--blush);font-size:1rem}
+ul.decisions li strong{color:var(--plum)}
+
+.pill-row{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0}
+.pill{padding:8px 16px;border-radius:30px;font-weight:600;font-size:.85rem}
+.pill.a{background:var(--sage);color:#fff}
+.pill.b{background:var(--blush-soft);color:var(--rose-deep);border:1px solid var(--blush)}
+.pill.c{background:#FBF6EE;color:#8a6d1f;border:1px solid #ecd9b0}
+
+.demo-links{text-align:center;margin:34px 0}
+.demo-btn{display:inline-block;background:var(--rose);color:#fff;padding:13px 28px;text-decoration:none;border-radius:30px;margin:6px;font-weight:600;transition:transform .2s,box-shadow .2s;box-shadow:0 10px 24px -10px var(--rose-deep)}
+.demo-btn:hover{transform:translateY(-2px);box-shadow:0 16px 30px -12px var(--rose-deep)}
+.demo-btn.secondary{background:var(--sage);box-shadow:0 10px 24px -10px #56603f}
+footer{text-align:center;margin-top:36px;color:#9a8f7e;font-size:.85rem}
+footer .mark{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--rose)}
+@media(max-width:768px){.project-header h1{font-size:2.1rem}.content-section{padding:22px}.container{padding:16px}}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <nav class="back-nav"><a href="index.html">&larr; Back to the live demo</a></nav>
+
+  <div class="project-header">
+    <h1 class="display">Lucy &middot; Bloom House Concierge</h1>
+    <p>Source Code &amp; the Resolve / Escalate / Decline Architecture</p>
+    <div class="badges">
+      <span class="badge">Governed Toolset</span>
+      <span class="badge">Live SQLite (sql.js)</span>
+      <span class="badge">3-Way Decision Gate</span>
+      <span class="badge">Warm Handoff</span>
+    </div>
+  </div>
+
+  <div class="highlight-box">
+    <h3>About this code showcase</h3>
+    <p><strong>Lucy is a customer-service agent for an online florist, built on the principle that an agent should be defined by what it cannot do.</strong> She talks to the customer directly and reaches exactly one of three outcomes on every message: resolve it with an approved tool, escalate it to a human, or politely decline it.</p>
+    <p>The whole demo runs client-side in one static page. The catalogue and orders live in a real <strong>SQLite</strong> database compiled to WebAssembly (<code>sql.js</code>) and queried in the browser. In a paying build the rule-based router is one Gemini call at the same boundaries; the gate, the tools, and the handoff stay exactly as they are here.</p>
+  </div>
+
+  <div class="content-section">
+    <h2>1 &middot; The three-way gate &mdash; resolve, escalate, or decline</h2>
+    <p>Before any answer, every message is sorted into one of three outcomes. Order matters: a decision-type request goes to a human before any tool runs, and an out-of-bounds request is declined before it can be mistaken for a handoff.</p>
+    <div class="code-container">
+      <div class="code-header">app.js &mdash; decide()</div>
+      <div class="code-block"><span class="c-comment">// 1. Decision-type (refund, cancel, change, complaint, upset) -> a human.</span>
+<span class="c-kw">const</span> esc = <span class="c-fn">escalationReason</span>(text);
+<span class="c-kw">if</span> (esc) <span class="c-kw">return</span> { action: <span class="c-str">'handoff'</span>, reason: esc.reason, situation: esc.situation };
+
+<span class="c-comment">// 2. Out of bounds (staff, internal, supplier, non-business) -> decline, never transfer.</span>
+<span class="c-kw">const</span> dec = <span class="c-fn">declineReason</span>(text);
+<span class="c-kw">if</span> (dec) <span class="c-kw">return</span> { action: <span class="c-str">'decline'</span>, reason: dec };
+
+<span class="c-comment">// 3. Information-type -> pick exactly one approved tool, or hand off if none fits.</span>
+<span class="c-kw">const</span> tool = <span class="c-fn">pickTool</span>(text);
+<span class="c-kw">if</span> (!tool) <span class="c-kw">return</span> { action: <span class="c-str">'handoff'</span>, reason: <span class="c-str">'no approved tool matches'</span> };
+<span class="c-kw">return</span> { action: <span class="c-str">'resolve'</span>, tool, reply: <span class="c-fn">run</span>(tool, text) };</div>
+    </div>
+    <div class="pill-row">
+      <span class="pill a">Resolve &rarr; approved tool</span>
+      <span class="pill b">Escalate &rarr; Ms. Young</span>
+      <span class="pill c">Decline &rarr; politely refuse</span>
+    </div>
+  </div>
+
+  <div class="content-section">
+    <h2>2 &middot; The governed toolset &mdash; Lucy's entire universe</h2>
+    <p>Lucy can call exactly eight fixed tools and supplies parameter <em>values</em> only. She cannot author SQL, browse the schema, or invoke anything that writes. There is deliberately no <code>processRefund</code>, <code>cancelOrder</code>, or <code>changeAddress</code> tool, so those actions cannot happen autonomously, by design rather than by luck.</p>
+    <div class="code-container">
+      <div class="code-header">app.js &mdash; recommend_bouquets() runs a FIXED query against SQLite</div>
+      <div class="code-block"><span class="c-fn">recommend_bouquets</span>({ occasion, maxBudget, colour }){
+  <span class="c-comment">// The SQL string is fixed. Only bound values flow in. No injected WHERE/UNION.</span>
+  <span class="c-kw">const</span> FQ = <span class="c-str">"SELECT id,name,flower,colour,price,url FROM products "</span> +
+    <span class="c-str">"WHERE occasions LIKE '%,'||?||',%' AND price &lt;= ? "</span> +
+    <span class="c-str">"AND (?='' OR colour=?) ORDER BY price DESC LIMIT 2"</span>;
+  <span class="c-kw">let</span> rows = <span class="c-fn">runRows</span>(FQ, [occasion, maxBudget||<span class="c-num">99999</span>, colour||<span class="c-str">''</span>, colour||<span class="c-str">''</span>]);
+  <span class="c-comment">// the reason is what makes it a florist, not a search box</span>
+  <span class="c-kw">return</span> rows.<span class="c-fn">map</span>(p =&gt; ({ ...p, reason: FLOWER_MEANING[p.flower] }));
+}</div>
+    </div>
+    <p>Eight approved tools: <code>recommend_bouquets</code>, <code>get_delivery_cutoff</code>, <code>get_coverage_areas</code>, <code>get_care_tips</code>, <code>get_hours</code>, <code>get_store_location</code>, <code>flower_meaning</code>, <code>get_order_status</code> (read-only).</p>
+  </div>
+
+  <div class="content-section">
+    <h2>3 &middot; The escalation gate &mdash; decision-type goes to a human</h2>
+    <p>Capability is easy; knowing when to stop is the product. Anything that commits money, changes an order, or carries emotion has no tool, so it routes to the founder, surfaced to the customer as the manager, Ms. Young.</p>
+    <div class="code-container">
+      <div class="code-header">app.js &mdash; escalationReason()</div>
+      <div class="code-block"><span class="c-kw">function</span> <span class="c-fn">escalationReason</span>(t){
+  <span class="c-kw">if</span> (<span class="c-fn">matchesAny</span>(t, COMPLAINT))   <span class="c-kw">return</span> { reason: <span class="c-str">'complaint or failed delivery'</span> };
+  <span class="c-kw">if</span> (<span class="c-fn">matchesAny</span>(t, MONEY))       <span class="c-kw">return</span> { reason: <span class="c-str">'touches money (refund / payment)'</span> };
+  <span class="c-kw">if</span> (<span class="c-fn">matchesAny</span>(t, ORDER_CHG))   <span class="c-kw">return</span> { reason: <span class="c-str">'asks to change or cancel an order'</span> };
+  <span class="c-kw">if</span> (<span class="c-fn">matchesAny</span>(t, CUSTOM_BULK)) <span class="c-kw">return</span> { reason: <span class="c-str">'custom, wedding or bulk request'</span> };
+  <span class="c-kw">if</span> (<span class="c-fn">matchesAny</span>(t, UPSET))       <span class="c-kw">return</span> { reason: <span class="c-str">'customer sounds upset'</span> };
+  <span class="c-kw">return</span> <span class="c-kw">null</span>;
+}</div>
+    </div>
+  </div>
+
+  <div class="content-section">
+    <h2>4 &middot; The decline rule &mdash; private and off-topic, refused not transferred</h2>
+    <p>A real shop assistant should not leak staff details or answer questions that have nothing to do with an order. These are refused with a fixed line and are never sent to a person. Ms. Young is a publicly designated contact, so naming her is fine; her schedule and personal details are not.</p>
+    <div class="code-container">
+      <div class="code-header">app.js &mdash; the nine declined categories</div>
+      <div class="code-block"><span class="c-kw">const</span> DEC = {
+  <span class="c-prop">staffCount</span>, <span class="c-prop">staffSchedule</span>, <span class="c-prop">staffContact</span>, <span class="c-prop">staffName</span>,
+  <span class="c-prop">supplier</span>, <span class="c-prop">margin</span>, <span class="c-prop">ownership</span>, <span class="c-prop">internal</span>, <span class="c-prop">nonbiz</span>
+};
+<span class="c-comment">// "How many staff?", "Is Ms. Priscilla in today?", "Her personal number?",</span>
+<span class="c-comment">// "Who supplies you?", "Your margin?", "Who owns this?", "Weather in KL?"</span>
+<span class="c-comment">//   -> "I'm sorry, but I'm unable to help with that."  (no transfer)</span></div>
+    </div>
+  </div>
+
+  <div class="content-section">
+    <h2>5 &middot; Warm handoff &mdash; the human never starts cold</h2>
+    <p>When the gate escalates, Lucy writes a short summary so the customer does not repeat themselves. The summary is shown <strong>only on the owner side</strong>, so the customer feels a person stepping in, not a bot logging a ticket.</p>
+    <div class="code-container">
+      <div class="code-header">app.js &mdash; showHandoff() (owner-facing panel)</div>
+      <div class="code-block"><span class="c-kw">function</span> <span class="c-fn">showHandoff</span>(s){   <span class="c-comment">// the customer only hears the warm one-liner</span>
+  panel.innerHTML =
+    <span class="c-str">`Situation: </span><span class="c-str">${s.situation}</span><span class="c-str"> · Order: </span><span class="c-str">${s.orderNo}</span><span class="c-str">`</span> +
+    <span class="c-str">`Mood: </span><span class="c-str">${s.mood}</span><span class="c-str"> · Reason: </span><span class="c-str">${s.reason}</span><span class="c-str">`</span>;
+}</div>
+    </div>
+  </div>
+
+  <div class="content-section">
+    <h2>Data model &amp; key decisions</h2>
+    <p>A real SQLite database (<code>products</code>, <code>orders</code>) built by <code>build_db.py</code> and embedded in the page as base64, so the same fixed queries run live on GitHub Pages and from <code>file://</code>.</p>
+    <ul class="decisions">
+      <li><strong>Defined by its limits:</strong> three outcomes, eight tools, no write path. The agent reads; it never commits money or changes an order.</li>
+      <li><strong>Real database, not a mock:</strong> recommendations and order lookups are genuine SQL <code>SELECT</code>s against SQLite, not hard-coded replies.</li>
+      <li><strong>Grounded recommendations only:</strong> Lucy suggests products that exist in the catalogue, with a flower-meaning reason. No invented bouquet, no invented price.</li>
+      <li><strong>Decision before tool, decline before handoff:</strong> the order of checks is the safety model.</li>
+      <li><strong>Seamless to the customer:</strong> the handoff summary and decision panel are owner-facing; the customer never sees the machinery.</li>
+    </ul>
+  </div>
+
+  <div class="demo-links">
+    <a href="index.html" class="demo-btn">Try the live demo</a>
+    <a href="products/peony-box.html" class="demo-btn secondary">See a product page</a>
+  </div>
+
+  <footer>&copy; 2026 <span class="mark">Bloom House</span> &middot; Lucy concierge &middot; portfolio build</footer>
+
+</div>
+</body>
+</html>

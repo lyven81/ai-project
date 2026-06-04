@@ -2,10 +2,10 @@
 
 [![Portfolio Website](https://img.shields.io/badge/Portfolio-Live-green?logo=vercel)](https://lyven81.github.io/ai-project/)
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-black?logo=github)](https://github.com/lyven81/ai-project)
-[![Projects](https://img.shields.io/badge/Projects-49-blue)](#projects-by-category)
+[![Projects](https://img.shields.io/badge/Projects-50-blue)](#projects-by-category)
 [![AI Powered](https://img.shields.io/badge/AI-Powered-orange?logo=tensorflow)](https://github.com/lyven81/ai-project)
 
-**49 production AI apps across 8 business categories** — each one solves a real, named pain point with a working demo you can click and try today.
+**50 production AI apps across 8 business categories** — each one solves a real, named pain point with a working demo you can click and try today.
 
 <div align="center">
 <img width="1200" height="400" alt="AI Portfolio Banner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
@@ -13,7 +13,7 @@
 
 ## 🌟 Portfolio Overview
 
-This repo contains **49 completed AI applications**, each with a working demo (live cloud URL or local `demo.html`). Projects are organized by **business use case** — so a reader can scan the list, find the category that matches their work, and immediately see which problems AI can solve there.
+This repo contains **50 completed AI applications**, each with a working demo (live cloud URL or local `demo.html`). Projects are organized by **business use case** — so a reader can scan the list, find the category that matches their work, and immediately see which problems AI can solve there.
 
 **Live site:** [lyven81.github.io/ai-project](https://lyven81.github.io/ai-project/)
 
@@ -23,7 +23,7 @@ The 8 categories below match the [live category pages](https://lyven81.github.io
 
 | # | Category | Count | Audience |
 |---|---|---|---|
-| 1 | [Service Agents](#1-service-agents-6-projects) | 6 | Solo operators, micro-SMEs running on WhatsApp |
+| 1 | [Service Agents](#1-service-agents-7-projects) | 7 | Solo operators, micro-SMEs running on WhatsApp |
 | 2 | [Multi-Agent Decision Systems](#2-multi-agent-decision-systems-7-projects) | 7 | Owners needing research → verdict pipelines |
 | 3 | [Conversational Data Analytics](#3-conversational-data-analytics-7-projects) | 7 | SME owners with data, no analyst |
 | 4 | [Content Automation](#4-content-automation-6-projects) | 6 | Solo consultants, creators, educators |
@@ -32,13 +32,19 @@ The 8 categories below match the [live category pages](https://lyven81.github.io
 | 7 | [Document & Productivity Tools](#7-document--productivity-tools-5-projects) | 5 | Knowledge workers, accessibility users |
 | 8 | [Agentic Commerce](#8-agentic-commerce-2-projects) | 2 | Storefronts ready for AI shopping agents |
 
-**Total: 49 projects.**
+**Total: 50 projects.**
 
 ---
 
-### 1. Service Agents (6 projects)
+### 1. Service Agents (7 projects)
 
-**Who it's for:** Solo operators and micro-SMEs running their business on WhatsApp — plumbers, gardeners, car workshops, aircon technicians, court bookers, car rental.
+**Who it's for:** Solo operators and micro-SMEs running their business on WhatsApp — plumbers, gardeners, car workshops, aircon technicians, court bookers, car rental, online florists.
+
+#### Lucy — Bloom House Concierge
+- **What it does:** Florist concierge that recommends, escalates, or politely declines, on the shop's website.
+- **How it's built:** Vanilla HTML/CSS/JS with a real SQLite catalogue queried in-browser via sql.js, hosted on GitHub Pages.
+- **Problem solved:** An online florist's one or two person team answers the same delivery and care questions by hand while sensitive cases (a late condolence stand) wait in the same queue. Lucy recommends real bouquets, answers routine questions, hands money and order decisions to a human, and refuses private or off-topic questions outright.
+- **Demo:** [Try it](https://lyven81.github.io/ai-project/projects/bloom-house-concierge/index.html)
 
 #### Plumber WhatsApp Agent
 - **What it does:** AI plumber that books jobs via WhatsApp in bahasa santai. 5-step guided flow, fixed pricing.

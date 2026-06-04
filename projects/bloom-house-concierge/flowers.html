@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flowers — Bloom House</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ivory:#FBF5F0; --cream:#FFFFFF; --blush:#F3D9DC; --blush-soft:#FBEDEE;
+  --rose:#A23E5A; --rose-deep:#7E2A40; --plum:#2E1E26; --plum-soft:#6A555E;
+  --sage:#7E8F66; --sage-soft:#EDF0E6; --gold:#C7A45A; --line:#ECDED7;
+  --shadow:0 24px 60px -28px rgba(46,30,38,.45);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Manrope',sans-serif;color:var(--plum);background:
+  radial-gradient(circle at 12% 10%,#FCEFEF,transparent 38%),
+  radial-gradient(circle at 90% 8%,#F6F0E4,transparent 34%),
+  var(--ivory);min-height:100vh;-webkit-font-smoothing:antialiased}
+.display{font-family:'Cormorant Garamond',serif}
+.shopbar{display:flex;align-items:center;justify-content:space-between;max-width:1120px;margin:0 auto;padding:20px 28px}
+.logo{display:flex;align-items:baseline;gap:10px;text-decoration:none}
+.logo .mark{font-family:'Cormorant Garamond',serif;font-size:1.9rem;font-weight:600;color:var(--rose-deep)}
+.logo .sub{font-size:.7rem;letter-spacing:.26em;text-transform:uppercase;color:var(--sage)}
+.shopnav{display:flex;gap:26px;font-size:.86rem}
+.shopnav a{color:var(--plum-soft);text-decoration:none}
+.shopnav a:hover,.shopnav a.on{color:var(--rose)}
+.wrap{max-width:1120px;margin:0 auto;padding:6px 28px 64px}
+.pagehead{text-align:center;padding:10px 0 26px}
+.pagehead .eyebrow{font-size:.72rem;letter-spacing:.24em;text-transform:uppercase;color:var(--sage)}
+.pagehead h1{font-family:'Cormorant Garamond',serif;font-size:2.6rem;font-weight:600;color:var(--plum);margin-top:6px}
+.pagehead p{color:var(--plum-soft);margin-top:6px}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(248px,1fr));gap:22px}
+.card{background:var(--cream);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column}
+.pv{height:200px;position:relative;background-size:cover;background-position:center;display:grid;place-items:center}
+.pv.motif{background:linear-gradient(160deg,var(--blush-soft),#fff)}
+.pv.motif:before{content:"";position:absolute;width:170px;height:170px;border-radius:50%;background:radial-gradient(circle,var(--a),transparent 68%);opacity:.5}
+.pv svg{position:relative;width:120px;height:120px}
+.pbody{padding:16px 18px 18px;display:flex;flex-direction:column;flex:1}
+.pbody h3{font-family:'Cormorant Garamond',serif;font-size:1.32rem;font-weight:600;color:var(--plum);line-height:1.12}
+.occ{font-size:.78rem;color:var(--plum-soft);margin-top:4px}
+.price{color:var(--rose);font-weight:700;margin-top:8px}
+.act{margin-top:14px}
+.btn{display:inline-block;border:none;border-radius:11px;padding:10px 18px;font-family:'Manrope';font-weight:600;font-size:.85rem;cursor:pointer;text-decoration:none}
+.btn.view{background:var(--rose);color:#fff}
+.btn.view:hover{filter:brightness(1.05)}
+.btn.ask{background:var(--ivory);color:var(--rose-deep);border:1px solid var(--line)}
+.btn.ask:hover{background:var(--blush-soft);border-color:var(--blush)}
+footer{text-align:center;margin-top:44px;color:#9a8f7e;font-size:.82rem;font-weight:300}
+footer .mark{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--rose)}
+@media(max-width:640px){.shopnav{display:none}}
+</style>
+</head>
+<body>
+  <div class="shopbar">
+    <a class="logo" href="index.html"><span class="mark display">Bloom House</span><span class="sub">Kuala Lumpur</span></a>
+    <nav class="shopnav"><a href="flowers.html" class="on">Flowers</a><a href="occasions.html">Occasions</a><a href="gifts.html">Gifts</a><a href="delivery.html">Delivery</a><a href="track-order.html">Track Order</a></nav>
+  </div>
+
+  <div class="wrap">
+    <div class="pagehead">
+      <div class="eyebrow">The Collection</div>
+      <h1 class="display">Our Flowers</h1>
+      <p>Hand-arranged bouquets, boxes and stands. Not sure which to send? <a href="index.html" style="color:var(--rose);font-weight:600">Ask Lucy</a>.</p>
+    </div>
+    <div class="grid" id="grid"></div>
+    <footer>&copy; 2026 <span class="mark">Bloom House</span> &middot; Kuala Lumpur</footer>
+  </div>
+
+<script>
+const P=[
+  {id:'rose-classic', name:'Classic Red Rose Bouquet', price:135, acc:'#C0445F', occ:'Anniversary · Love · Apology'},
+  {id:'carn-pink',    name:'Pink Carnation Bouquet',   price:145, acc:'#E89AAE', occ:'Birthday · Thank-you'},
+  {id:'rose-ruby',    name:'Ruby Rose Bouquet',        price:159, acc:'#C0445F', occ:'Anniversary · Love'},
+  {id:'lily-pink',    name:'Pink Lily Bouquet',        price:169, acc:'#E89AAE', occ:'Birthday · Get-well', page:'products/lily-pink.html', img:'products/images/lily-pink.png'},
+  {id:'tulip-box',    name:'Sunshine Tulip Flower Box',price:169, acc:'#E6A15C', occ:'Birthday · Congrats'},
+  {id:'peony-box',    name:'Pink Peony Flower Box',    price:189, acc:'#E59AB0', occ:'Birthday · Congrats', page:'products/peony-box.html', img:'products/images/peony-box.png'},
+  {id:'hydra-pink',   name:'Pink Hydrangea Bouquet',   price:229, acc:'#C9A6D6', occ:'Birthday · Congrats'},
+  {id:'cond-stand',   name:'Serene Condolence Flower Stand', price:239, acc:'#EAE3D4', occ:'Condolence', page:'products/cond-stand.html', img:'products/images/cond-stand.png'},
+  {id:'peony-grand',  name:'Grand Peony Hat Box',      price:319, acc:'#E59AB0', occ:'Anniversary · Birthday'}
+];
+function motif(acc){
+  return '<svg viewBox="0 0 24 24"><g style="fill:'+acc+'"><circle cx="12" cy="12" r="3.2"/>'+
+    '<ellipse cx="12" cy="6" rx="2.6" ry="3.9"/><ellipse cx="12" cy="18" rx="2.6" ry="3.9"/>'+
+    '<ellipse cx="6" cy="12" rx="3.9" ry="2.6"/><ellipse cx="18" cy="12" rx="3.9" ry="2.6"/>'+
+    '<ellipse cx="7.5" cy="7.5" rx="2.8" ry="3.3" transform="rotate(45 7.5 7.5)"/>'+
+    '<ellipse cx="16.5" cy="16.5" rx="2.8" ry="3.3" transform="rotate(45 16.5 16.5)"/>'+
+    '<ellipse cx="16.5" cy="7.5" rx="2.8" ry="3.3" transform="rotate(-45 16.5 7.5)"/>'+
+    '<ellipse cx="7.5" cy="16.5" rx="2.8" ry="3.3" transform="rotate(-45 7.5 16.5)"/></g>'+
+    '<circle cx="12" cy="12" r="2.1" fill="#fff" opacity=".6"/></svg>';
+}
+const g=document.getElementById('grid');
+P.forEach(p=>{
+  const visual = p.img
+    ? '<div class="pv" style="background-image:url('+p.img+')"></div>'
+    : '<div class="pv motif" style="--a:'+p.acc+'">'+motif(p.acc)+'</div>';
+  const act = p.page
+    ? '<a class="btn view" href="'+p.page+'">View</a>'
+    : '<a class="btn ask" href="index.html">Ask Lucy</a>';
+  const c=document.createElement('div'); c.className='card';
+  c.innerHTML = visual + '<div class="pbody"><h3 class="display">'+p.name+'</h3><div class="occ">'+p.occ+'</div><div class="price">From RM'+p.price+'</div><div class="act">'+act+'</div></div>';
+  g.appendChild(c);
+});
+</script>
+</body>
+</html>

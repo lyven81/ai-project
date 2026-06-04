@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lucy — Bloom House Concierge | Source Code</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Arial',sans-serif;line-height:1.6;color:#222;background:#fff}
+.container{max-width:1000px;margin:0 auto;padding:20px}
+.back-nav{margin-bottom:20px}
+.back-nav a{color:#0D9488;text-decoration:none}
+.back-nav a:hover{text-decoration:underline}
+.project-header{text-align:center;margin-bottom:30px;padding:40px 24px;background:linear-gradient(135deg,#0D9488,#14B8A6);color:#fff;border-radius:10px}
+.project-header h1{font-size:2.2rem;margin-bottom:8px}
+.project-header p{opacity:.95}
+.content-section{margin:30px 0;padding:28px;background:#f9f9f9;border-radius:8px;border-left:5px solid #0D9488}
+.content-section h2{color:#0D9488;margin-bottom:12px;font-size:1.6rem}
+.content-section p{margin-bottom:10px}
+.code-block{background:#1e293b;color:#e2e8f0;padding:16px 18px;border-radius:8px;font-family:'Consolas',monospace;font-size:.84rem;white-space:pre-wrap;overflow-x:auto;margin:12px 0}
+.tree{background:#1e293b;color:#e2e8f0;padding:16px 18px;border-radius:8px;font-family:'Consolas',monospace;font-size:.84rem;white-space:pre;overflow-x:auto}
+.demo-links{text-align:center;margin:28px 0}
+.demo-btn{display:inline-block;background:#0D9488;color:#fff;padding:12px 25px;text-decoration:none;border-radius:5px;margin:6px 8px;font-weight:bold}
+.demo-btn.secondary{background:#475569}
+footer{text-align:center;padding:24px;color:#777;font-size:.9rem}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <nav class="back-nav"><a href="bloom-house-concierge.html">&larr; Back to showcase</a></nav>
+
+  <header class="project-header">
+    <h1>Lucy &middot; Source Code</h1>
+    <p>The resolve / escalate / decline gate, a governed toolset, and live SQLite</p>
+  </header>
+
+  <section class="content-section">
+    <h2>File structure</h2>
+    <div class="tree">projects/bloom-house-concierge/
+  index.html              # Lucy, the governed concierge (sql.js)
+  data/db.js              # bloom-house.db embedded as base64 (auto-generated)
+  bloom-house.db          # SQLite source: products, orders
+  build_db.py             # rebuilds the DB + db.js
+  products/
+    peony-box.html        # birthday pick 1 (RM189)
+    lily-pink.html        # birthday pick 2 (RM169)
+    cond-stand.html       # condolence (RM239)
+    images/               # product photos
+  flowers.html occasions.html gifts.html delivery.html track-order.html
+  showcase.html           # in-app code walkthrough
+  problem-statement.md  design.md</div>
+  </section>
+
+  <section class="content-section">
+    <h2>1 &middot; The three-way gate</h2>
+    <p>Every message is sorted into one outcome before any answer. Order is the safety model: decision-type goes to a human first; out-of-bounds is declined before it can be mistaken for a handoff.</p>
+    <div class="code-block">function decide(text){
+  const t = text.toLowerCase();
+  // 1. decision-type (refund, cancel, change, complaint, upset) -> human
+  const esc = escalationReason(t);
+  if (esc) return { action:'handoff', reason:esc.reason, situation:esc.situation };
+  // 2. out of bounds (staff, internal, supplier, non-business) -> decline
+  const dec = declineReason(t);
+  if (dec) return { action:'decline', reason:dec };
+  // 3. information-type -> exactly one approved tool, else hand off
+  const tool = pickTool(t);
+  if (!tool) return { action:'handoff', reason:'no approved tool matches' };
+  return { action:'resolve', tool, reply: run(tool, text) };
+}</div>
+  </section>
+
+  <section class="content-section">
+    <h2>2 &middot; A governed tool = a fixed SQL query</h2>
+    <p>The agent supplies bound values only. The SQL string is fixed in the page; no injected WHERE or UNION, no write path.</p>
+    <div class="code-block">recommend_bouquets({ occasion, maxBudget, colour }){
+  const FQ = "SELECT id,name,flower,colour,price,url FROM products "
+    + "WHERE occasions LIKE '%,'||?||',%' AND price <= ? "
+    + "AND (?='' OR colour=?) ORDER BY price DESC LIMIT 2";
+  let rows = runRows(FQ, [occasion, maxBudget||99999, colour||'', colour||'']);
+  return rows.map(p => ({ ...p, reason: FLOWER_MEANING[p.flower] }));
+}</div>
+  </section>
+
+  <section class="content-section">
+    <h2>3 &middot; The decline rule</h2>
+    <p>Nine categories of private, internal, or off-topic questions are refused with a fixed line and never transferred. Ms. Young is a public contact, so naming her is fine; her schedule and personal details are not.</p>
+    <div class="code-block">const DEC = { staffCount, staffSchedule, staffContact, staffName,
+             supplier, margin, ownership, internal, nonbiz };
+// "How many staff?", "Her personal number?", "Who supplies you?",
+// "Your margin?", "Weather in KL?"  ->
+//   "I'm sorry, but I'm unable to help with that."   (no transfer)</div>
+  </section>
+
+  <section class="content-section">
+    <h2>4 &middot; Live SQLite in the browser</h2>
+    <p>The database is embedded as base64 and loaded into sql.js, so real fixed queries run client-side with no backend.</p>
+    <div class="code-block">initSqlJs({ locateFile: f => CDN + f })
+  .then(SQL => { DB = new SQL.Database(b64ToBytes(window.BLOOM_DB_B64)); });
+
+function runRows(sql, params){            // read-only helper
+  const s = DB.prepare(sql); s.bind(params);
+  const out = []; while (s.step()) out.push(s.getAsObject());
+  s.free(); return out;
+}</div>
+  </section>
+
+  <div class="demo-links">
+    <a href="projects/bloom-house-concierge/index.html" class="demo-btn" target="_blank">Launch Live Demo</a>
+    <a href="bloom-house-concierge.html" class="demo-btn secondary">Back to Showcase</a>
+  </div>
+
+  <footer>&copy; 2026 Bloom House Concierge &middot; AI Project Portfolio</footer>
+
+</div>
+</body>
+</html>
