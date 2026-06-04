@@ -26,7 +26,6 @@ PRODUCTS = [
     ("peony-box",    "Pink Peony Flower Box",           "peony",     "pink",   189, occ("birthday","congrats","just-because"),     "products/peony-box.html"),
     ("hydra-pink",   "Pink Hydrangea Bouquet",          "hydrangea", "pink",   229, occ("birthday","congrats"),                    ""),
     ("cond-stand",   "Serene Condolence Flower Stand",  "lily",      "white",  239, occ("condolence"),                             "products/cond-stand.html"),
-    ("peony-grand",  "Grand Peony Hat Box",             "peony",     "pink",   319, occ("anniversary","congrats","birthday"),      ""),
 ]
 
 ORDERS = [
