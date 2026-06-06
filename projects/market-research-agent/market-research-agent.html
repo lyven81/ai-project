@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Market Research Agent · Tong Shui</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#6B4226;
+    --navy-700:#583521;
+    --navy-900:#3f2516;
+    --mid:#C5873C;
+    --mid-soft:#dca85f;
+    --line:#e9e1d5;
+    --line-soft:#f1ebe1;
+    --paper:#f7f3ec;
+    --paper-2:#fbf8f2;
+    --ink:#2c2419;
+    --ink-soft:#6b6051;
+    --ink-faint:#9a9082;
+    --white:#ffffff;
+    --sql:#2f7d5b;
+    --sql-bg:#e7f3ec;
+    --cached:#b06a2c;
+    --cached-bg:#f6ece0;
+    --multi:#7a4fb0;
+    --multi-bg:#efe8f7;
+    --shadow:0 1px 2px rgba(63,37,22,.04), 0 8px 24px rgba(63,37,22,.07);
+    --shadow-lg:0 2px 6px rgba(63,37,22,.07), 0 24px 60px rgba(63,37,22,.13);
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{height:100%;}
+  body{
+    font-family:'Manrope',sans-serif;
+    background:
+      radial-gradient(1200px 600px at 12% -10%, rgba(197,135,60,.12), transparent 60%),
+      radial-gradient(900px 500px at 110% 10%, rgba(107,66,38,.09), transparent 55%),
+      var(--paper);
+    color:var(--ink);
+    height:100vh;
+    overflow:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .app{
+    display:grid;
+    grid-template-columns:340px 1fr;
+    height:100vh;
+  }
+
+  /* ===================== SIDEBAR ===================== */
+  .sidebar{
+    background:linear-gradient(180deg, var(--navy) 0%, var(--navy-900) 100%);
+    color:#e7d9c8;
+    display:flex;
+    flex-direction:column;
+    position:relative;
+    overflow:hidden;
+  }
+  .sidebar::before{
+    content:"";
+    position:absolute; inset:0;
+    background-image:radial-gradient(rgba(255,255,255,.05) 1px, transparent 1px);
+    background-size:18px 18px;
+    opacity:.5;
+    pointer-events:none;
+  }
+  .brand{
+    padding:26px 26px 20px;
+    border-bottom:1px solid rgba(255,255,255,.08);
+    position:relative;
+  }
+  .brand .mark{
+    display:flex; align-items:center; gap:12px;
+  }
+  .brand .glyph{
+    width:34px;height:34px;border-radius:9px;
+    background:linear-gradient(135deg,var(--mid),#e6c089);
+    display:grid;place-items:center;
+    box-shadow:0 6px 16px rgba(197,135,60,.4);
+    flex:none;
+  }
+  .brand .glyph svg{width:18px;height:18px;}
+  .brand h1{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:19px;
+    color:#fff;
+    line-height:1.1;
+    letter-spacing:.2px;
+  }
+  .brand .sub{
+    font-size:11.5px;
+    color:var(--mid-soft);
+    letter-spacing:.4px;
+    text-transform:uppercase;
+    margin-top:3px;
+    font-weight:600;
+  }
+
+  .context{
+    padding:18px 26px;
+    border-bottom:1px solid rgba(255,255,255,.08);
+    position:relative;
+  }
+  .context .row{display:flex;align-items:center;gap:9px;margin-bottom:11px;}
+  .context .row:last-child{margin-bottom:0;}
+  .context .ic{width:15px;height:15px;color:var(--mid-soft);flex:none;}
+  .context .k{font-size:11px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.5px;font-weight:600;}
+  .context .v{font-size:13.5px;color:#f3e9dc;font-weight:600;margin-top:1px;}
+  .context .cell{line-height:1.25;}
+
+  .freshness{
+    margin-top:4px;
+    display:inline-flex;align-items:center;gap:7px;
+    background:rgba(197,135,60,.16);
+    border:1px solid rgba(220,168,95,.35);
+    padding:5px 10px;border-radius:999px;
+    font-size:11px;color:#eccf9f;font-weight:600;
+  }
+  .dot{width:7px;height:7px;border-radius:50%;background:#54c08a;box-shadow:0 0 0 0 rgba(84,192,138,.6);animation:pulse 2.4s infinite;}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(84,192,138,.5)}70%{box-shadow:0 0 0 7px rgba(84,192,138,0)}100%{box-shadow:0 0 0 0 rgba(84,192,138,0)}}
+
+  .legend{
+    padding:16px 26px 4px;
+    position:relative;
+  }
+  .legend .title{font-size:10.5px;text-transform:uppercase;letter-spacing:.7px;color:var(--ink-faint);font-weight:700;margin-bottom:10px;}
+  .legend .items{display:flex;flex-direction:column;gap:7px;}
+  .legend .li{display:flex;align-items:center;gap:8px;font-size:11.5px;color:#cdbfae;}
+  .legend .pip{width:9px;height:9px;border-radius:3px;flex:none;}
+  .pip-sql{background:#5fc093;}
+  .pip-cached{background:#d99a55;}
+  .pip-multi{background:#a98fd1;}
+
+  .sidebar-foot{
+    margin-top:auto;
+    padding:16px 26px 22px;
+    border-top:1px solid rgba(255,255,255,.08);
+    font-size:11px;color:var(--ink-faint);
+    position:relative;line-height:1.5;
+  }
+  .sidebar-foot b{color:#e0d0bd;font-weight:600;}
+  .sidebar-foot .cr{display:block;margin-top:8px;color:#8d8170;font-size:10.5px;}
+
+  /* ===================== MAIN ===================== */
+  .main{display:flex;flex-direction:column;height:100vh;min-width:0;}
+
+  .topbar{
+    height:64px;flex:none;
+    background:rgba(251,248,242,.86);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+    display:flex;align-items:center;justify-content:space-between;
+    padding:0 28px;
+  }
+  .topbar .tt{font-family:'Fraunces',serif;font-size:17px;font-weight:600;color:var(--navy);}
+  .topbar .tt span{color:var(--ink-faint);font-family:'Manrope';font-weight:500;font-size:13px;margin-left:8px;}
+  .topbar .scope{
+    display:inline-flex;align-items:center;gap:7px;
+    font-size:11.5px;color:var(--mid);font-weight:600;
+    background:#f6ede0;border:1px solid #ecd9bd;
+    padding:6px 11px;border-radius:8px;
+  }
+  .topbar .right{display:flex;align-items:center;gap:12px;}
+  .homebtn{
+    display:inline-flex;align-items:center;gap:7px;cursor:pointer;
+    font-family:'Manrope';font-size:11.5px;color:var(--navy);font-weight:600;
+    background:var(--white);border:1px solid var(--line);
+    padding:6px 11px;border-radius:8px;
+    transition:border-color .15s ease, box-shadow .15s ease, transform .12s ease;
+  }
+  .homebtn:hover{border-color:var(--mid-soft);box-shadow:var(--shadow);transform:translateY(-1px);}
+  .homebtn svg{width:13px;height:13px;}
+
+  .stream{
+    flex:1;overflow-y:auto;
+    padding:30px 28px 18px;
+  }
+  .stream::-webkit-scrollbar{width:10px;}
+  .stream::-webkit-scrollbar-thumb{background:#ded3c3;border-radius:8px;border:3px solid var(--paper);}
+  .thread{max-width:780px;margin:0 auto;}
+
+  /* intro / question palette */
+  .intro{margin-bottom:8px;}
+  .intro h2{
+    font-family:'Fraunces',serif;font-weight:600;font-size:27px;
+    color:var(--navy);line-height:1.18;letter-spacing:.2px;
+    margin-bottom:8px;
+  }
+  .intro p{font-size:14.5px;color:var(--ink-soft);line-height:1.6;max-width:600px;}
+
+  .stage-block{margin-top:22px;}
+  .stage-head{
+    display:flex;align-items:center;gap:10px;margin-bottom:11px;
+  }
+  .stage-head .num{
+    font-family:'Fraunces',serif;font-size:12px;font-weight:600;
+    color:var(--mid);background:#f6ede0;border:1px solid #ecd9bd;
+    width:22px;height:22px;border-radius:6px;display:grid;place-items:center;flex:none;
+  }
+  .stage-head .lbl{font-size:11px;text-transform:uppercase;letter-spacing:.8px;color:var(--ink-faint);font-weight:700;}
+  .stage-head .rule{flex:1;height:1px;background:var(--line);}
+
+  .qgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .qcard{
+    text-align:left;cursor:pointer;
+    background:var(--white);border:1px solid var(--line);
+    border-radius:12px;padding:14px 15px;
+    font-family:'Manrope';font-size:13.5px;color:var(--ink);line-height:1.45;
+    box-shadow:var(--shadow);
+    transition:transform .16s ease, box-shadow .16s ease, border-color .16s ease;
+    position:relative;
+  }
+  .qcard:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg);border-color:var(--mid-soft);}
+  .qcard .tags{display:flex;gap:6px;margin-top:10px;}
+  .tag{font-size:10px;font-weight:700;letter-spacing:.3px;padding:3px 8px;border-radius:999px;display:inline-flex;align-items:center;gap:5px;}
+  .tag-sql{color:var(--sql);background:var(--sql-bg);}
+  .tag-cached{color:var(--cached);background:var(--cached-bg);}
+  .tag-multi{color:var(--multi);background:var(--multi-bg);}
+  .tag .tp{width:6px;height:6px;border-radius:2px;}
+  .tag-sql .tp{background:var(--sql);}
+  .tag-cached .tp{background:var(--cached);}
+  .tag-multi .tp{background:var(--multi);}
+
+  /* messages */
+  .msg{margin:20px 0;animation:rise .4s cubic-bezier(.2,.7,.3,1) both;}
+  @keyframes rise{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
+  .msg.user{display:flex;justify-content:flex-end;}
+  .bubble-user{
+    background:var(--navy);color:#f3e9dc;
+    padding:12px 16px;border-radius:14px 14px 4px 14px;
+    font-size:14px;max-width:78%;line-height:1.45;font-weight:500;
+    box-shadow:var(--shadow);
+  }
+  .answer{
+    background:var(--white);border:1px solid var(--line);
+    border-radius:4px 14px 14px 14px;
+    box-shadow:var(--shadow);overflow:hidden;
+  }
+  .answer .ahead{
+    display:flex;align-items:center;gap:9px;
+    padding:12px 16px;border-bottom:1px solid var(--line-soft);
+    background:linear-gradient(180deg,#fdfbf7,#fff);
+  }
+  .answer .abot{
+    width:24px;height:24px;border-radius:7px;flex:none;
+    background:linear-gradient(135deg,var(--navy),var(--mid));
+    display:grid;place-items:center;
+  }
+  .answer .abot svg{width:13px;height:13px;}
+  .answer .ahead .nm{font-size:12.5px;font-weight:700;color:var(--navy);}
+  .answer .ahead .src{
+    margin-left:auto;font-size:10.5px;color:var(--ink-faint);font-weight:600;
+    display:inline-flex;align-items:center;gap:6px;
+  }
+  .answer .ahead .src code{
+    font-family:'Manrope';background:var(--line-soft);color:var(--ink-soft);
+    padding:2px 7px;border-radius:6px;font-size:10.5px;font-weight:600;
+  }
+  .answer .abody{padding:15px 17px 17px;font-size:14px;line-height:1.6;color:var(--ink);}
+  .answer .abody p{margin-bottom:10px;}
+  .answer .abody p:last-child{margin-bottom:0;}
+  .answer .lead{font-weight:600;color:var(--navy);}
+  .answer .verdict{
+    display:inline-flex;align-items:center;gap:8px;
+    font-weight:700;font-size:13px;padding:7px 12px;border-radius:9px;margin-bottom:12px;
+  }
+  .v-go{background:var(--sql-bg);color:var(--sql);}
+  .v-caution{background:var(--cached-bg);color:var(--cached);}
+
+  /* mini viz */
+  .viz{margin:4px 0 12px;}
+  .barrow{display:grid;grid-template-columns:118px 1fr 64px;align-items:center;gap:10px;margin-bottom:8px;}
+  .barrow .bl{font-size:12.5px;color:var(--ink-soft);font-weight:600;text-align:right;}
+  .bartrack{height:10px;background:var(--line-soft);border-radius:6px;overflow:hidden;}
+  .barfill{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--mid),var(--navy));width:0;animation:grow 1s cubic-bezier(.2,.8,.3,1) forwards;}
+  @keyframes grow{from{width:0;}}
+  .barrow .bv{font-size:12px;color:var(--navy);font-weight:700;}
+
+  .priceline{margin:8px 0 12px;}
+  .pl-track{height:8px;border-radius:6px;background:linear-gradient(90deg,#e7f3ec,#f6ece0,#fbe3e0);position:relative;margin:26px 6px 30px;}
+  .pl-node{position:absolute;top:50%;transform:translate(-50%,-50%);text-align:center;}
+  .pl-node .pd{width:14px;height:14px;border-radius:50%;background:var(--navy);border:3px solid #fff;box-shadow:0 2px 6px rgba(63,37,22,.25);margin:0 auto;}
+  .pl-node .pcap{font-size:10.5px;font-weight:700;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.4px;position:absolute;top:-22px;left:50%;transform:translateX(-50%);white-space:nowrap;}
+  .pl-node .pval{font-size:12.5px;font-weight:700;color:var(--navy);position:absolute;top:20px;left:50%;transform:translateX(-50%);white-space:nowrap;}
+  .pl-gap{position:absolute;top:50%;transform:translateY(-50%);height:14px;border:2px dashed var(--cached);border-radius:8px;background:rgba(217,154,85,.1);}
+  .pl-gap .glab{position:absolute;top:-24px;left:50%;transform:translateX(-50%);font-size:10.5px;font-weight:700;color:var(--cached);white-space:nowrap;}
+
+  .themes{display:flex;flex-direction:column;gap:8px;margin:4px 0 12px;}
+  .theme{display:grid;grid-template-columns:1fr auto;align-items:center;gap:12px;}
+  .theme .tn{font-size:13px;color:var(--ink);font-weight:600;}
+  .theme .tmeter{height:8px;width:120px;background:var(--line-soft);border-radius:5px;overflow:hidden;}
+  .theme .tmeter i{display:block;height:100%;background:linear-gradient(90deg,#e08a5a,#c2693a);border-radius:5px;}
+
+  .footnote{font-size:11.5px;color:var(--ink-faint);border-top:1px dashed var(--line);padding-top:10px;margin-top:4px;line-height:1.5;}
+
+  .typing{display:inline-flex;gap:4px;padding:4px 0;}
+  .typing i{width:7px;height:7px;border-radius:50%;background:var(--mid-soft);animation:blink 1.2s infinite both;}
+  .typing i:nth-child(2){animation-delay:.18s;}
+  .typing i:nth-child(3){animation-delay:.36s;}
+  @keyframes blink{0%,80%,100%{opacity:.25;transform:translateY(0);}40%{opacity:1;transform:translateY(-3px);}}
+
+  /* composer */
+  .composer{
+    flex:none;padding:14px 28px 22px;
+    background:linear-gradient(180deg,rgba(247,243,236,0),var(--paper) 38%);
+  }
+  .composer-inner{max-width:780px;margin:0 auto;}
+  .inputwrap{
+    display:flex;align-items:flex-end;gap:10px;
+    background:var(--white);border:1px solid var(--line);border-radius:16px;
+    padding:9px 9px 9px 16px;box-shadow:var(--shadow-lg);
+    transition:border-color .15s ease, box-shadow .15s ease;
+  }
+  .inputwrap:focus-within{border-color:var(--mid);box-shadow:0 0 0 4px rgba(197,135,60,.16), var(--shadow-lg);}
+  .inputwrap textarea{
+    flex:1;border:none;outline:none;resize:none;
+    font-family:'Manrope';font-size:14.5px;color:var(--ink);
+    line-height:1.5;max-height:120px;background:transparent;padding:7px 0;
+  }
+  .inputwrap textarea::placeholder{color:var(--ink-faint);}
+  .send{
+    flex:none;width:38px;height:38px;border:none;border-radius:11px;cursor:pointer;
+    background:linear-gradient(135deg,var(--navy),var(--mid));
+    display:grid;place-items:center;transition:transform .12s ease, opacity .12s ease;
+  }
+  .send:hover{transform:translateY(-1px);}
+  .send:active{transform:translateY(0);}
+  .send svg{width:17px;height:17px;}
+  .composer .hint{
+    text-align:center;font-size:11px;color:var(--ink-faint);margin-top:10px;
+  }
+  .composer .hint b{color:var(--ink-soft);font-weight:600;}
+
+  @media (max-width:880px){
+    .app{grid-template-columns:1fr;}
+    .sidebar{display:none;}
+    .qgrid{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="mark">
+        <div class="glyph">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 21s-7-5.2-7-11a7 7 0 0 1 14 0c0 5.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.4"/>
+          </svg>
+        </div>
+        <div>
+          <h1>Market Research Agent</h1>
+          <div class="sub">Location Intelligence</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="context">
+      <div class="row">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 11h16l-1.2 7.2A2 2 0 0 1 16.8 20H7.2a2 2 0 0 1-2-1.8L4 11z"/><path d="M8 11V8a4 4 0 0 1 8 0v3M10 4.5c0-1 1-1.5 1-2.5M14 4.5c0-1-1-1.5-1-2.5"/></svg>
+        <div class="cell"><div class="k">Business</div><div class="v">Tong Shui Shop</div></div>
+      </div>
+      <div class="row">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3.6 9h16.8M3.6 15h16.8M12 3a14 14 0 0 0 0 18 14 14 0 0 0 0-18z"/></svg>
+        <div class="cell"><div class="k">Market</div><div class="v">Klang Valley</div></div>
+      </div>
+      <div class="row">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+        <div class="cell"><div class="k">Data pack</div><div class="v">7 tables loaded</div></div>
+      </div>
+      <div class="freshness"><span class="dot"></span> Maps cache refreshed 2 days ago</div>
+    </div>
+
+    <div class="legend">
+      <div class="title">How each answer is sourced</div>
+      <div class="items">
+        <div class="li"><span class="pip pip-sql"></span> Local SQL query, near-zero cost</div>
+        <div class="li"><span class="pip pip-cached"></span> Cached Maps table, no live call</div>
+        <div class="li"><span class="pip pip-multi"></span> Combined sources, go / no-go</div>
+      </div>
+    </div>
+
+    <div class="sidebar-foot">
+      <b>Governed queries.</b> The agent answers only from 10 approved, parameterized tools. It never writes free-form SQL and never calls Maps live.
+      <span class="cr">© 2026 Lee Yih Ven · Data-Driven Solutions</span>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="topbar">
+      <div class="tt">Research Console <span>tong shui · Klang Valley pack</span></div>
+      <div class="right">
+        <button id="home" class="homebtn" title="Back to the 10 questions">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8M5 10v10h14V10"/></svg>
+          Questions
+        </button>
+        <div class="scope">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
+          10 questions in scope
+        </div>
+      </div>
+    </div>
+
+    <div class="stream" id="stream">
+      <div class="thread" id="thread">
+
+        <div class="intro" id="intro">
+          <h2>What do you want to know before you open?</h2>
+          <p>Ask in your own words, or tap a question below. Every answer comes from the loaded Klang Valley tong shui pack and the cached Maps tables, grouped here by the decision you are making.</p>
+        </div>
+
+        <!-- WHERE -->
+        <div class="stage-block" id="palette">
+          <div class="stage-head"><span class="num">1</span><span class="lbl">Where to open</span><span class="rule"></span></div>
+          <div class="qgrid">
+            <button class="qcard" data-q="1">Which area has the highest foot traffic, and at what time of day?<div class="tags"><span class="tag tag-sql"><span class="tp"></span>SQL</span></div></button>
+            <button class="qcard" data-q="3">Which areas have strong evening traffic but few existing tong shui shops?<div class="tags"><span class="tag tag-cached"><span class="tp"></span>Cached</span></div></button>
+          </div>
+        </div>
+
+        <!-- WHO -->
+        <div class="stage-block">
+          <div class="stage-head"><span class="num">2</span><span class="lbl">Who lives there</span><span class="rule"></span></div>
+          <div class="qgrid">
+            <button class="qcard" data-q="2">Which area's resident profile best fits my target customer?<div class="tags"><span class="tag tag-sql"><span class="tp"></span>SQL</span></div></button>
+            <button class="qcard" data-q="4">How many tong shui shops already operate in SS2? Is it saturated?<div class="tags"><span class="tag tag-cached"><span class="tp"></span>Cached</span></div></button>
+          </div>
+        </div>
+
+        <!-- PRICE -->
+        <div class="stage-block">
+          <div class="stage-head"><span class="num">3</span><span class="lbl">How to price</span><span class="rule"></span></div>
+          <div class="qgrid">
+            <button class="qcard" data-q="5">What price range do competitors charge for a bowl of tong shui?<div class="tags"><span class="tag tag-sql"><span class="tp"></span>SQL</span></div></button>
+            <button class="qcard" data-q="6">Is there a price point no competitor occupies?<div class="tags"><span class="tag tag-sql"><span class="tp"></span>SQL</span></div></button>
+          </div>
+        </div>
+
+        <!-- DEMAND -->
+        <div class="stage-block">
+          <div class="stage-head"><span class="num">4</span><span class="lbl">What sells</span><span class="rule"></span></div>
+          <div class="qgrid">
+            <button class="qcard" data-q="7">What revenue can I expect from tong shui next quarter?<div class="tags"><span class="tag tag-sql"><span class="tp"></span>SQL</span></div></button>
+            <button class="qcard" data-q="8">Which dessert sells best, and which is growing or declining?<div class="tags"><span class="tag tag-sql"><span class="tp"></span>SQL</span></div></button>
+          </div>
+        </div>
+
+        <!-- DIFFERENTIATE + GO -->
+        <div class="stage-block">
+          <div class="stage-head"><span class="num">5</span><span class="lbl">Stand out and decide</span><span class="rule"></span></div>
+          <div class="qgrid">
+            <button class="qcard" data-q="9">What do customers complain about most in competing shops?<div class="tags"><span class="tag tag-cached"><span class="tp"></span>Cached</span></div></button>
+            <button class="qcard" data-q="10">Should I launch tong shui in Kepong?<div class="tags"><span class="tag tag-multi"><span class="tp"></span>Go / No-go</span></div></button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="composer">
+      <div class="composer-inner">
+        <div class="inputwrap">
+          <textarea id="input" rows="1" placeholder="Ask about foot traffic, competitors, pricing, demand, or reviews..."></textarea>
+          <button class="send" id="send" title="Send">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
+        </div>
+        <div class="hint">The agent answers only from the <b>10 approved questions</b>. Anything outside scope is declined, not guessed.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ---- Canned, realistic answers for the tong shui / Klang Valley demo pack ----
+const ANSWERS = {
+  1: {
+    q:"Which area has the highest foot traffic, and at what time of day?",
+    src:"foot_traffic", cost:"sql",
+    html:`<p class="lead">SS2 in Petaling Jaya pulls hardest, and the evening is the clear peak.</p>
+      <div class="viz">
+        ${bar("SS2 · evening",95,"95")}
+        ${bar("Cheras · evening",82,"82")}
+        ${bar("Kepong · evening",74,"74")}
+        ${bar("SS2 · morning",34,"34")}
+      </div>
+      <p>Tong shui is an evening and supper business across every area in the pack. SS2 and Cheras lead after 7pm, when the after-dinner and night-market crowd peaks, then fade in the morning. Staff and stock for the night rush, not the breakfast one.</p>
+      <div class="footnote">Source: <b>foot_traffic</b> table, scored by area and daypart. Pure local query, no Maps call.</div>`
+  },
+  2: {
+    q:"Which area's resident profile best fits my target customer?",
+    src:"demographics", cost:"sql",
+    html:`<p class="lead">Cheras and Kepong fit a value, family tong shui best.</p>
+      <div class="viz">
+        ${bar("Cheras",90,"90",true)}
+        ${bar("Kepong",86,"86",true)}
+        ${bar("SS2",78,"78",true)}
+        ${bar("Pudu",70,"70",true)}
+      </div>
+      <p>The pack adds a Chinese-population share for this use case, alongside population size and median age. Cheras and Kepong combine large, family-leaning, Chinese-dense neighbourhoods, the natural base for everyday tong shui. SS2 scores well too but is pricier and already crowded; Pudu is solid but smaller.</p>
+      <div class="footnote">Source: <b>demographics</b> table, including the added <b>chinese_population_pct</b> column for this pack. Income is not carried, so size and age act as proxies.</div>`
+  },
+  3: {
+    q:"Which areas have strong evening traffic but few existing tong shui shops?",
+    src:"foot_traffic + competitors", cost:"cached",
+    html:`<p class="lead">Kepong is the standout opportunity pocket.</p>
+      <div class="viz">
+        ${bar("Kepong",88,"high",false,"traffic, 4 shops")}
+        ${bar("SS2",96,"med",false,"traffic, 17 shops")}
+        ${bar("Cheras",90,"low",false,"traffic, 12 shops")}
+      </div>
+      <p>SS2 and Cheras have the evening traffic but are already crowded with dessert shops. Kepong carries strong night traffic and a Chinese-dense base with only four tong shui shops mapped nearby, the best ratio of demand to competition in the pack.</p>
+      <div class="footnote">Source: <b>foot_traffic</b> joined to the cached <b>competitors</b> table. Counts come from the scheduled Maps refresh, not a live call.</div>`
+  },
+  4: {
+    q:"How many tong shui shops already operate in SS2? Is it saturated?",
+    src:"competitors", cost:"cached",
+    html:`<p class="verdict v-caution">⚠ Crowded · 17 shops mapped</p>
+      <p>SS2 has <b>17</b> tong shui and dessert shops within the area, with an average rating of 4.3 and several long-running favourites near the night market. For a district this size that reads as well served. Entering here means competing on a clear point of difference, not on availability.</p>
+      <p>If your edge is a signature dessert or a less-sweet, premium recipe, SS2 can still work given the steady supper crowd. For a standard value shop, the earlier opportunity pockets are an easier start.</p>
+      <div class="footnote">Source: cached <b>competitors</b> table, last Maps refresh 2 days ago.</div>`
+  },
+  5: {
+    q:"What price range do competitors charge for a bowl of tong shui?",
+    src:"competitor_prices", cost:"sql",
+    html:`<p class="lead">Competitors cluster between RM3.50 and RM9.00, with most around RM5.50.</p>
+      <div class="priceline">
+        <div class="pl-track">
+          ${pnode(4,"Low","RM3.50")}
+          ${pnode(42,"Average","RM5.50")}
+          ${pnode(96,"High","RM9.00")}
+        </div>
+      </div>
+      <p>The low end is a single-item bowl from a hawker stall, red bean or green bean soup. The high end is a loaded mango pomelo sago or a combo bowl in a cafe setting. Most volume sits near the RM5.50 mark.</p>
+      <div class="footnote">Source: <b>competitor_prices</b> table. Region-level, so price cannot be sliced by area in this pack.</div>`
+  },
+  6: {
+    q:"Is there a price point no competitor occupies?",
+    src:"competitor_prices", cost:"sql",
+    html:`<p class="lead">Yes. The RM6.50 to RM7.50 band is thinly served.</p>
+      <div class="priceline">
+        <div class="pl-track">
+          ${pnode(4,"Low","RM3.50")}
+          ${pnode(36,"Cluster","RM5.50")}
+          ${pnode(96,"High","RM9.00")}
+          <div class="pl-gap" style="left:60%;width:20%;"><span class="glab">Open gap</span></div>
+        </div>
+      </div>
+      <p>Competitors pile up around RM5.50 or jump to RM9 plus. There is room for a "better than a stall, not a cafe" bowl at RM6.50 to RM7.50, a quality upgrade, fresher ingredients or a less-sweet recipe, that still feels like everyday dessert.</p>
+      <div class="footnote">Source: <b>competitor_prices</b> table. Gap detected by ranking occupied price bands.</div>`
+  },
+  7: {
+    q:"What revenue can I expect from tong shui next quarter?",
+    src:"sales_history_weekly", cost:"sql",
+    html:`<p class="lead">A comparable store points to roughly RM62,000 next quarter.</p>
+      <div class="viz">
+        ${bar("This quarter",100,"RM62k")}
+        ${bar("Last quarter",92,"RM57k")}
+        ${bar("Two quarters ago",83,"RM52k")}
+      </div>
+      <p>Based on the trend in the sales history, weekly tong shui revenue at a similar store has grown steadily. Projecting the recent slope forward gives about RM62,000 for the coming quarter, before any seasonal swing, cold desserts lift in the hot months and warming ones in the rainy season.</p>
+      <div class="footnote">Source: <b>sales_history_weekly</b> table. A straight-line projection on recent weeks, not a seasonal model.</div>`
+  },
+  8: {
+    q:"Which dessert sells best, and which is growing or declining?",
+    src:"sales_history_weekly", cost:"sql",
+    html:`<p class="lead">Mango pomelo sago is the growth driver. Plain green bean soup is slipping.</p>
+      <div class="viz">
+        ${bar("Mango pomelo sago ▲",96,"+22%")}
+        ${bar("Tau fu fa ▲",73,"+8%")}
+        ${bar("Red bean soup ▬",55,"flat")}
+        ${bar("Green bean soup ▼",40,"−7%")}
+      </div>
+      <p>Volume and growth both favour the richer, fruit-forward desserts. Mango pomelo sago leads on revenue and is rising fastest, while plain green bean soup is in slow decline. Lead the menu with the sago and tau fu fa, keep the bean soups as the entry options.</p>
+      <div class="footnote">Source: <b>sales_history_weekly</b> table, growth measured week over week within the pack.</div>`
+  },
+  9: {
+    q:"What do customers complain about most in competing shops?",
+    src:"competitor_reviews", cost:"cached",
+    html:`<p class="lead">Three complaints repeat across competitor reviews.</p>
+      <div class="themes">
+        ${theme("Desserts too sweet or inconsistent",82)}
+        ${theme("Long wait at the supper peak",67)}
+        ${theme("Cramped seating, no parking",44)}
+      </div>
+      <p>Sweetness and consistency is the loudest and most common gripe, the same dessert tasting different on different nights. Wait time at the night rush comes next, then seating and parking. Each one is a concrete thing you can design around: a controlled, less-sweet recipe, a fast supper queue, and a parking plan would answer the top three at once.</p>
+      <div class="footnote">Source: cached <b>competitor_reviews</b> table, themes tagged on the last Maps refresh.</div>`
+  },
+  10: {
+    q:"Should I launch tong shui in Kepong?",
+    src:"foot_traffic, demographics, competitors, reviews", cost:"multi",
+    html:`<p class="verdict v-go">✓ Strong fit, with one edge to press</p>
+      <p>Kepong has the demand and the right resident profile: strong evening traffic and a large, Chinese-dense, family base. Unlike SS2 it is not crowded, only four tong shui shops are mapped nearby, so you are entering an opportunity pocket rather than a price fight.</p>
+      <p class="lead">The opening that fits the data:</p>
+      <p>Enter at the open <b>RM6.50 to RM7.50</b> price band, lead with <b>mango pomelo sago</b>, and win on the top review complaint by serving a <b>controlled, less-sweet recipe</b> with consistent quality night to night. That combination uses the price gap, the demand trend, and the differentiation signal together. SS2 and Cheras remain the higher-traffic but more crowded alternatives if you prefer a proven supper district.</p>
+      <div class="footnote">Source: combined read across <b>foot_traffic</b>, <b>demographics</b>, cached <b>competitors</b> and <b>competitor_reviews</b>. This is the only multi-table question in scope.</div>`
+  }
+};
+
+// ---- mini-viz builders ----
+function bar(label,pct,val,fit,extra){
+  const v = extra ? `${val} <span style="color:var(--ink-faint);font-weight:600">${extra}</span>` : val;
+  return `<div class="barrow"><span class="bl">${label}</span><div class="bartrack"><span class="barfill" style="width:${pct}%;${fit?'background:linear-gradient(90deg,#dca85f,#6B4226)':''}"></span></div><span class="bv">${v}</span></div>`;
+}
+function pnode(left,cap,val){
+  return `<div class="pl-node" style="left:${left}%"><span class="pcap">${cap}</span><span class="pd"></span><span class="pval">${val}</span></div>`;
+}
+function theme(name,pct){
+  return `<div class="theme"><span class="tn">${name}</span><span class="tmeter"><i style="width:${pct}%"></i></span></div>`;
+}
+
+// ---- keyword routing for free text to one of the 10 ----
+const ROUTES = [
+  {id:1, kw:["foot traffic","busiest","time of day","daypart","when","evening","supper","night","footfall"]},
+  {id:2, kw:["resident","profile","target customer","demographic","who lives","population","age","chinese"]},
+  {id:3, kw:["underserved","gap","strong traffic but few","opportunity","few shops","white space","kepong opportunity"]},
+  {id:4, kw:["how many","saturated","saturation","crowded","ss2","competitors in"]},
+  {id:5, kw:["price range","how much","charge","pricing","cost","competitors charge","a bowl"]},
+  {id:6, kw:["price point","price gap","no competitor","unoccupied","positioning price"]},
+  {id:7, kw:["revenue","expect","forecast","projection","how much can i make","sales next"]},
+  {id:8, kw:["sells best","bestseller","best seller","growing","declining","product","dessert","menu"]},
+  {id:9, kw:["complain","complaint","review","reviews","dislike","unhappy","bad about","too sweet"]},
+  {id:10, kw:["should i launch","should i open","go or no","kepong","worth it","good idea"]}
+];
+
+function route(text){
+  const t = text.toLowerCase();
+  let best=null, score=0;
+  for(const r of ROUTES){
+    let s=0;
+    for(const k of r.kw){ if(t.includes(k)) s += k.split(" ").length; }
+    if(s>score){score=s;best=r.id;}
+  }
+  return score>0 ? best : null;
+}
+
+// ---- DOM wiring ----
+const stream = document.getElementById('stream');
+const thread = document.getElementById('thread');
+const input  = document.getElementById('input');
+const send   = document.getElementById('send');
+const home   = document.getElementById('home');
+const INITIAL_THREAD = thread.innerHTML;   // intro + 10-question palette, saved for reset
+let started = false;
+
+function bindCards(){
+  document.querySelectorAll('.qcard').forEach(c=>{
+    c.addEventListener('click',()=>ask(c.dataset.q));
+  });
+}
+
+function collapsePalette(){
+  if(started) return;
+  started = true;
+  // remove the question palette and intro once a conversation begins
+  document.querySelectorAll('.stage-block').forEach(e=>e.remove());
+  const intro = document.getElementById('intro');
+  if(intro) intro.remove();
+}
+
+function resetHome(){
+  // restore the intro + 10 questions, clear the conversation
+  thread.innerHTML = INITIAL_THREAD;
+  started = false;
+  bindCards();
+  input.value=''; autosize();
+  requestAnimationFrame(()=>{ stream.scrollTop = 0; });
+}
+
+function addUser(text){
+  const d=document.createElement('div');
+  d.className='msg user';
+  d.innerHTML=`<div class="bubble-user">${escapeHtml(text)}</div>`;
+  thread.appendChild(d);
+  scroll();
+}
+
+function addTyping(){
+  const d=document.createElement('div');
+  d.className='msg';
+  d.id='typing';
+  d.innerHTML=`<div class="answer"><div class="abody"><div class="typing"><i></i><i></i><i></i></div></div></div>`;
+  thread.appendChild(d);
+  scroll();
+}
+
+function addAnswer(a){
+  const t=document.getElementById('typing'); if(t) t.remove();
+  const tagClass = a.cost==='sql'?'tag-sql':a.cost==='cached'?'tag-cached':'tag-multi';
+  const tagLabel = a.cost==='sql'?'SQL · ~0 cost':a.cost==='cached'?'Cached Maps':'Multi-table';
+  const d=document.createElement('div');
+  d.className='msg';
+  d.innerHTML=`<div class="answer">
+      <div class="ahead">
+        <span class="abot"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><path d="M12 3v3M5 8l2 2M19 8l-2 2M4 16h16M7 16v3M17 16v3M9 12h6"/></svg></span>
+        <span class="nm">Research Agent</span>
+        <span class="src"><span class="tag ${tagClass}"><span class="tp"></span>${tagLabel}</span> <code>${a.src}</code></span>
+      </div>
+      <div class="abody">${a.html}</div>
+    </div>`;
+  thread.appendChild(d);
+  scroll();
+}
+
+function addRefusal(text){
+  const t=document.getElementById('typing'); if(t) t.remove();
+  const d=document.createElement('div');
+  d.className='msg';
+  d.innerHTML=`<div class="answer">
+      <div class="ahead">
+        <span class="abot"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><path d="M12 3v3M5 8l2 2M19 8l-2 2M4 16h16M7 16v3M17 16v3M9 12h6"/></svg></span>
+        <span class="nm">Research Agent</span>
+        <span class="src"><span class="tag tag-multi"><span class="tp"></span>Out of scope</span></span>
+      </div>
+      <div class="abody">
+        <p>That sits outside the 10 questions I am set up to answer for this pack, so I will not guess at it.</p>
+        <p>I can help with foot traffic and best areas, resident profile and saturation, competitor pricing and price gaps, expected revenue and bestsellers, competitor complaints, and a final go or no-go on an area. Try one of those, or tap a suggested question.</p>
+      </div>
+    </div>`;
+  thread.appendChild(d);
+  scroll();
+}
+
+// ---- live backend wiring ----
+// Leave BACKEND_URL = "" for the static GitHub Pages demo (canned answers).
+// Set it to your Cloud Run URL to go live, e.g. "https://market-research-agent-xxxx.run.app".
+// When this page is SERVED BY the backend (local uvicorn or Cloud Run), it auto-uses the
+// same origin, so `uvicorn app.main:app` is live with no edit needed.
+const BACKEND_URL = "https://market-research-agent-522143897885.asia-southeast1.run.app";
+function backendBase(){
+  if(BACKEND_URL) return BACKEND_URL.replace(/\/$/,'');
+  if(location.protocol.indexOf('http')===0 && !location.hostname.endsWith('github.io')){
+    return location.origin;          // served by our own backend (localhost / Cloud Run)
+  }
+  return null;                        // file:// or github.io -> static canned mode
+}
+function LIVE(){ return backendBase() !== null; }
+
+async function askBackend(question){
+  const r = await fetch(backendBase() + '/ask', {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({question})
+  });
+  if(!r.ok) throw new Error('backend ' + r.status);
+  return r.json();
+}
+
+function addLiveAnswer(resp){
+  const t=document.getElementById('typing'); if(t) t.remove();
+  if(!resp || !resp.id){   // out of scope
+    const d=document.createElement('div'); d.className='msg';
+    d.innerHTML=`<div class="answer">
+        <div class="ahead">
+          <span class="abot"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><path d="M12 3v3M5 8l2 2M19 8l-2 2M4 16h16M7 16v3M17 16v3M9 12h6"/></svg></span>
+          <span class="nm">Research Agent</span>
+          <span class="src"><span class="tag tag-multi"><span class="tp"></span>Out of scope</span></span>
+        </div>
+        <div class="abody"><p>${escapeHtml((resp&&resp.answer)||'Out of scope.')}</p></div>
+      </div>`;
+    thread.appendChild(d); scroll(); return;
+  }
+  const cost = resp.cost;
+  const tagClass = cost==='sql'?'tag-sql':cost==='cached'?'tag-cached':'tag-multi';
+  const tagLabel = cost==='sql'?'SQL · ~0 cost':cost==='cached'?'Cached Maps':'Multi-table';
+  const d=document.createElement('div'); d.className='msg';
+  d.innerHTML=`<div class="answer">
+      <div class="ahead">
+        <span class="abot"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><path d="M12 3v3M5 8l2 2M19 8l-2 2M4 16h16M7 16v3M17 16v3M9 12h6"/></svg></span>
+        <span class="nm">Research Agent</span>
+        <span class="src"><span class="tag ${tagClass}"><span class="tp"></span>${tagLabel}</span> <code>${escapeHtml(resp.source||'')}</code></span>
+      </div>
+      <div class="abody">
+        <p class="lead">${escapeHtml(resp.answer)}</p>
+        <div class="footnote">Live answer from the governed query API · query Q${resp.id} on <b>${escapeHtml(resp.source||'')}</b>.</div>
+      </div>
+    </div>`;
+  thread.appendChild(d); scroll();
+}
+
+function ask(id){
+  collapsePalette();
+  const a = ANSWERS[id];
+  addUser(a.q);
+  addTyping();
+  if(LIVE()){
+    askBackend(a.q).then(addLiveAnswer).catch(()=>addAnswer(a));  // fall back to canned
+  } else {
+    setTimeout(()=>addAnswer(a), 750);
+  }
+}
+
+function submitFree(){
+  const text = input.value.trim();
+  if(!text) return;
+  collapsePalette();
+  addUser(text);
+  input.value=''; autosize();
+  addTyping();
+  if(LIVE()){
+    askBackend(text).then(addLiveAnswer)
+      .catch(()=>{ const id=route(text); id ? addAnswer(ANSWERS[id]) : addRefusal(text); });
+  } else {
+    const id = route(text);
+    setTimeout(()=>{ id ? addAnswer(ANSWERS[id]) : addRefusal(text); }, 800);
+  }
+}
+
+// events
+bindCards();
+home.addEventListener('click', resetHome);
+send.addEventListener('click', submitFree);
+input.addEventListener('keydown', e=>{
+  if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); submitFree(); }
+});
+
+// helpers
+function scroll(){ requestAnimationFrame(()=>{ stream.scrollTop = stream.scrollHeight; }); }
+function escapeHtml(s){ return s.replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function autosize(){ input.style.height='auto'; input.style.height=Math.min(input.scrollHeight,120)+'px'; }
+input.addEventListener('input', autosize);
+
+// reflect live vs static mode in the sidebar
+if(LIVE()){
+  const f=document.querySelector('.freshness');
+  if(f) f.innerHTML='<span class="dot"></span> Live · governed query API';
+}
+</script>
+</body>
+</html>

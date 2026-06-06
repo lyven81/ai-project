@@ -2,10 +2,10 @@
 
 [![Portfolio Website](https://img.shields.io/badge/Portfolio-Live-green?logo=vercel)](https://lyven81.github.io/ai-project/)
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-black?logo=github)](https://github.com/lyven81/ai-project)
-[![Projects](https://img.shields.io/badge/Projects-50-blue)](#projects-by-category)
+[![Projects](https://img.shields.io/badge/Projects-48-blue)](#projects-by-category)
 [![AI Powered](https://img.shields.io/badge/AI-Powered-orange?logo=tensorflow)](https://github.com/lyven81/ai-project)
 
-**50 production AI apps across 8 business categories** — each one solves a real, named pain point with a working demo you can click and try today.
+**48 production AI apps across 8 business categories** — each one solves a real, named pain point with a working demo you can click and try today.
 
 <div align="center">
 <img width="1200" height="400" alt="AI Portfolio Banner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
@@ -13,7 +13,7 @@
 
 ## 🌟 Portfolio Overview
 
-This repo contains **50 completed AI applications**, each with a working demo (live cloud URL or local `demo.html`). Projects are organized by **business use case** — so a reader can scan the list, find the category that matches their work, and immediately see which problems AI can solve there.
+This repo contains **48 completed AI applications**, each with a working demo (live cloud URL or local `demo.html`). Projects are organized by **business use case** — so a reader can scan the list, find the category that matches their work, and immediately see which problems AI can solve there.
 
 **Live site:** [lyven81.github.io/ai-project](https://lyven81.github.io/ai-project/)
 
@@ -25,14 +25,14 @@ The 8 categories below match the [live category pages](https://lyven81.github.io
 |---|---|---|---|
 | 1 | [Service Agents](#1-service-agents-7-projects) | 7 | Solo operators, micro-SMEs running on WhatsApp |
 | 2 | [Multi-Agent Decision Systems](#2-multi-agent-decision-systems-7-projects) | 7 | Owners needing research → verdict pipelines |
-| 3 | [Conversational Data Analytics](#3-conversational-data-analytics-7-projects) | 7 | SME owners with data, no analyst |
+| 3 | [Conversational Data Analytics](#3-conversational-data-analytics-5-projects) | 5 | SME owners with data, no analyst |
 | 4 | [Content Automation](#4-content-automation-6-projects) | 6 | Solo consultants, creators, educators |
 | 5 | [Industry Specialist Advisors](#5-industry-specialist-advisors-8-projects) | 8 | Vertical experts (legal, finance, education, retail) |
 | 6 | [Knowledge & Reference Chatbots](#6-knowledge--reference-chatbots-8-projects) | 8 | Consumers seeking guidance in plain language |
 | 7 | [Document & Productivity Tools](#7-document--productivity-tools-5-projects) | 5 | Knowledge workers, accessibility users |
 | 8 | [Agentic Commerce](#8-agentic-commerce-2-projects) | 2 | Storefronts ready for AI shopping agents |
 
-**Total: 50 projects.**
+**Total: 48 projects.**
 
 ---
 
@@ -132,7 +132,7 @@ The 8 categories below match the [live category pages](https://lyven81.github.io
 
 ---
 
-### 3. Conversational Data Analytics (7 projects)
+### 3. Conversational Data Analytics (5 projects)
 
 **Who it's for:** SME owners who have years of data (POS, orders, distribution) but no analyst to ask questions in plain language.
 
@@ -154,29 +154,17 @@ The 8 categories below match the [live category pages](https://lyven81.github.io
 - **Problem solved:** Mid-size Malaysian e-commerce sellers (RM30K–RM300K/month) watch sales grow while profit silently erodes from discounts, returns, and shipping — and they have no private analyst. This app lives on the seller's own instance, answering "what's eating my margin" in plain language without sharing data with any human consultant.
 - **Demo:** [Try it](https://lyven81.github.io/ai-project/projects/ecommerce-analyst/demo.html)
 
-#### E-Commerce Advisor
-- **What it does:** Analyse 34,500 orders with 6 pre-built tools (sales, profit, discounts, returns, segments, delivery).
-- **How it's built:** Python + Google ADK + Gemini 2.0 Flash + FastAPI + Docker on Cloud Run.
-- **Problem solved:** SME owners sit on mountains of transaction data but have no analyst. This agent uses 6 specialist tools to answer plain-English business questions, generating Python code per request — no hardcoded report menus to learn.
-- **Demo:** [Try it](https://lyven81.github.io/ai-project/projects/sme-business-advisor/demo.html)
-
-#### E-Commerce Advisor (MCP)
-- **What it does:** Same analytics as the base advisor, but data flows in over MCP — swap CSV/Sheets/DB without rewriting the agent.
-- **How it's built:** Python + Google ADK + MCP Server protocol + Gemini 2.0 Flash + FastAPI + Docker on Cloud Run.
-- **Problem solved:** The base advisor is tightly coupled to one CSV file — changing data source requires rewriting code. This version abstracts the data layer behind MCP so the same agent works against CSV today and Sheets/DB tomorrow.
-- **Demo:** [Try it](https://lyven81.github.io/ai-project/projects/sme-advisor-mcp/demo.html)
-
-#### E-Commerce Advisor (Database)
-- **What it does:** Ask anything. The agent writes the database query — no fixed reports, full flexibility.
-- **How it's built:** Python + Google ADK + Gemini 2.0 Flash + AlloyDB (PostgreSQL) + FastAPI + Docker on Cloud Run.
-- **Problem solved:** Fixed report menus can't answer the unpredictable, open-ended business questions that actually come up in real life. This version stores data in AlloyDB and lets the agent write custom SQL per question, so users ask anything in plain English and the agent translates → executes → answers.
-- **Demo:** [Try it](https://lyven81.github.io/ai-project/projects/sme-advisor-alloydb/demo.html)
-
 #### Klinik Dr Fang Front-Desk Assistant
 - **What it does:** Front-desk AI for a clinic that surfaces patterns in patient records — symptom clusters, trends, lapsing patients — in plain language.
 - **How it's built:** Python + Gemini Flash + an MCP-Toolbox-style governed tool layer over read-only SQLite; live in-browser demo via sql.js.
 - **Problem solved:** A single-doctor clinic wants quick answers about its records but can't risk an LLM leaking patient data or running a destructive query. This assistant is structurally incapable of writing its own SQL or reaching data outside its pre-approved, read-only tools — the deliberate opposite of the free-SQL approach.
 - **Demo:** [Try it](https://lyven81.github.io/ai-project/projects/klinik-dr-fang/demo.html)
+
+#### Market Research Agent
+- **What it does:** Answers the 10 location, pricing, and demand questions a local shop owner asks, drawing on a business data pack plus cached Google Maps.
+- **How it's built:** Python + FastAPI + SQLite with 10 governed (fixed) SQL queries, a cached Google Maps Places layer, and a cheap-model router, deployed on Cloud Run.
+- **Problem solved:** A tong shui (or any local) shop owner deciding where to open, how to price, or what to launch usually guesses, and live-data tools get expensive fast. This agent answers from a fixed toolset and a scheduled Maps cache, so 6 of 10 questions are pure SQL and Maps is billed only on the refresh, keeping cost per question near zero.
+- **Demo:** [Try it](https://market-research-agent-522143897885.asia-southeast1.run.app)
 
 ---
 
@@ -435,9 +423,6 @@ ai-project/
 │   ├── sundry-shop-assistant/       # Conversational Data Analytics
 │   ├── hoo-tim-analytics-agent/
 │   ├── ecommerce-analyst/
-│   ├── sme-business-advisor/
-│   ├── sme-advisor-mcp/
-│   ├── sme-advisor-alloydb/
 │   ├── marketing-agency/            # Content Automation
 │   ├── banana-lab/
 │   ├── course-creator/
@@ -494,9 +479,8 @@ cd projects/<project-name>
 
 ## 💼 Professional Highlights
 
-- **49 production-ready apps** — each one has a clickable demo (local `demo.html` or live Cloud Run URL)
+- **48 production-ready apps** — each one has a clickable demo (local `demo.html` or live Cloud Run URL)
 - **Built for Malaysian SMEs** — most apps solve a specific local pain point (kedai runcit, tuition centres, plumbers, FMCG distributors)
-- **Anti-vendor-lock-in** — three E-Commerce Advisor variants (CSV / MCP / AlloyDB) show how the same agent runs against any data source
 - **Honest scoping** — no "AI" badge on apps that are scripted demos (Soon Heng, Wee Auto are clearly labelled vanilla JS scripted flows)
 
 ## 📞 Contact & Collaboration

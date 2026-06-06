@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Market Research Agent - Location Intelligence for Local Shop Owners</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #222; background-color: #ffffff; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        .back-nav { margin-bottom: 20px; }
+        .back-nav a { color: #007BFF; text-decoration: none; font-size: 1rem; }
+        .back-nav a:hover { text-decoration: underline; }
+        .project-header { text-align: center; margin-bottom: 40px; padding: 40px 0; background: linear-gradient(135deg, #E91E63, #AD1457); color: white; border-radius: 10px; }
+        .project-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        .project-header p { font-size: 1.2rem; opacity: 0.9; }
+        .badges { display: flex; justify-content: center; gap: 10px; margin: 20px 0; flex-wrap: wrap; }
+        .badge { background-color: rgba(255, 255, 255, 0.2); color: white; padding: 5px 12px; border-radius: 15px; font-size: 0.9rem; }
+        .demo-links { text-align: center; margin: 30px 0; }
+        .demo-btn { display: inline-block; background-color: #007BFF; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; margin: 0 10px; font-weight: bold; transition: background-color 0.3s; }
+        .demo-btn:hover { background-color: #0056b3; }
+        .demo-btn.secondary { background-color: #28a745; }
+        .demo-btn.secondary:hover { background-color: #218838; }
+        .content-section { margin: 40px 0; padding: 30px; background-color: #f9f9f9; border-radius: 8px; border-left: 5px solid #E91E63; }
+        .content-section h2 { color: #E91E63; margin-bottom: 20px; font-size: 1.8rem; }
+        .content-section h3 { color: #333; margin: 20px 0 10px 0; font-size: 1.3rem; }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin: 20px 0; }
+        .feature-item { background: white; padding: 20px; border-radius: 8px; border: 1px solid #ddd; }
+        .feature-item h4 { color: #E91E63; margin-bottom: 10px; }
+        .tech-stack { display: flex; flex-wrap: wrap; gap: 10px; margin: 15px 0; }
+        .tech-item { background-color: #E91E63; color: white; padding: 5px 12px; border-radius: 15px; font-size: 0.9rem; }
+        .code-block { background-color: #f4f4f4; border: 1px solid #ddd; border-radius: 5px; padding: 15px; margin: 15px 0; font-family: monospace; overflow-x: auto; }
+        .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin: 20px 0; }
+        .metric-card { background: white; padding: 20px; border-radius: 8px; text-align: center; border: 2px solid #E91E63; }
+        .metric-number { font-size: 2rem; font-weight: bold; color: #E91E63; }
+        .metric-label { color: #666; font-size: 0.9rem; }
+        .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin: 15px 0; }
+        .menu-tag { background-color: #fce4ec; border: 1px solid #f8bbd0; color: #880e4f; padding: 6px 12px; border-radius: 6px; font-size: 0.85rem; text-align: center; }
+        @media (max-width: 768px) {
+            .project-header h1 { font-size: 2rem; }
+            .project-header p { font-size: 1rem; }
+            .badges { justify-content: center; }
+            .demo-btn { margin: 5px; padding: 10px 20px; }
+            .container { padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="index.html">← Back to Portfolio</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>📍 Market Research Agent</h1>
+            <p>Location-intelligence agent for local shop owners, near-zero cost</p>
+
+            <div class="badges">
+                <span class="badge">Python</span>
+                <span class="badge">FastAPI</span>
+                <span class="badge">SQLite</span>
+                <span class="badge">Google Maps (cached)</span>
+                <span class="badge">Governed Queries</span>
+                <span class="badge">Cloud Run</span>
+            </div>
+        </div>
+
+        <div class="demo-links">
+            <a href="https://market-research-agent-522143897885.asia-southeast1.run.app" target="_blank" class="demo-btn">🚀 Launch Live Demo</a>
+            <a href="market-research-agent-source.html" class="demo-btn secondary">📁 View Source Code</a>
+        </div>
+
+        <div class="content-section">
+            <h2>📋 Project Overview & Problem Statement</h2>
+            <p><strong>Challenge:</strong> A small shop owner deciding where to open, how to price, or what to launch usually guesses. Proper market research is slow and expensive, and the live-data tools that could answer these questions (a model writing SQL, live Google Maps on every query) rack up cost fast.</p>
+
+            <p><strong>Solution:</strong> Market Research Agent answers the 10 questions an owner actually asks, drawing on a local business data pack plus cached Google Maps results. The agent never writes free-form SQL; it may only call one of 10 approved, parameterized queries. Maps is called only on a schedule and cached, so user questions cost almost nothing. The demo is configured for a tong shui (Chinese dessert) shop in the Klang Valley, but the same schema and questions work for any local, consumer-facing business.</p>
+
+            <h3>Key Benefits</h3>
+            <ul>
+                <li><strong>Answers the real decisions:</strong> where to open, who lives there, how saturated it is, how to price, what sells, what customers complain about, and a final go / no-go</li>
+                <li><strong>Near-zero running cost:</strong> 6 of 10 questions are pure local SQL; the other 4 read cached Maps tables, so Google Maps is billed only on the scheduled refresh, never per question</li>
+                <li><strong>Governed and safe:</strong> the agent picks from a fixed toolset, never writes SQL, never calls Maps live, and refuses anything outside the 10 questions instead of guessing</li>
+                <li><strong>Reusable across businesses:</strong> swap the data pack (competitor keyword + product list) and the same agent serves a chicken rice shop, an optician, or a stationery store</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>🖥️ Application Features</h2>
+
+            <div class="features-grid">
+                <div class="feature-item">
+                    <h4>📍 Where to Open</h4>
+                    <p>Finds the area with the highest foot traffic by daypart, and the opportunity pockets that have strong evening traffic but few existing shops. Tong shui peaks at supper, so the answer leans evening.</p>
+                </div>
+                <div class="feature-item">
+                    <h4>👥 Who Lives There</h4>
+                    <p>Ranks areas by how well the resident profile fits the target customer, using population, age, and Chinese-population share as the demand signal for a tong shui shop.</p>
+                </div>
+                <div class="feature-item">
+                    <h4>🏪 How Saturated</h4>
+                    <p>Counts competing shops in an area from the cached Maps table and reads whether the district is already well served or still open.</p>
+                </div>
+                <div class="feature-item">
+                    <h4>💰 How to Price</h4>
+                    <p>Returns the competitor price range for a bowl and finds the unoccupied price band, the gap where a quality, less-sweet offer can sit.</p>
+                </div>
+                <div class="feature-item">
+                    <h4>📈 What Sells</h4>
+                    <p>Projects next quarter's revenue from the sales history and ranks which desserts are growing or declining week over week.</p>
+                </div>
+                <div class="feature-item">
+                    <h4>✅ Stand Out and Decide</h4>
+                    <p>Surfaces the top competitor complaints from cached reviews, then assembles a single go / no-go recommendation for a chosen area.</p>
+                </div>
+            </div>
+
+            <h3>The 10 Governed Questions</h3>
+            <div class="menu-grid">
+                <div class="menu-tag">Foot traffic by daypart</div>
+                <div class="menu-tag">Resident profile fit</div>
+                <div class="menu-tag">High traffic, few rivals</div>
+                <div class="menu-tag">Saturation in an area</div>
+                <div class="menu-tag">Competitor price range</div>
+                <div class="menu-tag">Unoccupied price band</div>
+                <div class="menu-tag">Revenue forecast</div>
+                <div class="menu-tag">Bestseller and trend</div>
+                <div class="menu-tag">Top complaints</div>
+                <div class="menu-tag">Launch go / no-go</div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🤖 AI Integration & Intelligence</h2>
+
+            <div class="features-grid">
+                <div class="feature-item">
+                    <h4>🧭 Governed Query Routing</h4>
+                    <p>The agent maps a free-text question to one of 10 approved query tools. Routing is deterministic and free for the known questions, with an optional cheap-model (Gemini Flash / Claude Haiku) fallback for open phrasings.</p>
+                </div>
+                <div class="feature-item">
+                    <h4>🗺️ Cached Maps, Not Live</h4>
+                    <p>Competitor places and reviews come from a scheduled Google Maps refresh stored as local tables. Every user question reads the cache, so Maps is the only paid call and it runs on a timer, not per request.</p>
+                </div>
+                <div class="feature-item">
+                    <h4>🚫 Refusal by Design</h4>
+                    <p>Anything outside the 10 questions is declined rather than guessed. The agent cannot write its own SQL, list tables, or dump records, which keeps answers predictable and cheap.</p>
+                </div>
+                <div class="feature-item">
+                    <h4>🧩 Multi-Source Synthesis</h4>
+                    <p>The go / no-go question combines foot traffic, demographics, the price gap, the demand trend, and competitor complaints into one grounded recommendation for a specific area.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🛠️ Technical Architecture & Implementation</h2>
+
+            <h3>Frontend Stack</h3>
+            <div class="tech-stack">
+                <span class="tech-item">HTML / CSS</span>
+                <span class="tech-item">Vanilla JavaScript</span>
+                <span class="tech-item">Fetch to /ask</span>
+                <span class="tech-item">Static-fallback demo mode</span>
+            </div>
+
+            <h3>Backend Stack</h3>
+            <div class="tech-stack">
+                <span class="tech-item">Python 3.11</span>
+                <span class="tech-item">FastAPI</span>
+                <span class="tech-item">SQLite</span>
+                <span class="tech-item">10 Parameterized Queries</span>
+                <span class="tech-item">Google Maps Places (cached)</span>
+            </div>
+
+            <h3>Deployment & Infrastructure</h3>
+            <div class="tech-stack">
+                <span class="tech-item">Google Cloud Run</span>
+                <span class="tech-item">Docker</span>
+                <span class="tech-item">Cloud Scheduler (cache refresh)</span>
+            </div>
+
+            <h3>System Architecture</h3>
+            <ul>
+                <li><strong>Governed query layer:</strong> 10 fixed, parameterized SQL tools in <code>app/queries.py</code>; the agent selects one, it never authors SQL</li>
+                <li><strong>Seven-table data store:</strong> 4 business tables (demographics, foot traffic, competitor prices, weekly sales) plus 3 cached-Maps tables (competitors, reviews, suppliers)</li>
+                <li><strong>Router + phrasing:</strong> <code>app/agent.py</code> routes the question, runs the approved query, and templates the result into a short business answer</li>
+                <li><strong>Scheduled cache refresh:</strong> <code>cache/refresh_maps_cache.py</code> is the only place Google Maps is called, with field masking to control cost</li>
+                <li><strong>Single FastAPI service:</strong> serves the chat UI and the <code>/ask</code> endpoint from one Cloud Run container that scales to zero</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>📖 Development Setup & Installation Guide</h2>
+
+            <h3>Prerequisites</h3>
+            <ul>
+                <li><strong>Python 3.11+</strong></li>
+                <li><strong>Google Maps Places API key</strong> (only for the live cache refresh; the demo ships with a seeded cache)</li>
+            </ul>
+
+            <h3>Quick Start Installation</h3>
+            <div class="code-block">
+# Clone the repository
+git clone https://github.com/lyven81/ai-project.git
+cd ai-project/projects/market-research-agent
+
+# Build the data pack and SQLite database
+python setup/generate_data.py
+python setup/build_db.py
+
+# Install dependencies and run
+pip install -r requirements.txt
+uvicorn app.main:app --port 8080
+# open http://127.0.0.1:8080
+            </div>
+
+            <h3>Environment Configuration</h3>
+            <div class="code-block">
+# Only needed for the live Maps cache refresh (cache/refresh_maps_cache.py)
+MAPS_API_KEY=your_places_api_key_here
+            </div>
+
+            <h3>Available Scripts</h3>
+            <ul>
+                <li><code>python setup/generate_data.py</code>:build the Klang Valley tong shui data pack (7 CSVs)</li>
+                <li><code>python setup/build_db.py</code>:load the CSVs into <code>market_research.db</code></li>
+                <li><code>python app/queries.py</code>:smoke-test all 10 governed queries</li>
+                <li><code>python cache/refresh_maps_cache.py --dry-run</code>:preview the scheduled Maps refresh</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>🚀 Deployment on Google Cloud Run</h2>
+
+            <div class="code-block">
+# Build and deploy to Cloud Run (scales to zero)
+gcloud run deploy market-research-agent \
+  --source . \
+  --region asia-southeast1 \
+  --allow-unauthenticated \
+  --set-env-vars MAPS_API_KEY=your_api_key
+            </div>
+
+            <h3>Production Notes</h3>
+            <ul>
+                <li>Cloud Run scales to zero, so the service costs nothing when idle</li>
+                <li>Schedule <code>cache/refresh_maps_cache.py</code> daily or weekly with Cloud Scheduler; user questions never trigger a live Maps call</li>
+                <li>The committed SQLite database makes the container self-contained and fast to cold-start</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>📊 Key Metrics</h2>
+
+            <div class="metrics">
+                <div class="metric-card">
+                    <div class="metric-number">10</div>
+                    <div class="metric-label">Governed Questions</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">7</div>
+                    <div class="metric-label">Data Tables</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">6 / 10</div>
+                    <div class="metric-label">Answered by Pure SQL</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">Near-Zero</div>
+                    <div class="metric-label">Cost Per Question</div>
+                </div>
+            </div>
+
+            <h3>Business Value</h3>
+            <ul>
+                <li><strong>Faster decisions:</strong> turns location, pricing, and demand questions into instant grounded answers instead of a research project</li>
+                <li><strong>Cost discipline:</strong> caching and fixed queries keep the running cost near zero while the agent still feels live</li>
+                <li><strong>Trustworthy by construction:</strong> a fixed toolset and explicit refusal mean answers stay inside what the data can support</li>
+                <li><strong>One build, many businesses:</strong> the same schema and questions serve any local consumer-facing shop by swapping the data pack</li>
+            </ul>
+        </div>
+
+        <div class="demo-links">
+            <a href="https://market-research-agent-522143897885.asia-southeast1.run.app" target="_blank" class="demo-btn">🚀 Try Live Demo</a>
+            <a href="https://github.com/lyven81/ai-project/tree/main/projects/market-research-agent" class="demo-btn secondary">📖 Full Source Code</a>
+        </div>
+
+        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+            <a href="index.html">← Back to Portfolio</a> |
+            <a href="project-categories.html">View All Categories</a>
+        </nav>
+    </div>
+</body>
+</html>

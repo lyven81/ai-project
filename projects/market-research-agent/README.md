@@ -1,0 +1,122 @@
+# Market Research Agent (Tong Shui · Klang Valley)
+
+A market-research agent that answers the 10 questions a local business owner asks before
+opening or launching, by combining a local business **data pack** with **cached Google
+Maps** results. Modelled on Google's "Location Intelligence ADK Agent with MCP for
+BigQuery and Google Maps" codelab, with three deliberate changes:
+
+1. **No ADK** — plain Python function-calling instead of the Agent Development Kit.
+2. **Governed predefined queries** — the agent never writes SQL; it may only call one of
+   10 approved, parameterized tools (`app/queries.py`).
+3. **Cached Maps** — Google Maps is called only on a schedule (`cache/refresh_maps_cache.py`)
+   and stored as tables; user questions read the cache, so Maps is never billed per request.
+
+See `project-outline.md` for the full design rationale.
+
+## Cost model
+- 6 of 10 questions are pure local SQL (near-zero marginal cost).
+- 4 read cached-Maps tables (free per call; Maps billed only on the scheduled refresh).
+- No live drive-time / Routes call is in scope (the most expensive call was excluded).
+
+---
+
+## Steps
+
+### 1. Introduction
+The agent solves location, pricing, demand, and differentiation questions for a tong shui
+(Chinese sweet dessert) shop in the Klang Valley. The same code works for any local,
+consumer-facing business: only the data pack (competitor keyword + product list + rows)
+changes; the 7-table schema and 10 queries stay identical.
+
+### 2. Before you begin
+- Python 3.11+
+- (Optional, for live Maps refresh) a Google Maps **Places API** key.
+
+### 3. Get the code
+You are here. Project layout:
+```
+market-research agent/
+├── data/                      # the 7 CSV tables (generated)
+├── setup/
+│   ├── generate_data.py       # builds the Klang Valley tong shui data pack
+│   └── build_db.py            # CSVs -> market_research.db (SQLite)
+├── app/
+│   ├── queries.py             # the 10 approved, parameterized queries (governance layer)
+│   ├── router.py              # free text -> one of the 10 query ids
+│   ├── agent.py               # route -> run query -> phrase answer (no-ADK "LlmAgent")
+│   └── main.py                # FastAPI service (Cloud Run)
+├── cache/
+│   └── refresh_maps_cache.py  # fills competitors/reviews/suppliers from Maps (scheduled)
+├── market-research-agent.html # chat UI front end
+├── requirements.txt
+├── Dockerfile
+└── project-outline.md
+```
+
+### 4. Build the data pack and database
+```
+python setup/generate_data.py     # writes the 7 CSVs to data/
+python setup/build_db.py          # builds market_research.db
+```
+The 7 tables: `demographics`, `foot_traffic`, `competitor_prices`, `sales_history_weekly`
+(the 4 codelab data tables), plus the cached-Maps tables `competitors`,
+`competitor_reviews`, `suppliers`.
+
+### 5. Install dependencies
+```
+python -m venv .venv
+source .venv/bin/activate        # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+### 6. Inspect the application
+- `app/queries.py` — the 10 fixed SQL tools. Smoke-test them: `python app/queries.py`
+- `app/agent.py` — routing + phrasing. Try it: `python app/agent.py`
+- `app/main.py` — the FastAPI service.
+
+### 7. Chat with your agent
+```
+uvicorn app.main:app --reload --port 8080
+```
+Open http://127.0.0.1:8080 and tap a question, or POST directly:
+```
+curl -X POST http://127.0.0.1:8080/ask -H "Content-Type: application/json" \
+  -d '{"question":"should I launch in Kepong?"}'
+```
+> The shipped `market-research-agent.html` uses canned answers for an offline/GitHub-Pages
+> demo. To make the UI live, point its `fetch` at `POST /ask` and render `answer`.
+
+### 8. Refresh the Maps cache (the only Maps cost)
+```
+python cache/refresh_maps_cache.py --dry-run     # shows the plan, no API calls
+# then, with MAPS_API_KEY set in .env:
+python cache/refresh_maps_cache.py               # live refresh
+python setup/build_db.py                         # rebuild DB with fresh cache
+```
+Schedule this daily/weekly with Cloud Scheduler. User questions never trigger it.
+
+### 9. Deploy to Cloud Run (pay-per-use)
+```
+gcloud run deploy market-research-agent --source . --region asia-southeast1 \
+  --allow-unauthenticated --set-env-vars MAPS_API_KEY=YOUR_KEY
+```
+Cloud Run scales to zero, so the service costs nothing when idle.
+
+---
+
+## The 10 questions
+| # | Question | Source | Cost |
+|---|---|---|---|
+| 1 | Highest foot traffic by daypart | foot_traffic | SQL |
+| 2 | Resident profile fit | demographics | SQL |
+| 3 | High traffic, few competitors | foot_traffic + competitors | Cached |
+| 4 | Saturation in an area | competitors | Cached |
+| 5 | Competitor price range | competitor_prices | SQL |
+| 6 | Unoccupied price band | competitor_prices | SQL |
+| 7 | Revenue forecast | sales_history_weekly | SQL |
+| 8 | Bestseller and trend | sales_history_weekly | SQL |
+| 9 | Top competitor complaints | competitor_reviews | Cached |
+| 10 | Launch go / no-go | multiple | Multi |
+
+Data in this repo is synthetic (generated by `setup/generate_data.py`) for demonstration.
+Run the Maps refresh against a real key to populate the cached tables with live places.
