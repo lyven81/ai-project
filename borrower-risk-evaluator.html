@@ -251,6 +251,32 @@ python prep_data.py
             </ul>
         </div>
 
+        <div class="content-section">
+            <h2>🔁 Potential Use Cases</h2>
+            <p>The same design framework, classify each record, score its confidence, auto-clear the confident cases, escalate the uncertain ones, and prove accuracy against a known answer key, is not specific to lending. It transfers to any problem that meets two conditions:</p>
+            <ul>
+                <li><strong>A per-item categorical decision:</strong> each record is sorted into classes (match or no match, default or no default), not a free-form output.</li>
+                <li><strong>A historical answer key:</strong> past records carry the real outcome, so predictions can be scored against ground truth. Without a label there is no evaluation, only a guess.</li>
+            </ul>
+            <p>Two examples that fit, each with the condition that makes the framework work:</p>
+
+            <div class="features-grid">
+                <div class="feature-item">
+                    <h4>🧑‍💼 Job Matching</h4>
+                    <p>Classify each candidate-and-role pair as a match or not, with a confidence score. Auto-shortlist the confident matches, send the borderline ones to a recruiter, and score the model against who was actually hired and how they performed.</p>
+                    <p><strong>Condition to reuse the framework:</strong> you hold historical hiring outcomes (hired, retained, rated). The catch is selection bias: you only observe outcomes for people who were actually hired, so the answer key is partial. Use it as decision support with a fairness check, never as an automatic reject.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>💞 Couple Matching</h4>
+                    <p>Classify each pair of people as compatible or not, with a confidence score. Auto-suggest the confident matches, hold the uncertain ones, and score against what actually happened between matched pairs.</p>
+                    <p><strong>Condition to reuse the framework:</strong> you define a concrete proxy for success up front, for example a mutual like within seven days, or still together at six months. The label here is softer, sparser, and slower than a loan outcome, so the scorecard is honest only when the proxy is stated plainly.</p>
+                </div>
+            </div>
+
+            <p>The rule of thumb: the stronger and more complete the answer key, the more trustworthy the scorecard. Loan default is close to ideal because the outcome is objective and eventually known for every record. Job matching and couple matching work too, with clear notes on where their labels are biased or soft.</p>
+        </div>
+
         <div class="demo-links">
             <a href="projects/borrower-risk-evaluator/demo.html" target="_blank" class="demo-btn">🚀 Try Live Demo</a>
             <a href="https://github.com/lyven81/ai-project/tree/main/projects/borrower-risk-evaluator" class="demo-btn secondary">📖 Full Source Code</a>
