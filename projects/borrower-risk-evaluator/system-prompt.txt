@@ -1,0 +1,43 @@
+CLASSIFICATION PROMPT (the single documented prompt + taxonomy)
+
+Model: gemini-2.5-flash, temperature 0, structured JSON output.
+Sent once per borrower. The true label is NEVER included in the prompt; it is
+used only afterwards to score the verdict.
+
+---
+
+You are a credit-risk classifier for a small lender. Judging only from the
+borrower facts below, decide whether this loan will end in DEFAULT or NO DEFAULT.
+
+Borrower:
+- Age: {age}
+- Annual income: {income}
+- Home ownership: {home_ownership}
+- Employment length (years): {employment_duration}
+- Loan purpose: {loan_intent}
+- Loan grade (A best to G worst): {loan_grade}
+- Loan amount: {loan_amount}
+- Interest rate: {interest_rate}%
+- Loan term (years): {term_years}
+- Loan as % of income: {loan_to_income_pct}%
+- Interest rate vs typical for this grade: {rate_above_grade_norm} (positive = pricier than peers)
+- Prior default on record: {prior_default}
+- Credit history length (years): {credit_history_length}
+
+Return:
+- status: "DEFAULT" or "NO DEFAULT"
+- confidence: how sure you are of THIS verdict, from 0.5 (a coin toss) to 1.0 (certain)
+- reason: one short plain-language sentence naming the 1-2 facts that drove it.
+
+---
+
+TAXONOMY
+  Class:  { DEFAULT, NO DEFAULT }      (verdict, scored against Current_loan_status)
+  Action: { auto-approve, auto-flag, send-to-human }
+          decided deterministically from confidence vs the safety-dial threshold:
+            confidence < threshold        -> send-to-human
+            confidence >= threshold, NO DEFAULT -> auto-approve
+            confidence >= threshold, DEFAULT    -> auto-flag
+
+RESPONSE SCHEMA (enforced via Gemini responseSchema)
+  { status: enum["DEFAULT","NO DEFAULT"], confidence: number, reason: string }

@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Borrower Risk Evaluator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#14233b; --ink2:#243a5c; --paper:#eef1f6; --surface:#ffffff;
+    --line:#d9e0ea; --line2:#e9edf3; --muted:#5f6f86; --soft:#8493a8;
+    --gold:#b8893a; --gold-soft:#f2e6cf;
+    --approve:#1f8a6d; --approve-bg:#e6f4ee;
+    --flag:#b3402e; --flag-bg:#f8e8e4;
+    --human:#4a5fb5; --human-bg:#e9ecf8;
+    --display:'Space Grotesk',sans-serif;
+    --body:'Inter',sans-serif;
+    --mono:'JetBrains Mono',monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{font-family:var(--body);background:var(--paper);color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased;}
+  .num{font-family:var(--display);font-variant-numeric:tabular-nums;letter-spacing:-.01em;}
+  .mono{font-family:var(--mono);}
+
+  /* ---------- top bar / persistent control strip ---------- */
+  header{position:sticky;top:0;z-index:50;background:var(--ink);color:#fff;border-bottom:3px solid var(--gold);}
+  .bar{max-width:1180px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;gap:22px;flex-wrap:wrap;}
+  .brand{display:flex;flex-direction:column;gap:1px;min-width:200px;}
+  .brand .name{font-family:var(--display);font-weight:700;font-size:1.18rem;letter-spacing:-.015em;}
+  .brand .tag{font-size:.74rem;color:#9fb0c7;letter-spacing:.02em;}
+  .dial{flex:1;min-width:300px;display:flex;align-items:center;gap:16px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:10px 16px;}
+  .dial.disabled{opacity:.45;pointer-events:none;}
+  .dial .dlabel{font-size:.72rem;color:#9fb0c7;text-transform:uppercase;letter-spacing:.08em;white-space:nowrap;}
+  .dial .dval{font-family:var(--display);font-weight:700;font-size:1.4rem;color:var(--gold);min-width:58px;text-align:right;font-variant-numeric:tabular-nums;}
+  input[type=range]{-webkit-appearance:none;appearance:none;flex:1;height:6px;border-radius:6px;background:linear-gradient(to right,var(--gold) 0%,var(--gold) var(--fill,40%),rgba(255,255,255,.18) var(--fill,40%),rgba(255,255,255,.18) 100%);outline:none;cursor:pointer;}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:#fff;border:3px solid var(--gold);cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.3);}
+  input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:#fff;border:3px solid var(--gold);cursor:pointer;}
+  input[type=range]:focus-visible{box-shadow:0 0 0 3px rgba(184,137,58,.5);}
+  .headline{text-align:right;min-width:150px;}
+  .headline .big{font-family:var(--display);font-weight:700;font-size:1.5rem;color:#fff;line-height:1;}
+  .headline .small{font-size:.72rem;color:#9fb0c7;margin-top:3px;}
+
+  /* ---------- tabs ---------- */
+  .tabs{max-width:1180px;margin:0 auto;padding:0 24px;display:flex;gap:6px;border-bottom:1px solid var(--line);}
+  .tab{appearance:none;background:none;border:none;font-family:var(--display);font-weight:600;font-size:.95rem;color:var(--soft);padding:16px 18px 13px;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-1px;transition:color .15s,border-color .15s;}
+  .tab:hover{color:var(--ink2);}
+  .tab[aria-selected=true]{color:var(--ink);border-bottom-color:var(--gold);}
+  .tab:focus-visible{outline:2px solid var(--gold);outline-offset:-4px;border-radius:6px;}
+
+  main{max-width:1180px;margin:0 auto;padding:30px 24px 70px;}
+  .view{display:none;}
+  .view.active{display:block;animation:fade .25s ease;}
+  @keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+
+  .eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);font-weight:500;}
+  h2.section{font-family:var(--display);font-weight:600;font-size:1.05rem;margin:6px 0 16px;}
+  .lead{color:var(--muted);font-size:.92rem;max-width:680px;margin-bottom:24px;}
+
+  /* ---------- BYO-key run panel ---------- */
+  .runpanel{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:22px 24px;margin-bottom:26px;}
+  .runpanel.done{border-color:var(--approve);background:linear-gradient(0deg,#fff,#fbfdfc);}
+  .runpanel h3{font-family:var(--display);font-weight:600;font-size:1rem;margin-bottom:4px;}
+  .runpanel .rp-sub{font-size:.82rem;color:var(--muted);margin-bottom:16px;max-width:720px;}
+  .rp-controls{display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;}
+  .rp-field{display:flex;flex-direction:column;gap:5px;}
+  .rp-field label{font-size:.72rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.05em;}
+  .rp-field input[type=password],.rp-field select{font-family:var(--body);font-size:.9rem;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);}
+  .rp-field input[type=password]{width:300px;font-family:var(--mono);}
+  .rp-field input[type=password]:focus,.rp-field select:focus{outline:2px solid var(--gold);outline-offset:-1px;border-color:var(--gold);}
+  .runbtn{font-family:var(--display);font-weight:600;font-size:.92rem;padding:11px 22px;border:none;border-radius:10px;background:var(--gold);color:#fff;cursor:pointer;transition:.15s;white-space:nowrap;}
+  .runbtn:hover{background:#a3782f;}
+  .runbtn:disabled{opacity:.5;cursor:not-allowed;}
+  .runbtn:focus-visible{outline:2px solid var(--ink);outline-offset:2px;}
+  .rp-remember{display:flex;align-items:center;gap:6px;font-size:.78rem;color:var(--muted);margin-top:12px;}
+  .rp-priv{font-size:.74rem;color:var(--soft);margin-top:10px;}
+  .rp-priv a{color:var(--gold);}
+  .progress{margin-top:16px;display:none;}
+  .progress.show{display:block;}
+  .pbar{height:9px;border-radius:9px;background:var(--line2);overflow:hidden;}
+  .pbar i{display:block;height:100%;width:0;border-radius:9px;background:var(--gold);transition:width .2s;}
+  .pstatus{font-family:var(--mono);font-size:.76rem;color:var(--ink2);margin-top:8px;display:flex;justify-content:space-between;}
+  .rp-err{color:var(--flag);font-size:.8rem;margin-top:10px;display:none;}
+  .rp-err.show{display:block;}
+  .needrun{background:var(--gold-soft);border:1px solid #e3d2ad;border-radius:14px;padding:18px 22px;color:#6b521f;font-size:.88rem;text-align:center;}
+  .needrun b{font-family:var(--display);}
+
+  /* ---------- scorecard hero ---------- */
+  .hero{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px;}
+  .stat{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:24px 26px;position:relative;overflow:hidden;}
+  .stat.lead-stat{border:2px solid var(--gold);box-shadow:0 6px 24px rgba(184,137,58,.13);}
+  .stat .label{font-size:.8rem;color:var(--muted);font-weight:500;}
+  .stat .value{font-family:var(--display);font-weight:700;font-size:3.4rem;line-height:1;margin:10px 0 4px;letter-spacing:-.02em;font-variant-numeric:tabular-nums;}
+  .stat .sub{font-size:.78rem;color:var(--soft);}
+  .stat .delta{display:inline-block;margin-top:10px;font-size:.74rem;font-weight:600;font-family:var(--mono);padding:3px 9px;border-radius:20px;}
+  .delta.up{background:var(--approve-bg);color:var(--approve);}
+
+  .baseline-note{background:var(--ink);color:#dbe4f0;border-radius:14px;padding:16px 22px;display:flex;align-items:center;gap:16px;margin-bottom:26px;font-size:.9rem;}
+  .baseline-note .bn-num{font-family:var(--display);font-weight:700;font-size:2rem;color:var(--gold);line-height:1;white-space:nowrap;}
+  .baseline-note b{color:#fff;}
+
+  .grid2{display:grid;grid-template-columns:340px 1fr;gap:18px;align-items:start;}
+  .panel{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:22px 24px;}
+  .panel h3{font-family:var(--display);font-weight:600;font-size:.98rem;margin-bottom:4px;}
+  .panel .ph{font-size:.78rem;color:var(--soft);margin-bottom:16px;}
+
+  /* confusion matrix */
+  .cm{display:grid;grid-template-columns:auto 1fr 1fr;gap:6px;font-size:.8rem;}
+  .cm .axis{display:flex;align-items:center;justify-content:center;color:var(--muted);font-weight:500;font-size:.72rem;text-align:center;padding:4px;}
+  .cm .cell{border-radius:10px;padding:14px 10px;text-align:center;}
+  .cm .cell .cv{font-family:var(--display);font-weight:700;font-size:1.5rem;line-height:1;font-variant-numeric:tabular-nums;}
+  .cm .cell .cl{font-size:.68rem;color:var(--muted);margin-top:5px;display:block;}
+  .cm .correct{background:var(--approve-bg);}
+  .cm .correct .cv{color:var(--approve);}
+  .cm .wrong{background:var(--flag-bg);}
+  .cm .wrong .cv{color:var(--flag);}
+  .cm-corner{font-size:.7rem;color:var(--soft);}
+
+  /* metric rows */
+  .mrow{display:flex;align-items:center;gap:14px;padding:13px 0;border-bottom:1px solid var(--line2);}
+  .mrow:last-child{border-bottom:none;}
+  .mrow .mname{flex:1;}
+  .mrow .mname b{font-weight:600;font-size:.9rem;}
+  .mrow .mname span{display:block;font-size:.74rem;color:var(--soft);}
+  .mrow .mbar{width:120px;height:8px;border-radius:8px;background:var(--line2);overflow:hidden;}
+  .mrow .mbar i{display:block;height:100%;border-radius:8px;background:var(--human);}
+  .mrow .mval{font-family:var(--display);font-weight:700;font-size:1.2rem;width:62px;text-align:right;font-variant-numeric:tabular-nums;}
+
+  /* tradeoff chart */
+  .tradeoff{margin-top:18px;}
+  .chartwrap{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:22px 24px;}
+  .legend{display:flex;gap:20px;font-size:.78rem;color:var(--muted);margin-bottom:8px;flex-wrap:wrap;}
+  .legend i{display:inline-block;width:14px;height:3px;border-radius:3px;vertical-align:middle;margin-right:6px;}
+  svg{display:block;width:100%;height:auto;}
+
+  /* ---------- triage console ---------- */
+  .summary-band{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px;}
+  .sb{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px;border-left:4px solid var(--soft);}
+  .sb.approve{border-left-color:var(--approve);}
+  .sb.flag{border-left-color:var(--flag);}
+  .sb.human{border-left-color:var(--human);}
+  .sb.cleared{border-left-color:var(--gold);}
+  .sb .sv{font-family:var(--display);font-weight:700;font-size:2rem;line-height:1;font-variant-numeric:tabular-nums;}
+  .sb .sl{font-size:.76rem;color:var(--muted);margin-top:4px;}
+
+  .lanes{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;align-items:start;}
+  .lane{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;}
+  .lane-head{padding:14px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);}
+  .lane-head .lt{font-family:var(--display);font-weight:600;font-size:.92rem;display:flex;align-items:center;gap:8px;}
+  .lane-head .lt .dot{width:9px;height:9px;border-radius:50%;}
+  .lane-head .lc{font-family:var(--display);font-weight:700;font-size:1.05rem;font-variant-numeric:tabular-nums;}
+  .lane.approve .lt .dot{background:var(--approve);} .lane.approve .lane-head{background:var(--approve-bg);}
+  .lane.flag .lt .dot{background:var(--flag);} .lane.flag .lane-head{background:var(--flag-bg);}
+  .lane.human .lt .dot{background:var(--human);} .lane.human .lane-head{background:var(--human-bg);}
+  .lane-sub{font-size:.72rem;color:var(--soft);padding:8px 18px 0;}
+  .lane-body{padding:12px;max-height:560px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;}
+  .lane-body::-webkit-scrollbar{width:8px;}
+  .lane-body::-webkit-scrollbar-thumb{background:var(--line);border-radius:8px;}
+
+  .card{border:1px solid var(--line);border-radius:12px;padding:13px 14px;background:#fff;}
+  .card .ch{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+  .card .bid{font-family:var(--mono);font-size:.78rem;color:var(--ink2);}
+  .pill{font-size:.66rem;font-weight:600;padding:3px 9px;border-radius:20px;text-transform:uppercase;letter-spacing:.04em;font-family:var(--mono);}
+  .pill.def{background:var(--flag-bg);color:var(--flag);}
+  .pill.nodef{background:var(--approve-bg);color:var(--approve);}
+  .feat{font-size:.76rem;color:var(--muted);margin-bottom:9px;}
+  .feat span{color:var(--ink);font-weight:500;}
+  .confbar{height:6px;border-radius:6px;background:var(--line2);overflow:hidden;margin-bottom:5px;}
+  .confbar i{display:block;height:100%;border-radius:6px;}
+  .conftext{display:flex;justify-content:space-between;font-size:.7rem;color:var(--soft);}
+  .conftext .cpct{font-family:var(--mono);color:var(--ink2);font-weight:500;}
+  .why{font-size:.76rem;color:var(--ink2);margin-top:9px;padding-top:9px;border-top:1px dashed var(--line);}
+  .why b{color:var(--gold);font-weight:600;}
+  .truthtag{font-size:.68rem;font-family:var(--mono);margin-top:7px;color:var(--soft);}
+  .truthtag.hit{color:var(--approve);}
+  .truthtag.miss{color:var(--flag);}
+  .review-actions{display:flex;gap:8px;margin-top:11px;}
+  .review-actions button{flex:1;font-family:var(--body);font-weight:600;font-size:.76rem;padding:7px;border-radius:8px;cursor:pointer;border:1px solid var(--line);background:#fff;transition:.12s;}
+  .review-actions .ok{color:var(--approve);border-color:var(--approve);}
+  .review-actions .ok:hover{background:var(--approve);color:#fff;}
+  .review-actions .bad{color:var(--flag);border-color:var(--flag);}
+  .review-actions .bad:hover{background:var(--flag);color:#fff;}
+  .review-actions button:focus-visible{outline:2px solid var(--gold);outline-offset:1px;}
+  .more{text-align:center;font-size:.74rem;color:var(--soft);padding:8px;font-family:var(--mono);}
+  .empty{text-align:center;font-size:.8rem;color:var(--soft);padding:30px 14px;}
+  .empty b{display:block;color:var(--ink2);margin-bottom:3px;font-family:var(--display);}
+
+  /* by loan type */
+  .typebreak{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px 20px;margin-bottom:22px;}
+  .tb-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px;}
+  .tb-head h3{font-family:var(--display);font-weight:600;font-size:.98rem;}
+  .tb-legend{display:flex;gap:14px;font-size:.72rem;color:var(--muted);}
+  .tb-legend i{display:inline-block;width:10px;height:10px;border-radius:3px;vertical-align:-1px;margin-right:5px;}
+  .tb-active{font-family:var(--mono);font-size:.76rem;color:var(--ink2);}
+  .tb-rows{display:flex;flex-direction:column;gap:7px;}
+  .tb-row{display:grid;grid-template-columns:148px 42px 1fr 104px;align-items:center;gap:14px;width:100%;text-align:left;background:#fff;border:1px solid var(--line);border-radius:10px;padding:9px 14px;cursor:pointer;font-family:var(--body);transition:border-color .12s,background .12s;}
+  .tb-row:hover{border-color:var(--gold);background:#fcfaf5;}
+  .tb-row[aria-pressed=true]{border-color:var(--gold);background:var(--gold-soft);box-shadow:inset 0 0 0 1px var(--gold);}
+  .tb-row:focus-visible{outline:2px solid var(--gold);outline-offset:1px;}
+  .tb-name{font-weight:600;font-size:.86rem;}
+  .tb-total{font-family:var(--display);font-weight:700;font-size:.95rem;font-variant-numeric:tabular-nums;color:var(--ink2);}
+  .tb-bar{display:flex;height:13px;border-radius:6px;overflow:hidden;background:var(--line2);}
+  .tb-bar i{display:block;height:100%;}
+  .tb-bar .ap{background:var(--approve);} .tb-bar .fl{background:var(--flag);} .tb-bar .hu{background:var(--human);}
+  .tb-rate{font-family:var(--mono);font-size:.76rem;color:var(--ink2);text-align:right;font-weight:500;}
+  @media (max-width:880px){.tb-row{grid-template-columns:104px 34px 1fr 80px;gap:9px;}}
+
+  footer{max-width:1180px;margin:0 auto;padding:20px 24px 40px;color:var(--soft);font-size:.76rem;text-align:center;border-top:1px solid var(--line);}
+  .note{background:var(--gold-soft);border:1px solid #e3d2ad;border-radius:12px;padding:12px 18px;font-size:.82rem;color:#6b521f;margin-top:22px;}
+
+  /* confidence-interval annotations */
+  .ci{font-family:var(--mono);font-size:.7rem;color:var(--soft);}
+  .stat .ci{display:block;margin-top:6px;}
+  .mci{display:block;font-family:var(--mono);font-size:.68rem;color:var(--soft);margin-top:3px;}
+
+  /* ---------- portfolio-to-production guide ---------- */
+  .prod-intro{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px;}
+  .prod-card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:22px 24px;}
+  .prod-card.keep{border-left:4px solid var(--approve);}
+  .prod-card.change{border-left:4px solid var(--gold);}
+  .prod-card h3{font-family:var(--display);font-weight:600;font-size:.98rem;margin-bottom:12px;}
+  .klist{list-style:none;display:flex;flex-direction:column;gap:10px;}
+  .klist li{font-size:.86rem;color:var(--ink2);padding-left:24px;position:relative;}
+  .klist li::before{content:'';position:absolute;left:0;top:7px;width:11px;height:11px;border-radius:3px;background:var(--approve);}
+  .klist.change li::before{background:var(--gold);border-radius:50%;}
+  .klist li b{color:var(--ink);}
+  .ptable{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;margin-bottom:18px;}
+  .ptable th,.ptable td{text-align:left;padding:12px 16px;border-bottom:1px solid var(--line2);vertical-align:top;}
+  .ptable tr:last-child td{border-bottom:none;}
+  .ptable thead th{font-family:var(--display);font-weight:600;color:var(--ink2);font-size:.74rem;text-transform:uppercase;letter-spacing:.05em;background:#f4f6fa;}
+  .ptable td:first-child{font-weight:600;color:var(--ink2);width:150px;}
+  .ptable .demo-col{color:var(--muted);}
+  .archbox{background:var(--ink);color:#dbe4f0;border-radius:16px;padding:22px 24px;margin-bottom:18px;}
+  .archbox h3{font-family:var(--display);font-weight:600;font-size:.98rem;color:#fff;margin-bottom:6px;}
+  .archbox p{font-size:.86rem;margin-bottom:10px;}
+  .archbox b{color:var(--gold);}
+  .archflow{font-family:var(--mono);font-size:.78rem;color:#cdd8e8;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:14px 16px;line-height:1.9;overflow-x:auto;}
+  .archflow .ar{color:var(--gold);}
+  .insight{background:var(--approve-bg);border:1px solid #bfe3d4;border-radius:16px;padding:20px 24px;margin-bottom:18px;}
+  .insight h3{font-family:var(--display);font-weight:600;font-size:.98rem;color:var(--approve);margin-bottom:6px;}
+  .insight p{font-size:.88rem;color:#1c4d3e;}
+  .insight b{color:var(--approve);}
+  /* how accuracy is verified */
+  .subsection{margin:32px 0 16px;padding-top:26px;border-top:2px solid var(--line);}
+  .subsection .eyebrow2{font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);font-weight:500;}
+  .subsection h3{font-family:var(--display);font-weight:600;font-size:1.1rem;margin:6px 0 4px;}
+  .subsection .sslead{font-size:.88rem;color:var(--muted);max-width:680px;margin-bottom:18px;}
+  .vfy{display:flex;flex-direction:column;gap:12px;}
+  .vfy-item{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 20px;display:grid;grid-template-columns:38px 1fr;gap:16px;align-items:start;}
+  .vfy-num{width:38px;height:38px;border-radius:50%;background:var(--gold-soft);color:var(--gold);font-family:var(--display);font-weight:700;display:flex;align-items:center;justify-content:center;font-size:1.05rem;}
+  .vfy-item h4{font-family:var(--display);font-weight:600;font-size:.94rem;margin-bottom:5px;color:var(--ink);}
+  .vfy-item p{font-size:.86rem;color:var(--muted);}
+  .vfy-item b{color:var(--ink2);}
+  @media (max-width:880px){.prod-intro{grid-template-columns:1fr;}}
+
+  @media (max-width:880px){
+    .hero,.grid2,.summary-band,.lanes{grid-template-columns:1fr;}
+    .headline{display:none;}
+    .bar{gap:14px;}
+    .rp-field input[type=password]{width:100%;}
+  }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto;}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="bar">
+    <div class="brand">
+      <span class="name">Borrower Risk Evaluator</span>
+      <span class="tag">Classification, confidence, and measured proof</span>
+    </div>
+    <div class="dial disabled" id="dialWrap">
+      <span class="dlabel">Auto&#8209;clear confidence</span>
+      <input type="range" id="thr" min="50" max="98" value="80" step="1" aria-label="Confidence threshold for auto-clearing records">
+      <span class="dval" id="thrVal">80%</span>
+    </div>
+    <div class="headline">
+      <div class="big" id="hlCoverage">--%</div>
+      <div class="small">auto&#8209;cleared = less manual review</div>
+    </div>
+  </div>
+</header>
+
+<div class="tabs" role="tablist" aria-label="Views">
+  <button class="tab" role="tab" id="tab-score" aria-selected="true" aria-controls="view-score">Evaluation scorecard</button>
+  <button class="tab" role="tab" id="tab-triage" aria-selected="false" aria-controls="view-triage">Triage console</button>
+  <button class="tab" role="tab" id="tab-prod" aria-selected="false" aria-controls="view-prod">Portfolio to production</button>
+</div>
+
+<main>
+  <!-- ===================== SCORECARD ===================== -->
+  <section class="view active" id="view-score" role="tabpanel" aria-labelledby="tab-score">
+    <div class="eyebrow">The proof</div>
+    <h2 class="section">Does this model deserve to be trusted?</h2>
+    <p class="lead">A language model classifies each real borrower as default or no default and reports how sure it is. Then every verdict is checked against the borrower&rsquo;s real recorded outcome. The dial up top sets how sure the model must be before a case clears without a human.</p>
+
+    <!-- BYO-key run panel -->
+    <div class="runpanel" id="runPanel">
+      <h3>Run the live evaluation</h3>
+      <p class="rp-sub">Nothing on this page is pre-computed. Paste your Google Gemini API key and the model will classify real held&#8209;out borrowers one by one, then score itself against the known outcomes. The labels are revealed to the scorer only <i>after</i> each verdict is in.</p>
+      <div class="rp-controls">
+        <div class="rp-field">
+          <label for="apiKey">Gemini API key</label>
+          <input type="password" id="apiKey" placeholder="AIza..." autocomplete="off" spellcheck="false">
+        </div>
+        <div class="rp-field">
+          <label for="sampleN">Borrowers to test</label>
+          <select id="sampleN">
+            <option value="50">50 (fast)</option>
+            <option value="100">100</option>
+            <option value="150">150 (all)</option>
+          </select>
+        </div>
+        <button class="runbtn" id="runBtn">Run evaluation</button>
+      </div>
+      <label class="rp-remember"><input type="checkbox" id="rememberKey"> Remember the key on this device</label>
+      <div class="rp-priv">Your key stays in your browser and is sent only to Google&rsquo;s Gemini API. Get a free key at <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a>.</div>
+      <div class="progress" id="progress">
+        <div class="pbar"><i id="pbarFill"></i></div>
+        <div class="pstatus"><span id="pStatus">Starting...</span><span id="pCount">0 / 0</span></div>
+      </div>
+      <div class="rp-err" id="rpErr"></div>
+    </div>
+
+    <div id="scoreContent" style="display:none;">
+      <div class="hero">
+        <div class="stat">
+          <div class="label">Accuracy across all <span id="cntAll1">--</span> borrowers</div>
+          <div class="value" id="accAll">--%</div>
+          <div class="sub">Right verdicts &divide; total verdicts</div>
+          <span class="ci" id="accAllCi"></span>
+        </div>
+        <div class="stat lead-stat">
+          <div class="label">Accuracy on the cases it cleared on its own</div>
+          <div class="value" id="accHc">--%</div>
+          <div class="sub" id="accHcSub">High&#8209;confidence cases only</div>
+          <span class="ci" id="accHcCi"></span>
+          <span class="delta up" id="accDelta">--</span>
+        </div>
+      </div>
+
+      <div class="baseline-note">
+        <span class="bn-num" id="baseNum">--%</span>
+        <span>A lazy model that calls <b>every</b> borrower &ldquo;no default&rdquo; already scores <span id="baseInline">--%</span> accuracy here, and catches zero real defaults. <b>That is why accuracy alone is not the answer.</b> The two numbers below are.</span>
+      </div>
+
+      <div class="grid2">
+        <div class="panel">
+          <h3>Where it is right and wrong</h3>
+          <div class="ph">Counted against the real outcome, for the default class.</div>
+          <div class="cm">
+            <span class="cm-corner"></span>
+            <span class="axis">Predicted<br>default</span>
+            <span class="axis">Predicted<br>no default</span>
+            <span class="axis" style="writing-mode:vertical-rl;transform:rotate(180deg);">Real default</span>
+            <div class="cell correct"><span class="cv" id="cmTP">0</span><span class="cl">Caught</span></div>
+            <div class="cell wrong"><span class="cv" id="cmFN">0</span><span class="cl">Missed</span></div>
+            <span class="axis" style="writing-mode:vertical-rl;transform:rotate(180deg);">Real no default</span>
+            <div class="cell wrong"><span class="cv" id="cmFP">0</span><span class="cl">False alarm</span></div>
+            <div class="cell correct"><span class="cv" id="cmTN">0</span><span class="cl">Cleared</span></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>The numbers accuracy hides</h3>
+          <div class="ph">Performance on the rare-but-costly default class.</div>
+          <div class="mrow">
+            <div class="mname"><b>Recall</b><span>Of real defaults, how many it caught</span><span class="mci" id="ciRec"></span></div>
+            <div class="mbar"><i id="barRec"></i></div>
+            <div class="mval" id="valRec">--</div>
+          </div>
+          <div class="mrow">
+            <div class="mname"><b>Precision</b><span>Of its default flags, how many were right</span><span class="mci" id="ciPrec"></span></div>
+            <div class="mbar"><i id="barPrec"></i></div>
+            <div class="mval" id="valPrec">--</div>
+          </div>
+          <div class="mrow">
+            <div class="mname"><b>F1</b><span>The balance of the two above</span></div>
+            <div class="mbar"><i id="barF1"></i></div>
+            <div class="mval" id="valF1">--</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tradeoff">
+        <div class="chartwrap">
+          <h3 style="font-family:var(--display);font-weight:600;font-size:.98rem;margin-bottom:4px;">The safety dial, drawn out</h3>
+          <div class="ph" style="font-size:.78rem;color:var(--soft);margin-bottom:14px;">Raise the bar and the cases it clears get more accurate, but it clears fewer of them and leaves more for a human. The line shows the current setting.</div>
+          <div class="legend">
+            <span><i style="background:var(--approve);"></i>Accuracy on auto&#8209;cleared cases</span>
+            <span><i style="background:var(--gold);"></i>Share auto&#8209;cleared (coverage)</span>
+            <span><i style="background:var(--ink);"></i>Your setting</span>
+          </div>
+          <svg id="chart" viewBox="0 0 760 280" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Tradeoff between accuracy and coverage as the confidence threshold changes"></svg>
+        </div>
+      </div>
+
+      <div class="note">Framed as decision support: the system triages, a human owns the final call on any flag. Real credit denials need a person and a fairness check.</div>
+    </div>
+  </section>
+
+  <!-- ===================== TRIAGE ===================== -->
+  <section class="view" id="view-triage" role="tabpanel" aria-labelledby="tab-triage">
+    <div class="eyebrow">What it does</div>
+    <h2 class="section"><span id="cntAll2">--</span> borrowers in, three clear piles out</h2>
+    <p class="lead">The model sorts every borrower and routes it by how sure it is. Confident cases clear on their own. Only the uncertain ones reach the review queue, so a person spends time where it actually matters.</p>
+
+    <div id="triageNeedRun" class="needrun"><b>No results yet.</b><br>Open the Evaluation scorecard tab, paste a Gemini key, and run the evaluation to populate these piles.</div>
+
+    <div id="triageContent" style="display:none;">
+      <div class="typebreak">
+        <div class="tb-head">
+          <h3>By loan type</h3>
+          <div class="tb-legend"><span><i style="background:var(--approve)"></i>approve</span><span><i style="background:var(--flag)"></i>flag</span><span><i style="background:var(--human)"></i>human</span></div>
+          <span class="tb-active" id="tbActive">Showing all borrowers</span>
+        </div>
+        <div class="tb-rows" id="tbRows"></div>
+      </div>
+
+      <div class="summary-band">
+        <div class="sb approve"><div class="sv" id="sbApprove">0</div><div class="sl">Auto&#8209;approved<br>(confident no default)</div></div>
+        <div class="sb flag"><div class="sv" id="sbFlag">0</div><div class="sl">Auto&#8209;flagged<br>(confident default)</div></div>
+        <div class="sb human"><div class="sv" id="sbHuman">0</div><div class="sl">Sent to a human<br>(model unsure)</div></div>
+        <div class="sb cleared"><div class="sv" id="sbCleared">0%</div><div class="sl">Handled without a person<br>= less manual review</div></div>
+      </div>
+
+      <div class="lanes">
+        <div class="lane approve">
+          <div class="lane-head"><span class="lt"><span class="dot"></span>Auto&#8209;approve</span><span class="lc" id="laneApproveCount">0</span></div>
+          <div class="lane-sub">Cleared automatically. No action needed.</div>
+          <div class="lane-body" id="laneApprove"></div>
+        </div>
+        <div class="lane flag">
+          <div class="lane-head"><span class="lt"><span class="dot"></span>Auto&#8209;flag</span><span class="lc" id="laneFlagCount">0</span></div>
+          <div class="lane-sub">Routed for closer checks. No action needed.</div>
+          <div class="lane-body" id="laneFlag"></div>
+        </div>
+        <div class="lane human">
+          <div class="lane-head"><span class="lt"><span class="dot"></span>Your review queue</span><span class="lc" id="laneHumanCount">0</span></div>
+          <div class="lane-sub">The model was not sure. Your call.</div>
+          <div class="lane-body" id="laneHuman"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PORTFOLIO TO PRODUCTION ===================== -->
+  <section class="view" id="view-prod" role="tabpanel" aria-labelledby="tab-prod">
+    <div class="eyebrow">The honest path</div>
+    <h2 class="section">From this portfolio demo to a system that handles 10,000+ borrowers</h2>
+    <p class="lead">This page is a working blueprint, not a throwaway. The parts that are hard to get right, the classification logic and the proof that it works, carry over to production unchanged. What changes is the plumbing around them.</p>
+
+    <div class="prod-intro">
+      <div class="prod-card keep">
+        <h3>What transfers unchanged</h3>
+        <ul class="klist">
+          <li>The <b>classification prompt</b> and the typed <span class="mono">{status, confidence, reason}</span> verdict</li>
+          <li>The <b>escalation gate</b>: confidence vs threshold routes auto-approve / flag / human</li>
+          <li>The <b>evaluation harness</b>: scoring against ground truth, precision, recall, F1, accuracy-at-confidence. The hardest part, and it ports as-is</li>
+          <li>The <b>triage console and scorecard</b> become the live monitoring dashboard</li>
+        </ul>
+      </div>
+      <div class="prod-card change">
+        <h3>What changes to scale</h3>
+        <ul class="klist change">
+          <li>Classifying runs <b>server-side in batches</b>, not one live call at a time in a browser</li>
+          <li>Borrower records live in a <b>database</b>, not a static file</li>
+          <li><b>Caching, retries and audit logs</b> replace skip-on-error</li>
+          <li>A <b>periodic re-score</b> watches for model and policy drift</li>
+        </ul>
+      </div>
+    </div>
+
+    <table class="ptable">
+      <thead><tr><th>Concern</th><th>This portfolio demo</th><th>Production at 10k+</th></tr></thead>
+      <tbody>
+        <tr><td>Execution</td><td class="demo-col">Browser, one live call at a time, your key</td><td>Server-side batch job (Gemini Batch API, roughly half the cost, async) or a worker pool with rate-limit handling and resume</td></tr>
+        <tr><td>Data</td><td class="demo-col">150 rows embedded in a JS file</td><td>Real database (Postgres / AlloyDB / BigQuery); verdicts written back to a table</td></tr>
+        <tr><td>Idempotency</td><td class="demo-col">Re-runs every borrower each time</td><td>Cache verdicts per record, never re-classify the same borrower</td></tr>
+        <tr><td>Reliability</td><td class="demo-col">Skip on error</td><td>Retries, dead-letter queue, monitoring, full audit log</td></tr>
+        <tr><td>Human queue</td><td class="demo-col">In-page approve / flag buttons</td><td>A real review workflow: assignment, fairness checks, sign-off</td></tr>
+        <tr><td>Drift</td><td class="demo-col">One-shot run</td><td>Re-score the labelled hold-out on a schedule to catch model or policy drift</td></tr>
+      </tbody>
+    </table>
+
+    <div class="subsection">
+      <div class="eyebrow2">The credibility question</div>
+      <h3>How accuracy is verified</h3>
+      <p class="sslead">The honest version of &ldquo;you only tested 50 to 150 borrowers, how can that be ready for thousands of users?&rdquo; You do not convince anyone by testing more users. You show that the tested sample is statistically sufficient and representative, and let the numbers prove it.</p>
+      <div class="vfy">
+        <div class="vfy-item">
+          <div class="vfy-num">1</div>
+          <div>
+            <h4>The sample validates the decision rule, not the users</h4>
+            <p>A national election is called from a poll of about a thousand people, not the whole country. You do not drink the whole pot to check the soup, you stir and taste a spoonful. What matters is that the tested borrowers are a fair, random, <b>representative</b> slice, not that there are as many of them as there are real customers.</p>
+          </div>
+        </div>
+        <div class="vfy-item">
+          <div class="vfy-num">2</div>
+          <div>
+            <h4>The sample size you need does not grow with your user count</h4>
+            <p>The number of labelled cases needed to pin accuracy to a given margin is <b>the same whether you serve a thousand customers or ten million</b>. Going to production scale does not require a bigger validation set. So &ldquo;thousands of users, therefore test thousands&rdquo; is a misconception: the required test sample is fixed by the margin of error you want, not by the population size.</p>
+          </div>
+        </div>
+        <div class="vfy-item">
+          <div class="vfy-num">3</div>
+          <div>
+            <h4>The confidence interval states exactly how much to trust each number</h4>
+            <p>Every metric on the scorecard carries a 95% confidence interval, like <span class="mono">accuracy 88% (95% CI 82&ndash;92%, n=150)</span>. That is a <b>measured margin of error, not a promise</b>. Nobody has to take &ldquo;150 is enough&rdquo; on faith: the interval tells them, and it visibly tightens as you raise the sample.</p>
+          </div>
+        </div>
+        <div class="vfy-item">
+          <div class="vfy-num">4</div>
+          <div>
+            <h4>The sample is representative of the real book</h4>
+            <p>The tested borrowers preserve the real portfolio&rsquo;s <b>21% default rate and all six loan purposes in proportion</b>. A sample that mirrors the population is trustworthy; a cherry-picked one is not. This is what makes the spoonful a fair taste of the whole pot.</p>
+          </div>
+        </div>
+        <div class="vfy-item">
+          <div class="vfy-num">5</div>
+          <div>
+            <h4>The small sample is a demo budget, not a method limit</h4>
+            <p>50 to 150 is small only because each borrower is a live, paid API call running in your browser. The method itself scales to any validation size. In production you swap the live run for a <b>one-time offline batch of around a thousand labelled cases</b> (cheap on the Batch API), then <b>re-score new cases monthly</b> as their real outcomes arrive, so accuracy is watched continuously, not proven once.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="eyebrow2">Reproducibility</div>
+      <h3>Why results stay consistent</h3>
+      <p class="sslead">For an evaluation project, consistency <i>is</i> the credibility: a scorecard you can reproduce is one people trust. The result here does not depend on who runs it or which API key they use. It depends only on the model, a fixed prompt, and a fixed setting.</p>
+
+      <p style="font-size:.88rem;color:var(--ink2);margin-bottom:16px;max-width:760px;">The API key is only authentication and billing; it has <b>no effect on the verdict</b>. Three things determine the output, none of them the key: the <b>model version</b>, the sampling setting (fixed at <span class="mono">temperature 0</span>, so the model always picks its single most likely answer), and the <b>prompt and borrower data</b>, both fixed and in a fixed order so the same borrowers are scored every run.</p>
+
+      <table class="ptable">
+        <thead><tr><th>How you run it</th><th>Model version</th><th>What you get</th></tr></thead>
+        <tbody>
+          <tr><td>Different key, same time</td><td>Identical</td><td>Most reproducible: same model, prompt and setting. Near-identical, often exactly identical.</td></tr>
+          <tr><td>Same key, different time</td><td>May differ</td><td>Mostly the same; can drift only if the model snapshot is updated between runs.</td></tr>
+          <tr><td>Different key, different time</td><td>May differ</td><td>Same as the row above. The time gap is the variable, never the key.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="insight">
+        <h3>The aggregate is stable by design</h3>
+        <p>Picking the single most likely answer (temperature 0) makes each verdict highly consistent, though not bit-for-bit guaranteed: tiny differences in how the hardware adds up numbers, or how requests are batched on the server, can flip a borderline borrower. Across the whole set that moves accuracy by well under 1%, which is <b>inside the confidence interval the scorecard already shows</b>. So small run-to-run wobble is expected and within the stated margin, not a contradiction.</p>
+      </div>
+
+      <div class="prod-card change" style="margin-bottom:18px;">
+        <h3>Making it exact for production</h3>
+        <ul class="klist change">
+          <li><b>Pin the model to a dated snapshot</b> instead of the floating alias, so a server-side model update can never quietly drift the numbers</li>
+          <li><b>Cache every verdict</b> so a re-run reuses prior answers instead of re-asking, which a production system does anyway for cost and consistency</li>
+          <li>Together these make the scorecard <b>fully reproducible</b>: the same borrowers, the same pinned model, the same cached answers, give the same numbers every time</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="archbox">
+      <h3>A realistic production architecture</h3>
+      <p>The same brain and proof, wrapped in standard data infrastructure:</p>
+      <div class="archflow">
+        Borrower records <span class="ar">&rarr;</span> database (AlloyDB / BigQuery)<br>
+        <span class="ar">&rarr;</span> batch classifier (Gemini Batch API, governed tool access) writes <span class="mono">{status, confidence, reason}</span> per record<br>
+        <span class="ar">&rarr;</span> escalation gate applies the threshold, routes to approve / flag / review queues<br>
+        <span class="ar">&rarr;</span> evaluation service re-scores the labelled hold-out on a schedule, raises drift alerts<br>
+        <span class="ar">&rarr;</span> this dashboard (scorecard + triage) becomes the monitoring surface
+      </div>
+    </div>
+
+    <div class="note">The leap from demo to production is real work, but it is plumbing around a core that already exists here. The classification logic and the evaluation harness, the parts most builds skip, are done and proven on this page.</div>
+  </section>
+</main>
+
+<footer>
+  Borrower Risk Evaluator &middot; classifies real held&#8209;out loan records live with your Gemini key and scores every verdict against the recorded outcome &middot; &copy; 2026 Lee Yih Ven | Data-Driven Solutions
+</footer>
+
+<script src="data/borrowers.js"></script>
+<script>
+"use strict";
+
+/* ====================== helpers ====================== */
+const $=id=>document.getElementById(id);
+const pct=x=>Math.round(x*100)+'%';
+const pct1=x=>(x*100).toFixed(1)+'%';
+function clamp(x,a,b){return Math.max(a,Math.min(b,x));}
+
+/* ====================== state ====================== */
+let ROWS=[];                 // populated by the live run
+let thr=0.80;
+let activeType='ALL';
+let classified=false;
+let BASELINE=0;
+let CURVE=[];
+const reviewed=new Set();
+
+/* ====================== Gemini classification (BYO key) ====================== */
+const MODEL='gemini-2.5-flash';
+const SCHEMA={type:"OBJECT",properties:{
+  status:{type:"STRING",enum:["DEFAULT","NO DEFAULT"]},
+  confidence:{type:"NUMBER"},
+  reason:{type:"STRING"}
+},required:["status","confidence","reason"]};
+
+function buildPrompt(f){
+  return (
+"You are a credit-risk classifier for a small lender. Judging only from the borrower facts below, "+
+"decide whether this loan will end in DEFAULT or NO DEFAULT.\n\n"+
+"Borrower:\n"+
+"- Age: "+f.age+"\n"+
+"- Annual income: "+f.income+"\n"+
+"- Home ownership: "+f.home_ownership+"\n"+
+"- Employment length (years): "+f.employment_duration+"\n"+
+"- Loan purpose: "+f.loan_intent+"\n"+
+"- Loan grade (A best to G worst): "+f.loan_grade+"\n"+
+"- Loan amount: "+f.loan_amount+"\n"+
+"- Interest rate: "+f.interest_rate+"%\n"+
+"- Loan term (years): "+f.term_years+"\n"+
+"- Loan as % of income: "+f.loan_to_income_pct+"%\n"+
+"- Interest rate vs typical for this grade: "+f.rate_above_grade_norm+" (positive = pricier than peers)\n"+
+"- Prior default on record: "+f.prior_default+"\n"+
+"- Credit history length (years): "+f.credit_history_length+"\n\n"+
+"Return:\n"+
+"- status: \"DEFAULT\" or \"NO DEFAULT\"\n"+
+"- confidence: how sure you are of THIS verdict, from 0.5 (a coin toss) to 1.0 (certain)\n"+
+"- reason: one short plain-language sentence naming the 1-2 facts that drove it."
+  );
+}
+
+async function classifyOne(f,key){
+  const url="https://generativelanguage.googleapis.com/v1beta/models/"+MODEL+":generateContent?key="+encodeURIComponent(key);
+  const body={contents:[{role:"user",parts:[{text:buildPrompt(f)}]}],
+    generationConfig:{temperature:0,responseMimeType:"application/json",responseSchema:SCHEMA}};
+  const res=await fetch(url,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+  if(!res.ok){
+    let msg="HTTP "+res.status;
+    try{const e=await res.json();if(e.error&&e.error.message)msg=e.error.message;}catch(_){}
+    const err=new Error(msg);err.status=res.status;throw err;
+  }
+  const data=await res.json();
+  const txt=data&&data.candidates&&data.candidates[0]&&data.candidates[0].content&&data.candidates[0].content.parts[0].text;
+  if(!txt)throw new Error("Empty response from model");
+  const out=JSON.parse(txt);
+  let conf=Number(out.confidence);
+  if(conf>1)conf=conf/100;                 // tolerate a 0-100 scale
+  conf=clamp(conf,0.5,1);
+  // "NO DEFAULT" contains the word DEFAULT, so test for "NO" first
+  const status=(out.status||"").toUpperCase().includes("NO DEFAULT")?"NO DEFAULT":"DEFAULT";
+  return {status:status,confidence:conf,reason:out.reason||""};
+}
+
+function toRow(rec,verdict){
+  const f=rec.features;
+  const p=verdict.status==="DEFAULT"?verdict.confidence:1-verdict.confidence;
+  return {
+    id:rec.id, income:f.income, loan:f.loan_amount, intRate:f.interest_rate,
+    grade:f.loan_grade, intent:f.loan_intent, emp:f.employment_duration,
+    home:f.home_ownership, hist:(f.prior_default==='yes'?'Y':f.prior_default==='no'?'N':'UNKNOWN'),
+    lti:f.loan_to_income_pct/100, p:p, truth:rec.true_label==='DEFAULT'?1:0,
+    reason:verdict.reason
+  };
+}
+
+/* run the batch with limited concurrency */
+async function runEvaluation(){
+  const key=$('apiKey').value.trim();
+  if(!key){showErr("Please paste a Gemini API key first.");return;}
+  hideErr();
+  const n=Math.min(parseInt($('sampleN').value,10),window.BORROWERS.length);
+  const work=window.BORROWERS.slice(0,n);
+  if($('rememberKey').checked){try{localStorage.setItem('bre_key',key);}catch(_){}}
+  else{try{localStorage.removeItem('bre_key');}catch(_){}}
+
+  $('runBtn').disabled=true;$('runBtn').textContent='Running...';
+  $('progress').classList.add('show');
+  const out=[]; let done=0, errors=0;
+  const setProg=()=>{
+    $('pbarFill').style.width=(done/n*100)+'%';
+    $('pCount').textContent=done+' / '+n;
+    $('pStatus').textContent=errors?('Classifying... ('+errors+' skipped)'):'Classifying borrowers...';
+  };
+  setProg();
+
+  const CONCURRENCY=5;
+  let idx=0;
+  let fatal=null;
+  async function worker(){
+    while(idx<work.length){
+      const myI=idx++;
+      const rec=work[myI];
+      try{
+        const v=await classifyWithRetry(rec.features,key);
+        out.push(toRow(rec,v));
+      }catch(e){
+        errors++;
+        if(e.status===401||e.status===403){fatal=e;idx=work.length;}
+      }
+      done++; setProg();
+    }
+  }
+  await Promise.all(Array.from({length:CONCURRENCY},()=>worker()));
+
+  if(fatal){
+    $('progress').classList.remove('show');
+    $('runBtn').disabled=false;$('runBtn').textContent='Run evaluation';
+    showErr("Your key was rejected ("+fatal.message+"). Check the key and try again.");
+    return;
+  }
+  if(out.length===0){
+    $('progress').classList.remove('show');
+    $('runBtn').disabled=false;$('runBtn').textContent='Run evaluation';
+    showErr("No borrowers were classified. "+(errors?'All requests failed. Check your key, quota, or connection.':''));
+    return;
+  }
+
+  ROWS=out;
+  finishRun(errors);
+}
+
+async function classifyWithRetry(f,key){
+  try{return await classifyOne(f,key);}
+  catch(e){
+    if(e.status===429||e.status>=500){
+      await new Promise(r=>setTimeout(r,1200));
+      return await classifyOne(f,key);
+    }
+    throw e;
+  }
+}
+
+function showErr(m){$('rpErr').textContent=m;$('rpErr').classList.add('show');}
+function hideErr(){$('rpErr').classList.remove('show');}
+
+function finishRun(errors){
+  classified=true;
+  // baseline = a model that always predicts the majority (no default)
+  BASELINE=ROWS.filter(r=>!r.truth).length/ROWS.length;
+  buildCurve();
+  // reveal content, lock panel into "done" state
+  $('runBtn').textContent='Done - re-run';
+  $('runBtn').disabled=false;
+  $('progress').classList.remove('show');
+  $('runPanel').classList.add('done');
+  $('pStatus').textContent='Classified '+ROWS.length+' borrowers'+(errors?(' ('+errors+' skipped)'):'');
+  $('scoreContent').style.display='block';
+  $('triageNeedRun').style.display='none';
+  $('triageContent').style.display='block';
+  $('dialWrap').classList.remove('disabled');
+  $('cntAll1').textContent=ROWS.length;
+  $('cntAll2').textContent=ROWS.length;
+  render();
+}
+
+/* ====================== metrics ====================== */
+function compute(t){
+  let TP=0,FP=0,FN=0,TN=0,hcC=0,hcT=0,approve=0,flag=0,human=0;
+  for(const r of ROWS){
+    const pred=r.p>=0.5?1:0, conf=Math.max(r.p,1-r.p);
+    if(pred&&r.truth)TP++; else if(pred&&!r.truth)FP++; else if(!pred&&r.truth)FN++; else TN++;
+    if(conf>=t){hcT++; if(pred===r.truth)hcC++; if(pred)flag++; else approve++;} else human++;
+  }
+  const acc=ROWS.length?(TP+TN)/ROWS.length:0, prec=TP/(TP+FP||1), rec=TP/(TP+FN||1);
+  const f1=2*prec*rec/((prec+rec)||1), hcAcc=hcT?hcC/hcT:1, cov=ROWS.length?hcT/ROWS.length:0;
+  return {acc,prec,rec,f1,hcAcc,cov,approve,flag,human,TP,FP,FN,TN,hcC,hcT};
+}
+
+/* 95% Wilson score interval for a proportion k/n -> "lo-hi%" */
+function wilson(k,n){
+  if(!n)return[0,0];
+  const z=1.96,p=k/n,d=1+z*z/n;
+  const c=(p+z*z/(2*n))/d;
+  const m=(z*Math.sqrt(p*(1-p)/n+z*z/(4*n*n)))/d;
+  return[clamp(c-m,0,1),clamp(c+m,0,1)];
+}
+function ciText(k,n){
+  if(!n)return'';
+  const[lo,hi]=wilson(k,n);
+  return '95% CI '+Math.round(lo*100)+'–'+Math.round(hi*100)+'% (n='+n+')';
+}
+
+/* fallback reason if the model returned none */
+function reason(r){
+  const up=[],down=[];
+  if(r.intRate>=15)up.push('high interest rate ('+r.intRate+'%)'); else if(r.intRate<=10)down.push('low interest rate ('+r.intRate+'%)');
+  if(['D','E','F','G'].includes(r.grade))up.push('weak loan grade '+r.grade); else if(['A','B'].includes(r.grade))down.push('strong loan grade '+r.grade);
+  if(r.lti>=0.3)up.push('loan is '+Math.round(r.lti*100)+'% of income'); else if(r.lti<=0.18)down.push('small loan vs income');
+  if(r.emp<=2)up.push('short job history ('+r.emp+'y)'); else if(r.emp>=7)down.push('long job history ('+r.emp+'y)');
+  if(r.home==='RENT')up.push('renting'); else if(r.home==='OWN')down.push('owns home');
+  if(r.hist==='Y')up.push('past default on record');
+  const side=r.p>=0.5?up:down; const picks=side.slice(0,2);
+  if(picks.length===0) return r.p>=0.5?'Mixed signals leaning risky.':'No strong risk signals.';
+  return (r.p>=0.5?'Risk driven by ':'Cleared on ')+picks.join(' and ')+'.';
+}
+
+/* ====================== triage rendering ====================== */
+function laneCard(r,kind){
+  const conf=Math.max(r.p,1-r.p), isDef=r.p>=0.5;
+  const col=isDef?'var(--flag)':'var(--approve)';
+  const why=(r.reason&&r.reason.trim())?r.reason:reason(r);
+  let html='<div class="card" data-id="'+r.id+'">'+
+    '<div class="ch"><span class="bid">'+r.id+'</span><span class="pill '+(isDef?'def':'nodef')+'">'+(isDef?'Default':'No default')+'</span></div>'+
+    '<div class="feat"><span>'+r.intent.toLowerCase()+'</span> loan, grade '+r.grade+', '+r.intRate+'% &middot; income '+(r.income/1000).toFixed(0)+'k</div>'+
+    '<div class="confbar"><i style="width:'+(conf*100)+'%;background:'+col+';"></i></div>'+
+    '<div class="conftext"><span>confidence</span><span class="cpct">'+pct1(conf)+'</span></div>';
+  if(kind==='human'){
+    html+='<div class="why">'+why+'</div>'+
+      '<div class="review-actions"><button class="ok" onclick="act(\''+r.id+'\')">Approve</button>'+
+      '<button class="bad" onclick="act(\''+r.id+'\')">Flag</button></div>';
+  } else {
+    html+='<div class="why"><b>Why:</b> '+why+'</div>';
+    const correct=(isDef?1:0)===r.truth;
+    html+='<div class="truthtag '+(correct?'hit':'miss')+'">'+(correct?'✓ matched real outcome':'✗ real outcome was '+(r.truth?'default':'no default'))+'</div>';
+  }
+  return html+'</div>';
+}
+function fillLane(el,rows,kind){
+  const live=rows.filter(r=>!reviewed.has(r.id));
+  if(live.length===0){el.innerHTML='<div class="empty"><b>All clear</b>Nothing here right now.</div>';return;}
+  const cap=14;
+  el.innerHTML=live.slice(0,cap).map(r=>laneCard(r,kind)).join('')+
+    (live.length>cap?'<div class="more">+ '+(live.length-cap)+' more</div>':'');
+}
+
+/* loan-type breakdown */
+const TYPE_NAMES={ALL:'All types',EDUCATION:'Education',MEDICAL:'Medical',VENTURE:'Venture',PERSONAL:'Personal',DEBTCONSOLIDATION:'Debt consolidation',HOMEIMPROVEMENT:'Home improvement'};
+const TYPE_ORDER=['EDUCATION','MEDICAL','VENTURE','PERSONAL','DEBTCONSOLIDATION','HOMEIMPROVEMENT'];
+function routeOf(r){const conf=Math.max(r.p,1-r.p);if(conf<thr)return 'human';return r.p>=0.5?'flag':'approve';}
+function splitFor(type){
+  const a=[],f=[],h=[];
+  for(const r of ROWS){
+    if(type!=='ALL'&&r.intent!==type)continue;
+    const route=routeOf(r);
+    if(route==='approve')a.push(r); else if(route==='flag')f.push(r); else h.push(r);
+  }
+  return {a,f,h,total:a.length+f.length+h.length};
+}
+function renderTypePanel(){
+  const rows=['ALL',...TYPE_ORDER].map(t=>{
+    const s=splitFor(t), tot=s.total||1;
+    const ap=s.a.length,fl=s.f.length,hu=s.h.length;
+    const rate=Math.round(ap/tot*100);
+    return '<button class="tb-row" data-type="'+t+'" aria-pressed="'+(t===activeType)+'">'+
+      '<span class="tb-name">'+TYPE_NAMES[t]+'</span>'+
+      '<span class="tb-total">'+s.total+'</span>'+
+      '<span class="tb-bar"><i class="ap" style="width:'+(ap/tot*100)+'%"></i><i class="fl" style="width:'+(fl/tot*100)+'%"></i><i class="hu" style="width:'+(hu/tot*100)+'%"></i></span>'+
+      '<span class="tb-rate">'+rate+'% approved</span></button>';
+  }).join('');
+  const box=$('tbRows');
+  box.innerHTML=rows;
+  box.querySelectorAll('.tb-row').forEach(b=>b.addEventListener('click',()=>{activeType=b.dataset.type;render();}));
+  const s=splitFor(activeType);
+  $('tbActive').textContent = activeType==='ALL'
+    ? ('Showing all '+s.total+' borrowers')
+    : ('Showing '+TYPE_NAMES[activeType]+', '+s.total+' borrowers');
+}
+
+/* ====================== master render ====================== */
+function render(){
+  if(!classified)return;
+  const m=compute(thr);
+  $('thrVal').textContent=pct(thr);
+  $('thr').style.setProperty('--fill',((thr*100-50)/(98-50)*100)+'%');
+  $('hlCoverage').textContent=pct(m.cov);
+
+  $('accAll').textContent=pct1(m.acc);
+  $('accAllCi').textContent=ciText(m.TP+m.TN,ROWS.length);
+  $('accHc').textContent=pct1(m.hcAcc);
+  $('accHcCi').textContent=m.hcT?ciText(m.hcC,m.hcT):'No cases cleared at this threshold';
+  $('accHcSub').textContent=Math.round(m.cov*100)+'% of cases cleared this way';
+  const d=Math.round((m.hcAcc-m.acc)*100);
+  $('accDelta').textContent=(d>=0?'+':'')+d+' pts vs overall';
+  $('baseNum').textContent=pct(BASELINE);
+  $('baseInline').textContent=pct(BASELINE);
+
+  $('cmTP').textContent=m.TP; $('cmFN').textContent=m.FN; $('cmFP').textContent=m.FP; $('cmTN').textContent=m.TN;
+
+  $('valRec').textContent=pct1(m.rec); $('barRec').style.width=(m.rec*100)+'%';
+  $('ciRec').textContent=ciText(m.TP,m.TP+m.FN);
+  $('valPrec').textContent=pct1(m.prec); $('barPrec').style.width=(m.prec*100)+'%';
+  $('ciPrec').textContent=ciText(m.TP,m.TP+m.FP);
+  $('valF1').textContent=m.f1.toFixed(2); $('barF1').style.width=(m.f1*100)+'%';
+
+  renderTypePanel();
+  const split=splitFor(activeType);
+  $('sbApprove').textContent=split.a.length; $('sbFlag').textContent=split.f.length; $('sbHuman').textContent=split.h.length;
+  const cov=split.total?(split.a.length+split.f.length)/split.total:0;
+  $('sbCleared').textContent=Math.round(cov*100)+'%';
+  $('laneApproveCount').textContent=split.a.length; $('laneFlagCount').textContent=split.f.length; $('laneHumanCount').textContent=split.h.length;
+  fillLane($('laneApprove'),split.a,'approve');
+  fillLane($('laneFlag'),split.f,'flag');
+  fillLane($('laneHuman'),split.h,'human');
+
+  drawChart(thr);
+}
+
+window.act=function(id){ reviewed.add(id); render(); };
+
+/* ====================== tradeoff chart ====================== */
+function buildCurve(){
+  CURVE=[];
+  for(let t=50;t<=98;t++){const m=compute(t/100);CURVE.push({t:t/100,cov:m.cov,hcAcc:m.hcAcc});}
+}
+function drawChart(curThr){
+  if(!CURVE.length)return;
+  const W=760,H=280,padL=46,padR=16,padT=14,padB=34;
+  const x=t=>padL+( (t-0.50)/(0.98-0.50) )*(W-padL-padR);
+  const y=v=>padT+(1-v)*(H-padT-padB);
+  const line=(key,col,w)=>{
+    let d='';CURVE.forEach((p,i)=>{d+=(i?'L':'M')+x(p.t).toFixed(1)+' '+y(p[key]).toFixed(1)+' ';});
+    return '<path d="'+d+'" fill="none" stroke="'+col+'" stroke-width="'+w+'" stroke-linejoin="round"/>';
+  };
+  let grid='';
+  for(let g=0;g<=1.0001;g+=0.25){grid+='<line x1="'+padL+'" y1="'+y(g)+'" x2="'+(W-padR)+'" y2="'+y(g)+'" stroke="#e9edf3"/>'+
+    '<text x="'+(padL-8)+'" y="'+(y(g)+4)+'" text-anchor="end" font-size="11" fill="#8493a8" font-family="JetBrains Mono">'+Math.round(g*100)+'</text>';}
+  let xlab='';[0.5,0.6,0.7,0.8,0.9,0.98].forEach(t=>{xlab+='<text x="'+x(t)+'" y="'+(H-12)+'" text-anchor="middle" font-size="11" fill="#8493a8" font-family="JetBrains Mono">'+Math.round(t*100)+'%</text>';});
+  const mx=x(curThr);
+  const cur=CURVE.reduce((a,b)=>Math.abs(b.t-curThr)<Math.abs(a.t-curThr)?b:a);
+  const marker='<line x1="'+mx+'" y1="'+padT+'" x2="'+mx+'" y2="'+(H-padB)+'" stroke="#14233b" stroke-width="2" stroke-dasharray="4 3"/>'+
+    '<circle cx="'+mx+'" cy="'+y(cur.hcAcc)+'" r="5" fill="#1f8a6d" stroke="#fff" stroke-width="2"/>'+
+    '<circle cx="'+mx+'" cy="'+y(cur.cov)+'" r="5" fill="#b8893a" stroke="#fff" stroke-width="2"/>';
+  $('chart').innerHTML=grid+xlab+line('cov','#b8893a',2.5)+line('hcAcc','#1f8a6d',2.5)+marker;
+}
+
+/* ====================== wiring ====================== */
+$('thr').addEventListener('input',e=>{thr=+e.target.value/100;render();});
+$('runBtn').addEventListener('click',runEvaluation);
+const tabs=[['tab-score','view-score'],['tab-triage','view-triage'],['tab-prod','view-prod']];
+tabs.forEach(([tb,vw])=>{
+  $(tb).addEventListener('click',()=>{
+    tabs.forEach(([t,v])=>{$(t).setAttribute('aria-selected',t===tb);$(v).classList.toggle('active',v===vw);});
+  });
+});
+// restore a remembered key
+try{const k=localStorage.getItem('bre_key');if(k){$('apiKey').value=k;$('rememberKey').checked=true;}}catch(_){}
+</script>
+</body>
+</html>

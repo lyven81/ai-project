@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Borrower Risk Evaluator - Loan-Default Classifier That Proves Its Own Accuracy</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #222; background-color: #ffffff; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        .back-nav { margin-bottom: 20px; }
+        .back-nav a { color: #007BFF; text-decoration: none; font-size: 1rem; }
+        .back-nav a:hover { text-decoration: underline; }
+        .project-header { text-align: center; margin-bottom: 40px; padding: 40px 0; background: linear-gradient(135deg, #FF5722, #D84315); color: white; border-radius: 10px; }
+        .project-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        .project-header p { font-size: 1.2rem; opacity: 0.9; }
+        .badges { display: flex; justify-content: center; gap: 10px; margin: 20px 0; flex-wrap: wrap; }
+        .badge { background-color: rgba(255, 255, 255, 0.2); color: white; padding: 5px 12px; border-radius: 15px; font-size: 0.9rem; }
+        .demo-links { text-align: center; margin: 30px 0; }
+        .demo-btn { display: inline-block; background-color: #007BFF; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; margin: 0 10px; font-weight: bold; transition: background-color 0.3s; }
+        .demo-btn:hover { background-color: #0056b3; }
+        .demo-btn.secondary { background-color: #28a745; }
+        .demo-btn.secondary:hover { background-color: #218838; }
+        .content-section { margin: 40px 0; padding: 30px; background-color: #f9f9f9; border-radius: 8px; border-left: 5px solid #FF5722; }
+        .content-section h2 { color: #FF5722; margin-bottom: 20px; font-size: 1.8rem; }
+        .content-section h3 { color: #333; margin: 20px 0 10px 0; font-size: 1.3rem; }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin: 20px 0; }
+        .feature-item { background: white; padding: 20px; border-radius: 8px; border: 1px solid #ddd; }
+        .feature-item h4 { color: #FF5722; margin-bottom: 10px; }
+        .tech-stack { display: flex; flex-wrap: wrap; gap: 10px; margin: 15px 0; }
+        .tech-item { background-color: #FF5722; color: white; padding: 5px 12px; border-radius: 15px; font-size: 0.9rem; }
+        .code-block { background-color: #f4f4f4; border: 1px solid #ddd; border-radius: 5px; padding: 15px; margin: 15px 0; font-family: monospace; overflow-x: auto; }
+        .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin: 20px 0; }
+        .metric-card { background: white; padding: 20px; border-radius: 8px; text-align: center; border: 2px solid #FF5722; }
+        .metric-number { font-size: 2rem; font-weight: bold; color: #FF5722; }
+        .metric-label { color: #666; font-size: 0.9rem; }
+        @media (max-width: 768px) {
+            .project-header h1 { font-size: 2rem; }
+            .project-header p { font-size: 1rem; }
+            .badges { justify-content: center; }
+            .demo-btn { margin: 5px; padding: 10px 20px; }
+            .container { padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="index.html">← Back to Portfolio</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>📊 Borrower Risk Evaluator</h1>
+            <p>Loan-default classifier that proves its own accuracy for lenders</p>
+
+            <div class="badges">
+                <span class="badge">Gemini AI</span>
+                <span class="badge">Classification + Evaluation</span>
+                <span class="badge">Vanilla JS</span>
+                <span class="badge">Self-Contained</span>
+                <span class="badge">BYO-Key</span>
+                <span class="badge">GitHub Pages</span>
+            </div>
+        </div>
+
+        <div class="demo-links">
+            <a href="projects/borrower-risk-evaluator/demo.html" target="_blank" class="demo-btn">🚀 Launch Live Demo</a>
+            <a href="borrower-risk-evaluator-source.html" class="demo-btn secondary">📁 View Source Code</a>
+        </div>
+
+        <div class="content-section">
+            <h2>📋 Project Overview &amp; Problem Statement</h2>
+            <p><strong>Challenge:</strong> A credit officer at a small lender cannot carefully review every loan application, so they either rush (and approve defaults that cost real money) or over-review (and waste days on safe applicants). They have no defensible way to state how accurate their triage actually is. The market sells a black-box credit score that is never measured on the lender's own loan book, or a heavyweight machine-learning platform with no per-record human-in-the-loop workflow.</p>
+
+            <p><strong>Solution:</strong> Borrower Risk Evaluator classifies each borrower as default or no default with a confidence score, routes them auto-approve, auto-flag, or send-to-human, and then proves its accuracy live against the known repayment outcomes. The headline skill is the evaluation: a quality scorecard measured against ground truth, with a 95% confidence interval on every number.</p>
+
+            <h3>Key Benefits</h3>
+            <ul>
+                <li><strong>Measured, not promised:</strong> accuracy, precision, recall, and F1 are scored against the real outcome label, each with a confidence interval</li>
+                <li><strong>Confidence where it counts:</strong> accuracy on the cases the model cleared on its own, the pile that matters most</li>
+                <li><strong>Tunable safety dial:</strong> drag the confidence threshold and watch precision, recall, and manual-review volume trade off live</li>
+                <li><strong>Plain-language reasons:</strong> every verdict comes with the one or two facts that drove it, and a tick or cross showing whether it matched the real outcome</li>
+                <li><strong>Honest about scale:</strong> a built-in guide explains exactly how the demo becomes a production system for thousands of borrowers</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>🖥️ Application Features</h2>
+
+            <div class="features-grid">
+                <div class="feature-item">
+                    <h4>📊 Evaluation Scorecard</h4>
+                    <p>The headline. Accuracy, precision, recall, F1, a confusion matrix, and accuracy-at-high-confidence, all measured against the real <code>Current_loan_status</code> label, each carrying a 95% confidence interval so the audience knows exactly how much to trust the number.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>🎚️ Safety Dial</h4>
+                    <p>A confidence-threshold slider that re-splits the auto-pass and escalate piles live and redraws an accuracy-versus-coverage tradeoff curve. Raise the bar and the cleared pile gets more accurate but fewer cases clear.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>🗂️ Triage Console</h4>
+                    <p>Every borrower routed into three lanes: auto-approve, auto-flag, and a human review queue. Only the uncertain cases reach the queue. A by-loan-type breakdown shows how each purpose splits.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>🧭 Portfolio to Production</h4>
+                    <p>A dedicated tab covering how accuracy is verified, why results stay consistent, and what changes to scale the demo into a system handling 10,000+ borrowers.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🤖 AI Integration &amp; Intelligence</h2>
+
+            <div class="features-grid">
+                <div class="feature-item">
+                    <h4>🧠 Typed Verdict (Gemini AI)</h4>
+                    <p>Each borrower is classified by Google Gemini using structured output: a typed verdict of status, confidence, and reason. The prompt sees the borrower's facts only, never the true label, so the scoring is honest.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>✅ Measured Against Ground Truth</h4>
+                    <p>The genuinely new work: every prediction is compared to the borrower's recorded outcome to produce a real, statistical scorecard. Most AI demos report a confidence number that is never checked. This one checks it.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>🚦 Deterministic Escalation Gate</h4>
+                    <p>A short, deterministic rule, not an LLM, reads the confidence and routes the borrower auto-approve, auto-flag, or send-to-human. Not every component needs a model; the gate is auditable by design.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>🎯 Calibration as the Point</h4>
+                    <p>Language-model confidence is famously miscalibrated, which is exactly why measuring it matters. The accuracy-at-confidence view shows whether the model's certainty can actually be trusted.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🛠️ Technical Architecture &amp; Implementation</h2>
+
+            <h3>Frontend Stack</h3>
+            <div class="tech-stack">
+                <span class="tech-item">Single-file HTML</span>
+                <span class="tech-item">Vanilla JavaScript</span>
+                <span class="tech-item">Inline SVG charts</span>
+                <span class="tech-item">No build step</span>
+            </div>
+
+            <h3>AI &amp; Data</h3>
+            <div class="tech-stack">
+                <span class="tech-item">Google Gemini (gemini-2.5-flash)</span>
+                <span class="tech-item">Structured JSON output</span>
+                <span class="tech-item">BYO-key, client-side</span>
+                <span class="tech-item">Python + pandas (data prep)</span>
+            </div>
+
+            <h3>Deployment &amp; Infrastructure</h3>
+            <div class="tech-stack">
+                <span class="tech-item">GitHub Pages</span>
+                <span class="tech-item">Static asset (borrowers.js)</span>
+                <span class="tech-item">No backend</span>
+            </div>
+
+            <h3>System Architecture</h3>
+            <ul>
+                <li><strong>No backend, no server cost:</strong> the page calls Gemini directly from the browser with the visitor's own key</li>
+                <li><strong>Real data as a static asset:</strong> a keyless Python script cleans the 32,577-row dataset and emits 150 stratified real borrowers as <code>data/borrowers.js</code>, loaded via <code>&lt;script src&gt;</code> so it works on GitHub Pages and offline</li>
+                <li><strong>Honest scoring:</strong> the true label travels with each borrower but is used only after the model answers, never shown to it</li>
+                <li><strong>Typed verdict to UI:</strong> Gemini's status and confidence map to a default probability that drives the confusion matrix, metrics, and tradeoff chart</li>
+                <li><strong>Self-contained:</strong> classification, scoring, charts, and the safety dial all run in one HTML file</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>📖 Setup &amp; How to Run</h2>
+
+            <h3>Prerequisites</h3>
+            <ul>
+                <li><strong>A free Gemini API key</strong> from Google AI Studio (<code>aistudio.google.com/apikey</code>)</li>
+                <li>A modern browser. No install, no Node, no Python needed to run the demo</li>
+            </ul>
+
+            <h3>Run the Demo</h3>
+            <div class="code-block">
+# Open the live demo, or run locally:
+git clone https://github.com/lyven81/ai-project.git
+cd ai-project/projects/borrower-risk-evaluator
+
+# Open index.html in a browser, then:
+# 1. Paste your Gemini API key
+# 2. Choose how many borrowers to test (50 / 100 / 150)
+# 3. Click "Run evaluation"
+            </div>
+
+            <h3>Regenerate the Data Asset (optional)</h3>
+            <div class="code-block">
+# Re-sample real borrowers from the source dataset (keyless)
+pip install pandas
+python prep_data.py
+# -> writes data/borrowers.js and data/meta.json
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🚀 Deployment</h2>
+
+            <div class="code-block">
+# Fully static. Deployed on GitHub Pages, no server.
+# Live at:
+# https://lyven81.github.io/ai-project/projects/borrower-risk-evaluator/demo.html
+            </div>
+
+            <h3>Production Notes</h3>
+            <ul>
+                <li>The demo classifies a labelled hold-out live with the visitor's key; production swaps this for a one-time offline batch plus monthly re-scoring</li>
+                <li>For exact reproducibility, pin the model to a dated snapshot and cache verdicts (covered in the Portfolio to production tab)</li>
+                <li>Frame as decision support: the system triages, a human owns the final call on any flag</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>📊 Key Metrics</h2>
+
+            <div class="metrics">
+                <div class="metric-card">
+                    <div class="metric-number">32,577</div>
+                    <div class="metric-label">Real Labelled Borrowers in Source Data</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">150</div>
+                    <div class="metric-label">Held-Out Borrowers Scored Live</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">95%</div>
+                    <div class="metric-label">Confidence Interval on Every Metric</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">0</div>
+                    <div class="metric-label">Backend Servers (Fully Client-Side)</div>
+                </div>
+            </div>
+
+            <h3>Business Value</h3>
+            <ul>
+                <li><strong>Trust through evidence:</strong> proves accuracy on the lender's own labelled history, not a vendor's black box</li>
+                <li><strong>Less manual review:</strong> confident cases clear automatically so officers spend time only where it matters</li>
+                <li><strong>A tunable safety dial:</strong> the lender chooses where to sit on the precision-versus-recall tradeoff</li>
+                <li><strong>Audit-ready:</strong> plain-language reasons and a measured scorecard a regulator could read</li>
+                <li><strong>Closes the evaluation gap:</strong> demonstrates that an AI's output can be measured, not just produced</li>
+            </ul>
+        </div>
+
+        <div class="demo-links">
+            <a href="projects/borrower-risk-evaluator/demo.html" target="_blank" class="demo-btn">🚀 Try Live Demo</a>
+            <a href="https://github.com/lyven81/ai-project/tree/main/projects/borrower-risk-evaluator" class="demo-btn secondary">📖 Full Source Code</a>
+        </div>
+
+        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+            <a href="index.html">← Back to Portfolio</a> |
+            <a href="project-categories.html">View All Categories</a>
+        </nav>
+    </div>
+</body>
+</html>
