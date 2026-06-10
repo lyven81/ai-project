@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Motor Claim Triage and QC Evaluator - Source Code</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #222; background-color: #ffffff; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        .back-nav { margin-bottom: 20px; }
+        .back-nav a { color: #007BFF; text-decoration: none; font-size: 1rem; }
+        .back-nav a:hover { text-decoration: underline; }
+        .project-header { text-align: center; margin-bottom: 40px; padding: 40px 0; background: linear-gradient(135deg, #FF5722, #D84315); color: white; border-radius: 10px; }
+        .project-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        .project-header p { font-size: 1.2rem; opacity: 0.9; }
+        .badges { display: flex; justify-content: center; gap: 10px; margin: 20px 0; flex-wrap: wrap; }
+        .badge { background-color: rgba(255, 255, 255, 0.2); color: white; padding: 5px 12px; border-radius: 15px; font-size: 0.9rem; }
+        .content-section { margin: 40px 0; padding: 30px; background-color: #f9f9f9; border-radius: 8px; border-left: 5px solid #FF5722; }
+        .content-section h2 { color: #FF5722; margin-bottom: 20px; font-size: 1.8rem; }
+        .content-section h3 { color: #333; margin: 20px 0 10px 0; font-size: 1.3rem; }
+        .content-section p { margin-bottom: 12px; }
+        .highlight-box { background: linear-gradient(135deg, #fff3ee, #ffe0d4); padding: 20px; border-radius: 10px; border-left: 5px solid #FF5722; margin: 20px 0; }
+        .file-tree { background: #1e1e1e; color: #d4d4d4; padding: 18px 22px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.88rem; line-height: 1.7; white-space: pre; overflow-x: auto; margin: 16px 0; }
+        .code-container { background-color: #1e1e1e; border-radius: 8px; padding: 20px; margin: 20px 0; overflow-x: auto; }
+        .code-header { color: #4ade80; font-weight: bold; margin-bottom: 15px; font-size: 1.05rem; border-bottom: 1px solid #333; padding-bottom: 10px; font-family: 'Consolas', monospace; }
+        .code-block { font-family: 'Consolas', 'Monaco', 'Courier New', monospace; font-size: 13.5px; line-height: 1.55; color: #d4d4d4; white-space: pre; overflow-x: auto; }
+        .kw { color: #569cd6; } .str { color: #ce9178; } .com { color: #6a9955; font-style: italic; } .fn { color: #dcdcaa; } .num { color: #b5cea8; } .ty { color: #4ec9b0; }
+        .demo-links { text-align: center; margin: 30px 0; }
+        .demo-btn { display: inline-block; background-color: #007BFF; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; margin: 0 10px; font-weight: bold; }
+        .demo-btn:hover { background-color: #0056b3; }
+        .demo-btn.secondary { background-color: #28a745; }
+        @media (max-width: 768px) {
+            .project-header h1 { font-size: 2rem; }
+            .demo-btn { margin: 5px; padding: 10px 20px; }
+            .container { padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="motor-claim-evaluator.html">← Back to Project Overview</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>🚗 Motor Claim Triage and QC Evaluator</h1>
+            <p>Source Code &amp; Evaluation Engine</p>
+            <div class="badges">
+                <span class="badge">Vanilla JS</span>
+                <span class="badge">Gemini AI</span>
+                <span class="badge">Python + pandas</span>
+                <span class="badge">Self-Contained</span>
+            </div>
+        </div>
+
+        <div class="highlight-box">
+            <h3>🔍 About This Code Showcase</h3>
+            <p><strong>These snippets show the parts that make this both a triage tool and an honest evaluator: the five-way Gemini lane call, the data prep that hides the fraud label, the deterministic gate that can overrule the model, and the imbalance-aware metrics with a Wilson interval.</strong></p>
+            <p>The full page is a single self-contained HTML file with no backend. Real claims are sampled offline by a keyless Python script and shipped as a static JavaScript asset. Scoring runs live in the browser with the visitor's own Gemini key.</p>
+        </div>
+
+        <div class="content-section">
+            <h2>📁 Project Structure</h2>
+            <div class="file-tree">projects/motor-claim-evaluator/
+├── demo.html           &larr; the whole app: triage, scorecard, safety dial, charts
+├── data/
+│   ├── claims.js       &larr; 150 real held-out claims (window.CLAIMS), label hidden
+│   └── meta.json       &larr; population + sample provenance, true 6% base rate
+├── prep_data.py        &larr; keyless: sample dataset.csv -> emit claims.js
+└── dataset.csv         &larr; 15,420 real labelled motor claims (source)</div>
+        </div>
+
+        <div class="content-section">
+            <h2>🧠 The Five-Way Lane Call (Gemini, structured output)</h2>
+            <p>Unlike a yes-or-no classifier, this asks Gemini for a strict JSON object with a five-way handling lane plus a fraud risk, a confidence, and a one-line reason. A response schema with an enum forces the shape, temperature 0.2 keeps it steady, and the claim facts go in while the true outcome never does.</p>
+            <div class="code-container">
+                <div class="code-header">📄 demo.html · scoreClaimLive()</div>
+<div class="code-block"><span class="kw">const</span> RESP_SCHEMA = {<span class="ty">type</span>:<span class="str">"object"</span>, properties:{
+  lane:{<span class="ty">type</span>:<span class="str">"string"</span>, <span class="ty">enum</span>:[<span class="str">"Fast-track"</span>,<span class="str">"Standard review"</span>,
+    <span class="str">"Complex / high-value"</span>,<span class="str">"Investigate (SIU)"</span>,<span class="str">"Repudiate-candidate"</span>]},
+  fraud_risk:{<span class="ty">type</span>:<span class="str">"number"</span>}, confidence:{<span class="ty">type</span>:<span class="str">"number"</span>}, reason:{<span class="ty">type</span>:<span class="str">"string"</span>}
+}, required:[<span class="str">"lane"</span>,<span class="str">"fraud_risk"</span>,<span class="str">"confidence"</span>,<span class="str">"reason"</span>]};
+
+<span class="kw">async function</span> <span class="fn">scoreClaimLive</span>(key, c, retries=<span class="num">4</span>){
+  <span class="kw">const</span> payload = {system_instruction:{parts:[{text:SYSTEM_PROMPT}]},
+    contents:[{parts:[{text:<span class="str">"Classify this claim:\n"</span>+<span class="fn">factSheet</span>(c)}]}],
+    generationConfig:{responseMimeType:<span class="str">"application/json"</span>, responseSchema:RESP_SCHEMA, temperature:<span class="num">0.2</span>}};
+  <span class="kw">for</span>(<span class="kw">let</span> a=<span class="num">0</span>; a&lt;=retries; a++){
+    <span class="kw">const</span> res = <span class="kw">await</span> <span class="fn">fetch</span>(GEMINI_URL+<span class="str">"?key="</span>+<span class="fn">encodeURIComponent</span>(key), {method:<span class="str">"POST"</span>, ...});
+    <span class="kw">if</span>(res.ok){
+      <span class="kw">const</span> v = <span class="fn">JSON.parse</span>(out.candidates[<span class="num">0</span>].content.parts[<span class="num">0</span>].text);
+      <span class="kw">return</span> {lane:LANE_MAP[v.lane.<span class="fn">toLowerCase</span>()], fraud_risk:<span class="fn">clamp</span>(+v.fraud_risk,<span class="num">0</span>,<span class="num">1</span>),
+        confidence:<span class="fn">clamp</span>(+v.confidence,<span class="num">0</span>,<span class="num">1</span>), reason:v.reason};
+    }
+    <span class="com">// free-tier keys are rate-limited; back off and retry on 429/503</span>
+    <span class="kw">if</span>((res.status===<span class="num">429</span>||res.status===<span class="num">503</span>) &amp;&amp; a&lt;retries){ <span class="kw">await</span> <span class="fn">sleep</span>(<span class="num">4000</span>*(a+<span class="num">1</span>)); <span class="kw">continue</span>; }
+    <span class="kw">throw new</span> <span class="fn">Error</span>(<span class="str">"HTTP "</span>+res.status);
+  }
+}</div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🔒 The Honest Data Prep (label kept out of the prompt)</h2>
+            <p>A keyless Python script stratifies the real dataset to 40 fraud and 110 legitimate claims, maps the bucketed columns into a fact sheet for the model, and attaches <code>isFraud</code> for scoring only. The label travels inside each claim but is never placed in the prompt.</p>
+            <div class="code-container">
+                <div class="code-header">📄 prep_data.py · build_claim()</div>
+<div class="code-block"><span class="kw">def</span> <span class="fn">build_claim</span>(row, cid):
+    facts = {<span class="str">"make"</span>:<span class="fn">s</span>(row[<span class="str">"Make"</span>]), <span class="str">"accidentArea"</span>:<span class="fn">s</span>(row[<span class="str">"AccidentArea"</span>]),
+        <span class="str">"fault"</span>:<span class="fn">s</span>(row[<span class="str">"Fault"</span>]), <span class="str">"vehiclePrice"</span>:<span class="fn">s</span>(row[<span class="str">"VehiclePrice"</span>]),
+        <span class="str">"daysPolicyClaim"</span>:<span class="fn">s</span>(row[<span class="str">"Days_Policy_Claim"</span>]),
+        <span class="str">"pastNumberOfClaims"</span>:<span class="fn">s</span>(row[<span class="str">"PastNumberOfClaims"</span>]),
+        <span class="str">"policeReportFiled"</span>:<span class="fn">s</span>(row[<span class="str">"PoliceReportFiled"</span>]), <span class="com"># ...and more</span>}
+    <span class="kw">return</span> {
+        <span class="str">"id"</span>: cid,
+        <span class="str">"facts"</span>: facts,                          <span class="com"># the fact sheet handed to the model</span>
+        <span class="str">"isFraud"</span>: <span class="fn">int</span>(row[<span class="str">"FraudFound_P"</span>]),     <span class="com"># ground truth, read only when scoring</span>
+    }
+
+<span class="com"># rebalance so recall is measurable on a ~6% event, and disclose it</span>
+fraud = df[df[<span class="str">"FraudFound_P"</span>]==<span class="num">1</span>].<span class="fn">sample</span>(n=<span class="num">40</span>, random_state=SEED)
+legit = df[df[<span class="str">"FraudFound_P"</span>]==<span class="num">0</span>].<span class="fn">sample</span>(n=<span class="num">110</span>, random_state=SEED)</div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🚦 The Gate That Can Overrule the Model</h2>
+            <p>The model proposes a lane, but a short deterministic rule, not the LLM, makes the routing call. Any claim whose fraud risk crosses the safety dial is pulled into investigation; everything else follows the lane the model suggested. The rule is auditable, the override is explicit.</p>
+            <div class="code-container">
+                <div class="code-header">📄 demo.html · decorate(claims, threshold)</div>
+<div class="code-block"><span class="kw">function</span> <span class="fn">decorate</span>(claims, th){
+  <span class="kw">return</span> claims.<span class="fn">map</span>(c =&gt; {
+    <span class="kw">if</span>(!c.scored) <span class="kw">return</span> {...c, lane:<span class="str">"unscored"</span>, predFraud:<span class="num">0</span>};
+    <span class="com">// at or above the dial it goes to investigation; a claim the model itself</span>
+    <span class="com">// routed to SIU also counts as a fraud prediction (blueprint rule C)</span>
+    <span class="kw">const</span> lane = c.risk &gt;= th ? <span class="str">"siu"</span> : c.modelLane;
+    <span class="kw">const</span> predFraud = lane === <span class="str">"siu"</span> ? <span class="num">1</span> : <span class="num">0</span>;
+    <span class="kw">return</span> {...c, lane, predFraud, reason:c.modelReason};
+  });
+}</div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>📊 The Fraud Metrics Engine (built for a rare event)</h2>
+            <p>One pass over the scored claims builds the confusion matrix, then catch rate (recall), flag accuracy (precision), false-alarm rate, and F1. On a 6% event these matter far more than raw accuracy, which is why the scorecard leads with them.</p>
+            <div class="code-container">
+                <div class="code-header">📄 demo.html · metrics(claims)</div>
+<div class="code-block"><span class="kw">function</span> <span class="fn">metrics</span>(claims){
+  <span class="kw">let</span> TP=<span class="num">0</span>, FP=<span class="num">0</span>, FN=<span class="num">0</span>, TN=<span class="num">0</span>;
+  claims.<span class="fn">forEach</span>(c =&gt; {
+    <span class="kw">if</span>(c.predFraud &amp;&amp; c.isFraud) TP++;
+    <span class="kw">else if</span>(c.predFraud &amp;&amp; !c.isFraud) FP++;
+    <span class="kw">else if</span>(!c.predFraud &amp;&amp; c.isFraud) FN++;   <span class="com">// missed fraud, the expensive failure</span>
+    <span class="kw">else</span> TN++;
+  });
+  <span class="kw">const</span> prec = TP/(TP+FP||<span class="num">1</span>);           <span class="com">// when it flags, how often right</span>
+  <span class="kw">const</span> rec  = TP/(TP+FN||<span class="num">1</span>);           <span class="com">// catch rate, the number to protect</span>
+  <span class="kw">const</span> fpr  = FP/(FP+TN||<span class="num">1</span>);           <span class="com">// honest customers wrongly flagged</span>
+  <span class="kw">return</span> {TP, FP, FN, TN, prec, rec, fpr, f1:<span class="num">2</span>*prec*rec/((prec+rec)||<span class="num">1</span>),
+    recCI:<span class="fn">wilson</span>(TP, TP+FN), precCI:<span class="fn">wilson</span>(TP, TP+FP)};
+}</div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>📐 The Confidence Interval (Wilson score)</h2>
+            <p>Every headline number carries a 95% interval, so the audience knows the margin of error and can watch it tighten as the sample grows. This is what answers "you only scored 150, is that enough?".</p>
+            <div class="code-container">
+                <div class="code-header">📄 demo.html · wilson(k, n)</div>
+<div class="code-block"><span class="com">// 95% Wilson score interval for a proportion k/n</span>
+<span class="kw">function</span> <span class="fn">wilson</span>(k, n, z){
+  z = z || <span class="num">1.96</span>; <span class="kw">if</span>(n===<span class="num">0</span>) <span class="kw">return</span> [<span class="num">0</span>,<span class="num">0</span>];
+  <span class="kw">const</span> p=k/n, d=<span class="num">1</span>+z*z/n;
+  <span class="kw">const</span> c=(p+z*z/(<span class="num">2</span>*n))/d;
+  <span class="kw">const</span> h=(z*<span class="fn">Math.sqrt</span>(p*(<span class="num">1</span>-p)/n + z*z/(<span class="num">4</span>*n*n)))/d;
+  <span class="kw">return</span> [<span class="fn">clamp</span>(c-h,<span class="num">0</span>,<span class="num">1</span>), <span class="fn">clamp</span>(c+h,<span class="num">0</span>,<span class="num">1</span>)];
+}</div>
+            </div>
+        </div>
+
+        <div class="demo-links">
+            <a href="motor-claim-evaluator.html" class="demo-btn">← Back to Showcase</a>
+            <a href="https://github.com/lyven81/ai-project/tree/main/projects/motor-claim-evaluator" target="_blank" class="demo-btn secondary">📦 View on GitHub</a>
+        </div>
+    </div>
+</body>
+</html>

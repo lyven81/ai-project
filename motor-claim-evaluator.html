@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Motor Claim Triage and QC Evaluator - AI Claim Triage Scored on Real Fraud</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #222; background-color: #ffffff; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        .back-nav { margin-bottom: 20px; }
+        .back-nav a { color: #007BFF; text-decoration: none; font-size: 1rem; }
+        .back-nav a:hover { text-decoration: underline; }
+        .project-header { text-align: center; margin-bottom: 40px; padding: 40px 0; background: linear-gradient(135deg, #FF5722, #D84315); color: white; border-radius: 10px; }
+        .project-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        .project-header p { font-size: 1.2rem; opacity: 0.9; }
+        .badges { display: flex; justify-content: center; gap: 10px; margin: 20px 0; flex-wrap: wrap; }
+        .badge { background-color: rgba(255, 255, 255, 0.2); color: white; padding: 5px 12px; border-radius: 15px; font-size: 0.9rem; }
+        .demo-links { text-align: center; margin: 30px 0; }
+        .demo-btn { display: inline-block; background-color: #007BFF; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; margin: 0 10px; font-weight: bold; transition: background-color 0.3s; }
+        .demo-btn:hover { background-color: #0056b3; }
+        .demo-btn.secondary { background-color: #28a745; }
+        .demo-btn.secondary:hover { background-color: #218838; }
+        .content-section { margin: 40px 0; padding: 30px; background-color: #f9f9f9; border-radius: 8px; border-left: 5px solid #FF5722; }
+        .content-section h2 { color: #FF5722; margin-bottom: 20px; font-size: 1.8rem; }
+        .content-section h3 { color: #333; margin: 20px 0 10px 0; font-size: 1.3rem; }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin: 20px 0; }
+        .feature-item { background: white; padding: 20px; border-radius: 8px; border: 1px solid #ddd; }
+        .feature-item h4 { color: #FF5722; margin-bottom: 10px; }
+        .tech-stack { display: flex; flex-wrap: wrap; gap: 10px; margin: 15px 0; }
+        .tech-item { background-color: #FF5722; color: white; padding: 5px 12px; border-radius: 15px; font-size: 0.9rem; }
+        .code-block { background-color: #f4f4f4; border: 1px solid #ddd; border-radius: 5px; padding: 15px; margin: 15px 0; font-family: monospace; overflow-x: auto; }
+        .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin: 20px 0; }
+        .metric-card { background: white; padding: 20px; border-radius: 8px; text-align: center; border: 2px solid #FF5722; }
+        .metric-number { font-size: 2rem; font-weight: bold; color: #FF5722; }
+        .metric-label { color: #666; font-size: 0.9rem; }
+        @media (max-width: 768px) {
+            .project-header h1 { font-size: 2rem; }
+            .project-header p { font-size: 1rem; }
+            .badges { justify-content: center; }
+            .demo-btn { margin: 5px; padding: 10px 20px; }
+            .container { padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="index.html">← Back to Portfolio</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>🚗 Motor Claim Triage and QC Evaluator</h1>
+            <p>AI claim triage for insurers, scored on real fraud</p>
+
+            <div class="badges">
+                <span class="badge">Gemini AI</span>
+                <span class="badge">Multi-lane Triage</span>
+                <span class="badge">Fraud QC Scorecard</span>
+                <span class="badge">Vanilla JS</span>
+                <span class="badge">BYO-Key</span>
+                <span class="badge">GitHub Pages</span>
+            </div>
+        </div>
+
+        <div class="demo-links">
+            <a href="projects/motor-claim-evaluator/demo.html" target="_blank" class="demo-btn">🚀 Launch Live Demo</a>
+            <a href="motor-claim-evaluator-source.html" class="demo-btn secondary">📁 View Source Code</a>
+        </div>
+
+        <div class="content-section">
+            <h2>📋 Project Overview &amp; Problem Statement</h2>
+            <p><strong>Challenge:</strong> Motor claims arrive in a flood, and most are honest. A handler has to do two jobs at once: send each claim to the right desk, and catch the rare fraud hiding in the pile. Rush and you pay the fraud; over-investigate and honest customers wait weeks. And when the board asks how good the fraud triage really is, there is no measured answer, only a vendor's black-box score that was never tested on this insurer's own claims.</p>
+
+            <p><strong>Solution:</strong> This tool runs both jobs on one screen and stays honest about which one it can actually prove. It sorts every claim into one of five handling lanes for operational routing, and on the single axis that carries a real label, fraud, it scores its own flags live against the recorded outcome, with a 95% confidence interval on every figure.</p>
+
+            <h3>Key Benefits</h3>
+            <ul>
+                <li><strong>Two jobs, one screen:</strong> operational lane-sorting and a measured fraud check, kept separate so neither oversells the other</li>
+                <li><strong>Honest scope:</strong> fraud is graded against the real label; the four routing lanes are shown as a distribution and never dressed up as accuracy</li>
+                <li><strong>Tuned for a rare event:</strong> with fraud near 6 in 100, the scorecard leads on catch rate and false alarms, the numbers an SIU team actually argues over, not a flattering accuracy figure</li>
+                <li><strong>One dial for the real trade-off:</strong> catch more fraud and bother more honest customers, or the reverse, recomputed live as you drag it</li>
+                <li><strong>Governance built in:</strong> no claim is auto-denied, a repudiation candidate always reaches a person, and every flag shows the facts behind it</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>🖥️ Application Features</h2>
+
+            <div class="features-grid">
+                <div class="feature-item">
+                    <h4>🗂️ Five-Lane Triage Console</h4>
+                    <p>The operational half. Every claim is sorted into fast-track, standard review, complex or high-value, investigate (SIU), or repudiate-candidate, with a headline percentage cleared and a tap-to-filter view of each lane. This is routing, shown as a distribution, not graded against truth.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>✅ Fraud QC Scorecard</h4>
+                    <p>The measured half. Catch rate, flag accuracy, F1, false-alarm rate, and a four-box confusion matrix, all checked against the real <code>FraudFound_P</code> label, each carrying a 95% confidence interval. Plain-English first, the technical figure underneath, nothing hidden.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>🎚️ Safety Dial</h4>
+                    <p>A fraud-risk threshold slider that re-splits the investigate and clear piles live and redraws a catch-rate-versus-false-alarm curve. Three presets, catch more fraud, balanced, or fewer false alarms, make the trade-off concrete for an SIU lead.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>📐 Calibration and Segments</h4>
+                    <p>A stated-risk-versus-actual-fraud chart that exposes whether the model's certainty holds up on a rare event, plus a fraud-rate-by-accident-area sense check. The honesty layer that stops a high accuracy number from telling a comforting lie.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🤖 AI Integration &amp; Intelligence</h2>
+
+            <div class="features-grid">
+                <div class="feature-item">
+                    <h4>🧠 Five-Way Lane Call (Gemini AI)</h4>
+                    <p>This is not a yes-or-no verdict. From the claim facts alone, Gemini returns a five-way handling lane plus a fraud risk, a confidence, and a one-line reason, as structured JSON. The prompt never sees the true outcome, so the later scoring stays honest.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>🎯 Only the Fraud Call Is Graded</h4>
+                    <p>The design choice that keeps the tool honest: of the five lanes, only fraud carries a real label, so only the fraud flags are scored. The routing lanes are reported as a distribution. The page says so out loud rather than implying all five are accurate.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>🚦 The Gate Can Overrule the Model</h4>
+                    <p>A short deterministic rule, not the LLM, makes the routing call. It pulls any claim into investigation once its fraud risk crosses the dial, and it never lets a repudiation candidate skip a human. The model proposes; the auditable rule disposes.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>📊 Calibration Under Imbalance</h4>
+                    <p>When fraud is 6 in 100, a model can look 94 percent accurate by clearing everything. So the tool watches whether high stated risk actually lands on fraud more often, and rebalances the demo sample to roughly 27 percent fraud, disclosed on the page, so recall is measurable at all.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>📦 The QC Pack: From Tool to Operating Procedure</h2>
+            <p>A demo proves the model works; running it inside a claims team needs the operating layer around it. The companion <strong>QC Pack</strong> ships four artifacts that turn the evaluator into a repeatable workflow an adjuster or an offshore handler can follow.</p>
+
+            <div class="features-grid">
+                <div class="feature-item">
+                    <h4>📋 Claims Classification Guide</h4>
+                    <p>One entry per lane: definition, when to route there, when to escalate, edge cases, and a worked example. <strong>What it is for:</strong> giving every handler the same written definition of each lane, so triage stays consistent from desk to desk.</p>
+                </div>
+                <div class="feature-item">
+                    <h4>🧠 Prompt Library</h4>
+                    <p>The primary classifier prompt, plus a tie-breaker for borderline lanes and a re-check before high-stakes flags. <strong>What it is for:</strong> reproducing and tuning the model's behaviour deliberately, instead of guessing at prompt changes.</p>
+                </div>
+                <div class="feature-item">
+                    <h4>🗂️ Good / Bad / Gray Training Set</h4>
+                    <p>Eight worked example claims with the correct lane and the reason, marked clear, ambiguous, or tempting-wrong. <strong>What it is for:</strong> onboarding a new adjuster fast and calibrating judgement on the cases that actually trip people up.</p>
+                </div>
+                <div class="feature-item">
+                    <h4>✅ QC SOP</h4>
+                    <p>The daily review-queue steps and the weekly scorecard the team maintains. <strong>What it is for:</strong> running the queue day to day, and keeping the model honest over time through a standing trust contract.</p>
+                </div>
+            </div>
+
+            <div class="demo-links" style="margin: 10px 0 0;">
+                <a href="projects/motor-claim-evaluator/qc-pack.html" target="_blank" class="demo-btn secondary">📦 Open the QC Pack</a>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🛠️ Technical Architecture &amp; Implementation</h2>
+
+            <h3>Frontend Stack</h3>
+            <div class="tech-stack">
+                <span class="tech-item">Single-file HTML</span>
+                <span class="tech-item">Vanilla JavaScript</span>
+                <span class="tech-item">Inline SVG charts</span>
+                <span class="tech-item">No build step</span>
+            </div>
+
+            <h3>AI &amp; Data</h3>
+            <div class="tech-stack">
+                <span class="tech-item">Google Gemini (gemini-2.5-flash)</span>
+                <span class="tech-item">Structured JSON output</span>
+                <span class="tech-item">BYO-key, client-side</span>
+                <span class="tech-item">Python + pandas (data prep)</span>
+            </div>
+
+            <h3>Deployment &amp; Infrastructure</h3>
+            <div class="tech-stack">
+                <span class="tech-item">GitHub Pages</span>
+                <span class="tech-item">Static asset (claims.js)</span>
+                <span class="tech-item">No backend</span>
+            </div>
+
+            <h3>System Architecture</h3>
+            <ul>
+                <li><strong>No backend, no server cost:</strong> the page calls Gemini directly from the browser with the visitor's own key</li>
+                <li><strong>Real data as a static asset:</strong> a keyless Python script samples the 15,420-row Kaggle dataset and emits 150 stratified real claims as <code>data/claims.js</code>, loaded via <code>&lt;script src&gt;</code> so it works on GitHub Pages and offline</li>
+                <li><strong>Honest scoring:</strong> the true fraud label travels with each claim but is used only after the model answers, never shown to it</li>
+                <li><strong>Typed verdict to UI:</strong> Gemini's lane and fraud risk drive the confusion matrix, the metrics, the lane distribution, and the tradeoff chart</li>
+                <li><strong>Self-contained:</strong> classification, scoring, charts, and the safety dial all run in one HTML file</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>📖 Setup &amp; How to Run</h2>
+
+            <h3>Prerequisites</h3>
+            <ul>
+                <li><strong>A free Gemini API key</strong> from Google AI Studio (<code>aistudio.google.com/apikey</code>)</li>
+                <li>A modern browser. No install, no Node, no Python needed to run the demo</li>
+            </ul>
+
+            <h3>Run the Demo</h3>
+            <div class="code-block">
+# Open the live demo, or run locally:
+git clone https://github.com/lyven81/ai-project.git
+cd ai-project/projects/motor-claim-evaluator
+
+# Open demo.html in a browser, then:
+# 1. Paste your Gemini API key
+# 2. Choose how many claims to score (50 / 100 / 150)
+# 3. Click "Run evaluation"
+            </div>
+
+            <h3>Regenerate the Data Asset (optional)</h3>
+            <div class="code-block">
+# Re-sample real claims from the source dataset (keyless)
+pip install pandas
+python prep_data.py
+# -> writes data/claims.js and data/meta.json
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🚀 Deployment</h2>
+
+            <div class="code-block">
+# Fully static. Deployed on GitHub Pages, no server.
+# Live at:
+# https://lyven81.github.io/ai-project/projects/motor-claim-evaluator/demo.html
+            </div>
+
+            <h3>Production Notes</h3>
+            <ul>
+                <li>The demo scores a labelled sample live with the visitor's key; production swaps this for a one-time offline batch plus weekly re-scoring</li>
+                <li>For exact reproducibility, pin the model to a dated snapshot and cache verdicts</li>
+                <li>Frame as decision support: the system triages, a human owns the final call on any flag, and no claim is ever auto-denied</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>📊 Key Metrics</h2>
+
+            <div class="metrics">
+                <div class="metric-card">
+                    <div class="metric-number">15,420</div>
+                    <div class="metric-label">Real Labelled Claims in Source Data</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">150</div>
+                    <div class="metric-label">Held-Out Claims Scored Live</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">5</div>
+                    <div class="metric-label">Handling Lanes (One Scored, Four Routed)</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">0</div>
+                    <div class="metric-label">Backend Servers (Fully Client-Side)</div>
+                </div>
+            </div>
+
+            <h3>Business Value</h3>
+            <ul>
+                <li><strong>Trust through evidence:</strong> proves fraud accuracy on the insurer's own labelled history, not a vendor's black box</li>
+                <li><strong>Less manual review:</strong> clean low-risk claims fast-track so assessors spend time only where it matters</li>
+                <li><strong>A tunable safety dial:</strong> the insurer chooses where to sit on the catch-rate-versus-false-alarm tradeoff</li>
+                <li><strong>Audit-ready:</strong> plain-language reasons and a measured scorecard a compliance reviewer could read</li>
+                <li><strong>Closes the evaluation gap:</strong> demonstrates that an AI's output can be measured, not just produced</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2>🔁 Potential Use Cases</h2>
+            <p>Strip away the motor-insurance specifics and the pattern reusable here is the triage-plus-audit loop: sort each record into lanes, let a model rate the rare flag, clear the easy ones, escalate the rest, and grade only the call you have a real answer key for. It fits wherever two things hold:</p>
+            <ul>
+                <li><strong>A high-volume queue with a rare flag:</strong> most records are routine, a small fraction need scrutiny, and the cost of missing the flag is high.</li>
+                <li><strong>An answer key for that one flag:</strong> past records eventually record whether the flag was real, so the model's flags can be scored even when the routing lanes cannot.</li>
+            </ul>
+            <p>Two examples that fit, each with the catch that decides how far to trust the scorecard:</p>
+
+            <div class="features-grid">
+                <div class="feature-item">
+                    <h4>🏥 Medical Billing Review</h4>
+                    <p>Classify each submitted claim line as anomalous or routine, with a confidence score. Auto-approve the clean lines, route the suspicious ones to a reviewer, and score the model against which lines were later recovered or written off.</p>
+                    <p><strong>Condition to reuse the framework:</strong> you hold historical adjudication outcomes (paid, recovered, denied). The catch is that the answer key is partial for lines no one ever audited, so use it as decision support, not an automatic denial.</p>
+                </div>
+
+                <div class="feature-item">
+                    <h4>📦 Warranty Claim Triage</h4>
+                    <p>Classify each warranty claim as likely valid or likely abuse, with a confidence score. Fast-track the clear ones, escalate the doubtful ones, and score against which claims were ultimately honoured or rejected.</p>
+                    <p><strong>Condition to reuse the framework:</strong> you define a concrete outcome up front, for example honoured at final assessment. The label is only as honest as that definition, so it must be stated plainly.</p>
+                </div>
+            </div>
+
+            <p>The shorter the gap between a flag and its confirmed outcome, the more the scorecard is worth. Motor fraud sits near the good end: the label is recorded for every claim, even though it is rare. Medical billing and warranty triage are usable too, as long as the page is upfront about where their answer keys are partial or slow.</p>
+        </div>
+
+        <div class="demo-links">
+            <a href="projects/motor-claim-evaluator/demo.html" target="_blank" class="demo-btn">🚀 Try Live Demo</a>
+            <a href="https://github.com/lyven81/ai-project/tree/main/projects/motor-claim-evaluator" class="demo-btn secondary">📖 Full Source Code</a>
+        </div>
+
+        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+            <a href="index.html">← Back to Portfolio</a> |
+            <a href="project-categories.html">View All Categories</a>
+        </nav>
+    </div>
+</body>
+</html>

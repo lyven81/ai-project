@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Motor Claim Triage and QC Evaluator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1E3A5F; --navy2:#16293f; --blue:#4A7FB5; --blue-soft:#EAF1F8; --blue-line:#cfe0f0;
+    --ink:#1c2a38; --muted:#5d6b7a; --faint:#8a97a4; --line:#dbe4ee; --bg:#f4f7fb; --card:#ffffff;
+    --green:#2E7D5B; --green-soft:#e7f4ee;
+    --amber:#B07A12; --amber-soft:#fbf2dd;
+    --red:#C0392B; --red-soft:#fbe9e7;
+    --indigo:#4B5FA8; --indigo-soft:#ebedf8;
+    --slate:#5E6B7A; --slate-soft:#eef1f4;
+    --shadow:0 1px 2px rgba(30,58,95,.06),0 6px 18px rgba(30,58,95,.06);
+    --radius:14px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55;font-size:15px;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 20px;}
+
+  /* header */
+  header.top{background:linear-gradient(160deg,var(--navy) 0%,var(--navy2) 100%);color:#fff;padding:30px 0 26px;}
+  .brandrow{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+  .logo{width:34px;height:34px;border-radius:9px;background:var(--blue);display:grid;place-items:center;font-family:'Fraunces';font-weight:700;font-size:19px;color:#fff;flex:none;}
+  .brandtxt{font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:#a9c2dc;font-weight:600;}
+  header.top h1{font-family:'Fraunces';font-weight:600;font-size:33px;line-height:1.12;letter-spacing:-.01em;max-width:760px;}
+  header.top .lede{color:#cfe0f0;font-size:16px;margin-top:10px;max-width:680px;}
+  .govbar{display:inline-flex;align-items:center;gap:9px;margin-top:18px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);border-radius:30px;padding:7px 15px;font-size:13px;color:#e4eefa;}
+  .govbar .dot{width:8px;height:8px;border-radius:50%;background:#7fd0a3;flex:none;}
+
+  /* run bar */
+  .runbar{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px;margin:-26px auto 0;position:relative;z-index:3;display:flex;flex-wrap:wrap;gap:18px;align-items:flex-end;}
+  .field{display:flex;flex-direction:column;gap:6px;}
+  .field label{font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.02em;}
+  .field .hint{font-size:11.5px;color:var(--faint);font-weight:500;}
+  .seges{display:flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;}
+  .seges button{border:none;background:#fff;padding:9px 16px;font-family:inherit;font-size:14px;font-weight:600;color:var(--muted);cursor:pointer;border-right:1px solid var(--line);}
+  .seges button:last-child{border-right:none;}
+  .seges button.on{background:var(--navy);color:#fff;}
+  input.key{border:1px solid var(--line);border-radius:10px;padding:9px 12px;font-family:inherit;font-size:14px;width:230px;color:var(--ink);background:#fff;}
+  input.key:focus{outline:2px solid var(--blue);border-color:var(--blue);}
+  .runbtn{background:var(--blue);color:#fff;border:none;border-radius:10px;padding:11px 22px;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:9px;}
+  .runbtn:hover{background:#3f70a3;}
+  .runbtn:disabled{opacity:.6;cursor:default;}
+  .runbtn .spin{width:15px;height:15px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:sp .7s linear infinite;display:none;}
+  .runbtn.loading .spin{display:inline-block;}
+  @keyframes sp{to{transform:rotate(360deg);}}
+
+  .modechip{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--muted);background:var(--blue-soft);border:1px solid var(--blue-line);border-radius:8px;padding:7px 12px;margin:14px 0 4px;}
+  .modechip b{color:var(--navy);}
+
+  /* tabs */
+  nav.tabs{display:flex;gap:4px;border-bottom:2px solid var(--line);margin:24px 0 0;flex-wrap:wrap;}
+  nav.tabs button{border:none;background:none;font-family:inherit;font-size:15px;font-weight:600;color:var(--muted);padding:12px 16px;cursor:pointer;position:relative;border-radius:8px 8px 0 0;}
+  nav.tabs button .ico{margin-right:7px;}
+  nav.tabs button.on{color:var(--navy);}
+  nav.tabs button.on::after{content:"";position:absolute;left:10px;right:10px;bottom:-2px;height:3px;background:var(--blue);border-radius:3px;}
+  nav.tabs button:hover{color:var(--navy);}
+
+  .panel{display:none;padding:26px 0 50px;}
+  .panel.on{display:block;}
+  .panel-intro{font-size:15px;color:var(--muted);max-width:720px;margin-bottom:22px;}
+  .panel-intro b{color:var(--ink);}
+
+  h2.sec{font-family:'Fraunces';font-weight:600;font-size:22px;color:var(--navy);margin:30px 0 4px;}
+  .sec-sub{font-size:13.5px;color:var(--muted);margin-bottom:16px;}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px;}
+  .grid{display:grid;gap:16px;}
+  .g-5{grid-template-columns:repeat(5,1fr);}
+  .g-4{grid-template-columns:repeat(4,1fr);}
+  .g-3{grid-template-columns:repeat(3,1fr);}
+  .g-2{grid-template-columns:1fr 1fr;}
+
+  /* lane summary cards */
+  .lanecard{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;position:relative;overflow:hidden;cursor:pointer;transition:transform .12s,box-shadow .12s;}
+  .lanecard:hover{transform:translateY(-2px);box-shadow:var(--shadow);}
+  .lanecard.active{border-color:var(--navy);box-shadow:0 0 0 2px var(--navy) inset;}
+  .lanecard .bar{position:absolute;left:0;top:0;bottom:0;width:5px;}
+  .lanecard .lname{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:2px;padding-left:6px;}
+  .lanecard .lcount{font-family:'Fraunces';font-size:30px;font-weight:600;padding-left:6px;line-height:1;}
+  .lanecard .lpct{font-size:12px;color:var(--muted);padding-left:6px;margin-top:3px;}
+
+  /* headline strip */
+  .headline{display:flex;flex-wrap:wrap;gap:20px;background:linear-gradient(135deg,var(--blue-soft),#fff);border:1px solid var(--blue-line);border-radius:var(--radius);padding:20px 24px;margin-bottom:20px;align-items:center;}
+  .headline .hbig{font-family:'Fraunces';font-size:40px;font-weight:600;color:var(--navy);line-height:1;}
+  .headline .hlabel{font-size:13.5px;color:var(--muted);max-width:230px;}
+  .headline .divider{width:1px;align-self:stretch;background:var(--blue-line);}
+
+  /* claim list */
+  .filters{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0 12px;align-items:center;}
+  .filters .flbl{font-size:12.5px;color:var(--muted);font-weight:600;margin-right:2px;}
+  .chip{border:1px solid var(--line);background:#fff;border-radius:20px;padding:5px 13px;font-size:12.5px;font-weight:600;color:var(--muted);cursor:pointer;font-family:inherit;}
+  .chip.on{background:var(--navy);color:#fff;border-color:var(--navy);}
+  .claimrow{display:grid;grid-template-columns:96px 1.4fr 130px 120px 90px;gap:14px;align-items:center;padding:13px 14px;border:1px solid var(--line);border-radius:11px;margin-bottom:9px;background:#fff;}
+  .claimrow .cid{font-weight:700;font-size:13px;color:var(--navy);}
+  .claimrow .cfacts{font-size:12.5px;color:var(--muted);}
+  .claimrow .cfacts b{color:var(--ink);font-weight:600;}
+  .lanetag{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;border-radius:7px;padding:5px 9px;white-space:nowrap;}
+  .lanetag .sq{width:8px;height:8px;border-radius:2px;flex:none;}
+  .riskmeter{display:flex;flex-direction:column;gap:4px;}
+  .riskmeter .rtrack{height:7px;border-radius:5px;background:var(--line);overflow:hidden;}
+  .riskmeter .rfill{height:100%;border-radius:5px;}
+  .riskmeter .rword{font-size:11px;font-weight:700;}
+  .confword{font-size:12px;font-weight:700;text-align:right;}
+  .confword small{display:block;font-size:10.5px;font-weight:600;color:var(--faint);}
+  .reasoncell{grid-column:1 / -1;font-size:12px;color:var(--muted);padding:2px 2px 0 110px;font-style:italic;}
+
+  /* metric cards (dual register) */
+  .metric{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:8px;}
+  .metric .plain{font-size:14.5px;font-weight:600;color:var(--ink);line-height:1.4;}
+  .metric .plain .num{font-family:'Fraunces';font-size:23px;color:var(--navy);font-weight:600;}
+  .metric .tech{font-size:12px;color:var(--muted);background:var(--blue-soft);border-radius:7px;padding:6px 9px;font-weight:600;}
+  .metric .why{font-size:12px;color:var(--faint);line-height:1.4;}
+
+  /* confusion grid */
+  .cmwrap{display:grid;grid-template-columns:120px 1fr 1fr;gap:0;}
+  .cmhead{font-size:12px;font-weight:700;color:var(--muted);display:grid;place-items:center;text-align:center;padding:8px;}
+  .cmcorner{}
+  .cmside{font-size:12px;font-weight:700;color:var(--muted);display:grid;place-items:center;text-align:center;writing-mode:vertical-rl;transform:rotate(180deg);padding:8px 0;}
+  .cmcell{border-radius:11px;padding:16px;margin:5px;text-align:center;border:1px solid var(--line);}
+  .cmcell .cmtitle{font-size:12.5px;font-weight:700;margin-bottom:4px;}
+  .cmcell .cmval{font-family:'Fraunces';font-size:30px;font-weight:600;line-height:1;}
+  .cmcell .cmnote{font-size:11px;color:var(--muted);margin-top:5px;}
+  .cm-good{background:var(--green-soft);border-color:#bfe2cf;}
+  .cm-good .cmtitle,.cm-good .cmval{color:var(--green);}
+  .cm-bad{background:var(--red-soft);border-color:#f0c9c4;}
+  .cm-bad .cmtitle,.cm-bad .cmval{color:var(--red);}
+  .cm-warn{background:var(--amber-soft);border-color:#ecdcb4;}
+  .cm-warn .cmtitle,.cm-warn .cmval{color:var(--amber);}
+  .cm-neutral{background:var(--slate-soft);border-color:#d7dde3;}
+  .cm-neutral .cmtitle,.cm-neutral .cmval{color:var(--slate);}
+
+  /* dial */
+  .dialwrap{display:grid;grid-template-columns:1.1fr .9fr;gap:22px;align-items:start;}
+  .slider-block{padding:6px 4px;}
+  input[type=range]{width:100%;-webkit-appearance:none;height:8px;border-radius:6px;background:linear-gradient(90deg,var(--green),var(--amber),var(--red));outline:none;margin:18px 0 6px;}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;border-radius:50%;background:#fff;border:3px solid var(--navy);cursor:pointer;box-shadow:0 2px 5px rgba(0,0,0,.18);}
+  input[type=range]::-moz-range-thumb{width:26px;height:26px;border-radius:50%;background:#fff;border:3px solid var(--navy);cursor:pointer;}
+  .rangelabels{display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted);font-weight:600;}
+  .threadout{font-family:'Fraunces';font-size:34px;color:var(--navy);font-weight:600;}
+  .presets{display:flex;gap:8px;margin:16px 0 4px;flex-wrap:wrap;}
+  .preset{border:1px solid var(--line);background:#fff;border-radius:9px;padding:9px 13px;font-family:inherit;font-size:12.5px;font-weight:700;color:var(--navy);cursor:pointer;}
+  .preset:hover{background:var(--blue-soft);}
+  .consequence{background:var(--amber-soft);border:1px solid #ecdcb4;border-radius:11px;padding:15px 17px;font-size:14px;color:#6e5413;line-height:1.5;margin-top:8px;}
+  .consequence b{color:var(--amber);}
+  .dialstats{display:flex;flex-direction:column;gap:12px;}
+  .dialstat{display:flex;justify-content:space-between;align-items:center;border:1px solid var(--line);border-radius:11px;padding:13px 16px;}
+  .dialstat .dl{font-size:13px;color:var(--muted);font-weight:600;}
+  .dialstat .dl small{display:block;color:var(--faint);font-weight:500;font-size:11px;}
+  .dialstat .dv{font-family:'Fraunces';font-size:24px;font-weight:600;color:var(--navy);}
+
+  /* charts */
+  .chartcard h3{font-family:'Manrope';font-size:14px;font-weight:700;color:var(--ink);margin-bottom:3px;}
+  .chartcard .ctip{font-size:12px;color:var(--muted);margin-bottom:12px;}
+  svg.chart{width:100%;height:auto;display:block;}
+
+  /* how it works */
+  .note{display:flex;gap:13px;padding:15px 17px;border:1px solid var(--line);border-radius:12px;margin-bottom:13px;background:#fff;}
+  .note .ni{width:30px;height:30px;border-radius:8px;background:var(--blue-soft);color:var(--navy);display:grid;place-items:center;font-weight:800;flex:none;font-size:15px;}
+  .note h4{font-size:14px;color:var(--ink);margin-bottom:3px;}
+  .note p{font-size:13px;color:var(--muted);}
+  .guardlist{list-style:none;}
+  .guardlist li{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;color:var(--muted);margin-bottom:10px;}
+  .guardlist li::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--green);margin-top:7px;flex:none;}
+
+  footer{border-top:1px solid var(--line);padding:22px 0 40px;text-align:center;color:var(--faint);font-size:12.5px;}
+
+  @media(max-width:880px){
+    .g-5,.g-4,.g-3,.g-2{grid-template-columns:1fr 1fr;}
+    .dialwrap{grid-template-columns:1fr;}
+    .claimrow{grid-template-columns:1fr 1fr;}
+    .reasoncell{padding-left:2px;}
+    header.top h1{font-size:26px;}
+  }
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto;}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="brandrow">
+      <div class="logo">P</div>
+      <div class="brandtxt">Pau Analytics &nbsp;&middot;&nbsp; Claim Operations</div>
+    </div>
+    <h1>Motor Claim Triage and QC Evaluator</h1>
+    <p class="lede">The AI sorts incoming motor claims into handling lanes and flags possible fraud. Every flag is then checked against the real outcome, so you can see exactly how much to trust it.</p>
+    <div class="govbar"><span class="dot"></span> Decision support only. A human assessor owns every flag and every repudiation. No claim is ever auto-denied.</div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="runbar">
+    <div class="field">
+      <label>How many claims to score</label>
+      <div class="seges" id="sizeSel">
+        <button data-n="50">50</button>
+        <button data-n="100" class="on">100</button>
+        <button data-n="150">150</button>
+      </div>
+    </div>
+    <div class="field">
+      <label>Gemini API key <span class="hint">(for live scoring)</span></label>
+      <input class="key" id="keyInput" type="password" placeholder="Paste your Gemini key to score">
+    </div>
+    <button class="runbtn" id="runBtn"><span class="spin"></span><span class="rtxt">Run evaluation</span></button>
+  </div>
+
+  <div class="modechip" id="modeChip">These are <b>150 real motor claims</b>, not yet scored. This is a bring-your-own-key demo: paste your Gemini key above and click Run evaluation to triage them and score the fraud flags against the real outcome on each claim.</div>
+
+  <nav class="tabs" id="tabs">
+    <button data-tab="triage" class="on"><span class="ico">&#128203;</span>Triage console</button>
+    <button data-tab="score"><span class="ico">&#9989;</span>Accuracy scorecard</button>
+    <button data-tab="dial"><span class="ico">&#127919;</span>Safety dial</button>
+    <button data-tab="how"><span class="ico">&#128270;</span>Portfolio to production</button>
+  </nav>
+
+  <!-- TRIAGE -->
+  <section class="panel on" id="panel-triage">
+    <p class="panel-intro">This is where your day starts. Each claim has been sorted into one of five handling lanes. <b>Green clears with little effort, red needs investigation.</b> You decide what happens next on every one.</p>
+
+    <div class="headline">
+      <div><div class="hbig" id="hlAutoClear">0%</div><div class="hlabel">of claims land in fast-track, ready to clear with minimal effort</div></div>
+      <div class="divider"></div>
+      <div><div class="hbig" id="hlReview">0%</div><div class="hlabel">go to a human assessor, the rest of your queue</div></div>
+      <div class="divider"></div>
+      <div><div class="hbig" id="hlSiu" style="color:var(--red)">0</div><div class="hlabel">claims raised for fraud investigation today</div></div>
+    </div>
+
+    <h2 class="sec">Where your claims went</h2>
+    <div class="sec-sub">Tap a lane to see only those claims below.</div>
+    <div class="grid g-5" id="laneCards"></div>
+
+    <div class="filters" id="laneFilters">
+      <span class="flbl">Show:</span>
+      <button class="chip on" data-lane="all">All claims</button>
+    </div>
+    <div id="claimList"></div>
+  </section>
+
+  <!-- SCORECARD -->
+  <section class="panel" id="panel-score">
+    <p class="panel-intro">The AI was never shown the true fraud outcome. After it judged each claim, we compared its fraud flags against what really happened. <b>These are plain-English results with the technical figure shown beneath each one</b>, so nothing is hidden.</p>
+
+    <h2 class="sec">Can you trust the fraud flags?</h2>
+    <div class="sec-sub">The two numbers an assessor cares about most.</div>
+    <div class="grid g-2" id="topMetrics"></div>
+
+    <h2 class="sec">What actually happened</h2>
+    <div class="sec-sub">Every claim falls into one of four boxes once we compare the AI against the truth. The numbers update when you move the safety dial.</div>
+    <div class="card">
+      <div class="cmwrap">
+        <div class="cmcorner"></div>
+        <div class="cmhead">Truly fraudulent</div>
+        <div class="cmhead">Truly legitimate</div>
+        <div class="cmside">AI flagged it</div>
+        <div class="cmcell cm-good"><div class="cmtitle">Caught fraud</div><div class="cmval" id="cmTP">0</div><div class="cmnote">flagged and it really was fraud</div></div>
+        <div class="cmcell cm-warn"><div class="cmtitle">False alarm</div><div class="cmval" id="cmFP">0</div><div class="cmnote">flagged an honest claim by mistake</div></div>
+        <div class="cmside">AI cleared it</div>
+        <div class="cmcell cm-bad"><div class="cmtitle">Missed fraud</div><div class="cmval" id="cmFN">0</div><div class="cmnote">cleared a claim that was fraud</div></div>
+        <div class="cmcell cm-neutral"><div class="cmtitle">Correctly cleared</div><div class="cmval" id="cmTN">0</div><div class="cmnote">cleared an honest claim, no fuss</div></div>
+      </div>
+    </div>
+
+    <h2 class="sec">The full numbers</h2>
+    <div class="sec-sub">For anyone who wants the standard QC figures, each with a 95% confidence range (the band the true value is very likely to sit in, given this sample size).</div>
+    <div class="grid g-4" id="fullMetrics"></div>
+
+    <div class="grid g-2" style="margin-top:20px;">
+      <div class="card chartcard">
+        <h3>Is the AI honest about how sure it is?</h3>
+        <div class="ctip">When the AI says a claim is high risk, those claims really should turn out fraudulent more often. If the two bars line up, its confidence can be trusted.</div>
+        <svg class="chart" id="calChart" viewBox="0 0 460 240"></svg>
+      </div>
+      <div class="card chartcard">
+        <h3>Fraud rate by accident area</h3>
+        <div class="ctip">A simple sense-check: where the real fraud is concentrated in this batch.</div>
+        <svg class="chart" id="segChart" viewBox="0 0 460 240"></svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- DIAL -->
+  <section class="panel" id="panel-dial">
+    <p class="panel-intro">One dial controls how cautious the AI is about calling fraud. <b>There is no perfect setting</b>, only a trade-off: catch more fraud and you bother more honest customers, or vice versa. Move it and watch the effect in real numbers.</p>
+
+    <div class="card">
+      <div class="dialwrap">
+        <div class="slider-block">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;">
+            <div style="font-size:13px;color:var(--muted);font-weight:700;">Flag a claim when fraud risk is at least</div>
+            <div class="threadout" id="thReadout">0.50</div>
+          </div>
+          <input type="range" id="thSlider" min="10" max="90" value="50">
+          <div class="rangelabels"><span>0.10 &middot; catch the most</span><span>0.90 &middot; flag only the clearest</span></div>
+          <div class="presets">
+            <button class="preset" data-th="35">Catch more fraud</button>
+            <button class="preset" data-th="50">Balanced</button>
+            <button class="preset" data-th="65">Fewer false alarms</button>
+          </div>
+          <div class="consequence" id="consequence"></div>
+        </div>
+        <div class="dialstats">
+          <div class="dialstat"><div class="dl">Fraud caught <small>of all real fraud in the batch</small></div><div class="dv" id="dRecall">0%</div></div>
+          <div class="dialstat"><div class="dl">Flags that were right <small>when it flagged, how often correct</small></div><div class="dv" id="dPrec">0%</div></div>
+          <div class="dialstat"><div class="dl">Honest customers bothered <small>false alarms per 100 honest claims</small></div><div class="dv" id="dFpr">0%</div></div>
+          <div class="dialstat"><div class="dl">Claims sent to investigation <small>your SIU workload</small></div><div class="dv" id="dCover">0</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid g-2" style="margin-top:18px;">
+      <div class="card chartcard">
+        <h3>The trade-off, drawn out</h3>
+        <div class="ctip">Each point is a possible dial setting. Up and to the left is better. The marker is where your dial sits now.</div>
+        <svg class="chart" id="tradeChart" viewBox="0 0 460 260"></svg>
+      </div>
+      <div class="card chartcard">
+        <h3>Your queue at this setting</h3>
+        <div class="ctip">How the whole batch splits between investigation and routine handling right now.</div>
+        <svg class="chart" id="splitChart" viewBox="0 0 460 260"></svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW -->
+  <section class="panel" id="panel-how">
+    <p class="panel-intro">An honest account of what this tool does and does not claim, and what it takes to move it from a portfolio demo to a live claims desk. Built to be checked, not taken on faith.</p>
+
+    <h2 class="sec">How a claim moves through it</h2>
+    <div class="note"><div class="ni">1</div><div><h4>Read the claim facts</h4><p>The AI reads only the claim details: vehicle, accident area, who was at fault, days to report, police report, prior claims. It is never told the real outcome.</p></div></div>
+    <div class="note"><div class="ni">2</div><div><h4>Judge and explain</h4><p>It returns a handling lane, a fraud risk from 0 to 1, how confident it is, and a one-line reason in plain words.</p></div></div>
+    <div class="note"><div class="ni">3</div><div><h4>Route by a fixed rule</h4><p>A simple rule, not the AI, decides routing: risk at or above the dial goes to investigation, repudiation candidates always go to a person, only clean low-risk claims fast-track.</p></div></div>
+    <div class="note"><div class="ni">4</div><div><h4>Score against the truth</h4><p>Only now do we reveal the real fraud outcome and tally where the AI was right and wrong. That is the scorecard.</p></div></div>
+
+    <h2 class="sec">What is measured and what is not</h2>
+    <div class="card" style="margin-bottom:18px;">
+      <p style="font-size:13.5px;color:var(--muted);margin-bottom:10px;">Honesty matters more than a flattering number, so this is stated plainly:</p>
+      <ul class="guardlist">
+        <li><b style="color:var(--ink)">Fraud is scored.</b>&nbsp; The data carries a real fraud label, so the fraud flags are measured against it. That is the scorecard you see.</li>
+        <li><b style="color:var(--ink)">The other lanes are routing, not graded.</b>&nbsp; Fast-track, standard, and complex are operational sorting. No public truth label exists for them, so they are shown as a distribution, never claimed as accurate.</li>
+        <li><b style="color:var(--ink)">Fraud is rare.</b>&nbsp; In real motor books fraud runs near 6 in 100. This demo sample is rebalanced so there are enough fraud cases to measure, which is disclosed rather than hidden.</li>
+      </ul>
+    </div>
+
+    <h2 class="sec">The rules that never bend</h2>
+    <div class="card">
+      <ul class="guardlist">
+        <li>Decision support only. A human assessor owns every flag and every repudiation.</li>
+        <li>No auto-denial of claims. A fraud flag is a trigger to review, not an accusation.</li>
+        <li>The model is pinned to a dated version so results can be reproduced.</li>
+        <li>Synthetic and public data, used for portfolio demonstration only.</li>
+      </ul>
+    </div>
+
+    <h2 class="sec">From this demo to a live claims desk</h2>
+    <div class="sec-sub">What changes when the same design runs on a real, growing claims feed.</div>
+    <div class="grid g-2">
+      <div class="note"><div class="ni">&rarr;</div><div><h4>Score once, then re-score weekly</h4><p>The demo classifies a labelled sample live in the browser. Production runs one offline batch over the full claims feed, then re-scores weekly, so cost and latency stay flat as volume grows.</p></div></div>
+      <div class="note"><div class="ni">&rarr;</div><div><h4>Pin the model, cache the verdict</h4><p>For results an auditor can reproduce, the model is pinned to a dated snapshot and each verdict is cached with the claim, so the same claim always returns the same lane and risk.</p></div></div>
+      <div class="note"><div class="ni">&rarr;</div><div><h4>Wire the gate to the queue</h4><p>The deterministic gate becomes a routing rule in the claims system: SIU flags open an investigation task, repudiation candidates go to a senior assessor, fast-track clears with a logged reason.</p></div></div>
+      <div class="note"><div class="ni">&rarr;</div><div><h4>Keep the human in front</h4><p>Nothing is auto-denied. The model triages and explains; an assessor owns every flag, and the weekly scorecard is how the team keeps trusting, or challenging, the tool.</p></div></div>
+    </div>
+
+    <div class="modechip" style="margin-top:18px;">The operating layer behind this tool, the classification guide, prompt library, training set, and QC SOP, lives in the <a href="qc-pack.html" style="color:var(--navy);font-weight:700;">QC Pack</a>.</div>
+  </section>
+</div>
+
+<footer class="wrap">
+  Motor Claim Triage and QC Evaluator &middot; built on the Borrower Risk Evaluator pattern &middot; Pau Analytics &middot; &copy; 2026 Lee Yih Ven
+</footer>
+
+<!-- Real Kaggle records; fraud label hidden until the model scores them -->
+<script src="data/claims.js"></script>
+<!-- Bring-your-own-key demo: claims are scored live when the visitor runs them; no pre-baked verdicts. -->
+<script>window.BASELINE = {};</script>
+
+<script>
+const clamp=(x,lo,hi)=>Math.max(lo,Math.min(hi,x));
+const AREAS=["Urban","Rural"];
+
+// ---------- lane definitions ----------
+const LANES={
+  fast:{name:"Fast-track",color:"var(--green)",soft:"var(--green-soft)"},
+  standard:{name:"Standard review",color:"var(--blue)",soft:"var(--blue-soft)"},
+  complex:{name:"Complex / high-value",color:"var(--indigo)",soft:"var(--indigo-soft)"},
+  siu:{name:"Investigate (SIU)",color:"var(--red)",soft:"var(--red-soft)"},
+  repudiate:{name:"Repudiate-candidate",color:"var(--amber)",soft:"var(--amber-soft)"}
+};
+
+// ---------- real claims + model verdicts ----------
+// CLAIMS  = real Kaggle records (window.CLAIMS), fraud label hidden until scored.
+// VERDICTS = the model's judgments; starts as the cached real Gemini run (window.BASELINE),
+//            and is overwritten per claim when the user runs a live scoring pass.
+const CLAIMS = window.CLAIMS || [];
+let VERDICTS = Object.assign({}, window.BASELINE || {});
+
+function buildPool(){
+  return CLAIMS.map(c=>{
+    const v = VERDICTS[c.id];
+    if(!v) return Object.assign({}, c, {risk:null,conf:null,modelLane:null,modelReason:null,scored:false});
+    return Object.assign({}, c, {
+      risk: v.fraud_risk,
+      conf: v.confidence,
+      modelLane: v.lane,
+      modelReason: v.reason,
+      scored: true
+    });
+  });
+}
+let POOL = buildPool();
+
+// ---------- state ----------
+let state={n:100,threshold:0.50,laneFilter:"all"};
+function currentClaims(){return POOL.slice(0,state.n);}
+
+// ---------- derive per-claim lane + reason at threshold ----------
+function decorate(claims,th){
+  return claims.map(c=>{
+    if(!c.scored) return Object.assign({},c,{lane:"unscored",predFraud:0,reason:""});
+    // deterministic gate (not the model): at or above the dial it goes to investigation;
+    // a claim the model itself routed to SIU also counts as a fraud prediction (blueprint C).
+    const lane = c.risk>=th ? "siu" : c.modelLane;
+    const predFraud = lane==="siu" ? 1:0;
+    const reason = c.modelReason || "";   // the model's own one-line explanation
+    return Object.assign({},c,{lane,predFraud,reason});
+  });
+}
+
+// ---------- metrics ----------
+function wilson(k,n,z){z=z||1.96;if(n===0)return[0,0];const p=k/n;const d=1+z*z/n;const c=(p+z*z/(2*n))/d;const h=(z*Math.sqrt(p*(1-p)/n+z*z/(4*n*n)))/d;return[clamp(c-h,0,1),clamp(c+h,0,1)];}
+function metrics(claims){
+  let TP=0,FP=0,FN=0,TN=0;
+  claims.forEach(c=>{
+    if(c.predFraud&&c.isFraud)TP++;
+    else if(c.predFraud&&!c.isFraud)FP++;
+    else if(!c.predFraud&&c.isFraud)FN++;
+    else TN++;
+  });
+  const prec=(TP+FP)? TP/(TP+FP):0;
+  const rec=(TP+FN)? TP/(TP+FN):0;
+  const fpr=(FP+TN)? FP/(FP+TN):0;
+  const acc=claims.length? (TP+TN)/claims.length:0;
+  const f1=(prec+rec)? 2*prec*rec/(prec+rec):0;
+  // accuracy on the claims the model was most sure about (confidence >= 0.8)
+  const HC=0.8;
+  let hcCorrect=0,hcN=0;
+  claims.forEach(c=>{ if(c.conf>=HC){ hcN++; if(c.predFraud===c.isFraud) hcCorrect++; } });
+  const hcAcc=hcN? hcCorrect/hcN:0;
+  return {TP,FP,FN,TN,prec,rec,fpr,acc,f1,hcAcc,hcN,
+    precCI:wilson(TP,TP+FP),recCI:wilson(TP,TP+FN),accCI:wilson(TP+TN,claims.length),fprCI:wilson(FP,FP+TN),hcCI:wilson(hcCorrect,hcN)};
+}
+const pct=x=>Math.round(x*100);
+
+// ---------- rendering ----------
+function el(id){return document.getElementById(id);}
+function laneCounts(claims){const o={fast:0,standard:0,complex:0,siu:0,repudiate:0};claims.forEach(c=>{if(o[c.lane]!==undefined)o[c.lane]++;});return o;}
+
+function renderTriage(claims,m,anyScored){
+  const counts=laneCounts(claims);
+  const scoredCount=claims.filter(c=>c.scored).length;
+  if(anyScored){
+    const human=scoredCount-counts.fast;
+    el("hlAutoClear").textContent=pct(counts.fast/scoredCount)+"%";
+    el("hlReview").textContent=pct(human/scoredCount)+"%";
+    el("hlSiu").textContent=counts.siu;
+  }else{
+    el("hlAutoClear").textContent="-";
+    el("hlReview").textContent="-";
+    el("hlSiu").textContent="-";
+  }
+
+  const denom=scoredCount||claims.length;
+  const order=["fast","standard","complex","siu","repudiate"];
+  el("laneCards").innerHTML=order.map(k=>{
+    const L=LANES[k],c=counts[k];
+    const act=state.laneFilter===k?"active":"";
+    return `<div class="lanecard ${act}" data-lane="${k}">
+      <div class="bar" style="background:${L.color}"></div>
+      <div class="lname">${L.name}</div>
+      <div class="lcount" style="color:${L.color}">${anyScored?c:"-"}</div>
+      <div class="lpct">${anyScored?pct(c/denom)+"% of batch":"awaiting scoring"}</div></div>`;
+  }).join("");
+  document.querySelectorAll(".lanecard").forEach(card=>card.onclick=()=>{
+    const k=card.dataset.lane;
+    state.laneFilter = state.laneFilter===k ? "all" : k;
+    render();
+  });
+
+  // filter chips
+  const fc=el("laneFilters");
+  fc.innerHTML='<span class="flbl">Show:</span>'+
+    `<button class="chip ${state.laneFilter==="all"?"on":""}" data-lane="all">All claims</button>`+
+    order.map(k=>`<button class="chip ${state.laneFilter===k?"on":""}" data-lane="${k}">${LANES[k].name}</button>`).join("");
+  fc.querySelectorAll(".chip").forEach(ch=>ch.onclick=()=>{state.laneFilter=ch.dataset.lane;render();});
+
+  // list
+  const facts=c=>`<b>${c.make}</b>, ${c.area}, ${c.fault}<br>${c.valueBand} value &middot; policy-to-claim ${c.daysToClaim} days &middot; police ${c.police} &middot; prior claims ${c.prior}`;
+  const shown = claims.filter(c=>state.laneFilter==="all"||c.lane===state.laneFilter)
+                      .sort((a,b)=>(b.risk||0)-(a.risk||0));
+  el("claimList").innerHTML = shown.map(c=>{
+    if(!c.scored){
+      return `<div class="claimrow" style="border-left:4px solid var(--line)">
+      <div class="cid">${c.id}</div>
+      <div class="cfacts">${facts(c)}</div>
+      <div><span class="lanetag" style="background:var(--slate-soft);color:var(--slate)"><span class="sq" style="background:var(--slate)"></span>Awaiting scoring</span></div>
+      <div class="riskmeter"><div class="rword" style="color:var(--faint)">not yet scored</div><div class="rtrack"></div></div>
+      <div class="confword" style="color:var(--faint)">&middot;</div>
+    </div>`;
+    }
+    const L=LANES[c.lane];
+    const rword = c.risk>=0.66?"High":(c.risk>=0.4?"Medium":"Low");
+    const rcol = c.risk>=0.66?"var(--red)":(c.risk>=0.4?"var(--amber)":"var(--green)");
+    const cword = c.conf>=0.8?"Very sure":(c.conf>=0.65?"Fairly sure":"Unsure");
+    return `<div class="claimrow" style="border-left:4px solid ${L.color}">
+      <div class="cid">${c.id}</div>
+      <div class="cfacts">${facts(c)}</div>
+      <div><span class="lanetag" style="background:${L.soft};color:${L.color}"><span class="sq" style="background:${L.color}"></span>${L.name}</span></div>
+      <div class="riskmeter"><div class="rword" style="color:${rcol}">${rword} fraud risk</div><div class="rtrack"><div class="rfill" style="width:${pct(c.risk)}%;background:${rcol}"></div></div></div>
+      <div class="confword">${cword}<small>${pct(c.conf)}% confidence</small></div>
+      <div class="reasoncell">&ldquo;${c.reason}&rdquo;</div>
+    </div>`;
+  }).join("") || `<div class="card" style="text-align:center;color:var(--muted)">No claims in this lane for the current batch.</div>`;
+}
+
+function metricCard(plainHtml,techHtml,whyHtml){
+  return `<div class="metric"><div class="plain">${plainHtml}</div><div class="tech">${techHtml}</div><div class="why">${whyHtml}</div></div>`;
+}
+function renderScore(claims,m,anyScored){
+  if(!anyScored){
+    ["cmTP","cmFP","cmFN","cmTN"].forEach(id=>el(id).textContent="-");
+    el("topMetrics").innerHTML=`<div class="card" style="grid-column:1/-1;text-align:center;color:var(--muted)">No scores yet. Paste your Gemini key above and click <b>Run evaluation</b> to score these real claims and reveal the QC scorecard.</div>`;
+    el("fullMetrics").innerHTML="";
+    el("calChart").innerHTML=""; el("segChart").innerHTML="";
+    return;
+  }
+  el("cmTP").textContent=m.TP; el("cmFP").textContent=m.FP; el("cmFN").textContent=m.FN; el("cmTN").textContent=m.TN;
+
+  el("topMetrics").innerHTML =
+    metricCard(
+      `Catches about <span class="num">${pct(m.rec)}</span> out of every 100 fraudulent claims.`,
+      `Catch rate (recall): ${pct(m.rec)}% &nbsp; 95% range ${pct(m.recCI[0])} to ${pct(m.recCI[1])}%`,
+      "Missed fraud is the expensive failure, so this is usually the number to protect.")
+    +
+    metricCard(
+      `When it raises a flag, it is right about <span class="num">${pct(m.prec)}</span> times out of 100.`,
+      `Flag accuracy (precision): ${pct(m.prec)}% &nbsp; 95% range ${pct(m.precCI[0])} to ${pct(m.precCI[1])}%`,
+      "Wrong flags waste investigator time and risk upsetting honest customers.");
+
+  el("fullMetrics").innerHTML =
+    metricCard(`Overall agreement <span class="num">${pct(m.acc)}</span>%`,
+      `Accuracy &nbsp; 95% range ${pct(m.accCI[0])} to ${pct(m.accCI[1])}%`,
+      "Looks high because most claims are honest, so judge it alongside catch rate.")
+    + metricCard(`When very sure, right <span class="num">${m.hcN?pct(m.hcAcc):"-"}</span>%`,
+      `Accuracy at high confidence (&ge;80%) &nbsp; ${m.hcN?`95% range ${pct(m.hcCI[0])} to ${pct(m.hcCI[1])}% &middot; n=${m.hcN}`:`no high-confidence claims yet`}`,
+      "Whether the model's most confident calls can actually be trusted.")
+    + metricCard(`False alarms <span class="num">${pct(m.fpr)}</span>%`,
+      `False positive rate &nbsp; 95% range ${pct(m.fprCI[0])} to ${pct(m.fprCI[1])}%`,
+      "Share of honest claims wrongly flagged.")
+    + metricCard(`Balance score <span class="num">${pct(m.f1)}</span>%`,
+      `F1 score`,
+      "One figure blending catch rate and flag accuracy.")
+    + metricCard(`Sample size <span class="num">${claims.length}</span>`,
+      `${m.TP+m.FN} fraud &middot; ${m.FP+m.TN} legitimate`,
+      "Smaller samples give wider 95% ranges, so treat them with care.");
+
+  drawCalibration(claims);
+  drawSegment(claims);
+}
+
+// ---------- SVG charts ----------
+function svgText(x,y,t,opts){opts=opts||{};return `<text x="${x}" y="${y}" font-family="Manrope" font-size="${opts.size||11}" fill="${opts.fill||'#5d6b7a'}" text-anchor="${opts.anchor||'start'}" font-weight="${opts.w||500}">${t}</text>`;}
+
+function drawCalibration(claims){
+  const bands=[[0,0.25],[0.25,0.5],[0.5,0.75],[0.75,1.01]];
+  const labels=["0 to 25","25 to 50","50 to 75","75 to 100"];
+  const W=460,H=240,pad=38,gw=W-pad-20,gh=H-pad-40;
+  let bars="";
+  bands.forEach((b,i)=>{
+    const inb=claims.filter(c=>c.risk>=b[0]&&c.risk<b[1]);
+    const stated=(b[0]+Math.min(b[1],1))/2;
+    const actual=inb.length? inb.filter(c=>c.isFraud).length/inb.length : 0;
+    const groupW=gw/bands.length, x0=pad+i*groupW+10, bw=(groupW-26)/2;
+    const sh=stated*gh, ah=actual*gh;
+    bars+=`<rect x="${x0}" y="${pad+gh-sh}" width="${bw}" height="${sh}" rx="3" fill="#4A7FB5" opacity="0.55"></rect>`;
+    bars+=`<rect x="${x0+bw+6}" y="${pad+gh-ah}" width="${bw}" height="${ah}" rx="3" fill="#1E3A5F"></rect>`;
+    bars+=svgText(x0+groupW/2-13,pad+gh+15,labels[i],{anchor:"middle",size:9.5});
+  });
+  // y gridlines
+  let grid="";
+  for(let g=0;g<=4;g++){const y=pad+gh-(g/4)*gh;grid+=`<line x1="${pad}" y1="${y}" x2="${W-20}" y2="${y}" stroke="#e7edf3"></line>`+svgText(pad-6,y+3,(g*25)+"%",{anchor:"end",size:9});}
+  const legend=`<rect x="${pad}" y="8" width="11" height="11" rx="2" fill="#4A7FB5" opacity="0.55"></rect>`+svgText(pad+16,17,"AI says this risk",{size:10})+
+    `<rect x="${pad+135}" y="8" width="11" height="11" rx="2" fill="#1E3A5F"></rect>`+svgText(pad+151,17,"actually fraud",{size:10});
+  el("calChart").innerHTML=grid+bars+legend+svgText(W/2,H-6,"stated fraud-risk band",{anchor:"middle",size:10,fill:"#8a97a4"});
+}
+
+function drawSegment(claims){
+  const areas=AREAS.map(a=>{
+    const inb=claims.filter(c=>c.area===a);
+    return {a,rate:inb.length?inb.filter(c=>c.isFraud).length/inb.length:0,n:inb.length};
+  });
+  const W=460,H=240,pad=42,gh=H-pad-40,gw=W-pad-20;
+  const maxR=Math.max(0.1,...areas.map(x=>x.rate));
+  let grid="";
+  for(let g=0;g<=4;g++){const y=pad+gh-(g/4)*gh;const v=(maxR*g/4*100).toFixed(0);grid+=`<line x1="${pad}" y1="${y}" x2="${W-20}" y2="${y}" stroke="#e7edf3"></line>`+svgText(pad-6,y+3,v+"%",{anchor:"end",size:9});}
+  let bars="";
+  areas.forEach((s,i)=>{
+    const bw=70, x=pad+30+i*(gw/areas.length);
+    const h=(s.rate/maxR)*gh;
+    bars+=`<rect x="${x}" y="${pad+gh-h}" width="${bw}" height="${h}" rx="4" fill="#C0392B"></rect>`;
+    bars+=svgText(x+bw/2,pad+gh-h-7,(s.rate*100).toFixed(1)+"%",{anchor:"middle",size:11,w:700,fill:"#C0392B"});
+    bars+=svgText(x+bw/2,pad+gh+16,s.a+" ("+s.n+")",{anchor:"middle",size:10});
+  });
+  el("segChart").innerHTML=grid+bars;
+}
+
+function drawTradeoff(claims){
+  const W=460,H=260,pad=42,gw=W-pad-22,gh=H-pad-38;
+  // sweep thresholds
+  let pts=[];
+  for(let t=10;t<=90;t+=4){
+    const dec=decorate(claims,t/100);const mm=metrics(dec);
+    pts.push({fpr:mm.fpr,rec:mm.rec,t});
+  }
+  let grid="";
+  for(let g=0;g<=4;g++){
+    const y=pad+gh-(g/4)*gh, x=pad+(g/4)*gw;
+    grid+=`<line x1="${pad}" y1="${y}" x2="${W-22}" y2="${y}" stroke="#eef2f6"></line>`+svgText(pad-6,y+3,(g*25)+"%",{anchor:"end",size:9});
+    grid+=`<line x1="${x}" y1="${pad}" x2="${x}" y2="${pad+gh}" stroke="#f3f6f9"></line>`+svgText(x,pad+gh+15,(g*25)+"%",{anchor:"middle",size:9});
+  }
+  const X=v=>pad+v*gw, Y=v=>pad+gh-v*gh;
+  let path=pts.map((p,i)=>(i?"L":"M")+X(p.fpr)+" "+Y(p.rec)).join(" ");
+  let dots=pts.map(p=>`<circle cx="${X(p.fpr)}" cy="${Y(p.rec)}" r="2.6" fill="#4A7FB5"></circle>`).join("");
+  const cur=metrics(decorate(claims,state.threshold));
+  const marker=`<circle cx="${X(cur.fpr)}" cy="${Y(cur.rec)}" r="7" fill="#C79A4B" stroke="#fff" stroke-width="2"></circle>`;
+  el("tradeChart").innerHTML=grid+`<path d="${path}" fill="none" stroke="#4A7FB5" stroke-width="2"></path>`+dots+marker+
+    svgText(W/2,H-4,"honest customers bothered  (false alarm rate)",{anchor:"middle",size:10,fill:"#8a97a4"})+
+    `<text x="13" y="${pad+gh/2}" font-family="Manrope" font-size="10" fill="#8a97a4" transform="rotate(-90 13 ${pad+gh/2})" text-anchor="middle">fraud caught</text>`;
+}
+
+function drawSplit(claims){
+  const counts=laneCounts(claims);const total=claims.length;
+  const order=["fast","standard","complex","siu","repudiate"];
+  const W=460,H=260,pad=20;
+  let y=24,bars="";
+  order.forEach(k=>{
+    const L=LANES[k],c=counts[k],frac=c/total;
+    const bw=(W-150)*frac;
+    bars+=`<rect x="140" y="${y}" width="${Math.max(bw,c?3:0)}" height="26" rx="5" fill="${L.color}"></rect>`;
+    bars+=svgText(134,y+17,L.name,{anchor:"end",size:11,w:600,fill:"#1c2a38"});
+    bars+=svgText(146+Math.max(bw,3)+4,y+17,c+"  ("+pct(frac)+"%)",{size:11,w:700,fill:"#5d6b7a"});
+    y+=40;
+  });
+  el("splitChart").innerHTML=bars;
+}
+
+function renderDial(claims,m,anyScored){
+  el("thReadout").textContent=state.threshold.toFixed(2);
+  el("thSlider").value=Math.round(state.threshold*100);
+  if(!anyScored){
+    ["dRecall","dPrec","dFpr","dCover"].forEach(id=>el(id).textContent="-");
+    el("consequence").innerHTML=`Score the claims first: paste your Gemini key above and click <b>Run evaluation</b>. The trade-off numbers and curve populate once the model has judged the claims.`;
+    el("tradeChart").innerHTML=""; el("splitChart").innerHTML="";
+    return;
+  }
+  el("dRecall").textContent=pct(m.rec)+"%";
+  el("dPrec").textContent=pct(m.prec)+"%";
+  el("dFpr").textContent=pct(m.fpr)+"%";
+  el("dCover").textContent=(m.TP+m.FP);
+  // consequence sentence
+  const th=state.threshold;
+  let lead;
+  if(th<=0.4) lead=`<b>Cautious setting.</b> You catch most fraud, but you also raise more false alarms, so honest customers wait longer.`;
+  else if(th>=0.6) lead=`<b>Strict setting.</b> You investigate only the clearest cases, sparing honest customers, but more fraud slips through.`;
+  else lead=`<b>Balanced setting.</b> A middle ground between catching fraud and leaving honest claims alone.`;
+  el("consequence").innerHTML=`${lead}<br>Right now you catch <b>${pct(m.rec)}%</b> of fraud and wrongly flag <b>${pct(m.fpr)}%</b> of honest claims.`;
+  drawTradeoff(claims);
+  drawSplit(claims);
+}
+
+// ---------- master render ----------
+function render(){
+  const claims=decorate(currentClaims(),state.threshold);
+  const scoredClaims=claims.filter(c=>c.scored);
+  const anyScored=scoredClaims.length>0;
+  const m=metrics(scoredClaims);   // metrics only over claims the model has actually judged
+  renderTriage(claims,m,anyScored);
+  renderScore(scoredClaims,m,anyScored);
+  renderDial(scoredClaims,m,anyScored);
+}
+
+// ---------- events ----------
+el("sizeSel").querySelectorAll("button").forEach(b=>b.onclick=()=>{
+  el("sizeSel").querySelectorAll("button").forEach(x=>x.classList.remove("on"));
+  b.classList.add("on");state.n=+b.dataset.n;state.laneFilter="all";render();
+});
+el("thSlider").oninput=e=>{state.threshold=(+e.target.value)/100;render();};
+document.querySelectorAll(".preset").forEach(p=>p.onclick=()=>{state.threshold=(+p.dataset.th)/100;render();});
+
+document.querySelectorAll("#tabs button").forEach(t=>t.onclick=()=>{
+  document.querySelectorAll("#tabs button").forEach(x=>x.classList.remove("on"));
+  document.querySelectorAll(".panel").forEach(x=>x.classList.remove("on"));
+  t.classList.add("on");el("panel-"+t.dataset.tab).classList.add("on");
+});
+
+// ---------- live Gemini scoring (same model, prompt and schema as the cached run) ----------
+const GEMINI_MODEL="gemini-2.5-flash";
+const GEMINI_URL="https://generativelanguage.googleapis.com/v1beta/models/"+GEMINI_MODEL+":generateContent";
+const SYSTEM_PROMPT=`You are a motor-insurance claim triage assistant. Use the claim facts only. Never assume or guess the final fraud outcome; judge from the facts in front of you. Return a handling lane, a fraud_risk from 0 to 1, your confidence from 0 to 1, and a short reason (<=20 words).
+Lanes:
+- Fast-track: low value, clear liability, documents complete, no fraud signals.
+- Standard review: needs a human assessment, nothing alarming.
+- Complex / high-value: high exposure, route to a senior adjuster.
+- Investigate (SIU): fraud indicators present (late report, prior-claims pattern, no police report).
+- Repudiate-candidate: likely outside cover (lapsed policy, excluded driver); flagged for a human, never auto-rejected.`;
+const RESP_SCHEMA={type:"object",properties:{lane:{type:"string",enum:["Fast-track","Standard review","Complex / high-value","Investigate (SIU)","Repudiate-candidate"]},fraud_risk:{type:"number"},confidence:{type:"number"},reason:{type:"string"}},required:["lane","fraud_risk","confidence","reason"]};
+const LANE_MAP={"fast-track":"fast","standard review":"standard","complex / high-value":"complex","investigate (siu)":"siu","repudiate-candidate":"repudiate"};
+
+function factSheet(c){const f=c.facts;return `Vehicle: ${f.make} ${f.vehicleCategory}, price band ${f.vehiclePrice}, age ${f.ageOfVehicle}.
+Policy: ${f.policyType} (base ${f.basePolicy}), deductible ${f.deductible}, driver rating ${f.driverRating}.
+Holder: age ${f.age}, ${f.sex}, ${f.maritalStatus}, age band ${f.ageOfPolicyHolder}.
+Accident: area ${f.accidentArea}, fault ${f.fault}.
+Timing: days policy-to-accident ${f.daysPolicyAccident}, days policy-to-claim ${f.daysPolicyClaim}.
+History: prior claims ${f.pastNumberOfClaims}, police report ${f.policeReportFiled}, witness ${f.witnessPresent}, address change at claim ${f.addressChangeClaim}, supplements ${f.numberOfSuppliments}, agent ${f.agentType}.`;}
+
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+async function scoreClaimLive(key,c,retries=4){
+  const payload={system_instruction:{parts:[{text:SYSTEM_PROMPT}]},contents:[{parts:[{text:"Classify this claim:\n"+factSheet(c)}]}],generationConfig:{responseMimeType:"application/json",responseSchema:RESP_SCHEMA,temperature:0.2}};
+  for(let a=0;a<=retries;a++){
+    const res=await fetch(GEMINI_URL+"?key="+encodeURIComponent(key),{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
+    if(res.ok){
+      const out=await res.json();
+      const v=JSON.parse(out.candidates[0].content.parts[0].text);
+      return {lane:LANE_MAP[String(v.lane).toLowerCase().trim()]||"standard",fraud_risk:clamp(+v.fraud_risk,0,1),confidence:clamp(+v.confidence,0,1),reason:String(v.reason).trim()};
+    }
+    // free-tier keys are rate-limited; back off and retry on 429/503
+    if((res.status===429||res.status===503)&&a<retries){ await sleep(4000*(a+1)); continue; }
+    throw new Error("HTTP "+res.status);
+  }
+}
+
+async function runLive(key,n,onProgress){
+  const targets=CLAIMS.slice(0,n);
+  let done=0,idx=0,failed=0;
+  async function worker(){
+    while(idx<targets.length){
+      const c=targets[idx++];
+      try{ VERDICTS[c.id]=await scoreClaimLive(key,c); }
+      catch(e){ failed++; }   // a claim that keeps failing is left unscored
+      onProgress(++done,targets.length);
+    }
+  }
+  // low concurrency keeps within free-tier per-minute limits
+  await Promise.all(Array.from({length:Math.min(2,targets.length)},worker));
+  POOL=buildPool();
+  return failed;
+}
+
+el("runBtn").onclick=async ()=>{
+  const btn=el("runBtn"),key=el("keyInput").value.trim();
+  if(!key){
+    el("modeChip").innerHTML=`Paste your <b>Gemini key</b> in the box above, then click Run evaluation. This is a bring-your-own-key demo, so nothing is scored until you run it. Your key stays in the browser and is never stored.`;
+    render();return;
+  }
+  btn.classList.add("loading");btn.disabled=true;
+  try{
+    const failed=await runLive(key,state.n,(d,t)=>{btn.querySelector(".rtxt").textContent="Scoring "+d+"/"+t;});
+    el("modeChip").innerHTML=`Scored <b>${state.n} claims live</b> with your Gemini key (${GEMINI_MODEL})`+(failed?`, ${failed} fell back to the cached verdict`:``)+`. Accuracy is measured against the real fraud outcome on each claim.`;
+  }catch(e){
+    el("modeChip").innerHTML=`Live scoring could not run (${e.message}). Showing the cached real run instead. Check the key and that the model has quota.`;
+  }finally{
+    btn.classList.remove("loading");btn.disabled=false;btn.querySelector(".rtxt").textContent="Run evaluation";
+    render();
+  }
+};
+
+render();
+</script>
+</body>
+</html>

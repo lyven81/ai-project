@@ -2,10 +2,10 @@
 
 [![Portfolio Website](https://img.shields.io/badge/Portfolio-Live-green?logo=vercel)](https://lyven81.github.io/ai-project/)
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-black?logo=github)](https://github.com/lyven81/ai-project)
-[![Projects](https://img.shields.io/badge/Projects-49-blue)](#projects-by-category)
+[![Projects](https://img.shields.io/badge/Projects-50-blue)](#projects-by-category)
 [![AI Powered](https://img.shields.io/badge/AI-Powered-orange?logo=tensorflow)](https://github.com/lyven81/ai-project)
 
-**49 production AI apps across 8 business categories** — each one solves a real, named pain point with a working demo you can click and try today.
+**50 production AI apps across 8 business categories** — each one solves a real, named pain point with a working demo you can click and try today.
 
 <div align="center">
 <img width="1200" height="400" alt="AI Portfolio Banner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
@@ -13,7 +13,7 @@
 
 ## 🌟 Portfolio Overview
 
-This repo contains **49 completed AI applications**, each with a working demo (live cloud URL or local `demo.html`). Projects are organized by **business use case** — so a reader can scan the list, find the category that matches their work, and immediately see which problems AI can solve there.
+This repo contains **50 completed AI applications**, each with a working demo (live cloud URL or local `demo.html`). Projects are organized by **business use case** — so a reader can scan the list, find the category that matches their work, and immediately see which problems AI can solve there.
 
 **Live site:** [lyven81.github.io/ai-project](https://lyven81.github.io/ai-project/)
 
@@ -27,12 +27,12 @@ The 8 categories below match the [live category pages](https://lyven81.github.io
 | 2 | [Multi-Agent Decision Systems](#2-multi-agent-decision-systems-7-projects) | 7 | Owners needing research → verdict pipelines |
 | 3 | [Conversational Data Analytics](#3-conversational-data-analytics-5-projects) | 5 | SME owners with data, no analyst |
 | 4 | [Content Automation](#4-content-automation-6-projects) | 6 | Solo consultants, creators, educators |
-| 5 | [Industry Specialist Advisors](#5-industry-specialist-advisors-9-projects) | 9 | Vertical experts (legal, finance, education, retail) |
+| 5 | [Industry Specialist Advisors](#5-industry-specialist-advisors-10-projects) | 10 | Vertical experts (legal, finance, education, retail) |
 | 6 | [Knowledge & Reference Chatbots](#6-knowledge--reference-chatbots-8-projects) | 8 | Consumers seeking guidance in plain language |
 | 7 | [Document & Productivity Tools](#7-document--productivity-tools-5-projects) | 5 | Knowledge workers, accessibility users |
 | 8 | [Agentic Commerce](#8-agentic-commerce-2-projects) | 2 | Storefronts ready for AI shopping agents |
 
-**Total: 49 projects.**
+**Total: 50 projects.**
 
 ---
 
@@ -210,7 +210,7 @@ The 8 categories below match the [live category pages](https://lyven81.github.io
 
 ---
 
-### 5. Industry Specialist Advisors (9 projects)
+### 5. Industry Specialist Advisors (10 projects)
 
 **Who it's for:** Vertical experts and operators who need an AI advisor that knows the rules and language of one specific industry — education, law, sports, finance, retail.
 
@@ -267,6 +267,12 @@ The 8 categories below match the [live category pages](https://lyven81.github.io
 - **How it's built:** Google Gemini (gemini-2.5-flash, BYO-key) + vanilla JS + inline SVG, fully client-side, with a Python + pandas data-prep step. No backend.
 - **Problem solved:** Credit officers at small lenders triage loans on gut feel with no way to prove how accurate that triage is, and vendor credit scores are never measured on their own loan book. This app classifies each borrower with a confidence score, routes confident cases automatically, and scores itself live against real repayment outcomes with precision, recall, and 95% confidence intervals.
 - **Demo:** [Try it](https://lyven81.github.io/ai-project/projects/borrower-risk-evaluator/demo.html)
+
+#### Motor Claim Triage and QC Evaluator
+- **What it does:** AI claim triage for insurers that sorts claims into five handling lanes and scores its own fraud flags against the real outcome.
+- **How it's built:** Google Gemini (gemini-2.5-flash, BYO-key) + vanilla JS + inline SVG, fully client-side, with a Python + pandas data-prep step. No backend.
+- **Problem solved:** Motor claims handlers either rush honest claims through or over-investigate, with no measured way to prove how good their fraud triage is. This app routes each claim into a handling lane, flags fraud with a confidence score, and scores its flags live against the real fraud label with catch rate, false-alarm rate, and 95% confidence intervals, while staying honest that only fraud is graded and the other four lanes are operational routing.
+- **Demo:** [Try it](https://lyven81.github.io/ai-project/projects/motor-claim-evaluator/demo.html)
 
 ---
 
@@ -485,7 +491,7 @@ cd projects/<project-name>
 
 ## 💼 Professional Highlights
 
-- **49 production-ready apps** — each one has a clickable demo (local `demo.html` or live Cloud Run URL)
+- **50 production-ready apps** — each one has a clickable demo (local `demo.html` or live Cloud Run URL)
 - **Built for Malaysian SMEs** — most apps solve a specific local pain point (kedai runcit, tuition centres, plumbers, FMCG distributors)
 - **Honest scoping** — no "AI" badge on apps that are scripted demos (Soon Heng, Wee Auto are clearly labelled vanilla JS scripted flows)
 

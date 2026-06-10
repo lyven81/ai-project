@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Motor Claim QC Pack - Classification Guide, Prompt Library, Training Set, SOP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--navy:#1E3A5F;--navy2:#16293f;--blue:#4A7FB5;--blue-soft:#EAF1F8;--blue-line:#cfe0f0;
+    --ink:#1c2a38;--muted:#5d6b7a;--faint:#8a97a4;--line:#dbe4ee;--bg:#f4f7fb;--card:#fff;
+    --green:#2E7D5B;--green-soft:#e7f4ee;--amber:#B07A12;--amber-soft:#fbf2dd;--red:#C0392B;--red-soft:#fbe9e7;
+    --shadow:0 1px 2px rgba(30,58,95,.06),0 6px 18px rgba(30,58,95,.06);--radius:14px;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Manrope',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55;font-size:15px;}
+  .wrap{max-width:980px;margin:0 auto;padding:0 20px 60px;}
+  header.top{background:linear-gradient(160deg,var(--navy),var(--navy2));color:#fff;padding:34px 0 28px;}
+  .brandtxt{font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:#a9c2dc;font-weight:600;margin-bottom:10px;}
+  header.top h1{font-family:'Fraunces';font-weight:600;font-size:30px;line-height:1.14;max-width:760px;}
+  header.top .lede{color:#cfe0f0;font-size:15.5px;margin-top:10px;max-width:680px;}
+  .backlink{display:inline-block;margin-top:16px;color:#cfe0f0;font-size:13px;text-decoration:none;border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:6px 14px;}
+  nav.toc{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 4px;}
+  nav.toc a{font-size:13px;font-weight:600;color:var(--navy);background:var(--blue-soft);border:1px solid var(--blue-line);border-radius:20px;padding:7px 14px;text-decoration:none;}
+  section.block{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:26px;margin-top:22px;}
+  h2{font-family:'Fraunces';font-weight:600;font-size:23px;color:var(--navy);margin-bottom:4px;}
+  .sub{font-size:13.5px;color:var(--muted);margin-bottom:18px;}
+  h3{font-size:16px;color:var(--ink);margin:18px 0 8px;}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0 6px;border:1px solid var(--line);border-radius:10px;overflow:hidden;}
+  th{background:var(--navy);color:#fff;text-align:left;padding:9px 12px;font-size:12px;text-transform:uppercase;letter-spacing:.3px;}
+  td{padding:9px 12px;border-top:1px solid var(--line);vertical-align:top;}
+  tr:nth-child(even) td{background:#fbfdff;}
+  .lane{font-weight:700;}
+  .l-fast{color:var(--green);} .l-standard{color:var(--blue);} .l-complex{color:#4B5FA8;} .l-siu{color:var(--red);} .l-rep{color:var(--amber);}
+  pre{background:#16293f;color:#eaf1f8;border-radius:10px;padding:16px 18px;overflow-x:auto;font-family:'Consolas',monospace;font-size:12.8px;line-height:1.5;margin:8px 0 4px;white-space:pre-wrap;}
+  ul,ol{margin:6px 0 10px 22px;} li{margin-bottom:6px;}
+  .tag{display:inline-block;font-size:11px;font-weight:700;border-radius:6px;padding:2px 9px;}
+  .t-good{background:var(--green-soft);color:var(--green);} .t-gray{background:var(--amber-soft);color:var(--amber);} .t-bad{background:var(--red-soft);color:var(--red);}
+  .note{background:var(--blue-soft);border:1px solid var(--blue-line);border-radius:10px;padding:13px 16px;font-size:13.5px;color:var(--navy);margin:10px 0;}
+  footer{text-align:center;color:var(--faint);font-size:12.5px;margin-top:30px;}
+  code{background:#eef3f8;color:var(--navy);padding:1px 6px;border-radius:4px;font-family:'Consolas',monospace;font-size:12.5px;}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="brandtxt">Pau Analytics &nbsp;&middot;&nbsp; Claim Operations</div>
+    <h1>Motor Claim QC Pack</h1>
+    <p class="lede">The operating layer behind the evaluator: how to classify a claim, the prompts that drive it, worked training examples, and the standard procedure an adjuster team runs each week.</p>
+    <a class="backlink" href="demo.html">&larr; Back to the live evaluator</a>
+  </div>
+</header>
+
+<div class="wrap">
+  <nav class="toc">
+    <a href="#guide">1. Classification Guide</a>
+    <a href="#prompts">2. Prompt Library</a>
+    <a href="#training">3. Training Set</a>
+    <a href="#sop">4. QC SOP</a>
+  </nav>
+
+  <!-- 1. CLASSIFICATION GUIDE -->
+  <section class="block" id="guide">
+    <h2>1. Claims Classification Guide</h2>
+    <p class="sub">One entry per handling lane: what it means, when to route there, when to escalate, the edge cases, and a worked example.</p>
+
+    <h3><span class="lane l-fast">Fast-track</span></h3>
+    <table>
+      <tr><th>Definition</th><td>Low value, clear liability, documents complete, no fraud signals. Clears with minimal effort.</td></tr>
+      <tr><th>Route if</th><td>Low price band, police report on file, timely reporting, no prior-claims pattern, fraud risk well below the dial.</td></tr>
+      <tr><th>Escalate if</th><td>Any late reporting, missing police report on a non-minor loss, or a prior-claims pattern appears. Move to Standard or SIU.</td></tr>
+      <tr><th>Edge cases</th><td>Low value but third-party fault unclear: keep in Standard until liability is settled. Never fast-track a total loss.</td></tr>
+      <tr><th>Example</th><td>Perodua, urban, policy holder at fault, low value, police report Yes, reported within days, no prior claims.</td></tr>
+    </table>
+
+    <h3><span class="lane l-standard">Standard review</span></h3>
+    <table>
+      <tr><th>Definition</th><td>Needs a human assessment, nothing alarming. The default lane for ordinary claims.</td></tr>
+      <tr><th>Route if</th><td>Mid value or some missing context, but no fraud indicators and no high-exposure signal.</td></tr>
+      <tr><th>Escalate if</th><td>High exposure surfaces (route to Complex) or fraud indicators appear (route to SIU via the gate).</td></tr>
+      <tr><th>Edge cases</th><td>Mid value with one soft fraud signal: leave in Standard but note the signal for the assessor.</td></tr>
+      <tr><th>Example</th><td>Toyota, urban, third party at fault, mid value, police report Yes, one prior claim.</td></tr>
+    </table>
+
+    <h3><span class="lane l-complex">Complex / high-value</span></h3>
+    <table>
+      <tr><th>Definition</th><td>High exposure. Route to a senior adjuster regardless of fraud signal.</td></tr>
+      <tr><th>Route if</th><td>High price band, total loss, or large potential payout.</td></tr>
+      <tr><th>Escalate if</th><td>Fraud indicators also present: the gate pulls it to SIU, but the senior adjuster stays involved on exposure.</td></tr>
+      <tr><th>Edge cases</th><td>High value with clean documents is still Complex, not Fast-track. Value alone justifies senior eyes.</td></tr>
+      <tr><th>Example</th><td>Mercedes, high value band, total loss, clear liability, all documents present.</td></tr>
+    </table>
+
+    <h3><span class="lane l-siu">Investigate (SIU)</span></h3>
+    <table>
+      <tr><th>Definition</th><td>Fraud indicators present. Refer to the Special Investigations Unit. This is the only lane scored against the real label.</td></tr>
+      <tr><th>Route if</th><td>Fraud risk at or above the dial, or the model itself routes to SIU. Common triggers: late report, prior-claims pattern, no police report on a material loss.</td></tr>
+      <tr><th>Escalate if</th><td>Strong evidence of organised fraud: refer beyond SIU to the fraud manager and, where required, law enforcement.</td></tr>
+      <tr><th>Edge cases</th><td>An SIU flag is a review trigger, never an accusation and never an auto-denial. A cleared SIU claim returns to its routing lane.</td></tr>
+      <tr><th>Example</th><td>Reported more than 30 days after the accident, police report No, two to four prior claims, third party at fault.</td></tr>
+    </table>
+
+    <h3><span class="lane l-rep">Repudiate-candidate</span></h3>
+    <table>
+      <tr><th>Definition</th><td>Likely outside cover (lapsed policy, excluded driver). Flagged for a human, never auto-rejected.</td></tr>
+      <tr><th>Route if</th><td>Facts suggest a coverage problem rather than a fraud problem.</td></tr>
+      <tr><th>Escalate if</th><td>Coverage problem plus fraud indicators: SIU and the coverage reviewer both take it.</td></tr>
+      <tr><th>Edge cases</th><td>Always reaches a person. A repudiation is a legal decision a human owns, with reasons recorded.</td></tr>
+      <tr><th>Example</th><td>Accident date falls outside the policy period, or the named driver is excluded under the policy terms.</td></tr>
+    </table>
+  </section>
+
+  <!-- 2. PROMPT LIBRARY -->
+  <section class="block" id="prompts">
+    <h2>2. Prompt Library</h2>
+    <p class="sub">The single classifier prompt that drives the evaluator, plus a tie-breaker for borderline lanes and a re-check for high-stakes flags. All three see claim facts only, never the outcome.</p>
+
+    <h3>2.1 Primary classifier prompt</h3>
+    <pre>You are a motor-insurance claim triage assistant. Use the claim facts only.
+Never assume or guess the final fraud outcome; judge from the facts in front of you.
+Return a handling lane, a fraud_risk from 0 to 1, your confidence from 0 to 1,
+and a short reason (&lt;=20 words).
+
+Lanes:
+- Fast-track: low value, clear liability, documents complete, no fraud signals.
+- Standard review: needs a human assessment, nothing alarming.
+- Complex / high-value: high exposure, route to a senior adjuster.
+- Investigate (SIU): fraud indicators present (late report, prior-claims pattern, no police report).
+- Repudiate-candidate: likely outside cover (lapsed policy, excluded driver); flagged for a human, never auto-rejected.
+
+Output strict JSON: { "lane", "fraud_risk", "confidence", "reason" }</pre>
+
+    <h3>2.2 Tie-breaker prompt (borderline lane)</h3>
+    <p class="sub">Used when two lanes are close, for example Standard versus SIU, or Complex versus Fast-track.</p>
+    <pre>The claim below was classified with low confidence between two lanes.
+Decide which single lane fits best using the claim facts only.
+Weigh fraud indicators (late report, prior claims, missing police report) for SIU,
+and exposure (value, total loss) for Complex. When genuinely unsure, prefer the
+more cautious lane: SIU over Standard, Standard over Fast-track.
+Return the same strict JSON: { "lane", "fraud_risk", "confidence", "reason" }</pre>
+
+    <h3>2.3 Re-check prompt (high-stakes flag)</h3>
+    <p class="sub">A second pass before an SIU or Repudiate-candidate flag reaches a person, to reduce false alarms.</p>
+    <pre>This claim was flagged as Investigate (SIU) or Repudiate-candidate.
+Re-read the facts and state, in one line, the single strongest fact supporting
+the flag and the single strongest fact against it. Then confirm or downgrade the
+lane. Do not auto-deny; a flag is a review trigger, not a decision.
+Return: { "lane", "fraud_risk", "confidence", "reason", "for", "against" }</pre>
+  </section>
+
+  <!-- 3. TRAINING SET -->
+  <section class="block" id="training">
+    <h2>3. Good / Bad / Gray Training Set</h2>
+    <p class="sub">Eight worked examples for onboarding an adjuster or an offshore handler. <span class="tag t-good">good</span> = clear call, <span class="tag t-gray">gray</span> = genuinely ambiguous, <span class="tag t-bad">bad</span> = a tempting wrong call to avoid.</p>
+    <table>
+      <tr><th>#</th><th>Claim facts</th><th>Correct lane</th><th>Type</th><th>Reason</th></tr>
+      <tr><td>1</td><td>Perodua, urban, policy holder fault, low value, police Yes, reported in days, no prior claims</td><td class="lane l-fast">Fast-track</td><td><span class="tag t-good">good</span></td><td>Low value, clean documents, no signals. Clears with minimal effort.</td></tr>
+      <tr><td>2</td><td>Toyota, urban, third party fault, mid value, police Yes, one prior claim</td><td class="lane l-standard">Standard review</td><td><span class="tag t-good">good</span></td><td>Ordinary claim, no alarming signal, needs a routine human look.</td></tr>
+      <tr><td>3</td><td>Mercedes, high value band, total loss, clear liability, documents complete</td><td class="lane l-complex">Complex / high-value</td><td><span class="tag t-good">good</span></td><td>High exposure justifies a senior adjuster even with clean papers.</td></tr>
+      <tr><td>4</td><td>Honda, rural, third party fault, mid value, reported &gt;30 days, police No, 2 to 4 prior claims</td><td class="lane l-siu">Investigate (SIU)</td><td><span class="tag t-good">good</span></td><td>Three classic indicators stack: late report, no police report, prior pattern.</td></tr>
+      <tr><td>5</td><td>Accident date outside the policy period; otherwise ordinary</td><td class="lane l-rep">Repudiate-candidate</td><td><span class="tag t-good">good</span></td><td>Coverage problem, not a fraud problem. A human owns the repudiation.</td></tr>
+      <tr><td>6</td><td>Nissan, mid value, police Yes, reported in days, one prior claim, address changed at claim</td><td class="lane l-standard">Standard review</td><td><span class="tag t-gray">gray</span></td><td>One soft signal (address change) is not enough for SIU; note it and keep in Standard.</td></tr>
+      <tr><td>7</td><td>BMW, high value band, reported &gt;30 days, police No, no prior claims</td><td class="lane l-siu">Investigate (SIU)</td><td><span class="tag t-gray">gray</span></td><td>High value pulls toward Complex, but the timing and missing report make SIU the cautious call; senior adjuster stays on exposure.</td></tr>
+      <tr><td>8</td><td>Proton, low value, police Yes, but reported &gt;30 days late</td><td class="lane l-standard">Standard review</td><td><span class="tag t-bad">bad</span></td><td>Tempting to Fast-track on low value, but the late report rules out Fast-track. Standard at minimum, watch for more signals.</td></tr>
+    </table>
+    <div class="note">Rule of thumb for graders: low value never overrides a fraud signal. When two lanes are close, choose the more cautious one and let the human downgrade it.</div>
+  </section>
+
+  <!-- 4. QC SOP -->
+  <section class="block" id="sop">
+    <h2>4. QC Standard Operating Procedure</h2>
+    <p class="sub">How an adjuster team runs the review queue day to day, and the weekly scorecard that keeps the tool honest.</p>
+
+    <h3>4.1 Daily review queue</h3>
+    <ol>
+      <li><b>Open the queue by lane.</b> Work SIU and Repudiate-candidate first, then Complex, then Standard. Fast-track is cleared in a batch with a logged reason.</li>
+      <li><b>Read the model's reason.</b> Every claim carries a one-line reason and a fraud risk. Confirm it against the facts before acting.</li>
+      <li><b>Apply the re-check prompt</b> to any SIU or Repudiate-candidate flag before it leaves the desk, to cut false alarms.</li>
+      <li><b>Decide and record.</b> Confirm, downgrade, or escalate. A fraud flag is a review trigger, never an auto-denial; a repudiation is a human legal decision with reasons recorded.</li>
+      <li><b>Log the outcome.</b> Note the final lane and, once known, the true fraud outcome. This feeds the weekly scorecard.</li>
+    </ol>
+
+    <h3>4.2 Weekly QC scorecard</h3>
+    <ol>
+      <li><b>Pull the week's closed claims</b> that now carry a confirmed fraud outcome.</li>
+      <li><b>Recompute the scorecard:</b> catch rate (recall), flag accuracy (precision), false-alarm rate, F1, and accuracy at high confidence, each with a 95% confidence interval.</li>
+      <li><b>Check calibration.</b> When the model said high risk, did those claims actually turn out fraudulent more often? If not, the threshold needs review.</li>
+      <li><b>Set the dial for next week.</b> Move the fraud-risk threshold to the agreed point on the catch-rate versus false-alarm trade-off, and record why.</li>
+      <li><b>Review drift.</b> If catch rate falls or false alarms rise two weeks running, re-score a fresh sample and consider re-pinning the model snapshot.</li>
+    </ol>
+    <div class="note">The scorecard is the trust contract. The team keeps using the tool only as long as the weekly numbers hold up, and challenges it the moment they do not.</div>
+  </section>
+
+  <footer>Motor Claim QC Pack &middot; companion to the Motor Claim Triage and QC Evaluator &middot; Pau Analytics &middot; &copy; 2026 Lee Yih Ven</footer>
+</div>
+</body>
+</html>
