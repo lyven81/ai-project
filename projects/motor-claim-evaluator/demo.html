@@ -217,6 +217,7 @@
 
   <nav class="tabs" id="tabs">
     <button data-tab="triage" class="on"><span class="ico">&#128203;</span>Triage console</button>
+    <button data-tab="single"><span class="ico">&#128196;</span>Check one claim</button>
     <button data-tab="score"><span class="ico">&#9989;</span>Accuracy scorecard</button>
     <button data-tab="dial"><span class="ico">&#127919;</span>Safety dial</button>
     <button data-tab="how"><span class="ico">&#128270;</span>Portfolio to production</button>
@@ -243,6 +244,22 @@
       <button class="chip on" data-lane="all">All claims</button>
     </div>
     <div id="claimList"></div>
+  </section>
+
+  <!-- SINGLE CLAIM -->
+  <section class="panel" id="panel-single">
+    <p class="panel-intro">Pick any one of the 150 claims and see how it would be handled, then reveal whether it was actually fraud. This is a worked example for a single claim, <b>not a measured score</b>. Accuracy needs a batch, on the scorecard tab.</p>
+    <div class="card">
+      <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;">
+        <div class="field">
+          <label>Choose a claim</label>
+          <select id="singleSelect" class="key" style="width:190px;"></select>
+        </div>
+        <button class="preset" id="singleRandom" type="button">&#127922; Random</button>
+        <button class="runbtn" id="singleBtn" type="button"><span class="rtxt">Screen this claim</span></button>
+      </div>
+      <div id="singleResult" style="margin-top:18px;"></div>
+    </div>
   </section>
 
   <!-- SCORECARD -->
@@ -780,6 +797,67 @@ el("runBtn").onclick=async ()=>{
     render();
   }
 };
+
+// ---------- single-claim check (worked example, never feeds the scorecard) ----------
+(function initSingle(){
+  const sel=el("singleSelect");
+  if(sel) sel.innerHTML=CLAIMS.map(c=>`<option value="${c.id}">${c.id}</option>`).join("");
+})();
+function laneOutcome(lane){
+  if(lane==="fast") return {txt:"Clears with minimal effort (fast-track).",col:"var(--green)",soft:"var(--green-soft)"};
+  if(lane==="siu") return {txt:"Goes to a human assessor, flagged for fraud investigation (SIU).",col:"var(--red)",soft:"var(--red-soft)"};
+  if(lane==="repudiate") return {txt:"Goes to a human, possible cover issue (repudiate-candidate). Never auto-rejected.",col:"var(--amber)",soft:"var(--amber-soft)"};
+  if(lane==="complex") return {txt:"Goes to a senior adjuster (complex / high-value).",col:"var(--indigo)",soft:"var(--indigo-soft)"};
+  return {txt:"Goes to a human assessor (standard review).",col:"var(--blue)",soft:"var(--blue-soft)"};
+}
+function renderSingle(c,v,lane,predFraud){
+  const L=LANES[lane],oc=laneOutcome(lane);
+  const rcol=v.fraud_risk>=0.66?"var(--red)":(v.fraud_risk>=0.4?"var(--amber)":"var(--green)");
+  const truth=c.isFraud?`This claim <b>was a fraud case</b>.`:`This claim was <b>not fraud</b> (legitimate).`;
+  let match;
+  if(predFraud&&c.isFraud) match=`<b style="color:var(--green)">Caught.</b> The model flagged it and it really was fraud.`;
+  else if(predFraud&&!c.isFraud) match=`<b style="color:var(--amber)">False alarm.</b> The model flagged an honest claim.`;
+  else if(!predFraud&&c.isFraud) match=`<b style="color:var(--red)">Missed.</b> The model cleared a claim that was fraud.`;
+  else match=`<b style="color:var(--green)">Correct.</b> The model cleared an honest claim.`;
+  el("singleResult").innerHTML=`
+    <div style="border:1px solid ${L.color};border-radius:12px;overflow:hidden;">
+      <div style="background:${oc.soft};color:${oc.col};padding:12px 16px;font-weight:700;">${c.id}: ${oc.txt}</div>
+      <div style="padding:16px;">
+        <div style="font-size:13.5px;color:var(--muted);margin-bottom:12px;"><b>${c.make}</b>, ${c.area}, ${c.fault} &middot; ${c.valueBand} value &middot; policy-to-claim ${c.daysToClaim} days &middot; police ${c.police} &middot; prior claims ${c.prior}</div>
+        <div style="display:flex;gap:22px;flex-wrap:wrap;margin-bottom:12px;">
+          <div><div style="font-size:11px;color:var(--faint);font-weight:700;">LANE</div><div style="color:${L.color};font-weight:700;">${L.name}</div></div>
+          <div><div style="font-size:11px;color:var(--faint);font-weight:700;">FRAUD RISK</div><div style="color:${rcol};font-weight:700;">${pct(v.fraud_risk)}%</div></div>
+          <div><div style="font-size:11px;color:var(--faint);font-weight:700;">CONFIDENCE</div><div style="font-weight:700;">${pct(v.confidence)}%</div></div>
+        </div>
+        <div style="font-style:italic;color:var(--muted);font-size:13px;margin-bottom:14px;">&ldquo;${v.reason}&rdquo;</div>
+        <div style="background:var(--bg);border-radius:8px;padding:12px 14px;font-size:13.5px;">
+          <div style="margin-bottom:4px;">Actual outcome: ${truth}</div>
+          <div>${match}</div>
+        </div>
+      </div>
+    </div>`;
+}
+async function screenSingle(id){
+  const key=el("keyInput").value.trim();
+  const claim=CLAIMS.find(c=>c.id===id);
+  if(!claim) return;
+  const out=el("singleResult");
+  if(!key){ out.innerHTML=`<div class="card" style="color:var(--muted)">Paste your Gemini key in the box at the top, then screen this claim.</div>`; return; }
+  const btn=el("singleBtn"),rt=btn.querySelector(".rtxt");
+  btn.disabled=true; rt.textContent="Screening...";
+  out.innerHTML=`<div class="card" style="color:var(--muted)">Screening ${id}...</div>`;
+  try{
+    const v=await scoreClaimLive(key,claim);
+    const th=state.threshold;
+    const lane=v.fraud_risk>=th?"siu":v.lane;   // same deterministic gate as the batch
+    const predFraud=lane==="siu"?1:0;
+    renderSingle(claim,v,lane,predFraud);
+  }catch(e){
+    out.innerHTML=`<div class="card" style="color:var(--muted)">Could not screen live (${e.message}). Check the key and that the model has quota.</div>`;
+  }finally{ btn.disabled=false; rt.textContent="Screen this claim"; }
+}
+el("singleBtn").onclick=()=>screenSingle(el("singleSelect").value);
+el("singleRandom").onclick=()=>{ const i=Math.floor(Math.random()*CLAIMS.length); el("singleSelect").value=CLAIMS[i].id; screenSingle(CLAIMS[i].id); };
 
 render();
 </script>
