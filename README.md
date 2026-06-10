@@ -269,9 +269,9 @@ The 8 categories below match the [live category pages](https://lyven81.github.io
 - **Demo:** [Try it](https://lyven81.github.io/ai-project/projects/borrower-risk-evaluator/demo.html)
 
 #### Motor Claim Triage and QC Evaluator
-- **What it does:** AI claim triage for insurers that sorts claims into five handling lanes and scores its own fraud flags against the real outcome.
-- **How it's built:** Google Gemini (gemini-2.5-flash, BYO-key) + vanilla JS + inline SVG, fully client-side, with a Python + pandas data-prep step. No backend.
-- **Problem solved:** Motor claims handlers either rush honest claims through or over-investigate, with no measured way to prove how good their fraud triage is. This app routes each claim into a handling lane, flags fraud with a confidence score, and scores its flags live against the real fraud label with catch rate, false-alarm rate, and 95% confidence intervals, while staying honest that only fraud is graded and the other four lanes are operational routing.
+- **What it does:** Deterministic claim triage for insurers that sorts every claim into one of four categories with a fixed rule and scores the fraud flags against the real outcome.
+- **How it's built:** A fixed point-score yardstick over the claim fields (no model, no API key) + vanilla JS + inline SVG, fully client-side, with a Python + pandas data-encoding step. No backend.
+- **Problem solved:** Motor claims handlers either rush honest claims through or over-investigate, and a probabilistic scorer can give the same claim two different verdicts. This app classifies all 15,420 real claims into Fast track, Approve, Investigate, or Repudiate by a fixed, data-grounded rule (so the same claim always lands the same way), then measures the fraud flags against the real label over the full population with catch rate, false-alarm rate, and 95% confidence intervals.
 - **Demo:** [Try it](https://lyven81.github.io/ai-project/projects/motor-claim-evaluator/demo.html)
 
 ---
