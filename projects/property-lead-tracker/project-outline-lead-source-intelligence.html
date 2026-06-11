@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lead Source Intelligence — Project Outline | Pau Analytics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#1E3A5F; --blue:#4A7FB5; --blue-soft:#EAF1F8; --ink:#22303F;
+  --muted:#5B6B7C; --line:#D9E2EC; --bg:#FAFBFC; --white:#FFFFFF;
+  --amber:#B07A2A; --green:#2F7D5C; --red:#A8453A;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Manrope',sans-serif;color:var(--ink);background:var(--bg);line-height:1.65;font-size:16px}
+.wrap{max-width:980px;margin:0 auto;padding:0 28px}
+
+/* hero */
+header{background:var(--navy);color:#fff;padding:64px 0 56px}
+.eyebrow{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:#9FBEDC;font-weight:700;margin-bottom:18px}
+h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(34px,5vw,52px);line-height:1.12;max-width:18ch}
+.hero-sub{margin-top:18px;font-size:18px;color:#C9D9E8;max-width:62ch}
+.hero-meta{display:flex;flex-wrap:wrap;gap:28px;margin-top:34px;padding-top:24px;border-top:1px solid rgba(255,255,255,.18)}
+.hero-meta div{font-size:13px;color:#9FBEDC}
+.hero-meta strong{display:block;color:#fff;font-size:15px;font-weight:700;margin-top:2px}
+
+/* sections */
+section{padding:52px 0;border-bottom:1px solid var(--line)}
+.sec-label{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--blue);font-weight:800;margin-bottom:10px}
+h2{font-family:'Fraunces',serif;font-weight:600;font-size:30px;color:var(--navy);margin-bottom:18px}
+h3{font-size:17px;font-weight:800;color:var(--navy);margin:26px 0 10px}
+p{max-width:74ch;margin-bottom:12px}
+p.lede{font-size:18px;color:var(--ink)}
+
+/* cards & tables */
+.card{background:var(--white);border:1px solid var(--line);border-radius:10px;padding:22px 24px;margin:16px 0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media(max-width:760px){.grid2,.grid3{grid-template-columns:1fr}}
+table{width:100%;border-collapse:collapse;background:var(--white);border:1px solid var(--line);border-radius:10px;overflow:hidden;margin:14px 0;font-size:14.5px}
+th{background:var(--navy);color:#fff;text-align:left;padding:10px 14px;font-weight:700;font-size:13px;letter-spacing:.03em}
+td{padding:10px 14px;border-top:1px solid var(--line);vertical-align:top}
+tr:nth-child(even) td{background:#F4F8FB}
+.num{font-variant-numeric:tabular-nums}
+
+/* funnel signature element */
+.funnel{display:flex;align-items:stretch;gap:0;margin:22px 0;flex-wrap:wrap}
+.fstep{flex:1;min-width:130px;background:var(--white);border:1px solid var(--line);padding:16px 14px;position:relative}
+.fstep:first-child{border-radius:10px 0 0 10px}
+.fstep:last-child{border-radius:0 10px 10px 0;background:var(--navy);color:#fff}
+.fstep:last-child .fnum{color:#9FBEDC}.fstep:last-child .fname{color:#fff}
+.fnum{font-family:'Fraunces',serif;font-size:24px;color:var(--blue);font-weight:600}
+.fname{font-weight:800;font-size:14px;color:var(--navy);margin-top:4px}
+.fdesc{font-size:12.5px;color:var(--muted);margin-top:4px;line-height:1.45}
+.fstep:last-child .fdesc{color:#C9D9E8}
+
+/* badges */
+.badge{display:inline-block;font-size:11.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:3px 10px;border-radius:99px;margin-right:6px}
+.b-blue{background:var(--blue-soft);color:var(--blue)}
+.b-green{background:#E7F3EE;color:var(--green)}
+.b-amber{background:#F6EEDF;color:var(--amber)}
+.b-red{background:#F6E7E5;color:var(--red)}
+.b-navy{background:var(--navy);color:#fff}
+
+/* insight list */
+.insight{display:flex;gap:16px;background:var(--white);border:1px solid var(--line);border-left:4px solid var(--blue);border-radius:8px;padding:16px 18px;margin:10px 0}
+.insight .inum{font-family:'Fraunces',serif;font-size:26px;color:var(--blue);font-weight:600;line-height:1;min-width:34px}
+.insight p{margin:0;font-size:14.5px}
+.insight strong{color:var(--navy)}
+
+/* phases */
+.phase{display:grid;grid-template-columns:120px 1fr;gap:18px;padding:18px 0;border-top:1px solid var(--line)}
+.phase:first-of-type{border-top:none}
+.ph-tag{font-family:'Fraunces',serif;font-size:20px;color:var(--blue);font-weight:600}
+.ph-tag span{display:block;font-family:'Manrope';font-size:12px;color:var(--muted);font-weight:600;margin-top:2px}
+.phase p{margin:4px 0 0;font-size:14.5px}
+.phase strong{color:var(--navy)}
+
+ul.clean{list-style:none;max-width:74ch}
+ul.clean li{padding:7px 0 7px 24px;position:relative;font-size:15px}
+ul.clean li::before{content:"";position:absolute;left:4px;top:15px;width:8px;height:8px;border-radius:2px;background:var(--blue)}
+
+footer{background:var(--navy);color:#9FBEDC;padding:34px 0;font-size:13px}
+footer strong{color:#fff}
+.kicker{font-family:'Fraunces',serif;font-size:21px;color:var(--navy);font-weight:600;line-height:1.4;max-width:30ch;margin:18px 0}
+@media print{header{padding:36px 0}section{padding:30px 0;page-break-inside:avoid}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="eyebrow">Pau Analytics · Portfolio Build · Project Outline v1.0</div>
+    <h1>Which channel finds your tenant?</h1>
+    <p class="hero-sub">A lead source intelligence system for a Klang Valley rental agency running 10 listings across 5 enquiry channels. Multi-source attribution, lead quality tracking, and a two-audience white-label reporting layer, modeled on a real Upwork market demand signal.</p>
+    <div class="hero-meta">
+      <div>Status<strong>Dataset generated · Pre-build</strong></div>
+      <div>Data window<strong>Dec 2025 – May 2026</strong></div>
+      <div>Market evidence<strong>Upwork batch 5 Jun 26, job #11</strong></div>
+      <div>Date<strong>11 June 2026</strong></div>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <div class="sec-label">01 · Project Definition</div>
+    <h2>What this project is</h2>
+    <p class="lede">At its heart, the system answers one question for a rental agency: where do our leads actually come from, and which sources are worth the money?</p>
+    <p>A property agent receives enquiries through many doors: portal chats, WhatsApp messages, phone calls, ad lead forms. Each platform only sees its own door. This system collects every enquiry into one place, tags it with its source, its cost, and its outcome, and presents the combined picture in two formats: a detailed internal dashboard for the agent, and a simple white-label report for each property owner.</p>
+    <h3>Audience (defined first)</h3>
+    <div class="grid2">
+      <div class="card"><span class="badge b-navy">Primary</span><p style="margin-top:10px"><strong>The agency principal / agent.</strong> Decides monthly where marketing ringgit goes, which listings need price reviews, and whether enquiries are being lost. Needs operational detail.</p></div>
+      <div class="card"><span class="badge b-blue">Secondary</span><p style="margin-top:10px"><strong>The property owner (landlord).</strong> Receives a monthly branded one-page report proving the agent is actively marketing their unit. Needs plain language and confidence, not metrics.</p></div>
+    </div>
+    <h3>Market evidence</h3>
+    <p>Sourced from a live Upwork posting: a UK marketing agency seeking a white-label, multi-source reporting system with call tracking, lead quality analysis, two-audience dashboards, and monthly written insights, cloneable across clients. This build transplants every demanded mechanism into the Malaysian rental property vertical: attribution across paid and free channels, the untracked-phone-lead problem, the volume-versus-quality trap, and the clone-per-client architecture (here, clone-per-listing and clone-per-owner).</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-label">02 · Scope</div>
+    <h2>Portfolio and lead sources</h2>
+    <h3>10 listings, two segments</h3>
+    <table>
+      <tr><th>ID</th><th>Listing</th><th>Area</th><th>Segment</th><th class="num">Rent (RM/mo)</th><th>Role in dataset</th></tr>
+      <tr><td>L01</td><td>Arte Mont Kiara</td><td>Mont Kiara</td><td>Whole unit</td><td class="num">1,749</td><td>Signed Feb · PropertyGuru</td></tr>
+      <tr><td>L02</td><td>Nexus Residence (room)</td><td>Cheras</td><td>Room</td><td class="num">899</td><td>Signed Apr · Meta Ads</td></tr>
+      <tr><td>L03</td><td>J.Dupion (female room)</td><td>Cheras</td><td>Room</td><td class="num">799</td><td>Active · mismatch pattern host</td></tr>
+      <tr><td>L04</td><td>28 Boulevard studio</td><td>Ampang</td><td>Studio</td><td class="num">1,599</td><td>Active</td></tr>
+      <tr><td>L05</td><td>Nexus Residence (whole unit)</td><td>Cheras</td><td>Whole unit</td><td class="num">2,999</td><td>Signed May · comparison anchor for L09</td></tr>
+      <tr><td>L06</td><td>J.Dupion (master room)</td><td>Cheras</td><td>Room</td><td class="num">1,200</td><td>Signed Mar · Referral</td></tr>
+      <tr><td>L07</td><td>Lavile Kuala Lumpur</td><td>Maluri</td><td>Whole unit</td><td class="num">1,800</td><td><strong>Star performer</strong> · signed in 3 weeks</td></tr>
+      <tr><td>L08</td><td>M Vertica (room)</td><td>Maluri</td><td>Room</td><td class="num">850</td><td>Signed Apr · Referral</td></tr>
+      <tr><td>L09</td><td>Sunway Velocity Two</td><td>Maluri</td><td>Whole unit</td><td class="num">3,400</td><td><strong>Planted stale listing</strong></td></tr>
+      <tr><td>L10</td><td>Razak City studio</td><td>Sungai Besi</td><td>Studio</td><td class="num">1,350</td><td>Signed Mar · Google Ads</td></tr>
+    </table>
+    <p style="font-size:13.5px;color:var(--muted)">All identities fictionalized: agent persona "Adeline Khoo (PEA 9183), Klang Valley Homes Realty". Listing structures modeled on real KL market patterns.</p>
+
+    <h3>5 lead sources across 4 categories</h3>
+    <table>
+      <tr><th>Source</th><th>Category</th><th>Cost structure</th><th>Analytical role</th></tr>
+      <tr><td><strong>PropertyGuru</strong></td><td>Platform</td><td>Subscription + boosts</td><td>Premium portal workhorse</td></tr>
+      <tr><td><strong>Mudah.my</strong></td><td>Platform</td><td>Near-free + bumps</td><td>High volume, low quality trap</td></tr>
+      <tr><td><strong>Google Ads</strong></td><td>Search ad</td><td>Campaign spend</td><td>Cleanest cost-per-lead channel, intent leads</td></tr>
+      <tr><td><strong>Meta Ads</strong></td><td>Social media</td><td>Campaign spend</td><td>Visual targeting, room segment specialist</td></tr>
+      <tr><td><strong>WhatsApp referral</strong></td><td>Referral</td><td>RM0</td><td>Quality benchmark, the invisible champion</td></tr>
+    </table>
+    <p>Source (where they came from) and contact method (portal chat, WhatsApp, phone call, lead form) are tracked as separate columns. That separation is the attribution layer.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-label">03 · Funnel & Qualification</div>
+    <h2>Lead lifecycle taxonomy</h2>
+    <div class="funnel">
+      <div class="fstep"><div class="fnum">1</div><div class="fname">Enquiry</div><div class="fdesc">Any inbound contact about a listing</div></div>
+      <div class="fstep"><div class="fnum">2</div><div class="fname">Responded</div><div class="fdesc">Agent replied; gap = response time</div></div>
+      <div class="fstep"><div class="fnum">3</div><div class="fname">Viewing booked</div><div class="fdesc">Date and time committed</div></div>
+      <div class="fstep"><div class="fnum">4</div><div class="fname">Viewing attended</div><div class="fdesc">Prospect showed up</div></div>
+      <div class="fstep"><div class="fnum">5</div><div class="fname">Tenancy signed</div><div class="fdesc">The conversion. The yardstick for cost per conversion by source.</div></div>
+    </div>
+    <h3>Qualified enquiry: the written rule</h3>
+    <div class="card"><p style="margin:0">An enquiry is <strong>qualified</strong> when the prospect's requirement matches the listing (gender rule, occupancy, fit), the intended move-in is within <strong>30 days</strong>, and they remain responsive past the first exchange. Everything else is raw volume.</p></div>
+    <h3>Dead-end outcomes</h3>
+    <p><span class="badge b-amber">no_reply</span><span class="badge b-amber">lowball</span><span class="badge b-amber">requirement_mismatch</span><span class="badge b-amber">budget_mismatch</span><span class="badge b-amber">no_show</span><span class="badge b-amber">lost_to_other</span><span class="badge b-red">unanswered</span><span class="badge b-blue">still_open</span><span class="badge b-green">tenancy_signed</span></p>
+    <p style="font-size:14px;color:var(--muted)">"Unanswered" is the missed-lead category: a lead the agency paid for and never replied to. It inherits the call-tracking DNA of the source job.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-label">04 · KPI Dictionary</div>
+    <h2>Every metric, one formula</h2>
+    <table>
+      <tr><th>KPI</th><th>Formula</th><th>Audience</th></tr>
+      <tr><td>Enquiries / Qualified enquiries</td><td>Counts; qualified per written rule</td><td>Both / Internal</td></tr>
+      <tr><td>Cost per enquiry (CPE)</td><td>Source cost ÷ enquiries</td><td>Internal</td></tr>
+      <tr><td>Cost per qualified enquiry</td><td>Source cost ÷ qualified enquiries</td><td>Internal</td></tr>
+      <tr><td>Cost per viewing booked</td><td>Source cost ÷ viewings booked</td><td>Both</td></tr>
+      <tr><td><strong>Cost per tenancy (conversion)</strong></td><td><strong>Source cost ÷ tenancies signed</strong></td><td><strong>Both · headline</strong></td></tr>
+      <tr><td>Enquiry-to-viewing rate</td><td>Viewings booked ÷ enquiries</td><td>Both</td></tr>
+      <tr><td>Viewing show-up rate</td><td>Attended ÷ booked</td><td>Internal</td></tr>
+      <tr><td>Source quality score</td><td>Qualified ÷ total, per source</td><td>Internal</td></tr>
+      <tr><td>Median response time</td><td>median(first response − enquiry time)</td><td>Internal</td></tr>
+      <tr><td>Unanswered rate</td><td>Unanswered ÷ enquiries (split by after-hours)</td><td>Internal</td></tr>
+      <tr><td>Days on market</td><td>Signed date (or today) − listed date</td><td>Both</td></tr>
+      <tr><td>Enquiry velocity / stale flag</td><td>Enquiries per week, 4-week trend; flag if down ≥50% vs first 2 weeks and still open</td><td>Internal</td></tr>
+    </table>
+    <p>The owner report uses only the "Both" rows, translated to plain language: 12 people enquired, 5 viewed, here is what we are doing next.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-label">05 · Cost Model</div>
+    <h2>RM9,060 over six months</h2>
+    <table>
+      <tr><th>Source</th><th class="num">RM / month</th><th class="num">6-month total</th><th>Allocation rule</th></tr>
+      <tr><td>PropertyGuru</td><td class="num">450</td><td class="num">2,700</td><td>Portfolio-level: spread by days listed</td></tr>
+      <tr><td>Mudah.my</td><td class="num">60</td><td class="num">360</td><td>Portfolio-level: spread by days listed</td></tr>
+      <tr><td>Google Ads</td><td class="num">600</td><td class="num">3,600</td><td>Campaign-level: 3 campaigns by segment</td></tr>
+      <tr><td>Meta Ads</td><td class="num">400</td><td class="num">2,400</td><td>Campaign-level: 2 campaigns by segment</td></tr>
+      <tr><td>WhatsApp referral</td><td class="num">0</td><td class="num">0</td><td>Goodwill cost excluded, stated in README</td></tr>
+      <tr><td><strong>Total</strong></td><td class="num"><strong>1,510</strong></td><td class="num"><strong>9,060</strong></td><td>All assumptions stated openly</td></tr>
+    </table>
+    <div class="kicker">The honest answer to "what did this listing really cost to market" is an allocation rule, not a guess.</div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-label">06 · Planted Insights</div>
+    <h2>What the dashboard is built to find</h2>
+    <p>Eight patterns were written into the data generator deliberately, then verified after generation. They become the case study's findings.</p>
+    <div class="insight"><div class="inum">1</div><p><strong>The Mudah inversion (headline).</strong> 40% of all enquiry volume, 15% qualified rate, 5% viewing rate, zero tenancies in six months. The chart everyone remembers.</p></div>
+    <div class="insight"><div class="inum">2</div><p><strong>Google Ads: pay more, get tenants.</strong> Highest cost per enquiry (RM31) but ~50% qualified and the best paid-channel viewing rate. Two tenancies at RM1,800 each.</p></div>
+    <div class="insight"><div class="inum">3</div><p><strong>Referral: the invisible champion.</strong> 9% of volume, 67% qualified, two tenancies at RM0. Justifies formalizing a referral ask at every signing.</p></div>
+    <div class="insight"><div class="inum">4</div><p><strong>The stale listing.</strong> Sunway Velocity Two (RM3,400) collapses ~70% in enquiry velocity after week 2 while comparable Nexus at RM2,999 keeps moving. Recommendation: reprice toward RM3,000 to 3,100.</p></div>
+    <div class="insight"><div class="inum">5</div><p><strong>The after-hours leak.</strong> Unanswered rate runs 20% after-hours versus 7% in office hours, roughly 3x. Quantified as ~RM700 of paid leads lost.</p></div>
+    <div class="insight"><div class="inum">6</div><p><strong>Channel x segment.</strong> Meta converts for rooms only; Google for whole units and studios. Stop running every listing on every channel.</p></div>
+    <div class="insight"><div class="inum">7</div><p><strong>The star performer.</strong> Lavile (RM1,800, Maluri) signs within 3 weeks via Google Ads, giving the dashboard a healthy benchmark and the owner report a success story.</p></div>
+    <div class="insight"><div class="inum">8</div><p><strong>Portfolio sell-through.</strong> Monthly volume falls from 299 (Feb) to 64 (May) as 7 of 10 listings sign. The insight layer flags a restock warning: success creates its own pipeline problem.</p></div>
+
+    <h3>Cost per tenancy: the headline table</h3>
+    <table>
+      <tr><th>Source</th><th class="num">Tenancies</th><th class="num">Cost per tenancy</th><th>Verdict</th></tr>
+      <tr><td>WhatsApp referral</td><td class="num">2</td><td class="num">RM 0</td><td><span class="badge b-green">Champion</span></td></tr>
+      <tr><td>PropertyGuru</td><td class="num">2</td><td class="num">RM 1,350</td><td><span class="badge b-green">Workhorse</span></td></tr>
+      <tr><td>Google Ads</td><td class="num">2</td><td class="num">RM 1,800</td><td><span class="badge b-blue">Quality engine</span></td></tr>
+      <tr><td>Meta Ads</td><td class="num">1</td><td class="num">RM 2,400</td><td><span class="badge b-amber">Rooms only</span></td></tr>
+      <tr><td>Mudah.my</td><td class="num">0</td><td class="num">Undefined</td><td><span class="badge b-red">Volume trap</span></td></tr>
+    </table>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-label">07 · Dataset</div>
+    <h2>Four tables, ~1,140 enquiries, seed-reproducible</h2>
+    <table>
+      <tr><th>File</th><th>Grain</th><th>Key columns</th></tr>
+      <tr><td><strong>listings.csv</strong></td><td>1 row per listing (10)</td><td>listing_id, property_name, area, segment, asking_rent_myr, gender_rule, listed_date, status, signed_date, signed_source</td></tr>
+      <tr><td><strong>enquiries.csv</strong></td><td>1 row per enquiry (~1,140)</td><td>enquiry_id, listing_id, datetime, source, contact_method, campaign, move_in_days, qualified, responded, first_response_min, after_hours, viewing_booked, viewing_attended, outcome</td></tr>
+      <tr><td><strong>ad_spend.csv</strong></td><td>month x campaign (30)</td><td>month, source, campaign, spend_myr, target_segment</td></tr>
+      <tr><td><strong>platform_costs.csv</strong></td><td>month x platform (12)</td><td>month, source, cost_myr</td></tr>
+    </table>
+    <p>Window: 1 Dec 2025 to 31 May 2026. Generator: Python (pandas, numpy), fixed seed 2026, all assumptions and planted patterns documented in README.md. Realism rules include weekly seasonality, Jan to Feb intake bump, new-listing lifecycle curves, and after-hours enquiry timing.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-label">08 · Deliverables & Build Plan</div>
+    <h2>Two outputs, one data model</h2>
+    <div class="grid2">
+      <div class="card"><span class="badge b-navy">Deliverable 1</span><h3 style="margin-top:10px">Internal agency dashboard · Power BI</h3><ul class="clean">
+        <li>Overview: portfolio KPIs, monthly trend, tenancy wins</li>
+        <li>Source comparison: CPE, quality score, cost per tenancy</li>
+        <li>Listing performance: velocity, days on market, stale flags</li>
+        <li>Lead quality: outcomes, mismatch analysis, funnel by source</li>
+        <li>Responsiveness: response time, after-hours leak, unanswered loss</li>
+      </ul></div>
+      <div class="card"><span class="badge b-blue">Deliverable 2</span><h3 style="margin-top:10px">Owner report · white-label HTML one-pager</h3><ul class="clean">
+        <li>This month for your property: enquiries, viewings, status</li>
+        <li>What we did: channels run, spend categories</li>
+        <li>Plain-language explanation of what the numbers mean</li>
+        <li>Next steps and recommendation</li>
+        <li>Brand-skinnable: swap palette and logo per agency, proving white-label</li>
+      </ul></div>
+    </div>
+    <h3>Plus the insights layer</h3>
+    <p>A monthly written-recommendations section driven by metric thresholds, with AI-drafted summaries the agent edits. This reuses the KPI Composite Builder's AI-summary engine.</p>
+
+    <h3>Build phases</h3>
+    <div class="phase"><div class="ph-tag">P1<span>done</span></div><div><p><strong>Planning pack.</strong> Funnel taxonomy, KPI dictionary, cost model, planted insights, this outline.</p></div></div>
+    <div class="phase"><div class="ph-tag">P2<span>done</span></div><div><p><strong>Dataset.</strong> Generator built, run, and validated against all eight planted patterns.</p></div></div>
+    <div class="phase"><div class="ph-tag">P3</div><div><p><strong>Data model + internal dashboard.</strong> Power BI star schema (enquiries fact, listings dim, cost tables), DAX measures from the KPI dictionary, five pages.</p></div></div>
+    <div class="phase"><div class="ph-tag">P4</div><div><p><strong>Owner report.</strong> Refined Trust HTML one-pager per listing, demonstrated on two listings with two brand skins.</p></div></div>
+    <div class="phase"><div class="ph-tag">P5</div><div><p><strong>Insights layer.</strong> Threshold rules plus AI-drafted monthly notes; sample month of generated recommendations.</p></div></div>
+    <div class="phase"><div class="ph-tag">P6</div><div><p><strong>Case study.</strong> Refined Trust case study page: audience first, decisions and money framing, the cost-per-tenancy table as hero, cloning playbook section.</p></div></div>
+
+    <h3>Success criteria: the build must prove</h3>
+    <ul class="clean">
+      <li>Multi-source attribution with source and contact method separated</li>
+      <li>Phone and chat lead tracking with outcome and quality classification</li>
+      <li>Two-audience white-label output from a single data model</li>
+      <li>Monthly insight generation tied to metric thresholds</li>
+      <li>Cloneability: a new listing or new owner report absorbs automatically</li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <strong>Pau Analytics</strong> · Lead Source Intelligence project outline · Prepared 11 June 2026 · Market evidence: Upwork batch 5 Jun 26 · All client data synthetic and fictionalized
+  </div>
+</footer>
+</body>
+</html>

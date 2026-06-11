@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Which channel finds your tenant? — Case Study | Pau Analytics</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#1E3A5F;--blue:#4A7FB5;--soft:#EAF1F8;--ink:#22303F;--muted:#5B6B7C;--line:#D9E2EC;--bg:#FAFBFC;--green:#2F7D5C;--amber:#B07A2A;--red:#A8453A}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Manrope',sans-serif;color:var(--ink);background:var(--bg);font-size:16px;line-height:1.65}
+.wrap{max-width:920px;margin:0 auto;padding:0 28px}
+header{background:var(--navy);color:#fff;padding:70px 0 60px}
+.eyebrow{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:#9FBEDC;font-weight:800;margin-bottom:18px}
+h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(36px,5.5vw,56px);line-height:1.1;max-width:16ch}
+.hero-sub{margin-top:18px;font-size:18px;color:#C9D9E8;max-width:60ch}
+.hero-stats{display:flex;flex-wrap:wrap;gap:32px;margin-top:36px;padding-top:26px;border-top:1px solid rgba(255,255,255,.18)}
+.hero-stats div{font-size:12.5px;color:#9FBEDC}
+.hero-stats strong{display:block;font-family:'Fraunces',serif;font-size:26px;color:#fff;font-weight:600}
+section{padding:54px 0;border-bottom:1px solid var(--line)}
+.lab{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--blue);font-weight:800;margin-bottom:10px}
+h2{font-family:'Fraunces',serif;font-weight:600;font-size:30px;color:var(--navy);margin-bottom:16px}
+p{max-width:72ch;margin-bottom:12px}
+.lede{font-size:18.5px}
+table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden;margin:18px 0;font-size:15px}
+th{background:var(--navy);color:#fff;text-align:left;padding:12px 16px;font-weight:700;font-size:13px}
+td{padding:12px 16px;border-top:1px solid var(--line);font-variant-numeric:tabular-nums}
+tr:nth-child(even) td{background:#F4F8FB}
+.tag{display:inline-block;font-size:11px;font-weight:800;padding:3px 10px;border-radius:99px}
+.t-g{background:#E7F3EE;color:var(--green)}.t-a{background:#F6EEDF;color:var(--amber)}.t-r{background:#F6E7E5;color:var(--red)}.t-b{background:var(--soft);color:var(--blue)}
+.find{display:flex;gap:18px;background:#fff;border:1px solid var(--line);border-left:4px solid var(--blue);border-radius:8px;padding:18px 20px;margin:12px 0}
+.find .n{font-family:'Fraunces',serif;font-size:28px;color:var(--blue);font-weight:600;line-height:1;min-width:36px}
+.find p{margin:0;font-size:15px}
+.find strong{color:var(--navy)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:18px 0}
+@media(max-width:740px){.grid2{grid-template-columns:1fr}}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:22px 24px}
+.card h3{font-size:16px;font-weight:800;color:var(--navy);margin-bottom:10px}
+.card ul{list-style:none}
+.card li{padding:6px 0 6px 22px;position:relative;font-size:14.5px}
+.card li::before{content:"";position:absolute;left:2px;top:13px;width:8px;height:8px;border-radius:2px;background:var(--blue)}
+.quote{font-family:'Fraunces',serif;font-size:24px;color:var(--navy);font-weight:600;line-height:1.4;max-width:26ch;margin:24px 0;padding-left:22px;border-left:4px solid var(--blue)}
+.steps{counter-reset:s;margin:18px 0}
+.step{display:grid;grid-template-columns:54px 1fr;gap:16px;padding:16px 0;border-top:1px solid var(--line)}
+.step:first-child{border-top:none}
+.step::before{counter-increment:s;content:counter(s,decimal-leading-zero);font-family:'Fraunces',serif;font-size:24px;color:var(--blue);font-weight:600}
+.step p{margin:2px 0 0;font-size:15px}
+.step strong{color:var(--navy)}
+footer{background:var(--navy);color:#9FBEDC;padding:44px 0;font-size:14px}
+footer strong{color:#fff;font-size:16px}
+.cta{display:inline-block;background:#fff;color:var(--navy);font-weight:800;padding:12px 26px;border-radius:8px;text-decoration:none;margin-top:16px}
+.explore{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:22px 0 4px}
+@media(max-width:740px){.explore{grid-template-columns:1fr}}
+.xcard{display:block;background:#fff;border:1px solid var(--line);border-radius:10px;padding:22px 22px;text-decoration:none;color:var(--ink);transition:border-color .15s,box-shadow .15s}
+.xcard:hover{border-color:var(--blue);box-shadow:0 6px 22px rgba(30,58,95,.10)}
+.xcard .xk{font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);font-weight:800}
+.xcard h3{font-family:'Fraunces',serif;font-weight:600;font-size:19px;color:var(--navy);margin:8px 0 6px}
+.xcard p{font-size:13.5px;color:var(--muted);margin:0}
+.xcard .go{display:inline-block;margin-top:12px;font-weight:800;font-size:13.5px;color:var(--blue)}
+</style>
+</head>
+<body>
+
+<header><div class="wrap">
+  <div class="eyebrow">Pau Analytics · Case Study · Property Rental Analytics</div>
+  <h1>Which channel finds your tenant?</h1>
+  <p class="hero-sub">A rental agency was spending RM1,510 a month across five lead channels with no idea which ones produced tenants. We built a lead source intelligence system that tracked 1,140 enquiries to their outcomes, and the answer changed where every ringgit goes.</p>
+  <div class="hero-stats">
+    <div><strong>1,140</strong>enquiries tracked</div>
+    <div><strong>5</strong>lead channels</div>
+    <div><strong>10</strong>listings</div>
+    <div><strong>7</strong>tenancies attributed</div>
+    <div><strong>RM 0 – ∞</strong>cost per tenancy range</div>
+  </div>
+</div></header>
+
+<section><div class="wrap">
+  <div class="lab">The problem</div>
+  <h2>Five doors, no doorman</h2>
+  <p class="lede">A Klang Valley agency managing 10 rental listings received enquiries through PropertyGuru chats, Mudah messages, Google and Meta ad leads, WhatsApp referrals, and phone calls. Each platform reported its own numbers. None of them could answer the only question that matters: which source produces signed tenancies, and at what cost?</p>
+  <p>The hidden costs were worse than the visible ones. Enquiries arriving after 8pm, when renters actually browse, were going unanswered three times more often than daytime ones. A premium listing was quietly going stale while its marketing budget kept running. And the channel generating the most enquiries had never produced a single tenant.</p>
+</div></section>
+
+<section><div class="wrap">
+  <div class="lab">The headline result</div>
+  <h2>Cost per tenancy, by source</h2>
+  <p>Six months of data, every enquiry tagged with its source and followed to its outcome. Volume means nothing until it converts.</p>
+  <table>
+    <tr><th>Source</th><th>Enquiries</th><th>Qualified rate</th><th>Tenancies</th><th>Cost per tenancy</th><th>Verdict</th></tr>
+    <tr><td><b>WhatsApp referral</b></td><td>101</td><td>67%</td><td>2</td><td><b>RM 0</b></td><td><span class="tag t-g">Champion</span></td></tr>
+    <tr><td><b>PropertyGuru</b></td><td>293</td><td>41%</td><td>2</td><td><b>RM 1,350</b></td><td><span class="tag t-g">Workhorse</span></td></tr>
+    <tr><td><b>Google Ads</b></td><td>115</td><td>50%</td><td>2</td><td><b>RM 1,800</b></td><td><span class="tag t-b">Quality engine</span></td></tr>
+    <tr><td><b>Meta Ads</b></td><td>172</td><td>27%</td><td>1</td><td><b>RM 2,400</b></td><td><span class="tag t-a">Rooms only</span></td></tr>
+    <tr><td><b>Mudah.my</b></td><td>459</td><td>15%</td><td>0</td><td><b>Undefined</b></td><td><span class="tag t-r">Volume trap</span></td></tr>
+  </table>
+  <div class="quote">The cheapest enquiries produced zero tenants. The most expensive enquiries were the second-cheapest tenancies.</div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="lab">The findings</div>
+  <h2>Eight things the data revealed</h2>
+  <div class="find"><div class="n">1</div><p><strong>The Mudah inversion.</strong> 40% of all enquiry volume, a 15% qualified rate, and zero tenancies in six months. High volume disguised as performance.</p></div>
+  <div class="find"><div class="n">2</div><p><strong>Pay more, get tenants.</strong> Google Ads had the highest cost per enquiry at RM31, but half its leads were qualified and it signed two tenants at RM1,800 each.</p></div>
+  <div class="find"><div class="n">3</div><p><strong>The invisible champion.</strong> Referrals were 9% of volume, 67% qualified, and produced two tenancies at zero cost. Recommendation: a formal referral ask at every signing.</p></div>
+  <div class="find"><div class="n">4</div><p><strong>The stale listing.</strong> A RM3,400 unit's enquiry velocity collapsed 70% after week two while a comparable RM2,999 unit nearby kept moving and signed. The system's stale flag caught it; the recommendation was a price review, not more ad spend.</p></div>
+  <div class="find"><div class="n">5</div><p><strong>The after-hours leak.</strong> One in five enquiries arrived after 8pm or on weekends, and those went unanswered at 20% versus 7% in office hours, roughly RM700 of paid leads dropped.</p></div>
+  <div class="find"><div class="n">6</div><p><strong>Channel x segment.</strong> Meta Ads converted for budget rooms only; Google Ads converted for whole units and studios. Running every listing on every channel was burning both budgets.</p></div>
+  <div class="find"><div class="n">7</div><p><strong>The benchmark.</strong> The best-performing listing signed in 23 days via Google Ads, setting the healthy-velocity standard every other listing is measured against.</p></div>
+  <div class="find"><div class="n">8</div><p><strong>Success creates its own problem.</strong> Monthly volume fell from 299 to 64 as seven of ten listings signed. The insight layer flagged a restock warning before the agent felt the empty pipeline.</p></div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="lab">The system</div>
+  <h2>One data model, two audiences</h2>
+  <div class="grid2">
+    <div class="card"><h3>Internal dashboard · for the agent</h3><ul>
+      <li>Source comparison with cost per tenancy</li>
+      <li>Listing velocity and automatic stale flags</li>
+      <li>Lead quality and mismatch analysis</li>
+      <li>Response time and after-hours leak tracking</li>
+      <li>Monthly insight notes, AI-drafted, agent-edited</li>
+    </ul></div>
+    <div class="card"><h3>Owner report · for each landlord</h3><ul>
+      <li>One page, plain language, no jargon</li>
+      <li>Enquiries, serious prospects, viewings held</li>
+      <li>What we did for your property this month</li>
+      <li>One clear recommendation with reasoning</li>
+      <li>White-label: agency branding swaps via a single CSS block</li>
+    </ul></div>
+  </div>
+  <p>Every enquiry carries two separate labels: its <b>source</b> (where the lead came from) and its <b>contact method</b> (how it arrived: portal chat, WhatsApp, phone call, lead form). That separation is what turns a pile of messages into attribution, including the phone calls that standard analytics never sees.</p>
+</div></section>
+
+<section><div class="wrap">
+  <div class="lab">Cloneability</div>
+  <h2>Built to be repeated</h2>
+  <div class="steps">
+    <div class="step"><p><strong>Add a listing:</strong> one new row in the listings table, and every dashboard page, KPI, and stale check absorbs it automatically.</p></div>
+    <div class="step"><p><strong>Add an owner:</strong> the report template generates per listing; a new landlord gets their branded one-pager with no rebuild.</p></div>
+    <div class="step"><p><strong>Add an agency:</strong> the entire white-label skin is one CSS variable block: brand color, accent, agency name. Swap it, and the same system serves a different firm.</p></div>
+  </div>
+  <p>Stack: Python data pipeline · Power BI internal dashboard · HTML white-label reports · threshold-driven insight engine with AI-drafted monthly notes. Demonstration data is synthetic and fully documented; the architecture is production-ready for live portal exports and WhatsApp Business data.</p>
+</div></section>
+
+<section><div class="wrap">
+  <div class="lab">Explore the build</div>
+  <h2>See it working</h2>
+  <p>Every number on this page is computed from the same synthetic dataset of 1,140 enquiries. Open the live pieces below.</p>
+  <div class="explore">
+    <a class="xcard" href="ui-1-internal-dashboard.html">
+      <div class="xk">Interactive</div>
+      <h3>The internal dashboard</h3>
+      <p>Five live tabs: source comparison, listing velocity and stale flags, lead quality, and the after-hours leak.</p>
+      <span class="go">Open the dashboard →</span>
+    </a>
+    <a class="xcard" href="owner-reports/out/L09-2026-03-kvh.html">
+      <div class="xk">White-label</div>
+      <h3>A sample owner report</h3>
+      <p>The one-page landlord report for Sunway Velocity Two, March 2026, generated from the data with a reprice recommendation.</p>
+      <span class="go">Open the report →</span>
+    </a>
+    <a class="xcard" href="project-outline-lead-source-intelligence.html">
+      <div class="xk">Method</div>
+      <h3>Data, KPIs and cost model</h3>
+      <p>The full project outline: funnel taxonomy, KPI dictionary, cost-allocation model, and the eight planted insights.</p>
+      <span class="go">Read the outline →</span>
+    </a>
+  </div>
+</div></section>
+
+<footer><div class="wrap">
+  <strong>Pau Analytics</strong>
+  <p style="margin-top:8px;max-width:60ch">Data analytics and automation for businesses that want to know where their money works. If your enquiries arrive through five doors and you can't name your best one, this system was built for you.</p>
+  <a class="cta" href="#">Talk to us about your lead channels</a>
+</div></footer>
+</body>
+</html>

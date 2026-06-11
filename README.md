@@ -2,10 +2,10 @@
 
 [![Portfolio Website](https://img.shields.io/badge/Portfolio-Live-green?logo=vercel)](https://lyven81.github.io/ai-project/)
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-black?logo=github)](https://github.com/lyven81/ai-project)
-[![Projects](https://img.shields.io/badge/Projects-50-blue)](#projects-by-category)
+[![Projects](https://img.shields.io/badge/Projects-51-blue)](#projects-by-category)
 [![AI Powered](https://img.shields.io/badge/AI-Powered-orange?logo=tensorflow)](https://github.com/lyven81/ai-project)
 
-**50 production AI apps across 8 business categories** — each one solves a real, named pain point with a working demo you can click and try today.
+**51 production AI apps across 8 business categories** — each one solves a real, named pain point with a working demo you can click and try today.
 
 <div align="center">
 <img width="1200" height="400" alt="AI Portfolio Banner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
@@ -13,7 +13,7 @@
 
 ## 🌟 Portfolio Overview
 
-This repo contains **50 completed AI applications**, each with a working demo (live cloud URL or local `demo.html`). Projects are organized by **business use case** — so a reader can scan the list, find the category that matches their work, and immediately see which problems AI can solve there.
+This repo contains **51 completed AI applications**, each with a working demo (live cloud URL or local `demo.html`). Projects are organized by **business use case** — so a reader can scan the list, find the category that matches their work, and immediately see which problems AI can solve there.
 
 **Live site:** [lyven81.github.io/ai-project](https://lyven81.github.io/ai-project/)
 
@@ -27,12 +27,12 @@ The 8 categories below match the [live category pages](https://lyven81.github.io
 | 2 | [Multi-Agent Decision Systems](#2-multi-agent-decision-systems-7-projects) | 7 | Owners needing research → verdict pipelines |
 | 3 | [Conversational Data Analytics](#3-conversational-data-analytics-5-projects) | 5 | SME owners with data, no analyst |
 | 4 | [Content Automation](#4-content-automation-6-projects) | 6 | Solo consultants, creators, educators |
-| 5 | [Industry Specialist Advisors](#5-industry-specialist-advisors-10-projects) | 10 | Vertical experts (legal, finance, education, retail) |
+| 5 | [Industry Specialist Advisors](#5-industry-specialist-advisors-11-projects) | 11 | Vertical experts (legal, finance, education, retail, property) |
 | 6 | [Knowledge & Reference Chatbots](#6-knowledge--reference-chatbots-8-projects) | 8 | Consumers seeking guidance in plain language |
 | 7 | [Document & Productivity Tools](#7-document--productivity-tools-5-projects) | 5 | Knowledge workers, accessibility users |
 | 8 | [Agentic Commerce](#8-agentic-commerce-2-projects) | 2 | Storefronts ready for AI shopping agents |
 
-**Total: 50 projects.**
+**Total: 51 projects.**
 
 ---
 
@@ -210,7 +210,7 @@ The 8 categories below match the [live category pages](https://lyven81.github.io
 
 ---
 
-### 5. Industry Specialist Advisors (10 projects)
+### 5. Industry Specialist Advisors (11 projects)
 
 **Who it's for:** Vertical experts and operators who need an AI advisor that knows the rules and language of one specific industry — education, law, sports, finance, retail.
 
@@ -273,6 +273,12 @@ The 8 categories below match the [live category pages](https://lyven81.github.io
 - **How it's built:** A fixed point-score yardstick over the claim fields (no model, no API key) + vanilla JS + inline SVG, fully client-side, with a Python + pandas data-encoding step. No backend.
 - **Problem solved:** Motor claims handlers either rush honest claims through or over-investigate, and a probabilistic scorer can give the same claim two different verdicts. This app classifies all 15,420 real claims into Fast track, Approve, Investigate, or Repudiate by a fixed, data-grounded rule (so the same claim always lands the same way), then measures the fraud flags against the real label over the full population with catch rate, false-alarm rate, and 95% confidence intervals.
 - **Demo:** [Try it](https://lyven81.github.io/ai-project/projects/motor-claim-evaluator/demo.html)
+
+#### Property Lead Tracker
+- **What it does:** Tells a rental agency which lead channel actually signs tenants, and what each tenant costs to find from each channel.
+- **How it's built:** Python + pandas analytics over a seeded 1,140-enquiry dataset, a Chart.js internal dashboard, Jinja2 white-label owner reports, a threshold-rule monthly-insight engine (optional Claude polish), and a Power BI/DAX spec. No backend.
+- **Problem solved:** A property agency takes enquiries through five channels (PropertyGuru, Mudah, Google Ads, Meta Ads, WhatsApp referral) and cannot see which ones produce signed tenants or at what cost, so budget chases the busiest channel instead of the best one. This system follows every enquiry to its outcome, ranks each channel by cost per tenancy, flags stale listings for a price review and after-hours leads that go unanswered, and generates a branded one-page report for each landlord.
+- **Demo:** [Try it](https://lyven81.github.io/ai-project/projects/property-lead-tracker/ui-1-internal-dashboard.html)
 
 ---
 
@@ -491,7 +497,7 @@ cd projects/<project-name>
 
 ## 💼 Professional Highlights
 
-- **50 production-ready apps** — each one has a clickable demo (local `demo.html` or live Cloud Run URL)
+- **51 production-ready apps** — each one has a clickable demo (local `demo.html` or live Cloud Run URL)
 - **Built for Malaysian SMEs** — most apps solve a specific local pain point (kedai runcit, tuition centres, plumbers, FMCG distributors)
 - **Honest scoping** — no "AI" badge on apps that are scripted demos (Soon Heng, Wee Auto are clearly labelled vanilla JS scripted flows)
 

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Property Lead Tracker - Source Code</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #222; background-color: #ffffff; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        .back-nav { margin-bottom: 20px; }
+        .back-nav a { color: #007BFF; text-decoration: none; font-size: 1rem; }
+        .back-nav a:hover { text-decoration: underline; }
+        .project-header { text-align: center; margin-bottom: 40px; padding: 40px 0; background: linear-gradient(135deg, #FF5722, #BF360C); color: white; border-radius: 10px; }
+        .project-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        .project-header p { font-size: 1.2rem; opacity: 0.9; }
+        .badges { display: flex; justify-content: center; gap: 10px; margin: 20px 0; flex-wrap: wrap; }
+        .badge { background-color: rgba(255, 255, 255, 0.2); color: white; padding: 5px 12px; border-radius: 15px; font-size: 0.9rem; }
+        .content-section { margin: 40px 0; padding: 30px; background-color: #f9f9f9; border-radius: 8px; border-left: 5px solid #FF5722; }
+        .content-section h2 { color: #FF5722; margin-bottom: 20px; font-size: 1.8rem; }
+        .content-section h3 { color: #333; margin: 20px 0 10px 0; font-size: 1.3rem; }
+        .highlight-box { background: linear-gradient(135deg, #fff5f2, #ffe0d6); padding: 20px; border-radius: 10px; border-left: 5px solid #FF5722; margin: 20px 0; }
+        .code-container { background-color: #1e1e1e; border-radius: 8px; padding: 20px; margin: 20px 0; overflow-x: auto; }
+        .code-header { color: #ffab91; font-weight: bold; margin-bottom: 15px; font-size: 1.1rem; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        .code-block { font-family: 'Consolas', 'Monaco', 'Courier New', monospace; font-size: 14px; line-height: 1.5; color: #d4d4d4; white-space: pre; }
+        .code-comment { color: #6a9955; font-style: italic; }
+        .code-keyword { color: #569cd6; }
+        .code-string { color: #ce9178; }
+        .demo-links { text-align: center; margin: 30px 0; }
+        .demo-btn { display: inline-block; background-color: #FF5722; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; margin: 0 10px; font-weight: bold; transition: background-color 0.3s; }
+        .demo-btn:hover { background-color: #BF360C; }
+        .demo-btn.secondary { background-color: #455A64; }
+        .demo-btn.secondary:hover { background-color: #263238; }
+        @media (max-width: 768px) { .project-header h1 { font-size: 2rem; } .project-header p { font-size: 1rem; } .demo-btn { margin: 5px; padding: 10px 20px; } .container { padding: 15px; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="property-lead-tracker.html">← Back to Project Overview</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>🏠 Property Lead Tracker</h1>
+            <p>How the data, the reports, and the monthly notes are built</p>
+            <div class="badges">
+                <span class="badge">Python</span>
+                <span class="badge">pandas</span>
+                <span class="badge">Jinja2</span>
+                <span class="badge">Power BI / DAX</span>
+                <span class="badge">Claude API</span>
+            </div>
+        </div>
+
+        <div class="highlight-box">
+            <h3>🔍 About this code showcase</h3>
+            <p><strong>These snippets show the three pieces that make the system trustworthy: how each lead is labelled, how a landlord report is written from the numbers, and how the monthly recommendations are decided.</strong></p>
+            <p>The full project (dataset, generators, dashboard, owner-report template, insight engine, and the Power BI spec) lives in <code>projects/property-lead-tracker/</code>. Every figure on every page traces back to one seeded dataset of 1,140 enquiries.</p>
+        </div>
+
+        <div class="content-section">
+            <h2>📁 Project structure</h2>
+            <div class="code-container"><div class="code-block">projects/property-lead-tracker/
+  generate_dataset.py            <span class="code-comment"># seeded synthetic data (1,140 enquiries, reproducible)</span>
+  listings.csv  enquiries.csv    <span class="code-comment"># the fact table + the 10 listings</span>
+  ad_spend.csv  platform_costs.csv
+  ui-1-internal-dashboard.html   <span class="code-comment"># the live 5-tab agent dashboard (Chart.js)</span>
+  ui-2-owner-report.html         <span class="code-comment"># white-label owner report, live skin toggle</span>
+  ui-3-case-study.html           <span class="code-comment"># the public case study, links to everything</span>
+  owner-reports/
+    owner_report_template.html.j2  <span class="code-comment"># Jinja2 template (one CSS block per agency)</span>
+    generate_owner_reports.py      <span class="code-comment"># reads the data, writes a report per listing x month</span>
+    out/                           <span class="code-comment"># two generated samples, two agency skins</span>
+  insights/
+    generate_insights.py           <span class="code-comment"># threshold rules -> monthly written notes</span>
+    2026-03-notes.md ...           <span class="code-comment"># one notes file per month</span>
+  powerbi-spec/
+    data-model.md  measures.dax  pages.md   <span class="code-comment"># the same dashboard, built in Power BI</span></div></div>
+        </div>
+
+        <div class="content-section">
+            <h2>🏷️ 1. Labelling each lead: where it came from, how good it is</h2>
+            <p>The whole analysis rests on labelling every enquiry by channel, with a realistic quality and conversion profile for each. This is the table that lets the dashboard separate the busy channel from the one that actually signs tenants.</p>
+            <div class="code-container">
+                <div class="code-header">📄 generate_dataset.py — channel behaviour profiles</div>
+                <div class="code-block"><span class="code-comment"># share = how much volume each channel brings; q = how many are genuinely qualified;</span>
+<span class="code-comment"># view = chance of a viewing; show = chance they turn up. Referral is small but golden.</span>
+SOURCES = {
+    <span class="code-string">"mudah"</span>:        dict(share=0.38, q=0.15, view=0.30, show=0.55),  <span class="code-comment"># high volume, low quality</span>
+    <span class="code-string">"propertyguru"</span>: dict(share=0.27, q=0.42, view=0.55, show=0.75),  <span class="code-comment"># the workhorse</span>
+    <span class="code-string">"meta_ads"</span>:     dict(share=0.16, q=0.35, view=0.45, show=0.65),  <span class="code-comment"># rooms only</span>
+    <span class="code-string">"google_ads"</span>:   dict(share=0.11, q=0.55, view=0.68, show=0.80),  <span class="code-comment"># pricey but converts</span>
+    <span class="code-string">"referral"</span>:     dict(share=0.08, q=0.75, view=0.80, show=0.90),  <span class="code-comment"># the invisible champion</span>
+}</div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>📝 2. Writing the landlord report from the numbers</h2>
+            <p>The owner report is not hand-typed. A rule reads each listing's month and decides the one recommendation that matters: reprice a stale unit, celebrate a signing, or stay the course. The reprice range is computed from the asking rent, so the advice is always grounded in the data.</p>
+            <div class="code-container">
+                <div class="code-header">📄 owner-reports/generate_owner_reports.py — the recommendation rule</div>
+                <div class="code-block"><span class="code-keyword">def</span> <span class="code-keyword">recommendation</span>(f, anchor):
+    rent = int(f[<span class="code-string">"row"</span>].asking_rent_myr)
+    <span class="code-keyword">if</span> f[<span class="code-string">"signed_this_month"</span>]:
+        <span class="code-keyword">return</span> celebrate_signing()        <span class="code-comment"># the unit is tenanted, hand over</span>
+    <span class="code-keyword">if</span> f[<span class="code-string">"is_active"</span>] <span class="code-keyword">and</span> f[<span class="code-string">"velocity_drop"</span>] &gt;= 0.5 <span class="code-keyword">and</span> f[<span class="code-string">"weeks_on_market"</span>] &gt;= 6:
+        low  = round(rent * 0.88  / 50) * 50   <span class="code-comment"># reprice band, rounded to RM50</span>
+        high = round(rent * 0.913 / 50) * 50
+        <span class="code-keyword">return</span> reprice_advice(low, high, anchor)  <span class="code-comment"># a stale unit: review the price</span>
+    <span class="code-keyword">if</span> f[<span class="code-string">"new_enq"</span>] &gt;= 4 <span class="code-keyword">and</span> f[<span class="code-string">"viewings"</span>] &gt;= 1:
+        <span class="code-keyword">return</span> stay_the_course()        <span class="code-comment"># healthy: interest is converting</span>
+    <span class="code-keyword">return</span> refresh_listing()           <span class="code-comment"># quiet month: refresh and re-feature</span></div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🚩 3. The monthly flag: catching a stale listing automatically</h2>
+            <p>The insight engine compares a unit's recent enquiry pace against its opening fortnight. When interest has halved and the unit is still empty after six weeks, it writes the flag, names a cheaper comparable that kept moving, and recommends a price review instead of more ad spend.</p>
+            <div class="code-container">
+                <div class="code-header">📄 insights/generate_insights.py — the stale-listing rule</div>
+                <div class="code-block"><span class="code-keyword">if</span> drop &gt;= 0.5 <span class="code-keyword">and</span> weeks_on &gt;= 6:
+    <span class="code-comment"># find a cheaper, comparable unit that already signed</span>
+    anchor = cheaper_comparable(listing)
+    <span class="code-keyword">yield</span> (<span class="code-string">"flag"</span>,
+        f<span class="code-string">"{name} (RM{rent}) has gone stale: enquiry velocity is down "</span>
+        f<span class="code-string">"{drop:.0%} from its opening fortnight after {weeks_on} weeks. "</span>
+        f<span class="code-string">"Recommend a price review toward RM{low}-{high}, not more ad spend."</span>)</div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>📐 4. The same answer in Power BI (DAX)</h2>
+            <p>For a client who runs on Microsoft tools, the headline measure is one line. It returns blank when a channel produced no tenancies, which the dashboard shows as "Undefined", because cost divided by zero tenants is not zero, it is unanswerable.</p>
+            <div class="code-container">
+                <div class="code-header">📄 powerbi-spec/measures.dax — the headline measure</div>
+                <div class="code-block"><span class="code-comment">// HEADLINE: spend per signed tenancy, by channel</span>
+Cost per Tenancy =
+    DIVIDE ( [Source Cost], [Tenancies Signed] )
+
+<span class="code-comment">// shown as "Undefined" when a channel signed nobody (e.g. Mudah)</span>
+Cost per Tenancy (label) =
+    IF ( ISBLANK ( [Cost per Tenancy] ), <span class="code-string">"Undefined"</span>,
+         FORMAT ( [Cost per Tenancy], <span class="code-string">"\R\M #,0"</span> ) )</div>
+            </div>
+        </div>
+
+        <div class="demo-links">
+            <a href="property-lead-tracker.html" class="demo-btn">← Back to Project Overview</a>
+            <a href="https://github.com/lyven81/ai-project/tree/main/projects/property-lead-tracker" class="demo-btn secondary">📁 Full Source on GitHub</a>
+        </div>
+    </div>
+</body>
+</html>

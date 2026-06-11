@@ -1,0 +1,218 @@
+// =====================================================================
+// Lead Source Intelligence — DAX Measures
+// Reference spec. The live web dashboard (ui-1) mirrors these one-to-one.
+// Every KPI from the dictionary, grouped. Put these in a measure table
+// called [_Measures]. All amounts in MYR.
+// =====================================================================
+
+
+// ---------------------------------------------------------------------
+// 1. VOLUME & FUNNEL  (base counts the whole model builds on)
+// ---------------------------------------------------------------------
+
+Total Enquiries = COUNTROWS ( Enquiries )
+
+Qualified Enquiries =
+CALCULATE ( [Total Enquiries], Enquiries[qualified] = TRUE () )
+
+Qualified Rate =
+DIVIDE ( [Qualified Enquiries], [Total Enquiries] )   // format %
+
+Viewings Booked =
+CALCULATE ( [Total Enquiries], Enquiries[viewing_booked] = TRUE () )
+
+Viewings Attended =
+CALCULATE ( [Total Enquiries], Enquiries[viewing_attended] = TRUE () )
+
+Tenancies Signed =
+CALCULATE ( [Total Enquiries], Enquiries[outcome] = "tenancy_signed" )
+
+// Funnel conversion rates
+Enquiry to Viewing Rate =
+DIVIDE ( [Viewings Booked], [Total Enquiries] )       // format %
+
+Viewing Show-up Rate =
+DIVIDE ( [Viewings Attended], [Viewings Booked] )     // format %
+
+// Source quality: share of a source's enquiries that qualified.
+// Same formula as Qualified Rate, named for the source-comparison page.
+Source Quality Score = [Qualified Rate]
+
+
+// ---------------------------------------------------------------------
+// 2. COST  (source-level: the simple, unarguable totals)
+// ---------------------------------------------------------------------
+
+Platform Cost = SUM ( PlatformCosts[cost_myr] )       // PropertyGuru + Mudah subscriptions
+
+Ad Spend = SUM ( AdSpend[spend_myr] )                 // Google + Meta campaigns
+
+// Source Cost respects whatever source/month filter is in context.
+// Grand total over all sources & months = RM9,060.
+Source Cost = [Platform Cost] + [Ad Spend]
+
+Total Spend = CALCULATE ( [Source Cost], ALL ( SourceDim ), ALL ( DateDim ) )
+
+
+// ---------------------------------------------------------------------
+// 3. EFFICIENCY  (cost ÷ funnel stage — the heart of the analysis)
+// ---------------------------------------------------------------------
+
+Cost per Enquiry =
+DIVIDE ( [Source Cost], [Total Enquiries] )
+
+Cost per Qualified Enquiry =
+DIVIDE ( [Source Cost], [Qualified Enquiries] )
+
+Cost per Viewing Booked =
+DIVIDE ( [Source Cost], [Viewings Booked] )
+
+// HEADLINE measure. BLANK when a source produced zero tenancies
+// (e.g. Mudah) — surface that as the text "Undefined" in the visual,
+// because RM cost ÷ 0 tenancies is not zero, it is undefined.
+Cost per Tenancy =
+DIVIDE ( [Source Cost], [Tenancies Signed] )
+
+Cost per Tenancy (label) =
+IF ( ISBLANK ( [Cost per Tenancy] ), "Undefined",
+     FORMAT ( [Cost per Tenancy], "\R\M #,0" ) )
+
+
+// ---------------------------------------------------------------------
+// 4. RESPONSIVENESS  (the after-hours leak, insight #5)
+// ---------------------------------------------------------------------
+
+// first_response_min is blank for unanswered enquiries, so MEDIAN
+// ignores them automatically — no zero-fill needed.
+Median Response Time (min) =
+MEDIAN ( Enquiries[first_response_min] )
+
+Median Response Time — Office =
+CALCULATE ( [Median Response Time (min)], Enquiries[after_hours] = FALSE () )
+
+Unanswered Enquiries =
+CALCULATE ( [Total Enquiries], Enquiries[outcome] = "unanswered" )
+
+Unanswered Rate =
+DIVIDE ( [Unanswered Enquiries], [Total Enquiries] )  // format %
+
+Unanswered Rate — Office =
+CALCULATE ( [Unanswered Rate], Enquiries[after_hours] = FALSE () )
+
+Unanswered Rate — After Hours =
+CALCULATE ( [Unanswered Rate], Enquiries[after_hours] = TRUE () )
+
+After-Hours Share =
+DIVIDE (
+    CALCULATE ( [Total Enquiries], Enquiries[after_hours] = TRUE () ),
+    [Total Enquiries]
+)
+
+// Rough money lost: unanswered enquiries on PAID sources, valued at
+// each source's cost-per-enquiry. Referral/organic excluded (no media cost).
+Paid Leads Lost (RM) =
+SUMX (
+    VALUES ( SourceDim[source] ),
+    VAR cpe = [Cost per Enquiry]
+    VAR unansweredPaid =
+        CALCULATE (
+            [Unanswered Enquiries],
+            Enquiries[source] IN { "google_ads", "meta_ads", "propertyguru" }
+        )
+    RETURN cpe * unansweredPaid
+)
+
+
+// ---------------------------------------------------------------------
+// 5. LISTING-LEVEL ALLOCATED COST  (uses the ListingDaysByMonth bridge)
+//    Portfolio-level costs pushed down to one listing, always an allocation.
+// ---------------------------------------------------------------------
+
+// Subscriptions spread by each listing's share of days-listed that month.
+Allocated Platform Cost =
+SUMX (
+    VALUES ( DateDim[Month] ),
+    VAR monthCost     = CALCULATE ( [Platform Cost] )
+    VAR listingDays   = CALCULATE ( SUM ( ListingDaysByMonth[DaysListed] ) )
+    VAR portfolioDays = CALCULATE ( SUM ( ListingDaysByMonth[DaysListed] ), ALL ( Listings ) )
+    RETURN monthCost * DIVIDE ( listingDays, portfolioDays )
+)
+
+// Campaign spend attributed to listings matching the campaign's target
+// segment, by days-listed share within that segment.
+Allocated Ad Spend =
+SUMX (
+    VALUES ( DateDim[Month] ),
+    SUMX (
+        VALUES ( AdSpend[target_segment] ),
+        VAR seg           = AdSpend[target_segment]
+        VAR monthSegSpend = CALCULATE ( [Ad Spend] )
+        VAR listingDays   =
+            CALCULATE (
+                SUM ( ListingDaysByMonth[DaysListed] ),
+                FILTER ( Listings, Listings[segment] = seg )
+            )
+        VAR segDays =
+            CALCULATE (
+                SUM ( ListingDaysByMonth[DaysListed] ),
+                ALL ( Listings ),
+                FILTER ( ALL ( Listings ), Listings[segment] = seg )
+            )
+        RETURN monthSegSpend * DIVIDE ( listingDays, segDays )
+    )
+)
+
+Allocated Listing Cost = [Allocated Platform Cost] + [Allocated Ad Spend]
+
+
+// ---------------------------------------------------------------------
+// 6. LISTING PERFORMANCE: days on market, velocity, stale flag (insight #4)
+//    Requires calc column  Enquiries[WeekOfLife] =
+//      INT ( DATEDIFF ( RELATED ( Listings[listed_date] ), Enquiries[datetime], DAY ) / 7 )
+// ---------------------------------------------------------------------
+
+Days on Market = AVERAGE ( Listings[days_on_market] )   // per-listing context returns its own value
+
+// Average enquiries/week over the listing's first two weeks live.
+Early Velocity =
+DIVIDE (
+    CALCULATE ( [Total Enquiries], Enquiries[WeekOfLife] <= 1 ),
+    2
+)
+
+// Average enquiries/week over the most recent four weeks of life.
+Recent Velocity =
+VAR maxWk = CALCULATE ( MAX ( Enquiries[WeekOfLife] ), ALLEXCEPT ( Enquiries, Listings ) )
+RETURN
+DIVIDE (
+    CALCULATE ( [Total Enquiries], Enquiries[WeekOfLife] > maxWk - 4 ),
+    4
+)
+
+Velocity Drop % =
+DIVIDE ( [Early Velocity] - [Recent Velocity], [Early Velocity] )
+
+// STALE = still active AND velocity collapsed at least 50% vs the opening fortnight.
+Stale Flag =
+VAR isActive = SELECTEDVALUE ( Listings[status] ) = "active"
+RETURN
+IF (
+    isActive && [Velocity Drop %] >= 0.5,
+    "STALE — price review",
+    ""
+)
+
+
+// ---------------------------------------------------------------------
+// 7. PORTFOLIO SELL-THROUGH (insight #8) — restock warning
+// ---------------------------------------------------------------------
+
+Active Listings =
+CALCULATE ( DISTINCTCOUNT ( Listings[listing_id] ), Listings[status] = "active" )
+
+Restock Warning =
+IF (
+    [Active Listings] <= 3 && [Total Enquiries] < 100,
+    "Pipeline thinning — onboard 3 to 4 new listings",
+    ""
+)

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lead Source Intelligence — Internal Dashboard | Klang Valley Homes Realty</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+:root{--navy:#1E3A5F;--blue:#4A7FB5;--soft:#EAF1F8;--ink:#22303F;--muted:#5B6B7C;--line:#D9E2EC;--bg:#F5F7FA;--green:#2F7D5C;--amber:#B07A2A;--red:#A8453A}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Manrope',sans-serif;background:var(--bg);color:var(--ink);font-size:14.5px;line-height:1.55}
+.top{background:var(--navy);color:#fff;padding:20px 28px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.top h1{font-family:'Fraunces',serif;font-weight:600;font-size:22px}
+.top .sub{font-size:12px;color:#9FBEDC;margin-top:2px}
+.period{font-size:12.5px;background:rgba(255,255,255,.12);padding:6px 14px;border-radius:99px}
+nav{background:#fff;border-bottom:1px solid var(--line);padding:0 28px;display:flex;gap:4px;overflow-x:auto}
+nav button{border:none;background:none;font-family:'Manrope';font-weight:700;font-size:13.5px;color:var(--muted);padding:14px 16px;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap}
+nav button.on{color:var(--navy);border-bottom-color:var(--blue)}
+main{max-width:1180px;margin:0 auto;padding:26px 28px}
+.tab{display:none}.tab.on{display:block}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:22px}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px 18px}
+.kpi .v{font-family:'Fraunces',serif;font-size:30px;color:var(--navy);font-weight:600}
+.kpi .l{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-top:3px}
+.kpi .d{font-size:12px;margin-top:5px;font-weight:700}
+.up{color:var(--green)}.down{color:var(--red)}.flat{color:var(--muted)}
+.row{display:grid;grid-template-columns:1.4fr 1fr;gap:16px;margin-bottom:16px}
+@media(max-width:900px){.row{grid-template-columns:1fr}}
+.panel{background:#fff;border:1px solid var(--line);border-radius:10px;padding:18px 20px}
+.panel h3{font-size:14px;font-weight:800;color:var(--navy);margin-bottom:4px}
+.panel .hint{font-size:12px;color:var(--muted);margin-bottom:12px}
+canvas{max-height:300px}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{text-align:left;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:8px 10px;border-bottom:2px solid var(--line)}
+td{padding:9px 10px;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}
+.tag{display:inline-block;font-size:11px;font-weight:800;padding:2px 9px;border-radius:99px}
+.t-g{background:#E7F3EE;color:var(--green)}.t-a{background:#F6EEDF;color:var(--amber)}.t-r{background:#F6E7E5;color:var(--red)}.t-b{background:var(--soft);color:var(--blue)}.t-n{background:var(--navy);color:#fff}
+.note{background:var(--soft);border-left:4px solid var(--blue);border-radius:8px;padding:14px 16px;font-size:13.5px;margin:14px 0}
+.note strong{color:var(--navy)}
+.bar{height:8px;border-radius:99px;background:var(--line);overflow:hidden}.bar i{display:block;height:100%;background:var(--blue)}
+</style>
+</head>
+<body>
+<div class="top">
+  <div><h1>Lead Source Intelligence</h1><div class="sub">Klang Valley Homes Realty · Internal dashboard · Adeline Khoo (PEA 9183)</div></div>
+  <div style="display:flex;align-items:center;gap:14px">
+    <a href="ui-3-case-study.html" style="font-size:12.5px;color:#9FBEDC;text-decoration:none;font-weight:700">← Case study</a>
+    <div class="period">Dec 2025 – May 2026 · 10 listings · demo data</div>
+  </div>
+</div>
+<nav>
+  <button class="on" data-t="t1">Overview</button><button data-t="t2">Source comparison</button>
+  <button data-t="t3">Listing performance</button><button data-t="t4">Lead quality</button><button data-t="t5">Responsiveness</button>
+</nav>
+<main>
+
+<!-- OVERVIEW -->
+<div class="tab on" id="t1">
+  <div class="kpis">
+    <div class="kpi"><div class="v">1,140</div><div class="l">Enquiries</div><div class="d flat">5 sources</div></div>
+    <div class="kpi"><div class="v">359</div><div class="l">Qualified</div><div class="d flat">31.5% of total</div></div>
+    <div class="kpi"><div class="v">192</div><div class="l">Viewings booked</div><div class="d up">149 attended</div></div>
+    <div class="kpi"><div class="v">7</div><div class="l">Tenancies signed</div><div class="d up">7 of 10 listings</div></div>
+    <div class="kpi"><div class="v">RM 1,294</div><div class="l">Avg cost per tenancy</div><div class="d flat">RM9,060 total spend</div></div>
+  </div>
+  <div class="row">
+    <div class="panel"><h3>Monthly enquiries by source</h3><div class="hint">Stacked volume. Note the decline from March as listings sign: restock warning.</div><canvas id="cMonthly"></canvas></div>
+    <div class="panel"><h3>Tenancy wins</h3><div class="hint">Conversion by source and listing</div>
+      <table><tr><th>Listing</th><th>Source</th><th>Signed</th></tr>
+      <tr><td>Lavile KL</td><td>Google Ads</td><td>2 Jan</td></tr><tr><td>Arte Mont Kiara</td><td>PropertyGuru</td><td>18 Feb</td></tr>
+      <tr><td>J.Dupion master</td><td>Referral</td><td>9 Mar</td></tr><tr><td>Razak City studio</td><td>Google Ads</td><td>26 Mar</td></tr>
+      <tr><td>M Vertica room</td><td>Referral</td><td>6 Apr</td></tr><tr><td>Nexus room</td><td>Meta Ads</td><td>21 Apr</td></tr>
+      <tr><td>Nexus whole unit</td><td>PropertyGuru</td><td>12 May</td></tr></table>
+    </div>
+  </div>
+  <div class="note"><strong>This month's flag:</strong> enquiry volume fell to 64 in May from a peak of 299 in February. Seven listings have signed and the portfolio is selling through. Recommend onboarding 3 to 4 new listings to keep the pipeline working.</div>
+</div>
+
+<!-- SOURCES -->
+<div class="tab" id="t2">
+  <div class="panel" style="margin-bottom:16px"><h3>Cost per tenancy by source · the headline table</h3><div class="hint">Source cost ÷ tenancies signed. Volume means nothing until it converts.</div>
+    <table>
+      <tr><th>Source</th><th>Enquiries</th><th>Qualified</th><th>Enq→Viewing</th><th>Cost / enquiry</th><th>Cost / viewing</th><th>Tenancies</th><th>Cost / tenancy</th><th>Verdict</th></tr>
+      <tr><td><b>Referral</b></td><td>101</td><td>67%</td><td>54%</td><td>RM 0</td><td>RM 0</td><td>2</td><td><b>RM 0</b></td><td><span class="tag t-g">Champion</span></td></tr>
+      <tr><td><b>PropertyGuru</b></td><td>293</td><td>41%</td><td>17%</td><td>RM 9.22</td><td>RM 53</td><td>2</td><td><b>RM 1,350</b></td><td><span class="tag t-g">Workhorse</span></td></tr>
+      <tr><td><b>Google Ads</b></td><td>115</td><td>50%</td><td>37%</td><td>RM 31.30</td><td>RM 84</td><td>2</td><td><b>RM 1,800</b></td><td><span class="tag t-b">Quality engine</span></td></tr>
+      <tr><td><b>Meta Ads</b></td><td>172</td><td>27%</td><td>12%</td><td>RM 13.95</td><td>RM 120</td><td>1</td><td><b>RM 2,400</b></td><td><span class="tag t-a">Rooms only</span></td></tr>
+      <tr><td><b>Mudah.my</b></td><td>459</td><td>15%</td><td>5%</td><td>RM 0.78</td><td>RM 16</td><td>0</td><td><b>Undefined</b></td><td><span class="tag t-r">Volume trap</span></td></tr>
+    </table>
+  </div>
+  <div class="row">
+    <div class="panel"><h3>Volume vs quality</h3><div class="hint">Share of enquiries vs qualified rate. Mudah owns volume; referral owns quality.</div><canvas id="cVolQ"></canvas></div>
+    <div class="panel"><h3>Reading the table</h3>
+      <div class="note" style="margin-top:0"><strong>Mudah inversion:</strong> 40% of all enquiries, zero tenancies in six months. Cheap leads are not cheap if they never sign.</div>
+      <div class="note"><strong>Google pays off:</strong> the most expensive enquiry (RM31) becomes the second-cheapest paid tenancy (RM1,800), because half its leads are qualified.</div>
+      <div class="note"><strong>Action:</strong> formalize a referral ask at every signing; cap Meta to room campaigns; treat Mudah as free background noise, never paid boosts.</div>
+    </div>
+  </div>
+</div>
+
+<!-- LISTINGS -->
+<div class="tab" id="t3">
+  <div class="panel" style="margin-bottom:16px"><h3>Portfolio health</h3><div class="hint">Velocity = enquiries per week trend over last 4 active weeks vs first 2 weeks listed</div>
+    <table>
+      <tr><th>Listing</th><th>Segment</th><th>Rent</th><th>Enquiries</th><th>Qualified</th><th>Viewings</th><th>Days on market</th><th>Status</th></tr>
+      <tr><td>Lavile KL</td><td>Whole unit</td><td>1,800</td><td>49</td><td>19</td><td>10</td><td>23</td><td><span class="tag t-g">Signed · star</span></td></tr>
+      <tr><td>Arte Mont Kiara</td><td>Whole unit</td><td>1,749</td><td>87</td><td>30</td><td>17</td><td>79</td><td><span class="tag t-g">Signed</span></td></tr>
+      <tr><td>M Vertica room</td><td>Room</td><td>850</td><td>121</td><td>33</td><td>16</td><td>84</td><td><span class="tag t-g">Signed</span></td></tr>
+      <tr><td>J.Dupion master</td><td>Room</td><td>1,200</td><td>117</td><td>29</td><td>17</td><td>91</td><td><span class="tag t-g">Signed</span></td></tr>
+      <tr><td>Razak City studio</td><td>Studio</td><td>1,350</td><td>95</td><td>32</td><td>23</td><td>96</td><td><span class="tag t-g">Signed</span></td></tr>
+      <tr><td>Nexus whole unit</td><td>Whole unit</td><td>2,999</td><td>80</td><td>31</td><td>21</td><td>127</td><td><span class="tag t-g">Signed</span></td></tr>
+      <tr><td>Nexus room</td><td>Room</td><td>899</td><td>211</td><td>67</td><td>29</td><td>141</td><td><span class="tag t-g">Signed</span></td></tr>
+      <tr><td>28 Boulevard studio</td><td>Studio</td><td>1,599</td><td>112</td><td>35</td><td>18</td><td>167</td><td><span class="tag t-b">Active</span></td></tr>
+      <tr><td>J.Dupion female room</td><td>Room</td><td>799</td><td>210</td><td>65</td><td>31</td><td>174</td><td><span class="tag t-a">Active · mismatch issue</span></td></tr>
+      <tr><td><b>Sunway Velocity Two</b></td><td>Whole unit</td><td>3,400</td><td>58</td><td>18</td><td>10</td><td>119</td><td><span class="tag t-r">STALE · price review</span></td></tr>
+    </table>
+  </div>
+  <div class="row">
+    <div class="panel"><h3>The stale signal</h3><div class="hint">Weekly enquiries from listing date: Sunway Velocity Two (RM3,400) vs comparable Nexus whole unit (RM2,999), both Cheras 3R2B</div><canvas id="cStale"></canvas></div>
+    <div class="panel"><h3>What the curve means</h3>
+      <div class="note" style="margin-top:0"><strong>Week 1 to 2:</strong> SV2 attracted 29 enquiries, healthy curiosity for a premium tower.</div>
+      <div class="note"><strong>Week 3 onward:</strong> velocity collapsed roughly 70% and never recovered, while Nexus at RM2,999 kept moving and signed in May.</div>
+      <div class="note"><strong>Recommendation:</strong> the market has answered the RM400 premium. Reprice toward RM3,000 to 3,100 or add value (parking, flexible terms).</div>
+    </div>
+  </div>
+</div>
+
+<!-- QUALITY -->
+<div class="tab" id="t4">
+  <div class="row">
+    <div class="panel"><h3>Outcome distribution (1,140 enquiries)</h3><div class="hint">Where leads end up. "Unanswered" is money already spent and then dropped.</div><canvas id="cOutcome"></canvas></div>
+    <div class="panel"><h3>Funnel by source</h3><div class="hint">Qualified rate, then enquiry-to-viewing rate</div>
+      <table><tr><th>Source</th><th>Qualified</th><th></th><th>Enq→View</th></tr>
+      <tr><td>Referral</td><td>67%</td><td style="width:34%"><div class="bar"><i style="width:67%"></i></div></td><td>54%</td></tr>
+      <tr><td>Google Ads</td><td>50%</td><td><div class="bar"><i style="width:50%"></i></div></td><td>37%</td></tr>
+      <tr><td>PropertyGuru</td><td>41%</td><td><div class="bar"><i style="width:41%"></i></div></td><td>17%</td></tr>
+      <tr><td>Meta Ads</td><td>27%</td><td><div class="bar"><i style="width:27%"></i></div></td><td>12%</td></tr>
+      <tr><td>Mudah.my</td><td>15%</td><td><div class="bar"><i style="width:15%"></i></div></td><td>5%</td></tr></table>
+      <div class="note"><strong>Mismatch hotspot:</strong> the J.Dupion female room receives a heavy share of male enquiries via Mudah (planted at 28% of its Mudah traffic). Fix the listing copy and Mudah category to filter at the source.</div>
+    </div>
+  </div>
+</div>
+
+<!-- RESPONSIVENESS -->
+<div class="tab" id="t5">
+  <div class="kpis">
+    <div class="kpi"><div class="v">33 min</div><div class="l">Median response time</div><div class="d flat">office hours</div></div>
+    <div class="kpi"><div class="v">19.6%</div><div class="l">After-hours share</div><div class="d flat">8pm–11pm + weekends</div></div>
+    <div class="kpi"><div class="v">6.8%</div><div class="l">Unanswered · office hrs</div><div class="d up">acceptable</div></div>
+    <div class="kpi"><div class="v">20.2%</div><div class="l">Unanswered · after hrs</div><div class="d down">3x leak</div></div>
+    <div class="kpi"><div class="v">~RM 700</div><div class="l">Paid leads lost</div><div class="d down">unanswered, 6 months</div></div>
+  </div>
+  <div class="row">
+    <div class="panel"><h3>The after-hours leak</h3><div class="hint">Unanswered rate by time slot</div><canvas id="cAH"></canvas></div>
+    <div class="panel"><h3>Recommendation</h3>
+      <div class="note" style="margin-top:0"><strong>One in five enquiries</strong> arrives after 8pm or on weekends, when renters actually browse, and one in five of those never gets a reply.</div>
+      <div class="note"><strong>Fix:</strong> WhatsApp auto-acknowledgement with three qualifying questions (move-in date, occupants, viewing availability) holds the lead overnight at zero cost. Recovering half the leak is worth roughly RM350 in paid leads plus the referral and portal leads on top.</div>
+    </div>
+  </div>
+</div>
+</main>
+<script>
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{
+  document.querySelectorAll("nav button").forEach(x=>x.classList.remove("on"));
+  document.querySelectorAll(".tab").forEach(x=>x.classList.remove("on"));
+  b.classList.add("on");document.getElementById(b.dataset.t).classList.add("on");});
+const C={navy:"#1E3A5F",blue:"#4A7FB5",soft:"#9FBEDC",amber:"#B07A2A",red:"#A8453A",green:"#2F7D5C",grey:"#C7D2DD"};
+Chart.defaults.font.family="'Manrope',sans-serif";Chart.defaults.color="#5B6B7C";
+new Chart(cMonthly,{type:"bar",data:{labels:["Dec","Jan","Feb","Mar","Apr","May"],datasets:[
+ {label:"Mudah",data:[74,121,123,72,49,20],backgroundColor:C.grey},
+ {label:"PropertyGuru",data:[49,71,86,42,29,16],backgroundColor:C.navy},
+ {label:"Meta Ads",data:[34,47,35,26,17,13],backgroundColor:C.soft},
+ {label:"Google Ads",data:[27,27,29,19,6,7],backgroundColor:C.blue},
+ {label:"Referral",data:[18,26,26,13,10,8],backgroundColor:C.green}]},
+ options:{responsive:true,scales:{x:{stacked:true},y:{stacked:true}},plugins:{legend:{position:"bottom"}}}});
+new Chart(cVolQ,{type:"bar",data:{labels:["Mudah","PropertyGuru","Meta Ads","Google Ads","Referral"],datasets:[
+ {label:"Share of enquiries %",data:[40.3,25.7,15.1,10.1,8.9],backgroundColor:C.grey},
+ {label:"Qualified rate %",data:[15,41,27,50,67],backgroundColor:C.blue}]},
+ options:{plugins:{legend:{position:"bottom"}}}});
+new Chart(cStale,{type:"line",data:{labels:[...Array(16).keys()].map(i=>"Wk "+(i+1)),datasets:[
+ {label:"Sunway Velocity Two RM3,400",data:[14,15,4,3,3,0,2,2,2,2,1,1,4,0,3,1],borderColor:C.red,backgroundColor:C.red,tension:.3},
+ {label:"Nexus whole unit RM2,999",data:[9,8,2,8,4,4,4,6,2,2,7,5,3,2,1,5],borderColor:C.blue,backgroundColor:C.blue,tension:.3}]},
+ options:{plugins:{legend:{position:"bottom"}}}});
+new Chart(cOutcome,{type:"doughnut",data:{labels:["No reply","Lowball","Requirement mismatch","Budget mismatch","Unanswered","Still open","Lost to other","No show","Viewing pipeline","Tenancy signed"],
+ datasets:[{data:[349,177,158,114,107,81,69,43,35,7],backgroundColor:[C.grey,"#B9C6D2",C.amber,"#D9B98A",C.red,C.soft,"#8FA8C0",C.navy,C.blue,C.green]}]},
+ options:{plugins:{legend:{position:"right"}}}});
+new Chart(cAH,{type:"bar",data:{labels:["Office hours (917 enquiries)","After hours (223 enquiries)"],datasets:[
+ {label:"Unanswered rate %",data:[6.8,20.2],backgroundColor:[C.blue,C.red]}]},
+ options:{plugins:{legend:{display:false}},scales:{y:{max:25}}}});
+</script>
+</body>
+</html>
