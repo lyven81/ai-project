@@ -143,7 +143,7 @@
         <li>You enter your Gemini API key (kept in browser session only)</li>
         <li>Agent picks MCP tools from a catalog of 5</li>
         <li>Tools query pre-aggregated data in-browser</li>
-        <li>Gemini 2.0 Flash writes the narrative grounded in real numbers</li>
+        <li>Gemini 2.5 Flash writes the narrative grounded in real numbers</li>
       </ul>
       <h2>Get a Gemini API Key</h2>
       <p><a href="https://aistudio.google.com/apikey" target="_blank">Google AI Studio → API Keys</a> (free tier available)</p>
@@ -516,7 +516,7 @@ ${toolContext}`;
   const loader = addMsg('<em>Agent is analyzing data…</em>', 'agent');
 
   try {
-    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

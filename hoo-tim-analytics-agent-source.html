@@ -117,7 +117,7 @@ district_table = [{
 
             <div class="explain">
                 <h4>4. Grounded Gemini call — strict "don't invent"</h4>
-                <p>The system prompt pins the agent to the tool output. Gemini 2.0 Flash is cheap, fast, and obedient with temperature 0.2. The MCP outputs are inlined so the model has no excuse to hallucinate numbers.</p>
+                <p>The system prompt pins the agent to the tool output. Gemini 2.5 Flash is cheap, fast, and obedient with temperature 0.2. The MCP outputs are inlined so the model has no excuse to hallucinate numbers.</p>
             </div>
 <pre>const systemPrompt = `You are the Hoo Tim Analytics Agent...
 
@@ -133,7 +133,7 @@ MCP TOOL OUTPUTS:
 ${toolContext}`;
 
 await fetch(`https://generativelanguage.googleapis.com/v1beta/
-    models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
+    models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({
