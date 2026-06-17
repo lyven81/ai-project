@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Voucher Analyzer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#1E3A5F;--blue:#4A7FB5;--soft:#EAF1F8;--line:#CBDDEF;--ink:#22303C;--muted:#5C6B78;--bg:#F7F9FB;
+ --pos:#2E7D5B;--posbg:#E3F1EA;--neg:#9A4150;--negbg:#F6E3E7;--warn:#B5532A;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Manrope",system-ui,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+header{background:var(--navy);color:#fff;padding:22px 28px}
+header h1{font-family:"Fraunces",Georgia,serif;font-weight:600;font-size:1.5rem;margin:0}
+header p{margin:3px 0 0;color:#BFD3E8;font-size:.85rem}
+nav{display:flex;gap:4px;background:#fff;border-bottom:1px solid var(--line);padding:0 16px;flex-wrap:wrap;position:sticky;top:0;z-index:5}
+nav button{font-family:inherit;border:none;background:none;padding:14px 16px;font-size:.9rem;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;font-weight:600}
+nav button.on{color:var(--navy);border-bottom-color:var(--blue)}
+main{max-width:980px;margin:0 auto;padding:26px 20px 80px}
+.screen{display:none} .screen.on{display:block}
+h2{font-family:"Fraunces",Georgia,serif;font-weight:600;color:var(--navy);font-size:1.35rem;margin:8px 0 2px}
+.sub{color:var(--muted);margin:0 0 18px;font-size:.95rem}
+h3{font-size:1rem;color:var(--navy);margin:30px 0 8px;font-weight:700}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin:8px 0 6px}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.kpi .v{font-family:"Fraunces",Georgia,serif;font-size:1.8rem;color:var(--navy);font-weight:600;line-height:1}
+.kpi .l{font-size:.78rem;color:var(--muted);margin-top:6px}
+.callout{background:var(--soft);border:1px solid var(--line);border-left:4px solid var(--blue);border-radius:10px;padding:16px 20px;margin:18px 0}
+.callout b{color:var(--navy)}
+table{width:100%;border-collapse:collapse;margin:10px 0;font-size:.88rem;background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+th{background:var(--navy);color:#fff;text-align:left;padding:10px 11px;font-size:.74rem;font-weight:600;letter-spacing:.02em}
+td{padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+.mono{font-variant-numeric:tabular-nums}
+.chip{display:inline-block;font-size:.7rem;font-weight:700;padding:2px 9px;border-radius:20px}
+.c-scale{background:var(--posbg);color:var(--pos)} .c-keep{background:var(--soft);color:var(--blue)} .c-kill{background:var(--negbg);color:var(--neg)}
+.bar{height:8px;border-radius:5px;background:var(--soft);overflow:hidden;min-width:60px}
+.bar i{display:block;height:100%}
+.pos{color:var(--pos);font-weight:600}.negv{color:var(--neg);font-weight:600}
+.grad{display:flex;gap:6px;align-items:flex-end;height:90px;margin:6px 0 2px}
+.grad .g{flex:1;text-align:center;font-size:.65rem;color:var(--muted)}
+.grad .g i{display:block;border-radius:4px 4px 0 0;margin-bottom:4px}
+.mx td.cell{text-align:center;font-variant-numeric:tabular-nums;font-size:.8rem}
+.note{font-size:.85rem;color:var(--muted)}
+.stub{background:#fff;border:1px dashed var(--blue);border-radius:12px;padding:22px;margin-top:10px}
+.qa{background:var(--soft);border-radius:10px;padding:12px 14px;margin:10px 0}
+.qa .q{font-weight:700;color:var(--navy);font-size:.9rem}
+.qa .a{font-size:.88rem;margin-top:4px}
+.ph{display:flex;gap:8px;margin-top:14px}
+.ph input{flex:1;padding:10px 12px;border:1px solid var(--line);border-radius:8px;font-family:inherit;font-size:.9rem}
+.ph button{background:var(--blue);color:#fff;border:none;border-radius:8px;padding:0 16px;font-weight:600;cursor:not-allowed;opacity:.6}
+.tag{display:inline-block;background:var(--soft);color:var(--blue);font-size:.7rem;font-weight:700;padding:2px 8px;border-radius:6px;margin:2px 4px 2px 0}
+.tag.bad{background:var(--negbg);color:var(--neg)}
+.kq{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 20px;margin:14px 0}
+.kq .qq{font-family:"Fraunces",Georgia,serif;color:var(--navy);font-size:1.04rem;font-weight:600;margin-bottom:6px}
+.kq .aa{font-size:.92rem;margin-bottom:12px}
+.kqchart{display:flex;flex-direction:column;gap:5px}
+.kqrow{display:flex;align-items:center;gap:8px;font-size:.78rem}
+.kqlab{width:132px;flex:none;color:var(--muted);text-align:right;line-height:1.2}
+.kqtrack{flex:1;height:13px;background:var(--soft);border-radius:7px;overflow:hidden}
+.kqtrack i{display:block;height:100%}
+.kqval{width:84px;flex:none;text-align:right;font-variant-numeric:tabular-nums;color:var(--navy);font-weight:600}
+.kqsplit{display:flex;height:28px;border-radius:8px;overflow:hidden;font-size:.74rem;color:#fff;font-weight:700}
+.kqsplit>div{display:flex;align-items:center;justify-content:center;min-width:0}
+.kqgroup{display:flex;flex-direction:column;gap:8px}
+.kqgrow .gl{color:var(--muted);font-size:.76rem;margin-bottom:3px}
+.kqgrow .gb{display:flex;align-items:center;gap:6px;margin:2px 0;font-size:.74rem}
+.kqgrow .gb>span:first-child{width:42px;flex:none;color:var(--muted)}
+.kqgrow .gb .t{flex:1;height:11px;background:var(--soft);border-radius:6px;overflow:hidden}
+.kqgrow .gb .t i{display:block;height:100%}
+@media(max-width:560px){main{padding:18px 12px 60px} table{font-size:.78rem} th,td{padding:7px 7px} .kqlab{width:96px}}
+
+.acc{background:#fff;border:1px solid var(--line);border-radius:10px;margin:8px 0;overflow:hidden}
+.acc-q{width:100%;text-align:left;border:none;background:none;color:var(--navy);font-size:1rem;font-weight:600;padding:14px 18px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;font-family:"Fraunces",Georgia,serif}
+.acc-q:hover,.acc.open .acc-q{background:var(--soft)}
+.acc-ic{flex:none;color:var(--blue);font-size:1.25rem;font-weight:700;width:18px;text-align:center}
+.acc-a{display:none;padding:2px 18px 18px}
+.acc.open .acc-a{display:block}
+.acc-a .aa{font-size:.92rem;margin:8px 0 12px}
+.gtag{display:inline-block;font-size:.68rem;font-weight:700;letter-spacing:.02em;color:var(--blue);background:var(--soft);border:1px solid var(--line);padding:2px 9px;border-radius:6px;margin:8px 0}
+.gtag code{background:rgba(255,255,255,.6);padding:0 4px;border-radius:4px;font-size:.95em}
+.gtag.live{color:var(--pos);background:var(--posbg);border-color:#bfe0cd}
+.sqlbox{background:#0F2236;color:#DCE8F4;border-radius:8px;padding:10px 13px;overflow-x:auto;font-size:.76rem;font-family:ui-monospace,Menlo,Consolas,monospace;line-height:1.5;margin:4px 0 12px;white-space:pre}
+#kqlive{margin-top:6px}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/sql-wasm.js"></script>
+<script src="voucher-data.js"></script>
+</head>
+<body>
+<header><h1>Voucher Analyzer</h1><p>See which vouchers actually made money, and plan what to run next.</p></header>
+<nav id="nav"></nav>
+<main>
+  <section class="screen on" id="overview"></section>
+  <section class="screen" id="scorecard"></section>
+  <section class="screen" id="matrix"></section>
+  <section class="screen" id="newproduct"></section>
+  <section class="screen" id="keyquestions"></section>
+</main>
+<script>
+const RESULTS = {"meta": {"generated": "2026-06-17", "orders": 27232, "redemptions": 2678, "categories": ["Grocery", "Toys", "Beauty", "Fashion", "Sports", "Home", "Electronics"], "vouchers": ["F1", "F2", "F3", "P1", "P2", "P3", "N1"]}, "overview": {"promo_spend": 52103.0, "real_incremental_margin": 81969.0, "subsidy_share": 0.571, "best": "F1", "worst": "P3", "orders": 27232, "redemptions": 2678}, "scorecard": {"F1": {"redeemed": 937, "discount_cost": 4685.0, "est_incremental_share": 0.451, "incremental_contribution": 26816.57, "subsidy_loss": 2571.3, "net_pnl": 24245.27, "roi": 5.175, "verdict": "scale", "issued": 1000, "redemption_rate": 0.937, "mechanic": "fixed", "value": "RM5", "threshold": 50, "eff_disc": 0.047}, "F2": {"redeemed": 311, "discount_cost": 3110.0, "est_incremental_share": 0.428, "incremental_contribution": 18424.0, "subsidy_loss": 1778.0, "net_pnl": 16646.0, "roi": 5.352, "verdict": "scale", "issued": 1000, "redemption_rate": 0.311, "mechanic": "fixed", "value": "RM10", "threshold": 150, "eff_disc": 0.038}, "F3": {"redeemed": 171, "discount_cost": 3420.0, "est_incremental_share": 0.441, "incremental_contribution": 12473.31, "subsidy_loss": 1912.72, "net_pnl": 10560.59, "roi": 3.088, "verdict": "scale", "issued": 1000, "redemption_rate": 0.171, "mechanic": "fixed", "value": "RM20", "threshold": 250, "eff_disc": 0.05}, "P1": {"redeemed": 466, "discount_cost": 5559.58, "est_incremental_share": 0.438, "incremental_contribution": 21363.94, "subsidy_loss": 3256.45, "net_pnl": 18107.49, "roi": 3.257, "verdict": "scale", "issued": 1000, "redemption_rate": 0.466, "mechanic": "percentage", "value": "5%", "threshold": 100, "eff_disc": 0.043}, "P2": {"redeemed": 239, "discount_cost": 8770.76, "est_incremental_share": 0.43, "incremental_contribution": 14607.81, "subsidy_loss": 5124.29, "net_pnl": 9483.52, "roi": 1.081, "verdict": "scale", "issued": 1000, "redemption_rate": 0.239, "mechanic": "percentage", "value": "10%", "threshold": 200, "eff_disc": 0.089}, "P3": {"redeemed": 280, "discount_cost": 25237.39, "est_incremental_share": 0.444, "incremental_contribution": 13397.74, "subsidy_loss": 14341.28, "net_pnl": -943.54, "roi": -0.037, "verdict": "kill", "issued": 1000, "redemption_rate": 0.28, "mechanic": "percentage", "value": "20%", "threshold": 300, "eff_disc": 0.175}, "N1": {"redeemed": 274, "discount_cost": 1319.88, "est_incremental_share": 0.479, "incremental_contribution": 4641.78, "subsidy_loss": 771.97, "net_pnl": 3869.8, "roi": 2.932, "verdict": "scale", "issued": 1000, "redemption_rate": 0.274, "mechanic": "new_product", "value": "5%", "threshold": 0, "eff_disc": 0.045}}, "matrix": {"Grocery": {"F1": -93.06, "F2": -95.93, "F3": -81.3, "P1": -53.79, "P2": -239.88, "P3": -894.5, "N1": -21.74}, "Toys": {"F1": -65.9, "F2": -55.64, "F3": -75.13, "P1": -28.43, "P2": -163.54, "P3": -1479.58, "N1": -13.41}, "Beauty": {"F1": 155.54, "F2": 102.84, "F3": 56.92, "P1": 147.77, "P2": 19.01, "P3": -839.6, "N1": 57.7}, "Fashion": {"F1": 1836.51, "F2": 792.87, "F3": 941.45, "P1": 1080.08, "P2": 645.22, "P3": -56.72, "N1": 226.93}, "Sports": {"F1": 4245.6, "F2": 2007.24, "F3": 1188.97, "P1": 2272.49, "P2": 859.77, "P3": 234.25, "N1": 318.91}, "Home": {"F1": 6506.32, "F2": 3084.25, "F3": 2696.01, "P1": 3532.5, "P2": 1452.31, "P3": 869.8, "N1": 370.8}, "Electronics": {"F1": 11660.27, "F2": 10810.36, "F3": 5833.67, "P1": 11156.88, "P2": 6910.63, "P3": 1222.81, "N1": 2930.61}}, "fixed_vs_pct": [{"band": "RM100-150", "fixed_net_cm": 59.06, "pct_net_cm": 49.06, "fixed_eff": 0.035, "pct_eff": 0.042}, {"band": "RM150-200", "fixed_net_cm": 64.65, "pct_net_cm": 74.95, "fixed_eff": 0.043, "pct_eff": 0.045}, {"band": "RM200-250", "fixed_net_cm": 109.37, "pct_net_cm": 82.78, "fixed_eff": 0.03, "pct_eff": 0.073}, {"band": "RM250-300", "fixed_net_cm": 125.71, "pct_net_cm": 105.9, "fixed_eff": 0.042, "pct_eff": 0.074}, {"band": "RM300-+", "fixed_net_cm": 276.99, "pct_net_cm": 184.57, "fixed_eff": 0.027, "pct_eff": 0.129}], "effective_discount": {"F1": {"mean": 0.047, "min": 0.001, "max": 0.1}, "F2": {"mean": 0.038, "min": 0.001, "max": 0.067}, "F3": {"mean": 0.05, "min": 0.009, "max": 0.08}, "P1": {"mean": 0.043, "min": 0.01, "max": 0.05}, "P2": {"mean": 0.089, "min": 0.02, "max": 0.1}, "P3": {"mean": 0.175, "min": 0.05, "max": 0.2}, "N1": {"mean": 0.045, "min": 0.01, "max": 0.051}}, "recommendations": {"per_category": {"Grocery": {"use": [], "avoid": ["F1", "F2", "F3", "P1", "P2", "P3", "N1"]}, "Toys": {"use": [], "avoid": ["F1", "F2", "F3", "P1", "P2", "P3", "N1"]}, "Beauty": {"use": ["F1", "F2", "F3", "P1", "P2", "N1"], "avoid": ["P3"]}, "Fashion": {"use": ["F1", "F2", "F3", "P1", "P2", "N1"], "avoid": ["P3"]}, "Sports": {"use": ["F1", "F2", "F3", "P1", "P2", "P3", "N1"], "avoid": []}, "Home": {"use": ["F1", "F2", "F3", "P1", "P2", "P3", "N1"], "avoid": []}, "Electronics": {"use": ["F1", "F2", "F3", "P1", "P2", "P3", "N1"], "avoid": []}}, "flat_to_targeted": ["F1", "F2", "F3", "P1", "P2", "N1"]}, "new_product": {"est_incremental_share": 0.479, "net_pnl": 3869.8, "verdict": "scale", "note": "5% flat reads as trial spend; compare against a small fixed voucher in a follow-up build."}, "recovery": {"by_category": {"Grocery": {"estimate": 0.525, "truth": 0.656}, "Toys": {"estimate": 0.342, "truth": 0.685}, "Beauty": {"estimate": 0.695, "truth": 0.684}, "Fashion": {"estimate": 0.548, "truth": 0.494}, "Sports": {"estimate": 0.441, "truth": 0.408}, "Home": {"estimate": 0.397, "truth": 0.415}, "Electronics": {"estimate": 0.377, "truth": 0.383}}, "mean_abs_error": 0.085, "ranking_recovered": false, "naive_share": 1.0, "true_overall": 0.46, "est_overall": 0.446}, "lift_by_category": {"Grocery": {"rate_out": 4.18, "rate_in": 4.54, "lift_pct": 0.086, "incremental_orders": 50, "redemptions": 93, "incremental_share": 0.535, "truth": 0.656}, "Toys": {"rate_out": 4.49, "rate_in": 4.87, "lift_pct": 0.084, "incremental_orders": 52, "redemptions": 149, "incremental_share": 0.349, "truth": 0.685}, "Beauty": {"rate_out": 4.15, "rate_in": 5.13, "lift_pct": 0.236, "incremental_orders": 135, "redemptions": 193, "incremental_share": 0.7, "truth": 0.684}, "Fashion": {"rate_out": 6.44, "rate_in": 8.2, "lift_pct": 0.274, "incremental_orders": 243, "redemptions": 441, "incremental_share": 0.551, "truth": 0.494}, "Sports": {"rate_out": 4.33, "rate_in": 5.72, "lift_pct": 0.319, "incremental_orders": 191, "redemptions": 431, "incremental_share": 0.443, "truth": 0.408}, "Home": {"rate_out": 5.71, "rate_in": 7.34, "lift_pct": 0.286, "incremental_orders": 225, "redemptions": 564, "incremental_share": 0.399, "truth": 0.415}, "Electronics": {"rate_out": 6.31, "rate_in": 8.53, "lift_pct": 0.351, "incremental_orders": 306, "redemptions": 807, "incremental_share": 0.379, "truth": 0.383}}, "margin_gradient": {"Grocery": -0.22, "Toys": 2.53, "Beauty": 4.43, "Fashion": 17.31, "Sports": 58.22, "Home": 85.88, "Electronics": 253.17}};
+const rm = n => "RM"+Math.round(n).toLocaleString();
+const pct = n => Math.round(n*100)+"%";
+const CATS = RESULTS.meta.categories, VIDS = RESULTS.meta.vouchers;
+const chip = v => `<span class="chip c-${v}">${v}</span>`;
+
+const TABS=[["overview","Overview"],["scorecard","Voucher Scorecard"],["matrix","Category × Voucher"],
+ ["newproduct","New Product"],["keyquestions","The Key Questions"]];
+const nav=document.getElementById("nav");
+TABS.forEach(([id,label],i)=>{const b=document.createElement("button");b.textContent=label;b.className=i==0?"on":"";
+ b.onclick=()=>{document.querySelectorAll("nav button").forEach(x=>x.classList.remove("on"));b.classList.add("on");
+ document.querySelectorAll(".screen").forEach(s=>s.classList.remove("on"));document.getElementById(id).classList.add("on");};
+ nav.appendChild(b);});
+
+// ---------- OVERVIEW ----------
+(()=>{const o=RESULTS.overview,r=RESULTS.recovery,g=RESULTS.margin_gradient,L=RESULTS.lift_by_category;
+ const gmax=Math.max(...CATS.map(c=>Math.abs(g[c])));
+ const bars=CATS.map(c=>{const h=Math.max(4,Math.abs(g[c])/gmax*70);const col=g[c]<0?"var(--neg)":"var(--blue)";
+   return `<div class="g"><i style="height:${h}px;background:${col}"></i>${c}<br><b>${g[c]<0?'-':''}RM${Math.abs(g[c]).toFixed(0)}</b></div>`;}).join("");
+ const liftSorted=[...CATS].sort((a,b)=>L[b].lift_pct-L[a].lift_pct);
+ const lmax=Math.max(...CATS.map(c=>L[c].lift_pct));
+ const liftRows=liftSorted.map(c=>{const w=L[c].lift_pct/lmax*100;const weak=L[c].lift_pct<0.15;
+   return `<div class="kqrow"><span class="kqlab">${c}</span><span class="kqtrack"><i style="width:${w}%;background:${weak?'var(--neg)':'var(--blue)'}"></i></span><span class="kqval">+${Math.round(L[c].lift_pct*100)}%</span></div>`;}).join("");
+ document.getElementById("overview").innerHTML=`
+  <h2>Overview</h2><p class="sub">${o.orders.toLocaleString()} orders · ${o.redemptions.toLocaleString()} voucher redemptions</p>
+  <div class="kpis">
+   <div class="kpi"><div class="v">${rm(o.promo_spend)}</div><div class="l">Total voucher discount given</div></div>
+   <div class="kpi"><div class="v">${pct(o.subsidy_share)}</div><div class="l">Share of spend that was subsidy</div></div>
+   <div class="kpi"><div class="v">${rm(o.real_incremental_margin)}</div><div class="l">Real incremental margin earned</div></div>
+   <div class="kpi"><div class="v">${o.best} / ${o.worst}</div><div class="l">Best / worst voucher</div></div>
+  </div>
+  <div class="callout"><b>Recovery check, </b> the tool estimates that ${pct(r.est_overall)} of redemptions were genuinely incremental.
+   The baked-in truth is ${pct(r.true_overall)} (mean abs error ${r.mean_abs_error} across categories).
+   A naive "every campaign sale was driven by the voucher" read would say ${pct(r.naive_share)}, and overstate impact by more than 2×.
+   This is the proof the method works before any recommendation is trusted.</div>
+  <h3>Does the voucher actually lift orders?</h3>
+  <p class="note">Measured by comparing each category's order rate during voucher campaigns against its baseline rate outside them, observable data only, no hidden truth used.</p>
+  <div class="kqchart">${liftRows}</div>
+  <p class="note">Vouchers strongly increase orders in the higher-priced categories (Electronics, Sports, Home, Fashion), but barely move Grocery and Toys, those cheap items rarely meet the thresholds. Checked against the simulation's hidden truth, this estimate lands within a few points in the data-rich categories.</p>
+  <div class="callout"><b>How to measure this for real, </b> this method assumes baseline demand is the same inside and outside campaign windows; in reality 11.11/12.12 have elevated demand regardless, which would over-credit the voucher. The gold standard is a <b>holdout</b>: withhold the voucher from a random 5–10% of eligible buyers and compare. This tool estimates lift from history; a holdout confirms it going forward.</div>
+  <h3>Margin gradient (before any voucher)</h3>
+  <p class="note">Grocery loses money on every order, so a flat voucher there is pure loss. This is what drives category targeting.</p>
+  <div class="grad">${bars}</div>`;
+})();
+
+// ---------- SCORECARD ----------
+(()=>{const s=RESULTS.scorecard;
+ const nmax=Math.max(...VIDS.map(v=>Math.abs(s[v].net_pnl)));
+ const rows=VIDS.map(v=>{const b=s[v];const w=Math.abs(b.net_pnl)/nmax*100;
+   const bar=`<div class="bar"><i style="width:${w}%;background:${b.net_pnl<0?'var(--neg)':'var(--blue)'}"></i></div>`;
+   return `<tr><td><b>${v}</b> <span class="note">${b.value} · ≥RM${b.threshold}</span></td>
+    <td class="mono">${b.redeemed}</td><td class="mono">${pct(b.redemption_rate)}</td>
+    <td class="mono">${pct(b.est_incremental_share)}</td>
+    <td class="mono ${b.net_pnl<0?'negv':'pos'}">${b.net_pnl<0?'-':''}${rm(Math.abs(b.net_pnl))}</td>
+    <td>${bar}</td><td class="mono">${b.roi}</td><td>${chip(b.verdict)}</td></tr>`;}).join("");
+ const fx=RESULTS.fixed_vs_pct.map(b=>`<tr><td>${b.band}</td>
+    <td class="mono">${b.fixed_net_cm??', '}</td><td class="mono">${b.pct_net_cm??', '}</td>
+    <td>${b.fixed_net_cm&&b.pct_net_cm?(b.fixed_net_cm>b.pct_net_cm?'Fixed':'Percentage')+' wins':', '}</td></tr>`).join("");
+ const ed=RESULTS.effective_discount;
+ const erows=VIDS.map(v=>`<tr><td><b>${v}</b></td><td class="mono">${pct(ed[v].mean)}</td>
+    <td class="mono">${pct(ed[v].min)}–${pct(ed[v].max)}</td></tr>`).join("");
+ document.getElementById("scorecard").innerHTML=`
+  <h2>Voucher Scorecard</h2><p class="sub">True contribution-margin ROI per voucher, incremental gains minus subsidy given away.</p>
+  <table><tr><th>Voucher</th><th>Redeemed</th><th>Redeem rate</th><th>Est. incremental</th><th>Net P&L</th><th></th><th>ROI</th><th>Verdict</th></tr>${rows}</table>
+  <p class="note">ROI = net profit per RM of discount. A negative net means the voucher gave away more in subsidy than it earned in incremental margin.</p>
+  <h3>Fixed vs Percentage, where thresholds overlap</h3>
+  <table><tr><th>Price band</th><th>Fixed net CM</th><th>% net CM</th><th>Winner</th></tr>${fx}</table>
+  <h3>Effective discount rate (fixed vouchers are regressive)</h3>
+  <table><tr><th>Voucher</th><th>Mean</th><th>Range</th></tr>${erows}</table>
+  <p class="note">A fixed RM voucher gives a bigger percentage break on smaller baskets, the deepest discount goes to the smallest spenders.</p>`;
+})();
+
+// ---------- CATEGORY x VOUCHER ----------
+(()=>{const m=RESULTS.matrix,rec=RESULTS.recommendations;
+ const head=`<tr><th>Category</th>${VIDS.map(v=>`<th>${v}</th>`).join("")}</tr>`;
+ const body=CATS.map(c=>{const cells=VIDS.map(v=>{const x=m[c][v];
+   if(x==null)return `<td class="cell note">, </td>`;
+   const bg=x>0?'var(--posbg)':'var(--negbg)';const col=x>0?'var(--pos)':'var(--neg)';
+   return `<td class="cell" style="background:${bg};color:${col}">${x>0?'+':''}${Math.round(x)}</td>`;}).join("");
+  return `<tr><td><b>${c}</b></td>${cells}</tr>`;}).join("");
+ const recs=CATS.map(c=>`<div style="margin:8px 0"><b>${c}:</b>
+   ${rec.per_category[c].use.map(v=>`<span class="tag">${v}</span>`).join("")||'<span class="note">none net-positive</span>'}
+   ${rec.per_category[c].avoid.length?'&nbsp;avoid '+rec.per_category[c].avoid.map(v=>`<span class="tag bad">${v}</span>`).join(''):''}</div>`).join("");
+ document.getElementById("matrix").innerHTML=`
+  <h2>Category × Voucher</h2><p class="sub">Net P&L of each voucher in each category. Flat issuance hides that the same voucher wins in one category and loses in another.</p>
+  <table class="mx">${head}${body}</table>
+  <div class="callout"><b>Flat → targeted, </b> these vouchers are profitable overall but lose money in specific categories:
+   ${RESULTS.recommendations.flat_to_targeted.map(v=>`<span class="tag bad">${v}</span>`).join("")}.
+   Issuing them flat across all categories quietly burns margin.</div>
+  <h3>Recommended voucher set per category</h3>${recs}`;
+})();
+
+// ---------- NEW PRODUCT ----------
+(()=>{const n=RESULTS.new_product;
+ document.getElementById("newproduct").innerHTML=`
+  <h2>New Product (voucher N1 · 5% flat)</h2><p class="sub">Launch promos are about trial, not protecting an existing margin base.</p>
+  <div class="kpis">
+   <div class="kpi"><div class="v">${pct(n.est_incremental_share)}</div><div class="l">Estimated incremental share</div></div>
+   <div class="kpi"><div class="v ${n.net_pnl<0?'negv':''}">${rm(n.net_pnl)}</div><div class="l">Net P&L</div></div>
+   <div class="kpi"><div class="v">${chip(n.verdict)}</div><div class="l">Verdict</div></div>
+  </div>
+  <div class="callout">${n.note} For a product with no history, this verdict is a category-borrowed starting point, re-measure after 4–6 weeks of its own data.</div>`;
+})();
+
+// ---------- KEY QUESTIONS (accordion: click a question to open answer + chart) ----------
+(()=>{
+ const S=RESULTS.scorecard,OV=RESULTS.overview,FP=RESULTS.fixed_vs_pct,ED=RESULTS.effective_discount,MX=RESULTS.matrix,NP=RESULTS.new_product;
+ const f=n=>(n<0?'-':'')+'RM'+Math.abs(Math.round(n)).toLocaleString();
+ const roi=v=>v.toFixed(2);
+ const bar=(items,fmt)=>{const m=Math.max(...items.map(i=>Math.abs(i.value)))||1;
+   return '<div class="kqchart">'+items.map(i=>{const w=Math.abs(i.value)/m*100,neg=i.value<0;
+     return `<div class="kqrow"><span class="kqlab">${i.label}</span><span class="kqtrack"><i style="width:${w}%;background:${neg?'var(--neg)':'var(--blue)'}"></i></span><span class="kqval ${neg?'negv':''}">${fmt(i.value)}</span></div>`;}).join('')+'</div>';};
+ const split=parts=>{const t=parts.reduce((a,b)=>a+b.value,0)||1;
+   return '<div class="kqsplit">'+parts.map((p,i)=>`<div style="width:${p.value/t*100}%;background:${i==0?'var(--neg)':'var(--blue)'}">${p.label} ${Math.round(p.value/t*100)}%</div>`).join('')+'</div>';};
+ const grouped=rows=>{const m=Math.max(...rows.flatMap(r=>[Math.abs(r.a),Math.abs(r.b)]))||1;
+   return '<div class="kqgroup">'+rows.map(r=>`<div class="kqgrow"><div class="gl">${r.label}</div>
+     <div class="gb"><span>Fixed</span><div class="t"><i style="width:${Math.abs(r.a)/m*100}%;background:var(--navy)"></i></div><span style="width:54px;color:var(--navy);font-weight:600;text-align:right">RM${Math.round(r.a)}</span></div>
+     <div class="gb"><span>%</span><div class="t"><i style="width:${Math.abs(r.b)/m*100}%;background:var(--blue)"></i></div><span style="width:54px;color:var(--navy);font-weight:600;text-align:right">RM${Math.round(r.b)}</span></div></div>`).join('')+'</div>';};
+
+ const sortNet=[...VIDS].sort((a,b)=>S[b].net_pnl-S[a].net_pnl);
+ const sortRoi=[...VIDS].sort((a,b)=>S[b].roi-S[a].roi);
+ const byDepth=[...VIDS].sort((a,b)=>ED[a].mean-ED[b].mean);
+ const made=VIDS.filter(v=>S[v].net_pnl>0).length;
+ const sub=Math.round(OV.subsidy_share*100),inc=100-sub;
+ const othersAvg=VIDS.filter(v=>v!=='P3').reduce((a,v)=>a+S[v].net_pnl,0)/(VIDS.length-1);
+ const catsum=CATS.map(c=>({c,v:VIDS.reduce((a,v)=>a+(MX[c][v]||0),0)}));
+ const bestCat=CATS.map(c=>{let bv=null,bx=-1e9;VIDS.forEach(v=>{if(MX[c][v]!=null&&MX[c][v]>bx){bx=MX[c][v];bv=v;}});return{c,bv,bx};});
+ const npInc=Math.round(NP.est_incremental_share*100);
+
+ const LOOKUP=[
+  {t:"T1",src:"scorecard[*].net_pnl",q:"1 · Which of my vouchers made money, and which lost money?",
+   a:`${made} of your ${VIDS.length} vouchers made money, only ${OV.worst} (${S[OV.worst].value} off) lost it, costing about ${f(Math.abs(S[OV.worst].net_pnl))}. ${OV.best} was the strongest, adding around ${f(S[OV.best].net_pnl)} in real margin.`,
+   c:bar(sortNet.map(v=>({label:`${v} (${S[v].value})`,value:S[v].net_pnl})),f)},
+  {t:"T2",src:"overview.subsidy_share",q:"2 · How much of my voucher spend went to buyers who'd have bought anyway?",
+   a:`About ${sub}% of your voucher discount went to shoppers who would have bought anyway, that's subsidy, not new sales. Only the other ~${inc}% brought genuinely extra orders.`,
+   c:split([{label:"Subsidy",value:sub},{label:"Incremental",value:inc}])},
+  {t:"T3",src:"scorecard[*].roi",q:"3 · What's the true ROI of each voucher after the discount cost?",
+   a:`${sortRoi[0]} gave the best return, about RM${S[sortRoi[0]].roi.toFixed(2)} of profit for every RM1 of discount, and most vouchers cleared RM1 or more. ${OV.worst} was the exception, returning below zero.`,
+   c:bar(sortRoi.map(v=>({label:`${v} (${S[v].value})`,value:S[v].roi})),roi)},
+  {t:"T4",src:"fixed_vs_pct[]",q:"4 · At which price points does fixed beat percentage?",
+   a:`Fixed-amount vouchers come out ahead at most price points, especially above RM200, where a flat RM discount costs less margin than a percentage. Percentage only edged ahead in the RM150-200 band.`,
+   c:grouped(FP.map(b=>({label:b.band,a:b.fixed_net_cm,b:b.pct_net_cm})))},
+  {t:"T5",src:"scorecard.P3",q:"5 · Is my deepest voucher (20% off) worth the margin hit?",
+   a:`No, P3 (20% off) is the only voucher losing money, about ${f(Math.abs(S.P3.net_pnl))}, with a return below zero. The discount is too deep for the margin it brings back.`,
+   c:bar([{label:"P3 (20%)",value:S.P3.net_pnl},{label:"Other vouchers (avg)",value:othersAvg}],f)},
+  {t:"T6",src:"scorecard[*].roi + .eff_disc",q:"6 · Which discount depth gives the best return per ringgit?",
+   a:`Shallower discounts paid off best, your lightest vouchers returned around RM5 per RM1 spent, while the 20% voucher lost money. Deeper isn't better here.`,
+   c:bar(byDepth.map(v=>({label:`${v} (${Math.round(ED[v].mean*100)}%)`,value:S[v].roi})),roi)},
+  {t:"T7",src:"matrix[cat][*]",q:"7 · Which voucher works best in each category?",
+   a:`${bestCat.find(x=>x.c==='Electronics').bv} is the most profitable voucher in almost every category, but in Grocery and Toys even the best option loses money. A single flat voucher for every category leaves profit on the table.`,
+   c:bar(bestCat.map(x=>({label:`${x.c} (${x.bv})`,value:x.bx})),f)},
+  {t:"T8",src:"matrix (column sums)",q:"8 · Which categories lose money on vouchers no matter what?",
+   a:`Grocery and Toys lose money on every voucher, they barely make margin before any discount. Beauty is borderline; only the fatter categories reliably profit.`,
+   c:bar([...catsum].sort((a,b)=>a.v-b.v).map(x=>({label:x.c,value:x.v})),f)},
+  {t:"T9",src:"recommendations.per_category",q:"9 · Which vouchers should I stop offering in low-margin categories?",
+   a:`In Grocery and Toys, stop all vouchers, none of them turn a profit. In Beauty and Fashion, drop just the 20% voucher (P3); the rest are fine.`,
+   c:bar(VIDS.map(v=>({label:`Grocery · ${v}`,value:MX['Grocery'][v]||0})),f)},
+  {t:"T10",src:"new_product",q:"10 · What should I run for a new product instead of a flat 5%?",
+   a:`Your flat 5% launch voucher works, about ${npInc}% of its use was genuine new trial and it cleared about ${f(NP.net_pnl)} profit. Keep it, but test a small fixed-amount voucher too, which often pulls first-time buyers better.`,
+   c:split([{label:"Subsidy",value:100-npInc},{label:"Genuine trial",value:npInc}])}
+ ];
+
+ function item(host,qtext,tagHTML,bodyHTML){
+   const w=document.createElement('div');w.className='acc';
+   w.innerHTML=`<button class="acc-q" aria-expanded="false"><span>${qtext}</span><span class="acc-ic">+</span></button><div class="acc-a">${tagHTML}${bodyHTML}</div>`;
+   const b=w.querySelector('.acc-q'),ic=w.querySelector('.acc-ic');
+   b.addEventListener('click',()=>{const o=w.classList.toggle('open');b.setAttribute('aria-expanded',o);ic.textContent=o?'−':'+';});
+   host.appendChild(w);
+ }
+
+ document.getElementById("keyquestions").innerHTML=
+  '<h2>The Key Questions</h2><p class="sub">The ten questions sellers ask most, plus four live, read-only queries that run in your browser. Click a question to open the answer and chart; click again to close.</p>'+
+  '<div id="kqlookup"></div>'+
+  '<h3>Live data queries <span class="gtag live">read-only SQL · runs in your browser</span></h3>'+
+  '<p class="note">These four answers come from fixed, parameterised SQL executed client-side over the order data (sql.js). The query layer can only pick a track and bind values, it can never write SQL or reach the hidden incrementality truth.</p>'+
+  '<div id="kqlive"></div>';
+
+ const lookHost=document.getElementById("kqlookup");
+ LOOKUP.forEach(x=>item(lookHost,x.q,`<div class="gtag">${x.t} · governed lookup · <code>results.json</code> &rarr; <code>${x.src}</code></div>`,`<div class="aa">${x.a}</div>${x.c}`));
+
+ const liveHost=document.getElementById("kqlive");
+ const pctOf=(n,d)=>Math.round(n/d*100);
+ window.__buildLiveTracks=function(db){
+   const run=(sql,params)=>{const st=db.prepare(sql);if(params)st.bind(params);const o=[];while(st.step())o.push(st.getAsObject());st.free();return o;};
+   const sqlBox=s=>`<pre class="sqlbox">${s.replace(/</g,'&lt;')}</pre>`;
+   const TR=[];
+   {const sql=`SELECT campaign_tier, COUNT(*) AS redemptions,\n       ROUND(SUM(discount_amount_rm)) AS spend\nFROM orders GROUP BY campaign_tier ORDER BY redemptions DESC`;
+    const rows=run(sql);const g=t=>{const r=rows.find(x=>x.campaign_tier===t);return r?r.redemptions:0;};
+    const mega=g('11.11')+g('12.12'),monthly=g('monthly');
+    const a=`Your 11.11 and 12.12 mega-campaigns drove ${mega.toLocaleString()} redemptions against ${monthly.toLocaleString()} in ordinary monthly runs. The mega events concentrate most voucher use into two dates, so margin control there matters most.`;
+    TR.push({q:"11 · How do 11.11 / 12.12 campaigns compare to monthly runs?",sql,a,c:bar(rows.map(r=>({label:r.campaign_tier,value:r.redemptions})),n=>n.toLocaleString())});}
+   {const sql=`SELECT voucher_id, COUNT(*) AS redeemed\nFROM orders GROUP BY voucher_id ORDER BY redeemed DESC`;
+    const rows=run(sql);const top=rows[0],low=rows[rows.length-1];
+    const a=`${top.voucher_id} was redeemed ${top.redeemed.toLocaleString()} of the 1,000 issued (${pctOf(top.redeemed,1000)}% take-up), the highest; ${low.voucher_id} the lowest at ${low.redeemed} (${pctOf(low.redeemed,1000)}%). Take-up reflects how easy the threshold is to hit, not how profitable the voucher is.`;
+    TR.push({q:"12 · What is the real redemption rate of each voucher?",sql,a,c:bar(rows.map(r=>({label:r.voucher_id,value:pctOf(r.redeemed,1000)})),n=>n+'%')});}
+   {const V='F1';const sqlP=`SELECT customer_type, COUNT(*) AS orders\nFROM orders WHERE voucher_id = :v\nGROUP BY customer_type`;
+    const rows=run(sqlP,{':v':V});
+    const nw=(rows.find(r=>r.customer_type==='new')||{orders:0}).orders;
+    const rt=(rows.find(r=>r.customer_type==='returning')||{orders:0}).orders;const tot=nw+rt||1;
+    const a=`Of ${V}'s redemptions, ${pctOf(nw,tot)}% came from new customers and ${pctOf(rt,tot)}% from returning ones. A voucher leaning heavily to returning buyers rewards loyalty more than it wins new trade.`;
+    TR.push({q:"13 · Do vouchers bring new buyers or reward returning ones? (voucher F1)",sql:sqlP.replace(':v',"'"+V+"'"),a,c:split([{label:"New",value:pctOf(nw,tot)},{label:"Returning",value:pctOf(rt,tot)}])});}
+   {const sql=`SELECT voucher_id, ROUND(AVG(effective_discount_pct),3) AS mean_eff\nFROM orders GROUP BY voucher_id ORDER BY mean_eff DESC`;
+    const rows=run(sql);const top=rows[0];
+    const a=`${top.voucher_id} took the deepest real cut at ${Math.round(top.mean_eff*100)}% of basket value on average, far above the fixed vouchers near 4-5%. A fixed RM discount is far less regressive than a percentage on large baskets.`;
+    TR.push({q:"14 · How deep is each voucher's real discount on the basket?",sql,a,c:bar(rows.map(r=>({label:r.voucher_id,value:Math.round(r.mean_eff*100)})),n=>n+'%')});}
+   TR.forEach(t=>item(liveHost,t.q,`<div class="gtag live">live read-only SQL · sql.js</div>${sqlBox(t.sql)}`,`<div class="aa">${t.a}</div>${t.c}`));
+ };
+ if(window.__voucherDB) window.__buildLiveTracks(window.__voucherDB);
+})();
+
+// ---------- sql.js engine: governed query layer (keyless, client-side) ----------
+initSqlJs({locateFile:f=>`https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/${f}`})
+ .then(SQL=>{
+   const db=new SQL.Database();
+   db.run("CREATE TABLE orders(voucher_id TEXT, campaign_tier TEXT, customer_type TEXT, discount_amount_rm REAL, effective_discount_pct REAL);");
+   const st=db.prepare("INSERT INTO orders VALUES (?,?,?,?,?)");
+   VOUCHER_ROWS.forEach(r=>st.run(r));st.free();
+   window.__voucherDB=db;
+   if(window.__buildLiveTracks) window.__buildLiveTracks(db);
+ })
+ .catch(()=>{const h=document.getElementById("kqlive");if(h)h.innerHTML='<p class="note">The four live queries need an internet connection to load the in-browser SQL engine. The ten questions above are fully available offline.</p>';});
+</script>
+<footer style="background:#1E3A5F;color:#BFD3E8;text-align:center;font-size:.82rem;padding:18px 16px;font-family:Manrope,system-ui,sans-serif">&copy; 2026 Lee Yih Ven | Data-Driven Solutions</footer>
+</body>
+</html>

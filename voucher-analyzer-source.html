@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voucher Analyzer - Source Code</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #222; background-color: #ffffff; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        .back-nav { margin-bottom: 20px; }
+        .back-nav a { color: #007BFF; text-decoration: none; font-size: 1rem; }
+        .back-nav a:hover { text-decoration: underline; }
+        .project-header { text-align: center; margin-bottom: 40px; padding: 40px 0; background: linear-gradient(135deg, #E91E63, #AD1457); color: white; border-radius: 10px; }
+        .project-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        .project-header p { font-size: 1.2rem; opacity: 0.9; }
+        .badges { display: flex; justify-content: center; gap: 10px; margin: 20px 0; flex-wrap: wrap; }
+        .badge { background-color: rgba(255, 255, 255, 0.2); color: white; padding: 5px 12px; border-radius: 15px; font-size: 0.9rem; }
+        .content-section { margin: 40px 0; padding: 30px; background-color: #f9f9f9; border-radius: 8px; border-left: 5px solid #E91E63; }
+        .content-section h2 { color: #E91E63; margin-bottom: 20px; font-size: 1.8rem; }
+        .content-section h3 { color: #333; margin: 20px 0 10px 0; font-size: 1.3rem; }
+        .highlight-box { background: linear-gradient(135deg, #fde7ef, #fbd0e0); padding: 20px; border-radius: 10px; border-left: 5px solid #E91E63; margin: 20px 0; }
+        .file-tree { background-color: #f4f4f4; border: 1px solid #ddd; border-radius: 5px; padding: 15px; margin: 15px 0; font-family: 'Consolas', monospace; font-size: 14px; white-space: pre; overflow-x: auto; }
+        .code-container { background-color: #1e1e1e; border-radius: 8px; padding: 20px; margin: 20px 0; overflow-x: auto; }
+        .code-header { color: #f48fb1; font-weight: bold; margin-bottom: 15px; font-size: 1.1rem; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        .code-block { font-family: 'Consolas', 'Monaco', 'Courier New', monospace; font-size: 14px; line-height: 1.5; color: #d4d4d4; white-space: pre; }
+        .code-comment { color: #6a9955; font-style: italic; }
+        .code-keyword { color: #569cd6; }
+        .code-string { color: #ce9178; }
+        .demo-links { text-align: center; margin: 30px 0; }
+        .demo-btn { display: inline-block; background-color: #007BFF; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; margin: 0 10px; font-weight: bold; transition: background-color 0.3s; }
+        .demo-btn:hover { background-color: #0056b3; }
+        .demo-btn.secondary { background-color: #28a745; }
+        .demo-btn.secondary:hover { background-color: #218838; }
+        @media (max-width: 768px) {
+            .project-header h1 { font-size: 2rem; }
+            .project-header p { font-size: 1rem; }
+            .demo-btn { margin: 5px; padding: 10px 20px; }
+            .container { padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav">
+            <a href="voucher-analyzer.html">&larr; Back to Project Overview</a>
+        </nav>
+
+        <div class="project-header">
+            <h1>&#128202; Voucher Analyzer</h1>
+            <p>Incrementality engine, recovery check, and governed query layer</p>
+            <div class="badges">
+                <span class="badge">Python</span>
+                <span class="badge">pandas</span>
+                <span class="badge">sql.js</span>
+                <span class="badge">Baseline-Counterfactual</span>
+                <span class="badge">Read-only SQL</span>
+            </div>
+        </div>
+
+        <div class="highlight-box">
+            <h3>&#128269; About This Code Showcase</h3>
+            <p><strong>These three excerpts are the heart of the project: an incrementality estimate that runs blind to the answer, the recovery check that grades it against a hidden truth, and the governed query layer that powers the live questions.</strong></p>
+            <p>Dataset-generation plumbing is omitted for clarity. The key idea throughout: the per-order ground truth (<code>was_incremental</code>) is withheld from everything the page can see, so the tool genuinely estimates rather than reads the answer.</p>
+        </div>
+
+        <div class="content-section">
+            <h2>&#129518; The Analytical Brain: Incrementality, Estimated Blind</h2>
+            <p>The core skill is separating the sales a voucher truly caused from buyers who would have purchased anyway. The estimate uses a baseline-counterfactual (difference-in-differences style): learn each category's ordinary order rate from non-campaign days, then treat the excess during campaigns as incremental. It never looks at the truth column.</p>
+
+            <div class="code-container">
+                <div class="code-header">&#128196; pipeline.py: withhold the truth, then estimate</div>
+<div class="code-block"><span class="code-comment"># DEPLOYED dataset: the per-order truth column is WITHHELD.</span>
+<span class="code-comment"># The assistant must never see was_incremental.</span>
+df.drop(columns=[<span class="code-string">"was_incremental"</span>]).to_csv(<span class="code-string">"voucher_orders.csv"</span>, index=<span class="code-keyword">False</span>)
+<span class="code-comment"># EVAL copy WITH the truth, for the recovery check only. Never deployed.</span>
+df.to_csv(<span class="code-string">"voucher_orders_eval.csv"</span>, index=<span class="code-keyword">False</span>)
+
+<span class="code-comment"># Incrementality ESTIMATE via baseline-counterfactual (DiD style), per category.</span>
+<span class="code-comment"># Blind to truth: compare in-campaign volume to the baseline learned off-campaign.</span>
+est_share = {}
+<span class="code-keyword">for</span> c <span class="code-keyword">in</span> CATS:
+    base_rate = ((df.category==c) & (~df.in_window) & (df.voucher_id==<span class="code-string">"none"</span>)).sum() / max(nonwin_days, 1)
+    win_orders = ((df.category==c) & (df.in_window)).sum()
+    exp_base   = base_rate * len(win_days)
+    incr_vol   = max(0.0, win_orders - exp_base)        <span class="code-comment"># orders the campaign actually added</span>
+    redemptions = (v.category==c).sum()
+    est_share[c] = float(np.clip(incr_vol / max(redemptions, 1), 0, 1))</div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>&#9989; The Proof: Recovery Check</h2>
+            <p>A blind estimate is only worth trusting if it lands on the real answer. The recovery check compares the per-category estimate against the baked-in truth and reports the error. It recovers an overall 45 percent incremental share against a true 46 percent, while the naive "every redemption is new" read would claim 100 percent.</p>
+
+            <div class="code-container">
+                <div class="code-header">&#128196; pipeline.py: grade the estimate against the hidden truth</div>
+<div class="code-block"><span class="code-comment"># PHASE 3: recovery check, only here is the truth column read.</span>
+true_share = {c: float(v[v.category==c][<span class="code-string">"was_incremental"</span>].mean()) <span class="code-keyword">for</span> c <span class="code-keyword">in</span> CATS}
+mae = np.mean([abs(est_share[c] - true_share[c]) <span class="code-keyword">for</span> c <span class="code-keyword">in</span> CATS])
+
+recovery = dict(
+    by_category = {c: dict(estimate=round(est_share[c],3), truth=round(true_share[c],3)) <span class="code-keyword">for</span> c <span class="code-keyword">in</span> CATS},
+    mean_abs_error = round(mae, 3),                 <span class="code-comment"># about 0.085</span>
+    naive_share    = 1.0,                           <span class="code-comment"># the naive read overstates</span>
+    true_overall   = round(v.was_incremental.mean(), 3),   <span class="code-comment"># 0.46</span>
+    est_overall    = round(np.mean([est_share[c] <span class="code-keyword">for</span> c <span class="code-keyword">in</span> v.category]), 3),  <span class="code-comment"># 0.446</span>
+)</div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>&#128272; The Governed Query Layer (client-side, keyless)</h2>
+            <p>The live questions in the app run real SQL in the browser via sql.js, on the Klinik Dr Fang pattern. Each track is a fixed, parameterised, read-only statement. The model (or the click handler) can pick a track and bind a value; it can never write, extend, or alter the SQL, and the deployed table has no truth column to reach.</p>
+
+            <div class="code-container">
+                <div class="code-header">&#128196; demo.html: fixed, parameterised, read-only tools</div>
+<div class="code-block"><span class="code-comment">// Values only (e.g. {':v': 'F1'}); the SQL itself is fixed.</span>
+<span class="code-keyword">function</span> run(sql, params) {
+  <span class="code-keyword">const</span> st = db.prepare(sql);
+  <span class="code-keyword">if</span> (params) st.bind(params);          <span class="code-comment">// bind a value, never author SQL</span>
+  <span class="code-keyword">const</span> out = [];
+  <span class="code-keyword">while</span> (st.step()) out.push(st.getAsObject());
+  st.free();
+  <span class="code-keyword">return</span> out;
+}
+
+<span class="code-comment">// Track 13: do vouchers bring new buyers or reward returning ones?</span>
+<span class="code-keyword">const</span> rows = run(
+  <span class="code-string">"SELECT customer_type, COUNT(*) AS orders "</span> +
+  <span class="code-string">"FROM orders WHERE voucher_id = :v GROUP BY customer_type"</span>,
+  {<span class="code-string">':v'</span>: <span class="code-string">'F1'</span>}
+);</div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>&#128193; Project Structure</h2>
+            <div class="file-tree">projects/voucher-analyzer/
+  demo.html               the app (self-contained; results inlined)
+  voucher-data.js         redemption records for the live sql.js queries
+  results.json            the engine's computed outputs the UI renders
+  voucher_orders.csv      observable order data (no truth column)
+  voucher_issuance.csv    per-voucher issuance
+  pipeline.py             generates data, runs the engine + recovery check
+  build_assistant_data.py builds voucher-data.js from the orders
+  README.md</div>
+        </div>
+
+        <div class="content-section">
+            <h2>&#9881;&#65039; Why This Design</h2>
+            <ul style="margin: 15px 0; padding-left: 20px;">
+                <li><strong>Offline engine, frozen results:</strong> the brain runs once in Python and writes <code>results.json</code>; the page renders proven numbers, so the displayed answers never drift.</li>
+                <li><strong>Truth firewall:</strong> <code>was_incremental</code> exists only in the eval file, which is never deployed; the live data physically cannot surface the answer key.</li>
+                <li><strong>Match the tool to the job:</strong> incrementality is a counterfactual computation, so it stays in Python; the observable drill-downs are simple aggregations, so they run as governed SQL in the browser.</li>
+                <li><strong>Keyless and free:</strong> the whole app is static, with no backend and no API key, so it runs on GitHub Pages at zero cost.</li>
+            </ul>
+        </div>
+
+        <div class="demo-links">
+            <a href="projects/voucher-analyzer/demo.html" target="_blank" class="demo-btn">&#128640; Try Live Demo</a>
+            <a href="voucher-analyzer.html" class="demo-btn secondary">&#128214; View Full Project Details</a>
+        </div>
+
+        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
+            <a href="index.html">&larr; Back to Portfolio</a> |
+            <a href="voucher-analyzer.html">View Project Overview</a>
+        </nav>
+    </div>
+</body>
+</html>
