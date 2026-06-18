@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seasonal Pricing Console - Source Code</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Arial',sans-serif;line-height:1.6;color:#222;background-color:#fff}
+        .container{max-width:1000px;margin:0 auto;padding:20px}
+        .back-nav{margin-bottom:20px}
+        .back-nav a{color:#E91E63;text-decoration:none;font-size:1rem}
+        .back-nav a:hover{text-decoration:underline}
+        .project-header{text-align:center;margin-bottom:40px;padding:40px 0;background:linear-gradient(135deg,#E91E63,#AD1457);color:white;border-radius:10px}
+        .project-header h1{font-size:2.3rem;margin-bottom:10px}
+        .project-header p{font-size:1.1rem;opacity:.9}
+        .content-section{margin:40px 0;padding:30px;background-color:#f9f9f9;border-radius:8px;border-left:5px solid #E91E63}
+        .content-section h2{color:#E91E63;margin-bottom:14px;font-size:1.6rem}
+        .content-section h3{color:#333;margin:18px 0 8px;font-size:1.15rem}
+        .code-block{background-color:#0f2233;color:#cfe3f5;border-radius:6px;padding:15px;margin:12px 0;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.82rem;overflow-x:auto;white-space:pre;line-height:1.45}
+        p{margin:8px 0}
+        @media (max-width:768px){.project-header h1{font-size:1.8rem}.container{padding:15px}}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav"><a href="seasonal-pricing-console.html">← Back to Showcase</a></nav>
+        <div class="project-header">
+            <h1>🏷️ Seasonal Pricing Console — Source</h1>
+            <p>How the data, the estimator, the proof, and the governed query layer fit together</p>
+        </div>
+
+        <div class="content-section">
+            <h2>📁 Project Structure</h2>
+            <div class="code-block">projects/seasonal-pricing-console/
+├── demo.html          # the console: self-contained, data embedded, sql.js in-browser
+├── generate_data.py   # synthetic generator with a baked-in elasticity ground truth
+├── analyze.py         # DiD elasticity estimator + recovery check + optimal price
+├── build_db.py        # builds the small SQLite DB the governed queries run on
+├── results.json       # the locked results the console renders
+└── README.md          # how it works and how to run it</div>
+            <p>The build follows one order: <strong>data → brain → prove the brain → UI</strong>. Nothing is rendered until the estimate has recovered a known answer.</p>
+        </div>
+
+        <div class="content-section">
+            <h2>1. Data: a known truth baked in</h2>
+            <p>The generator simulates three years of listing-nights and bakes a known price elasticity into each listing and season, then makes occupancy actually respond to price through that elasticity. Because the truth is known, the estimate can later be graded against it.</p>
+            <div class="code-block"># generate_data.py (excerpt)
+TYPE_ELAST = {"Studio":-1.60,"1BR":-1.25,"2BR":-1.05,"3BR":-0.85}
+SEASON_ELAST_FACTOR = {"peak":0.80,"shoulder":1.00,"trough":1.20}
+# occupancy responds to price via the baked-in elasticity:
+price_response = (price/base) ** el          # el = true elasticity
+occ = BASE_OCC * dw_term * DEMAND_SEASON[s] * price_response
+booked = int(rng.random() &lt; occ)</div>
+        </div>
+
+        <div class="content-section">
+            <h2>2. Brain: difference-in-differences elasticity</h2>
+            <p>Elasticity is the slope of log(occupancy) on log(price). The trap is that the host raises prices in peak season exactly when demand is high. Listing fixed effects and a weekend control remove that, so the price effect is identified from month-to-month price changes, with confidence intervals from the regression.</p>
+            <div class="code-block"># analyze.py (excerpt)
+# y = ln(occupancy); regress on ln(price) with listing fixed effects + weekend
+X = np.column_stack([FE, np.log(price), is_weekend])   # FE = listing dummies
+beta, cov = wls(X, y, w)
+elasticity = beta[ei]                 # coef on ln(price)
+ci_low, ci_high = elasticity - 1.96*se, elasticity + 1.96*se</div>
+        </div>
+
+        <div class="content-section">
+            <h2>3. Prove: the recovery check (the hard gate)</h2>
+            <p>Before any rate is trusted, the estimate is compared with the baked-in truth, and against a naive price-vs-occupancy read. The controlled estimator is 3.2x closer to the truth and lands inside the 95% interval in every cell.</p>
+            <div class="code-block"># analyze.py (excerpt)
+recovery = dict(
+  mean_abs_error      = 0.224,   # controlled estimator vs known truth
+  naive_mean_abs_error= 0.713,   # naive read (no controls), badly biased
+  truth_in_ci_rate    = 1.0,     # truth inside 95% CI in 12/12 cells
+)
+# optimal price: profit-max rate from the fitted curve, net of cost,
+# bounded to prices already observed that season (no extrapolation)</div>
+        </div>
+
+        <div class="content-section">
+            <h2>4. Governed query layer (in the browser)</h2>
+            <p>The "Pricing Questions" tab answers four questions with fixed, parameterized read-only SQL run client-side via sql.js. The layer picks an approved track and binds values; it can never author its own SQL, and the hidden true sensitivity is never queried.</p>
+            <div class="code-block">// demo.html (excerpt) — sql.js builds a small table, runs FIXED queries
+db.run("CREATE TABLE rates(listing_id, listing_title, property_type, season,
+  elasticity, current_avg_price, optimal_price, ...);");
+RATE_ROWS.forEach(r => st.run(r));
+
+// fixed, read-only query — only values flow, never SQL
+const sql = "SELECT listing_title, ROUND(SUM(uplift_rm)) AS uplift " +
+            "FROM rates GROUP BY listing_title ORDER BY uplift DESC";
+const rows = run(sql);   // rendered live in the browser</div>
+        </div>
+
+        <nav class="back-nav" style="text-align:center;margin-top:40px;">
+            <a href="seasonal-pricing-console.html">← Back to Showcase</a> |
+            <a href="https://github.com/lyven81/ai-project/tree/main/projects/seasonal-pricing-console" target="_blank">View Full Code on GitHub</a>
+        </nav>
+    </div>
+</body>
+</html>

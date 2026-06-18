@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kinta Stays - Seasonal Pricing Console</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/sql-wasm.js"></script>
+<style>
+:root{--navy:#1E3A5F;--blue:#4A7FB5;--soft:#EAF1F8;--line:#CBDDEF;--ink:#22303C;--muted:#5C6B78;--bg:#F7F9FB;
+ --pos:#2E7D5B;--posbg:#E3F1EA;--neg:#9A4150;--negbg:#F6E3E7;--warn:#B5532A;--gold:#B5832A;
+ --peak:#B5532A;--shoulder:#4A7FB5;--trough:#2E7D5B;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Manrope",system-ui,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+header{background:var(--navy);color:#fff;padding:22px 28px}
+header h1{font-family:"Fraunces",Georgia,serif;font-weight:600;font-size:1.5rem;margin:0}
+header p{margin:3px 0 0;color:#BFD3E8;font-size:.85rem}
+nav{display:flex;gap:4px;background:#fff;border-bottom:1px solid var(--line);padding:0 16px;flex-wrap:wrap;position:sticky;top:0;z-index:5}
+nav button{font-family:inherit;border:none;background:none;padding:14px 16px;font-size:.9rem;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;font-weight:600}
+nav button.on{color:var(--navy);border-bottom-color:var(--blue)}
+main{max-width:980px;margin:0 auto;padding:26px 20px 80px}
+.screen{display:none}.screen.on{display:block}
+h2{font-family:"Fraunces",Georgia,serif;font-weight:600;color:var(--navy);font-size:1.35rem;margin:8px 0 2px}
+.sub{color:var(--muted);margin:0 0 18px;font-size:.95rem}
+h3{font-size:1rem;color:var(--navy);margin:30px 0 8px;font-weight:700}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin:8px 0 6px}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.kpi .v{font-family:"Fraunces",Georgia,serif;font-size:1.7rem;color:var(--navy);font-weight:600;line-height:1;white-space:nowrap}
+.kpi .l{font-size:.78rem;color:var(--muted);margin-top:6px}
+.callout{background:var(--soft);border:1px solid var(--line);border-left:4px solid var(--blue);border-radius:10px;padding:16px 20px;margin:18px 0}
+.callout b{color:var(--navy)}
+.callout.proof{background:var(--navy);color:#fff;border-color:var(--navy)}.callout.proof b{color:#BFD3E8}
+table{width:100%;border-collapse:collapse;margin:10px 0;font-size:.86rem;background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+th{background:var(--navy);color:#fff;text-align:left;padding:10px 11px;font-size:.74rem;font-weight:600;letter-spacing:.02em}
+td{padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+.mono{font-variant-numeric:tabular-nums}
+.chip{display:inline-block;font-size:.7rem;font-weight:700;padding:2px 9px;border-radius:20px}
+.c-raise{background:var(--posbg);color:var(--pos)}.c-cut{background:var(--negbg);color:var(--neg)}.c-hold{background:var(--soft);color:var(--blue)}
+.note{font-size:.85rem;color:var(--muted)}
+.kqchart{display:flex;flex-direction:column;gap:5px;margin:8px 0 2px}
+.kqrow{display:flex;align-items:center;gap:8px;font-size:.78rem}
+.kqlab{width:158px;flex:none;color:var(--muted);text-align:right;line-height:1.2}
+.kqtrack{flex:1;height:13px;background:var(--soft);border-radius:7px;overflow:hidden}
+.kqtrack i{display:block;height:100%}
+.kqval{width:74px;flex:none;text-align:right;font-variant-numeric:tabular-nums;color:var(--navy);font-weight:600}
+.kqval.negv{color:var(--neg)}
+.kqsplit{display:flex;border-radius:8px;overflow:hidden;font-size:.74rem;font-weight:700;color:#fff;margin:6px 0}
+.kqsplit div{padding:8px 10px;white-space:nowrap}
+.kqgroup{display:flex;flex-direction:column;gap:10px;margin:6px 0}
+.kqgrow .gl{font-size:.8rem;font-weight:600;color:var(--navy);margin-bottom:3px}
+.kqgrow .gb{display:flex;align-items:center;gap:8px;font-size:.74rem;color:var(--muted)}
+.kqgrow .gb span:first-child{width:46px;flex:none;text-align:right}
+.kqgrow .gb .t{flex:1;height:11px;background:var(--soft);border-radius:6px;overflow:hidden}
+.kqgrow .gb .t i{display:block;height:100%}
+.acc{background:#fff;border:1px solid var(--line);border-radius:12px;margin:10px 0;overflow:hidden}
+.acc-q{width:100%;display:flex;justify-content:space-between;align-items:center;gap:12px;font-family:inherit;text-align:left;border:none;background:none;cursor:pointer;padding:15px 18px;font-size:.96rem;font-weight:600;color:var(--navy)}
+.acc-ic{font-size:1.2rem;color:var(--blue);flex:none}
+.acc-a{display:none;padding:0 18px 16px}
+.acc.open .acc-a{display:block}
+.aa{font-size:.9rem;margin:6px 0 10px}
+.gtag{display:inline-block;background:var(--soft);color:var(--blue);font-size:.68rem;font-weight:700;padding:3px 9px;border-radius:6px;margin-bottom:8px;letter-spacing:.02em}
+.gtag.live{background:var(--posbg);color:var(--pos)}
+.gtag code{background:rgba(0,0,0,.05);padding:0 4px;border-radius:3px;font-size:.95em}
+.sqlbox{background:#0f2233;color:#cfe3f5;border-radius:8px;padding:11px 13px;font-size:.74rem;line-height:1.45;overflow-x:auto;margin:0 0 10px;white-space:pre;font-family:ui-monospace,Menlo,Consolas,monospace}
+.seasonstrip{display:grid;grid-template-columns:repeat(12,1fr);gap:4px;margin:8px 0}
+.seasonstrip div{text-align:center;font-size:.66rem;padding:7px 2px;border-radius:6px;font-weight:600}
+.s-peak{background:var(--negbg);color:var(--neg)}.s-shoulder{background:var(--soft);color:var(--blue)}.s-trough{background:var(--posbg);color:var(--pos)}
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 4px}
+.lg{font-size:.72rem;font-weight:700;padding:4px 11px;border-radius:20px}
+.sheet{font-size:.76rem;border:1px solid var(--line)}
+.sheet th{background:var(--navy);color:#fff;padding:7px 6px;font-size:.7rem;text-align:center}
+.sheet th.name,.sheet td.name{text-align:left;white-space:nowrap}
+.sheet td{padding:6px 6px;text-align:center;border-bottom:1px solid var(--line)}
+.sheet td.cell{font-variant-numeric:tabular-nums;font-weight:600}
+.cell.peak{background:var(--negbg);color:var(--neg)}.cell.shoulder{background:var(--soft);color:var(--navy)}.cell.value{background:var(--posbg);color:var(--pos)}
+footer{background:#1E3A5F;color:#BFD3E8;text-align:center;font-size:.82rem;padding:18px 16px}
+@media(max-width:560px){.kqlab{width:108px}main{padding:20px 14px 60px}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Kinta Stays - Seasonal Pricing Console</h1>
+  <p>How occupancy responds to nightly rate by season, and the revenue-maximizing price for 15 Ipoh listings</p>
+</header>
+<nav id="nav"></nav>
+<main>
+  <section class="screen on" id="overview"></section>
+  <section class="screen" id="elasticity"></section>
+  <section class="screen" id="optimal"></section>
+  <section class="screen" id="questions"></section>
+</main>
+<footer>&copy; 2026 Lee Yih Ven | Data-Driven Solutions</footer>
+
+<script>
+const RESULTS = {"meta":{"project":"Kinta Stays - Ipoh seasonal price-elasticity","grain":"listing-night","listings":15,"period":"2023-01-01..2025-12-31"},"portfolio":{"listings":15,"nights":16440,"days":1096,"observed_revenue":2677982.0,"overall_occupancy":0.575,"projected_uplift_rm":254138.0,"projected_uplift_pct":9.5},"recovery":{"mean_abs_error":0.224,"naive_mean_abs_error":0.713,"truth_in_ci_rate":1.0,"by_season":{"peak":{"est_mean":-1.159,"truth_mean":-0.963},"shoulder":{"est_mean":-1.246,"truth_mean":-1.201},"trough":{"est_mean":-1.61,"truth_mean":-1.438}},"n_cells":12},"seasonal":{"by_month":[{"month":"Jan","occupancy":0.545,"avg_price":269.0,"revenue":212792.0},{"month":"Feb","occupancy":0.59,"avg_price":342.0,"revenue":262116.0},{"month":"Mar","occupancy":0.532,"avg_price":229.0,"revenue":169751.0},{"month":"Apr","occupancy":0.567,"avg_price":265.0,"revenue":203643.0},{"month":"May","occupancy":0.616,"avg_price":337.0,"revenue":298857.0},{"month":"Jun","occupancy":0.568,"avg_price":269.0,"revenue":210841.0},{"month":"Jul","occupancy":0.594,"avg_price":261.0,"revenue":219314.0},{"month":"Aug","occupancy":0.546,"avg_price":266.0,"revenue":206091.0},{"month":"Sep","occupancy":0.605,"avg_price":257.0,"revenue":213870.0},{"month":"Oct","occupancy":0.603,"avg_price":257.0,"revenue":219266.0},{"month":"Nov","occupancy":0.539,"avg_price":235.0,"revenue":168928.0},{"month":"Dec","occupancy":0.592,"avg_price":345.0,"revenue":292513.0}],"by_season":[{"season":"peak","occupancy":0.6,"avg_price":341.0,"revenue":853486.0,"nights":4065},{"season":"shoulder","occupancy":0.575,"avg_price":263.0,"revenue":1485817.0,"nights":9630},{"season":"trough","occupancy":0.536,"avg_price":232.0,"revenue":338679.0,"nights":2745}],"peak_month":"May","slow_month":"Mar"},"elasticity_by_type_season":[{"property_type":"Studio","season":"peak","elasticity":-1.86,"se":0.299,"ci_low":-2.446,"ci_high":-1.273,"naive":-0.835,"truth":-1.291,"abs_err":0.569,"naive_abs_err":0.456,"truth_in_ci":true},{"property_type":"Studio","season":"shoulder","elasticity":-1.791,"se":0.176,"ci_low":-2.136,"ci_high":-1.446,"naive":-0.903,"truth":-1.611,"abs_err":0.18,"naive_abs_err":0.708,"truth_in_ci":true},{"property_type":"Studio","season":"trough","elasticity":-2.55,"se":0.345,"ci_low":-3.226,"ci_high":-1.875,"naive":-1.626,"truth":-1.931,"abs_err":0.619,"naive_abs_err":0.305,"truth_in_ci":true},{"property_type":"1BR","season":"peak","elasticity":-1.089,"se":0.245,"ci_low":-1.569,"ci_high":-0.608,"naive":-0.2,"truth":-1.03,"abs_err":0.059,"naive_abs_err":0.83,"truth_in_ci":true},{"property_type":"1BR","season":"shoulder","elasticity":-1.362,"se":0.134,"ci_low":-1.625,"ci_high":-1.099,"naive":-0.423,"truth":-1.279,"abs_err":0.083,"naive_abs_err":0.856,"truth_in_ci":true},{"property_type":"1BR","season":"trough","elasticity":-1.788,"se":0.312,"ci_low":-2.399,"ci_high":-1.176,"naive":-0.795,"truth":-1.529,"abs_err":0.259,"naive_abs_err":0.734,"truth_in_ci":true},{"property_type":"2BR","season":"peak","elasticity":-1.111,"se":0.387,"ci_low":-1.869,"ci_high":-0.353,"naive":-0.293,"truth":-0.859,"abs_err":0.252,"naive_abs_err":0.566,"truth_in_ci":true},{"property_type":"2BR","season":"shoulder","elasticity":-0.84,"se":0.175,"ci_low":-1.182,"ci_high":-0.497,"naive":-0.317,"truth":-1.069,"abs_err":0.229,"naive_abs_err":0.752,"truth_in_ci":true},{"property_type":"2BR","season":"trough","elasticity":-1.151,"se":0.455,"ci_low":-2.042,"ci_high":-0.26,"naive":-0.375,"truth":-1.279,"abs_err":0.128,"naive_abs_err":0.904,"truth_in_ci":true},{"property_type":"3BR","season":"peak","elasticity":-0.575,"se":0.286,"ci_low":-1.135,"ci_high":-0.014,"naive":0.168,"truth":-0.673,"abs_err":0.099,"naive_abs_err":0.842,"truth_in_ci":true},{"property_type":"3BR","season":"shoulder","elasticity":-0.991,"se":0.234,"ci_low":-1.45,"ci_high":-0.532,"naive":-0.193,"truth":-0.844,"abs_err":0.147,"naive_abs_err":0.651,"truth_in_ci":true},{"property_type":"3BR","season":"trough","elasticity":-0.952,"se":0.325,"ci_low":-1.59,"ci_high":-0.315,"naive":-0.065,"truth":-1.014,"abs_err":0.062,"naive_abs_err":0.949,"truth_in_ci":true}],"by_listing_season":[{"listing_id":"KS01","listing_title":"Infinity Poolside View @ The Haven Lakeside Tambun","property_type":"1BR","season":"peak","elasticity":-1.089,"current_avg_price":359.0,"current_occ":0.771,"optimal_price":471.0,"optimal_occ":0.573,"current_profit_per_night":217.64,"optimal_profit_per_night":226.17,"uplift_pct":3.9,"cell_rev":73763.0,"uplift_rm":2876.757},{"listing_id":"KS01","listing_title":"Infinity Poolside View @ The Haven Lakeside Tambun","property_type":"1BR","season":"shoulder","elasticity":-1.362,"current_avg_price":276.0,"current_occ":0.717,"optimal_price":279.0,"optimal_occ":0.705,"current_profit_per_night":144.48,"optimal_profit_per_night":144.49,"uplift_pct":0.0,"cell_rev":123609.0,"uplift_rm":0.0},{"listing_id":"KS01","listing_title":"Infinity Poolside View @ The Haven Lakeside Tambun","property_type":"1BR","season":"trough","elasticity":-1.788,"current_avg_price":230.0,"current_occ":0.672,"optimal_price":187.0,"optimal_occ":0.975,"current_profit_per_night":105.89,"optimal_profit_per_night":111.45,"uplift_pct":5.2,"cell_rev":27220.0,"uplift_rm":1415.44},{"listing_id":"KS02","listing_title":"Sunset Hill View @ Sunway City Ipoh","property_type":"1BR","season":"peak","elasticity":-1.089,"current_avg_price":299.0,"current_occ":0.657,"optimal_price":375.0,"optimal_occ":0.514,"current_profit_per_night":147.55,"optimal_profit_per_night":154.33,"uplift_pct":4.6,"cell_rev":52038.0,"uplift_rm":2393.748},{"listing_id":"KS02","listing_title":"Sunset Hill View @ Sunway City Ipoh","property_type":"1BR","season":"shoulder","elasticity":-1.362,"current_avg_price":224.0,"current_occ":0.62,"optimal_price":273.0,"optimal_occ":0.473,"current_profit_per_night":93.8,"optimal_profit_per_night":94.83,"uplift_pct":1.1,"cell_rev":86454.0,"uplift_rm":950.994},{"listing_id":"KS02","listing_title":"Sunset Hill View @ Sunway City Ipoh","property_type":"1BR","season":"trough","elasticity":-1.788,"current_avg_price":189.0,"current_occ":0.617,"optimal_price":162.0,"optimal_occ":0.811,"current_profit_per_night":72.42,"optimal_profit_per_night":73.48,"uplift_pct":1.5,"cell_rev":20133.0,"uplift_rm":301.995},{"listing_id":"KS03","listing_title":"Hot Spring Retreat @ Lost World Tambun","property_type":"1BR","season":"peak","elasticity":-1.089,"current_avg_price":325.0,"current_occ":0.793,"optimal_price":452.0,"optimal_occ":0.554,"current_profit_per_night":197.77,"optimal_profit_per_night":208.42,"uplift_pct":5.4,"cell_rev":68694.0,"uplift_rm":3709.476},{"listing_id":"KS03","listing_title":"Hot Spring Retreat @ Lost World Tambun","property_type":"1BR","season":"shoulder","elasticity":-1.362,"current_avg_price":262.0,"current_occ":0.692,"optimal_price":277.0,"optimal_occ":0.642,"current_profit_per_night":130.39,"optimal_profit_per_night":130.5,"uplift_pct":0.1,"cell_rev":114056.0,"uplift_rm":114.056},{"listing_id":"KS03","listing_title":"Hot Spring Retreat @ Lost World Tambun","property_type":"1BR","season":"trough","elasticity":-1.788,"current_avg_price":225.0,"current_occ":0.667,"optimal_price":182.0,"optimal_occ":0.978,"current_profit_per_night":101.9,"optimal_profit_per_night":106.95,"uplift_pct":5.0,"cell_rev":26896.0,"uplift_rm":1344.8},{"listing_id":"KS04","listing_title":"Comfy Apt @ Majestic Taman Jubilee","property_type":"1BR","season":"peak","elasticity":-1.089,"current_avg_price":288.0,"current_occ":0.531,"optimal_price":376.0,"optimal_occ":0.397,"current_profit_per_night":113.37,"optimal_profit_per_night":119.78,"uplift_pct":5.6,"cell_rev":41121.0,"uplift_rm":2302.776},{"listing_id":"KS04","listing_title":"Comfy Apt @ Majestic Taman Jubilee","property_type":"1BR","season":"shoulder","elasticity":-1.362,"current_avg_price":211.0,"current_occ":0.561,"optimal_price":272.0,"optimal_occ":0.396,"current_profit_per_night":77.79,"optimal_profit_per_night":79.23,"uplift_pct":1.9,"cell_rev":73963.0,"uplift_rm":1405.297},{"listing_id":"KS04","listing_title":"Comfy Apt @ Majestic Taman Jubilee","property_type":"1BR","season":"trough","elasticity":-1.788,"current_avg_price":183.0,"current_occ":0.475,"optimal_price":162.0,"optimal_occ":0.593,"current_profit_per_night":53.23,"optimal_profit_per_night":53.75,"uplift_pct":1.0,"cell_rev":15450.0,"uplift_rm":154.5},{"listing_id":"KS05","listing_title":"Spacious Family Stay @ Ipoh Garden","property_type":"2BR","season":"peak","elasticity":-1.111,"current_avg_price":436.0,"current_occ":0.635,"optimal_price":561.0,"optimal_occ":0.479,"current_profit_per_night":209.87,"optimal_profit_per_night":218.53,"uplift_pct":4.1,"cell_rev":74214.0,"uplift_rm":3042.774},{"listing_id":"KS05","listing_title":"Spacious Family Stay @ Ipoh Garden","property_type":"2BR","season":"shoulder","elasticity":-0.84,"current_avg_price":333.0,"current_occ":0.643,"optimal_price":447.0,"optimal_occ":0.502,"current_profit_per_night":148.75,"optimal_profit_per_night":173.42,"uplift_pct":16.6,"cell_rev":135973.0,"uplift_rm":22571.518},{"listing_id":"KS05","listing_title":"Spacious Family Stay @ Ipoh Garden","property_type":"2BR","season":"trough","elasticity":-1.151,"current_avg_price":306.0,"current_occ":0.53,"optimal_price":359.0,"optimal_occ":0.441,"current_profit_per_night":108.59,"optimal_profit_per_night":113.73,"uplift_pct":4.7,"cell_rev":29411.0,"uplift_rm":1382.317},{"listing_id":"KS06","listing_title":"High Rise Mountain View @ Meru Raya","property_type":"2BR","season":"peak","elasticity":-1.111,"current_avg_price":400.0,"current_occ":0.55,"optimal_price":525.0,"optimal_occ":0.406,"current_profit_per_night":162.86,"optimal_profit_per_night":171.2,"uplift_pct":5.1,"cell_rev":58219.0,"uplift_rm":2969.169},{"listing_id":"KS06","listing_title":"High Rise Mountain View @ Meru Raya","property_type":"2BR","season":"shoulder","elasticity":-0.84,"current_avg_price":283.0,"current_occ":0.576,"optimal_price":386.0,"optimal_occ":0.444,"current_profit_per_night":105.35,"optimal_profit_per_night":126.9,"uplift_pct":20.4,"cell_rev":103366.0,"uplift_rm":21086.664},{"listing_id":"KS06","listing_title":"High Rise Mountain View @ Meru Raya","property_type":"2BR","season":"trough","elasticity":-1.151,"current_avg_price":274.0,"current_occ":0.486,"optimal_price":331.0,"optimal_occ":0.392,"current_profit_per_night":84.67,"optimal_profit_per_night":90.42,"uplift_pct":6.8,"cell_rev":24171.0,"uplift_rm":1643.628},{"listing_id":"KS07","listing_title":"Luxury Apt @ Kinta Riverfront","property_type":"2BR","season":"peak","elasticity":-1.111,"current_avg_price":474.0,"current_occ":0.635,"optimal_price":637.0,"optimal_occ":0.458,"current_profit_per_night":233.75,"optimal_profit_per_night":242.87,"uplift_pct":3.9,"cell_rev":81466.0,"uplift_rm":3177.174},{"listing_id":"KS07","listing_title":"Luxury Apt @ Kinta Riverfront","property_type":"2BR","season":"shoulder","elasticity":-0.84,"current_avg_price":368.0,"current_occ":0.607,"optimal_price":490.0,"optimal_occ":0.478,"current_profit_per_night":161.2,"optimal_profit_per_night":185.0,"uplift_pct":14.8,"cell_rev":141365.0,"uplift_rm":20922.02},{"listing_id":"KS07","listing_title":"Luxury Apt @ Kinta Riverfront","property_type":"2BR","season":"trough","elasticity":-1.151,"current_avg_price":309.0,"current_occ":0.552,"optimal_price":403.0,"optimal_occ":0.406,"current_profit_per_night":114.48,"optimal_profit_per_night":122.52,"uplift_pct":7.0,"cell_rev":30756.0,"uplift_rm":2152.92},{"listing_id":"KS08","listing_title":"Grand Family Retreat @ Tambun Lakeside","property_type":"3BR","season":"peak","elasticity":-0.575,"current_avg_price":636.0,"current_occ":0.742,"optimal_price":848.0,"optimal_occ":0.629,"current_profit_per_night":368.57,"optimal_profit_per_night":445.66,"uplift_pct":20.9,"cell_rev":127132.0,"uplift_rm":26570.588},{"listing_id":"KS08","listing_title":"Grand Family Retreat @ Tambun Lakeside","property_type":"3BR","season":"shoulder","elasticity":-0.991,"current_avg_price":484.0,"current_occ":0.688,"optimal_price":661.0,"optimal_occ":0.505,"current_profit_per_night":240.56,"optimal_profit_per_night":266.11,"uplift_pct":10.6,"cell_rev":213104.0,"uplift_rm":22589.024},{"listing_id":"KS08","listing_title":"Grand Family Retreat @ Tambun Lakeside","property_type":"3BR","season":"trough","elasticity":-0.952,"current_avg_price":464.0,"current_occ":0.612,"optimal_price":568.0,"optimal_occ":0.505,"current_profit_per_night":202.36,"optimal_profit_per_night":219.4,"uplift_pct":8.4,"cell_rev":51525.0,"uplift_rm":4328.1},{"listing_id":"KS09","listing_title":"Premium City View @ Greentown Octagon","property_type":"3BR","season":"peak","elasticity":-0.575,"current_avg_price":512.0,"current_occ":0.642,"optimal_price":637.0,"optimal_occ":0.566,"current_profit_per_night":241.92,"optimal_profit_per_night":284.11,"uplift_pct":17.4,"cell_rev":89224.0,"uplift_rm":15524.976},{"listing_id":"KS09","listing_title":"Premium City View @ Greentown Octagon","property_type":"3BR","season":"shoulder","elasticity":-0.991,"current_avg_price":402.0,"current_occ":0.631,"optimal_price":529.0,"optimal_occ":0.48,"current_profit_per_night":170.27,"optimal_profit_per_night":190.75,"uplift_pct":12.0,"cell_rev":160271.0,"uplift_rm":19232.52},{"listing_id":"KS09","listing_title":"Premium City View @ Greentown Octagon","property_type":"3BR","season":"trough","elasticity":-0.952,"current_avg_price":369.0,"current_occ":0.497,"optimal_price":478.0,"optimal_occ":0.389,"current_profit_per_night":118.54,"optimal_profit_per_night":135.01,"uplift_pct":13.9,"cell_rev":32763.0,"uplift_rm":4554.057},{"listing_id":"KS10","listing_title":"Heritage Studio @ Old Town Concubine Lane","property_type":"Studio","season":"peak","elasticity":-1.86,"current_avg_price":248.0,"current_occ":0.624,"optimal_price":195.0,"optimal_occ":0.977,"current_profit_per_night":117.83,"optimal_profit_per_night":132.59,"uplift_pct":12.5,"cell_rev":41007.0,"uplift_rm":5125.875},{"listing_id":"KS10","listing_title":"Heritage Studio @ Old Town Concubine Lane","property_type":"Studio","season":"shoulder","elasticity":-1.791,"current_avg_price":209.0,"current_occ":0.542,"optimal_price":151.0,"optimal_occ":0.973,"current_profit_per_night":82.02,"optimal_profit_per_night":90.47,"uplift_pct":10.3,"cell_rev":69484.0,"uplift_rm":7156.852},{"listing_id":"KS10","listing_title":"Heritage Studio @ Old Town Concubine Lane","property_type":"Studio","season":"trough","elasticity":-2.55,"current_avg_price":163.0,"current_occ":0.634,"optimal_price":137.0,"optimal_occ":0.98,"current_profit_per_night":67.08,"optimal_profit_per_night":78.66,"uplift_pct":17.3,"cell_rev":18320.0,"uplift_rm":3169.36},{"listing_id":"KS11","listing_title":"Modern Studio Loft @ Greentown","property_type":"Studio","season":"peak","elasticity":-1.86,"current_avg_price":231.0,"current_occ":0.502,"optimal_price":181.0,"optimal_occ":0.787,"current_profit_per_night":86.2,"optimal_profit_per_night":96.2,"uplift_pct":11.6,"cell_rev":30533.0,"uplift_rm":3541.828},{"listing_id":"KS11","listing_title":"Modern Studio Loft @ Greentown","property_type":"Studio","season":"shoulder","elasticity":-1.791,"current_avg_price":190.0,"current_occ":0.48,"optimal_price":134.0,"optimal_occ":0.892,"current_profit_per_night":63.29,"optimal_profit_per_night":68.19,"uplift_pct":7.8,"cell_rev":57394.0,"uplift_rm":4476.732},{"listing_id":"KS11","listing_title":"Modern Studio Loft @ Greentown","property_type":"Studio","season":"trough","elasticity":-2.55,"current_avg_price":151.0,"current_occ":0.579,"optimal_price":123.0,"optimal_occ":0.977,"current_profit_per_night":54.79,"optimal_profit_per_night":65.07,"uplift_pct":18.8,"cell_rev":15533.0,"uplift_rm":2920.204},{"listing_id":"KS12","listing_title":"Chic Studio @ The Horizon Bercham","property_type":"Studio","season":"peak","elasticity":-1.86,"current_avg_price":212.0,"current_occ":0.487,"optimal_price":168.0,"optimal_occ":0.749,"current_profit_per_night":74.8,"optimal_profit_per_night":82.26,"uplift_pct":10.0,"cell_rev":27336.0,"uplift_rm":2733.6},{"listing_id":"KS12","listing_title":"Chic Studio @ The Horizon Bercham","property_type":"Studio","season":"shoulder","elasticity":-1.791,"current_avg_price":172.0,"current_occ":0.419,"optimal_price":129.0,"optimal_occ":0.7,"current_profit_per_night":48.08,"optimal_profit_per_night":50.37,"uplift_pct":4.8,"cell_rev":44818.0,"uplift_rm":2151.264},{"listing_id":"KS12","listing_title":"Chic Studio @ The Horizon Bercham","property_type":"Studio","season":"trough","elasticity":-2.55,"current_avg_price":147.0,"current_occ":0.448,"optimal_price":110.0,"optimal_occ":0.94,"current_profit_per_night":40.66,"optimal_profit_per_night":50.44,"uplift_pct":24.0,"cell_rev":11821.0,"uplift_rm":2837.04},{"listing_id":"KS13","listing_title":"Compact Studio @ Ipoh Garden East","property_type":"Studio","season":"peak","elasticity":-1.86,"current_avg_price":236.0,"current_occ":0.491,"optimal_price":180.0,"optimal_occ":0.812,"current_profit_per_night":86.88,"optimal_profit_per_night":98.31,"uplift_pct":13.2,"cell_rev":30791.0,"uplift_rm":4064.412},{"listing_id":"KS13","listing_title":"Compact Studio @ Ipoh Garden East","property_type":"Studio","season":"shoulder","elasticity":-1.791,"current_avg_price":172.0,"current_occ":0.512,"optimal_price":129.0,"optimal_occ":0.855,"current_profit_per_night":58.74,"optimal_profit_per_night":61.52,"uplift_pct":4.7,"cell_rev":55076.0,"uplift_rm":2588.572},{"listing_id":"KS13","listing_title":"Compact Studio @ Ipoh Garden East","property_type":"Studio","season":"trough","elasticity":-2.55,"current_avg_price":154.0,"current_occ":0.415,"optimal_price":111.0,"optimal_occ":0.963,"current_profit_per_night":40.71,"optimal_profit_per_night":52.63,"uplift_pct":29.3,"cell_rev":11011.0,"uplift_rm":3226.223},{"listing_id":"KS14","listing_title":"Minimalist Studio @ Octagon Greentown","property_type":"Studio","season":"peak","elasticity":-1.86,"current_avg_price":248.0,"current_occ":0.502,"optimal_price":183.0,"optimal_occ":0.882,"current_profit_per_night":94.59,"optimal_profit_per_night":109.08,"uplift_pct":15.3,"cell_rev":33157.0,"uplift_rm":5073.021},{"listing_id":"KS14","listing_title":"Minimalist Studio @ Octagon Greentown","property_type":"Studio","season":"shoulder","elasticity":-1.791,"current_avg_price":198.0,"current_occ":0.474,"optimal_price":140.0,"optimal_occ":0.882,"current_profit_per_night":66.46,"optimal_profit_per_night":72.52,"uplift_pct":9.1,"cell_rev":58507.0,"uplift_rm":5324.137},{"listing_id":"KS14","listing_title":"Minimalist Studio @ Octagon Greentown","property_type":"Studio","season":"trough","elasticity":-2.55,"current_avg_price":166.0,"current_occ":0.508,"optimal_price":129.0,"optimal_occ":0.967,"current_profit_per_night":55.55,"optimal_profit_per_night":69.9,"uplift_pct":25.8,"cell_rev":14727.0,"uplift_rm":3799.566},{"listing_id":"KS15","listing_title":"Snug Studio @ Station 18 Kinta City","property_type":"Studio","season":"peak","elasticity":-1.86,"current_avg_price":218.0,"current_occ":0.432,"optimal_price":164.0,"optimal_occ":0.733,"current_profit_per_night":68.93,"optimal_profit_per_night":77.45,"uplift_pct":12.4,"cell_rev":24791.0,"uplift_rm":3074.084},{"listing_id":"KS15","listing_title":"Snug Studio @ Station 18 Kinta City","property_type":"Studio","season":"shoulder","elasticity":-1.791,"current_avg_price":167.0,"current_occ":0.467,"optimal_price":129.0,"optimal_occ":0.739,"current_profit_per_night":51.29,"optimal_profit_per_night":53.31,"uplift_pct":3.9,"cell_rev":48377.0,"uplift_rm":1886.703},{"listing_id":"KS15","listing_title":"Snug Studio @ Station 18 Kinta City","property_type":"Studio","season":"trough","elasticity":-2.55,"current_avg_price":153.0,"current_occ":0.339,"optimal_price":116.0,"optimal_occ":0.691,"current_profit_per_night":32.9,"optimal_profit_per_night":41.25,"uplift_pct":25.4,"cell_rev":8942.0,"uplift_rm":2271.268}]};
+const RATE_ROWS = [["KS01","Infinity Poolside View @ The Haven Lakeside Tambun","1BR","peak",-1.089,359.0,471.0,0.771,0.573,3.9,2876.757,73763.0],["KS01","Infinity Poolside View @ The Haven Lakeside Tambun","1BR","shoulder",-1.362,276.0,279.0,0.717,0.705,0.0,0.0,123609.0],["KS01","Infinity Poolside View @ The Haven Lakeside Tambun","1BR","trough",-1.788,230.0,187.0,0.672,0.975,5.2,1415.44,27220.0],["KS02","Sunset Hill View @ Sunway City Ipoh","1BR","peak",-1.089,299.0,375.0,0.657,0.514,4.6,2393.748,52038.0],["KS02","Sunset Hill View @ Sunway City Ipoh","1BR","shoulder",-1.362,224.0,273.0,0.62,0.473,1.1,950.994,86454.0],["KS02","Sunset Hill View @ Sunway City Ipoh","1BR","trough",-1.788,189.0,162.0,0.617,0.811,1.5,301.995,20133.0],["KS03","Hot Spring Retreat @ Lost World Tambun","1BR","peak",-1.089,325.0,452.0,0.793,0.554,5.4,3709.476,68694.0],["KS03","Hot Spring Retreat @ Lost World Tambun","1BR","shoulder",-1.362,262.0,277.0,0.692,0.642,0.1,114.056,114056.0],["KS03","Hot Spring Retreat @ Lost World Tambun","1BR","trough",-1.788,225.0,182.0,0.667,0.978,5.0,1344.8,26896.0],["KS04","Comfy Apt @ Majestic Taman Jubilee","1BR","peak",-1.089,288.0,376.0,0.531,0.397,5.6,2302.776,41121.0],["KS04","Comfy Apt @ Majestic Taman Jubilee","1BR","shoulder",-1.362,211.0,272.0,0.561,0.396,1.9,1405.297,73963.0],["KS04","Comfy Apt @ Majestic Taman Jubilee","1BR","trough",-1.788,183.0,162.0,0.475,0.593,1.0,154.5,15450.0],["KS05","Spacious Family Stay @ Ipoh Garden","2BR","peak",-1.111,436.0,561.0,0.635,0.479,4.1,3042.774,74214.0],["KS05","Spacious Family Stay @ Ipoh Garden","2BR","shoulder",-0.84,333.0,447.0,0.643,0.502,16.6,22571.518,135973.0],["KS05","Spacious Family Stay @ Ipoh Garden","2BR","trough",-1.151,306.0,359.0,0.53,0.441,4.7,1382.317,29411.0],["KS06","High Rise Mountain View @ Meru Raya","2BR","peak",-1.111,400.0,525.0,0.55,0.406,5.1,2969.169,58219.0],["KS06","High Rise Mountain View @ Meru Raya","2BR","shoulder",-0.84,283.0,386.0,0.576,0.444,20.4,21086.664,103366.0],["KS06","High Rise Mountain View @ Meru Raya","2BR","trough",-1.151,274.0,331.0,0.486,0.392,6.8,1643.628,24171.0],["KS07","Luxury Apt @ Kinta Riverfront","2BR","peak",-1.111,474.0,637.0,0.635,0.458,3.9,3177.174,81466.0],["KS07","Luxury Apt @ Kinta Riverfront","2BR","shoulder",-0.84,368.0,490.0,0.607,0.478,14.8,20922.02,141365.0],["KS07","Luxury Apt @ Kinta Riverfront","2BR","trough",-1.151,309.0,403.0,0.552,0.406,7.0,2152.92,30756.0],["KS08","Grand Family Retreat @ Tambun Lakeside","3BR","peak",-0.575,636.0,848.0,0.742,0.629,20.9,26570.588,127132.0],["KS08","Grand Family Retreat @ Tambun Lakeside","3BR","shoulder",-0.991,484.0,661.0,0.688,0.505,10.6,22589.024,213104.0],["KS08","Grand Family Retreat @ Tambun Lakeside","3BR","trough",-0.952,464.0,568.0,0.612,0.505,8.4,4328.1,51525.0],["KS09","Premium City View @ Greentown Octagon","3BR","peak",-0.575,512.0,637.0,0.642,0.566,17.4,15524.976,89224.0],["KS09","Premium City View @ Greentown Octagon","3BR","shoulder",-0.991,402.0,529.0,0.631,0.48,12.0,19232.52,160271.0],["KS09","Premium City View @ Greentown Octagon","3BR","trough",-0.952,369.0,478.0,0.497,0.389,13.9,4554.057,32763.0],["KS10","Heritage Studio @ Old Town Concubine Lane","Studio","peak",-1.86,248.0,195.0,0.624,0.977,12.5,5125.875,41007.0],["KS10","Heritage Studio @ Old Town Concubine Lane","Studio","shoulder",-1.791,209.0,151.0,0.542,0.973,10.3,7156.852,69484.0],["KS10","Heritage Studio @ Old Town Concubine Lane","Studio","trough",-2.55,163.0,137.0,0.634,0.98,17.3,3169.36,18320.0],["KS11","Modern Studio Loft @ Greentown","Studio","peak",-1.86,231.0,181.0,0.502,0.787,11.6,3541.828,30533.0],["KS11","Modern Studio Loft @ Greentown","Studio","shoulder",-1.791,190.0,134.0,0.48,0.892,7.8,4476.732,57394.0],["KS11","Modern Studio Loft @ Greentown","Studio","trough",-2.55,151.0,123.0,0.579,0.977,18.8,2920.204,15533.0],["KS12","Chic Studio @ The Horizon Bercham","Studio","peak",-1.86,212.0,168.0,0.487,0.749,10.0,2733.6,27336.0],["KS12","Chic Studio @ The Horizon Bercham","Studio","shoulder",-1.791,172.0,129.0,0.419,0.7,4.8,2151.264,44818.0],["KS12","Chic Studio @ The Horizon Bercham","Studio","trough",-2.55,147.0,110.0,0.448,0.94,24.0,2837.04,11821.0],["KS13","Compact Studio @ Ipoh Garden East","Studio","peak",-1.86,236.0,180.0,0.491,0.812,13.2,4064.412,30791.0],["KS13","Compact Studio @ Ipoh Garden East","Studio","shoulder",-1.791,172.0,129.0,0.512,0.855,4.7,2588.572,55076.0],["KS13","Compact Studio @ Ipoh Garden East","Studio","trough",-2.55,154.0,111.0,0.415,0.963,29.3,3226.223,11011.0],["KS14","Minimalist Studio @ Octagon Greentown","Studio","peak",-1.86,248.0,183.0,0.502,0.882,15.3,5073.021,33157.0],["KS14","Minimalist Studio @ Octagon Greentown","Studio","shoulder",-1.791,198.0,140.0,0.474,0.882,9.1,5324.137,58507.0],["KS14","Minimalist Studio @ Octagon Greentown","Studio","trough",-2.55,166.0,129.0,0.508,0.967,25.8,3799.566,14727.0],["KS15","Snug Studio @ Station 18 Kinta City","Studio","peak",-1.86,218.0,164.0,0.432,0.733,12.4,3074.084,24791.0],["KS15","Snug Studio @ Station 18 Kinta City","Studio","shoulder",-1.791,167.0,129.0,0.467,0.739,3.9,1886.703,48377.0],["KS15","Snug Studio @ Station 18 Kinta City","Studio","trough",-2.55,153.0,116.0,0.339,0.691,25.4,2271.268,8942.0]];
+
+const rm  = n => "RM"+Math.round(n).toLocaleString();
+const rmC = n => n>=1e6?"RM"+(n/1e6).toFixed(2)+"M":n>=1e3?"RM"+Math.round(n/1e3)+"K":"RM"+Math.round(n);
+const pct = n => Math.round(n*100)+"%";
+const cap = s => s[0].toUpperCase()+s.slice(1);
+
+const P=RESULTS.portfolio, REC=RESULTS.recovery, SEA=RESULTS.seasonal,
+      TS=RESULTS.elasticity_by_type_season, LS=RESULTS.by_listing_season;
+const TYPES=["Studio","1BR","2BR","3BR"], SEASONS=["peak","shoulder","trough"];
+const SL={peak:"Peak",shoulder:"Shoulder",trough:"Value"};
+const sl=s=>SL[s];
+
+/* ---- tab shell ---- */
+const TABS=[["overview","Overview"],["elasticity","Price Sensitivity"],
+            ["optimal","Recommended Rates"],["questions","The Pricing Questions"]];
+const nav=document.getElementById("nav");
+TABS.forEach(([id,label],i)=>{const b=document.createElement("button");b.textContent=label;b.className=i==0?"on":"";
+  b.onclick=()=>{document.querySelectorAll("nav button").forEach(x=>x.classList.remove("on"));b.classList.add("on");
+    document.querySelectorAll(".screen").forEach(s=>s.classList.remove("on"));document.getElementById(id).classList.add("on");
+    window.scrollTo(0,0);};
+  nav.appendChild(b);});
+
+/* ---- shared CSS-bar helpers ---- */
+const bar=(items,fmt)=>{const m=Math.max(...items.map(i=>Math.abs(i.value)))||1;
+  return '<div class="kqchart">'+items.map(i=>{const w=Math.abs(i.value)/m*100,neg=i.value<0;
+    return `<div class="kqrow"><span class="kqlab">${i.label}</span><span class="kqtrack"><i style="width:${w}%;background:${neg?'var(--neg)':'var(--blue)'}"></i></span><span class="kqval ${neg?'negv':''}">${fmt(i.value)}</span></div>`;}).join('')+'</div>';};
+const split=parts=>{const t=parts.reduce((a,b)=>a+b.value,0)||1;
+  return '<div class="kqsplit">'+parts.map((p,i)=>`<div style="width:${Math.max(8,p.value/t*100)}%;background:${i==0?'var(--blue)':'var(--pos)'}">${p.label} ${Math.round(p.value/t*100)}%</div>`).join('')+'</div>';};
+const grouped=(rows,la,lb,ca,cb)=>{const m=Math.max(...rows.flatMap(r=>[Math.abs(r.a),Math.abs(r.b)]))||1;
+  return '<div class="kqgroup">'+rows.map(r=>`<div class="kqgrow"><div class="gl">${r.label}</div>
+    <div class="gb"><span>${la}</span><div class="t"><i style="width:${Math.abs(r.a)/m*100}%;background:${ca}"></i></div><span style="width:60px;color:var(--navy);font-weight:600;text-align:right">${r.fa}</span></div>
+    <div class="gb"><span>${lb}</span><div class="t"><i style="width:${Math.abs(r.b)/m*100}%;background:${cb}"></i></div><span style="width:60px;color:var(--navy);font-weight:600;text-align:right">${r.fb}</span></div></div>`).join('')+'</div>';};
+
+/* helpers over the data */
+const typeAvgElast = t => {const c=TS.filter(x=>x.property_type==t);return c.reduce((a,x)=>a+x.elasticity,0)/c.length;};
+const seasonAvgElast = s => {const c=TS.filter(x=>x.season==s);return c.reduce((a,x)=>a+x.elasticity,0)/c.length;};
+const seasonRow = s => SEA.by_season.find(x=>x.season==s);
+const MONTHS=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const PEAKM=["Feb","May","Dec"], VALM=["Nov","Mar"];
+const monthSeason=m=>PEAKM.includes(m)?"peak":(VALM.includes(m)?"trough":"shoulder");
+const lost=e=>Math.round(Math.abs(e)*10);
+const seasonLegend='<div class="legend"><span class="lg s-peak">Peak \u00b7 Dec, Feb, May</span><span class="lg s-shoulder">Shoulder \u00b7 other months</span><span class="lg s-trough">Value \u00b7 Nov, Mar</span></div>';
+const OPT={}, ORDER=[];
+LS.forEach(r=>{ if(!OPT[r.listing_id]){OPT[r.listing_id]={title:r.listing_title,type:r.property_type}; ORDER.push(r.listing_id);} OPT[r.listing_id][r.season]=r.optimal_price; });
+
+/* ---------- OVERVIEW ---------- */
+(()=>{
+  const strip=MONTHS.map(m=>{const cls=({peak:'s-peak',shoulder:'s-shoulder',trough:'s-trough'})[monthSeason(m)];
+    return `<div class="${cls}">${m}</div>`;}).join('');
+  const DEF={peak:{months:"Dec, Feb, May",mean:"Busiest months: year-end, Chinese New Year and the May school break. Guests book regardless, so rates can sit high."},
+             shoulder:{months:"All other months",mean:"The steady middle of the year. Demand is ordinary, so price has the most room to be tuned."},
+             trough:{months:"Nov, Mar",mean:"The quiet post-holiday lull. Demand is softest, so a lower rate wins back empty nights."}};
+  const defRows=SEASONS.map(s=>{const r=seasonRow(s);return `<tr>
+      <td><span class="lg s-${s=='trough'?'trough':s}">${sl(s)}</span></td>
+      <td>${DEF[s].months}</td>
+      <td class="mono">${pct(r.occupancy)}</td>
+      <td class="mono">${rm(r.avg_price)}</td>
+      <td class="note">${DEF[s].mean}</td></tr>`;}).join('');
+  document.getElementById("overview").innerHTML=`
+    <h2>Overview</h2>
+    <p class="sub">${P.listings} listings &middot; ${P.nights.toLocaleString()} listing-nights &middot; ${RESULTS.meta.period}</p>
+    <div class="kpis">
+      <div class="kpi"><div class="v">${P.listings}</div><div class="l">Listings priced</div></div>
+      <div class="kpi"><div class="v">${rmC(P.observed_revenue)}</div><div class="l">Observed revenue</div></div>
+      <div class="kpi"><div class="v">${pct(P.overall_occupancy)}</div><div class="l">Overall occupancy</div></div>
+      <div class="kpi"><div class="v">${rmC(P.projected_uplift_rm)}</div><div class="l">Projected annual uplift</div></div>
+      <div class="kpi"><div class="v">+${P.projected_uplift_pct}%</div><div class="l">Uplift vs current pricing</div></div>
+    </div>
+    <div class="callout proof"><b>Method recovery check: </b> the estimator recovers the baked-in elasticity with a mean error of
+      <b>${REC.mean_abs_error}</b> against <b>${REC.naive_mean_abs_error}</b> for a naive price-vs-occupancy read
+      (${(REC.naive_mean_abs_error/REC.mean_abs_error).toFixed(1)}x better), and the true value sits inside the 95% interval in
+      <b>${pct(REC.truth_in_ci_rate)}</b> of the ${REC.n_cells} type-season cells. This is the proof the numbers can be trusted before any rate is changed.</div>
+    <h3>What the three seasons mean</h3>
+    <p class="note">Each month is grouped into one of three seasons by how much travel demand it draws. The two numbers below, how full the nights run (occupancy) and the nightly rate the market supports, are the metric that separates the seasons: peak is the busiest and dearest, value the quietest and cheapest.</p>
+    <table><tr><th>Season</th><th>Months</th><th>Occupancy</th><th>Typical rate</th><th>What it means</th></tr>${defRows}</table>
+    <h3>Which season each month falls in</h3>
+    ${seasonLegend}
+    <div class="seasonstrip">${strip}</div>
+    <p class="note">Season is set by the month, not by quarter. August is Shoulder, December is Peak.</p>
+    <h3>How to read the numbers</h3>
+    <table><tr><th>Metric</th><th>What it means</th></tr>
+      <tr><td><b>Occupancy</b></td><td>The share of available nights that get booked. ${pct(P.overall_occupancy)} means roughly that many nights in every hundred are filled.</td></tr>
+      <tr><td><b>Nightly rate</b></td><td>The price listed for one night, in RM, before any weekend or public-holiday premium.</td></tr>
+      <tr><td><b>Price sensitivity</b></td><td>How many bookings out of 100 you lose when you raise the rate 10 percent. Higher means guests leave faster.</td></tr>
+      <tr><td><b>Uplift</b></td><td>The extra profit a year from moving to the recommended rate, compared with current pricing.</td></tr>
+    </table>`;
+})();
+
+/* ---------- PRICE SENSITIVITY ---------- */
+(()=>{
+  const byType=TYPES.map(t=>({label:t,value:lost(typeAvgElast(t))}));
+  const rows=TS.map(x=>`<tr>
+      <td><b>${x.property_type}</b></td><td>${sl(x.season)}</td>
+      <td class="mono"><b>${lost(x.elasticity)}</b> of 100</td>
+      <td class="mono note">${x.elasticity}</td></tr>`).join('');
+  document.getElementById("elasticity").innerHTML=`
+    <h2>How much do bookings drop when you raise the price?</h2>
+    <p class="sub">Price sensitivity: out of 100 bookings, how many you lose when the nightly rate goes up 10 percent. A higher number means guests walk away faster.</p>
+    <h3>Bookings lost per 10% price rise, by room type</h3>
+    ${bar(byType, n=>n+" of 100")}
+    <p class="note">Studios are the most price-sensitive, so raising their rate empties the calendar fast; larger units barely move, so they can carry a higher price. That is why studios are mostly cut and larger units mostly raised.</p>
+    <h3>Full table, by room type and season</h3>
+    <table><tr><th>Type</th><th>Season</th><th>Bookings lost per 10% rise</th><th>Sensitivity score</th></tr>${rows}</table>
+    <p class="note">The sensitivity score is the measured price-sensitivity figure: a score of -2.0 means a 10% rise costs about 20 bookings in 100. Guests are less sensitive in peak and more sensitive in the value months.</p>`;
+})();
+
+/* ---------- RECOMMENDED RATES (price sheet) ---------- */
+(()=>{
+  const cc={peak:'peak',shoulder:'shoulder',trough:'value'};
+  const head=`<tr><th class="name">Listing</th><th>Type</th>${MONTHS.map(m=>`<th>${m}</th>`).join('')}</tr>`;
+  const body=ORDER.map(id=>{const o=OPT[id];
+    const cells=MONTHS.map(m=>{const s=monthSeason(m);return `<td class="cell ${cc[s]}">${Math.round(o[s])}</td>`;}).join('');
+    return `<tr><td class="name">${o.title}</td><td>${o.type}</td>${cells}</tr>`;}).join('');
+  document.getElementById("optimal").innerHTML=`
+    <h2>Recommended nightly rate, every listing by month</h2>
+    <p class="sub">The price to list for each of the 15 properties in each month, in RM, before any weekend premium.</p>
+    ${seasonLegend}
+    <div style="overflow-x:auto"><table class="sheet">${head}${body}</table></div>
+    <p class="note">Same place, different price by season: highest in the peak months, lowest in the value months. The rates stay within prices the host has already tested, so they are safe to apply in steps while watching occupancy. Also saved as price-sheet.csv.</p>`;
+})();
+
+/* ---------- THE PRICING QUESTIONS (governed assistant) ---------- */
+(()=>{
+  const f0=n=>rm(n), fp=n=>"+"+Math.round(n)+"%", fe=n=>n.toFixed(2);
+  const raiseN=LS.filter(r=>r.optimal_price>r.current_avg_price).length;
+  const cutN  =LS.filter(r=>r.optimal_price<r.current_avg_price).length;
+  const holdN =LS.length-raiseN-cutN;
+  const topUplift=[...LS].sort((a,b)=>b.uplift_rm-a.uplift_rm).slice(0,6);
+  const totalUplift=LS.reduce((a,r)=>a+r.uplift_rm,0);
+  const peakRev=seasonRow('peak').revenue, shoRev=seasonRow('shoulder').revenue, troRev=seasonRow('trough').revenue;
+  const upSeason=s=>LS.filter(r=>r.season==s).reduce((a,r)=>a+r.uplift_rm,0);
+  const upPeak=upSeason('peak'),upSho=upSeason('shoulder'),upTro=upSeason('trough');
+  const avgOpt=s=>{const c=LS.filter(r=>r.season==s);return c.reduce((a,r)=>a+r.optimal_price,0)/c.length;};
+  const studios=LS.filter(r=>r.property_type=='Studio');
+  const studioCut=studios.filter(r=>r.optimal_price<r.current_avg_price);
+  const bigRaise=[...LS].filter(r=>r.optimal_price>r.current_avg_price).sort((a,b)=>b.uplift_rm-a.uplift_rm).slice(0,6);
+  const mostElasticType=TYPES.map(t=>({t,e:typeAvgElast(t)})).sort((a,b)=>a.e-b.e)[0];
+  const leastElasticType=TYPES.map(t=>({t,e:typeAvgElast(t)})).sort((a,b)=>b.e-a.e)[0];
+
+  const LOOKUP=[
+   {t:"L1",src:"by_listing_season.optimal_price (by season)",
+    q:"1 \u00b7 How should my rates move through the year?",
+    a:`Rates should climb into the busy months and ease in the quiet ones. Across all 15 listings the recommended nightly rate averages about ${rm(avgOpt('peak'))} in the peak months (Dec, Feb, May), ${rm(avgOpt('shoulder'))} in the shoulder months, and ${rm(avgOpt('trough'))} in the value months (Nov, Mar). Same place, different price by season.`,
+    c:bar([{label:"Peak",value:avgOpt('peak')},{label:"Shoulder",value:avgOpt('shoulder')},{label:"Value",value:avgOpt('trough')}], rm)},
+   {t:"L2",src:"by_listing_season.uplift_rm (by season)",
+    q:"2 \u00b7 Which season holds the most uplift?",
+    a:`Most of the money hides in the ordinary shoulder months, not the obvious peak. Shoulder holds about ${rm(upSho)} of the ${rm(P.projected_uplift_rm)} total (${Math.round(upSho/P.projected_uplift_rm*100)}%), more than peak (${rm(upPeak)}) and the value season (${rm(upTro)}) combined. The larger units are most underpriced in shoulder, so start there for the fastest return.`,
+    c:bar([{label:"Shoulder",value:upSho},{label:"Peak",value:upPeak},{label:"Value",value:upTro}], f0)},
+   {t:"L3",src:"by_listing_season (bookings lost per 10%)",
+    q:"3 \u00b7 Which room type is most sensitive to price?",
+    a:`${mostElasticType.t} are the most price-sensitive: raise the rate 10% and you lose about ${lost(mostElasticType.e)} bookings in 100. ${leastElasticType.t} are the least, losing only about ${lost(leastElasticType.e)}. Sensitive units should be priced to fill; the rest can carry a premium.`,
+    c:bar(TYPES.map(t=>({label:t,value:lost(typeAvgElast(t))})), n=>n+" of 100")},
+   {t:"L4",src:"by_listing_season (sensitivity by season)",
+    q:"4 \u00b7 Does that sensitivity change with the season?",
+    a:`Yes. Guests are less price-sensitive in peak and more so in the value months. A studio loses about ${lost(TS.find(x=>x.property_type=='Studio'&&x.season=='peak').elasticity)} bookings in 100 per 10% rise in peak, but about ${lost(TS.find(x=>x.property_type=='Studio'&&x.season=='trough').elasticity)} in the value season. So peak can hold firm while the quiet months should chase occupancy.`,
+    c:bar(SEASONS.map(s=>({label:sl(s),value:lost(seasonAvgElast(s))})), n=>n+" of 100")},
+   {t:"L5",src:"by_listing_season (optimal vs current)",
+    q:"5 \u00b7 Which listings should I raise, and which should I cut?",
+    a:`Of the ${LS.length} listing-and-season prices, ${raiseN} should go up and ${cutN} should come down. The raises are the larger, less price-sensitive units; the cuts are the studios, where filling more nights beats holding a high rate.`,
+    c:split([{label:"Raise",value:raiseN},{label:"Cut",value:cutN}])},
+   {t:"L6",src:"by_listing_season.uplift_rm",
+    q:"6 \u00b7 Where is the biggest money left on the table?",
+    a:`The largest single opportunities are ${topUplift[0].listing_title.split(' @ ')[0]} (${sl(topUplift[0].season)}) at about ${rm(topUplift[0].uplift_rm)} and ${topUplift[1].listing_title.split(' @ ')[0]} (${sl(topUplift[1].season)}) at about ${rm(topUplift[1].uplift_rm)} a year. The bigger family units in the shoulder season carry the most upside.`,
+    c:bar(topUplift.map(r=>({label:`${r.listing_title.split(' @ ')[0]} (${sl(r.season)[0]})`,value:r.uplift_rm})), f0)},
+   {t:"L7",src:"portfolio.projected_uplift_rm / _pct",
+    q:"7 \u00b7 How much extra will the new prices make overall?",
+    a:`About ${rm(P.projected_uplift_rm)} more a year, or ${P.projected_uplift_pct}% over current pricing, with occupancy holding near ${pct(P.overall_occupancy)} and no extra listings or spend. It comes purely from setting the right rate per listing per season.`,
+    c:split([{label:"Current profit base",value:Math.round(P.observed_revenue)},{label:"Uplift",value:Math.round(P.projected_uplift_rm)}])},
+   {t:"L8",src:"by_listing_season (Studio, cut)",
+    q:"8 \u00b7 Which studios am I over-pricing?",
+    a:`${studioCut.length} of the studio prices sit above their best rate. Because studios are the most price-sensitive type, the empty nights cost more than the higher rate earns, so trimming the rate fills the calendar and lifts total profit.`,
+    c:bar(studioCut.slice(0,6).map(r=>({label:`${r.listing_title.split(' @ ')[0]} (${sl(r.season)[0]})`,value:r.uplift_pct})), fp)},
+   {t:"L9",src:"by_listing_season (raise, by uplift)",
+    q:"9 \u00b7 Which listings are clearly under-priced?",
+    a:`The strongest raises are the larger units: ${bigRaise.slice(0,3).map(r=>r.listing_title.split(' @ ')[0]+' ('+sl(r.season)+')').join(', ')}. Work the shoulder-season raises first, that is where the fastest return sits. These barely lose bookings when the rate goes up.`,
+    c:bar(bigRaise.map(r=>({label:`${r.listing_title.split(' @ ')[0]} (${sl(r.season)[0]})`,value:r.uplift_pct})), fp)},
+   {t:"L10",src:"by_listing_season (peak optimal by type)",
+    q:"10 \u00b7 What should the peak rate be for each room type?",
+    a:`In peak season the rates separate by size: studios land roughly ${rm(Math.min(...LS.filter(r=>r.property_type=='Studio'&&r.season=='peak').map(r=>r.optimal_price)))} to ${rm(Math.max(...LS.filter(r=>r.property_type=='Studio'&&r.season=='peak').map(r=>r.optimal_price)))}, while 3BR units reach ${rm(Math.max(...LS.filter(r=>r.property_type=='3BR'&&r.season=='peak').map(r=>r.optimal_price)))}. Size drives the headline number as much as the season.`,
+    c:bar(TYPES.map(t=>{const cells=LS.filter(r=>r.property_type==t&&r.season=='peak');return {label:`${t} peak`,value:cells.reduce((a,r)=>a+r.optimal_price,0)/cells.length};}), rm)},
+  ];
+
+  function item(host,qtext,tagHTML,bodyHTML){
+    const w=document.createElement('div');w.className='acc';
+    w.innerHTML=`<button class="acc-q" aria-expanded="false"><span>${qtext}</span><span class="acc-ic">+</span></button><div class="acc-a">${tagHTML}${bodyHTML}</div>`;
+    const b=w.querySelector('.acc-q'),ic=w.querySelector('.acc-ic');
+    b.addEventListener('click',()=>{const o=w.classList.toggle('open');b.setAttribute('aria-expanded',o);ic.textContent=o?'\u2212':'+';});
+    host.appendChild(w);
+  }
+
+  document.getElementById("questions").innerHTML=
+    '<h2>The Pricing Questions</h2>'+
+    '<p class="sub">The ten questions a host asks most, answered from the locked results, plus four live read-only queries that run in your browser. Click a question to open the answer and chart.</p>'+
+    '<div id="kqlookup"></div>'+
+    '<h3>Live data queries <span class="gtag live">read-only SQL \u00b7 runs in your browser</span></h3>'+
+    '<p class="note">These four answers come from fixed, parameterised SQL run client-side over the deployed listing-season rates (sql.js). The query layer can only pick a track and bind values. It can never write its own SQL, and it never sees the hidden true price sensitivity, which stays in the eval copy used only for the accuracy check.</p>'+
+    '<div id="kqlive"><p class="note">Loading the in-browser SQL engine...</p></div>';
+
+  const lookHost=document.getElementById("kqlookup");
+  LOOKUP.forEach(x=>item(lookHost,x.q,`<div class="gtag">${x.t} \u00b7 governed lookup \u00b7 <code>results.json</code> &rarr; <code>${x.src}</code></div>`,`<div class="aa">${x.a}</div>${x.c}`));
+
+  /* live sql.js layer */
+  const liveHost=document.getElementById("kqlive");
+  const sqlBox=s=>`<pre class="sqlbox">${s.replace(/</g,'&lt;')}</pre>`;
+  window.__buildLive=function(db){
+    liveHost.innerHTML='';
+    const run=(sql,params)=>{const st=db.prepare(sql);if(params)st.bind(params);const o=[];while(st.step())o.push(st.getAsObject());st.free();return o;};
+    const TR=[];
+    {const sql="SELECT listing_title, ROUND(SUM(uplift_rm)) AS uplift\nFROM rates GROUP BY listing_title ORDER BY uplift DESC";
+     const rows=run(sql);const top=rows[0];
+     const a=`${top.listing_title} carries the single biggest annual opportunity at about ${rm(top.uplift)}. The ranking below is the order to work the portfolio in.`;
+     TR.push({q:"11 \u00b7 Which listings carry the biggest annual uplift?",sql,a,
+       c:bar(rows.slice(0,8).map(r=>({label:r.listing_title.split(' @ ')[0],value:r.uplift})), n=>rm(n))});}
+    {const sql="SELECT season,\n  SUM(CASE WHEN optimal_price>current_avg_price THEN 1 ELSE 0 END) AS raise,\n  SUM(CASE WHEN optimal_price<current_avg_price THEN 1 ELSE 0 END) AS cut\nFROM rates GROUP BY season";
+     const rows=run(sql);
+     const a=`The mix of raises and cuts shifts by season: peak and shoulder lean toward raising the larger units, while the value season leans toward cutting to fill nights.`;
+     TR.push({q:"12 \u00b7 How does the raise-versus-cut split vary by season?",sql,a,
+       c:grouped(rows.map(r=>({label:sl(r.season),a:r.raise,b:r.cut,fa:r.raise+' raise',fb:r.cut+' cut'})),'Raise','Cut','var(--pos)','var(--neg)')});}
+    {const sql="SELECT property_type, ROUND(AVG(elasticity),2) AS mean_elast\nFROM rates GROUP BY property_type ORDER BY mean_elast";
+     const rows=run(sql);
+     const a=`Studios are the most price-sensitive on average and the larger units the least, which is the whole basis for cutting the small units and raising the large ones. The score below is the underlying figure, where more negative means more sensitive.`;
+     TR.push({q:"13 \u00b7 What is the average price sensitivity by room type?",sql,a,
+       c:bar(rows.map(r=>({label:r.property_type,value:r.mean_elast})), n=>n.toFixed(2))});}
+    {const sql="SELECT listing_title, season, current_avg_price, optimal_price,\n  ROUND(optimal_price-current_avg_price) AS delta\nFROM rates ORDER BY ABS(optimal_price-current_avg_price) DESC LIMIT 8";
+     const rows=run(sql);const top=rows[0];
+     const a=`The biggest single move is ${top.listing_title.split(' @ ')[0]} in ${sl(top.season)}, ${top.delta>0?'up':'down'} about ${rm(Math.abs(top.delta))} a night (${rm(top.current_avg_price)} to ${rm(top.optimal_price)}). These are the rate changes to stage first.`;
+     TR.push({q:"14 \u00b7 What are the biggest single price moves?",sql,a,
+       c:bar(rows.map(r=>({label:`${r.listing_title.split(' @ ')[0]} (${sl(r.season)[0]})`,value:r.delta})), n=>(n>0?'+':'')+rm(n))});}
+    TR.forEach(t=>item(liveHost,t.q,`<div class="gtag live">live read-only SQL \u00b7 sql.js</div>${sqlBox(t.sql)}`,`<div class="aa">${t.a}</div>${t.c}`));
+  };
+
+  initSqlJs({locateFile:f=>`https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/${f}`})
+   .then(SQL=>{
+     const db=new SQL.Database();
+     db.run("CREATE TABLE rates(listing_id TEXT, listing_title TEXT, property_type TEXT, season TEXT, elasticity REAL, current_avg_price REAL, optimal_price REAL, current_occ REAL, optimal_occ REAL, uplift_pct REAL, uplift_rm REAL, cell_rev REAL);");
+     const st=db.prepare("INSERT INTO rates VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
+     RATE_ROWS.forEach(r=>st.run(r));st.free();
+     window.__buildLive(db);
+   })
+   .catch(()=>{liveHost.innerHTML='<p class="note">The four live queries need an internet connection to load the in-browser SQL engine. The ten questions above are fully available offline.</p>';});
+})();
+</script>
+</body>
+</html>
