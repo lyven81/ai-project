@@ -2,10 +2,10 @@
 
 [![Portfolio Website](https://img.shields.io/badge/Portfolio-Live-green?logo=vercel)](https://lyven81.github.io/ai-project/)
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-black?logo=github)](https://github.com/lyven81/ai-project)
-[![Projects](https://img.shields.io/badge/Projects-53-blue)](#projects-by-category)
+[![Projects](https://img.shields.io/badge/Projects-54-blue)](#projects-by-category)
 [![AI Powered](https://img.shields.io/badge/AI-Powered-orange?logo=tensorflow)](https://github.com/lyven81/ai-project)
 
-**53 production AI apps across 8 business categories** — each one solves a real, named pain point with a working demo you can click and try today.
+**54 production AI apps across 8 business categories** — each one solves a real, named pain point with a working demo you can click and try today.
 
 <div align="center">
 <img width="1200" height="400" alt="AI Portfolio Banner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
@@ -13,7 +13,7 @@
 
 ## 🌟 Portfolio Overview
 
-This repo contains **53 completed AI applications**, each with a working demo (live cloud URL or local `demo.html`). Projects are organized by **business use case** — so a reader can scan the list, find the category that matches their work, and immediately see which problems AI can solve there.
+This repo contains **54 completed AI applications**, each with a working demo (live cloud URL or local `demo.html`). Projects are organized by **business use case** — so a reader can scan the list, find the category that matches their work, and immediately see which problems AI can solve there.
 
 **Live site:** [lyven81.github.io/ai-project](https://lyven81.github.io/ai-project/)
 
@@ -25,14 +25,14 @@ The 8 categories below match the [live category pages](https://lyven81.github.io
 |---|---|---|---|
 | 1 | [Service Agents](#1-service-agents-7-projects) | 7 | Solo operators, micro-SMEs running on WhatsApp |
 | 2 | [Multi-Agent Decision Systems](#2-multi-agent-decision-systems-7-projects) | 7 | Owners needing research → verdict pipelines |
-| 3 | [Conversational Data Analytics](#3-conversational-data-analytics-7-projects) | 7 | SME owners with data, no analyst |
+| 3 | [Conversational Data Analytics](#3-conversational-data-analytics-8-projects) | 8 | SME owners with data, no analyst |
 | 4 | [Content Automation](#4-content-automation-6-projects) | 6 | Solo consultants, creators, educators |
 | 5 | [Industry Specialist Advisors](#5-industry-specialist-advisors-11-projects) | 11 | Vertical experts (legal, finance, education, retail, property) |
 | 6 | [Knowledge & Reference Chatbots](#6-knowledge--reference-chatbots-8-projects) | 8 | Consumers seeking guidance in plain language |
 | 7 | [Document & Productivity Tools](#7-document--productivity-tools-5-projects) | 5 | Knowledge workers, accessibility users |
 | 8 | [Agentic Commerce](#8-agentic-commerce-2-projects) | 2 | Storefronts ready for AI shopping agents |
 
-**Total: 53 projects.**
+**Total: 54 projects.**
 
 ---
 
@@ -132,7 +132,7 @@ The 8 categories below match the [live category pages](https://lyven81.github.io
 
 ---
 
-### 3. Conversational Data Analytics (7 projects)
+### 3. Conversational Data Analytics (8 projects)
 
 **Who it's for:** SME owners who have years of data (POS, orders, distribution) but no analyst to ask questions in plain language.
 
@@ -177,6 +177,12 @@ The 8 categories below match the [live category pages](https://lyven81.github.io
 - **How it's built:** A Python (NumPy/pandas) difference-in-differences elasticity estimator with a recovery check, served as static HTML with a keyless, client-side sql.js governed query layer.
 - **Problem solved:** A short-term rental host prices 15 Ipoh Airbnb listings by gut, so studios sit overpriced and larger units underpriced. This measures how occupancy responds to price by season, proves the estimate against a known answer, and gives the profit-maximizing rate per listing per month.
 - **Demo:** [Try it](https://lyven81.github.io/ai-project/projects/seasonal-pricing-console/demo.html)
+
+#### Courier CS Quality Console
+- **What it does:** Measures and improves customer-service quality for courier teams.
+- **How it's built:** A Python brain classifies each conversation, scores the agent's decision against a ground-truth answer key, and proves it with a recovery check; served as a self-contained HTML console (single-source from results.json) with a keyless governed "ask the data" query layer.
+- **Problem solved:** A courier runs an AI chatbot plus a human team across channels and cannot tell how well they perform or where they lose customers. This grades every decision, surfaces the high-stakes cases being closed instead of escalated, and turns it into a monthly review, per-agent appraisals, a coaching playbook, and an action plan.
+- **Demo:** [Try it](https://lyven81.github.io/ai-project/projects/courier-cs-quality-console/demo.html)
 
 ---
 

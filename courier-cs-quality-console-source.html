@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courier CS Quality Console - Source Code</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Arial',sans-serif;line-height:1.6;color:#222;background-color:#fff}
+        .container{max-width:1000px;margin:0 auto;padding:20px}
+        .back-nav{margin-bottom:20px}
+        .back-nav a{color:#007BFF;text-decoration:none;font-size:1rem}
+        .back-nav a:hover{text-decoration:underline}
+        .project-header{text-align:center;margin-bottom:40px;padding:40px 0;background:linear-gradient(135deg,#E91E63,#C2185B);color:white;border-radius:10px}
+        .project-header h1{font-size:2.3rem;margin-bottom:10px}
+        .project-header p{font-size:1.15rem;opacity:.92}
+        .content-section{margin:40px 0;padding:30px;background-color:#f9f9f9;border-radius:8px;border-left:5px solid #E91E63}
+        .content-section h2{color:#E91E63;margin-bottom:16px;font-size:1.6rem}
+        .content-section h3{color:#333;margin:18px 0 8px 0;font-size:1.15rem}
+        .content-section p{margin-bottom:10px}
+        .code-block{background-color:#1e1e1e;color:#e6e6e6;border-radius:6px;padding:16px;margin:12px 0;font-family:'Consolas',monospace;font-size:.86rem;overflow-x:auto;white-space:pre}
+        .tree{background-color:#f4f4f4;border:1px solid #ddd;border-radius:6px;padding:16px;margin:12px 0;font-family:monospace;font-size:.88rem;white-space:pre;color:#333}
+        .demo-btn{display:inline-block;background-color:#007BFF;color:white;padding:12px 25px;text-decoration:none;border-radius:5px;margin:0 10px;font-weight:bold}
+        .demo-btn.secondary{background-color:#E91E63}
+        @media (max-width:768px){.project-header h1{font-size:1.8rem}.container{padding:15px}}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav"><a href="courier-cs-quality-console.html">← Back to Showcase</a></nav>
+
+        <div class="project-header">
+            <h1>📦 Courier CS Quality Console — Source</h1>
+            <p>How the measurement is built, proven, and governed</p>
+        </div>
+
+        <div class="content-section">
+            <h2>📁 Project Structure</h2>
+            <p>The build runs foundation-up: data with a known truth, then the scoring brain, then a recovery check that proves it, then the console and the governed assistant on top.</p>
+            <div class="tree">projects/courier-cs-quality-console/
+├── generate_log.py        # synthetic courier CS log + ground-truth key
+├── analyze.py             # the measurement brain -> results.json
+├── recover.py             # recovery check (Wilson CIs) -> recovery.json
+├── build_console.py       # assembles the console from results.json
+├── build_assistant.py     # the standalone governed assistant
+├── _console_template.html # the 5-tab console shell
+├── _assistant_template.html
+├── ground-truth-key.json  # the answer key (correct outcome + checklist per reason)
+├── results.json           # the measured metrics (single source for the UI)
+├── recovery.json          # the recovery-check result
+├── demo.html              # the built console (the live demo)
+└── data/
+    ├── courier-cs-log.csv    # deployed log (no truth columns)
+    ├── courier-cs-eval.csv   # same rows + the baked-in truth
+    └── courier-cs-scored.csv # the brain's derived columns</div>
+        </div>
+
+        <div class="content-section">
+            <h2>1. The ground-truth answer key</h2>
+            <p>Every reason carries the correct outcome and a "good reply must include" checklist. This is the known truth the whole build is scored against.</p>
+            <div class="code-block">{ "id": 2, "reason": "Tracking says delivered but not received",
+  "correct_outcome": "escalate", "handled_by": "human",
+  "good_response_must_include": [
+    "apologize for the situation",
+    "confirm the delivery record: time, location, proof of delivery",
+    "open a proof-of-delivery investigation with a reference number",
+    "advise checking household / neighbour / guardhouse",
+    "set a callback SLA (for example 24 to 48 hours)" ],
+  "bad_response_example": "Our system shows it was delivered, please check around your house." }</div>
+        </div>
+
+        <div class="content-section">
+            <h2>2. The measurement brain</h2>
+            <p>It reads only the deployed log (no truth), classifies the reason from the message text, then scores the agent's gate decision against the answer key. It estimates the verdict, it does not read it.</p>
+            <div class="code-block">def classify(msg):                      # keyword-signature reason classifier
+    m = msg.lower(); best, score = 0, 0
+    for rid, kws in SIG.items():
+        s = sum(1 for k in kws if k in m)
+        if s > score: best, score = rid, s
+    return best
+
+for r in log:
+    rid          = classify(r["customer_message"])
+    correct_oc   = REASONS[rid]["correct_outcome"]
+    oc_correct   = (r["agent_outcome"] == correct_oc)     # graded against the key
+    quality      = score_response(r["agent_response"], rid)  # checklist coverage</div>
+        </div>
+
+        <div class="content-section">
+            <h2>3. The recovery check (the credibility centrepiece)</h2>
+            <p>Before any number is shown, the brain's derived values are graded against the held-out truth, with Wilson 95% confidence intervals, and against a naive baseline.</p>
+            <div class="code-block">def wilson(k, n, z=1.96):               # 95% confidence interval for a proportion
+    p = k/n; d = 1 + z*z/n
+    c = (p + z*z/(2*n))/d
+    h = (z*math.sqrt(p*(1-p)/n + z*z/(4*n*n)))/d
+    return (round(100*max(0,c-h),1), round(100*min(1,c+h),1))
+
+# result: reason recovery 100% (CI 99.7-100, vs 10.5% naive),
+#         verdict agreement 100%, 0 disagreements with the truth.</div>
+        </div>
+
+        <div class="content-section">
+            <h2>4. The governed assistant (Klinik fixed-query discipline)</h2>
+            <p>The "Ask the data" tool maps a question to one approved query and returns the exact figure. Anything off the menu is refused; raw records are never shown.</p>
+            <div class="code-block">function ask(){
+  const t = input.value.toLowerCase().trim();
+  for (const a of APPROVED)                       // approved queries only
+    if (a.kw.some(k => t.includes(k))) return showAns(a.q, a.a);
+  for (const k in SNIPS)                           // governed redacted examples
+    if (SNIPS[k] && t.includes(k)) return showSnip(k);
+  return refuse();                                 // off-menu -> polite refusal
+}</div>
+            <p>The console itself is assembled by <code>build_console.py</code>, which injects <code>results.json</code> into the template, so the screen can never disagree with the validated pipeline.</p>
+        </div>
+
+        <nav class="back-nav" style="text-align:center;margin-top:40px;">
+            <a href="courier-cs-quality-console.html" class="demo-btn secondary">← Back to Showcase</a>
+            <a href="https://github.com/lyven81/ai-project/tree/main/projects/courier-cs-quality-console" class="demo-btn">📖 Full Source on GitHub</a>
+        </nav>
+    </div>
+</body>
+</html>

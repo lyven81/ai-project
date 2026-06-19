@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Customer Service Quality Review — Monthly</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+ --yellow:#FFCC00;--yellowdk:#E6B400;--ink:#1F1B16;--charcoal:#2B2B2B;--red:#D40511;
+ --good:#2E7D5B;--goodbg:#E3F1EA;--warn:#9A6B00;--warnbg:#FFF1CC;--bad:#D40511;--badbg:#FBE3E0;
+ --bg:#FFFDF6;--line:#EADFBF;--soft:#FFF6D2;--muted:#6E6452;--card:#fff;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Manrope",system-ui,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:980px;margin:0 auto;padding:0 0 90px}
+.topband{background:var(--yellow);border-bottom:3px solid var(--ink)}
+.head{max-width:980px;margin:0 auto;padding:26px 22px 22px;display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px}
+.eyebrow{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink);font-weight:800;margin:0 0 6px;opacity:.7}
+h1{font-weight:800;color:var(--ink);font-size:2rem;line-height:1.05;margin:0 0 6px;letter-spacing:-.02em}
+.sub{font-size:1rem;color:#5b513e;margin:0;font-weight:500;max-width:560px}
+.period{font-size:.82rem;color:var(--ink);background:#fff;border:2px solid var(--ink);border-radius:9px;padding:8px 13px;white-space:nowrap;font-weight:600}
+.body{max-width:980px;margin:0 auto;padding:26px 22px 0}
+.gradebig{display:flex;align-items:center;gap:14px;background:#fff;border:1px solid var(--line);border-left:6px solid var(--yellow);border-radius:12px;padding:14px 18px;margin:0 0 6px}
+.gradebig .lt{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:800;margin-bottom:1px}
+.gradebig .g{font-weight:800;font-size:2.3rem;line-height:1}
+.gradebig .d{font-size:.9rem;color:var(--muted);max-width:520px}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin:24px 0 0}
+.tab{font-family:inherit;font-size:.92rem;font-weight:700;color:var(--muted);background:transparent;border:1px solid transparent;border-radius:10px 10px 0 0;padding:11px 16px;cursor:pointer}
+.tab:hover{color:var(--ink);background:#fff}
+.tab[aria-selected="true"]{color:var(--ink);background:#fff;border-color:var(--line);border-bottom-color:#fff;position:relative;top:1px;box-shadow:0 -3px 0 var(--yellow) inset}
+.tabwrap{border-top:1px solid var(--line);margin-top:-1px;padding-top:26px}
+.panel{display:none}.panel.on{display:block}
+h2{font-weight:800;color:var(--ink);font-size:1.3rem;margin:30px 0 4px;letter-spacing:-.01em}
+h2:first-child{margin-top:4px}
+.lede{font-size:1rem;color:var(--muted);margin:0 0 4px}
+.sec{margin:26px 0 0}
+.scards{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:12px;margin:16px 0}
+.sc{background:#fff;border:1px solid var(--line);border-radius:11px;padding:15px 16px;border-top:4px solid var(--yellow)}
+.sc .lab{font-size:.78rem;color:var(--muted);font-weight:700}
+.sc .big{font-weight:800;font-size:1.9rem;color:var(--ink);line-height:1.1;margin:4px 0 2px}
+.sc .small{font-size:.82rem;color:var(--muted)}
+.bigstat{background:var(--ink);color:#fff;border-radius:12px;padding:18px 22px;margin:18px 0;display:flex;flex-wrap:wrap;gap:18px;align-items:center}
+.bigstat .n{font-weight:800;font-size:2.2rem;color:var(--yellow);line-height:1}
+.bigstat .t{font-size:.96rem;color:#EDE6D6;max-width:660px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+@media(max-width:680px){.two{grid-template-columns:1fr}}
+.call{border-radius:12px;padding:16px 18px;border:1px solid var(--line)}
+.call h3{margin:0 0 8px;font-size:1.02rem;color:var(--ink);display:flex;align-items:center;gap:8px;font-weight:800}
+.call.good{background:var(--goodbg);border-color:#C3E2D1}
+.call.bad{background:var(--badbg);border-color:#F3C9C4}
+.call ul{margin:6px 0 0;padding-left:20px}.call li{margin:6px 0;font-size:.94rem}
+.call .pin{font-weight:800}
+.dot{width:9px;height:9px;border-radius:50%;display:inline-block}.dot.g{background:var(--good)}.dot.b{background:var(--bad)}
+.issue{margin:9px 0}
+.issue .top{display:flex;justify-content:space-between;font-size:.92rem;margin-bottom:3px}
+.issue .top .c{color:var(--muted);white-space:nowrap;margin-left:10px}
+.bar{height:10px;background:var(--soft);border-radius:6px;overflow:hidden}
+.bar>span{display:block;height:100%;background:var(--yellow);border-radius:6px}
+.flag{display:inline-block;font-size:.68rem;font-weight:800;padding:1px 8px;border-radius:20px;margin-left:6px;background:var(--warnbg);color:var(--warn);vertical-align:1px}
+.pick{display:flex;flex-wrap:wrap;gap:7px;margin:10px 0 4px}
+.pchip{font-size:.86rem;font-weight:700;color:var(--muted);background:#fff;border:1px solid var(--line);border-radius:20px;padding:7px 14px;cursor:pointer}
+.pchip[aria-pressed="true"]{color:var(--ink);background:var(--yellow);border-color:var(--ink)}
+.samplenote{font-size:.8rem;color:var(--warn);background:var(--warnbg);border:1px solid #EAD9A8;border-radius:8px;padding:7px 12px;margin:8px 0 0;display:inline-block}
+.ac{background:#fff;border:1px solid var(--line);border-radius:13px;overflow:hidden;margin:14px 0}
+.ac .ach{background:var(--soft);border-bottom:1px solid var(--line);padding:16px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.ava{width:46px;height:46px;border-radius:50%;background:var(--ink);color:var(--yellow);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.05rem}
+.ac .ach .nm{font-weight:800;font-size:1.22rem;color:var(--ink)}
+.ac .ach .role{font-size:.84rem;color:var(--muted)}
+.gtag{margin-left:auto;display:flex;align-items:center;gap:9px}
+.gtag .gv{font-weight:800;font-size:1.9rem;line-height:1}
+.gtag .gl{font-size:.74rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:800}
+.acb{padding:18px 20px}
+.mini{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin:0 0 14px}
+.mini .m{background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:10px 12px;text-align:center}
+.mini .m .v{font-weight:800;font-size:1.3rem;color:var(--ink)}
+.mini .m .k{font-size:.74rem;color:var(--muted)}
+.col2{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media(max-width:680px){.col2{grid-template-columns:1fr}}
+.block h4{margin:0 0 6px;font-size:.96rem;color:var(--ink);display:flex;align-items:center;gap:7px;font-weight:800}
+.block ul{margin:0;padding-left:19px}.block li{margin:5px 0;font-size:.92rem}
+.exch{border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:10px 0;background:#fff}
+.exch.bad{border-left:4px solid var(--bad)}.exch.good{border-left:4px solid var(--good)}
+.exch .who{font-size:.74rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px}
+.exch.bad .who{color:var(--bad)}.exch.good .who{color:var(--good)}
+.exch .cust{font-size:.94rem}.exch .rep{font-size:.92rem;color:var(--muted);font-style:italic;margin:4px 0}
+.exch .ver{font-size:.84rem;color:var(--muted);margin-top:5px}.exch .ver b{color:var(--ink)}
+.coach{background:var(--soft);border-left:4px solid var(--yellowdk);border-radius:0 10px 10px 0;padding:13px 16px;margin:14px 0 0}
+.coach h4{margin:0 0 5px;color:var(--ink);font-size:.98rem;font-weight:800}
+.talk{background:#fff;border:1px dashed var(--line);border-radius:10px;padding:13px 16px;margin:12px 0 0}
+.talk h4{margin:0 0 7px;color:var(--ink);font-size:.95rem;font-weight:800}.talk ul{margin:0;padding-left:19px}.talk li{margin:6px 0;font-size:.92rem}
+.filter{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 4px}
+.fchip{font-size:.82rem;font-weight:700;color:var(--muted);background:#fff;border:1px solid var(--line);border-radius:20px;padding:6px 13px;cursor:pointer}
+.fchip[aria-pressed="true"]{color:var(--ink);background:var(--yellow);border-color:var(--ink)}
+.pb{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:12px 0}
+.pbh{padding:14px 18px;display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap;border-bottom:1px solid var(--line)}
+.pbh .rs{font-weight:800;font-size:1.04rem;color:var(--ink);flex:1;min-width:200px}
+.act{font-size:.74rem;font-weight:800;padding:4px 11px;border-radius:20px;white-space:nowrap}
+.act.resolve{background:var(--goodbg);color:var(--good)}.act.escalate{background:var(--warnbg);color:var(--warn)}.act.decline{background:#ECEFF3;color:var(--muted)}
+.pbb{padding:14px 18px}.pbb .gl{font-size:.8rem;font-weight:800;color:var(--good);text-transform:uppercase;letter-spacing:.04em;margin:0 0 4px}
+.pbb ul{margin:0 0 12px;padding-left:19px}.pbb li{margin:4px 0;font-size:.92rem}
+.pbb .bl{font-size:.8rem;font-weight:800;color:var(--bad);text-transform:uppercase;letter-spacing:.04em;margin:0 0 4px}
+.pbb .badq{font-size:.92rem;color:var(--muted);font-style:italic;background:var(--badbg);border-radius:8px;padding:8px 12px}
+.cat{font-size:.76rem;color:var(--muted);margin-top:3px}
+.fix{background:#fff;border:1px solid var(--line);border-left:5px solid var(--bad);border-radius:0 12px 12px 0;padding:16px 20px;margin:14px 0}
+.fix.two-{border-left-color:var(--warn)}.fix.three-{border-left-color:var(--yellowdk)}
+.fix .rank{font-weight:800;color:var(--muted);font-size:.78rem;letter-spacing:.04em;text-transform:uppercase}
+.fix h3{margin:3px 0 6px;color:var(--ink);font-size:1.1rem;font-weight:800}
+.fix .row{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-top:10px}
+.fix .row div{font-size:.9rem}.fix .row .k{font-size:.74rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:2px}
+.verify{background:var(--goodbg);border:1px solid #C3E2D1;border-radius:12px;padding:16px 20px;margin:18px 0 0}
+.verify h3{margin:0 0 6px;color:var(--good);font-size:1.05rem;font-weight:800}
+.foot{max-width:980px;margin:46px auto 0;padding:20px 22px 0;border-top:1px solid var(--line);color:var(--muted);font-size:.82rem}
+.howto{font-size:.82rem;color:var(--muted);margin-top:10px}.howto summary{cursor:pointer;color:var(--warn);font-weight:700}.howto p{margin:8px 0 0}
+/* Overview / Ask the data */
+.gov{background:#fff;border:1px solid var(--line);border-left:5px solid var(--yellow);border-radius:0 12px 12px 0;padding:14px 18px;margin:4px 0 0;font-size:.93rem}
+.qlab{font-size:.74rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:20px 0 8px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.qchip{font-family:inherit;font-size:.86rem;font-weight:600;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:20px;padding:8px 14px;cursor:pointer}
+.qchip:hover{background:var(--soft);border-color:var(--yellowdk)}
+.askrow{display:flex;gap:8px;margin:8px 0 0}
+.askrow input{flex:1;font-family:inherit;font-size:.95rem;padding:11px 14px;border:2px solid var(--line);border-radius:10px;background:#fff;color:var(--ink)}
+.askrow input:focus{outline:none;border-color:var(--ink)}
+.askrow button{font-family:inherit;font-weight:800;font-size:.92rem;background:var(--yellow);border:2px solid var(--ink);border-radius:10px;padding:0 18px;cursor:pointer}
+.ans{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:16px 0 0;display:none}
+.ans.on{display:block}
+.ans .qt{font-size:.78rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px}
+.ans .at{font-size:1rem}.ans .at ul{margin:6px 0 0;padding-left:20px}
+.ans.refuse{border-left:5px solid var(--bad)}.ans.refuse .qt{color:var(--bad)}
+.snip{border:1px solid var(--line);border-left:4px solid var(--warn);border-radius:0 10px 10px 0;padding:11px 14px;margin:9px 0;background:#fff;font-size:.9rem}
+.snip .r{font-size:.74rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--warn);margin-bottom:4px}
+.snip .p{color:var(--muted);font-style:italic;margin:3px 0}.snip .v{font-size:.82rem;color:var(--muted);margin-top:4px}
+.redbadge{display:inline-block;font-size:.66rem;font-weight:800;background:var(--warnbg);color:var(--warn);border-radius:20px;padding:1px 8px;margin-left:6px}
+.verdict{display:flex;align-items:center;gap:18px;background:#fff;border:1px solid var(--line);border-left:7px solid var(--yellow);border-radius:12px;padding:18px 22px;margin:4px 0 0}
+.verdict .vgrade{font-weight:800;font-size:3rem;line-height:1}
+.verdict .vlt{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:800}
+.verdict .vtext p{margin:2px 0 0;font-size:1.02rem;color:var(--ink);max-width:620px}
+.signals{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin:14px 0 0}
+.sig{background:#fff;border:1px solid var(--line);border-top:4px solid var(--yellow);border-radius:11px;padding:14px 16px}
+.sig .sl{font-size:.78rem;color:var(--muted);font-weight:700}
+.sig .sv{font-weight:800;font-size:1.8rem;color:var(--ink);line-height:1.1;margin:3px 0 2px}
+.sig .sd{font-size:.82rem;font-weight:700}
+.sig .sd.up{color:var(--good)}.sig .sd.down{color:var(--bad)}.sig .sd.flat{color:var(--muted)}
+.hero{background:var(--ink);color:#fff;border-radius:12px;padding:18px 22px;margin:16px 0 0;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px}
+.hero .herotext{font-size:1.05rem;max-width:640px}.hero .heron{font-weight:800;font-size:1.6rem;color:var(--yellow)}
+.herobtn{font-family:inherit;font-weight:800;font-size:.9rem;background:var(--yellow);color:var(--ink);border:none;border-radius:10px;padding:10px 16px;cursor:pointer;white-space:nowrap}
+.askcap{font-size:.82rem;color:var(--muted);margin:8px 0 0}
+.dive{font-size:.9rem;color:var(--muted);margin:14px 0 0}
+.dlink{font-family:inherit;font-size:.9rem;font-weight:700;color:var(--ink);background:none;border:none;border-bottom:2px solid var(--yellow);padding:0 1px;cursor:pointer}
+.dlink:hover{background:var(--soft)}
+.connect{font-size:.92rem;color:var(--muted);background:var(--soft);border-radius:8px;padding:9px 13px;margin:0 0 4px;border-left:3px solid var(--yellowdk)}
+</style>
+</head>
+<body>
+<div class="topband"><div class="head">
+  <div>
+    <p class="eyebrow">Customer service quality · monthly review</p>
+    <h1>Customer Service Quality Review</h1>
+    <p class="sub">A plain read on how your customer service is doing, where it is costing you customers, and what to fix. Built for review meetings and one-to-ones.</p>
+  </div>
+  <div class="period" id="period"></div>
+</div></div>
+
+<div class="wrap"><div class="body">
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" aria-selected="true" id="t-overview" onclick="showTab('overview')">Overview</button>
+    <button class="tab" role="tab" aria-selected="false" id="t-team" onclick="showTab('team')">Team this month</button>
+    <button class="tab" role="tab" aria-selected="false" id="t-agent" onclick="showTab('agent')">Agent review</button>
+    <button class="tab" role="tab" aria-selected="false" id="t-coach" onclick="showTab('coach')">Coaching playbook</button>
+    <button class="tab" role="tab" aria-selected="false" id="t-action" onclick="showTab('action')">Action plan</button>
+  </div>
+
+  <div class="tabwrap">
+    <section class="panel on" id="tab-overview" role="tabpanel">
+      <div class="verdict">
+        <div class="vgrade" id="ovgrade"></div>
+        <div class="vtext"><div class="vlt">Overall this month</div>
+          <p>Customers are mostly looked after, but a clear group of high-stakes cases is slipping through. Fixable, and worth real money.</p></div>
+      </div>
+      <div class="signals" id="signals"></div>
+      <p class="askcap" style="margin-top:6px">Arrows compare with last month (an illustrative prior period in this demo).</p>
+      <div class="hero">
+        <div class="herotext"><span class="heron" id="heron"></span> high-stakes cases were closed instead of escalated this month, the single thing most worth fixing.</div>
+        <button class="herobtn" onclick="showTab('action')">See the fix &rarr;</button>
+      </div>
+      <p class="dive">Dive deeper: <button class="dlink" onclick="showTab('team')">what customers contacted about</button> · <button class="dlink" onclick="showTab('agent')">how each agent did</button> · <button class="dlink" onclick="showTab('coach')">what a good reply looks like</button> · <button class="dlink" onclick="showTab('action')">what to do next</button>.</p>
+      <h2>Ask anything about this month</h2>
+      <div class="askrow"><input id="q" placeholder="e.g. how accurate is the AI, or who needs coaching" onkeydown="if(event.key==='Enter')ask()"><button onclick="ask()">Ask</button></div>
+      <div class="chips" id="okchips" style="margin-top:10px"></div>
+      <p class="askcap">Answers use the approved monthly figures only. Raw customer records are never shown, and off-topic questions are declined.</p>
+      <div class="ans" id="ans"><div class="qt" id="qt"></div><div class="at" id="at"></div></div>
+      <div class="qlab">See examples <span class="redbadge">redacted</span></div>
+      <div class="chips" id="snipchips"></div><div id="snipout"></div>
+    </section>
+    <section class="panel" id="tab-team" role="tabpanel">
+      <p class="lede" id="teamconnect"></p>
+      <h2 style="margin-top:18px">Why customer happiness moves</h2>
+      <div class="bigstat"><div class="n" id="cgap"></div><div class="t" id="cgaptext"></div></div>
+      <div class="two">
+        <div class="call good"><h3><span class="dot g"></span> What is going well</h3>
+          <ul>
+            <li><span class="pin">Fast first response.</span> The chatbot picks up most first contacts and settles simple things (tracking, delivery dates, redelivery) quickly.</li>
+            <li><span class="pin">Your people are strong.</span> When a person handles a case they get the right action most of the time, and their replies are thorough.</li>
+            <li><span class="pin">Good self-service.</span> Just over half of all contacts never needed a human at all.</li>
+          </ul></div>
+        <div class="call bad"><h3><span class="dot b"></span> What is costing you customers</h3><ul id="badlist"></ul></div>
+      </div>
+      <div class="sec"><h2>What customers contacted you about</h2>
+        <p class="lede">The reasons people got in touch, most common first. A tag marks the ones that usually need a specialist.</p>
+        <div id="issues"></div></div>
+      <details class="howto"><summary>How these are measured</summary>
+        <p>Every conversation is read and checked against an agreed answer key: was the right next step taken, and did the reply cover what a good answer should. The figures are the share that met the standard across all conversations. The method was independently checked for accuracy (100% on reason, exact on the verdict) before these numbers were used.</p></details>
+    </section>
+
+    <section class="panel" id="tab-agent" role="tabpanel">
+      <h2 style="margin-top:4px">Agent review</h2>
+      <p class="connect">Drills into the Overview <b>"right action"</b> signal: who drives it, and who needs coaching.</p>
+      <p class="lede">A ready-to-use scorecard for a review meeting or appraisal: where this agent is strong, where to coach, real examples from their own conversations, and talking points you can read aloud.</p>
+      <div class="pick" id="agentpick" role="group"></div>
+      <div id="samplewrap"></div><div id="agentcard"></div>
+    </section>
+
+    <section class="panel" id="tab-coach" role="tabpanel">
+      <h2 style="margin-top:4px">Coaching playbook</h2>
+      <p class="connect">The standard behind the hero issue: what a good reply looks like for every reason, especially the high-stakes ones being under-escalated.</p>
+      <p class="lede">What good looks like for every situation a customer can raise. Use it to train new recruits and to settle "what should I have done here". Each card shows the right move, what a strong reply must cover, and a weak reply to avoid.</p>
+      <div class="filter" id="catfilter" role="group"></div><div id="playbook"></div>
+    </section>
+
+    <section class="panel" id="tab-action" role="tabpanel">
+      <h2 style="margin-top:4px">Action plan for next month</h2>
+      <p class="connect">Turns the Overview signals into moves: each fix targets one of the leaks behind the grade (the 107 under-escalations, the over-escalated easy questions, the thin replies).</p>
+      <p class="lede">Three changes, in order of payoff. Each names who it affects and what you should expect to see if it works, so you can check it at the next review.</p>
+      <div class="fix"><span class="rank">Priority 1 · biggest payoff</span><h3>Stop the chatbot closing high-stakes cases</h3>
+        <p id="fix1p"></p>
+        <div class="row"><div><div class="k">The fix</div>Tighten the chatbot's rule so any claim, dispute or complaint is always passed to a person, never answered with "please wait".</div>
+        <div><div class="k">Who it affects</div>The customers most likely to leave and complain publicly.</div>
+        <div><div class="k">Expect to see</div>Far fewer brushed-off claims, and the satisfaction penalty for wrong actions shrinking.</div></div></div>
+      <div class="fix two-"><span class="rank">Priority 2 · reclaim staff time</span><h3>Let the chatbot finish the easy questions</h3>
+        <p id="fix2p"></p>
+        <div class="row"><div><div class="k">The fix</div>Widen the list of questions the chatbot is trusted to answer in full, using the model answers in the coaching playbook.</div>
+        <div><div class="k">Who it affects</div>Your team, who get time back for the cases that need a human.</div>
+        <div><div class="k">Expect to see</div>Staff hours freed up, with no drop in customer happiness.</div></div></div>
+      <div class="fix three-"><span class="rank">Priority 3 · lift reply quality</span><h3>Make every reply cover the full checklist</h3>
+        <p>The chatbot's replies left out required steps about half the time, so customers had to come back. Your people already score well here.</p>
+        <div class="row"><div><div class="k">The fix</div>Load the coaching-playbook checklists into the chatbot's reply templates so nothing is skipped.</div>
+        <div><div class="k">Who it affects</div>Every customer, and your repeat-contact rate.</div>
+        <div><div class="k">Expect to see</div>More complete replies and fewer "I asked already" follow-ups.</div></div></div>
+      <div class="verify"><h3>Check it worked, next review</h3>
+        <p style="margin:0" id="verifyp"></p></div>
+    </section>
+  </div>
+</div>
+
+<div class="foot" id="foot"></div>
+</div>
+
+<script>
+const PARETO=[{"r": "Tracking hasn't updated in days", "n": 126, "esc": false}, {"r": "Asking for a delivery date", "n": 110, "esc": false}, {"r": "Says delivered but not received", "n": 104, "esc": true}, {"r": "Missed delivery, wants redelivery", "n": 77, "esc": false}, {"r": "Parcel arrived damaged or wet", "n": 73, "esc": true}, {"r": "Payment shown as owing after paying", "n": 72, "esc": true}, {"r": "Parcel stuck in transit too long", "n": 72, "esc": false}, {"r": "Out for delivery but nothing came", "n": 70, "esc": false}, {"r": "Disputing a surcharge or fee", "n": 53, "esc": false}, {"r": "Rider was rude or unprofessional", "n": 45, "esc": true}];
+const AGENTS=[{"id": "ai", "name": "AI assistant", "role": "Chatbot \u00b7 859 conversations", "real": true, "initials": "AI", "grade": "C+", "gradeColor": "var(--warn)", "small": false, "mini": [["Right action", "76%"], ["Reply fullness", "Building"], ["Avg speed", "2.5 min"], ["Happiness", "3.47/5"]], "strong": ["Fast on first contact and always on, never off shift", "Takes the simple, repetitive questions off the team"], "watch": ["Closes claims and disputes that should go to a specialist", "Sometimes engages off-topic questions it should politely decline"], "examples": [{"bad": true, "reason": "Rider was rude / unprofessional", "cust": "I want to complain about the delivery rider's attitude.", "rep": "Thank you for reaching out. Apologize sincerely. Capture details (rider, time, what happened). Log a formal conduct complaint. Route to the hub / oper", "did": "Handled it", "should": "Pass to a specialist", "extra": "A rider was rude / unprofessional should pass to a specialist, not be closed."}, {"bad": false, "reason": "Surcharge / remote-area / weight fee dispute", "cust": "Why is there an extra remote area surcharge?", "rep": "Thank you for reaching out. Explain the specific fee and how it is calculated (zone, weight or volumetric). Show the breakdown. If it looks like an er", "did": "Handled it", "should": "Handle it directly", "extra": "Handled in full and rated well, a good example to use in training."}], "coach": "Focus this period: the chatbot must never close a claim, dispute or complaint. Set one firm rule, every high-stakes case goes to a person, and reload its reply templates from the coaching playbook so nothing is skipped.", "talk": ["Praise the speed and the volume it takes off the team", "Name the one problem clearly: high-stakes cases being closed instead of escalated", "Agree the single rule change and a date to recheck"]}, {"id": "mei", "name": "Mei", "role": "Agent \u00b7 90 conversations", "real": true, "initials": "M", "grade": "A", "gradeColor": "var(--good)", "small": false, "mini": [["Right action", "97%"], ["Reply fullness", "Fair"], ["Avg speed", "12.3 min"], ["Happiness", "4.35/5"]], "strong": ["Picks the right next step almost every time", "Customers rate their conversations highly", "Escalates the difficult cases correctly, a model for training"], "watch": ["Keep volume and quality balanced"], "examples": [{"bad": true, "reason": "Parcel arrived damaged / broken / wet", "cust": "My parcel arrived broken, how do I claim?", "rep": "Sorry about that, nothing we can do once delivered.", "did": "Handled it", "should": "Pass to a specialist", "extra": "Customer rated this 2 out of 5. A parcel arrived damaged / broken / wet should pass to a specialist, not be closed."}, {"bad": false, "reason": "Stuck at sorting hub / customs / in transit too long", "cust": "My parcel has been stuck at the sorting hub for a week.", "rep": "Thank you for reaching out. Explain the current stage (sorting / customs clearance) and typical dwell time. Give an updated ETA. If abnormally long, r", "did": "Handled it", "should": "Handle it directly", "extra": "Handled in full and rated well, a good example to use in training."}], "coach": "Focus this period: lift reply completeness. Use the coaching-playbook checklists so every reply covers the full set of steps.", "talk": ["Recognise the solid, accurate work", "Pick one topic to tighten reply quality on", "Keep using their strong cases as training material"]}, {"id": "arif", "name": "Arif", "role": "Agent \u00b7 66 conversations", "real": true, "initials": "A", "grade": "A-", "gradeColor": "var(--good)", "small": false, "mini": [["Right action", "92%"], ["Reply fullness", "Strong"], ["Avg speed", "13.4 min"], ["Happiness", "4.39/5"]], "strong": ["Picks the right next step almost every time", "Thorough, complete replies that customers rate highly", "Customers rate their conversations highly"], "watch": ["Keep volume and quality balanced"], "examples": [{"bad": true, "reason": "Tracking says delivered but not received", "cust": "The app says delivered but I never received my parcel.", "rep": "Thank you for reaching out. Apologize for the situation. Confirm the delivery record: time, location, proof of delivery. Open a proof-of-delivery inve", "did": "Handled it", "should": "Pass to a specialist", "extra": "A tracking says delivered but not received should pass to a specialist, not be closed."}, {"bad": false, "reason": "Wrong COD amount / already paid but still showing owing", "cust": "The COD amount is wrong, I was overcharged.", "rep": "Thank you for reaching out. Apologize. Verify the COD record and payment proof. Raise to the finance / COD team. Give a reference and resolution timel", "did": "Passed to a specialist", "should": "Pass to a specialist", "extra": "Handled in full and rated well, a good example to use in training."}], "coach": "Focus this period: lift reply completeness. Use the coaching-playbook checklists so every reply covers the full set of steps.", "talk": ["Recognise the solid, accurate work", "Pick one topic to tighten reply quality on", "Keep using their strong cases as training material"]}, {"id": "farah", "name": "Farah", "role": "Agent \u00b7 64 conversations", "real": true, "initials": "F", "grade": "A", "gradeColor": "var(--good)", "small": false, "mini": [["Right action", "98%"], ["Reply fullness", "Strong"], ["Avg speed", "11.1 min"], ["Happiness", "4.15/5"]], "strong": ["Picks the right next step almost every time", "Thorough, complete replies that customers rate highly", "Customers rate their conversations highly"], "watch": ["Keep volume and quality balanced"], "examples": [{"bad": true, "reason": "Out for delivery but nothing arrived", "cust": "Out for delivery since morning but I got nothing.", "rep": "Thank you for reaching out. Confirm the out-for-delivery status. Set the same-day expectation. If a failed attempt was logged, explain redelivery and ", "did": "Passed to a specialist", "should": "Handle it directly", "extra": "Customer rated this 3 out of 5. A out for delivery but nothing arrived should handle it directly, not be closed."}, {"bad": false, "reason": "Items missing from the parcel", "cust": "The parcel came but half the items are gone.", "rep": "Thank you for reaching out. Apologize. Gather details (what is missing, packaging condition, weight). Open an investigation. Note it may involve the s", "did": "Passed to a specialist", "should": "Pass to a specialist", "extra": "Handled in full and rated well, a good example to use in training."}], "coach": "Focus this period: stretch, not fix. Ready to mentor a new recruit and to take a slightly higher case load.", "talk": ["Recognise top-tier quality clearly", "Offer a mentoring or training role", "Agree a modest volume increase, protecting the quality"]}, {"id": "raj", "name": "Raj", "role": "Agent \u00b7 48 conversations", "real": true, "initials": "R", "grade": "A-", "gradeColor": "var(--good)", "small": false, "mini": [["Right action", "92%"], ["Reply fullness", "Fair"], ["Avg speed", "11.0 min"], ["Happiness", "4.0/5"]], "strong": ["Gets the right action on most cases"], "watch": ["Keep volume and quality balanced"], "examples": [{"bad": true, "reason": "Parcel lost, claim and compensation", "cust": "My parcel is lost, how do I get compensation?", "rep": "It is lost, please contact the seller.", "did": "Handled it", "should": "Pass to a specialist", "extra": "A parcel lost, claim and compensation should pass to a specialist, not be closed."}, {"bad": false, "reason": "Surcharge / remote-area / weight fee dispute", "cust": "Can you explain this additional weight fee?", "rep": "Thank you for reaching out. Explain the specific fee and how it is calculated (zone, weight or volumetric). Show the breakdown. If it looks like an er", "did": "Handled it", "should": "Handle it directly", "extra": "Handled in full and rated well, a good example to use in training."}], "coach": "Focus this period: lift reply completeness. Use the coaching-playbook checklists so every reply covers the full set of steps.", "talk": ["Recognise the solid, accurate work", "Pick one topic to tighten reply quality on", "Keep using their strong cases as training material"]}, {"id": "bee", "name": "Bee", "role": "Agent \u00b7 42 conversations", "real": true, "initials": "B", "grade": "B", "gradeColor": "var(--good)", "small": true, "mini": [["Right action", "86%"], ["Reply fullness", "Building"], ["Avg speed", "9.5 min"], ["Happiness", "3.71/5"]], "strong": ["Gets the right action on most cases"], "watch": ["Replies often miss a required step, so customers come back", "A few high-stakes cases slip through to a resolve instead of an escalation"], "examples": [{"bad": true, "reason": "Schedule a pickup / rider did not show", "cust": "I scheduled a pickup but no rider showed up.", "rep": "Thank you for reaching out. Confirm the pickup details. Reschedule with a new window and a reference. Apologize for the no-show.", "did": "Declined it", "should": "Handle it directly", "extra": "Customer rated this 2 out of 5. A schedule a pickup / rider did not show should handle it directly, not be closed."}, {"bad": false, "reason": "Tracking says delivered but not received", "cust": "The app says delivered but I never received my parcel.", "rep": "Thank you for reaching out. Apologize for the situation. Confirm the delivery record: time, location, proof of delivery. Open a proof-of-delivery inve", "did": "Passed to a specialist", "should": "Pass to a specialist", "extra": "Handled in full and rated well, a good example to use in training."}], "coach": "Focus this period: when to escalate. Pair with the coaching playbook on claims and disputes, and review three escalation calls together each week.", "talk": ["Credit the speed and the volume", "Be specific about the escalation gap, with the example below", "Set a simple weekly check-in on escalation decisions"]}, {"id": "devi", "name": "Devi", "role": "Agent \u00b7 31 conversations \u00b7 new recruit", "real": true, "initials": "D", "grade": "C-", "gradeColor": "var(--bad)", "small": true, "mini": [["Right action", "64%"], ["Reply fullness", "Building"], ["Avg speed", "16.7 min"], ["Happiness", "3.93/5"]], "strong": ["Handles a steady volume of cases"], "watch": ["Closes claims and disputes that should go to a specialist", "Replies often miss a required step, so customers come back"], "examples": [{"bad": true, "reason": "Surcharge / remote-area / weight fee dispute", "cust": "Why is there an extra remote area surcharge?", "rep": "That is the standard charge.", "did": "Declined it", "should": "Handle it directly", "extra": "A surcharge / remote-area / weight fee dispute should handle it directly, not be closed."}, {"bad": false, "reason": "Marked 'recipient unavailable' but customer was home", "cust": "Rider marked recipient unavailable but I was home all day!", "rep": "Thank you for reaching out. Apologize for the false attempt. Log the dispute. Arrange a priority re-attempt. Route feedback to the delivery hub / ride", "did": "Passed to a specialist", "should": "Pass to a specialist", "extra": "Handled in full and rated well, a good example to use in training."}], "coach": "Focus this period: new-recruit ramp. Work straight from the coaching playbook, shadow a strong agent on claims, and have every escalation call reviewed for the first month.", "talk": ["Reassure, this is a normal new-recruit ramp", "Set the playbook as the daily reference", "Arrange shadowing with a strong agent and weekly review"]}];
+const REASONS=[{"id": 1, "cat": "A", "catname": "Tracking & delivery", "reason": "Tracking hasn't updated in days", "act": "resolve", "must": ["acknowledge the concern", "give the latest scan: status, location, time", "explain the likely cause (in transit / hub backlog)", "set the next-update or ETA expectation", "if stale beyond threshold, open an investigation with a reference number"], "bad": "It shows in transit, please keep waiting."}, {"id": 2, "cat": "A", "catname": "Tracking & delivery", "reason": "Tracking says delivered but not received", "act": "escalate", "must": ["apologize for the situation", "confirm the delivery record: time, location, proof of delivery", "open a proof-of-delivery investigation with a reference number", "advise checking household / neighbour / guardhouse", "set a callback SLA (for example 24 to 48 hours)"], "bad": "Our system shows it was delivered, please check around your house."}, {"id": 3, "cat": "A", "catname": "Tracking & delivery", "reason": "Estimated delivery date / ETA", "act": "resolve", "must": ["give the estimated delivery date or window", "state the current status", "flag any known delay", "offer delivery notifications"], "bad": "Soon."}, {"id": 4, "cat": "A", "catname": "Tracking & delivery", "reason": "Stuck at sorting hub / customs / in transit too long", "act": "resolve", "must": ["explain the current stage (sorting / customs clearance) and typical dwell time", "give an updated ETA", "if abnormally long, raise to operations with a reference", "reassure the parcel is not lost"], "bad": "It is at the hub, nothing we can do."}, {"id": 5, "cat": "A", "catname": "Tracking & delivery", "reason": "Out for delivery but nothing arrived", "act": "resolve", "must": ["confirm the out-for-delivery status", "set the same-day expectation", "if a failed attempt was logged, explain redelivery and offer to reschedule", "if no attempt by end of day, raise to the delivery hub"], "bad": "It is out for delivery, just wait."}, {"id": 6, "cat": "B", "catname": "Failed delivery & rescheduling", "reason": "Missed delivery, arrange redelivery", "act": "resolve", "must": ["confirm the missed attempt", "offer the next redelivery date or self-collect", "confirm the address and contact number", "give a confirmation reference"], "bad": "You missed it, it will be returned."}, {"id": 7, "cat": "B", "catname": "Failed delivery & rescheduling", "reason": "Marked 'recipient unavailable' but customer was home", "act": "escalate", "must": ["apologize for the false attempt", "log the dispute", "arrange a priority re-attempt", "route feedback to the delivery hub / rider", "give a reference and a callback"], "bad": "The rider says no one was home, please wait for the next attempt."}, {"id": 8, "cat": "B", "catname": "Failed delivery & rescheduling", "reason": "Change delivery address or reschedule date", "act": "resolve", "must": ["confirm what change is allowed at this stage", "make the change or state the cutoff", "confirm the new details with a reference", "if too late, offer alternatives (self-collect, redelivery)"], "bad": "Address cannot be changed."}, {"id": 9, "cat": "B", "catname": "Failed delivery & rescheduling", "reason": "Self-collect at branch / hub", "act": "resolve", "must": ["confirm eligibility for self-collection", "give the branch / hub address and opening hours", "state what to bring (ID, tracking number)", "hold the parcel and confirm"], "bad": "You can come and collect."}, {"id": 10, "cat": "C", "catname": "Damaged, lost or wrong items", "reason": "Parcel arrived damaged / broken / wet", "act": "escalate", "must": ["apologize with empathy", "explain the claim steps and required evidence (photos, packaging, value)", "open a claim with a reference number", "set a resolution timeline", "advise the customer to retain the packaging"], "bad": "Sorry about that, nothing we can do once delivered."}, {"id": 11, "cat": "C", "catname": "Damaged, lost or wrong items", "reason": "Parcel lost, claim and compensation", "act": "escalate", "must": ["apologize", "confirm the last known status", "open a loss investigation and claim with a reference", "explain the compensation policy and coverage limits", "state who files (sender vs receiver) and the timeline"], "bad": "It is lost, please contact the seller."}, {"id": 12, "cat": "C", "catname": "Damaged, lost or wrong items", "reason": "Received the wrong parcel", "act": "escalate", "must": ["apologize", "arrange pickup of the wrong parcel", "open an investigation to locate the correct parcel", "give a reference and timeline"], "bad": "Please return it to the nearest branch yourself."}, {"id": 13, "cat": "C", "catname": "Damaged, lost or wrong items", "reason": "Items missing from the parcel", "act": "escalate", "must": ["apologize", "gather details (what is missing, packaging condition, weight)", "open an investigation", "note it may involve the seller's packing", "give a reference and timeline"], "bad": "We only deliver sealed parcels, talk to the seller."}, {"id": 14, "cat": "D", "catname": "Handling & rider conduct", "reason": "Special delivery instruction (leave at guardhouse / neighbour / door)", "act": "resolve", "must": ["confirm the instruction can be added (or the policy limit)", "attach the note to the shipment", "advise on liability if left unattended", "confirm"], "bad": "We cannot follow special instructions."}, {"id": 15, "cat": "D", "catname": "Handling & rider conduct", "reason": "Rider was rude / unprofessional", "act": "escalate", "must": ["apologize sincerely", "capture details (rider, time, what happened)", "log a formal conduct complaint", "route to the hub / operations", "give a reference and assure follow-up"], "bad": "Noted, we will tell them."}, {"id": 16, "cat": "D", "catname": "Handling & rider conduct", "reason": "Parcel left unattended / thrown / not handed over properly", "act": "escalate", "must": ["apologize", "capture details of the mishandling", "check for damage and open a claim if needed", "log a handling complaint to the hub", "give a reference and follow-up"], "bad": "It was delivered, that is what matters."}, {"id": 17, "cat": "E", "catname": "Payments & fees", "reason": "Wrong COD amount / already paid but still showing owing", "act": "escalate", "must": ["apologize", "verify the COD record and payment proof", "raise to the finance / COD team", "give a reference and resolution timeline", "reassure there will be no double charge"], "bad": "Please just pay the amount shown."}, {"id": 18, "cat": "E", "catname": "Payments & fees", "reason": "Surcharge / remote-area / weight fee dispute", "act": "resolve", "must": ["explain the specific fee and how it is calculated (zone, weight or volumetric)", "show the breakdown", "if it looks like an error, raise it for review", "offer the dispute path"], "bad": "That is the standard charge."}, {"id": 19, "cat": "F", "catname": "Sender & account", "reason": "Schedule a pickup / rider did not show", "act": "resolve", "must": ["confirm the pickup details", "reschedule with a new window and a reference", "apologize for the no-show", "if repeated, escalate to the pickup hub"], "bad": "Please wait for the next pickup round."}, {"id": 20, "cat": "F", "catname": "Sender & account", "reason": "Return / reship a rejected parcel", "act": "resolve", "must": ["explain the return-to-sender / reship options and any fee", "confirm the chosen action", "give a reference and timeline"], "bad": "Rejected parcels are returned automatically."}, {"id": 0, "cat": "O", "catname": "O", "reason": "Non-business, abusive, or internal-information request", "act": "decline", "must": ["politely decline", "state it is outside customer-service scope", "redirect to what can be helped with"], "bad": "Answers an off-topic or internal-data question it should refuse."}];
+const TEAM={"total": 1200, "contain": 59, "right": 8, "acc": 80.2, "csat": 3.64, "ccorr": 4.08, "cwrong": 1.82, "cgap": 2.3, "aispeed": 2.5, "huspeed": 12.2, "grade": "B-", "gradeColor": "var(--warn)", "under": 107, "over": 67, "hours": 14, "contain_prev": 55, "acc_prev": 78.0, "csat_prev": 3.7};
+const APPROVED=[{"id": "contain", "q": "What is our containment rate?", "kw": ["containment", "handled on the spot", "resolved without", "self-serve", "deflect"], "a": "<b>59%</b> of contacts were handled on the spot, settled without passing to anyone."}, {"id": "acc", "q": "How accurate are the decisions overall?", "kw": ["accuracy", "right action", "correct decision", "gate", "accurate"], "a": "The team took the right next step on <b>80.2%</b> of conversations (AI 75.9%, human team 91.2%)."}, {"id": "under", "q": "What is our under-escalation rate?", "kw": ["under-escalation", "under escalation", "brushed off", "closed instead", "missed escalation", "claims closed"], "a": "<b>22.2%</b> of cases that should reach a specialist were closed instead, <b>107</b> high-stakes cases this period, almost all from the chatbot."}, {"id": "reasons", "q": "What do customers contact us about most?", "kw": ["contact about", "top reasons", "most common", "pareto", "why do customers", "volume", "contact us"], "a": "Top five reasons:<ul><li>Tracking hasn&#x27;t updated in days (126)</li><li>Estimated delivery date / ETA (110)</li><li>Tracking says delivered but not received (104)</li><li>Missed delivery, arrange redelivery (77)</li><li>Parcel arrived damaged / broken / wet (73)</li></ul>"}, {"id": "agents", "q": "Who is strongest and who needs the most coaching?", "kw": ["strongest", "best agent", "coaching", "weakest", "who needs", "appraisal", "ranking", "agent performance"], "a": "Strongest: <b>Farah</b> (98% right action). Needs the most coaching: <b>Devi</b> (64%). The AI assistant sits at 76%."}, {"id": "csat", "q": "What is our customer satisfaction?", "kw": ["csat", "satisfaction", "happiness", "rating", "stars", "happy"], "a": "Average CSAT is <b>3.64/5</b>. When the team got the outcome right it was 4.08; when wrong it fell to 1.82, a 2.3-star swing."}, {"id": "time", "q": "How much staff time is spent on easy questions?", "kw": ["over-escalation", "over escalation", "easy questions", "staff time", "hours", "wasted", "bumped to a person"], "a": "<b>67</b> simple questions were bumped to a person when the chatbot could have closed them, about <b>14 hours</b> of staff time."}];
+const SNIPS={"damaged": [{"reason": "Parcel arrived damaged / broken / wet", "cust": "The box was wet and the item inside is damaged.", "rep": "Sorry about that, nothing we can do once delivered.", "did": "resolve", "should": "escalate"}, {"reason": "Parcel arrived damaged / broken / wet", "cust": "The box was wet and the item inside is damaged.", "rep": "Sorry about that, nothing we can do once delivered.", "did": "resolve", "should": "escalate"}, {"reason": "Parcel arrived damaged / broken / wet", "cust": "My parcel arrived broken, how do I claim?", "rep": "Sorry about that, nothing we can do once delivered.", "did": "resolve", "should": "escalate"}], "lost": [{"reason": "Parcel lost, claim and compensation", "cust": "It has been missing for weeks, I want to file a claim.", "rep": "It is lost, please contact the seller.", "did": "resolve", "should": "escalate"}, {"reason": "Items missing from the parcel", "cust": "Some items are missing from my parcel.", "rep": "We only deliver sealed parcels, talk to the seller.", "did": "decline", "should": "escalate"}, {"reason": "Items missing from the parcel", "cust": "Some items are missing from my parcel.", "rep": "We only deliver sealed parcels, talk to the seller.", "did": "resolve", "should": "escalate"}], "claim": [{"reason": "Parcel arrived damaged / broken / wet", "cust": "The box was wet and the item inside is damaged.", "rep": "Sorry about that, nothing we can do once delivered.", "did": "resolve", "should": "escalate"}, {"reason": "Parcel lost, claim and compensation", "cust": "It has been missing for weeks, I want to file a claim.", "rep": "It is lost, please contact the seller.", "did": "resolve", "should": "escalate"}, {"reason": "Items missing from the parcel", "cust": "Some items are missing from my parcel.", "rep": "We only deliver sealed parcels, talk to the seller.", "did": "decline", "should": "escalate"}], "payment": [{"reason": "Wrong COD amount / already paid but still showing owing", "cust": "The COD amount is wrong, I was overcharged.", "rep": "Please just pay the amount shown.", "did": "resolve", "should": "escalate"}, {"reason": "Surcharge / remote-area / weight fee dispute", "cust": "Why is there an extra remote area surcharge?", "rep": "That is the standard charge.", "did": "escalate", "should": "resolve"}, {"reason": "Wrong COD amount / already paid but still showing owing", "cust": "I already paid online but it still shows COD owing.", "rep": "Thank you for reaching out. Apologize. Verify the COD record and payment proof. Raise to the finance / COD team. Give a ", "did": "decline", "should": "escalate"}], "rude": [{"reason": "Rider was rude / unprofessional", "cust": "I want to complain about the delivery rider&#x27;s attitude.", "rep": "Thank you for reaching out. Apologize sincerely. Capture details (rider, time, what happened). Log a formal conduct comp", "did": "resolve", "should": "escalate"}, {"reason": "Rider was rude / unprofessional", "cust": "Your rider was extremely rude to me.", "rep": "Noted, we will tell them.", "did": "decline", "should": "escalate"}, {"reason": "Rider was rude / unprofessional", "cust": "Your rider was extremely rude to me.", "rep": "Thank you for reaching out. Apologize sincerely. Capture details (rider, time, what happened). Log a formal conduct comp", "did": "resolve", "should": "escalate"}], "delivered": [{"reason": "Tracking says delivered but not received", "cust": "The app says delivered but I never received my parcel.", "rep": "Thank you for reaching out. Apologize for the situation. Confirm the delivery record: time, location, proof of delivery.", "did": "resolve", "should": "escalate"}, {"reason": "Tracking says delivered but not received", "cust": "Tracking shows delivered but nothing arrived at my place.", "rep": "Our system shows it was delivered, please check around your house.", "did": "resolve", "should": "escalate"}, {"reason": "Tracking says delivered but not received", "cust": "The app says delivered but I never received my parcel.", "rep": "Thank you for reaching out. Apologize for the situation. Confirm the delivery record: time, location, proof of delivery.", "did": "resolve", "should": "escalate"}]};
+
+
+/* ---- team ---- */
+document.getElementById('period').innerHTML='Period<br><b>Last 60 days</b><br>'+TEAM.total.toLocaleString()+' customer conversations';
+/* Overview verdict + signal tiles + hero */
+document.getElementById('ovgrade').textContent=TEAM.grade;
+document.getElementById('ovgrade').style.color=TEAM.gradeColor;
+document.getElementById('heron').textContent=TEAM.under;
+function arrow(cur,prev,unit){const d=Math.round((cur-prev)*10)/10;const flat=Math.abs(d)<0.05;
+ const cls=flat?'flat':(d>0?'up':'down');const ar=flat?'→':(d>0?'▲':'▼');
+ const txt=flat?'no change vs last month':(ar+' '+(d>0?'+':'')+d+unit+' vs last month');
+ return '<div class="sd '+cls+'">'+txt+'</div>';}
+document.getElementById('signals').innerHTML=
+ '<div class="sig"><div class="sl">Handled on the spot</div><div class="sv">'+TEAM.contain+'%</div>'+arrow(TEAM.contain,TEAM.contain_prev,'%')+'</div>'+
+ '<div class="sig"><div class="sl">Right action taken</div><div class="sv">'+TEAM.right+' in 10</div>'+arrow(TEAM.acc,TEAM.acc_prev,' pts')+'</div>'+
+ '<div class="sig"><div class="sl">Customer happiness</div><div class="sv">'+TEAM.csat+'/5</div>'+arrow(TEAM.csat,TEAM.csat_prev,'')+'</div>';
+document.getElementById('teamconnect').textContent='The month behind the Overview signals: how the team handled the work, what customers contacted about, and where service leaks. The chatbot replies in about '+TEAM.aispeed+' min, a person in about '+TEAM.huspeed+'. The headline grade and trends live on the Overview tab.';
+document.getElementById('cgap').textContent=TEAM.cgap+' stars';
+document.getElementById('cgaptext').textContent=`The single biggest driver of a happy customer is simply getting the right action. When the team handled a case correctly customers rated it ${TEAM.ccorr} out of 5; when they got it wrong it fell to ${TEAM.cwrong}. Doing the right thing is worth about ${TEAM.cgap} stars every time.`;
+document.getElementById('badlist').innerHTML=`
+ <li><span class="pin">High-stakes cases brushed off.</span> ${TEAM.under} times this month a case that needed a specialist (a lost or damaged parcel, a payment dispute, a rude-rider complaint) was closed instead of passed on. Almost all of these came from the chatbot.</li>
+ <li><span class="pin">Replies that miss steps.</span> The chatbot's answers left out key information about half the time, so customers come back again.</li>
+ <li><span class="pin">Staff time spent on easy questions.</span> ${TEAM.over} simple questions were bumped to a person, roughly ${TEAM.hours} hours of your team's time the chatbot could have saved.</li>`;
+const issuesEl=document.getElementById('issues');const pmax=PARETO[0].n;
+PARETO.forEach(p=>{const d=document.createElement('div');d.className='issue';
+ d.innerHTML=`<div class="top"><span>${p.r}${p.esc?'<span class="flag">usually needs a specialist</span>':''}</span><span class="c">${p.n} contacts</span></div><div class="bar"><span style="width:${Math.round(p.n/pmax*100)}%"></span></div>`;
+ issuesEl.appendChild(d);});
+document.getElementById('fix1p').textContent=`${TEAM.under} cases that needed a specialist (damage, loss, missing items, payment disputes, rider conduct) were closed by the chatbot this month. These are the cases that lose customers and pull ratings down to ${TEAM.cwrong} out of 5.`;
+document.getElementById('fix2p').textContent=`${TEAM.over} simple questions (delivery dates, redelivery, self-collect, special instructions) were handed to a person when the chatbot could have closed them, about ${TEAM.hours} hours of staff time.`;
+document.getElementById('verifyp').textContent=`Bring this same review back next month. If the fixes landed you should see the brushed-off-claims count well below ${TEAM.under}, the staff hours on easy questions falling, and the overall grade moving up from ${TEAM.grade}. If a number did not move, that is the conversation for the next meeting.`;
+document.getElementById('foot').innerHTML='Customer Service Quality Review · plain-language management view · figures from '+TEAM.total.toLocaleString()+' conversations over 60 days, checked for accuracy before use · © 2026 Pau Analytics';
+
+/* ---- agents ---- */
+const pickEl=document.getElementById('agentpick');
+AGENTS.forEach((a,i)=>{const b=document.createElement('button');b.className='pchip';b.setAttribute('aria-pressed',i===0?'true':'false');b.textContent=a.name;b.onclick=()=>selectAgent(a.id);pickEl.appendChild(b);});
+function selectAgent(id){
+ [...pickEl.children].forEach((c,i)=>c.setAttribute('aria-pressed',AGENTS[i].id===id?'true':'false'));
+ const a=AGENTS.find(x=>x.id===id);
+ document.getElementById('samplewrap').innerHTML = a.small ? '<div class="samplenote">Fewer than 45 conversations this period, so these figures are directional. The review flow is exactly what a full month produces.</div>' : '';
+ const mini=a.mini.map(m=>`<div class="m"><div class="v">${m[1]}</div><div class="k">${m[0]}</div></div>`).join('');
+ const strong=a.strong.map(s=>`<li>${s}</li>`).join('');const watch=a.watch.map(s=>`<li>${s}</li>`).join('');
+ const ex=a.examples.map(e=>`<div class="exch ${e.bad?'bad':'good'}"><div class="who">${e.bad?'Needs attention':'Good example'} · ${e.reason}</div><div class="cust">Customer: ${e.cust}</div><div class="rep">Agent: ${e.rep}</div><div class="ver"><b>Did:</b> ${e.did} &nbsp; <b>Should:</b> ${e.should}. ${e.extra}</div></div>`).join('');
+ const talk=a.talk.map(t=>`<li>${t}</li>`).join('');
+ document.getElementById('agentcard').innerHTML=`<div class="ac"><div class="ach"><div class="ava">${a.initials}</div>
+   <div><div class="nm">${a.name}</div><div class="role">${a.role}</div></div>
+   <div class="gtag"><div><div class="gl">Grade</div></div><div class="gv" style="color:${a.gradeColor}">${a.grade}</div></div></div>
+   <div class="acb"><div class="mini">${mini}</div>
+   <div class="col2"><div class="block"><h4><span class="dot g"></span> Strengths</h4><ul>${strong}</ul></div>
+   <div class="block"><h4><span class="dot b"></span> Where to coach</h4><ul>${watch}</ul></div></div>
+   <h4 style="margin:18px 0 2px;font-weight:800">From their own conversations</h4>${ex}
+   <div class="coach"><h4>Coaching focus for next period</h4><p style="margin:0">${a.coach}</p></div>
+   <div class="talk"><h4>Talking points for the meeting</h4><ul>${talk}</ul></div></div></div>`;
+}
+
+/* ---- playbook ---- */
+const ACTLABEL={resolve:"Handle it directly",escalate:"Pass to a specialist",decline:"Politely decline"};
+const CATS=[["all","All topics"],["A","Tracking"],["B","Failed delivery"],["C","Claims"],["D","Conduct"],["E","Payments"],["F","Sender"],["G","Off-topic"]];
+const filterEl=document.getElementById('catfilter');
+CATS.forEach((c,i)=>{const b=document.createElement('button');b.className='fchip';b.setAttribute('aria-pressed',i===0?'true':'false');b.textContent=c[1];b.onclick=()=>filterCat(c[0]);filterEl.appendChild(b);});
+function renderPlaybook(cat){const list=cat==='all'?REASONS:REASONS.filter(r=>r.cat===cat);
+ document.getElementById('playbook').innerHTML=list.map(r=>`<div class="pb"><div class="pbh"><div class="rs">${r.reason}<div class="cat">${r.catname}</div></div><span class="act ${r.act}">${ACTLABEL[r.act]}</span></div>
+  <div class="pbb"><p class="gl">A strong reply covers</p><ul>${r.must.map(m=>`<li>${m}</li>`).join('')}</ul><p class="bl">Avoid a reply like</p><div class="badq">${r.bad}</div></div></div>`).join('');}
+function filterCat(cat){[...filterEl.children].forEach((c,i)=>c.setAttribute('aria-pressed',CATS[i][0]===cat?'true':'false'));renderPlaybook(cat);}
+
+/* ---- tabs ---- */
+function showTab(id){['overview','team','agent','coach','action'].forEach(t=>{document.getElementById('tab-'+t).classList.toggle('on',t===id);document.getElementById('t-'+t).setAttribute('aria-selected',t===id?'true':'false');});}
+
+/* ---- Overview: ask the data (governed) ---- */
+const okchips=document.getElementById('okchips');
+APPROVED.forEach(a=>{const b=document.createElement('button');b.className='qchip';b.textContent=a.q;b.onclick=()=>showAns(a.q,a.a);okchips.appendChild(b);});
+const SNIPLABEL={damaged:"Damaged parcels",lost:"Lost / missing",claim:"Claims",payment:"Payment & fees",rude:"Rude rider",delivered:"Delivered-not-received"};
+const snipchips=document.getElementById('snipchips');
+Object.keys(SNIPS).forEach(t=>{if(!SNIPS[t])return;const b=document.createElement('button');b.className='qchip';b.textContent=SNIPLABEL[t]||t;b.onclick=()=>showSnip(t);snipchips.appendChild(b);});
+function showAns(q,a){const e=document.getElementById('ans');e.className='ans on';document.getElementById('qt').textContent=q;document.getElementById('at').innerHTML=a;}
+function refuse(){const e=document.getElementById('ans');e.className='ans on refuse';document.getElementById('qt').textContent='Refused';document.getElementById('at').innerHTML='I can only answer from the approved set of support-quality questions, and I never share raw customer records. Try one of the approved questions above.';}
+function ask(){const t=(document.getElementById('q').value||'').toLowerCase().trim();if(!t)return;
+ for(const a of APPROVED){if(a.kw.some(k=>t.includes(k))){showAns(a.q,a.a);return;}}
+ for(const k in SNIPS){if(SNIPS[k]&&t.includes(k)){showSnip(k);return;}}
+ if(t.includes('example')||t.includes('show me')){const k=Object.keys(SNIPS).find(x=>SNIPS[x]);showSnip(k);return;}
+ refuse();}
+function showSnip(t){const rows=SNIPS[t]||[];document.getElementById('snipout').innerHTML='<div class="ans on"><div class="qt">'+(SNIPLABEL[t]||t)+' · redacted examples the AI mishandled</div><div class="at">'+rows.map(s=>`<div class="snip"><div class="r">${s.reason}</div><div>Customer: ${s.cust}</div><div class="p">Agent: ${s.rep}</div><div class="v">Did <b>${s.did}</b>, should <b>${s.should}</b>. Names and numbers are redacted.</div></div>`).join('')+'</div></div>';}
+
+selectAgent('ai');renderPlaybook('all');
+</script>
+</body>
+</html>

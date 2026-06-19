@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Customer Service Quality Review — Monthly</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+ --yellow:#FFCC00;--yellowdk:#E6B400;--ink:#1F1B16;--charcoal:#2B2B2B;--red:#D40511;
+ --good:#2E7D5B;--goodbg:#E3F1EA;--warn:#9A6B00;--warnbg:#FFF1CC;--bad:#D40511;--badbg:#FBE3E0;
+ --bg:#FFFDF6;--line:#EADFBF;--soft:#FFF6D2;--muted:#6E6452;--card:#fff;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Manrope",system-ui,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:980px;margin:0 auto;padding:0 0 90px}
+.topband{background:var(--yellow);border-bottom:3px solid var(--ink)}
+.head{max-width:980px;margin:0 auto;padding:26px 22px 22px;display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px}
+.eyebrow{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink);font-weight:800;margin:0 0 6px;opacity:.7}
+h1{font-weight:800;color:var(--ink);font-size:2rem;line-height:1.05;margin:0 0 6px;letter-spacing:-.02em}
+.sub{font-size:1rem;color:#5b513e;margin:0;font-weight:500;max-width:560px}
+.period{font-size:.82rem;color:var(--ink);background:#fff;border:2px solid var(--ink);border-radius:9px;padding:8px 13px;white-space:nowrap;font-weight:600}
+.body{max-width:980px;margin:0 auto;padding:26px 22px 0}
+.gradebig{display:flex;align-items:center;gap:14px;background:#fff;border:1px solid var(--line);border-left:6px solid var(--yellow);border-radius:12px;padding:14px 18px;margin:0 0 6px}
+.gradebig .lt{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:800;margin-bottom:1px}
+.gradebig .g{font-weight:800;font-size:2.3rem;line-height:1}
+.gradebig .d{font-size:.9rem;color:var(--muted);max-width:520px}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin:24px 0 0}
+.tab{font-family:inherit;font-size:.92rem;font-weight:700;color:var(--muted);background:transparent;border:1px solid transparent;border-radius:10px 10px 0 0;padding:11px 16px;cursor:pointer}
+.tab:hover{color:var(--ink);background:#fff}
+.tab[aria-selected="true"]{color:var(--ink);background:#fff;border-color:var(--line);border-bottom-color:#fff;position:relative;top:1px;box-shadow:0 -3px 0 var(--yellow) inset}
+.tabwrap{border-top:1px solid var(--line);margin-top:-1px;padding-top:26px}
+.panel{display:none}.panel.on{display:block}
+h2{font-weight:800;color:var(--ink);font-size:1.3rem;margin:30px 0 4px;letter-spacing:-.01em}
+h2:first-child{margin-top:4px}
+.lede{font-size:1rem;color:var(--muted);margin:0 0 4px}
+.sec{margin:26px 0 0}
+.scards{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:12px;margin:16px 0}
+.sc{background:#fff;border:1px solid var(--line);border-radius:11px;padding:15px 16px;border-top:4px solid var(--yellow)}
+.sc .lab{font-size:.78rem;color:var(--muted);font-weight:700}
+.sc .big{font-weight:800;font-size:1.9rem;color:var(--ink);line-height:1.1;margin:4px 0 2px}
+.sc .small{font-size:.82rem;color:var(--muted)}
+.bigstat{background:var(--ink);color:#fff;border-radius:12px;padding:18px 22px;margin:18px 0;display:flex;flex-wrap:wrap;gap:18px;align-items:center}
+.bigstat .n{font-weight:800;font-size:2.2rem;color:var(--yellow);line-height:1}
+.bigstat .t{font-size:.96rem;color:#EDE6D6;max-width:660px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+@media(max-width:680px){.two{grid-template-columns:1fr}}
+.call{border-radius:12px;padding:16px 18px;border:1px solid var(--line)}
+.call h3{margin:0 0 8px;font-size:1.02rem;color:var(--ink);display:flex;align-items:center;gap:8px;font-weight:800}
+.call.good{background:var(--goodbg);border-color:#C3E2D1}
+.call.bad{background:var(--badbg);border-color:#F3C9C4}
+.call ul{margin:6px 0 0;padding-left:20px}.call li{margin:6px 0;font-size:.94rem}
+.call .pin{font-weight:800}
+.dot{width:9px;height:9px;border-radius:50%;display:inline-block}.dot.g{background:var(--good)}.dot.b{background:var(--bad)}
+.issue{margin:9px 0}
+.issue .top{display:flex;justify-content:space-between;font-size:.92rem;margin-bottom:3px}
+.issue .top .c{color:var(--muted);white-space:nowrap;margin-left:10px}
+.bar{height:10px;background:var(--soft);border-radius:6px;overflow:hidden}
+.bar>span{display:block;height:100%;background:var(--yellow);border-radius:6px}
+.flag{display:inline-block;font-size:.68rem;font-weight:800;padding:1px 8px;border-radius:20px;margin-left:6px;background:var(--warnbg);color:var(--warn);vertical-align:1px}
+.pick{display:flex;flex-wrap:wrap;gap:7px;margin:10px 0 4px}
+.pchip{font-size:.86rem;font-weight:700;color:var(--muted);background:#fff;border:1px solid var(--line);border-radius:20px;padding:7px 14px;cursor:pointer}
+.pchip[aria-pressed="true"]{color:var(--ink);background:var(--yellow);border-color:var(--ink)}
+.samplenote{font-size:.8rem;color:var(--warn);background:var(--warnbg);border:1px solid #EAD9A8;border-radius:8px;padding:7px 12px;margin:8px 0 0;display:inline-block}
+.ac{background:#fff;border:1px solid var(--line);border-radius:13px;overflow:hidden;margin:14px 0}
+.ac .ach{background:var(--soft);border-bottom:1px solid var(--line);padding:16px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.ava{width:46px;height:46px;border-radius:50%;background:var(--ink);color:var(--yellow);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.05rem}
+.ac .ach .nm{font-weight:800;font-size:1.22rem;color:var(--ink)}
+.ac .ach .role{font-size:.84rem;color:var(--muted)}
+.gtag{margin-left:auto;display:flex;align-items:center;gap:9px}
+.gtag .gv{font-weight:800;font-size:1.9rem;line-height:1}
+.gtag .gl{font-size:.74rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:800}
+.acb{padding:18px 20px}
+.mini{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin:0 0 14px}
+.mini .m{background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:10px 12px;text-align:center}
+.mini .m .v{font-weight:800;font-size:1.3rem;color:var(--ink)}
+.mini .m .k{font-size:.74rem;color:var(--muted)}
+.col2{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media(max-width:680px){.col2{grid-template-columns:1fr}}
+.block h4{margin:0 0 6px;font-size:.96rem;color:var(--ink);display:flex;align-items:center;gap:7px;font-weight:800}
+.block ul{margin:0;padding-left:19px}.block li{margin:5px 0;font-size:.92rem}
+.exch{border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:10px 0;background:#fff}
+.exch.bad{border-left:4px solid var(--bad)}.exch.good{border-left:4px solid var(--good)}
+.exch .who{font-size:.74rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px}
+.exch.bad .who{color:var(--bad)}.exch.good .who{color:var(--good)}
+.exch .cust{font-size:.94rem}.exch .rep{font-size:.92rem;color:var(--muted);font-style:italic;margin:4px 0}
+.exch .ver{font-size:.84rem;color:var(--muted);margin-top:5px}.exch .ver b{color:var(--ink)}
+.coach{background:var(--soft);border-left:4px solid var(--yellowdk);border-radius:0 10px 10px 0;padding:13px 16px;margin:14px 0 0}
+.coach h4{margin:0 0 5px;color:var(--ink);font-size:.98rem;font-weight:800}
+.talk{background:#fff;border:1px dashed var(--line);border-radius:10px;padding:13px 16px;margin:12px 0 0}
+.talk h4{margin:0 0 7px;color:var(--ink);font-size:.95rem;font-weight:800}.talk ul{margin:0;padding-left:19px}.talk li{margin:6px 0;font-size:.92rem}
+.filter{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 4px}
+.fchip{font-size:.82rem;font-weight:700;color:var(--muted);background:#fff;border:1px solid var(--line);border-radius:20px;padding:6px 13px;cursor:pointer}
+.fchip[aria-pressed="true"]{color:var(--ink);background:var(--yellow);border-color:var(--ink)}
+.pb{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:12px 0}
+.pbh{padding:14px 18px;display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap;border-bottom:1px solid var(--line)}
+.pbh .rs{font-weight:800;font-size:1.04rem;color:var(--ink);flex:1;min-width:200px}
+.act{font-size:.74rem;font-weight:800;padding:4px 11px;border-radius:20px;white-space:nowrap}
+.act.resolve{background:var(--goodbg);color:var(--good)}.act.escalate{background:var(--warnbg);color:var(--warn)}.act.decline{background:#ECEFF3;color:var(--muted)}
+.pbb{padding:14px 18px}.pbb .gl{font-size:.8rem;font-weight:800;color:var(--good);text-transform:uppercase;letter-spacing:.04em;margin:0 0 4px}
+.pbb ul{margin:0 0 12px;padding-left:19px}.pbb li{margin:4px 0;font-size:.92rem}
+.pbb .bl{font-size:.8rem;font-weight:800;color:var(--bad);text-transform:uppercase;letter-spacing:.04em;margin:0 0 4px}
+.pbb .badq{font-size:.92rem;color:var(--muted);font-style:italic;background:var(--badbg);border-radius:8px;padding:8px 12px}
+.cat{font-size:.76rem;color:var(--muted);margin-top:3px}
+.fix{background:#fff;border:1px solid var(--line);border-left:5px solid var(--bad);border-radius:0 12px 12px 0;padding:16px 20px;margin:14px 0}
+.fix.two-{border-left-color:var(--warn)}.fix.three-{border-left-color:var(--yellowdk)}
+.fix .rank{font-weight:800;color:var(--muted);font-size:.78rem;letter-spacing:.04em;text-transform:uppercase}
+.fix h3{margin:3px 0 6px;color:var(--ink);font-size:1.1rem;font-weight:800}
+.fix .row{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-top:10px}
+.fix .row div{font-size:.9rem}.fix .row .k{font-size:.74rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:2px}
+.verify{background:var(--goodbg);border:1px solid #C3E2D1;border-radius:12px;padding:16px 20px;margin:18px 0 0}
+.verify h3{margin:0 0 6px;color:var(--good);font-size:1.05rem;font-weight:800}
+.foot{max-width:980px;margin:46px auto 0;padding:20px 22px 0;border-top:1px solid var(--line);color:var(--muted);font-size:.82rem}
+.howto{font-size:.82rem;color:var(--muted);margin-top:10px}.howto summary{cursor:pointer;color:var(--warn);font-weight:700}.howto p{margin:8px 0 0}
+/* Overview / Ask the data */
+.gov{background:#fff;border:1px solid var(--line);border-left:5px solid var(--yellow);border-radius:0 12px 12px 0;padding:14px 18px;margin:4px 0 0;font-size:.93rem}
+.qlab{font-size:.74rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:20px 0 8px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.qchip{font-family:inherit;font-size:.86rem;font-weight:600;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:20px;padding:8px 14px;cursor:pointer}
+.qchip:hover{background:var(--soft);border-color:var(--yellowdk)}
+.askrow{display:flex;gap:8px;margin:8px 0 0}
+.askrow input{flex:1;font-family:inherit;font-size:.95rem;padding:11px 14px;border:2px solid var(--line);border-radius:10px;background:#fff;color:var(--ink)}
+.askrow input:focus{outline:none;border-color:var(--ink)}
+.askrow button{font-family:inherit;font-weight:800;font-size:.92rem;background:var(--yellow);border:2px solid var(--ink);border-radius:10px;padding:0 18px;cursor:pointer}
+.ans{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:16px 0 0;display:none}
+.ans.on{display:block}
+.ans .qt{font-size:.78rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px}
+.ans .at{font-size:1rem}.ans .at ul{margin:6px 0 0;padding-left:20px}
+.ans.refuse{border-left:5px solid var(--bad)}.ans.refuse .qt{color:var(--bad)}
+.snip{border:1px solid var(--line);border-left:4px solid var(--warn);border-radius:0 10px 10px 0;padding:11px 14px;margin:9px 0;background:#fff;font-size:.9rem}
+.snip .r{font-size:.74rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--warn);margin-bottom:4px}
+.snip .p{color:var(--muted);font-style:italic;margin:3px 0}.snip .v{font-size:.82rem;color:var(--muted);margin-top:4px}
+.redbadge{display:inline-block;font-size:.66rem;font-weight:800;background:var(--warnbg);color:var(--warn);border-radius:20px;padding:1px 8px;margin-left:6px}
+.verdict{display:flex;align-items:center;gap:18px;background:#fff;border:1px solid var(--line);border-left:7px solid var(--yellow);border-radius:12px;padding:18px 22px;margin:4px 0 0}
+.verdict .vgrade{font-weight:800;font-size:3rem;line-height:1}
+.verdict .vlt{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:800}
+.verdict .vtext p{margin:2px 0 0;font-size:1.02rem;color:var(--ink);max-width:620px}
+.signals{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin:14px 0 0}
+.sig{background:#fff;border:1px solid var(--line);border-top:4px solid var(--yellow);border-radius:11px;padding:14px 16px}
+.sig .sl{font-size:.78rem;color:var(--muted);font-weight:700}
+.sig .sv{font-weight:800;font-size:1.8rem;color:var(--ink);line-height:1.1;margin:3px 0 2px}
+.sig .sd{font-size:.82rem;font-weight:700}
+.sig .sd.up{color:var(--good)}.sig .sd.down{color:var(--bad)}.sig .sd.flat{color:var(--muted)}
+.hero{background:var(--ink);color:#fff;border-radius:12px;padding:18px 22px;margin:16px 0 0;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px}
+.hero .herotext{font-size:1.05rem;max-width:640px}.hero .heron{font-weight:800;font-size:1.6rem;color:var(--yellow)}
+.herobtn{font-family:inherit;font-weight:800;font-size:.9rem;background:var(--yellow);color:var(--ink);border:none;border-radius:10px;padding:10px 16px;cursor:pointer;white-space:nowrap}
+.askcap{font-size:.82rem;color:var(--muted);margin:8px 0 0}
+.dive{font-size:.9rem;color:var(--muted);margin:14px 0 0}
+.dlink{font-family:inherit;font-size:.9rem;font-weight:700;color:var(--ink);background:none;border:none;border-bottom:2px solid var(--yellow);padding:0 1px;cursor:pointer}
+.dlink:hover{background:var(--soft)}
+.connect{font-size:.92rem;color:var(--muted);background:var(--soft);border-radius:8px;padding:9px 13px;margin:0 0 4px;border-left:3px solid var(--yellowdk)}
+</style>
+</head>
+<body>
+<div class="topband"><div class="head">
+  <div>
+    <p class="eyebrow">Customer service quality · monthly review</p>
+    <h1>Customer Service Quality Review</h1>
+    <p class="sub">A plain read on how your customer service is doing, where it is costing you customers, and what to fix. Built for review meetings and one-to-ones.</p>
+  </div>
+  <div class="period" id="period"></div>
+</div></div>
+
+<div class="wrap"><div class="body">
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" aria-selected="true" id="t-overview" onclick="showTab('overview')">Overview</button>
+    <button class="tab" role="tab" aria-selected="false" id="t-team" onclick="showTab('team')">Team this month</button>
+    <button class="tab" role="tab" aria-selected="false" id="t-agent" onclick="showTab('agent')">Agent review</button>
+    <button class="tab" role="tab" aria-selected="false" id="t-coach" onclick="showTab('coach')">Coaching playbook</button>
+    <button class="tab" role="tab" aria-selected="false" id="t-action" onclick="showTab('action')">Action plan</button>
+  </div>
+
+  <div class="tabwrap">
+    <section class="panel on" id="tab-overview" role="tabpanel">
+      <div class="verdict">
+        <div class="vgrade" id="ovgrade"></div>
+        <div class="vtext"><div class="vlt">Overall this month</div>
+          <p>Customers are mostly looked after, but a clear group of high-stakes cases is slipping through. Fixable, and worth real money.</p></div>
+      </div>
+      <div class="signals" id="signals"></div>
+      <p class="askcap" style="margin-top:6px">Arrows compare with last month (an illustrative prior period in this demo).</p>
+      <div class="hero">
+        <div class="herotext"><span class="heron" id="heron"></span> high-stakes cases were closed instead of escalated this month, the single thing most worth fixing.</div>
+        <button class="herobtn" onclick="showTab('action')">See the fix &rarr;</button>
+      </div>
+      <p class="dive">Dive deeper: <button class="dlink" onclick="showTab('team')">what customers contacted about</button> · <button class="dlink" onclick="showTab('agent')">how each agent did</button> · <button class="dlink" onclick="showTab('coach')">what a good reply looks like</button> · <button class="dlink" onclick="showTab('action')">what to do next</button>.</p>
+      <h2>Ask anything about this month</h2>
+      <div class="askrow"><input id="q" placeholder="e.g. how accurate is the AI, or who needs coaching" onkeydown="if(event.key==='Enter')ask()"><button onclick="ask()">Ask</button></div>
+      <div class="chips" id="okchips" style="margin-top:10px"></div>
+      <p class="askcap">Answers use the approved monthly figures only. Raw customer records are never shown, and off-topic questions are declined.</p>
+      <div class="ans" id="ans"><div class="qt" id="qt"></div><div class="at" id="at"></div></div>
+      <div class="qlab">See examples <span class="redbadge">redacted</span></div>
+      <div class="chips" id="snipchips"></div><div id="snipout"></div>
+    </section>
+    <section class="panel" id="tab-team" role="tabpanel">
+      <p class="lede" id="teamconnect"></p>
+      <h2 style="margin-top:18px">Why customer happiness moves</h2>
+      <div class="bigstat"><div class="n" id="cgap"></div><div class="t" id="cgaptext"></div></div>
+      <div class="two">
+        <div class="call good"><h3><span class="dot g"></span> What is going well</h3>
+          <ul>
+            <li><span class="pin">Fast first response.</span> The chatbot picks up most first contacts and settles simple things (tracking, delivery dates, redelivery) quickly.</li>
+            <li><span class="pin">Your people are strong.</span> When a person handles a case they get the right action most of the time, and their replies are thorough.</li>
+            <li><span class="pin">Good self-service.</span> Just over half of all contacts never needed a human at all.</li>
+          </ul></div>
+        <div class="call bad"><h3><span class="dot b"></span> What is costing you customers</h3><ul id="badlist"></ul></div>
+      </div>
+      <div class="sec"><h2>What customers contacted you about</h2>
+        <p class="lede">The reasons people got in touch, most common first. A tag marks the ones that usually need a specialist.</p>
+        <div id="issues"></div></div>
+      <details class="howto"><summary>How these are measured</summary>
+        <p>Every conversation is read and checked against an agreed answer key: was the right next step taken, and did the reply cover what a good answer should. The figures are the share that met the standard across all conversations. The method was independently checked for accuracy (100% on reason, exact on the verdict) before these numbers were used.</p></details>
+    </section>
+
+    <section class="panel" id="tab-agent" role="tabpanel">
+      <h2 style="margin-top:4px">Agent review</h2>
+      <p class="connect">Drills into the Overview <b>"right action"</b> signal: who drives it, and who needs coaching.</p>
+      <p class="lede">A ready-to-use scorecard for a review meeting or appraisal: where this agent is strong, where to coach, real examples from their own conversations, and talking points you can read aloud.</p>
+      <div class="pick" id="agentpick" role="group"></div>
+      <div id="samplewrap"></div><div id="agentcard"></div>
+    </section>
+
+    <section class="panel" id="tab-coach" role="tabpanel">
+      <h2 style="margin-top:4px">Coaching playbook</h2>
+      <p class="connect">The standard behind the hero issue: what a good reply looks like for every reason, especially the high-stakes ones being under-escalated.</p>
+      <p class="lede">What good looks like for every situation a customer can raise. Use it to train new recruits and to settle "what should I have done here". Each card shows the right move, what a strong reply must cover, and a weak reply to avoid.</p>
+      <div class="filter" id="catfilter" role="group"></div><div id="playbook"></div>
+    </section>
+
+    <section class="panel" id="tab-action" role="tabpanel">
+      <h2 style="margin-top:4px">Action plan for next month</h2>
+      <p class="connect">Turns the Overview signals into moves: each fix targets one of the leaks behind the grade (the 107 under-escalations, the over-escalated easy questions, the thin replies).</p>
+      <p class="lede">Three changes, in order of payoff. Each names who it affects and what you should expect to see if it works, so you can check it at the next review.</p>
+      <div class="fix"><span class="rank">Priority 1 · biggest payoff</span><h3>Stop the chatbot closing high-stakes cases</h3>
+        <p id="fix1p"></p>
+        <div class="row"><div><div class="k">The fix</div>Tighten the chatbot's rule so any claim, dispute or complaint is always passed to a person, never answered with "please wait".</div>
+        <div><div class="k">Who it affects</div>The customers most likely to leave and complain publicly.</div>
+        <div><div class="k">Expect to see</div>Far fewer brushed-off claims, and the satisfaction penalty for wrong actions shrinking.</div></div></div>
+      <div class="fix two-"><span class="rank">Priority 2 · reclaim staff time</span><h3>Let the chatbot finish the easy questions</h3>
+        <p id="fix2p"></p>
+        <div class="row"><div><div class="k">The fix</div>Widen the list of questions the chatbot is trusted to answer in full, using the model answers in the coaching playbook.</div>
+        <div><div class="k">Who it affects</div>Your team, who get time back for the cases that need a human.</div>
+        <div><div class="k">Expect to see</div>Staff hours freed up, with no drop in customer happiness.</div></div></div>
+      <div class="fix three-"><span class="rank">Priority 3 · lift reply quality</span><h3>Make every reply cover the full checklist</h3>
+        <p>The chatbot's replies left out required steps about half the time, so customers had to come back. Your people already score well here.</p>
+        <div class="row"><div><div class="k">The fix</div>Load the coaching-playbook checklists into the chatbot's reply templates so nothing is skipped.</div>
+        <div><div class="k">Who it affects</div>Every customer, and your repeat-contact rate.</div>
+        <div><div class="k">Expect to see</div>More complete replies and fewer "I asked already" follow-ups.</div></div></div>
+      <div class="verify"><h3>Check it worked, next review</h3>
+        <p style="margin:0" id="verifyp"></p></div>
+    </section>
+  </div>
+</div>
+
+<div class="foot" id="foot"></div>
+</div>
+
+<script>
+/*__DATA__*/
+
+/* ---- team ---- */
+document.getElementById('period').innerHTML='Period<br><b>Last 60 days</b><br>'+TEAM.total.toLocaleString()+' customer conversations';
+/* Overview verdict + signal tiles + hero */
+document.getElementById('ovgrade').textContent=TEAM.grade;
+document.getElementById('ovgrade').style.color=TEAM.gradeColor;
+document.getElementById('heron').textContent=TEAM.under;
+function arrow(cur,prev,unit){const d=Math.round((cur-prev)*10)/10;const flat=Math.abs(d)<0.05;
+ const cls=flat?'flat':(d>0?'up':'down');const ar=flat?'→':(d>0?'▲':'▼');
+ const txt=flat?'no change vs last month':(ar+' '+(d>0?'+':'')+d+unit+' vs last month');
+ return '<div class="sd '+cls+'">'+txt+'</div>';}
+document.getElementById('signals').innerHTML=
+ '<div class="sig"><div class="sl">Handled on the spot</div><div class="sv">'+TEAM.contain+'%</div>'+arrow(TEAM.contain,TEAM.contain_prev,'%')+'</div>'+
+ '<div class="sig"><div class="sl">Right action taken</div><div class="sv">'+TEAM.right+' in 10</div>'+arrow(TEAM.acc,TEAM.acc_prev,' pts')+'</div>'+
+ '<div class="sig"><div class="sl">Customer happiness</div><div class="sv">'+TEAM.csat+'/5</div>'+arrow(TEAM.csat,TEAM.csat_prev,'')+'</div>';
+document.getElementById('teamconnect').textContent='The month behind the Overview signals: how the team handled the work, what customers contacted about, and where service leaks. The chatbot replies in about '+TEAM.aispeed+' min, a person in about '+TEAM.huspeed+'. The headline grade and trends live on the Overview tab.';
+document.getElementById('cgap').textContent=TEAM.cgap+' stars';
+document.getElementById('cgaptext').textContent=`The single biggest driver of a happy customer is simply getting the right action. When the team handled a case correctly customers rated it ${TEAM.ccorr} out of 5; when they got it wrong it fell to ${TEAM.cwrong}. Doing the right thing is worth about ${TEAM.cgap} stars every time.`;
+document.getElementById('badlist').innerHTML=`
+ <li><span class="pin">High-stakes cases brushed off.</span> ${TEAM.under} times this month a case that needed a specialist (a lost or damaged parcel, a payment dispute, a rude-rider complaint) was closed instead of passed on. Almost all of these came from the chatbot.</li>
+ <li><span class="pin">Replies that miss steps.</span> The chatbot's answers left out key information about half the time, so customers come back again.</li>
+ <li><span class="pin">Staff time spent on easy questions.</span> ${TEAM.over} simple questions were bumped to a person, roughly ${TEAM.hours} hours of your team's time the chatbot could have saved.</li>`;
+const issuesEl=document.getElementById('issues');const pmax=PARETO[0].n;
+PARETO.forEach(p=>{const d=document.createElement('div');d.className='issue';
+ d.innerHTML=`<div class="top"><span>${p.r}${p.esc?'<span class="flag">usually needs a specialist</span>':''}</span><span class="c">${p.n} contacts</span></div><div class="bar"><span style="width:${Math.round(p.n/pmax*100)}%"></span></div>`;
+ issuesEl.appendChild(d);});
+document.getElementById('fix1p').textContent=`${TEAM.under} cases that needed a specialist (damage, loss, missing items, payment disputes, rider conduct) were closed by the chatbot this month. These are the cases that lose customers and pull ratings down to ${TEAM.cwrong} out of 5.`;
+document.getElementById('fix2p').textContent=`${TEAM.over} simple questions (delivery dates, redelivery, self-collect, special instructions) were handed to a person when the chatbot could have closed them, about ${TEAM.hours} hours of staff time.`;
+document.getElementById('verifyp').textContent=`Bring this same review back next month. If the fixes landed you should see the brushed-off-claims count well below ${TEAM.under}, the staff hours on easy questions falling, and the overall grade moving up from ${TEAM.grade}. If a number did not move, that is the conversation for the next meeting.`;
+document.getElementById('foot').innerHTML='Customer Service Quality Review · plain-language management view · figures from '+TEAM.total.toLocaleString()+' conversations over 60 days, checked for accuracy before use · © 2026 Pau Analytics';
+
+/* ---- agents ---- */
+const pickEl=document.getElementById('agentpick');
+AGENTS.forEach((a,i)=>{const b=document.createElement('button');b.className='pchip';b.setAttribute('aria-pressed',i===0?'true':'false');b.textContent=a.name;b.onclick=()=>selectAgent(a.id);pickEl.appendChild(b);});
+function selectAgent(id){
+ [...pickEl.children].forEach((c,i)=>c.setAttribute('aria-pressed',AGENTS[i].id===id?'true':'false'));
+ const a=AGENTS.find(x=>x.id===id);
+ document.getElementById('samplewrap').innerHTML = a.small ? '<div class="samplenote">Fewer than 45 conversations this period, so these figures are directional. The review flow is exactly what a full month produces.</div>' : '';
+ const mini=a.mini.map(m=>`<div class="m"><div class="v">${m[1]}</div><div class="k">${m[0]}</div></div>`).join('');
+ const strong=a.strong.map(s=>`<li>${s}</li>`).join('');const watch=a.watch.map(s=>`<li>${s}</li>`).join('');
+ const ex=a.examples.map(e=>`<div class="exch ${e.bad?'bad':'good'}"><div class="who">${e.bad?'Needs attention':'Good example'} · ${e.reason}</div><div class="cust">Customer: ${e.cust}</div><div class="rep">Agent: ${e.rep}</div><div class="ver"><b>Did:</b> ${e.did} &nbsp; <b>Should:</b> ${e.should}. ${e.extra}</div></div>`).join('');
+ const talk=a.talk.map(t=>`<li>${t}</li>`).join('');
+ document.getElementById('agentcard').innerHTML=`<div class="ac"><div class="ach"><div class="ava">${a.initials}</div>
+   <div><div class="nm">${a.name}</div><div class="role">${a.role}</div></div>
+   <div class="gtag"><div><div class="gl">Grade</div></div><div class="gv" style="color:${a.gradeColor}">${a.grade}</div></div></div>
+   <div class="acb"><div class="mini">${mini}</div>
+   <div class="col2"><div class="block"><h4><span class="dot g"></span> Strengths</h4><ul>${strong}</ul></div>
+   <div class="block"><h4><span class="dot b"></span> Where to coach</h4><ul>${watch}</ul></div></div>
+   <h4 style="margin:18px 0 2px;font-weight:800">From their own conversations</h4>${ex}
+   <div class="coach"><h4>Coaching focus for next period</h4><p style="margin:0">${a.coach}</p></div>
+   <div class="talk"><h4>Talking points for the meeting</h4><ul>${talk}</ul></div></div></div>`;
+}
+
+/* ---- playbook ---- */
+const ACTLABEL={resolve:"Handle it directly",escalate:"Pass to a specialist",decline:"Politely decline"};
+const CATS=[["all","All topics"],["A","Tracking"],["B","Failed delivery"],["C","Claims"],["D","Conduct"],["E","Payments"],["F","Sender"],["G","Off-topic"]];
+const filterEl=document.getElementById('catfilter');
+CATS.forEach((c,i)=>{const b=document.createElement('button');b.className='fchip';b.setAttribute('aria-pressed',i===0?'true':'false');b.textContent=c[1];b.onclick=()=>filterCat(c[0]);filterEl.appendChild(b);});
+function renderPlaybook(cat){const list=cat==='all'?REASONS:REASONS.filter(r=>r.cat===cat);
+ document.getElementById('playbook').innerHTML=list.map(r=>`<div class="pb"><div class="pbh"><div class="rs">${r.reason}<div class="cat">${r.catname}</div></div><span class="act ${r.act}">${ACTLABEL[r.act]}</span></div>
+  <div class="pbb"><p class="gl">A strong reply covers</p><ul>${r.must.map(m=>`<li>${m}</li>`).join('')}</ul><p class="bl">Avoid a reply like</p><div class="badq">${r.bad}</div></div></div>`).join('');}
+function filterCat(cat){[...filterEl.children].forEach((c,i)=>c.setAttribute('aria-pressed',CATS[i][0]===cat?'true':'false'));renderPlaybook(cat);}
+
+/* ---- tabs ---- */
+function showTab(id){['overview','team','agent','coach','action'].forEach(t=>{document.getElementById('tab-'+t).classList.toggle('on',t===id);document.getElementById('t-'+t).setAttribute('aria-selected',t===id?'true':'false');});}
+
+/* ---- Overview: ask the data (governed) ---- */
+const okchips=document.getElementById('okchips');
+APPROVED.forEach(a=>{const b=document.createElement('button');b.className='qchip';b.textContent=a.q;b.onclick=()=>showAns(a.q,a.a);okchips.appendChild(b);});
+const SNIPLABEL={damaged:"Damaged parcels",lost:"Lost / missing",claim:"Claims",payment:"Payment & fees",rude:"Rude rider",delivered:"Delivered-not-received"};
+const snipchips=document.getElementById('snipchips');
+Object.keys(SNIPS).forEach(t=>{if(!SNIPS[t])return;const b=document.createElement('button');b.className='qchip';b.textContent=SNIPLABEL[t]||t;b.onclick=()=>showSnip(t);snipchips.appendChild(b);});
+function showAns(q,a){const e=document.getElementById('ans');e.className='ans on';document.getElementById('qt').textContent=q;document.getElementById('at').innerHTML=a;}
+function refuse(){const e=document.getElementById('ans');e.className='ans on refuse';document.getElementById('qt').textContent='Refused';document.getElementById('at').innerHTML='I can only answer from the approved set of support-quality questions, and I never share raw customer records. Try one of the approved questions above.';}
+function ask(){const t=(document.getElementById('q').value||'').toLowerCase().trim();if(!t)return;
+ for(const a of APPROVED){if(a.kw.some(k=>t.includes(k))){showAns(a.q,a.a);return;}}
+ for(const k in SNIPS){if(SNIPS[k]&&t.includes(k)){showSnip(k);return;}}
+ if(t.includes('example')||t.includes('show me')){const k=Object.keys(SNIPS).find(x=>SNIPS[x]);showSnip(k);return;}
+ refuse();}
+function showSnip(t){const rows=SNIPS[t]||[];document.getElementById('snipout').innerHTML='<div class="ans on"><div class="qt">'+(SNIPLABEL[t]||t)+' · redacted examples the AI mishandled</div><div class="at">'+rows.map(s=>`<div class="snip"><div class="r">${s.reason}</div><div>Customer: ${s.cust}</div><div class="p">Agent: ${s.rep}</div><div class="v">Did <b>${s.did}</b>, should <b>${s.should}</b>. Names and numbers are redacted.</div></div>`).join('')+'</div></div>';}
+
+selectAgent('ai');renderPlaybook('all');
+</script>
+</body>
+</html>
