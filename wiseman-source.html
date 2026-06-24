@@ -1,347 +1,339 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wiseman · 智者 — Source Code</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wiseman · 智者: Source | AI Project Portfolio</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root{ --ink:#222; --paper:#fff; --hair:#dddddd; --gray:#555; --accent:#B8860B; --navy:#1E3A5F; --code-bg:#fbfbf8; --cmt:#6b8190; }
+  html{ scroll-behavior:smooth; }
+  body{ background:var(--paper); color:var(--ink); font-family:Arial, Helvetica, sans-serif; line-height:1.6; overflow-x:hidden; }
+  a{ color:inherit; text-decoration:none; }
+  a:hover h2, a:hover h3, a:hover h4{ color:var(--accent); }
+  p code, li code{ font-family:"Courier New", monospace; font-size:.86em; background:#f2f3f5; padding:1px 5px; color:var(--navy); }
 
-        body {
-            font-family: 'Arial', sans-serif;
-            line-height: 1.6;
-            color: #222;
-            background-color: #ffffff;
-        }
+  /* Masthead (shared) */
+  .masthead{ display:flex; align-items:center; justify-content:space-between; padding:14px 28px; max-width:1240px; margin:0 auto; gap:18px; }
+  .mast-left{ display:flex; align-items:center; gap:20px; }
+  .logo{ background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; letter-spacing:3px; font-size:.95rem; padding:8px 12px; white-space:nowrap; }
+  .mast-nav{ display:flex; gap:20px; font-family:Arial, Helvetica, sans-serif; font-size:.72rem; letter-spacing:1.4px; text-transform:uppercase; }
+  .mast-nav a:hover{ color:var(--accent); }
+  .hamburger{ display:none; flex-direction:column; gap:4px; background:none; border:none; cursor:pointer; padding:6px; }
+  .hamburger span{ width:22px; height:2px; background:#222; display:block; }
+  .rule-top{ border:none; border-top:3px solid #222; max-width:1240px; margin:0 auto; }
 
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+  /* Search (shared) */
+  .search-box{ position:relative; width:200px; }
+  .search-input{ width:100%; padding:7px 30px 7px 12px; border:1px solid var(--hair); background:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; color:#222; }
+  .search-input:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(184,134,11,.15); }
+  .search-ic{ position:absolute; right:10px; top:50%; transform:translateY(-50%); color:var(--gray); font-size:.8rem; pointer-events:none; }
+  .search-results{ position:absolute; top:calc(100% + 4px); left:0; width:340px; max-width:86vw; background:#fff; border:1px solid #222; max-height:60vh; overflow-y:auto; z-index:120; display:none; }
+  .sr-item{ padding:12px 14px; border-bottom:1px solid var(--hair); }
+  .sr-item:last-child{ border-bottom:none; }
+  .sr-cat{ font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; margin-bottom:4px; color:var(--accent); }
+  .sr-title{ font-weight:700; font-size:1.02rem; color:#222; }
+  .sr-links{ font-size:.58rem; letter-spacing:.8px; text-transform:uppercase; color:var(--gray); margin-top:5px; }
+  .sr-links a:hover{ color:var(--accent); }
+  .sr-none{ padding:16px 14px; font-size:.82rem; color:var(--gray); }
 
-        .back-nav {
-            margin-bottom: 20px;
-        }
+  /* Shared bits */
+  .tab{ display:inline-block; background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.66rem; letter-spacing:2px; text-transform:uppercase; padding:6px 12px; }
+  .rubric{ font-family:Arial, Helvetica, sans-serif; font-size:.62rem; font-weight:700; letter-spacing:1.6px; text-transform:uppercase; color:var(--accent); display:block; margin-bottom:8px; }
+  .tech-chip{ display:inline-block; border:1px solid var(--hair); padding:6px 12px; font-size:.72rem; letter-spacing:.3px; color:#333; white-space:nowrap; }
+  .tech-chip:hover{ border-color:var(--accent); color:var(--accent); }
+  .btn{ display:inline-block; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.7rem; letter-spacing:1.6px; text-transform:uppercase; padding:13px 24px; border:1px solid #222; background:#222; color:#fff; cursor:pointer; transition:.15s; }
+  .btn:hover{ background:var(--accent); border-color:var(--accent); }
+  .btn.ghost{ background:#fff; color:#222; }
+  .btn.ghost:hover{ color:var(--accent); border-color:var(--accent); background:#fff; }
 
-        .back-nav a {
-            color: #007BFF;
-            text-decoration: none;
-            font-size: 1rem;
-        }
+  /* Breadcrumb */
+  .crumb{ max-width:1240px; margin:0 auto; padding:20px 28px 0; font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--gray); }
+  .crumb a:hover{ color:var(--accent); }
+  .crumb .sep{ color:var(--hair); margin:0 8px; }
 
-        .back-nav a:hover {
-            text-decoration: underline;
-        }
+  /* Header (slim cover banner + copy) */
+  .src-head{ max-width:1240px; margin:0 auto; padding:14px 28px 6px; }
+  .cover-strip{ border:1px solid var(--hair); line-height:0; background:#eef1f4; }
+  .cover-strip img{ width:100%; height:190px; object-fit:cover; object-position:center 42%; display:block; }
+  .src-head h1{ font-size:2.5rem; font-weight:900; line-height:1.04; letter-spacing:-.008em; margin-top:18px; }
+  .src-head .sub{ font-style:italic; font-size:1.08rem; color:#333; margin-top:10px; max-width:72ch; }
+  .head-tech{ display:flex; flex-wrap:wrap; gap:9px; margin-top:16px; }
+  .head-btns{ display:flex; flex-wrap:wrap; gap:12px; margin-top:18px; }
 
-        .project-header {
-            text-align: center;
-            margin-bottom: 40px;
-            padding: 40px 0;
-            background: linear-gradient(135deg, #9C27B0, #6A1B9A);
-            color: white;
-            border-radius: 10px;
-        }
+  /* Section shell */
+  .sec{ max-width:1240px; margin:0 auto; padding:26px 28px; }
+  .sec-rule{ border-top:3px solid #222; padding-top:16px; }
+  .sec .tab{ margin-bottom:14px; }
+  .sec h2{ font-size:1.7rem; font-weight:900; line-height:1.06; }
+  .sec .intro{ color:#333; font-size:1.02rem; margin-top:10px; max-width:80%; }
+  .sec .body{ color:#333; font-size:1rem; margin-top:10px; max-width:80%; }
 
-        .project-header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
+  /* Code block */
+  .codeblock{ border:1px solid var(--hair); margin-top:16px; }
+  .code-bar{ display:flex; align-items:center; justify-content:space-between; gap:12px; background:var(--navy); color:#fff; padding:8px 12px; }
+  .code-bar .path{ font-family:"Courier New", monospace; font-size:.74rem; letter-spacing:.2px; opacity:.96; display:flex; align-items:center; gap:7px; min-width:0; }
+  .code-bar .path span{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .code-copy{ flex:none; background:none; border:1px solid rgba(255,255,255,.4); color:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.56rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; padding:5px 11px; cursor:pointer; transition:.15s; }
+  .code-copy:hover{ background:rgba(255,255,255,.16); }
+  .codeblock pre{ margin:0; padding:14px 16px; overflow-x:auto; background:var(--code-bg); }
+  .codeblock code{ font-family:"Courier New", monospace; font-size:.82rem; line-height:1.6; color:#1b2a3a; background:none; padding:0; white-space:pre; display:block; }
+  .codeblock code .cmt{ color:var(--cmt); font-style:italic; }
 
-        .project-header p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
+  .tree .code-bar .path::before{ content:"📁"; }
 
-        .badges {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin: 20px 0;
-            flex-wrap: wrap;
-        }
+  /* Notes */
+  .note-block{ margin-top:22px; }
+  .note-block h3{ font-size:1.15rem; font-weight:800; }
+  .blist{ list-style:none; margin-top:12px; border-top:1px solid var(--hair); }
+  .blist li{ padding:12px 0; border-bottom:1px solid var(--hair); color:#333; font-size:.95rem; }
+  .blist li b{ color:#222; }
 
-        .badge {
-            background-color: rgba(255, 255, 255, 0.2);
-            color: white;
-            padding: 5px 12px;
-            border-radius: 15px;
-            font-size: 0.9rem;
-        }
+  /* CTA */
+  .cta-inner{ display:flex; align-items:center; gap:18px; flex-wrap:wrap; border-top:3px solid #222; padding-top:18px; }
+  .cta-inner h3{ font-size:1.4rem; font-weight:900; line-height:1.08; }
+  .cta-inner p{ color:var(--gray); font-size:.95rem; margin-top:4px; }
+  .cta-btns{ margin-left:auto; display:flex; gap:12px; flex-wrap:wrap; }
 
-        .content-section {
-            margin: 40px 0;
-            padding: 30px;
-            background-color: #f9f9f9;
-            border-radius: 8px;
-            border-left: 5px solid #9C27B0;
-        }
+  footer{ background:#222; max-width:1240px; margin:30px auto 0; padding:24px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; letter-spacing:.5px; color:#fff; text-align:center; }
+  .note{ max-width:1240px; margin:14px auto 0; padding:8px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.62rem; letter-spacing:1px; color:#999; }
 
-        .content-section h2 {
-            color: #9C27B0;
-            margin-bottom: 20px;
-            font-size: 1.8rem;
-        }
+  /* Drawer (shared) */
+  .drawer{ position:fixed; top:0; left:-300px; width:280px; height:100vh; background:#fff; z-index:200; box-shadow:2px 0 14px rgba(0,0,0,.15); transition:left .28s ease; padding:74px 26px 26px; }
+  .drawer.open{ left:0; }
+  .drawer a{ display:block; font-family:Arial, Helvetica, sans-serif; font-size:.82rem; letter-spacing:1.2px; text-transform:uppercase; padding:14px 0; border-bottom:1px solid var(--hair); }
+  .overlay{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:150; }
+  .overlay.open{ display:block; }
+  .drawer-close{ position:absolute; top:20px; right:20px; font-family:Arial, Helvetica, sans-serif; font-size:1.4rem; background:none; border:none; cursor:pointer; }
 
-        .content-section h3 {
-            color: #333;
-            margin: 20px 0 10px 0;
-            font-size: 1.3rem;
-        }
-
-        .highlight-box {
-            background: linear-gradient(135deg, #f3e5f5, #e1bee7);
-            padding: 20px;
-            border-radius: 10px;
-            border-left: 5px solid #9C27B0;
-            margin: 20px 0;
-        }
-
-        .code-container {
-            background-color: #1e1e1e;
-            border-radius: 8px;
-            padding: 20px;
-            margin: 20px 0;
-            overflow-x: auto;
-        }
-
-        .code-header {
-            color: #ce93d8;
-            font-weight: bold;
-            margin-bottom: 15px;
-            font-size: 1.1rem;
-            border-bottom: 1px solid #333;
-            padding-bottom: 10px;
-        }
-
-        .code-block {
-            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-            font-size: 14px;
-            line-height: 1.5;
-            color: #d4d4d4;
-        }
-
-        .code-comment {
-            color: #6a9955;
-            font-style: italic;
-        }
-
-        .code-keyword {
-            color: #569cd6;
-        }
-
-        .code-string {
-            color: #ce9178;
-        }
-
-        .code-function {
-            color: #dcdcaa;
-        }
-
-        .code-number {
-            color: #b5cea8;
-        }
-
-        .demo-links {
-            text-align: center;
-            margin: 30px 0;
-        }
-
-        .demo-btn {
-            display: inline-block;
-            background-color: #9C27B0;
-            color: white;
-            padding: 12px 25px;
-            text-decoration: none;
-            border-radius: 5px;
-            margin: 0 10px;
-            font-weight: bold;
-            transition: background-color 0.3s;
-        }
-
-        .demo-btn:hover {
-            background-color: #7B1FA2;
-        }
-
-        .demo-btn.secondary {
-            background-color: #6A1B9A;
-        }
-
-        .demo-btn.secondary:hover {
-            background-color: #4A148C;
-        }
-
-        @media (max-width: 768px) {
-            .project-header h1 {
-                font-size: 2rem;
-            }
-
-            .project-header p {
-                font-size: 1rem;
-            }
-
-            .demo-btn {
-                margin: 5px;
-                padding: 10px 20px;
-            }
-
-            .container {
-                padding: 15px;
-            }
-        }
-    </style>
+  @media (max-width:900px){
+    .cta-btns{ margin-left:0; }
+    .mast-nav{ display:none; }
+    .hamburger{ display:flex; }
+    .masthead{ padding:12px 16px; }
+    .mast-left{ gap:10px; min-width:0; flex:1; }
+    .logo{ font-size:.72rem; letter-spacing:1.5px; padding:6px 8px; }
+    .search-box{ flex:1; width:auto; min-width:0; }
+    .search-results{ position:fixed; top:58px; left:12px; right:12px; width:auto; max-width:none; }
+    .src-head h1{ font-size:1.95rem; }
+    .cover-strip img{ height:150px; }
+  }
+</style>
 </head>
 <body>
-    <div class="container">
-        <nav class="back-nav">
-            <a href="wiseman.html">&larr; Back to Project Overview</a>
-        </nav>
 
-        <div class="project-header">
-            <h1>Wiseman &middot; 智者</h1>
-            <p>Daily cosmic reading in Mandarin Chinese — Bazi, horoscope, planetary astrology, and Chinese zodiac</p>
+  <div class="overlay" id="overlay"></div>
+  <nav class="drawer" id="drawer">
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">&times;</button>
+    <a href="index.html">Home</a>
+    <a href="project-categories.html">Categories</a>
+    <a href="contact.html">Contact</a>
+    <a href="https://lyven81.github.io/data-analyst-portfolio/index.html">Data Portfolio</a>
+  </nav>
 
-            <div class="badges">
-                <span class="badge">Node.js</span>
-                <span class="badge">Express</span>
-                <span class="badge">Claude API</span>
-                <span class="badge">ES Modules</span>
-            </div>
-        </div>
-
-        <div class="highlight-box">
-            <h3>About This Code Showcase</h3>
-            <p><strong>This curated selection highlights how Wiseman generates personalized daily cosmic readings by combining five astrological systems — Bazi, Western horoscope, planetary positions, Chinese zodiac, and Mayan astrology — into a single AI-interpreted narrative.</strong></p>
-            <p>The app uses a modular API architecture where each astrological system has its own module under <code>apis/</code>, and readings are cached per day to avoid redundant LLM calls.</p>
-        </div>
-
-        <div class="content-section">
-            <h2>File Structure</h2>
-            <div class="code-container">
-                <div class="code-block">
-wiseman/
-├── server.mjs              <span class="code-comment"># Express server — routes &amp; middleware</span>
-├── wiseman.config.mjs      <span class="code-comment"># User profile &amp; app settings</span>
-├── profile.json            <span class="code-comment"># Cached personality profile (generated once)</span>
-├── package.json            <span class="code-comment"># Dependencies: express, dotenv</span>
-├── apis/
-│   ├── reading.mjs         <span class="code-comment"># Daily reading generator &amp; chat prompt builder</span>
-│   ├── profile.mjs         <span class="code-comment"># One-time "who am I" profile generator</span>
-│   ├── bazi.mjs            <span class="code-comment"># Chinese Bazi (八字) calculations</span>
-│   ├── astrology.mjs       <span class="code-comment"># Western horoscope engine</span>
-│   ├── zodiac.mjs          <span class="code-comment"># Chinese zodiac analysis</span>
-│   └── maya.mjs            <span class="code-comment"># Mayan calendar day-sign lookup</span>
-├── lib/
-│   └── llm.mjs             <span class="code-comment"># Claude API wrapper</span>
-├── runs/                   <span class="code-comment"># Cached daily readings (one JSON per day)</span>
-└── dashboard/public/       <span class="code-comment"># Frontend HTML/CSS/JS</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>Core: Express Server &amp; API Routes</h2>
-            <p>The server exposes three main endpoints: <code>/api/reading</code> for daily cosmic readings, <code>/api/chat</code> for follow-up conversation with Wiseman, and <code>/api/profile</code> for the one-time personality profile. Each reading is cached by date so the same day always returns consistent guidance.</p>
-
-            <div class="code-container">
-                <div class="code-header">server.mjs — Reading &amp; Chat Routes</div>
-                <div class="code-block">
-<span class="code-keyword">import</span> { generateReading, buildChatSystemPrompt } <span class="code-keyword">from</span> <span class="code-string">'./apis/reading.mjs'</span>
-<span class="code-keyword">import</span> { generateProfile } <span class="code-keyword">from</span> <span class="code-string">'./apis/profile.mjs'</span>
-<span class="code-keyword">import</span> { callClaudeChat } <span class="code-keyword">from</span> <span class="code-string">'./lib/llm.mjs'</span>
-<span class="code-keyword">import</span> { config } <span class="code-keyword">from</span> <span class="code-string">'./wiseman.config.mjs'</span>
-
-<span class="code-comment">// GET /api/reading — returns today's reading (cached or fresh)</span>
-app.get(<span class="code-string">'/api/reading'</span>, <span class="code-keyword">async</span> (req, res) =&gt; {
-  <span class="code-keyword">const</span> dateStr = req.query.date || getTodayStr()
-  <span class="code-keyword">const</span> reading = <span class="code-keyword">await</span> <span class="code-function">generateReading</span>(dateStr)
-  res.json({ ok: <span class="code-keyword">true</span>, reading })
-})
-
-<span class="code-comment">// POST /api/chat — chat with Wiseman about today's reading</span>
-app.post(<span class="code-string">'/api/chat'</span>, <span class="code-keyword">async</span> (req, res) =&gt; {
-  <span class="code-keyword">const</span> { message, history, readingDate } = req.body
-  <span class="code-keyword">const</span> dateStr = readingDate || getTodayStr()
-  <span class="code-keyword">const</span> reading = <span class="code-keyword">await</span> <span class="code-function">generateReading</span>(dateStr)
-  <span class="code-keyword">const</span> systemPrompt = <span class="code-function">buildChatSystemPrompt</span>(reading)
-
-  <span class="code-comment">// Build message history for Claude</span>
-  <span class="code-keyword">const</span> messages = []
-  <span class="code-keyword">if</span> (history &amp;&amp; Array.isArray(history)) {
-    <span class="code-keyword">for</span> (<span class="code-keyword">const</span> h <span class="code-keyword">of</span> history) {
-      <span class="code-keyword">if</span> (h.role &amp;&amp; h.content) messages.push({ role: h.role, content: h.content })
-    }
-  }
-  messages.push({ role: <span class="code-string">'user'</span>, content: message })
-
-  <span class="code-keyword">const</span> reply = <span class="code-keyword">await</span> <span class="code-function">callClaudeChat</span>({ systemPrompt, messages, maxTokens: <span class="code-number">512</span> })
-  res.json({ ok: <span class="code-keyword">true</span>, reply })
-})
-                </div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>Configuration: User Profile &amp; Birth Data</h2>
-            <p>The config file stores the user's birth details — date, time, Chinese zodiac, and Western sign — which feed into all five astrological calculation modules. This makes every reading personally calibrated.</p>
-
-            <div class="code-container">
-                <div class="code-header">wiseman.config.mjs — Personal Configuration</div>
-                <div class="code-block">
-<span class="code-keyword">export const</span> config = {
-  user: {
-    <span class="code-comment">// Birthday details — used for Bazi and horoscope calculations</span>
-    birthday: <span class="code-string">"1981-08-12"</span>,
-    birthTime: <span class="code-string">"17:30"</span>,
-    birthYear: <span class="code-number">1981</span>,
-    birthMonth: <span class="code-number">8</span>,
-    birthDay: <span class="code-number">12</span>,
-    birthHour: <span class="code-number">17</span>,
-    birthMinute: <span class="code-number">30</span>,
-
-    <span class="code-comment">// Chinese astrology</span>
-    chineseZodiac: <span class="code-string">"鸡"</span>,
-    chineseZodiacEn: <span class="code-string">"Rooster"</span>,
-
-    <span class="code-comment">// Western astrology</span>
-    westernSign: <span class="code-string">"狮子座"</span>,
-    westernSignEn: <span class="code-string">"Leo"</span>,
-
-    name: <span class="code-string">"主人"</span>
-  },
-
-  port: process.env.PORT || <span class="code-number">3000</span>,
-  runsDir: <span class="code-string">"./runs"</span>,
-  claudeModel: <span class="code-string">"claude-opus-4-6"</span>
-}
-                </div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>Technical Implementation Notes</h2>
-            <h3>Key Design Decisions</h3>
-            <ul style="margin: 15px 0; padding-left: 20px;">
-                <li><strong>Five astrological systems:</strong> Bazi (八字), Western horoscope, planetary positions, Chinese zodiac, and Mayan calendar are each handled by a dedicated module under <code>apis/</code></li>
-                <li><strong>Daily caching:</strong> Readings are saved as JSON files in <code>runs/</code> by date, so the same day always returns consistent guidance without extra API calls</li>
-                <li><strong>Persistent profile:</strong> The "Who Am I" personality profile is generated once and cached in <code>profile.json</code> — a deep character reading that never changes</li>
-                <li><strong>Context-aware chat:</strong> Follow-up conversations receive today's full reading as system context, so Wiseman can reference specific cosmic influences in replies</li>
-                <li><strong>All output in Mandarin:</strong> The entire reading and chat experience is delivered in Chinese, matching the traditional character of the astrological systems</li>
-            </ul>
-        </div>
-
-        <div class="demo-links">
-            <a href="wiseman.html" class="demo-btn secondary">View Full Project Details</a>
-        </div>
-
-        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
-            <a href="index.html">&larr; Back to Portfolio</a> |
-            <a href="project-categories.html">View All Categories</a>
-        </nav>
+  <div class="masthead">
+    <div class="mast-left">
+      <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+      <a class="logo" href="index.html">AI PROJECTS</a>
+      <nav class="mast-nav">
+        <a href="project-categories.html">Categories</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <div class="search-box">
+        <input type="text" class="search-input" id="searchInput" autocomplete="off" placeholder="Search AI projects..." aria-label="Search AI projects">
+        <span class="search-ic">&#128269;</span>
+        <div class="search-results" id="searchResults"></div>
+      </div>
     </div>
+  </div>
+  <hr class="rule-top">
+
+  <div class="crumb">
+    <a href="project-categories.html">Categories</a>
+    <span class="sep">/</span><a id="crumbCat" href="#"></a>
+    <span class="sep">/</span><a id="crumbProj" href="#"></a>
+    <span class="sep">/</span><span>Source</span>
+  </div>
+
+  <section class="src-head">
+    <div class="cover-strip" id="coverStrip" style="display:none"><img id="cover" alt=""></div>
+    <span class="rubric" id="kicker"></span>
+    <h1 id="title"></h1>
+    <p class="sub" id="subtitle"></p>
+    <div class="head-tech" id="headTech"></div>
+    <div class="head-btns" id="headBtns"></div>
+  </section>
+
+  <div id="body"></div>
+
+  <footer>&copy; 2026 Lee Yih Ven | AI Project Portfolio &middot; All rights reserved.</footer>
+  <div class="note">Sample Source-Showcase-E2 (TEMPLATE): source-code page on the index magazine system: slim cover banner, About, Project Structure, code walkthrough with copyable navy-barred code blocks, CTA. Reuse by editing only the PROJECT block at the top of the script.</div>
+
+<script>
+  const SITE = "";
+
+  /* =================================================================
+     EDIT PER PROJECT  -  the ONLY block you change per page.
+     Copy this file, swap PROJECT, save as <slug>-source.html.
+     - structure.code : the project file tree (plain text)
+     - walkthrough[]   : { heading, body, files:[{label, code}] }
+     - notes[]         : { heading, bullets:[...] }
+     Code strings can be multi-line; they render verbatim.
+     ================================================================= */
+  const PROJECT = {
+  "slug": "wiseman",
+  "category": "Knowledge & Reference Chatbots",
+  "categoryUrl": "category-knowledge-chatbots.html",
+  "title": "Wiseman · 智者",
+  "subtitle": "Daily cosmic reading in Mandarin Chinese: Bazi, horoscope, planetary astrology, and Chinese zodiac.",
+  "cover": "images/wiseman/cover.jpeg",
+  "tech": [
+    "Node.js",
+    "Express",
+    "Claude API",
+    "ES Modules"
+  ],
+  "overviewUrl": "wiseman.html",
+  "demoLabel": "Try Live Demo",
+  "demoUrl": "https://lyven81.github.io/ai-project/projects/wiseman/demo.html",
+  "repoUrl": "https://github.com/lyven81/ai-project/tree/main/projects/wiseman",
+  "about": "This curated selection highlights how Wiseman generates personalized daily cosmic readings by combining five astrological systems: Bazi, Western horoscope, planetary positions, Chinese zodiac, and Mayan astrology, into a single AI-interpreted narrative. The app uses a modular API architecture where each astrological system has its own module under <code>apis/</code>, and readings are cached per day to avoid redundant LLM calls.",
+  "structure": {
+    "label": "wiseman/",
+    "code": "wiseman/\n├── server.mjs              # Express server — routes & middleware\n├── wiseman.config.mjs      # User profile & app settings\n├── profile.json            # Cached personality profile (generated once)\n├── package.json            # Dependencies: express, dotenv\n├── apis/\n│   ├── reading.mjs         # Daily reading generator & chat prompt builder\n│   ├── profile.mjs         # One-time \"who am I\" profile generator\n│   ├── bazi.mjs            # Chinese Bazi (八字) calculations\n│   ├── astrology.mjs       # Western horoscope engine\n│   ├── zodiac.mjs          # Chinese zodiac analysis\n│   └── maya.mjs            # Mayan calendar day-sign lookup\n├── lib/\n│   └── llm.mjs             # Claude API wrapper\n├── runs/                   # Cached daily readings (one JSON per day)\n└── dashboard/public/       # Frontend HTML/CSS/JS"
+  },
+  "walkthrough": [
+    {
+      "heading": "Core: Express Server & API Routes",
+      "body": "The server exposes three main endpoints: <code>/api/reading</code> for daily cosmic readings, <code>/api/chat</code> for follow-up conversation with Wiseman, and <code>/api/profile</code> for the one-time personality profile. Each reading is cached by date so the same day always returns consistent guidance.",
+      "files": [
+        {
+          "label": "server.mjs: Reading & Chat Routes",
+          "code": "import { generateReading, buildChatSystemPrompt } from './apis/reading.mjs'\nimport { generateProfile } from './apis/profile.mjs'\nimport { callClaudeChat } from './lib/llm.mjs'\nimport { config } from './wiseman.config.mjs'\n\n// GET /api/reading — returns today's reading (cached or fresh)\napp.get('/api/reading', async (req, res) => {\n  const dateStr = req.query.date || getTodayStr()\n  const reading = await generateReading(dateStr)\n  res.json({ ok: true, reading })\n})\n\n// POST /api/chat — chat with Wiseman about today's reading\napp.post('/api/chat', async (req, res) => {\n  const { message, history, readingDate } = req.body\n  const dateStr = readingDate || getTodayStr()\n  const reading = await generateReading(dateStr)\n  const systemPrompt = buildChatSystemPrompt(reading)\n\n  // Build message history for Claude\n  const messages = []\n  if (history && Array.isArray(history)) {\n    for (const h of history) {\n      if (h.role && h.content) messages.push({ role: h.role, content: h.content })\n    }\n  }\n  messages.push({ role: 'user', content: message })\n\n  const reply = await callClaudeChat({ systemPrompt, messages, maxTokens: 512 })\n  res.json({ ok: true, reply })\n})"
+        }
+      ]
+    },
+    {
+      "heading": "Configuration: User Profile & Birth Data",
+      "body": "The config file stores the user's birth details: date, time, Chinese zodiac, and Western sign, which feed into all five astrological calculation modules. This makes every reading personally calibrated.",
+      "files": [
+        {
+          "label": "wiseman.config.mjs: Personal Configuration",
+          "code": "export const config = {\n  user: {\n    // Birthday details — used for Bazi and horoscope calculations\n    birthday: \"1981-08-12\",\n    birthTime: \"17:30\",\n    birthYear: 1981,\n    birthMonth: 8,\n    birthDay: 12,\n    birthHour: 17,\n    birthMinute: 30,\n\n    // Chinese astrology\n    chineseZodiac: \"鸡\",\n    chineseZodiacEn: \"Rooster\",\n\n    // Western astrology\n    westernSign: \"狮子座\",\n    westernSignEn: \"Leo\",\n\n    name: \"主人\"\n  },\n\n  port: process.env.PORT || 3000,\n  runsDir: \"./runs\",\n  claudeModel: \"claude-opus-4-6\"\n}"
+        }
+      ]
+    }
+  ],
+  "cta": "Want a personalized, locally cached AI reading app like this? Let's scope it."
+};
+  /* ===================== END EDIT BLOCK ===================== */
+
+  const pref = (u) => /^https?:|^mailto:|^tel:/.test(u || '') ? u : (SITE + (u || ''));
+  const esc = (s) => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const rich = (s) => esc(s).replace(/&lt;(\/?(?:b|code))&gt;/g, '<$1>');
+
+  // raw code store for copy buttons
+  const RAW = [];
+  function codeBlock(label, codeStr, extraClass){
+    const idx = RAW.push(codeStr) - 1;
+    const rendered = esc(codeStr).split('\n')
+      .map(line => /^\s*#/.test(line) ? `<span class="cmt">${line}</span>` : line).join('\n');
+    return `<div class="codeblock ${extraClass||''}">`+
+      `<div class="code-bar"><span class="path"><span>${esc(label)}</span></span>`+
+      `<button class="code-copy" data-idx="${idx}">Copy</button></div>`+
+      `<pre><code>${rendered}</code></pre></div>`;
+  }
+
+  // Breadcrumb + header
+  document.title = PROJECT.title + ": Source | AI Project Portfolio";
+  document.getElementById('crumbCat').textContent = PROJECT.category;
+  document.getElementById('crumbCat').href = pref(PROJECT.categoryUrl);
+  document.getElementById('crumbProj').textContent = PROJECT.title;
+  document.getElementById('crumbProj').href = pref(PROJECT.overviewUrl);
+  if (PROJECT.cover){
+    document.getElementById('coverStrip').style.display = '';
+    const c = document.getElementById('cover'); c.src = PROJECT.cover; c.alt = PROJECT.title + " cover";
+  }
+  document.getElementById('kicker').textContent = "Source Walkthrough · " + PROJECT.category;
+  document.getElementById('title').textContent = PROJECT.title;
+  document.getElementById('subtitle').textContent = PROJECT.subtitle;
+  document.getElementById('headTech').innerHTML = (PROJECT.tech||[]).map(t => `<span class="tech-chip">${esc(t)}</span>`).join('');
+  document.getElementById('headBtns').innerHTML =
+    (PROJECT.demoUrl ? `<a class="btn" href="${pref(PROJECT.demoUrl)}" target="_blank" rel="noopener">${esc(PROJECT.demoLabel||'Live Demo')}</a>` : '') +
+    (PROJECT.overviewUrl ? `<a class="btn ghost" href="${pref(PROJECT.overviewUrl)}">Project Overview</a>` : '') +
+    (PROJECT.repoUrl ? `<a class="btn ghost" href="${pref(PROJECT.repoUrl)}" target="_blank" rel="noopener">GitHub Repo</a>` : '');
+
+  const section = (tab, inner) => `<section class="sec"><div class="sec-rule"><span class="tab">${esc(tab)}</span>${inner}</div></section>`;
+  let html = "";
+  const P = PROJECT;
+
+  if (P.about){
+    html += section("About This Code", `<h2>About This Code Showcase</h2><p class="intro">${rich(P.about)}</p>`);
+  }
+  if (P.structure && P.structure.code){
+    html += section("Project Structure", `<h2>Project Structure</h2>`+
+      codeBlock(P.structure.label || 'project/', P.structure.code, 'tree'));
+  }
+  (P.walkthrough||[]).forEach(w => {
+    let inner = `<h2>${esc(w.heading)}</h2>`;
+    if (w.body) inner += `<p class="body">${rich(w.body)}</p>`;
+    (w.files||[]).forEach(f => { inner += codeBlock(f.label, f.code); });
+    html += section("Code", inner);
+  });
+  // CTA
+  html += `<section class="sec"><div class="cta-inner">`+
+    `<div><h3>Interested in the build?</h3><p>${esc(P.cta || "Let's talk.")}</p></div>`+
+    `<div class="cta-btns">`+
+    (P.demoUrl ? `<a class="btn" href="${pref(P.demoUrl)}" target="_blank" rel="noopener">${esc(P.demoLabel||'Live Demo')}</a>` : '')+
+    `<a class="btn ghost" href="${SITE}contact.html">Get in Touch</a>`+
+    `</div></div></section>`;
+
+  document.getElementById('body').innerHTML = html;
+
+  // Copy buttons
+  function copyText(text, btn){
+    const done = ()=>{ const o=btn.textContent; btn.textContent='Copied ✓'; setTimeout(()=>btn.textContent=o.includes('Copied')?'Copy':o,1400); };
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(done).catch(()=>fb(text,done)); }
+    else fb(text,done);
+  }
+  function fb(text,done){ const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(ta); done(); }
+  document.querySelectorAll('.code-copy').forEach(btn =>
+    btn.addEventListener('click', ()=> copyText(RAW[+btn.dataset.idx], btn)));
+
+  // Masthead search
+  const ITEMS = [
+    {t:PROJECT.title, c:PROJECT.category, s:PROJECT.slug},
+    {t:"Courier CS Quality Console", c:"Conversational Data Analytics", s:"courier-cs-quality-console"},
+    {t:"Voucher Analyzer", c:"Conversational Data Analytics", s:"voucher-analyzer"},
+    {t:"Wiseman", c:"Knowledge & Reference Chatbots", s:"wiseman"},
+    {t:"Sunny Car Accessories", c:"Agentic Commerce", s:"sunny-car-accessories"},
+    {t:"Bookshelf", c:"Multi-Agent Decision Systems", s:"bookshelf"}
+  ];
+  const searchInput = document.getElementById('searchInput');
+  const searchResults = document.getElementById('searchResults');
+  function runSearch(q){
+    if(q.trim().length < 2){ searchResults.style.display='none'; return; }
+    const ql = q.toLowerCase();
+    const hits = ITEMS.filter(it => (it.t+' '+it.c).toLowerCase().includes(ql));
+    searchResults.innerHTML = hits.length ? hits.map(it =>
+      `<div class="sr-item"><div class="sr-cat">${esc(it.c)}</div>`+
+      `<a href="${SITE}${it.s}.html"><div class="sr-title">${esc(it.t)}</div></a>`+
+      `<div class="sr-links"><a href="${SITE}${it.s}.html">View Details</a></div></div>`).join('')
+      : `<div class="sr-none">No projects found. Try a different keyword.</div>`;
+    searchResults.style.display='block';
+  }
+  searchInput.addEventListener('input', e => runSearch(e.target.value));
+  document.addEventListener('click', e => { if(!e.target.closest('.search-box')) searchResults.style.display='none'; });
+
+  // Drawer
+  const drawer=document.getElementById('drawer'), overlay=document.getElementById('overlay');
+  const openMenu=()=>{ drawer.classList.add('open'); overlay.classList.add('open'); };
+  const closeMenu=()=>{ drawer.classList.remove('open'); overlay.classList.remove('open'); };
+  document.getElementById('hamburger').addEventListener('click', openMenu);
+  document.getElementById('drawerClose').addEventListener('click', closeMenu);
+  overlay.addEventListener('click', closeMenu);
+  drawer.querySelectorAll('a').forEach(a=>a.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeMenu(); searchResults.style.display='none'; }});
+</script>
 </body>
 </html>

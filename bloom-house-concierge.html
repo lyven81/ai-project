@@ -3,162 +3,524 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lucy — Bloom House Concierge | Florist Customer-Service Agent</title>
+<title>Lucy, Bloom House Concierge | AI Project Portfolio</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Arial',sans-serif;line-height:1.6;color:#222;background:#fff}
-.container{max-width:1000px;margin:0 auto;padding:20px}
-.back-nav{margin-bottom:20px}
-.back-nav a{color:#0D9488;text-decoration:none;font-size:1rem}
-.back-nav a:hover{text-decoration:underline}
-.project-header{text-align:center;margin-bottom:40px;padding:44px 24px;background:linear-gradient(135deg,#0D9488,#14B8A6);color:#fff;border-radius:10px}
-.project-header h1{font-size:2.5rem;margin-bottom:10px}
-.project-header p{font-size:1.2rem;opacity:.95}
-.badges{display:flex;justify-content:center;gap:10px;margin-top:20px;flex-wrap:wrap}
-.badge{background:rgba(255,255,255,.2);color:#fff;padding:5px 12px;border-radius:15px;font-size:.9rem}
-.demo-links{text-align:center;margin:30px 0}
-.demo-btn{display:inline-block;background:#0D9488;color:#fff;padding:12px 25px;text-decoration:none;border-radius:5px;margin:6px 8px;font-weight:bold;transition:background-color .3s}
-.demo-btn:hover{background:#0b7d72}
-.demo-btn.secondary{background:#475569}
-.demo-btn.secondary:hover{background:#334155}
-.content-section{margin:36px 0;padding:30px;background:#f9f9f9;border-radius:8px;border-left:5px solid #0D9488}
-.content-section h2{color:#0D9488;margin-bottom:16px;font-size:1.8rem}
-.content-section h3{color:#333;margin:18px 0 8px}
-.content-section p{margin-bottom:10px}
-.content-section ul{margin:10px 0 10px 22px}
-.content-section li{margin-bottom:6px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:16px}
-.feature-item{background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:18px}
-.feature-item h3{color:#0D9488;margin:0 0 6px;font-size:1.05rem}
-.feature-item p{font-size:.94rem;color:#444;margin:0}
-.tech-stack{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
-.tech-item{background:#0D9488;color:#fff;padding:5px 12px;border-radius:14px;font-size:.84rem}
-.code-block{background:#1e293b;color:#e2e8f0;padding:16px 18px;border-radius:8px;font-family:'Consolas',monospace;font-size:.86rem;white-space:pre-wrap;overflow-x:auto;margin:12px 0}
-.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-top:16px}
-.metric-card{background:#fff;border:1px solid #e5e7eb;border-top:4px solid #0D9488;border-radius:8px;padding:18px;text-align:center}
-.metric-card .num{font-size:2rem;font-weight:bold;color:#0D9488}
-.metric-card .lbl{font-size:.9rem;color:#555;margin-top:4px}
-footer{text-align:center;padding:24px;color:#777;font-size:.9rem}
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root{ --ink:#222; --paper:#fff; --hair:#dddddd; --gray:#555; --accent:#B8860B; --navy:#1E3A5F; --teal:#0D9488; }
+  html{ scroll-behavior:smooth; }
+  body{ background:var(--paper); color:var(--ink); font-family:Arial, Helvetica, sans-serif; line-height:1.6; overflow-x:hidden; }
+  a{ color:inherit; text-decoration:none; }
+  a:hover h2, a:hover h3, a:hover h4{ color:var(--accent); }
+  code{ font-family:"Courier New", monospace; font-size:.86em; background:#f2f3f5; padding:1px 5px; color:var(--navy); }
+
+  /* Masthead (shared) */
+  .masthead{ display:flex; align-items:center; justify-content:space-between; padding:14px 28px; max-width:1240px; margin:0 auto; gap:18px; }
+  .mast-left{ display:flex; align-items:center; gap:20px; }
+  .logo{ background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; letter-spacing:3px; font-size:.95rem; padding:8px 12px; white-space:nowrap; }
+  .mast-nav{ display:flex; gap:20px; font-family:Arial, Helvetica, sans-serif; font-size:.72rem; letter-spacing:1.4px; text-transform:uppercase; }
+  .mast-nav a:hover{ color:var(--accent); }
+  .hamburger{ display:none; flex-direction:column; gap:4px; background:none; border:none; cursor:pointer; padding:6px; }
+  .hamburger span{ width:22px; height:2px; background:#222; display:block; }
+  .rule-top{ border:none; border-top:3px solid #222; max-width:1240px; margin:0 auto; }
+
+  /* Search (shared) */
+  .search-box{ position:relative; width:200px; }
+  .search-input{ width:100%; padding:7px 30px 7px 12px; border:1px solid var(--hair); background:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; color:#222; }
+  .search-input:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(184,134,11,.15); }
+  .search-ic{ position:absolute; right:10px; top:50%; transform:translateY(-50%); color:var(--gray); font-size:.8rem; pointer-events:none; }
+  .search-results{ position:absolute; top:calc(100% + 4px); left:0; width:340px; max-width:86vw; background:#fff; border:1px solid #222; max-height:60vh; overflow-y:auto; z-index:120; display:none; }
+  .sr-item{ padding:12px 14px; border-bottom:1px solid var(--hair); }
+  .sr-item:last-child{ border-bottom:none; }
+  .sr-cat{ font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; margin-bottom:4px; color:var(--accent); }
+  .sr-title{ font-weight:700; font-size:1.02rem; color:#222; }
+  .sr-links{ font-size:.58rem; letter-spacing:.8px; text-transform:uppercase; color:var(--gray); margin-top:5px; }
+  .sr-links a:hover{ color:var(--accent); }
+  .sr-none{ padding:16px 14px; font-size:.82rem; color:var(--gray); }
+
+  /* Shared type bits */
+  .tab{ display:inline-block; background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.66rem; letter-spacing:2px; text-transform:uppercase; padding:6px 12px; }
+  .rubric{ font-family:Arial, Helvetica, sans-serif; font-size:.62rem; font-weight:700; letter-spacing:1.6px; text-transform:uppercase; color:var(--accent); display:block; margin-bottom:8px; }
+  .links{ font-family:Arial, Helvetica, sans-serif; font-size:.58rem; letter-spacing:1px; text-transform:uppercase; margin-top:10px; color:var(--gray); }
+  .links a:hover{ color:var(--accent); }
+  .lead-dek{ font-style:italic; color:#333; }
+  .tech-chip{ display:inline-block; border:1px solid var(--hair); padding:6px 12px; font-size:.72rem; letter-spacing:.3px; color:#333; white-space:nowrap; }
+  .tech-chip:hover{ border-color:var(--accent); color:var(--accent); }
+
+  /* Breadcrumb */
+  .crumb{ max-width:1240px; margin:0 auto; padding:20px 28px 0; font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--gray); }
+  .crumb a:hover{ color:var(--accent); }
+  .crumb .sep{ color:var(--hair); margin:0 8px; }
+
+  /* ===== HERO (cover image feature opener) ===== */
+  .hero{ max-width:1240px; margin:0 auto; padding:16px 28px 8px; }
+  .cover-wrap{ border:1px solid var(--hair); box-shadow:0 1px 0 rgba(30,58,95,.06); line-height:0; background:#eef1f4; }
+  .cover{ width:100%; aspect-ratio:2 / 1; object-fit:cover; display:block; }
+  .hero-copy{ padding:22px 0 6px; }
+  .hero-copy h1{ font-size:2.7rem; font-weight:900; line-height:1.03; letter-spacing:-.008em; }
+  .hero-copy .tagline{ font-style:italic; font-size:1.15rem; color:#333; margin-top:10px; max-width:60ch; }
+  .hero-tech{ display:flex; flex-wrap:wrap; gap:9px; margin-top:16px; }
+  .hero-btns{ display:flex; flex-wrap:wrap; gap:12px; margin-top:18px; }
+  .btn{ display:inline-block; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.7rem; letter-spacing:1.6px; text-transform:uppercase; padding:13px 24px; border:1px solid #222; background:#222; color:#fff; cursor:pointer; transition:.15s; }
+  .btn:hover{ background:var(--accent); border-color:var(--accent); }
+  .btn.ghost{ background:#fff; color:#222; }
+  .btn.ghost:hover{ color:var(--accent); border-color:var(--accent); background:#fff; }
+
+  /* ===== SECTION SHELL ===== */
+  .sec{ max-width:1240px; margin:0 auto; padding:26px 28px; }
+  .sec-rule{ border-top:3px solid #222; padding-top:16px; }
+  .sec .tab{ margin-bottom:14px; }
+  .sec h2{ font-size:1.7rem; font-weight:900; line-height:1.06; }
+  .sec .intro{ color:#333; font-size:1.02rem; margin-top:10px; max-width:80ch; }
+
+  /* Two-column challenge / solution */
+  .duo{ display:grid; grid-template-columns:1fr 1fr; margin-top:20px; }
+  .duo > div:first-child{ padding-right:30px; border-right:1px solid var(--hair); }
+  .duo > div:last-child{ padding-left:30px; }
+  .duo p{ color:#333; }
+
+  /* Editorial bullet list */
+  .blist{ list-style:none; margin-top:18px; border-top:1px solid var(--hair); }
+  .blist li{ padding:13px 0; border-bottom:1px solid var(--hair); color:#333; font-size:.96rem; }
+  .blist li b{ color:#222; }
+
+  /* Feature / AI grid (borderless hairline cards) */
+  .fgrid{ display:grid; grid-template-columns:repeat(3,1fr); border-top:1px solid var(--hair); margin-top:20px; }
+  .fcard{ padding:20px 22px; border-right:1px solid var(--hair); border-bottom:1px solid var(--hair); }
+  .fcard:nth-child(3n){ border-right:none; }
+  .fcard .fe{ font-size:1.5rem; }
+  .fcard h4{ font-size:1.08rem; font-weight:700; line-height:1.18; margin:9px 0 6px; }
+  .fcard p{ font-size:.9rem; color:#444; line-height:1.5; }
+
+  /* Comparison table */
+  .table-scroll{ overflow-x:auto; margin-top:20px; border-top:1px solid var(--hair); }
+  table.cmp{ width:100%; border-collapse:collapse; min-width:640px; }
+  table.cmp th, table.cmp td{ text-align:left; vertical-align:top; padding:13px 16px; border-bottom:1px solid var(--hair); font-size:.9rem; }
+  table.cmp thead th{ font-size:.62rem; font-weight:700; letter-spacing:1.2px; text-transform:uppercase; color:var(--navy); border-bottom:2px solid var(--accent); }
+  table.cmp tbody td:first-child{ font-weight:700; color:#222; white-space:nowrap; }
+  table.cmp tbody tr:hover{ background:#fbfbf8; }
+
+  /* Architecture stacks */
+  .stacks{ display:grid; grid-template-columns:repeat(2,1fr); gap:22px 34px; margin-top:20px; }
+  .stack .rubric{ margin-bottom:10px; }
+  .stack-chips{ display:flex; flex-wrap:wrap; gap:8px; }
+  .sys-list{ list-style:none; margin-top:24px; border-top:1px solid var(--hair); }
+  .sys-list li{ padding:13px 0 13px 0; border-bottom:1px solid var(--hair); color:#333; font-size:.95rem; }
+  .sys-list li b{ color:var(--navy); }
+
+  /* Metrics row */
+  .metrics{ display:grid; grid-template-columns:repeat(4,1fr); border-top:1px solid var(--hair); margin-top:20px; }
+  .metric{ padding:22px 18px; border-right:1px solid var(--hair); }
+  .metric:last-child{ border-right:none; }
+  .metric .v{ font-size:2.6rem; font-weight:900; line-height:1; color:#222; letter-spacing:-.01em; }
+  .metric .l{ font-size:.62rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--gray); margin-top:9px; }
+
+  /* CTA */
+  .cta-inner{ display:flex; align-items:center; gap:18px; flex-wrap:wrap; border-top:3px solid #222; padding-top:18px; }
+  .cta-inner h3{ font-size:1.4rem; font-weight:900; line-height:1.08; }
+  .cta-inner p{ color:var(--gray); font-size:.95rem; margin-top:4px; }
+  .cta-btns{ margin-left:auto; display:flex; gap:12px; flex-wrap:wrap; }
+
+  footer{ background:#222; max-width:1240px; margin:30px auto 0; padding:24px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; letter-spacing:.5px; color:#fff; text-align:center; }
+  .note{ max-width:1240px; margin:14px auto 0; padding:8px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.62rem; letter-spacing:1px; color:#999; }
+
+  /* Drawer (shared) */
+  .drawer{ position:fixed; top:0; left:-300px; width:280px; height:100vh; background:#fff; z-index:200; box-shadow:2px 0 14px rgba(0,0,0,.15); transition:left .28s ease; padding:74px 26px 26px; }
+  .drawer.open{ left:0; }
+  .drawer a{ display:block; font-family:Arial, Helvetica, sans-serif; font-size:.82rem; letter-spacing:1.2px; text-transform:uppercase; padding:14px 0; border-bottom:1px solid var(--hair); }
+  .overlay{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:150; }
+  .overlay.open{ display:block; }
+  .drawer-close{ position:absolute; top:20px; right:20px; font-family:Arial, Helvetica, sans-serif; font-size:1.4rem; background:none; border:none; cursor:pointer; }
+
+  @media (max-width:900px){
+    .duo{ grid-template-columns:1fr; }
+    .duo > div:first-child{ padding-right:0; border-right:none; padding-bottom:18px; border-bottom:1px solid var(--hair); margin-bottom:18px; }
+    .duo > div:last-child{ padding-left:0; }
+    .fgrid{ grid-template-columns:repeat(2,1fr); }
+    .fcard:nth-child(3n){ border-right:1px solid var(--hair); }
+    .fcard:nth-child(2n){ border-right:none; }
+    .stacks{ grid-template-columns:1fr; }
+    .metrics{ grid-template-columns:repeat(2,1fr); }
+    .metric:nth-child(2n){ border-right:none; }
+    .metric:nth-child(-n+2){ border-bottom:1px solid var(--hair); }
+    .cta-btns{ margin-left:0; }
+    .mast-nav{ display:none; }
+    .hamburger{ display:flex; }
+    .masthead{ padding:12px 16px; }
+    .mast-left{ gap:10px; min-width:0; flex:1; }
+    .logo{ font-size:.72rem; letter-spacing:1.5px; padding:6px 8px; }
+    .search-box{ flex:1; width:auto; min-width:0; }
+    .search-results{ position:fixed; top:58px; left:12px; right:12px; width:auto; max-width:none; }
+    .hero-copy h1{ font-size:2.05rem; }
+  }
+  @media (max-width:560px){
+    .fgrid{ grid-template-columns:1fr; }
+    .fcard{ border-right:none !important; }
+    .metrics{ grid-template-columns:1fr; }
+    .metric{ border-right:none; border-bottom:1px solid var(--hair); }
+    .metric:last-child{ border-bottom:none; }
+  }
 </style>
 </head>
 <body>
-<div class="container">
 
-  <nav class="back-nav"><a href="index.html">&larr; Back to Portfolio</a></nav>
-
-  <header class="project-header">
-    <h1>Lucy &middot; Bloom House Concierge &#127800;</h1>
-    <p>Florist concierge that recommends, escalates, or politely declines</p>
-    <div class="badges">
-      <span class="badge">Service Agent</span>
-      <span class="badge">Governed Toolset</span>
-      <span class="badge">Live SQLite (sql.js)</span>
-      <span class="badge">GitHub Pages</span>
-    </div>
-  </header>
-
-  <div class="demo-links">
-    <a href="projects/bloom-house-concierge/index.html" class="demo-btn" target="_blank">Launch Live Demo</a>
-    <a href="bloom-house-concierge-source.html" class="demo-btn secondary">View Source Code</a>
-  </div>
-
-  <section class="content-section">
-    <h2>Project Overview &amp; Problem</h2>
-    <p>An online florist sells into emotional moments: birthdays, anniversaries, get-well wishes and condolences. Buyers know the occasion but not what to send, so many leave without ordering; the few who buy ask the same delivery and care questions, and a one or two person team answers them by hand. The routine load and the genuinely sensitive cases (a late condolence stand, wilted flowers before an event) wait in the same slow queue.</p>
-    <p>Lucy is the shop's concierge. She talks to the customer directly and reaches exactly one of three outcomes on every message: <strong>resolve</strong> it with an approved tool, <strong>escalate</strong> it to a human, or politely <strong>decline</strong> it.</p>
-    <ul>
-      <li>Recommends real, in-catalogue bouquets by occasion, budget and colour, with a reason.</li>
-      <li>Answers delivery, coverage, care, hours and store-location questions from the shop's own facts.</li>
-      <li>Hands money and order decisions to a human, and refuses private or off-topic questions outright.</li>
-    </ul>
-  </section>
-
-  <section class="content-section">
-    <h2>Application Features</h2>
-    <div class="grid">
-      <div class="feature-item"><h3>Florist consultant</h3><p>Recommends two real bouquets by occasion, budget and colour, each with a flower-meaning reason. Never invents a product or price.</p></div>
-      <div class="feature-item"><h3>Three-way decision gate</h3><p>Every message is resolved, escalated to a human, or declined, decided in that order before anything runs.</p></div>
-      <div class="feature-item"><h3>Grounded support answers</h3><p>Delivery cut-offs, coverage, care, hours and store location, answered from the shop's knowledge base.</p></div>
-      <div class="feature-item"><h3>Read-only order status</h3><p>Looks up an order number with a fixed query. It can read an order; it can never change one.</p></div>
-      <div class="feature-item"><h3>Warm human handoff</h3><p>On escalation, writes a Situation / Order / Mood / Reason summary for the human, shown owner-side only.</p></div>
-      <div class="feature-item"><h3>Full storefront</h3><p>Flowers, Occasions, Gifts, Delivery and a live Track-Order page, plus three real product pages.</p></div>
-    </div>
-  </section>
-
-  <section class="content-section">
-    <h2>AI Integration &amp; the Governed Toolset</h2>
-    <p>Lucy's universe is eight fixed, approved tools. She chooses <em>which</em> tool and supplies parameter <em>values</em> only; she cannot author SQL, browse the schema, or invoke anything that writes. The safety comes from what is missing: there is no refund, cancel, or change tool, so those actions cannot happen autonomously.</p>
-    <div class="grid">
-      <div class="feature-item"><h3>Resolve (information)</h3><p>recommend_bouquets, get_delivery_cutoff, get_coverage_areas, get_care_tips, get_hours, get_store_location, flower_meaning, get_order_status.</p></div>
-      <div class="feature-item"><h3>Escalate (decision)</h3><p>Refunds, cancellations, order changes, custom or bulk orders, complaints and upset customers go to the manager, Ms. Young, with a summary.</p></div>
-      <div class="feature-item"><h3>Decline (out of bounds)</h3><p>Staff details, suppliers, margins, ownership, internal metrics and non-business questions are refused, never transferred.</p></div>
-    </div>
-    <p style="margin-top:14px">In a paying build the rule-based router becomes one Gemini classification call at the same function boundaries; the gate, the tools and the handoff stay unchanged.</p>
-  </section>
-
-  <section class="content-section">
-    <h2>Technical Architecture</h2>
-    <h3>Stack</h3>
-    <div class="tech-stack">
-      <span class="tech-item">HTML / CSS / JS</span>
-      <span class="tech-item">SQLite via sql.js (WASM)</span>
-      <span class="tech-item">Rule-based router + 3-way gate</span>
-      <span class="tech-item">GitHub Pages</span>
-      <span class="tech-item">No backend</span>
-    </div>
-    <h3>How it works</h3>
-    <ul>
-      <li>The catalogue and orders live in a real SQLite database (<code>bloom-house.db</code>), embedded in the page as base64 so the same fixed queries run live in the browser, on GitHub Pages and from <code>file://</code>.</li>
-      <li>Recommendations and order lookups are genuine parameterized <code>SELECT</code> statements, not hard-coded replies.</li>
-      <li>The decision gate runs before any tool, so a decision-type request reaches a human before a tool can fire, and an out-of-bounds request is declined before it can be mistaken for a handoff.</li>
-    </ul>
-  </section>
-
-  <section class="content-section">
-    <h2>Run It Locally</h2>
-    <div class="code-block"># clone, then open the app entry point
-cd projects/bloom-house-concierge
-# rebuild the embedded database (optional)
-python build_db.py
-# open in a browser (needs internet for the sql.js WASM CDN)
-start index.html</div>
-    <p>No build step, no API key, no server. The database is embedded, so the page is fully self-contained.</p>
-  </section>
-
-  <section class="content-section">
-    <h2>Deployment</h2>
-    <div class="code-block"># static hosting on GitHub Pages
-# entry: projects/bloom-house-concierge/index.html
-# everything (DB, product pages, images) ships as static files</div>
-    <p>Hosted free on GitHub Pages as part of the AI project portfolio.</p>
-  </section>
-
-  <section class="content-section">
-    <h2>Key Metrics</h2>
-    <div class="metrics">
-      <div class="metric-card"><div class="num">3</div><div class="lbl">outcomes: resolve / escalate / decline</div></div>
-      <div class="metric-card"><div class="num">8</div><div class="lbl">fixed, approved tools</div></div>
-      <div class="metric-card"><div class="num">0</div><div class="lbl">write actions the agent can take</div></div>
-      <div class="metric-card"><div class="num">100%</div><div class="lbl">answers grounded in the real catalogue</div></div>
-    </div>
-    <ul>
-      <li>Clears the routine question load so the owner's time goes to sensitive cases.</li>
-      <li>Turns the AI vs human boundary from a soft guess into a structural guarantee.</li>
-      <li>Keeps the customer feeling looked after: it never exposes the machinery.</li>
-    </ul>
-  </section>
-
-  <div class="demo-links">
-    <a href="projects/bloom-house-concierge/index.html" class="demo-btn" target="_blank">Launch Live Demo</a>
-    <a href="bloom-house-concierge-source.html" class="demo-btn secondary">View Source Code</a>
-  </div>
-
-  <nav class="back-nav" style="text-align:center;margin-top:30px">
-    <a href="index.html">&larr; Back to Portfolio</a> &nbsp;&middot;&nbsp; <a href="project-categories.html">View All Categories</a>
+  <div class="overlay" id="overlay"></div>
+  <nav class="drawer" id="drawer">
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">&times;</button>
+    <a href="index.html">Home</a>
+    <a href="project-categories.html">Categories</a>
+    <a href="contact.html">Contact</a>
+    <a href="https://lyven81.github.io/data-analyst-portfolio/index.html">Data Portfolio</a>
   </nav>
 
-  <footer>&copy; 2026 Bloom House Concierge &middot; AI Project Portfolio</footer>
+  <div class="masthead">
+    <div class="mast-left">
+      <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+      <a class="logo" href="index.html">AI PROJECTS</a>
+      <nav class="mast-nav">
+        <a href="project-categories.html">Categories</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <div class="search-box">
+        <input type="text" class="search-input" id="searchInput" autocomplete="off" placeholder="Search AI projects..." aria-label="Search AI projects">
+        <span class="search-ic">&#128269;</span>
+        <div class="search-results" id="searchResults"></div>
+      </div>
+    </div>
+  </div>
+  <hr class="rule-top">
 
-</div>
+  <div class="crumb">
+    <a href="project-categories.html">Categories</a>
+    <span class="sep">/</span><a id="crumbCat" href="#"></a>
+    <span class="sep">/</span><span id="crumbHere"></span>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="cover-wrap"><img class="cover" id="cover" alt=""></div>
+    <div class="hero-copy">
+      <span class="rubric" id="kicker"></span>
+      <h1 id="title"></h1>
+      <p class="tagline" id="tagline"></p>
+      <div class="hero-tech" id="heroTech"></div>
+      <div class="hero-btns" id="heroBtns"></div>
+    </div>
+  </section>
+
+  <div id="body"></div>
+
+  <footer>&copy; 2026 Lee Yih Ven | AI Project Portfolio &middot; All rights reserved.</footer>
+  <div class="note">Sample Project-Showcase-E2 (TEMPLATE): project page on the index magazine system, led by the generated cover image. Sections render only when present in the PROJECT data, so simpler projects omit them. Reuse by editing only the PROJECT block at the top of the script. Deep install/deploy code lives on the matching -source.html page.</div>
+
+<script>
+  const SITE = "";
+
+  /* =================================================================
+     EDIT PER PROJECT  -  the ONLY block you change per page.
+     Copy this file, swap PROJECT, save as <slug>.html.
+     - cover     : path to the 1200x600 cover image (sits next to the page)
+     - tech      : chips under the title
+     - demoUrl / sourceUrl : buttons (relative to SITE or full https://)
+     - Any optional section can be deleted; it just won't render.
+     ================================================================= */
+  const PROJECT = {
+  "slug": "bloom-house-concierge",
+  "category": "Service Agents",
+  "categoryUrl": "category-service-agents.html",
+  "title": "Lucy, Bloom House Concierge",
+  "tagline": "Florist concierge that recommends, escalates, or politely declines, with sensitive cases going to a human.",
+  "cover": "images/bloom-house-concierge/cover.jpeg",
+  "tech": [
+    "HTML / CSS / JS",
+    "SQLite via sql.js (WASM)",
+    "Rule-based router + 3-way gate",
+    "GitHub Pages",
+    "No backend"
+  ],
+  "demoLabel": "Launch Live Demo",
+  "demoUrl": "https://lyven81.github.io/ai-project/projects/bloom-house-concierge/index.html",
+  "sourceUrl": "bloom-house-concierge-source.html",
+  "overview": {
+    "challenge": "An online florist sells into emotional moments: birthdays, anniversaries, get-well wishes and condolences. Buyers know the occasion but not what to send, so many leave without ordering; the few who buy ask the same delivery and care questions, and a one or two person team answers them by hand. The routine load and the genuinely sensitive cases (a late condolence stand, wilted flowers before an event) wait in the same slow queue.",
+    "solution": "Lucy is the shop's concierge. She talks to the customer directly and reaches exactly one of three outcomes on every message: <b>resolve</b> it with an approved tool, <b>escalate</b> it to a human, or politely <b>decline</b> it.",
+    "benefits": [
+      "<b>Recommends real bouquets:</b> suggests in-catalogue bouquets by occasion, budget and colour, with a reason.",
+      "<b>Grounded answers:</b> answers delivery, coverage, care, hours and store-location questions from the shop's own facts.",
+      "<b>Hands off the hard calls:</b> hands money and order decisions to a human, and refuses private or off-topic questions outright.",
+      "<b>One outcome per message:</b> every message is resolved, escalated, or declined, decided in that order before anything runs."
+    ]
+  },
+  "differentiator": {
+    "heading": "What Makes This Different",
+    "intro": "Lucy's universe is eight fixed, approved tools. She chooses which tool and supplies parameter values only; she cannot author SQL, browse the schema, or invoke anything that writes. The safety comes from what is missing: there is no refund, cancel, or change tool, so those actions cannot happen autonomously.",
+    "outcomes": [
+      "<b>Resolve (information):</b> recommend_bouquets, get_delivery_cutoff, get_coverage_areas, get_care_tips, get_hours, get_store_location, flower_meaning, get_order_status.",
+      "<b>Escalate (decision):</b> refunds, cancellations, order changes, custom or bulk orders, complaints and upset customers go to the manager, Ms. Young, with a summary.",
+      "<b>Decline (out of bounds):</b> staff details, suppliers, margins, ownership, internal metrics and non-business questions are refused, never transferred.",
+      "<b>Upgrade path:</b> in a paying build the rule-based router becomes one Gemini classification call at the same function boundaries; the gate, the tools and the handoff stay unchanged."
+    ]
+  },
+  "features": [
+    {
+      "e": "💐",
+      "n": "Florist consultant",
+      "d": "Recommends two real bouquets by occasion, budget and colour, each with a flower-meaning reason. Never invents a product or price."
+    },
+    {
+      "e": "🚦",
+      "n": "Three-way decision gate",
+      "d": "Every message is resolved, escalated to a human, or declined, decided in that order before anything runs."
+    },
+    {
+      "e": "📚",
+      "n": "Grounded support answers",
+      "d": "Delivery cut-offs, coverage, care, hours and store location, answered from the shop's knowledge base."
+    },
+    {
+      "e": "🔍",
+      "n": "Read-only order status",
+      "d": "Looks up an order number with a fixed query. It can read an order; it can never change one."
+    },
+    {
+      "e": "🤝",
+      "n": "Warm human handoff",
+      "d": "On escalation, writes a Situation / Order / Mood / Reason summary for the human, shown owner-side only."
+    },
+    {
+      "e": "🛍️",
+      "n": "Full storefront",
+      "d": "Flowers, Occasions, Gifts, Delivery and a live Track-Order page, plus three real product pages."
+    }
+  ],
+  "aiIntegration": [
+    {
+      "e": "✅",
+      "n": "Resolve (information)",
+      "d": "Eight fixed, approved information tools: recommend_bouquets, get_delivery_cutoff, get_coverage_areas, get_care_tips, get_hours, get_store_location, flower_meaning, get_order_status."
+    },
+    {
+      "e": "🙋",
+      "n": "Escalate (decision)",
+      "d": "Refunds, cancellations, order changes, custom or bulk orders, complaints and upset customers go to the manager, Ms. Young, with a summary."
+    },
+    {
+      "e": "🚫",
+      "n": "Decline (out of bounds)",
+      "d": "Staff details, suppliers, margins, ownership, internal metrics and non-business questions are refused, never transferred."
+    },
+    {
+      "e": "🔒",
+      "n": "Tool-bound by design",
+      "d": "Lucy chooses which tool and supplies parameter values only; she cannot author SQL, browse the schema, or invoke anything that writes. There is no refund, cancel, or change tool, so those actions cannot happen autonomously."
+    }
+  ],
+  "architecture": {
+    "stacks": [
+      {
+        "label": "Frontend & App",
+        "items": [
+          "HTML",
+          "CSS",
+          "JS",
+          "Rule-based router + 3-way gate"
+        ]
+      },
+      {
+        "label": "Data & Engine",
+        "items": [
+          "SQLite via sql.js (WASM)",
+          "Embedded bloom-house.db (base64)",
+          "Parameterized SELECT queries"
+        ]
+      },
+      {
+        "label": "Deployment",
+        "items": [
+          "GitHub Pages",
+          "Static (no backend)",
+          "No API key"
+        ]
+      }
+    ],
+    "system": [
+      "<b>Embedded live database:</b> the catalogue and orders live in a real SQLite database (<code>bloom-house.db</code>), embedded in the page as base64 so the same fixed queries run live in the browser, on GitHub Pages and from <code>file://</code>.",
+      "<b>Genuine queries, not canned replies:</b> recommendations and order lookups are genuine parameterized <code>SELECT</code> statements, not hard-coded replies.",
+      "<b>Gate before tools:</b> the decision gate runs before any tool, so a decision-type request reaches a human before a tool can fire, and an out-of-bounds request is declined before it can be mistaken for a handoff."
+    ]
+  },
+  "metrics": [
+    {
+      "v": "3",
+      "l": "outcomes: resolve / escalate / decline"
+    },
+    {
+      "v": "8",
+      "l": "fixed, approved tools"
+    },
+    {
+      "v": "0",
+      "l": "write actions the agent can take"
+    },
+    {
+      "v": "100%",
+      "l": "answers grounded in the real catalogue"
+    }
+  ],
+  "businessValue": [
+    "<b>Frees the owner's time:</b> clears the routine question load so the owner's time goes to sensitive cases.",
+    "<b>Structural safety:</b> turns the AI vs human boundary from a soft guess into a structural guarantee.",
+    "<b>Customer trust:</b> keeps the customer feeling looked after; it never exposes the machinery."
+  ],
+  "cta": "Want a governed, zero-cost service agent like this for your own shop? Let's scope it."
+};
+  /* ===================== END EDIT BLOCK ===================== */
+
+  const pref = (u) => /^https?:|^mailto:|^tel:/.test(u || '') ? u : (SITE + (u || ''));
+  const esc = (s) => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  // allow <b>...</b> and <code>...</code> that we intentionally put in the data
+  const rich = (s) => esc(s).replace(/&lt;(\/?(?:b|code))&gt;/g, '<$1>');
+
+  // Breadcrumb + hero
+  document.title = PROJECT.title + " | AI Project Portfolio";
+  document.getElementById('crumbCat').textContent = PROJECT.category;
+  document.getElementById('crumbCat').href = pref(PROJECT.categoryUrl);
+  document.getElementById('crumbHere').textContent = PROJECT.title;
+  const cover = document.getElementById('cover');
+  cover.src = PROJECT.cover; cover.alt = PROJECT.title + " cover illustration";
+  document.getElementById('kicker').textContent = PROJECT.category;
+  document.getElementById('title').textContent = PROJECT.title;
+  document.getElementById('tagline').textContent = PROJECT.tagline;
+  document.getElementById('heroTech').innerHTML = (PROJECT.tech || []).map(t => `<span class="tech-chip">${esc(t)}</span>`).join('');
+  document.getElementById('heroBtns').innerHTML =
+    (PROJECT.demoUrl ? `<a class="btn" href="${pref(PROJECT.demoUrl)}" target="_blank" rel="noopener">${esc(PROJECT.demoLabel || 'Live Demo')}</a>` : '') +
+    (PROJECT.sourceUrl ? `<a class="btn ghost" href="${pref(PROJECT.sourceUrl)}">View Source &amp; Build</a>` : '');
+
+  // Section builders
+  const section = (tab, inner, opts={}) =>
+    `<section class="sec"><div class="${opts.noRule ? '' : 'sec-rule'}">`+
+    `<span class="tab">${esc(tab)}</span>${inner}</div></section>`;
+
+  let html = "";
+  const P = PROJECT;
+
+  // OVERVIEW
+  if (P.overview){
+    let inner = `<h2>Overview</h2>`;
+    inner += `<div class="duo">`+
+      `<div><span class="rubric">The Challenge</span><p>${rich(P.overview.challenge)}</p></div>`+
+      `<div><span class="rubric">The Solution</span><p>${rich(P.overview.solution)}</p></div>`+
+      `</div>`;
+    if (P.overview.benefits && P.overview.benefits.length){
+      inner += `<ul class="blist">${P.overview.benefits.map(b => `<li>${rich(b)}</li>`).join('')}</ul>`;
+    }
+    html += section("Overview", inner);
+  }
+
+  // DIFFERENTIATOR (+ optional table)
+  if (P.differentiator){
+    const d = P.differentiator;
+    let inner = `<h2>${esc(d.heading || 'What Makes This Different')}</h2>`;
+    if (d.intro) inner += `<p class="intro">${rich(d.intro)}</p>`;
+    if (d.table){
+      inner += `<div class="table-scroll"><table class="cmp"><thead><tr>`+
+        d.table.columns.map(c => `<th>${esc(c)}</th>`).join('')+
+        `</tr></thead><tbody>`+
+        d.table.rows.map(r => `<tr>${r.map(c => `<td>${rich(c)}</td>`).join('')}</tr>`).join('')+
+        `</tbody></table></div>`;
+    }
+    if (d.outcomes && d.outcomes.length){
+      inner += `<ul class="blist">${d.outcomes.map(o => `<li>${rich(o)}</li>`).join('')}</ul>`;
+    }
+    html += section("Why It's Different", inner);
+  }
+
+  // FEATURES
+  if (P.features && P.features.length){
+    const grid = `<div class="fgrid">${P.features.map(f =>
+      `<article class="fcard"><div class="fe">${f.e || ''}</div><h4>${esc(f.n)}</h4><p>${rich(f.d)}</p></article>`).join('')}</div>`;
+    html += section("Features", `<h2>What's Inside</h2>${grid}`);
+  }
+
+  // AI INTEGRATION
+  if (P.aiIntegration && P.aiIntegration.length){
+    const grid = `<div class="fgrid">${P.aiIntegration.map(f =>
+      `<article class="fcard"><div class="fe">${f.e || ''}</div><h4>${esc(f.n)}</h4><p>${rich(f.d)}</p></article>`).join('')}</div>`;
+    html += section("AI Integration", `<h2>How the AI Works</h2>${grid}`);
+  }
+
+  // ARCHITECTURE
+  if (P.architecture){
+    let inner = `<h2>Technical Architecture</h2>`;
+    if (P.architecture.stacks){
+      inner += `<div class="stacks">${P.architecture.stacks.map(s =>
+        `<div class="stack"><span class="rubric">${esc(s.label)}</span><div class="stack-chips">`+
+        s.items.map(i => `<span class="tech-chip">${esc(i)}</span>`).join('')+`</div></div>`).join('')}</div>`;
+    }
+    if (P.architecture.system){
+      inner += `<ul class="sys-list">${P.architecture.system.map(li => `<li>${rich(li)}</li>`).join('')}</ul>`;
+    }
+    html += section("Architecture", inner);
+  }
+
+  // METRICS
+  if (P.metrics && P.metrics.length){
+    const row = `<div class="metrics">${P.metrics.map(m =>
+      `<div class="metric"><div class="v">${esc(m.v)}</div><div class="l">${esc(m.l)}</div></div>`).join('')}</div>`;
+    html += section("By the Numbers", `<h2>Key Metrics</h2>${row}`);
+  }
+
+  // BUSINESS VALUE
+  if (P.businessValue && P.businessValue.length){
+    const list = `<ul class="blist">${P.businessValue.map(b => `<li>${rich(b)}</li>`).join('')}</ul>`;
+    html += section("Business Value", `<h2>Why It Matters</h2>${list}`);
+  }
+
+  // CTA
+  html += `<section class="sec"><div class="cta-inner">`+
+    `<div><h3>${esc(P.cta ? 'Have a similar project?' : 'Interested?')}</h3>`+
+    `<p>${esc(P.cta || "Let's talk about what you're trying to build.")}</p></div>`+
+    `<div class="cta-btns">`+
+    (P.demoUrl ? `<a class="btn" href="${pref(P.demoUrl)}" target="_blank" rel="noopener">${esc(P.demoLabel || 'Live Demo')}</a>` : '')+
+    `<a class="btn ghost" href="${SITE}contact.html">Get in Touch</a>`+
+    `</div></div></section>`;
+
+  document.getElementById('body').innerHTML = html;
+
+  // Masthead search (this project + a few site-wide; production indexes the full catalog)
+  const ITEMS = [
+    {t:PROJECT.title, c:PROJECT.category, s:PROJECT.slug},
+    {t:"Courier CS Quality Console", c:"Conversational Data Analytics", s:"courier-cs-quality-console"},
+    {t:"Voucher Analyzer", c:"Conversational Data Analytics", s:"voucher-analyzer"},
+    {t:"Property Lead Tracker", c:"Industry Specialist Advisors", s:"property-lead-tracker"},
+    {t:"Wiseman", c:"Knowledge & Reference Chatbots", s:"wiseman"},
+    {t:"Sunny Car Accessories", c:"Agentic Commerce", s:"sunny-car-accessories"},
+    {t:"Bookshelf", c:"Multi-Agent Decision Systems", s:"bookshelf"}
+  ];
+  const searchInput = document.getElementById('searchInput');
+  const searchResults = document.getElementById('searchResults');
+  function runSearch(q){
+    if(q.trim().length < 2){ searchResults.style.display='none'; return; }
+    const ql = q.toLowerCase();
+    const hits = ITEMS.filter(it => (it.t+' '+it.c).toLowerCase().includes(ql));
+    searchResults.innerHTML = hits.length ? hits.map(it =>
+      `<div class="sr-item"><div class="sr-cat">${esc(it.c)}</div>`+
+      `<a href="${SITE}${it.s}.html"><div class="sr-title">${esc(it.t)}</div></a>`+
+      `<div class="sr-links"><a href="${SITE}${it.s}.html">View Details</a></div></div>`).join('')
+      : `<div class="sr-none">No projects found. Try a different keyword.</div>`;
+    searchResults.style.display='block';
+  }
+  searchInput.addEventListener('input', e => runSearch(e.target.value));
+  document.addEventListener('click', e => { if(!e.target.closest('.search-box')) searchResults.style.display='none'; });
+
+  // Drawer
+  const drawer=document.getElementById('drawer'), overlay=document.getElementById('overlay');
+  const openMenu=()=>{ drawer.classList.add('open'); overlay.classList.add('open'); };
+  const closeMenu=()=>{ drawer.classList.remove('open'); overlay.classList.remove('open'); };
+  document.getElementById('hamburger').addEventListener('click', openMenu);
+  document.getElementById('drawerClose').addEventListener('click', closeMenu);
+  overlay.addEventListener('click', closeMenu);
+  drawer.querySelectorAll('a').forEach(a=>a.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeMenu(); searchResults.style.display='none'; }});
+</script>
 </body>
 </html>

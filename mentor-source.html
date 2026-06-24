@@ -1,166 +1,380 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mentor - Source Code</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #222; background-color: #ffffff; }
-        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
-        .back-nav { margin-bottom: 20px; }
-        .back-nav a { color: #007BFF; text-decoration: none; font-size: 1rem; }
-        .back-nav a:hover { text-decoration: underline; }
-        .project-header { text-align: center; margin-bottom: 40px; padding: 40px 0; background: linear-gradient(135deg, #9C27B0, #6A1B9A); color: white; border-radius: 10px; }
-        .project-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
-        .project-header p { font-size: 1.2rem; opacity: 0.9; }
-        .content-section { margin: 40px 0; padding: 30px; background-color: #f9f9f9; border-radius: 8px; border-left: 5px solid #9C27B0; }
-        .content-section h2 { color: #9C27B0; margin-bottom: 20px; font-size: 1.8rem; }
-        .content-section h3 { color: #333; margin: 20px 0 10px 0; font-size: 1.3rem; }
-        .content-section p { margin-bottom: 12px; }
-        .file-tree { background: #f4f4f4; padding: 20px; border-radius: 6px; font-family: monospace; white-space: pre; overflow-x: auto; border: 1px solid #ddd; }
-        pre.code { background: #1e1e1e; color: #d4d4d4; padding: 18px; border-radius: 6px; overflow-x: auto; font-size: 13px; line-height: 1.5; margin: 12px 0; }
-        pre.code .comment { color: #6a9955; }
-        pre.code .string { color: #ce9178; }
-        pre.code .keyword { color: #c586c0; }
-        code.inline { background: #f0f0f0; padding: 2px 6px; border-radius: 3px; font-family: monospace; font-size: 13px; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mentor: Source | AI Project Portfolio</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root{ --ink:#222; --paper:#fff; --hair:#dddddd; --gray:#555; --accent:#B8860B; --navy:#1E3A5F; --code-bg:#fbfbf8; --cmt:#6b8190; }
+  html{ scroll-behavior:smooth; }
+  body{ background:var(--paper); color:var(--ink); font-family:Arial, Helvetica, sans-serif; line-height:1.6; overflow-x:hidden; }
+  a{ color:inherit; text-decoration:none; }
+  a:hover h2, a:hover h3, a:hover h4{ color:var(--accent); }
+  p code, li code{ font-family:"Courier New", monospace; font-size:.86em; background:#f2f3f5; padding:1px 5px; color:var(--navy); }
+
+  /* Masthead (shared) */
+  .masthead{ display:flex; align-items:center; justify-content:space-between; padding:14px 28px; max-width:1240px; margin:0 auto; gap:18px; }
+  .mast-left{ display:flex; align-items:center; gap:20px; }
+  .logo{ background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; letter-spacing:3px; font-size:.95rem; padding:8px 12px; white-space:nowrap; }
+  .mast-nav{ display:flex; gap:20px; font-family:Arial, Helvetica, sans-serif; font-size:.72rem; letter-spacing:1.4px; text-transform:uppercase; }
+  .mast-nav a:hover{ color:var(--accent); }
+  .hamburger{ display:none; flex-direction:column; gap:4px; background:none; border:none; cursor:pointer; padding:6px; }
+  .hamburger span{ width:22px; height:2px; background:#222; display:block; }
+  .rule-top{ border:none; border-top:3px solid #222; max-width:1240px; margin:0 auto; }
+
+  /* Search (shared) */
+  .search-box{ position:relative; width:200px; }
+  .search-input{ width:100%; padding:7px 30px 7px 12px; border:1px solid var(--hair); background:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; color:#222; }
+  .search-input:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(184,134,11,.15); }
+  .search-ic{ position:absolute; right:10px; top:50%; transform:translateY(-50%); color:var(--gray); font-size:.8rem; pointer-events:none; }
+  .search-results{ position:absolute; top:calc(100% + 4px); left:0; width:340px; max-width:86vw; background:#fff; border:1px solid #222; max-height:60vh; overflow-y:auto; z-index:120; display:none; }
+  .sr-item{ padding:12px 14px; border-bottom:1px solid var(--hair); }
+  .sr-item:last-child{ border-bottom:none; }
+  .sr-cat{ font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; margin-bottom:4px; color:var(--accent); }
+  .sr-title{ font-weight:700; font-size:1.02rem; color:#222; }
+  .sr-links{ font-size:.58rem; letter-spacing:.8px; text-transform:uppercase; color:var(--gray); margin-top:5px; }
+  .sr-links a:hover{ color:var(--accent); }
+  .sr-none{ padding:16px 14px; font-size:.82rem; color:var(--gray); }
+
+  /* Shared bits */
+  .tab{ display:inline-block; background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.66rem; letter-spacing:2px; text-transform:uppercase; padding:6px 12px; }
+  .rubric{ font-family:Arial, Helvetica, sans-serif; font-size:.62rem; font-weight:700; letter-spacing:1.6px; text-transform:uppercase; color:var(--accent); display:block; margin-bottom:8px; }
+  .tech-chip{ display:inline-block; border:1px solid var(--hair); padding:6px 12px; font-size:.72rem; letter-spacing:.3px; color:#333; white-space:nowrap; }
+  .tech-chip:hover{ border-color:var(--accent); color:var(--accent); }
+  .btn{ display:inline-block; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.7rem; letter-spacing:1.6px; text-transform:uppercase; padding:13px 24px; border:1px solid #222; background:#222; color:#fff; cursor:pointer; transition:.15s; }
+  .btn:hover{ background:var(--accent); border-color:var(--accent); }
+  .btn.ghost{ background:#fff; color:#222; }
+  .btn.ghost:hover{ color:var(--accent); border-color:var(--accent); background:#fff; }
+
+  /* Breadcrumb */
+  .crumb{ max-width:1240px; margin:0 auto; padding:20px 28px 0; font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--gray); }
+  .crumb a:hover{ color:var(--accent); }
+  .crumb .sep{ color:var(--hair); margin:0 8px; }
+
+  /* Header (slim cover banner + copy) */
+  .src-head{ max-width:1240px; margin:0 auto; padding:14px 28px 6px; }
+  .cover-strip{ border:1px solid var(--hair); line-height:0; background:#eef1f4; }
+  .cover-strip img{ width:100%; height:190px; object-fit:cover; object-position:center 42%; display:block; }
+  .src-head h1{ font-size:2.5rem; font-weight:900; line-height:1.04; letter-spacing:-.008em; margin-top:18px; }
+  .src-head .sub{ font-style:italic; font-size:1.08rem; color:#333; margin-top:10px; max-width:72ch; }
+  .head-tech{ display:flex; flex-wrap:wrap; gap:9px; margin-top:16px; }
+  .head-btns{ display:flex; flex-wrap:wrap; gap:12px; margin-top:18px; }
+
+  /* Section shell */
+  .sec{ max-width:1240px; margin:0 auto; padding:26px 28px; }
+  .sec-rule{ border-top:3px solid #222; padding-top:16px; }
+  .sec .tab{ margin-bottom:14px; }
+  .sec h2{ font-size:1.7rem; font-weight:900; line-height:1.06; }
+  .sec .intro{ color:#333; font-size:1.02rem; margin-top:10px; max-width:80%; }
+  .sec .body{ color:#333; font-size:1rem; margin-top:10px; max-width:80%; }
+
+  /* Code block */
+  .codeblock{ border:1px solid var(--hair); margin-top:16px; }
+  .code-bar{ display:flex; align-items:center; justify-content:space-between; gap:12px; background:var(--navy); color:#fff; padding:8px 12px; }
+  .code-bar .path{ font-family:"Courier New", monospace; font-size:.74rem; letter-spacing:.2px; opacity:.96; display:flex; align-items:center; gap:7px; min-width:0; }
+  .code-bar .path span{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .code-copy{ flex:none; background:none; border:1px solid rgba(255,255,255,.4); color:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.56rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; padding:5px 11px; cursor:pointer; transition:.15s; }
+  .code-copy:hover{ background:rgba(255,255,255,.16); }
+  .codeblock pre{ margin:0; padding:14px 16px; overflow-x:auto; background:var(--code-bg); }
+  .codeblock code{ font-family:"Courier New", monospace; font-size:.82rem; line-height:1.6; color:#1b2a3a; background:none; padding:0; white-space:pre; display:block; }
+  .codeblock code .cmt{ color:var(--cmt); font-style:italic; }
+
+  .tree .code-bar .path::before{ content:"📁"; }
+
+  /* Notes */
+  .note-block{ margin-top:22px; }
+  .note-block h3{ font-size:1.15rem; font-weight:800; }
+  .blist{ list-style:none; margin-top:12px; border-top:1px solid var(--hair); }
+  .blist li{ padding:12px 0; border-bottom:1px solid var(--hair); color:#333; font-size:.95rem; }
+  .blist li b{ color:#222; }
+
+  /* CTA */
+  .cta-inner{ display:flex; align-items:center; gap:18px; flex-wrap:wrap; border-top:3px solid #222; padding-top:18px; }
+  .cta-inner h3{ font-size:1.4rem; font-weight:900; line-height:1.08; }
+  .cta-inner p{ color:var(--gray); font-size:.95rem; margin-top:4px; }
+  .cta-btns{ margin-left:auto; display:flex; gap:12px; flex-wrap:wrap; }
+
+  footer{ background:#222; max-width:1240px; margin:30px auto 0; padding:24px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; letter-spacing:.5px; color:#fff; text-align:center; }
+  .note{ max-width:1240px; margin:14px auto 0; padding:8px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.62rem; letter-spacing:1px; color:#999; }
+
+  /* Drawer (shared) */
+  .drawer{ position:fixed; top:0; left:-300px; width:280px; height:100vh; background:#fff; z-index:200; box-shadow:2px 0 14px rgba(0,0,0,.15); transition:left .28s ease; padding:74px 26px 26px; }
+  .drawer.open{ left:0; }
+  .drawer a{ display:block; font-family:Arial, Helvetica, sans-serif; font-size:.82rem; letter-spacing:1.2px; text-transform:uppercase; padding:14px 0; border-bottom:1px solid var(--hair); }
+  .overlay{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:150; }
+  .overlay.open{ display:block; }
+  .drawer-close{ position:absolute; top:20px; right:20px; font-family:Arial, Helvetica, sans-serif; font-size:1.4rem; background:none; border:none; cursor:pointer; }
+
+  @media (max-width:900px){
+    .cta-btns{ margin-left:0; }
+    .mast-nav{ display:none; }
+    .hamburger{ display:flex; }
+    .masthead{ padding:12px 16px; }
+    .mast-left{ gap:10px; min-width:0; flex:1; }
+    .logo{ font-size:.72rem; letter-spacing:1.5px; padding:6px 8px; }
+    .search-box{ flex:1; width:auto; min-width:0; }
+    .search-results{ position:fixed; top:58px; left:12px; right:12px; width:auto; max-width:none; }
+    .src-head h1{ font-size:1.95rem; }
+    .cover-strip img{ height:150px; }
+  }
+</style>
 </head>
 <body>
-    <div class="container">
-        <nav class="back-nav">
-            <a href="mentor.html">← Back to Showcase</a>
-        </nav>
 
-        <div class="project-header">
-            <h1>📁 Mentor — Source Code</h1>
-            <p>An AI advisor for solo founders of service and expert businesses</p>
-        </div>
+  <div class="overlay" id="overlay"></div>
+  <nav class="drawer" id="drawer">
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">&times;</button>
+    <a href="index.html">Home</a>
+    <a href="project-categories.html">Categories</a>
+    <a href="contact.html">Contact</a>
+    <a href="https://lyven81.github.io/data-analyst-portfolio/index.html">Data Portfolio</a>
+  </nav>
 
-        <div class="content-section">
-            <h2>📂 Project Structure</h2>
-            <div class="file-tree">projects/mentor/
-├── mentor_server.py       # Flask backend + retrieval + Claude API
-├── mentor-ui.html         # Full frontend (Daily, Wiki, Learn & Talk tabs)
-├── demo.html              # Portfolio live demo (browser-only)
-├── power-of-process.txt   # Sample knowledge base (demo)
-└── config.txt             # User's API key (local only)</div>
-        </div>
-
-        <div class="content-section">
-            <h2>🧠 Core Logic — Retrieval + Grounding</h2>
-            <p>Every chat request is processed through a two-layer context pipeline before being sent to Claude Haiku. Layer 1 is always-on reality (user profile, schedule, priorities, progress log). Layer 2 is keyword-retrieved wiki chunks relevant to the specific question.</p>
-
-            <h3>Wiki Chunking</h3>
-            <p>Every wiki markdown file is split by <code class="inline">##</code> headings into teachable sections, stored in memory for instant lookup.</p>
-<pre class="code">def load_wiki_chunks():
-    chunks = []
-    for md_file in WIKI_DIR.rglob("*.md"):
-        topic = md_file.parent.name
-        text = md_file.read_text(encoding="utf-8")
-        sections = re.split(r"\n(?=## )", text)
-        for sec in sections:
-            if len(sec) &lt; 100:
-                continue
-            title_match = re.match(r"##\s*(.+)", sec)
-            title = title_match.group(1).strip() if title_match else topic
-            chunks.append({"topic": topic, "title": title, "text": sec})
-    return chunks</pre>
-
-            <h3>Keyword Retrieval</h3>
-            <p>A simple tokenizer + set intersection score keeps the system fast and transparent. No vector database needed at this scale.</p>
-<pre class="code">def retrieve(question, k=3):
-    q_tokens = set(tokenize(question))
-    scored = []
-    for chunk in WIKI_CHUNKS:
-        chunk_tokens = set(tokenize(chunk["text"]))
-        score = len(q_tokens &amp; chunk_tokens)
-        title_tokens = set(tokenize(chunk["title"]))
-        score += 2 * len(q_tokens &amp; title_tokens)  # title boost
-        if score &gt; 0:
-            scored.append((score, chunk))
-    scored.sort(key=lambda x: x[0], reverse=True)
-    return [c for _, c in scored[:k]]</pre>
-        </div>
-
-        <div class="content-section">
-            <h2>🎯 System Prompt — The Output Contract</h2>
-            <p>The strict rules enforced on every reply. This is what turns a chatbot into a mentor.</p>
-<pre class="code">SYSTEM_PROMPT = """You are a unified-voice mentor for a solo founder
-of a service and expert business.
-
-CRITICAL RULES:
-1. Reply in MAXIMUM 2 paragraphs. Each paragraph MAXIMUM 3 sentences.
-2. Use direct, clear, simple language. No jargon. No filler.
-3. Candid tone — tell the truth even when uncomfortable.
-   Be encouraging when real progress has been made.
-4. Never say "Baker says" or "Weiss recommends" —
-   speak as one trusted advisor using "I".
-5. Ground EVERY recommendation in the user's actual context
-   (schedule, priorities, progress, skill level).
-6. Use the wiki frameworks as the logic, but translate them
-   to the user's real situation.
-7. If the wiki doesn't cover it, say so in one sentence.
-8. End with a specific next action when the question calls for one.
-9. Never suggest something the user clearly lacks capacity for
-   without naming that gap first.
-"""</pre>
-        </div>
-
-        <div class="content-section">
-            <h2>💬 Chat Endpoint With Session Memory</h2>
-            <p>The chat endpoint accepts a short history array from the browser so follow-up questions work naturally. It also appends every exchange to a dated markdown log.</p>
-<pre class="code">@app.route("/api/ask", methods=["POST"])
-def api_ask():
-    data = request.get_json(force=True)
-    question = (data.get("question") or "").strip()
-    history = data.get("history") or []
-
-    retrieved = retrieve(question, k=3)
-    wiki_context = "\n\n---\n\n".join(
-        f"[{c['topic']} — {c['title']}]\n{c['text']}" for c in retrieved
-    )
-    current_user_message = f"""USER CONTEXT:
-{LAYER1_CONTEXT}
-
----
-
-RELEVANT WIKI FRAMEWORKS:
-{wiki_context}
-
----
-
-QUESTION: {question}"""
-
-    messages = []
-    for msg in history[-10:]:  # cap at 10
-        role = msg.get("role")
-        content = (msg.get("content") or "").strip()
-        if role in ("user", "assistant") and content:
-            messages.append({"role": role, "content": content})
-    messages.append({"role": "user", "content": current_user_message})
-
-    resp = anthropic_client.messages.create(
-        model="claude-haiku-4-5-20251001",
-        max_tokens=400,
-        system=SYSTEM_PROMPT,
-        messages=messages
-    )
-    answer = resp.content[0].text
-    append_chat_log(question, answer, retrieved)
-    return jsonify({"answer": answer, "sources": retrieved})</pre>
-        </div>
-
-        <div class="content-section">
-            <h2>📚 Live Demo Notes</h2>
-            <p>The portfolio live demo (<code class="inline">projects/mentor/demo.html</code>) runs entirely in the browser with no backend. It loads a single sample knowledge base file (<code class="inline">power-of-process.txt</code>) and calls the Gemini API directly from the browser when the user provides an API key. This preserves the production UI (Daily, Wiki, Learn & Talk tabs) and the tone contract of the system prompt.</p>
-            <p>The full production version uses Claude Haiku 4.5 via the Anthropic SDK, a multi-file wiki, and the local Flask server for true reality grounding (schedule, priorities, progress logs).</p>
-        </div>
-
-        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
-            <a href="mentor.html">← Back to Showcase</a> |
-            <a href="index.html">Portfolio Home</a>
-        </nav>
+  <div class="masthead">
+    <div class="mast-left">
+      <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+      <a class="logo" href="index.html">AI PROJECTS</a>
+      <nav class="mast-nav">
+        <a href="project-categories.html">Categories</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <div class="search-box">
+        <input type="text" class="search-input" id="searchInput" autocomplete="off" placeholder="Search AI projects..." aria-label="Search AI projects">
+        <span class="search-ic">&#128269;</span>
+        <div class="search-results" id="searchResults"></div>
+      </div>
     </div>
+  </div>
+  <hr class="rule-top">
+
+  <div class="crumb">
+    <a href="project-categories.html">Categories</a>
+    <span class="sep">/</span><a id="crumbCat" href="#"></a>
+    <span class="sep">/</span><a id="crumbProj" href="#"></a>
+    <span class="sep">/</span><span>Source</span>
+  </div>
+
+  <section class="src-head">
+    <div class="cover-strip" id="coverStrip" style="display:none"><img id="cover" alt=""></div>
+    <span class="rubric" id="kicker"></span>
+    <h1 id="title"></h1>
+    <p class="sub" id="subtitle"></p>
+    <div class="head-tech" id="headTech"></div>
+    <div class="head-btns" id="headBtns"></div>
+  </section>
+
+  <div id="body"></div>
+
+  <footer>&copy; 2026 Lee Yih Ven | AI Project Portfolio &middot; All rights reserved.</footer>
+  <div class="note">Sample Source-Showcase-E2 (TEMPLATE): source-code page on the index magazine system: slim cover banner, About, Project Structure, code walkthrough with copyable navy-barred code blocks, CTA. Reuse by editing only the PROJECT block at the top of the script.</div>
+
+<script>
+  const SITE = "";
+
+  /* =================================================================
+     EDIT PER PROJECT  -  the ONLY block you change per page.
+     Copy this file, swap PROJECT, save as <slug>-source.html.
+     - structure.code : the project file tree (plain text)
+     - walkthrough[]   : { heading, body, files:[{label, code}] }
+     - notes[]         : { heading, bullets:[...] }
+     Code strings can be multi-line; they render verbatim.
+     ================================================================= */
+  const PROJECT = {
+  "slug": "mentor",
+  "category": "Industry Specialist Advisors",
+  "categoryUrl": "category-industry-advisors.html",
+  "title": "Mentor",
+  "subtitle": "Wiki chunking, keyword retrieval, the output-contract system prompt, and the grounded chat endpoint, the four excerpts that turn a chatbot into an advisor.",
+  "cover": "images/mentor/cover.jpeg",
+  "tech": [
+    "Python 3",
+    "Flask",
+    "Anthropic SDK",
+    "Claude Haiku 4.5",
+    "Retrieval-Augmented"
+  ],
+  "overviewUrl": "mentor.html",
+  "demoLabel": "Try Live Demo",
+  "demoUrl": "https://lyven81.github.io/ai-project/projects/mentor/demo.html",
+  "repoUrl": "https://github.com/lyven81/ai-project/tree/main/projects/mentor",
+  "about": "These excerpts are the heart of the project: wiki markdown is split into teachable chunks, a simple keyword retriever picks the top three per question, a strict system prompt holds every reply to a unified-voice output contract, and the chat endpoint grounds each answer in two context layers (the user's real week plus the retrieved frameworks) while keeping the last 10 messages for follow-up coherence. The key idea throughout: advice is grounded in the user's actual schedule, priorities, and progress, so it fits reality rather than reciting theory.",
+  "structure": {
+    "label": "projects/mentor/",
+    "code": "projects/mentor/\n  mentor_server.py        Flask backend + retrieval + Claude API\n  mentor-ui.html          full frontend (Daily, Wiki, Learn & Talk tabs)\n  demo.html               portfolio live demo (browser-only)\n  power-of-process.txt     sample knowledge base (demo)\n  config.txt              user's API key (local only)"
+  },
+  "walkthrough": [
+    {
+      "heading": "Wiki Chunking: Frameworks Become Teachable Sections",
+      "body": "Every wiki markdown file is split by <code>##</code> headings into teachable sections and held in memory for instant lookup. Each chunk keeps its topic and title so retrieval can boost on the heading later.",
+      "files": [
+        {
+          "label": "mentor_server.py: split each wiki file into chunks",
+          "code": "def load_wiki_chunks():\n    chunks = []\n    for md_file in WIKI_DIR.rglob(\"*.md\"):\n        topic = md_file.parent.name\n        text = md_file.read_text(encoding=\"utf-8\")\n        sections = re.split(r\"\\n(?=## )\", text)\n        for sec in sections:\n            if len(sec) < 100:\n                continue\n            title_match = re.match(r\"##\\s*(.+)\", sec)\n            title = title_match.group(1).strip() if title_match else topic\n            chunks.append({\"topic\": topic, \"title\": title, \"text\": sec})\n    return chunks"
+        }
+      ]
+    },
+    {
+      "heading": "Keyword Retrieval (no vector database needed)",
+      "body": "A simple tokeniser and set-intersection score keeps the system fast and transparent. Title matches are weighted double, and the top three chunks are returned as the framework context for each question.",
+      "files": [
+        {
+          "label": "mentor_server.py: score and pick the top three chunks",
+          "code": "def retrieve(question, k=3):\n    q_tokens = set(tokenize(question))\n    scored = []\n    for chunk in WIKI_CHUNKS:\n        chunk_tokens = set(tokenize(chunk[\"text\"]))\n        score = len(q_tokens & chunk_tokens)\n        title_tokens = set(tokenize(chunk[\"title\"]))\n        score += 2 * len(q_tokens & title_tokens)   # title boost\n        if score > 0:\n            scored.append((score, chunk))\n    scored.sort(key=lambda x: x[0], reverse=True)\n    return [c for _, c in scored[:k]]"
+        }
+      ]
+    },
+    {
+      "heading": "The Output Contract: System Prompt",
+      "body": "The strict rules enforced on every reply are what turn a chatbot into a mentor: a hard cap of two short paragraphs, a unified 'I' voice instead of citing authors, a candid tone, and a refusal to recommend anything without grounding it in the user's real context.",
+      "files": [
+        {
+          "label": "mentor_server.py: the unified-voice output contract",
+          "code": "SYSTEM_PROMPT = \"\"\"You are a unified-voice mentor for a solo founder\nof a service and expert business.\n\nCRITICAL RULES:\n1. Reply in MAXIMUM 2 paragraphs. Each paragraph MAXIMUM 3 sentences.\n2. Use direct, clear, simple language. No jargon. No filler.\n3. Candid tone, tell the truth even when uncomfortable.\n   Be encouraging when real progress has been made.\n4. Never say \"Baker says\" or \"Weiss recommends\",\n   speak as one trusted advisor using \"I\".\n5. Ground EVERY recommendation in the user's actual context\n   (schedule, priorities, progress, skill level).\n6. Use the wiki frameworks as the logic, but translate them\n   to the user's real situation.\n7. If the wiki doesn't cover it, say so in one sentence.\n8. End with a specific next action when the question calls for one.\n9. Never suggest something the user clearly lacks capacity for\n   without naming that gap first.\n\"\"\""
+        }
+      ]
+    },
+    {
+      "heading": "Grounded Chat Endpoint With Session Memory",
+      "body": "The chat endpoint accepts a short history array from the browser so follow-up questions work naturally. It builds the user message from Layer 1 reality context and the retrieved wiki frameworks, caps history at 10 messages, calls Claude Haiku, and appends every exchange to a dated markdown log.",
+      "files": [
+        {
+          "label": "mentor_server.py: two-layer context + capped history",
+          "code": "@app.route(\"/api/ask\", methods=[\"POST\"])\ndef api_ask():\n    data = request.get_json(force=True)\n    question = (data.get(\"question\") or \"\").strip()\n    history = data.get(\"history\") or []\n\n    retrieved = retrieve(question, k=3)\n    wiki_context = \"\\n\\n---\\n\\n\".join(\n        f\"[{c['topic']} — {c['title']}]\\n{c['text']}\" for c in retrieved\n    )\n    current_user_message = f\"USER CONTEXT:\\n{LAYER1_CONTEXT}\\n\\n---\\n\\nRELEVANT WIKI FRAMEWORKS:\\n{wiki_context}\\n\\n---\\n\\nQUESTION: {question}\"\n\n    messages = []\n    for msg in history[-10:]:                 # cap at 10\n        role = msg.get(\"role\")\n        content = (msg.get(\"content\") or \"\").strip()\n        if role in (\"user\", \"assistant\") and content:\n            messages.append({\"role\": role, \"content\": content})\n    messages.append({\"role\": \"user\", \"content\": current_user_message})\n\n    resp = anthropic_client.messages.create(\n        model=\"claude-haiku-4-5-20251001\",\n        max_tokens=400,\n        system=SYSTEM_PROMPT,\n        messages=messages\n    )\n    answer = resp.content[0].text\n    append_chat_log(question, answer, retrieved)\n    return jsonify({\"answer\": answer, \"sources\": retrieved})"
+        }
+      ]
+    }
+  ],
+  "notes": [
+    {
+      "heading": "Live Demo Notes",
+      "bullets": [
+        "<b>Browser-only demo:</b> the portfolio live demo (<code>projects/mentor/demo.html</code>) runs entirely in the browser with no backend.",
+        "<b>Single sample wiki:</b> it loads one sample knowledge base file (<code>power-of-process.txt</code>) and calls the LLM API directly from the browser when the user provides an API key.",
+        "<b>UI and tone preserved:</b> the demo keeps the production UI (Daily, Wiki, Learn & Talk tabs) and the tone contract of the system prompt.",
+        "<b>Full production version:</b> uses Claude Haiku 4.5 via the Anthropic SDK, a multi-file wiki, and the local Flask server for true reality grounding (schedule, priorities, progress logs)."
+      ]
+    },
+    {
+      "heading": "Why This Design",
+      "bullets": [
+        "<b>Local-first and private:</b> the whole app runs on the user's machine, so the knowledge base and chat log never leave it.",
+        "<b>Match the tool to the job:</b> retrieval is simple keyword scoring because the wiki is small, so no vector database is needed at the current scale.",
+        "<b>Two-layer grounding:</b> Layer 1 reality is always on; Layer 2 frameworks are retrieved per question, so answers fit both reality and logic.",
+        "<b>Cost-effective:</b> Claude Haiku keeps each question to roughly one sen, cheap enough for daily use."
+      ]
+    }
+  ],
+  "cta": "Want a grounded, private AI advisor like this built on your own knowledge base? Let's scope it."
+};
+  /* ===================== END EDIT BLOCK ===================== */
+
+  const pref = (u) => /^https?:|^mailto:|^tel:/.test(u || '') ? u : (SITE + (u || ''));
+  const esc = (s) => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const rich = (s) => esc(s).replace(/&lt;(\/?(?:b|code))&gt;/g, '<$1>');
+
+  // raw code store for copy buttons
+  const RAW = [];
+  function codeBlock(label, codeStr, extraClass){
+    const idx = RAW.push(codeStr) - 1;
+    const rendered = esc(codeStr).split('\n')
+      .map(line => /^\s*#/.test(line) ? `<span class="cmt">${line}</span>` : line).join('\n');
+    return `<div class="codeblock ${extraClass||''}">`+
+      `<div class="code-bar"><span class="path"><span>${esc(label)}</span></span>`+
+      `<button class="code-copy" data-idx="${idx}">Copy</button></div>`+
+      `<pre><code>${rendered}</code></pre></div>`;
+  }
+
+  // Breadcrumb + header
+  document.title = PROJECT.title + ": Source | AI Project Portfolio";
+  document.getElementById('crumbCat').textContent = PROJECT.category;
+  document.getElementById('crumbCat').href = pref(PROJECT.categoryUrl);
+  document.getElementById('crumbProj').textContent = PROJECT.title;
+  document.getElementById('crumbProj').href = pref(PROJECT.overviewUrl);
+  if (PROJECT.cover){
+    document.getElementById('coverStrip').style.display = '';
+    const c = document.getElementById('cover'); c.src = PROJECT.cover; c.alt = PROJECT.title + " cover";
+  }
+  document.getElementById('kicker').textContent = "Source Walkthrough · " + PROJECT.category;
+  document.getElementById('title').textContent = PROJECT.title;
+  document.getElementById('subtitle').textContent = PROJECT.subtitle;
+  document.getElementById('headTech').innerHTML = (PROJECT.tech||[]).map(t => `<span class="tech-chip">${esc(t)}</span>`).join('');
+  document.getElementById('headBtns').innerHTML =
+    (PROJECT.demoUrl ? `<a class="btn" href="${pref(PROJECT.demoUrl)}" target="_blank" rel="noopener">${esc(PROJECT.demoLabel||'Live Demo')}</a>` : '') +
+    (PROJECT.overviewUrl ? `<a class="btn ghost" href="${pref(PROJECT.overviewUrl)}">Project Overview</a>` : '') +
+    (PROJECT.repoUrl ? `<a class="btn ghost" href="${pref(PROJECT.repoUrl)}" target="_blank" rel="noopener">GitHub Repo</a>` : '');
+
+  const section = (tab, inner) => `<section class="sec"><div class="sec-rule"><span class="tab">${esc(tab)}</span>${inner}</div></section>`;
+  let html = "";
+  const P = PROJECT;
+
+  if (P.about){
+    html += section("About This Code", `<h2>About This Code Showcase</h2><p class="intro">${rich(P.about)}</p>`);
+  }
+  if (P.structure && P.structure.code){
+    html += section("Project Structure", `<h2>Project Structure</h2>`+
+      codeBlock(P.structure.label || 'project/', P.structure.code, 'tree'));
+  }
+  (P.walkthrough||[]).forEach(w => {
+    let inner = `<h2>${esc(w.heading)}</h2>`;
+    if (w.body) inner += `<p class="body">${rich(w.body)}</p>`;
+    (w.files||[]).forEach(f => { inner += codeBlock(f.label, f.code); });
+    html += section("Code", inner);
+  });
+  // CTA
+  html += `<section class="sec"><div class="cta-inner">`+
+    `<div><h3>Interested in the build?</h3><p>${esc(P.cta || "Let's talk.")}</p></div>`+
+    `<div class="cta-btns">`+
+    (P.demoUrl ? `<a class="btn" href="${pref(P.demoUrl)}" target="_blank" rel="noopener">${esc(P.demoLabel||'Live Demo')}</a>` : '')+
+    `<a class="btn ghost" href="${SITE}contact.html">Get in Touch</a>`+
+    `</div></div></section>`;
+
+  document.getElementById('body').innerHTML = html;
+
+  // Copy buttons
+  function copyText(text, btn){
+    const done = ()=>{ const o=btn.textContent; btn.textContent='Copied ✓'; setTimeout(()=>btn.textContent=o.includes('Copied')?'Copy':o,1400); };
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(done).catch(()=>fb(text,done)); }
+    else fb(text,done);
+  }
+  function fb(text,done){ const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(ta); done(); }
+  document.querySelectorAll('.code-copy').forEach(btn =>
+    btn.addEventListener('click', ()=> copyText(RAW[+btn.dataset.idx], btn)));
+
+  // Masthead search
+  const ITEMS = [
+    {t:PROJECT.title, c:PROJECT.category, s:PROJECT.slug},
+    {t:"Courier CS Quality Console", c:"Conversational Data Analytics", s:"courier-cs-quality-console"},
+    {t:"Voucher Analyzer", c:"Conversational Data Analytics", s:"voucher-analyzer"},
+    {t:"Wiseman", c:"Knowledge & Reference Chatbots", s:"wiseman"},
+    {t:"Sunny Car Accessories", c:"Agentic Commerce", s:"sunny-car-accessories"},
+    {t:"Bookshelf", c:"Multi-Agent Decision Systems", s:"bookshelf"}
+  ];
+  const searchInput = document.getElementById('searchInput');
+  const searchResults = document.getElementById('searchResults');
+  function runSearch(q){
+    if(q.trim().length < 2){ searchResults.style.display='none'; return; }
+    const ql = q.toLowerCase();
+    const hits = ITEMS.filter(it => (it.t+' '+it.c).toLowerCase().includes(ql));
+    searchResults.innerHTML = hits.length ? hits.map(it =>
+      `<div class="sr-item"><div class="sr-cat">${esc(it.c)}</div>`+
+      `<a href="${SITE}${it.s}.html"><div class="sr-title">${esc(it.t)}</div></a>`+
+      `<div class="sr-links"><a href="${SITE}${it.s}.html">View Details</a></div></div>`).join('')
+      : `<div class="sr-none">No projects found. Try a different keyword.</div>`;
+    searchResults.style.display='block';
+  }
+  searchInput.addEventListener('input', e => runSearch(e.target.value));
+  document.addEventListener('click', e => { if(!e.target.closest('.search-box')) searchResults.style.display='none'; });
+
+  // Drawer
+  const drawer=document.getElementById('drawer'), overlay=document.getElementById('overlay');
+  const openMenu=()=>{ drawer.classList.add('open'); overlay.classList.add('open'); };
+  const closeMenu=()=>{ drawer.classList.remove('open'); overlay.classList.remove('open'); };
+  document.getElementById('hamburger').addEventListener('click', openMenu);
+  document.getElementById('drawerClose').addEventListener('click', closeMenu);
+  overlay.addEventListener('click', closeMenu);
+  drawer.querySelectorAll('a').forEach(a=>a.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeMenu(); searchResults.style.display='none'; }});
+</script>
 </body>
 </html>

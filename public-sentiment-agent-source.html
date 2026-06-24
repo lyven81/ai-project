@@ -1,477 +1,361 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Public Sentiment Collection Agent - Source Code</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Public Sentiment Collection Agent: Source | AI Project Portfolio</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root{ --ink:#222; --paper:#fff; --hair:#dddddd; --gray:#555; --accent:#B8860B; --navy:#1E3A5F; --code-bg:#fbfbf8; --cmt:#6b8190; }
+  html{ scroll-behavior:smooth; }
+  body{ background:var(--paper); color:var(--ink); font-family:Arial, Helvetica, sans-serif; line-height:1.6; overflow-x:hidden; }
+  a{ color:inherit; text-decoration:none; }
+  a:hover h2, a:hover h3, a:hover h4{ color:var(--accent); }
+  p code, li code{ font-family:"Courier New", monospace; font-size:.86em; background:#f2f3f5; padding:1px 5px; color:var(--navy); }
 
-        body {
-            font-family: 'Arial', sans-serif;
-            line-height: 1.6;
-            color: #222;
-            background-color: #ffffff;
-        }
+  /* Masthead (shared) */
+  .masthead{ display:flex; align-items:center; justify-content:space-between; padding:14px 28px; max-width:1240px; margin:0 auto; gap:18px; }
+  .mast-left{ display:flex; align-items:center; gap:20px; }
+  .logo{ background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; letter-spacing:3px; font-size:.95rem; padding:8px 12px; white-space:nowrap; }
+  .mast-nav{ display:flex; gap:20px; font-family:Arial, Helvetica, sans-serif; font-size:.72rem; letter-spacing:1.4px; text-transform:uppercase; }
+  .mast-nav a:hover{ color:var(--accent); }
+  .hamburger{ display:none; flex-direction:column; gap:4px; background:none; border:none; cursor:pointer; padding:6px; }
+  .hamburger span{ width:22px; height:2px; background:#222; display:block; }
+  .rule-top{ border:none; border-top:3px solid #222; max-width:1240px; margin:0 auto; }
 
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+  /* Search (shared) */
+  .search-box{ position:relative; width:200px; }
+  .search-input{ width:100%; padding:7px 30px 7px 12px; border:1px solid var(--hair); background:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; color:#222; }
+  .search-input:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(184,134,11,.15); }
+  .search-ic{ position:absolute; right:10px; top:50%; transform:translateY(-50%); color:var(--gray); font-size:.8rem; pointer-events:none; }
+  .search-results{ position:absolute; top:calc(100% + 4px); left:0; width:340px; max-width:86vw; background:#fff; border:1px solid #222; max-height:60vh; overflow-y:auto; z-index:120; display:none; }
+  .sr-item{ padding:12px 14px; border-bottom:1px solid var(--hair); }
+  .sr-item:last-child{ border-bottom:none; }
+  .sr-cat{ font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; margin-bottom:4px; color:var(--accent); }
+  .sr-title{ font-weight:700; font-size:1.02rem; color:#222; }
+  .sr-links{ font-size:.58rem; letter-spacing:.8px; text-transform:uppercase; color:var(--gray); margin-top:5px; }
+  .sr-links a:hover{ color:var(--accent); }
+  .sr-none{ padding:16px 14px; font-size:.82rem; color:var(--gray); }
 
-        .back-nav {
-            margin-bottom: 20px;
-        }
+  /* Shared bits */
+  .tab{ display:inline-block; background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.66rem; letter-spacing:2px; text-transform:uppercase; padding:6px 12px; }
+  .rubric{ font-family:Arial, Helvetica, sans-serif; font-size:.62rem; font-weight:700; letter-spacing:1.6px; text-transform:uppercase; color:var(--accent); display:block; margin-bottom:8px; }
+  .tech-chip{ display:inline-block; border:1px solid var(--hair); padding:6px 12px; font-size:.72rem; letter-spacing:.3px; color:#333; white-space:nowrap; }
+  .tech-chip:hover{ border-color:var(--accent); color:var(--accent); }
+  .btn{ display:inline-block; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.7rem; letter-spacing:1.6px; text-transform:uppercase; padding:13px 24px; border:1px solid #222; background:#222; color:#fff; cursor:pointer; transition:.15s; }
+  .btn:hover{ background:var(--accent); border-color:var(--accent); }
+  .btn.ghost{ background:#fff; color:#222; }
+  .btn.ghost:hover{ color:var(--accent); border-color:var(--accent); background:#fff; }
 
-        .back-nav a {
-            color: #007BFF;
-            text-decoration: none;
-            font-size: 1rem;
-        }
+  /* Breadcrumb */
+  .crumb{ max-width:1240px; margin:0 auto; padding:20px 28px 0; font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--gray); }
+  .crumb a:hover{ color:var(--accent); }
+  .crumb .sep{ color:var(--hair); margin:0 8px; }
 
-        .back-nav a:hover {
-            text-decoration: underline;
-        }
+  /* Header (slim cover banner + copy) */
+  .src-head{ max-width:1240px; margin:0 auto; padding:14px 28px 6px; }
+  .cover-strip{ border:1px solid var(--hair); line-height:0; background:#eef1f4; }
+  .cover-strip img{ width:100%; height:190px; object-fit:cover; object-position:center 42%; display:block; }
+  .src-head h1{ font-size:2.5rem; font-weight:900; line-height:1.04; letter-spacing:-.008em; margin-top:18px; }
+  .src-head .sub{ font-style:italic; font-size:1.08rem; color:#333; margin-top:10px; max-width:72ch; }
+  .head-tech{ display:flex; flex-wrap:wrap; gap:9px; margin-top:16px; }
+  .head-btns{ display:flex; flex-wrap:wrap; gap:12px; margin-top:18px; }
 
-        .project-header {
-            text-align: center;
-            margin-bottom: 40px;
-            padding: 40px 0;
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: white;
-            border-radius: 10px;
-        }
+  /* Section shell */
+  .sec{ max-width:1240px; margin:0 auto; padding:26px 28px; }
+  .sec-rule{ border-top:3px solid #222; padding-top:16px; }
+  .sec .tab{ margin-bottom:14px; }
+  .sec h2{ font-size:1.7rem; font-weight:900; line-height:1.06; }
+  .sec .intro{ color:#333; font-size:1.02rem; margin-top:10px; max-width:80%; }
+  .sec .body{ color:#333; font-size:1rem; margin-top:10px; max-width:80%; }
 
-        .project-header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
+  /* Code block */
+  .codeblock{ border:1px solid var(--hair); margin-top:16px; }
+  .code-bar{ display:flex; align-items:center; justify-content:space-between; gap:12px; background:var(--navy); color:#fff; padding:8px 12px; }
+  .code-bar .path{ font-family:"Courier New", monospace; font-size:.74rem; letter-spacing:.2px; opacity:.96; display:flex; align-items:center; gap:7px; min-width:0; }
+  .code-bar .path span{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .code-copy{ flex:none; background:none; border:1px solid rgba(255,255,255,.4); color:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.56rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; padding:5px 11px; cursor:pointer; transition:.15s; }
+  .code-copy:hover{ background:rgba(255,255,255,.16); }
+  .codeblock pre{ margin:0; padding:14px 16px; overflow-x:auto; background:var(--code-bg); }
+  .codeblock code{ font-family:"Courier New", monospace; font-size:.82rem; line-height:1.6; color:#1b2a3a; background:none; padding:0; white-space:pre; display:block; }
+  .codeblock code .cmt{ color:var(--cmt); font-style:italic; }
 
-        .project-header p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
+  .tree .code-bar .path::before{ content:"📁"; }
 
-        .badges {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin: 20px 0;
-            flex-wrap: wrap;
-        }
+  /* Notes */
+  .note-block{ margin-top:22px; }
+  .note-block h3{ font-size:1.15rem; font-weight:800; }
+  .blist{ list-style:none; margin-top:12px; border-top:1px solid var(--hair); }
+  .blist li{ padding:12px 0; border-bottom:1px solid var(--hair); color:#333; font-size:.95rem; }
+  .blist li b{ color:#222; }
 
-        .badge {
-            background-color: rgba(255, 255, 255, 0.2);
-            color: white;
-            padding: 5px 12px;
-            border-radius: 15px;
-            font-size: 0.9rem;
-        }
+  /* CTA */
+  .cta-inner{ display:flex; align-items:center; gap:18px; flex-wrap:wrap; border-top:3px solid #222; padding-top:18px; }
+  .cta-inner h3{ font-size:1.4rem; font-weight:900; line-height:1.08; }
+  .cta-inner p{ color:var(--gray); font-size:.95rem; margin-top:4px; }
+  .cta-btns{ margin-left:auto; display:flex; gap:12px; flex-wrap:wrap; }
 
-        .content-section {
-            margin: 40px 0;
-            padding: 30px;
-            background-color: #f9f9f9;
-            border-radius: 8px;
-            border-left: 5px solid #10b981;
-        }
+  footer{ background:#222; max-width:1240px; margin:30px auto 0; padding:24px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; letter-spacing:.5px; color:#fff; text-align:center; }
+  .note{ max-width:1240px; margin:14px auto 0; padding:8px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.62rem; letter-spacing:1px; color:#999; }
 
-        .content-section h2 {
-            color: #10b981;
-            margin-bottom: 20px;
-            font-size: 1.8rem;
-        }
+  /* Drawer (shared) */
+  .drawer{ position:fixed; top:0; left:-300px; width:280px; height:100vh; background:#fff; z-index:200; box-shadow:2px 0 14px rgba(0,0,0,.15); transition:left .28s ease; padding:74px 26px 26px; }
+  .drawer.open{ left:0; }
+  .drawer a{ display:block; font-family:Arial, Helvetica, sans-serif; font-size:.82rem; letter-spacing:1.2px; text-transform:uppercase; padding:14px 0; border-bottom:1px solid var(--hair); }
+  .overlay{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:150; }
+  .overlay.open{ display:block; }
+  .drawer-close{ position:absolute; top:20px; right:20px; font-family:Arial, Helvetica, sans-serif; font-size:1.4rem; background:none; border:none; cursor:pointer; }
 
-        .content-section h3 {
-            color: #333;
-            margin: 20px 0 10px 0;
-            font-size: 1.3rem;
-        }
-
-        .highlight-box {
-            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
-            padding: 20px;
-            border-radius: 10px;
-            border-left: 5px solid #10b981;
-            margin: 20px 0;
-        }
-
-        .code-container {
-            background-color: #1e1e1e;
-            border-radius: 8px;
-            padding: 20px;
-            margin: 20px 0;
-            overflow-x: auto;
-        }
-
-        .code-header {
-            color: #569cd6;
-            font-weight: bold;
-            margin-bottom: 15px;
-            font-size: 1.1rem;
-            border-bottom: 1px solid #333;
-            padding-bottom: 10px;
-        }
-
-        .code-block {
-            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-            font-size: 14px;
-            line-height: 1.5;
-            color: #d4d4d4;
-        }
-
-        .code-comment {
-            color: #6a9955;
-            font-style: italic;
-        }
-
-        .code-keyword {
-            color: #569cd6;
-        }
-
-        .code-string {
-            color: #ce9178;
-        }
-
-        .code-function {
-            color: #dcdcaa;
-        }
-
-        .code-number {
-            color: #b5cea8;
-        }
-
-        .demo-links {
-            text-align: center;
-            margin: 30px 0;
-        }
-
-        .demo-btn {
-            display: inline-block;
-            background-color: #10b981;
-            color: white;
-            padding: 12px 25px;
-            text-decoration: none;
-            border-radius: 5px;
-            margin: 0 10px;
-            font-weight: bold;
-            transition: background-color 0.3s;
-        }
-
-        .demo-btn:hover {
-            background-color: #059669;
-        }
-
-        .demo-btn.secondary {
-            background-color: #28a745;
-        }
-
-        .demo-btn.secondary:hover {
-            background-color: #218838;
-        }
-
-        @media (max-width: 768px) {
-            .project-header h1 {
-                font-size: 2rem;
-            }
-
-            .project-header p {
-                font-size: 1rem;
-            }
-
-            .demo-btn {
-                margin: 5px;
-                padding: 10px 20px;
-            }
-
-            .container {
-                padding: 15px;
-            }
-        }
-    </style>
+  @media (max-width:900px){
+    .cta-btns{ margin-left:0; }
+    .mast-nav{ display:none; }
+    .hamburger{ display:flex; }
+    .masthead{ padding:12px 16px; }
+    .mast-left{ gap:10px; min-width:0; flex:1; }
+    .logo{ font-size:.72rem; letter-spacing:1.5px; padding:6px 8px; }
+    .search-box{ flex:1; width:auto; min-width:0; }
+    .search-results{ position:fixed; top:58px; left:12px; right:12px; width:auto; max-width:none; }
+    .src-head h1{ font-size:1.95rem; }
+    .cover-strip img{ height:150px; }
+  }
+</style>
 </head>
 <body>
-    <div class="container">
-        <nav class="back-nav">
-            <a href="index.html">← Back to Portfolio</a>
-        </nav>
 
-        <div class="project-header">
-            <h1>🌍 Public Sentiment Collection Agent</h1>
-            <p>Geographic Sentiment Analysis with Credibility Tracking</p>
+  <div class="overlay" id="overlay"></div>
+  <nav class="drawer" id="drawer">
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">&times;</button>
+    <a href="index.html">Home</a>
+    <a href="project-categories.html">Categories</a>
+    <a href="contact.html">Contact</a>
+    <a href="https://lyven81.github.io/data-analyst-portfolio/index.html">Data Portfolio</a>
+  </nav>
 
-            <div class="badges">
-                <span class="badge">Python 3.9+</span>
-                <span class="badge">Gemini 2.0 Flash</span>
-                <span class="badge">Tavily API</span>
-                <span class="badge">Pandas</span>
-                <span class="badge">Matplotlib</span>
-            </div>
-        </div>
-
-        <div class="highlight-box">
-            <h3>🔍 About This Code Showcase</h3>
-            <p><strong>This curated code snippet demonstrates how the Public Sentiment Collection Agent performs geographic sentiment analysis with advanced credibility tracking and source diversity assessment.</strong></p>
-            <p>Full deployment scripts, API credentials, and proprietary details are omitted for clarity and security. This showcase highlights the core multi-agent orchestration and sentiment analysis algorithms.</p>
-        </div>
-
-        <div class="content-section">
-            <h2>📖 Core Algorithm: Geographic Social Listening</h2>
-            <p>The foundation of the Public Sentiment Agent is its ability to collect sentiment data with geographic segmentation and track source diversity for credibility assessment:</p>
-
-            <div class="code-container">
-                <div class="code-header">🌐 geographic_listening_agent.py</div>
-                <div class="code-block">
-<span class="code-keyword">def</span> <span class="code-function">geographic_listening_agent</span>(
-    issue_keyword: str,
-    locations: list = [<span class="code-string">"global"</span>],
-    num_sources_per_location: int = <span class="code-number">15</span>
-) -> dict:
-    <span class="code-string">"""
-    Collect sentiment data with geographic segmentation and source diversity tracking.
-
-    This agent addresses a critical flaw in traditional sentiment analysis:
-    lumping all geographic regions together without considering cultural context.
-
-    Example: "Public opinion on alcohol consumption"
-    - WITHOUT geographic filtering: Misleading global average
-    - WITH geographic filtering: Reveals cultural nuances (Saudi Arabia vs Germany)
-
-    Args:
-        issue_keyword: Topic to research
-        locations: List of countries/regions (e.g., ["USA", "Germany", "Saudi Arabia"])
-        num_sources_per_location: Sources per location
-
-    Returns:
-        dict: Data organized by location with diversity metrics
-    """</span>
-
-    log_agent_title_html(<span class="code-string">"Geographic Social Listening Agent"</span>, <span class="code-string">"🌍"</span>)
-
-    location_data = {}
-
-    <span class="code-keyword">for</span> location <span class="code-keyword">in</span> locations:
-        log_tool_call_html(<span class="code-string">"tavily_search_geographic"</span>, f<span class="code-string">"location={location}"</span>)
-
-        <span class="code-comment"># Search with location-specific filtering</span>
-        search_result = tavily_search_geographic(
-            query=issue_keyword,
-            location=location,
-            max_results=num_sources_per_location
-        )
-
-        <span class="code-keyword">if</span> <span class="code-string">'error'</span> <span class="code-keyword">not in</span> search_result:
-            results = search_result[<span class="code-string">'results'</span>]
-
-            <span class="code-comment"># CRITICAL: Analyze source diversity to detect bias</span>
-            diversity = analyze_source_diversity(results)
-
-            location_data[location] = {
-                <span class="code-string">'snippets'</span>: [r[<span class="code-string">'content'</span>] <span class="code-keyword">for</span> r <span class="code-keyword">in</span> results <span class="code-keyword">if</span> r.get(<span class="code-string">'content'</span>)],
-                <span class="code-string">'sources'</span>: [{<span class="code-string">'title'</span>: r[<span class="code-string">'title'</span>], <span class="code-string">'url'</span>: r[<span class="code-string">'url'</span>], <span class="code-string">'domain'</span>: r[<span class="code-string">'domain'</span>]}
-                           <span class="code-keyword">for</span> r <span class="code-keyword">in</span> results],
-                <span class="code-string">'diversity'</span>: diversity
-            }
-
-            <span class="code-comment"># Warn if data quality is compromised</span>
-            <span class="code-keyword">if</span> diversity[<span class="code-string">'warnings'</span>]:
-                <span class="code-keyword">for</span> warning <span class="code-keyword">in</span> diversity[<span class="code-string">'warnings'</span>]:
-                    log_warning_html(f<span class="code-string">"{location}: {warning}"</span>)
-
-    <span class="code-keyword">return</span> {
-        <span class="code-string">'issue'</span>: issue_keyword,
-        <span class="code-string">'location_data'</span>: location_data,
-        <span class="code-string">'collection_date'</span>: datetime.now().strftime(<span class="code-string">'%Y-%m-%d %H:%M:%S'</span>)
-    }
-                </div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>🔍 Source Diversity Analysis Engine</h2>
-            <p>The system automatically detects data quality issues by analyzing source diversity and concentration bias:</p>
-
-            <div class="code-container">
-                <div class="code-header">📊 source_diversity_analyzer.py</div>
-                <div class="code-block">
-<span class="code-keyword">def</span> <span class="code-function">analyze_source_diversity</span>(results: list) -> dict:
-    <span class="code-string">"""
-    Analyze diversity of information sources and detect bias patterns.
-
-    This prevents the "echo chamber problem" where all data comes from
-    a single source type (e.g., 90% social media) or domain.
-
-    Returns:
-        dict: Diversity metrics and quality warnings
-    """</span>
-
-    domains = [r.get(<span class="code-string">'domain'</span>, <span class="code-string">'unknown'</span>) <span class="code-keyword">for</span> r <span class="code-keyword">in</span> results]
-    domain_counts = Counter(domains)
-
-    <span class="code-comment"># Classify source types using domain patterns</span>
-    source_types = []
-    <span class="code-keyword">for</span> domain <span class="code-keyword">in</span> domains:
-        <span class="code-keyword">if</span> any(x <span class="code-keyword">in</span> domain <span class="code-keyword">for</span> x <span class="code-keyword">in</span> [<span class="code-string">'reddit.com'</span>, <span class="code-string">'twitter.com'</span>, <span class="code-string">'facebook.com'</span>]):
-            source_types.append(<span class="code-string">'social_media'</span>)
-        <span class="code-keyword">elif</span> any(x <span class="code-keyword">in</span> domain <span class="code-keyword">for</span> x <span class="code-keyword">in</span> [<span class="code-string">'news'</span>, <span class="code-string">'times'</span>, <span class="code-string">'post'</span>, <span class="code-string">'bbc'</span>, <span class="code-string">'cnn'</span>]):
-            source_types.append(<span class="code-string">'news'</span>)
-        <span class="code-keyword">elif</span> any(x <span class="code-keyword">in</span> domain <span class="code-keyword">for</span> x <span class="code-keyword">in</span> [<span class="code-string">'.gov'</span>, <span class="code-string">'.edu'</span>]):
-            source_types.append(<span class="code-string">'institutional'</span>)
-        <span class="code-keyword">else</span>:
-            source_types.append(<span class="code-string">'other'</span>)
-
-    type_counts = Counter(source_types)
-
-    <span class="code-comment"># Calculate diversity score (0-100, higher = more diverse)</span>
-    unique_domains = len(domain_counts)
-    total_sources = len(domains)
-    diversity_score = min(<span class="code-number">100</span>, (unique_domains / max(<span class="code-number">1</span>, total_sources)) * <span class="code-number">150</span>)
-
-    <span class="code-comment"># Detect concentration bias and issue warnings</span>
-    warnings = []
-    most_common_domain, max_count = domain_counts.most_common(<span class="code-number">1</span>)[<span class="code-number">0</span>] <span class="code-keyword">if</span> domain_counts <span class="code-keyword">else</span> (<span class="code-string">''</span>, <span class="code-number">0</span>)
-
-    <span class="code-keyword">if</span> max_count > total_sources * <span class="code-number">0.4</span>:
-        warnings.append(
-            f<span class="code-string">"⚠️ {(max_count/total_sources)*100:.0f}% of sources from single domain: {most_common_domain}"</span>
-        )
-
-    <span class="code-keyword">if</span> type_counts.get(<span class="code-string">'social_media'</span>, <span class="code-number">0</span>) > total_sources * <span class="code-number">0.7</span>:
-        warnings.append(<span class="code-string">"⚠️ Over 70% sources are social media (potential echo chamber bias)"</span>)
-
-    <span class="code-keyword">if</span> unique_domains < <span class="code-number">5</span>:
-        warnings.append(f<span class="code-string">"⚠️ Only {unique_domains} unique sources (low diversity)"</span>)
-
-    <span class="code-keyword">return</span> {
-        <span class="code-string">'diversity_score'</span>: round(diversity_score, <span class="code-number">1</span>),
-        <span class="code-string">'unique_domains'</span>: unique_domains,
-        <span class="code-string">'total_sources'</span>: total_sources,
-        <span class="code-string">'source_type_distribution'</span>: dict(type_counts),
-        <span class="code-string">'top_domains'</span>: dict(domain_counts.most_common(<span class="code-number">5</span>)),
-        <span class="code-string">'warnings'</span>: warnings
-    }
-                </div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>🧠 Comparative Sentiment Analysis Engine</h2>
-            <p>The sentiment analysis engine processes data separately for each location and calculates credibility scores:</p>
-
-            <div class="code-container">
-                <div class="code-header">💡 comparative_sentiment_agent.py</div>
-                <div class="code-block">
-<span class="code-keyword">def</span> <span class="code-function">comparative_sentiment_agent</span>(listening_data: dict) -> dict:
-    <span class="code-string">"""
-    Analyze sentiment separately for each location with credibility tracking.
-
-    Credibility Score = (Source Diversity * 0.6) + (Sample Size * 0.4)
-
-    This ensures findings are weighted by data quality, not just sentiment counts.
-    """</span>
-
-    log_agent_title_html(<span class="code-string">"Comparative Sentiment Analysis Agent"</span>, <span class="code-string">"🧠"</span>)
-
-    issue = listening_data[<span class="code-string">'issue'</span>]
-    location_data = listening_data[<span class="code-string">'location_data'</span>]
-    location_sentiments = {}
-
-    <span class="code-keyword">for</span> location, data <span class="code-keyword">in</span> location_data.items():
-        snippets = data[<span class="code-string">'snippets'</span>]
-
-        <span class="code-keyword">if</span> <span class="code-keyword">not</span> snippets:
-            log_warning_html(f<span class="code-string">"No data for {location}, skipping..."</span>)
-            <span class="code-keyword">continue</span>
-
-        <span class="code-comment"># Analyze sentiment with cultural context awareness</span>
-        analyses = analyze_sentiment_with_context(snippets, issue)
-
-        <span class="code-comment"># Calculate statistics</span>
-        sentiments = [a.get(<span class="code-string">'sentiment'</span>, <span class="code-string">'neutral'</span>) <span class="code-keyword">for</span> a <span class="code-keyword">in</span> analyses <span class="code-keyword">if</span> <span class="code-string">'error'</span> <span class="code-keyword">not in</span> a]
-        emotions = [a.get(<span class="code-string">'emotion'</span>, <span class="code-string">'neutral'</span>) <span class="code-keyword">for</span> a <span class="code-keyword">in</span> analyses <span class="code-keyword">if</span> <span class="code-string">'error'</span> <span class="code-keyword">not in</span> a]
-
-        sentiment_counts = Counter(sentiments)
-        total = len(sentiments) <span class="code-keyword">if</span> sentiments <span class="code-keyword">else</span> <span class="code-number">1</span>
-
-        sentiment_dist = {
-            <span class="code-string">'positive'</span>: (sentiment_counts.get(<span class="code-string">'positive'</span>, <span class="code-number">0</span>) / total) * <span class="code-number">100</span>,
-            <span class="code-string">'negative'</span>: (sentiment_counts.get(<span class="code-string">'negative'</span>, <span class="code-number">0</span>) / total) * <span class="code-number">100</span>,
-            <span class="code-string">'neutral'</span>: (sentiment_counts.get(<span class="code-string">'neutral'</span>, <span class="code-number">0</span>) / total) * <span class="code-number">100</span>
-        }
-
-        <span class="code-comment"># CRITICAL: Calculate credibility score (0-100)</span>
-        <span class="code-comment"># This weights findings by data quality, not just raw sentiment</span>
-        diversity_score = data[<span class="code-string">'diversity'</span>][<span class="code-string">'diversity_score'</span>]
-        sample_size_score = min(<span class="code-number">100</span>, (len(snippets) / <span class="code-number">20</span>) * <span class="code-number">100</span>)
-        credibility_score = (diversity_score * <span class="code-number">0.6</span> + sample_size_score * <span class="code-number">0.4</span>)
-
-        location_sentiments[location] = {
-            <span class="code-string">'sentiment_distribution'</span>: sentiment_dist,
-            <span class="code-string">'emotion_counts'</span>: dict(Counter(emotions)),
-            <span class="code-string">'sample_size'</span>: len(sentiments),
-            <span class="code-string">'credibility_score'</span>: round(credibility_score, <span class="code-number">1</span>),
-            <span class="code-string">'diversity_metrics'</span>: data[<span class="code-string">'diversity'</span>]
-        }
-
-        log_tool_result_html(
-            f<span class="code-string">"{location}: Pos={sentiment_dist['positive']:.0f}% "</span>
-            f<span class="code-string">"Neg={sentiment_dist['negative']:.0f}% | Credibility: {credibility_score:.0f}/100"</span>
-        )
-
-    <span class="code-keyword">return</span> {
-        <span class="code-string">'issue'</span>: issue,
-        <span class="code-string">'location_sentiments'</span>: location_sentiments
-    }
-                </div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>⚙️ Technical Implementation Notes</h2>
-            <h3>Key Algorithms & Innovations</h3>
-            <ul style="margin: 15px 0; padding-left: 20px;">
-                <li><strong>Geographic Segmentation:</strong> Prevents misleading averages by analyzing regions separately</li>
-                <li><strong>Source Diversity Tracking:</strong> Detects echo chamber bias and single-domain concentration</li>
-                <li><strong>Credibility Scoring:</strong> Weights findings by data quality (diversity + sample size)</li>
-                <li><strong>Cultural Context Detection:</strong> Identifies cultural/geographic patterns in sentiment</li>
-                <li><strong>Automatic Bias Warnings:</strong> Real-time alerts when data quality is compromised</li>
-            </ul>
-
-            <h3>Why This Approach Works</h3>
-            <ul style="margin: 15px 0; padding-left: 20px;">
-                <li><strong>Addresses Cultural Nuance:</strong> Shows regional differences instead of misleading global averages</li>
-                <li><strong>Transparent Quality Metrics:</strong> Users see exactly how trustworthy each regional analysis is</li>
-                <li><strong>Multi-Agent Architecture:</strong> Specialized agents for collection, analysis, visualization, and reporting</li>
-                <li><strong>Production-Ready Output:</strong> Generates 10 files per analysis (1 report, 4 charts, 5 CSV exports)</li>
-            </ul>
-
-            <h3>Real-World Example</h3>
-            <p><strong>Topic: "Public opinion on alcohol consumption"</strong></p>
-            <ul style="margin: 15px 0; padding-left: 20px;">
-                <li>❌ <strong>Without geographic filtering:</strong> 60% negative globally (misleading)</li>
-                <li>✅ <strong>With geographic filtering:</strong>
-                    <ul style="margin: 10px 0; padding-left: 20px;">
-                        <li>Saudi Arabia: 95% negative (religious/cultural context)</li>
-                        <li>Germany: 70% positive (beer culture)</li>
-                        <li>USA: 50/50 split (health concerns vs social acceptance)</li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-
-        <div class="demo-links">
-            <a href="https://colab.research.google.com/drive/1On9i4SrYBVQqG-Fex5up9o3Eo1Y6mWls" target="_blank" class="demo-btn">🚀 Try on Google Colab</a>
-            <a href="index.html" class="demo-btn secondary">📖 Back to Portfolio</a>
-        </div>
-
-        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
-            <a href="index.html">← Back to Portfolio</a>
-        </nav>
+  <div class="masthead">
+    <div class="mast-left">
+      <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+      <a class="logo" href="index.html">AI PROJECTS</a>
+      <nav class="mast-nav">
+        <a href="project-categories.html">Categories</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <div class="search-box">
+        <input type="text" class="search-input" id="searchInput" autocomplete="off" placeholder="Search AI projects..." aria-label="Search AI projects">
+        <span class="search-ic">&#128269;</span>
+        <div class="search-results" id="searchResults"></div>
+      </div>
     </div>
+  </div>
+  <hr class="rule-top">
+
+  <div class="crumb">
+    <a href="project-categories.html">Categories</a>
+    <span class="sep">/</span><a id="crumbCat" href="#"></a>
+    <span class="sep">/</span><a id="crumbProj" href="#"></a>
+    <span class="sep">/</span><span>Source</span>
+  </div>
+
+  <section class="src-head">
+    <div class="cover-strip" id="coverStrip" style="display:none"><img id="cover" alt=""></div>
+    <span class="rubric" id="kicker"></span>
+    <h1 id="title"></h1>
+    <p class="sub" id="subtitle"></p>
+    <div class="head-tech" id="headTech"></div>
+    <div class="head-btns" id="headBtns"></div>
+  </section>
+
+  <div id="body"></div>
+
+  <footer>&copy; 2026 Lee Yih Ven | AI Project Portfolio &middot; All rights reserved.</footer>
+  <div class="note">Sample Source-Showcase-E2 (TEMPLATE): source-code page on the index magazine system: slim cover banner, About, Project Structure, code walkthrough with copyable navy-barred code blocks, CTA. Reuse by editing only the PROJECT block at the top of the script.</div>
+
+<script>
+  const SITE = "";
+
+  /* =================================================================
+     EDIT PER PROJECT  -  the ONLY block you change per page.
+     Copy this file, swap PROJECT, save as <slug>-source.html.
+     - structure.code : the project file tree (plain text)
+     - walkthrough[]   : { heading, body, files:[{label, code}] }
+     - notes[]         : { heading, bullets:[...] }
+     Code strings can be multi-line; they render verbatim.
+     ================================================================= */
+  const PROJECT = {
+  "slug": "public-sentiment-agent",
+  "category": "Multi-Agent Decision Systems",
+  "categoryUrl": "category-multi-agent-systems.html",
+  "title": "Public Sentiment Collection Agent",
+  "subtitle": "Geographic listening, source-diversity scoring, and comparative sentiment, the three excerpts at the heart of the multi-agent pipeline.",
+  "cover": "images/public-sentiment-agent/cover.jpeg",
+  "tech": [
+    "Python 3.9+",
+    "Gemini 2.0 Flash",
+    "Tavily API",
+    "Pandas",
+    "Matplotlib"
+  ],
+  "overviewUrl": "public-sentiment-agent.html",
+  "demoLabel": "Try on Google Colab",
+  "demoUrl": "https://colab.research.google.com/drive/1On9i4SrYBVQqG-Fex5up9o3Eo1Y6mWls",
+  "repoUrl": "https://github.com/lyven81/ai-project/tree/main/projects/public-sentiment-collection-agent",
+  "about": "These three excerpts are the heart of the project: the geographic listening agent that collects reviews with source-diversity tracking, the diversity analyzer that detects echo-chamber bias, and the comparative sentiment agent that scores each location by credibility, not just raw counts. Full deployment scripts and API credentials are omitted for clarity. The key idea throughout: every finding is weighted by data quality (<code>diversity</code> plus <code>sample size</code>), so a confident-looking number from a single domain is never trusted on its own.",
+  "structure": {
+    "label": "projects/public-sentiment-collection-agent/",
+    "code": "projects/public-sentiment-collection-agent/\n  public_sentiment_collection_agent.py   the 5-agent pipeline entry point\n  geographic_listening_agent.py          collect reviews + track source diversity\n  source_diversity_analyzer.py           detect echo-chamber / concentration bias\n  comparative_sentiment_agent.py         per-location sentiment + credibility score\n  demo.html                              zero-setup interactive walkthrough\n  requirements.txt                       pinned dependencies\n  .env                                   GOOGLE_API_KEY + TAVILY_API_KEY (local only)\n  README.md"
+  },
+  "walkthrough": [
+    {
+      "heading": "Geographic Social Listening",
+      "body": "The foundation of the pipeline is collecting sentiment data with geographic segmentation and tracking source diversity for credibility assessment. Lumping all regions together produces a misleading global average; this agent searches each location separately and records diversity metrics as it goes.",
+      "files": [
+        {
+          "label": "geographic_listening_agent.py: collect with diversity tracking",
+          "code": "def geographic_listening_agent(\n    issue_keyword: str,\n    locations: list = [\"global\"],\n    num_sources_per_location: int = 15\n) -> dict:\n    \"\"\"\n    Collect sentiment data with geographic segmentation and source diversity tracking.\n\n    This agent addresses a critical flaw in traditional sentiment analysis:\n    lumping all geographic regions together without considering cultural context.\n\n    Example: \"Public opinion on alcohol consumption\"\n    - WITHOUT geographic filtering: Misleading global average\n    - WITH geographic filtering: Reveals cultural nuances (Saudi Arabia vs Germany)\n    \"\"\"\n\n    log_agent_title_html(\"Geographic Social Listening Agent\", \"\\ud83c\\udf0d\")\n    location_data = {}\n\n    for location in locations:\n        log_tool_call_html(\"tavily_search_geographic\", f\"location={location}\")\n\n        # Search with location-specific filtering\n        search_result = tavily_search_geographic(\n            query=issue_keyword,\n            location=location,\n            max_results=num_sources_per_location\n        )\n\n        if 'error' not in search_result:\n            results = search_result['results']\n\n            # CRITICAL: Analyze source diversity to detect bias\n            diversity = analyze_source_diversity(results)\n\n            location_data[location] = {\n                'snippets': [r['content'] for r in results if r.get('content')],\n                'sources': [{'title': r['title'], 'url': r['url'], 'domain': r['domain']}\n                           for r in results],\n                'diversity': diversity\n            }\n\n    return {\n        'issue': issue_keyword,\n        'location_data': location_data,\n        'collection_date': datetime.now().strftime('%Y-%m-%d %H:%M:%S')\n    }"
+        }
+      ]
+    },
+    {
+      "heading": "Source Diversity Analysis",
+      "body": "The system detects data quality issues by analysing source diversity and concentration bias. This prevents the echo-chamber problem where all data comes from a single source type (for example 90 percent social media) or a single domain. It returns a diversity score and quality warnings.",
+      "files": [
+        {
+          "label": "source_diversity_analyzer.py: detect concentration bias",
+          "code": "def analyze_source_diversity(results: list) -> dict:\n    \"\"\"\n    Analyze diversity of information sources and detect bias patterns.\n\n    This prevents the \"echo chamber problem\" where all data comes from\n    a single source type (e.g., 90% social media) or domain.\n    \"\"\"\n\n    domains = [r.get('domain', 'unknown') for r in results]\n    domain_counts = Counter(domains)\n\n    # Classify source types using domain patterns\n    source_types = []\n    for domain in domains:\n        if any(x in domain for x in ['reddit.com', 'twitter.com', 'facebook.com']):\n            source_types.append('social_media')\n        elif any(x in domain for x in ['news', 'times', 'post', 'bbc', 'cnn']):\n            source_types.append('news')\n        elif any(x in domain for x in ['.gov', '.edu']):\n            source_types.append('institutional')\n        else:\n            source_types.append('other')\n\n    type_counts = Counter(source_types)\n\n    # Calculate diversity score (0-100, higher = more diverse)\n    unique_domains = len(domain_counts)\n    total_sources = len(domains)\n    diversity_score = min(100, (unique_domains / max(1, total_sources)) * 150)\n\n    # Detect concentration bias and issue warnings\n    warnings = []\n    most_common_domain, max_count = domain_counts.most_common(1)[0] if domain_counts else ('', 0)\n\n    if max_count > total_sources * 0.4:\n        warnings.append(\n            f\"{(max_count/total_sources)*100:.0f}% of sources from single domain: {most_common_domain}\"\n        )\n    if type_counts.get('social_media', 0) > total_sources * 0.7:\n        warnings.append(\"Over 70% sources are social media (potential echo chamber bias)\")\n    if unique_domains < 5:\n        warnings.append(f\"Only {unique_domains} unique sources (low diversity)\")\n\n    return {\n        'diversity_score': round(diversity_score, 1),\n        'unique_domains': unique_domains,\n        'total_sources': total_sources,\n        'source_type_distribution': dict(type_counts),\n        'top_domains': dict(domain_counts.most_common(5)),\n        'warnings': warnings\n    }"
+        }
+      ]
+    },
+    {
+      "heading": "Comparative Sentiment with Credibility Scoring",
+      "body": "The sentiment engine processes data separately for each location and weights every finding by a credibility score. Credibility = (source diversity times 0.6) plus (sample size times 0.4), so a confident-looking number from a thin or single-domain sample is never trusted on its own.",
+      "files": [
+        {
+          "label": "comparative_sentiment_agent.py: score by data quality",
+          "code": "def comparative_sentiment_agent(listening_data: dict) -> dict:\n    \"\"\"\n    Analyze sentiment separately for each location with credibility tracking.\n\n    Credibility Score = (Source Diversity * 0.6) + (Sample Size * 0.4)\n\n    This ensures findings are weighted by data quality, not just sentiment counts.\n    \"\"\"\n\n    issue = listening_data['issue']\n    location_data = listening_data['location_data']\n    location_sentiments = {}\n\n    for location, data in location_data.items():\n        snippets = data['snippets']\n        if not snippets:\n            continue\n\n        # Analyze sentiment with cultural context awareness\n        analyses = analyze_sentiment_with_context(snippets, issue)\n        sentiments = [a.get('sentiment', 'neutral') for a in analyses if 'error' not in a]\n        sentiment_counts = Counter(sentiments)\n        total = len(sentiments) if sentiments else 1\n\n        sentiment_dist = {\n            'positive': (sentiment_counts.get('positive', 0) / total) * 100,\n            'negative': (sentiment_counts.get('negative', 0) / total) * 100,\n            'neutral': (sentiment_counts.get('neutral', 0) / total) * 100\n        }\n\n        # CRITICAL: Calculate credibility score (0-100)\n        # This weights findings by data quality, not just raw sentiment\n        diversity_score = data['diversity']['diversity_score']\n        sample_size_score = min(100, (len(snippets) / 20) * 100)\n        credibility_score = (diversity_score * 0.6 + sample_size_score * 0.4)\n\n        location_sentiments[location] = {\n            'sentiment_distribution': sentiment_dist,\n            'sample_size': len(sentiments),\n            'credibility_score': round(credibility_score, 1),\n            'diversity_metrics': data['diversity']\n        }\n\n    return {\n        'issue': issue,\n        'location_sentiments': location_sentiments\n    }"
+        }
+      ]
+    }
+  ],
+  "notes": [
+    {
+      "heading": "Why This Design",
+      "bullets": [
+        "<b>Segment, do not average:</b> regions (and channels) are analysed separately, so a misleading global mean never hides the real story.",
+        "<b>Diversity first:</b> <code>analyze_source_diversity</code> flags echo-chamber and single-domain bias before any sentiment number is reported.",
+        "<b>Credibility-weighted:</b> findings are scored by data quality (diversity plus sample size), not raw sentiment counts, so thin samples carry less weight.",
+        "<b>Multi-agent and production-ready:</b> specialised agents for collection, analysis, visualisation, and reporting generate 10 files per run (1 report, 4 charts, 5 CSV exports)."
+      ]
+    }
+  ],
+  "cta": "Want a credibility-weighted voice-of-customer pipeline like this built for your own reviews? Let's scope it."
+};
+  /* ===================== END EDIT BLOCK ===================== */
+
+  const pref = (u) => /^https?:|^mailto:|^tel:/.test(u || '') ? u : (SITE + (u || ''));
+  const esc = (s) => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const rich = (s) => esc(s).replace(/&lt;(\/?(?:b|code))&gt;/g, '<$1>');
+
+  // raw code store for copy buttons
+  const RAW = [];
+  function codeBlock(label, codeStr, extraClass){
+    const idx = RAW.push(codeStr) - 1;
+    const rendered = esc(codeStr).split('\n')
+      .map(line => /^\s*#/.test(line) ? `<span class="cmt">${line}</span>` : line).join('\n');
+    return `<div class="codeblock ${extraClass||''}">`+
+      `<div class="code-bar"><span class="path"><span>${esc(label)}</span></span>`+
+      `<button class="code-copy" data-idx="${idx}">Copy</button></div>`+
+      `<pre><code>${rendered}</code></pre></div>`;
+  }
+
+  // Breadcrumb + header
+  document.title = PROJECT.title + ": Source | AI Project Portfolio";
+  document.getElementById('crumbCat').textContent = PROJECT.category;
+  document.getElementById('crumbCat').href = pref(PROJECT.categoryUrl);
+  document.getElementById('crumbProj').textContent = PROJECT.title;
+  document.getElementById('crumbProj').href = pref(PROJECT.overviewUrl);
+  if (PROJECT.cover){
+    document.getElementById('coverStrip').style.display = '';
+    const c = document.getElementById('cover'); c.src = PROJECT.cover; c.alt = PROJECT.title + " cover";
+  }
+  document.getElementById('kicker').textContent = "Source Walkthrough · " + PROJECT.category;
+  document.getElementById('title').textContent = PROJECT.title;
+  document.getElementById('subtitle').textContent = PROJECT.subtitle;
+  document.getElementById('headTech').innerHTML = (PROJECT.tech||[]).map(t => `<span class="tech-chip">${esc(t)}</span>`).join('');
+  document.getElementById('headBtns').innerHTML =
+    (PROJECT.demoUrl ? `<a class="btn" href="${pref(PROJECT.demoUrl)}" target="_blank" rel="noopener">${esc(PROJECT.demoLabel||'Live Demo')}</a>` : '') +
+    (PROJECT.overviewUrl ? `<a class="btn ghost" href="${pref(PROJECT.overviewUrl)}">Project Overview</a>` : '') +
+    (PROJECT.repoUrl ? `<a class="btn ghost" href="${pref(PROJECT.repoUrl)}" target="_blank" rel="noopener">GitHub Repo</a>` : '');
+
+  const section = (tab, inner) => `<section class="sec"><div class="sec-rule"><span class="tab">${esc(tab)}</span>${inner}</div></section>`;
+  let html = "";
+  const P = PROJECT;
+
+  if (P.about){
+    html += section("About This Code", `<h2>About This Code Showcase</h2><p class="intro">${rich(P.about)}</p>`);
+  }
+  if (P.structure && P.structure.code){
+    html += section("Project Structure", `<h2>Project Structure</h2>`+
+      codeBlock(P.structure.label || 'project/', P.structure.code, 'tree'));
+  }
+  (P.walkthrough||[]).forEach(w => {
+    let inner = `<h2>${esc(w.heading)}</h2>`;
+    if (w.body) inner += `<p class="body">${rich(w.body)}</p>`;
+    (w.files||[]).forEach(f => { inner += codeBlock(f.label, f.code); });
+    html += section("Code", inner);
+  });
+  // CTA
+  html += `<section class="sec"><div class="cta-inner">`+
+    `<div><h3>Interested in the build?</h3><p>${esc(P.cta || "Let's talk.")}</p></div>`+
+    `<div class="cta-btns">`+
+    (P.demoUrl ? `<a class="btn" href="${pref(P.demoUrl)}" target="_blank" rel="noopener">${esc(P.demoLabel||'Live Demo')}</a>` : '')+
+    `<a class="btn ghost" href="${SITE}contact.html">Get in Touch</a>`+
+    `</div></div></section>`;
+
+  document.getElementById('body').innerHTML = html;
+
+  // Copy buttons
+  function copyText(text, btn){
+    const done = ()=>{ const o=btn.textContent; btn.textContent='Copied ✓'; setTimeout(()=>btn.textContent=o.includes('Copied')?'Copy':o,1400); };
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(done).catch(()=>fb(text,done)); }
+    else fb(text,done);
+  }
+  function fb(text,done){ const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(ta); done(); }
+  document.querySelectorAll('.code-copy').forEach(btn =>
+    btn.addEventListener('click', ()=> copyText(RAW[+btn.dataset.idx], btn)));
+
+  // Masthead search
+  const ITEMS = [
+    {t:PROJECT.title, c:PROJECT.category, s:PROJECT.slug},
+    {t:"Courier CS Quality Console", c:"Conversational Data Analytics", s:"courier-cs-quality-console"},
+    {t:"Voucher Analyzer", c:"Conversational Data Analytics", s:"voucher-analyzer"},
+    {t:"Wiseman", c:"Knowledge & Reference Chatbots", s:"wiseman"},
+    {t:"Sunny Car Accessories", c:"Agentic Commerce", s:"sunny-car-accessories"},
+    {t:"Bookshelf", c:"Multi-Agent Decision Systems", s:"bookshelf"}
+  ];
+  const searchInput = document.getElementById('searchInput');
+  const searchResults = document.getElementById('searchResults');
+  function runSearch(q){
+    if(q.trim().length < 2){ searchResults.style.display='none'; return; }
+    const ql = q.toLowerCase();
+    const hits = ITEMS.filter(it => (it.t+' '+it.c).toLowerCase().includes(ql));
+    searchResults.innerHTML = hits.length ? hits.map(it =>
+      `<div class="sr-item"><div class="sr-cat">${esc(it.c)}</div>`+
+      `<a href="${SITE}${it.s}.html"><div class="sr-title">${esc(it.t)}</div></a>`+
+      `<div class="sr-links"><a href="${SITE}${it.s}.html">View Details</a></div></div>`).join('')
+      : `<div class="sr-none">No projects found. Try a different keyword.</div>`;
+    searchResults.style.display='block';
+  }
+  searchInput.addEventListener('input', e => runSearch(e.target.value));
+  document.addEventListener('click', e => { if(!e.target.closest('.search-box')) searchResults.style.display='none'; });
+
+  // Drawer
+  const drawer=document.getElementById('drawer'), overlay=document.getElementById('overlay');
+  const openMenu=()=>{ drawer.classList.add('open'); overlay.classList.add('open'); };
+  const closeMenu=()=>{ drawer.classList.remove('open'); overlay.classList.remove('open'); };
+  document.getElementById('hamburger').addEventListener('click', openMenu);
+  document.getElementById('drawerClose').addEventListener('click', closeMenu);
+  overlay.addEventListener('click', closeMenu);
+  drawer.querySelectorAll('a').forEach(a=>a.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeMenu(); searchResults.style.display='none'; }});
+</script>
 </body>
 </html>

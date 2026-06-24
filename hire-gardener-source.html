@@ -1,289 +1,363 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hire Gardener - Source Code</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #222; background-color: #ffffff; }
-        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
-        .back-nav { margin-bottom: 20px; }
-        .back-nav a { color: #007BFF; text-decoration: none; font-size: 1rem; }
-        .back-nav a:hover { text-decoration: underline; }
-        .project-header {
-            text-align: center; margin-bottom: 40px; padding: 40px 0;
-            background: linear-gradient(135deg, #075E54, #128C7E);
-            color: white; border-radius: 10px;
-        }
-        .project-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
-        .project-header p { font-size: 1.2rem; opacity: 0.9; }
-        .badges { display: flex; justify-content: center; gap: 10px; margin: 20px 0; flex-wrap: wrap; }
-        .badge { background-color: rgba(255,255,255,0.2); color: white; padding: 5px 12px; border-radius: 15px; font-size: 0.9rem; }
-        .content-section { margin: 40px 0; padding: 30px; background-color: #f9f9f9; border-radius: 8px; border-left: 5px solid #075E54; }
-        .content-section h2 { color: #075E54; margin-bottom: 20px; font-size: 1.8rem; }
-        .content-section h3 { color: #333; margin: 20px 0 10px 0; font-size: 1.3rem; }
-        .highlight-box { background: linear-gradient(135deg, #f0fdf4, #dcfce7); padding: 20px; border-radius: 10px; border-left: 5px solid #075E54; margin: 20px 0; }
-        .code-container { background-color: #1e1e1e; border-radius: 8px; padding: 20px; margin: 20px 0; overflow-x: auto; }
-        .code-header { color: #4ade80; font-weight: bold; margin-bottom: 15px; font-size: 1.05rem; border-bottom: 1px solid #333; padding-bottom: 10px; }
-        .code-block { font-family: 'Consolas', 'Monaco', 'Courier New', monospace; font-size: 13px; line-height: 1.55; color: #d4d4d4; white-space: pre; }
-        .cm { color: #6a9955; font-style: italic; }
-        .ck { color: #569cd6; }
-        .cs { color: #ce9178; }
-        .cf { color: #dcdcaa; }
-        .cn { color: #b5cea8; }
-        .cv { color: #9cdcfe; }
-        .demo-links { text-align: center; margin: 30px 0; }
-        .demo-btn { display: inline-block; background-color: #007BFF; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; margin: 0 10px; font-weight: bold; transition: background-color 0.3s; }
-        .demo-btn:hover { background-color: #0056b3; }
-        .demo-btn.secondary { background-color: #25D366; }
-        .demo-btn.secondary:hover { background-color: #1ebe5d; }
-        .file-tree { font-family: monospace; font-size: 0.9rem; background: #f4f4f4; padding: 16px; border-radius: 8px; line-height: 1.8; }
-        @media (max-width: 768px) {
-            .project-header h1 { font-size: 2rem; }
-            .demo-btn { margin: 5px; padding: 10px 20px; }
-            .container { padding: 15px; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hire Gardener: Source | AI Project Portfolio</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root{ --ink:#222; --paper:#fff; --hair:#dddddd; --gray:#555; --accent:#B8860B; --navy:#1E3A5F; --code-bg:#fbfbf8; --cmt:#6b8190; }
+  html{ scroll-behavior:smooth; }
+  body{ background:var(--paper); color:var(--ink); font-family:Arial, Helvetica, sans-serif; line-height:1.6; overflow-x:hidden; }
+  a{ color:inherit; text-decoration:none; }
+  a:hover h2, a:hover h3, a:hover h4{ color:var(--accent); }
+  p code, li code{ font-family:"Courier New", monospace; font-size:.86em; background:#f2f3f5; padding:1px 5px; color:var(--navy); }
+
+  /* Masthead (shared) */
+  .masthead{ display:flex; align-items:center; justify-content:space-between; padding:14px 28px; max-width:1240px; margin:0 auto; gap:18px; }
+  .mast-left{ display:flex; align-items:center; gap:20px; }
+  .logo{ background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; letter-spacing:3px; font-size:.95rem; padding:8px 12px; white-space:nowrap; }
+  .mast-nav{ display:flex; gap:20px; font-family:Arial, Helvetica, sans-serif; font-size:.72rem; letter-spacing:1.4px; text-transform:uppercase; }
+  .mast-nav a:hover{ color:var(--accent); }
+  .hamburger{ display:none; flex-direction:column; gap:4px; background:none; border:none; cursor:pointer; padding:6px; }
+  .hamburger span{ width:22px; height:2px; background:#222; display:block; }
+  .rule-top{ border:none; border-top:3px solid #222; max-width:1240px; margin:0 auto; }
+
+  /* Search (shared) */
+  .search-box{ position:relative; width:200px; }
+  .search-input{ width:100%; padding:7px 30px 7px 12px; border:1px solid var(--hair); background:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; color:#222; }
+  .search-input:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(184,134,11,.15); }
+  .search-ic{ position:absolute; right:10px; top:50%; transform:translateY(-50%); color:var(--gray); font-size:.8rem; pointer-events:none; }
+  .search-results{ position:absolute; top:calc(100% + 4px); left:0; width:340px; max-width:86vw; background:#fff; border:1px solid #222; max-height:60vh; overflow-y:auto; z-index:120; display:none; }
+  .sr-item{ padding:12px 14px; border-bottom:1px solid var(--hair); }
+  .sr-item:last-child{ border-bottom:none; }
+  .sr-cat{ font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; margin-bottom:4px; color:var(--accent); }
+  .sr-title{ font-weight:700; font-size:1.02rem; color:#222; }
+  .sr-links{ font-size:.58rem; letter-spacing:.8px; text-transform:uppercase; color:var(--gray); margin-top:5px; }
+  .sr-links a:hover{ color:var(--accent); }
+  .sr-none{ padding:16px 14px; font-size:.82rem; color:var(--gray); }
+
+  /* Shared bits */
+  .tab{ display:inline-block; background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.66rem; letter-spacing:2px; text-transform:uppercase; padding:6px 12px; }
+  .rubric{ font-family:Arial, Helvetica, sans-serif; font-size:.62rem; font-weight:700; letter-spacing:1.6px; text-transform:uppercase; color:var(--accent); display:block; margin-bottom:8px; }
+  .tech-chip{ display:inline-block; border:1px solid var(--hair); padding:6px 12px; font-size:.72rem; letter-spacing:.3px; color:#333; white-space:nowrap; }
+  .tech-chip:hover{ border-color:var(--accent); color:var(--accent); }
+  .btn{ display:inline-block; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.7rem; letter-spacing:1.6px; text-transform:uppercase; padding:13px 24px; border:1px solid #222; background:#222; color:#fff; cursor:pointer; transition:.15s; }
+  .btn:hover{ background:var(--accent); border-color:var(--accent); }
+  .btn.ghost{ background:#fff; color:#222; }
+  .btn.ghost:hover{ color:var(--accent); border-color:var(--accent); background:#fff; }
+
+  /* Breadcrumb */
+  .crumb{ max-width:1240px; margin:0 auto; padding:20px 28px 0; font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--gray); }
+  .crumb a:hover{ color:var(--accent); }
+  .crumb .sep{ color:var(--hair); margin:0 8px; }
+
+  /* Header (slim cover banner + copy) */
+  .src-head{ max-width:1240px; margin:0 auto; padding:14px 28px 6px; }
+  .cover-strip{ border:1px solid var(--hair); line-height:0; background:#eef1f4; }
+  .cover-strip img{ width:100%; height:190px; object-fit:cover; object-position:center 42%; display:block; }
+  .src-head h1{ font-size:2.5rem; font-weight:900; line-height:1.04; letter-spacing:-.008em; margin-top:18px; }
+  .src-head .sub{ font-style:italic; font-size:1.08rem; color:#333; margin-top:10px; max-width:72ch; }
+  .head-tech{ display:flex; flex-wrap:wrap; gap:9px; margin-top:16px; }
+  .head-btns{ display:flex; flex-wrap:wrap; gap:12px; margin-top:18px; }
+
+  /* Section shell */
+  .sec{ max-width:1240px; margin:0 auto; padding:26px 28px; }
+  .sec-rule{ border-top:3px solid #222; padding-top:16px; }
+  .sec .tab{ margin-bottom:14px; }
+  .sec h2{ font-size:1.7rem; font-weight:900; line-height:1.06; }
+  .sec .intro{ color:#333; font-size:1.02rem; margin-top:10px; max-width:80%; }
+  .sec .body{ color:#333; font-size:1rem; margin-top:10px; max-width:80%; }
+
+  /* Code block */
+  .codeblock{ border:1px solid var(--hair); margin-top:16px; }
+  .code-bar{ display:flex; align-items:center; justify-content:space-between; gap:12px; background:var(--navy); color:#fff; padding:8px 12px; }
+  .code-bar .path{ font-family:"Courier New", monospace; font-size:.74rem; letter-spacing:.2px; opacity:.96; display:flex; align-items:center; gap:7px; min-width:0; }
+  .code-bar .path span{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .code-copy{ flex:none; background:none; border:1px solid rgba(255,255,255,.4); color:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.56rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; padding:5px 11px; cursor:pointer; transition:.15s; }
+  .code-copy:hover{ background:rgba(255,255,255,.16); }
+  .codeblock pre{ margin:0; padding:14px 16px; overflow-x:auto; background:var(--code-bg); }
+  .codeblock code{ font-family:"Courier New", monospace; font-size:.82rem; line-height:1.6; color:#1b2a3a; background:none; padding:0; white-space:pre; display:block; }
+  .codeblock code .cmt{ color:var(--cmt); font-style:italic; }
+
+  .tree .code-bar .path::before{ content:"📁"; }
+
+  /* Notes */
+  .note-block{ margin-top:22px; }
+  .note-block h3{ font-size:1.15rem; font-weight:800; }
+  .blist{ list-style:none; margin-top:12px; border-top:1px solid var(--hair); }
+  .blist li{ padding:12px 0; border-bottom:1px solid var(--hair); color:#333; font-size:.95rem; }
+  .blist li b{ color:#222; }
+
+  /* CTA */
+  .cta-inner{ display:flex; align-items:center; gap:18px; flex-wrap:wrap; border-top:3px solid #222; padding-top:18px; }
+  .cta-inner h3{ font-size:1.4rem; font-weight:900; line-height:1.08; }
+  .cta-inner p{ color:var(--gray); font-size:.95rem; margin-top:4px; }
+  .cta-btns{ margin-left:auto; display:flex; gap:12px; flex-wrap:wrap; }
+
+  footer{ background:#222; max-width:1240px; margin:30px auto 0; padding:24px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; letter-spacing:.5px; color:#fff; text-align:center; }
+  .note{ max-width:1240px; margin:14px auto 0; padding:8px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.62rem; letter-spacing:1px; color:#999; }
+
+  /* Drawer (shared) */
+  .drawer{ position:fixed; top:0; left:-300px; width:280px; height:100vh; background:#fff; z-index:200; box-shadow:2px 0 14px rgba(0,0,0,.15); transition:left .28s ease; padding:74px 26px 26px; }
+  .drawer.open{ left:0; }
+  .drawer a{ display:block; font-family:Arial, Helvetica, sans-serif; font-size:.82rem; letter-spacing:1.2px; text-transform:uppercase; padding:14px 0; border-bottom:1px solid var(--hair); }
+  .overlay{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:150; }
+  .overlay.open{ display:block; }
+  .drawer-close{ position:absolute; top:20px; right:20px; font-family:Arial, Helvetica, sans-serif; font-size:1.4rem; background:none; border:none; cursor:pointer; }
+
+  @media (max-width:900px){
+    .cta-btns{ margin-left:0; }
+    .mast-nav{ display:none; }
+    .hamburger{ display:flex; }
+    .masthead{ padding:12px 16px; }
+    .mast-left{ gap:10px; min-width:0; flex:1; }
+    .logo{ font-size:.72rem; letter-spacing:1.5px; padding:6px 8px; }
+    .search-box{ flex:1; width:auto; min-width:0; }
+    .search-results{ position:fixed; top:58px; left:12px; right:12px; width:auto; max-width:none; }
+    .src-head h1{ font-size:1.95rem; }
+    .cover-strip img{ height:150px; }
+  }
+</style>
 </head>
 <body>
-<div class="container">
 
-    <nav class="back-nav"><a href="hire-gardener.html">← Back to Project Overview</a></nav>
+  <div class="overlay" id="overlay"></div>
+  <nav class="drawer" id="drawer">
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">&times;</button>
+    <a href="index.html">Home</a>
+    <a href="project-categories.html">Categories</a>
+    <a href="contact.html">Contact</a>
+    <a href="https://lyven81.github.io/data-analyst-portfolio/index.html">Data Portfolio</a>
+  </nav>
 
-    <div class="project-header">
-        <h1>🌿 Hire Gardener</h1>
-        <p>Core Source Code — AI Vendor Communication Workflow</p>
-        <div class="badges">
-            <span class="badge">Python</span>
-            <span class="badge">Streamlit</span>
-            <span class="badge">Ollama · Llama3</span>
-            <span class="badge">WhatsApp Cloud API</span>
-        </div>
+  <div class="masthead">
+    <div class="mast-left">
+      <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+      <a class="logo" href="index.html">AI PROJECTS</a>
+      <nav class="mast-nav">
+        <a href="project-categories.html">Categories</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <div class="search-box">
+        <input type="text" class="search-input" id="searchInput" autocomplete="off" placeholder="Search AI projects..." aria-label="Search AI projects">
+        <span class="search-ic">&#128269;</span>
+        <div class="search-results" id="searchResults"></div>
+      </div>
     </div>
+  </div>
+  <hr class="rule-top">
 
-    <div class="highlight-box">
-        <h3>🔍 About This Code Showcase</h3>
-        <p><strong>This showcase highlights the four core modules that power Hire Gardener's AI vendor communication workflow.</strong></p>
-        <p style="margin-top:8px">The key design principle is a pluggable messaging layer — one config flag switches the entire app between simulation mode (Llama3 plays vendor roles) and live mode (real WhatsApp API). The workflow logic never changes.</p>
-    </div>
+  <div class="crumb">
+    <a href="project-categories.html">Categories</a>
+    <span class="sep">/</span><a id="crumbCat" href="#"></a>
+    <span class="sep">/</span><a id="crumbProj" href="#"></a>
+    <span class="sep">/</span><span>Source</span>
+  </div>
 
-    <div class="content-section">
-        <h2>🗃️ Project File Structure</h2>
-        <div class="file-tree">
-hire-gardener/
-├── ui.py                  ← Streamlit app (main entry point)
-├── workflow.py            ← 6-stage orchestration logic
-├── agent.py               ← Llama3 message composition
-├── config.py              ← MODE flag + all settings
-├── requirements.txt
-├── .env.example
-├── README.md
-└── messaging/
-    ├── __init__.py        ← Auto-loads mock or real mode
-    ├── mock.py            ← Llama3 vendor simulation
-    └── whatsapp.py        ← Meta WhatsApp Cloud API
-        </div>
-    </div>
+  <section class="src-head">
+    <div class="cover-strip" id="coverStrip" style="display:none"><img id="cover" alt=""></div>
+    <span class="rubric" id="kicker"></span>
+    <h1 id="title"></h1>
+    <p class="sub" id="subtitle"></p>
+    <div class="head-tech" id="headTech"></div>
+    <div class="head-btns" id="headBtns"></div>
+  </section>
 
-    <div class="content-section">
-        <h2>⚙️ Core Design: The Mode Switch</h2>
-        <p>The entire mock/live switch lives in two files. <code>config.py</code> reads the environment, and <code>messaging/__init__.py</code> loads the correct module automatically.</p>
+  <div id="body"></div>
 
-        <div class="code-container">
-            <div class="code-header">📄 config.py — Single source of truth for all settings</div>
-            <div class="code-block"><span class="ck">import</span> os
-<span class="ck">from</span> dotenv <span class="ck">import</span> load_dotenv
+  <footer>&copy; 2026 Lee Yih Ven | AI Project Portfolio &middot; All rights reserved.</footer>
+  <div class="note">Sample Source-Showcase-E2 (TEMPLATE): source-code page on the index magazine system: slim cover banner, About, Project Structure, code walkthrough with copyable navy-barred code blocks, CTA. Reuse by editing only the PROJECT block at the top of the script.</div>
 
-load_dotenv()
+<script>
+  const SITE = "";
 
-<span class="cm"># Switch between "mock" (Llama3 simulation) and "real" (WhatsApp API)</span>
-MODE = os.getenv(<span class="cs">"MODE"</span>, <span class="cs">"mock"</span>)
-
-<span class="cm"># Ollama — local LLM running on your machine</span>
-OLLAMA_BASE_URL = os.getenv(<span class="cs">"OLLAMA_BASE_URL"</span>, <span class="cs">"http://127.0.0.1:11434"</span>)
-OLLAMA_MODEL    = os.getenv(<span class="cs">"OLLAMA_MODEL"</span>, <span class="cs">"llama3:latest"</span>)
-
-<span class="cm"># WhatsApp Cloud API — only used when MODE=real</span>
-WHATSAPP_API_TOKEN      = os.getenv(<span class="cs">"WHATSAPP_API_TOKEN"</span>, <span class="cs">""</span>)
-WHATSAPP_PHONE_NUMBER_ID = os.getenv(<span class="cs">"WHATSAPP_PHONE_NUMBER_ID"</span>, <span class="cs">""</span>)</div>
-        </div>
-
-        <div class="code-container">
-            <div class="code-header">📄 messaging/__init__.py — Pluggable messaging layer</div>
-            <div class="code-block"><span class="ck">from</span> config <span class="ck">import</span> MODE
-
-<span class="ck">if</span> MODE == <span class="cs">"real"</span>:
-    <span class="ck">from</span> .whatsapp <span class="ck">import</span> get_vendor_response  <span class="cm"># Real WhatsApp API</span>
-<span class="ck">else</span>:
-    <span class="ck">from</span> .mock <span class="ck">import</span> get_vendor_response      <span class="cm"># Llama3 simulation</span>
-
-<span class="cm"># Same function signature in both modules — workflow never needs to change</span>
-__all__ = [<span class="cs">"get_vendor_response"</span>]</div>
-        </div>
-    </div>
-
-    <div class="content-section">
-        <h2>🤖 Agent Module — Message Composition</h2>
-        <p>All outbound messages are composed by Llama3 with a persona system prompt. Every function has a hardcoded fallback so the app keeps working even if Ollama is offline.</p>
-
-        <div class="code-container">
-            <div class="code-header">📄 agent.py — Persona prompt + LLM call with fallback</div>
-            <div class="code-block">AGENT_SYSTEM = <span class="cs">"""You are a personal assistant helping a property owner find
-a grass cutting service in Malaysia. You communicate naturally,
-like a real person sending WhatsApp messages. Keep messages short
-and conversational — 2 to 4 sentences maximum. Use a natural mix
-of English and Malay where appropriate (e.g. "boleh", "terima kasih").
-Never reveal you are an AI."""</span>
-
-
-<span class="ck">def</span> <span class="cf">call_llm</span>(prompt, system=AGENT_SYSTEM):
-    <span class="ck">try</span>:
-        response = requests.post(
-            <span class="cs">f"</span>{OLLAMA_BASE_URL}<span class="cs">/api/generate"</span>,
-            json={
-                <span class="cs">"model"</span>:   OLLAMA_MODEL,
-                <span class="cs">"prompt"</span>:  prompt,
-                <span class="cs">"system"</span>:  system,
-                <span class="cs">"stream"</span>:  <span class="ck">False</span>,
-                <span class="cs">"options"</span>: {<span class="cs">"temperature"</span>: <span class="cn">0.7</span>}
-            },
-            timeout=<span class="cn">60</span>
-        )
-        <span class="ck">return</span> response.json().get(<span class="cs">"response"</span>, <span class="cs">""</span>).strip()
-    <span class="ck">except</span> Exception:
-        <span class="ck">return</span> <span class="ck">None</span>  <span class="cm"># Caller uses fallback text if None</span>
-
-
-<span class="ck">def</span> <span class="cf">compose_outreach</span>(area):
-    result = call_llm(
-        <span class="cs">f"Write a short WhatsApp message asking a grass cutting service "</span>
-        <span class="cs">f"if they cover </span>{area}<span class="cs">. Friendly, casual, 2–3 sentences."</span>
-    )
-    <span class="cm"># Fallback if Ollama is offline</span>
-    <span class="ck">return</span> result <span class="ck">or</span> (
-        <span class="cs">f"Hi, I'm looking for a grass cutting service in </span>{area}<span class="cs">. "</span>
-        <span class="cs">"Do you provide this service in the area? Thanks!"</span>
-    )</div>
-        </div>
-    </div>
-
-    <div class="content-section">
-        <h2>🎭 Vendor Simulation — Mock Mode</h2>
-        <p>Each vendor has a persona system prompt that drives Llama3's responses. Vendor 3 (Pak Razif) is programmed to decline at the quoting stage — adding realism to the simulation.</p>
-
-        <div class="code-container">
-            <div class="code-header">📄 messaging/mock.py — Vendor personas and reply logic</div>
-            <div class="code-block">PERSONAS = {
-    <span class="cn">1</span>: {
-        <span class="cs">"system"</span>: (
-            <span class="cs">"You are Ahmad, owner of Ahmad Landscaping in KL. "</span>
-            <span class="cs">"Speak in friendly Malay-English mix — use 'boleh', 'ok bro', 'insyaAllah'. "</span>
-            <span class="cs">"Charge RM150–180. Available Monday or Tuesday next week."</span>
-        ),
-        <span class="cs">"rate"</span>: <span class="cs">"160"</span>, <span class="cs">"availability"</span>: <span class="cs">"Monday next week"</span>, <span class="cs">"declines"</span>: <span class="ck">False</span>
-    },
-    <span class="cn">2</span>: {
-        <span class="cs">"system"</span>: (
-            <span class="cs">"You are Sarah from Green Garden KL. Professional English. "</span>
-            <span class="cs">"Charge RM200–220. Available this Saturday morning."</span>
-        ),
-        <span class="cs">"rate"</span>: <span class="cs">"210"</span>, <span class="cs">"availability"</span>: <span class="cs">"This Saturday"</span>, <span class="cs">"declines"</span>: <span class="ck">False</span>
-    },
-    <span class="cn">3</span>: {
-        <span class="cs">"system"</span>: (
-            <span class="cs">"You are Razif, a solo gardener based in Shah Alam. "</span>
-            <span class="cs">"For outreach: reply positively. For quoting: apologise and "</span>
-            <span class="cs">"say the area is too far from Shah Alam."</span>
-        ),
-        <span class="cs">"rate"</span>: <span class="ck">None</span>, <span class="cs">"availability"</span>: <span class="ck">None</span>, <span class="cs">"declines"</span>: <span class="ck">True</span>
-    }
-}
-
-
-<span class="ck">def</span> <span class="cf">get_vendor_response</span>(vendor: dict, message: str, stage: str) -> tuple:
-    <span class="cs">"""Returns (reply_text, quote_data | None)"""</span>
-    persona_id = vendor.get(<span class="cs">"persona_id"</span>, <span class="cn">1</span>)
-    persona    = PERSONAS[persona_id]
-
-    <span class="ck">if</span> stage == <span class="cs">"quoting"</span> <span class="ck">and</span> persona[<span class="cs">"declines"</span>]:
-        prompt = (
-            <span class="cs">f"Reply politely saying the area is too far from Shah Alam: '</span>{message}<span class="cs">'"</span>
-        )
-    <span class="ck">else</span>:
-        prompt = <span class="cs">f"Reply naturally to this WhatsApp message in character: '</span>{message}<span class="cs">'"</span>
-
-    reply = call_llm(prompt, persona[<span class="cs">"system"</span>]) <span class="ck">or</span> persona[<span class="cs">"fallbacks"</span>].get(stage, <span class="cs">"Ok, noted."</span>)
-
-    <span class="ck">if</span> stage == <span class="cs">"quoting"</span>:
-        quote_data = {
-            <span class="cs">"declined"</span>:     persona[<span class="cs">"declines"</span>],
-            <span class="cs">"rate"</span>:         persona[<span class="cs">"rate"</span>],
-            <span class="cs">"availability"</span>: persona[<span class="cs">"availability"</span>]
+  /* =================================================================
+     EDIT PER PROJECT  -  the ONLY block you change per page.
+     Copy this file, swap PROJECT, save as <slug>-source.html.
+     - structure.code : the project file tree (plain text)
+     - walkthrough[]   : { heading, body, files:[{label, code}] }
+     - notes[]         : { heading, bullets:[...] }
+     Code strings can be multi-line; they render verbatim.
+     ================================================================= */
+  const PROJECT = {
+  "slug": "hire-gardener",
+  "category": "Service Agents",
+  "categoryUrl": "category-service-agents.html",
+  "title": "Hire Gardener",
+  "subtitle": "Core Source Code, AI Vendor Communication Workflow.",
+  "cover": "images/hire-gardener/cover.jpeg",
+  "tech": [
+    "Python",
+    "Streamlit",
+    "Ollama · Llama3",
+    "WhatsApp Cloud API"
+  ],
+  "overviewUrl": "hire-gardener.html",
+  "demoLabel": "Try Live Demo",
+  "demoUrl": "https://lyven81.github.io/ai-project/projects/hire-gardener/demo.html",
+  "repoUrl": "https://github.com/lyven81/ai-project/tree/main/projects/hire-gardener",
+  "about": "This showcase highlights the four core modules that power Hire Gardener's AI vendor communication workflow. The key design principle is a pluggable messaging layer: one config flag switches the entire app between simulation mode (Llama3 plays vendor roles) and live mode (real WhatsApp API). The workflow logic never changes.",
+  "structure": {
+    "label": "hire-gardener/",
+    "code": "hire-gardener/\n├── ui.py                  ← Streamlit app (main entry point)\n├── workflow.py            ← 6-stage orchestration logic\n├── agent.py               ← Llama3 message composition\n├── config.py              ← MODE flag + all settings\n├── requirements.txt\n├── .env.example\n├── README.md\n└── messaging/\n    ├── __init__.py        ← Auto-loads mock or real mode\n    ├── mock.py            ← Llama3 vendor simulation\n    └── whatsapp.py        ← Meta WhatsApp Cloud API"
+  },
+  "walkthrough": [
+    {
+      "heading": "Core Design: The Mode Switch",
+      "body": "The entire mock/live switch lives in two files. <code>config.py</code> reads the environment, and <code>messaging/__init__.py</code> loads the correct module automatically.",
+      "files": [
+        {
+          "label": "config.py: Single source of truth for all settings",
+          "code": "import os\nfrom dotenv import load_dotenv\n\nload_dotenv()\n\n# Switch between \"mock\" (Llama3 simulation) and \"real\" (WhatsApp API)\nMODE = os.getenv(\"MODE\", \"mock\")\n\n# Ollama — local LLM running on your machine\nOLLAMA_BASE_URL = os.getenv(\"OLLAMA_BASE_URL\", \"http://127.0.0.1:11434\")\nOLLAMA_MODEL    = os.getenv(\"OLLAMA_MODEL\", \"llama3:latest\")\n\n# WhatsApp Cloud API — only used when MODE=real\nWHATSAPP_API_TOKEN      = os.getenv(\"WHATSAPP_API_TOKEN\", \"\")\nWHATSAPP_PHONE_NUMBER_ID = os.getenv(\"WHATSAPP_PHONE_NUMBER_ID\", \"\")"
+        },
+        {
+          "label": "messaging/__init__.py: Pluggable messaging layer",
+          "code": "from config import MODE\n\nif MODE == \"real\":\n    from .whatsapp import get_vendor_response  # Real WhatsApp API\nelse:\n    from .mock import get_vendor_response      # Llama3 simulation\n\n# Same function signature in both modules — workflow never needs to change\n__all__ = [\"get_vendor_response\"]"
         }
-        <span class="ck">return</span> reply, quote_data
+      ]
+    },
+    {
+      "heading": "Agent Module: Message Composition",
+      "body": "All outbound messages are composed by Llama3 with a persona system prompt. Every function has a hardcoded fallback so the app keeps working even if Ollama is offline.",
+      "files": [
+        {
+          "label": "agent.py: Persona prompt + LLM call with fallback",
+          "code": "AGENT_SYSTEM = \"\"\"You are a personal assistant helping a property owner find\na grass cutting service in Malaysia. You communicate naturally,\nlike a real person sending WhatsApp messages. Keep messages short\nand conversational — 2 to 4 sentences maximum. Use a natural mix\nof English and Malay where appropriate (e.g. \"boleh\", \"terima kasih\").\nNever reveal you are an AI.\"\"\"\n\n\ndef call_llm(prompt, system=AGENT_SYSTEM):\n    try:\n        response = requests.post(\n            f\"{OLLAMA_BASE_URL}/api/generate\",\n            json={\n                \"model\":   OLLAMA_MODEL,\n                \"prompt\":  prompt,\n                \"system\":  system,\n                \"stream\":  False,\n                \"options\": {\"temperature\": 0.7}\n            },\n            timeout=60\n        )\n        return response.json().get(\"response\", \"\").strip()\n    except Exception:\n        return None  # Caller uses fallback text if None\n\n\ndef compose_outreach(area):\n    result = call_llm(\n        f\"Write a short WhatsApp message asking a grass cutting service \"\n        f\"if they cover {area}. Friendly, casual, 2–3 sentences.\"\n    )\n    # Fallback if Ollama is offline\n    return result or (\n        f\"Hi, I'm looking for a grass cutting service in {area}. \"\n        \"Do you provide this service in the area? Thanks!\"\n    )"
+        }
+      ]
+    },
+    {
+      "heading": "Vendor Simulation: Mock Mode",
+      "body": "Each vendor has a persona system prompt that drives Llama3's responses. Vendor 3 (Pak Razif) is programmed to decline at the quoting stage, adding realism to the simulation.",
+      "files": [
+        {
+          "label": "messaging/mock.py: Vendor personas and reply logic",
+          "code": "PERSONAS = {\n    1: {\n        \"system\": (\n            \"You are Ahmad, owner of Ahmad Landscaping in KL. \"\n            \"Speak in friendly Malay-English mix — use 'boleh', 'ok bro', 'insyaAllah'. \"\n            \"Charge RM150–180. Available Monday or Tuesday next week.\"\n        ),\n        \"rate\": \"160\", \"availability\": \"Monday next week\", \"declines\": False\n    },\n    2: {\n        \"system\": (\n            \"You are Sarah from Green Garden KL. Professional English. \"\n            \"Charge RM200–220. Available this Saturday morning.\"\n        ),\n        \"rate\": \"210\", \"availability\": \"This Saturday\", \"declines\": False\n    },\n    3: {\n        \"system\": (\n            \"You are Razif, a solo gardener based in Shah Alam. \"\n            \"For outreach: reply positively. For quoting: apologise and \"\n            \"say the area is too far from Shah Alam.\"\n        ),\n        \"rate\": None, \"availability\": None, \"declines\": True\n    }\n}\n\n\ndef get_vendor_response(vendor: dict, message: str, stage: str) -> tuple:\n    \"\"\"Returns (reply_text, quote_data | None)\"\"\"\n    persona_id = vendor.get(\"persona_id\", 1)\n    persona    = PERSONAS[persona_id]\n\n    if stage == \"quoting\" and persona[\"declines\"]:\n        prompt = (\n            f\"Reply politely saying the area is too far from Shah Alam: '{message}'\"\n        )\n    else:\n        prompt = f\"Reply naturally to this WhatsApp message in character: '{message}'\"\n\n    reply = call_llm(prompt, persona[\"system\"]) or persona[\"fallbacks\"].get(stage, \"Ok, noted.\")\n\n    if stage == \"quoting\":\n        quote_data = {\n            \"declined\":     persona[\"declines\"],\n            \"rate\":         persona[\"rate\"],\n            \"availability\": persona[\"availability\"]\n        }\n        return reply, quote_data\n\n    return reply, None"
+        }
+      ]
+    },
+    {
+      "heading": "Workflow Engine: 6-Stage Orchestration",
+      "body": "The workflow module calls agent functions and the messaging layer in sequence. It never imports from WhatsApp or mock directly, only through the pluggable <code>messaging</code> module.",
+      "files": [
+        {
+          "label": "workflow.py: Stage 3: Quote request with media",
+          "code": "def stage_3_quote(vendors: list, conversations: dict) -> tuple:\n    \"\"\"Send quote request + media to all vendors. Returns (conversations, quotes).\"\"\"\n    quotes = []\n\n    for vendor in vendors:\n        msg = compose_quote_request()\n\n        # Display version shows media indicators in the UI\n        display_msg = msg + \"\\n\\n📷 [Area photo attached]\\n🎥 [Area video attached]\"\n        conversations[vendor[\"id\"]].append({\n            \"role\": \"agent\", \"text\": display_msg, \"has_media\": True\n        })\n\n        # LLM gets the clean message (no UI indicators)\n        reply, quote_data = get_vendor_response(vendor, msg, \"quoting\")\n        conversations[vendor[\"id\"]].append({\"role\": \"vendor\", \"text\": reply})\n\n        quotes.append({\n            **quote_data,\n            \"vendor_id\":   vendor[\"id\"],\n            \"vendor_name\": vendor[\"name\"],\n            \"number\":      vendor[\"number\"],\n            \"persona_id\":  vendor.get(\"persona_id\", 1)\n        })\n\n    return conversations, quotes"
+        }
+      ]
+    }
+  ],
+  "cta": "Want an AI agent that handles your vendor communication end to end? Let's scope it."
+};
+  /* ===================== END EDIT BLOCK ===================== */
 
-    <span class="ck">return</span> reply, <span class="ck">None</span></div>
-        </div>
-    </div>
+  const pref = (u) => /^https?:|^mailto:|^tel:/.test(u || '') ? u : (SITE + (u || ''));
+  const esc = (s) => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const rich = (s) => esc(s).replace(/&lt;(\/?(?:b|code))&gt;/g, '<$1>');
 
-    <div class="content-section">
-        <h2>🔄 Workflow Engine — 6-Stage Orchestration</h2>
-        <p>The workflow module calls agent functions and the messaging layer in sequence. It never imports from WhatsApp or mock directly — only through the pluggable <code>messaging</code> module.</p>
+  // raw code store for copy buttons
+  const RAW = [];
+  function codeBlock(label, codeStr, extraClass){
+    const idx = RAW.push(codeStr) - 1;
+    const rendered = esc(codeStr).split('\n')
+      .map(line => /^\s*#/.test(line) ? `<span class="cmt">${line}</span>` : line).join('\n');
+    return `<div class="codeblock ${extraClass||''}">`+
+      `<div class="code-bar"><span class="path"><span>${esc(label)}</span></span>`+
+      `<button class="code-copy" data-idx="${idx}">Copy</button></div>`+
+      `<pre><code>${rendered}</code></pre></div>`;
+  }
 
-        <div class="code-container">
-            <div class="code-header">📄 workflow.py — Stage 3: Quote request with media</div>
-            <div class="code-block"><span class="ck">def</span> <span class="cf">stage_3_quote</span>(vendors: list, conversations: dict) -> tuple:
-    <span class="cs">"""Send quote request + media to all vendors. Returns (conversations, quotes)."""</span>
-    quotes = []
+  // Breadcrumb + header
+  document.title = PROJECT.title + ": Source | AI Project Portfolio";
+  document.getElementById('crumbCat').textContent = PROJECT.category;
+  document.getElementById('crumbCat').href = pref(PROJECT.categoryUrl);
+  document.getElementById('crumbProj').textContent = PROJECT.title;
+  document.getElementById('crumbProj').href = pref(PROJECT.overviewUrl);
+  if (PROJECT.cover){
+    document.getElementById('coverStrip').style.display = '';
+    const c = document.getElementById('cover'); c.src = PROJECT.cover; c.alt = PROJECT.title + " cover";
+  }
+  document.getElementById('kicker').textContent = "Source Walkthrough · " + PROJECT.category;
+  document.getElementById('title').textContent = PROJECT.title;
+  document.getElementById('subtitle').textContent = PROJECT.subtitle;
+  document.getElementById('headTech').innerHTML = (PROJECT.tech||[]).map(t => `<span class="tech-chip">${esc(t)}</span>`).join('');
+  document.getElementById('headBtns').innerHTML =
+    (PROJECT.demoUrl ? `<a class="btn" href="${pref(PROJECT.demoUrl)}" target="_blank" rel="noopener">${esc(PROJECT.demoLabel||'Live Demo')}</a>` : '') +
+    (PROJECT.overviewUrl ? `<a class="btn ghost" href="${pref(PROJECT.overviewUrl)}">Project Overview</a>` : '') +
+    (PROJECT.repoUrl ? `<a class="btn ghost" href="${pref(PROJECT.repoUrl)}" target="_blank" rel="noopener">GitHub Repo</a>` : '');
 
-    <span class="ck">for</span> vendor <span class="ck">in</span> vendors:
-        msg = compose_quote_request()
+  const section = (tab, inner) => `<section class="sec"><div class="sec-rule"><span class="tab">${esc(tab)}</span>${inner}</div></section>`;
+  let html = "";
+  const P = PROJECT;
 
-        <span class="cm"># Display version shows media indicators in the UI</span>
-        display_msg = msg + <span class="cs">"\n\n📷 [Area photo attached]\n🎥 [Area video attached]"</span>
-        conversations[vendor[<span class="cs">"id"</span>]].append({
-            <span class="cs">"role"</span>: <span class="cs">"agent"</span>, <span class="cs">"text"</span>: display_msg, <span class="cs">"has_media"</span>: <span class="ck">True</span>
-        })
+  if (P.about){
+    html += section("About This Code", `<h2>About This Code Showcase</h2><p class="intro">${rich(P.about)}</p>`);
+  }
+  if (P.structure && P.structure.code){
+    html += section("Project Structure", `<h2>Project Structure</h2>`+
+      codeBlock(P.structure.label || 'project/', P.structure.code, 'tree'));
+  }
+  (P.walkthrough||[]).forEach(w => {
+    let inner = `<h2>${esc(w.heading)}</h2>`;
+    if (w.body) inner += `<p class="body">${rich(w.body)}</p>`;
+    (w.files||[]).forEach(f => { inner += codeBlock(f.label, f.code); });
+    html += section("Code", inner);
+  });
+  // CTA
+  html += `<section class="sec"><div class="cta-inner">`+
+    `<div><h3>Interested in the build?</h3><p>${esc(P.cta || "Let's talk.")}</p></div>`+
+    `<div class="cta-btns">`+
+    (P.demoUrl ? `<a class="btn" href="${pref(P.demoUrl)}" target="_blank" rel="noopener">${esc(P.demoLabel||'Live Demo')}</a>` : '')+
+    `<a class="btn ghost" href="${SITE}contact.html">Get in Touch</a>`+
+    `</div></div></section>`;
 
-        <span class="cm"># LLM gets the clean message (no UI indicators)</span>
-        reply, quote_data = get_vendor_response(vendor, msg, <span class="cs">"quoting"</span>)
-        conversations[vendor[<span class="cs">"id"</span>]].append({<span class="cs">"role"</span>: <span class="cs">"vendor"</span>, <span class="cs">"text"</span>: reply})
+  document.getElementById('body').innerHTML = html;
 
-        quotes.append({
-            **quote_data,
-            <span class="cs">"vendor_id"</span>:   vendor[<span class="cs">"id"</span>],
-            <span class="cs">"vendor_name"</span>: vendor[<span class="cs">"name"</span>],
-            <span class="cs">"number"</span>:      vendor[<span class="cs">"number"</span>],
-            <span class="cs">"persona_id"</span>:  vendor.get(<span class="cs">"persona_id"</span>, <span class="cn">1</span>)
-        })
+  // Copy buttons
+  function copyText(text, btn){
+    const done = ()=>{ const o=btn.textContent; btn.textContent='Copied ✓'; setTimeout(()=>btn.textContent=o.includes('Copied')?'Copy':o,1400); };
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(done).catch(()=>fb(text,done)); }
+    else fb(text,done);
+  }
+  function fb(text,done){ const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(ta); done(); }
+  document.querySelectorAll('.code-copy').forEach(btn =>
+    btn.addEventListener('click', ()=> copyText(RAW[+btn.dataset.idx], btn)));
 
-    <span class="ck">return</span> conversations, quotes</div>
-        </div>
-    </div>
+  // Masthead search
+  const ITEMS = [
+    {t:PROJECT.title, c:PROJECT.category, s:PROJECT.slug},
+    {t:"Courier CS Quality Console", c:"Conversational Data Analytics", s:"courier-cs-quality-console"},
+    {t:"Voucher Analyzer", c:"Conversational Data Analytics", s:"voucher-analyzer"},
+    {t:"Wiseman", c:"Knowledge & Reference Chatbots", s:"wiseman"},
+    {t:"Sunny Car Accessories", c:"Agentic Commerce", s:"sunny-car-accessories"},
+    {t:"Bookshelf", c:"Multi-Agent Decision Systems", s:"bookshelf"}
+  ];
+  const searchInput = document.getElementById('searchInput');
+  const searchResults = document.getElementById('searchResults');
+  function runSearch(q){
+    if(q.trim().length < 2){ searchResults.style.display='none'; return; }
+    const ql = q.toLowerCase();
+    const hits = ITEMS.filter(it => (it.t+' '+it.c).toLowerCase().includes(ql));
+    searchResults.innerHTML = hits.length ? hits.map(it =>
+      `<div class="sr-item"><div class="sr-cat">${esc(it.c)}</div>`+
+      `<a href="${SITE}${it.s}.html"><div class="sr-title">${esc(it.t)}</div></a>`+
+      `<div class="sr-links"><a href="${SITE}${it.s}.html">View Details</a></div></div>`).join('')
+      : `<div class="sr-none">No projects found. Try a different keyword.</div>`;
+    searchResults.style.display='block';
+  }
+  searchInput.addEventListener('input', e => runSearch(e.target.value));
+  document.addEventListener('click', e => { if(!e.target.closest('.search-box')) searchResults.style.display='none'; });
 
-    <div class="content-section">
-        <h2>⚙️ Technical Implementation Notes</h2>
-        <h3>Key Design Decisions</h3>
-        <ul style="margin:15px 0; padding-left:20px">
-            <li><strong>Single mode flag:</strong> The entire mock/live behaviour is controlled by one environment variable — no branching logic spread across multiple files</li>
-            <li><strong>Identical function signatures:</strong> <code>mock.py</code> and <code>whatsapp.py</code> both export <code>get_vendor_response(vendor, message, stage)</code> — the workflow imports from neither directly</li>
-            <li><strong>Hardcoded fallbacks:</strong> Every LLM call returns a sensible fallback string if Ollama is unreachable — the demo never crashes</li>
-            <li><strong>Streamlit session state:</strong> All workflow state (conversations, quotes, selected vendor) is persisted in <code>st.session_state</code> so the UI can rerun without losing progress</li>
-            <li><strong>Dedicated WhatsApp number:</strong> Real mode is designed for a separate business SIM — personal numbers are never used with automation tools to avoid bans</li>
-        </ul>
-    </div>
-
-    <div class="demo-links">
-        <a href="projects/hire-gardener/demo.html" class="demo-btn">▶ Try Live Demo</a>
-        <a href="hire-gardener.html" class="demo-btn secondary">📖 View Project Overview</a>
-    </div>
-
-    <nav class="back-nav" style="text-align:center; margin-top:40px;">
-        <a href="index.html">← Back to Portfolio</a> |
-        <a href="hire-gardener.html">View Project Overview</a>
-    </nav>
-
-</div>
+  // Drawer
+  const drawer=document.getElementById('drawer'), overlay=document.getElementById('overlay');
+  const openMenu=()=>{ drawer.classList.add('open'); overlay.classList.add('open'); };
+  const closeMenu=()=>{ drawer.classList.remove('open'); overlay.classList.remove('open'); };
+  document.getElementById('hamburger').addEventListener('click', openMenu);
+  document.getElementById('drawerClose').addEventListener('click', closeMenu);
+  overlay.addEventListener('click', closeMenu);
+  drawer.querySelectorAll('a').forEach(a=>a.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeMenu(); searchResults.style.display='none'; }});
+</script>
 </body>
 </html>

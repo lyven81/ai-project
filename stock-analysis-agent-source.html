@@ -1,619 +1,366 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stock Analysis Agent - Source Code</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stock Analysis Agent: Source | AI Project Portfolio</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root{ --ink:#222; --paper:#fff; --hair:#dddddd; --gray:#555; --accent:#B8860B; --navy:#1E3A5F; --code-bg:#fbfbf8; --cmt:#6b8190; }
+  html{ scroll-behavior:smooth; }
+  body{ background:var(--paper); color:var(--ink); font-family:Arial, Helvetica, sans-serif; line-height:1.6; overflow-x:hidden; }
+  a{ color:inherit; text-decoration:none; }
+  a:hover h2, a:hover h3, a:hover h4{ color:var(--accent); }
+  p code, li code{ font-family:"Courier New", monospace; font-size:.86em; background:#f2f3f5; padding:1px 5px; color:var(--navy); }
 
-        body {
-            font-family: 'Arial', sans-serif;
-            line-height: 1.6;
-            color: #222;
-            background-color: #ffffff;
-        }
+  /* Masthead (shared) */
+  .masthead{ display:flex; align-items:center; justify-content:space-between; padding:14px 28px; max-width:1240px; margin:0 auto; gap:18px; }
+  .mast-left{ display:flex; align-items:center; gap:20px; }
+  .logo{ background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; letter-spacing:3px; font-size:.95rem; padding:8px 12px; white-space:nowrap; }
+  .mast-nav{ display:flex; gap:20px; font-family:Arial, Helvetica, sans-serif; font-size:.72rem; letter-spacing:1.4px; text-transform:uppercase; }
+  .mast-nav a:hover{ color:var(--accent); }
+  .hamburger{ display:none; flex-direction:column; gap:4px; background:none; border:none; cursor:pointer; padding:6px; }
+  .hamburger span{ width:22px; height:2px; background:#222; display:block; }
+  .rule-top{ border:none; border-top:3px solid #222; max-width:1240px; margin:0 auto; }
 
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+  /* Search (shared) */
+  .search-box{ position:relative; width:200px; }
+  .search-input{ width:100%; padding:7px 30px 7px 12px; border:1px solid var(--hair); background:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; color:#222; }
+  .search-input:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(184,134,11,.15); }
+  .search-ic{ position:absolute; right:10px; top:50%; transform:translateY(-50%); color:var(--gray); font-size:.8rem; pointer-events:none; }
+  .search-results{ position:absolute; top:calc(100% + 4px); left:0; width:340px; max-width:86vw; background:#fff; border:1px solid #222; max-height:60vh; overflow-y:auto; z-index:120; display:none; }
+  .sr-item{ padding:12px 14px; border-bottom:1px solid var(--hair); }
+  .sr-item:last-child{ border-bottom:none; }
+  .sr-cat{ font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; margin-bottom:4px; color:var(--accent); }
+  .sr-title{ font-weight:700; font-size:1.02rem; color:#222; }
+  .sr-links{ font-size:.58rem; letter-spacing:.8px; text-transform:uppercase; color:var(--gray); margin-top:5px; }
+  .sr-links a:hover{ color:var(--accent); }
+  .sr-none{ padding:16px 14px; font-size:.82rem; color:var(--gray); }
 
-        .back-nav {
-            margin-bottom: 20px;
-        }
+  /* Shared bits */
+  .tab{ display:inline-block; background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.66rem; letter-spacing:2px; text-transform:uppercase; padding:6px 12px; }
+  .rubric{ font-family:Arial, Helvetica, sans-serif; font-size:.62rem; font-weight:700; letter-spacing:1.6px; text-transform:uppercase; color:var(--accent); display:block; margin-bottom:8px; }
+  .tech-chip{ display:inline-block; border:1px solid var(--hair); padding:6px 12px; font-size:.72rem; letter-spacing:.3px; color:#333; white-space:nowrap; }
+  .tech-chip:hover{ border-color:var(--accent); color:var(--accent); }
+  .btn{ display:inline-block; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.7rem; letter-spacing:1.6px; text-transform:uppercase; padding:13px 24px; border:1px solid #222; background:#222; color:#fff; cursor:pointer; transition:.15s; }
+  .btn:hover{ background:var(--accent); border-color:var(--accent); }
+  .btn.ghost{ background:#fff; color:#222; }
+  .btn.ghost:hover{ color:var(--accent); border-color:var(--accent); background:#fff; }
 
-        .back-nav a {
-            color: #007BFF;
-            text-decoration: none;
-            font-size: 1rem;
-        }
+  /* Breadcrumb */
+  .crumb{ max-width:1240px; margin:0 auto; padding:20px 28px 0; font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--gray); }
+  .crumb a:hover{ color:var(--accent); }
+  .crumb .sep{ color:var(--hair); margin:0 8px; }
 
-        .back-nav a:hover {
-            text-decoration: underline;
-        }
+  /* Header (slim cover banner + copy) */
+  .src-head{ max-width:1240px; margin:0 auto; padding:14px 28px 6px; }
+  .cover-strip{ border:1px solid var(--hair); line-height:0; background:#eef1f4; }
+  .cover-strip img{ width:100%; height:190px; object-fit:cover; object-position:center 42%; display:block; }
+  .src-head h1{ font-size:2.5rem; font-weight:900; line-height:1.04; letter-spacing:-.008em; margin-top:18px; }
+  .src-head .sub{ font-style:italic; font-size:1.08rem; color:#333; margin-top:10px; max-width:72ch; }
+  .head-tech{ display:flex; flex-wrap:wrap; gap:9px; margin-top:16px; }
+  .head-btns{ display:flex; flex-wrap:wrap; gap:12px; margin-top:18px; }
 
-        .project-header {
-            text-align: center;
-            margin-bottom: 40px;
-            padding: 40px 0;
-            background: linear-gradient(135deg, #10B981, #059669);
-            color: white;
-            border-radius: 10px;
-        }
+  /* Section shell */
+  .sec{ max-width:1240px; margin:0 auto; padding:26px 28px; }
+  .sec-rule{ border-top:3px solid #222; padding-top:16px; }
+  .sec .tab{ margin-bottom:14px; }
+  .sec h2{ font-size:1.7rem; font-weight:900; line-height:1.06; }
+  .sec .intro{ color:#333; font-size:1.02rem; margin-top:10px; max-width:80%; }
+  .sec .body{ color:#333; font-size:1rem; margin-top:10px; max-width:80%; }
 
-        .project-header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
+  /* Code block */
+  .codeblock{ border:1px solid var(--hair); margin-top:16px; }
+  .code-bar{ display:flex; align-items:center; justify-content:space-between; gap:12px; background:var(--navy); color:#fff; padding:8px 12px; }
+  .code-bar .path{ font-family:"Courier New", monospace; font-size:.74rem; letter-spacing:.2px; opacity:.96; display:flex; align-items:center; gap:7px; min-width:0; }
+  .code-bar .path span{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .code-copy{ flex:none; background:none; border:1px solid rgba(255,255,255,.4); color:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.56rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; padding:5px 11px; cursor:pointer; transition:.15s; }
+  .code-copy:hover{ background:rgba(255,255,255,.16); }
+  .codeblock pre{ margin:0; padding:14px 16px; overflow-x:auto; background:var(--code-bg); }
+  .codeblock code{ font-family:"Courier New", monospace; font-size:.82rem; line-height:1.6; color:#1b2a3a; background:none; padding:0; white-space:pre; display:block; }
+  .codeblock code .cmt{ color:var(--cmt); font-style:italic; }
 
-        .project-header p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
+  .tree .code-bar .path::before{ content:"📁"; }
 
-        .badges {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin: 20px 0;
-            flex-wrap: wrap;
-        }
+  /* Notes */
+  .note-block{ margin-top:22px; }
+  .note-block h3{ font-size:1.15rem; font-weight:800; }
+  .blist{ list-style:none; margin-top:12px; border-top:1px solid var(--hair); }
+  .blist li{ padding:12px 0; border-bottom:1px solid var(--hair); color:#333; font-size:.95rem; }
+  .blist li b{ color:#222; }
 
-        .badge {
-            background-color: rgba(255, 255, 255, 0.2);
-            color: white;
-            padding: 5px 12px;
-            border-radius: 15px;
-            font-size: 0.9rem;
-        }
+  /* CTA */
+  .cta-inner{ display:flex; align-items:center; gap:18px; flex-wrap:wrap; border-top:3px solid #222; padding-top:18px; }
+  .cta-inner h3{ font-size:1.4rem; font-weight:900; line-height:1.08; }
+  .cta-inner p{ color:var(--gray); font-size:.95rem; margin-top:4px; }
+  .cta-btns{ margin-left:auto; display:flex; gap:12px; flex-wrap:wrap; }
 
-        .content-section {
-            margin: 40px 0;
-            padding: 30px;
-            background-color: #f9f9f9;
-            border-radius: 8px;
-            border-left: 5px solid #10B981;
-        }
+  footer{ background:#222; max-width:1240px; margin:30px auto 0; padding:24px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; letter-spacing:.5px; color:#fff; text-align:center; }
+  .note{ max-width:1240px; margin:14px auto 0; padding:8px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.62rem; letter-spacing:1px; color:#999; }
 
-        .content-section h2 {
-            color: #10B981;
-            margin-bottom: 20px;
-            font-size: 1.8rem;
-        }
+  /* Drawer (shared) */
+  .drawer{ position:fixed; top:0; left:-300px; width:280px; height:100vh; background:#fff; z-index:200; box-shadow:2px 0 14px rgba(0,0,0,.15); transition:left .28s ease; padding:74px 26px 26px; }
+  .drawer.open{ left:0; }
+  .drawer a{ display:block; font-family:Arial, Helvetica, sans-serif; font-size:.82rem; letter-spacing:1.2px; text-transform:uppercase; padding:14px 0; border-bottom:1px solid var(--hair); }
+  .overlay{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:150; }
+  .overlay.open{ display:block; }
+  .drawer-close{ position:absolute; top:20px; right:20px; font-family:Arial, Helvetica, sans-serif; font-size:1.4rem; background:none; border:none; cursor:pointer; }
 
-        .content-section h3 {
-            color: #333;
-            margin: 20px 0 10px 0;
-            font-size: 1.3rem;
-        }
-
-        .highlight-box {
-            background: linear-gradient(135deg, #FFF8E1, #FFF3C4);
-            padding: 20px;
-            border-radius: 10px;
-            border-left: 5px solid #10B981;
-            margin: 20px 0;
-        }
-
-        .code-container {
-            background-color: #1e1e1e;
-            border-radius: 8px;
-            padding: 20px;
-            margin: 20px 0;
-            overflow-x: auto;
-        }
-
-        .code-header {
-            color: #569cd6;
-            font-weight: bold;
-            margin-bottom: 15px;
-            font-size: 1.1rem;
-            border-bottom: 1px solid #333;
-            padding-bottom: 10px;
-        }
-
-        .code-block {
-            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-            font-size: 14px;
-            line-height: 1.5;
-            color: #d4d4d4;
-        }
-
-        .code-comment {
-            color: #6a9955;
-            font-style: italic;
-        }
-
-        .code-keyword {
-            color: #569cd6;
-        }
-
-        .code-string {
-            color: #ce9178;
-        }
-
-        .code-function {
-            color: #dcdcaa;
-        }
-
-        .code-number {
-            color: #b5cea8;
-        }
-
-        .demo-links {
-            text-align: center;
-            margin: 30px 0;
-        }
-
-        .demo-btn {
-            display: inline-block;
-            background-color: #10B981;
-            color: white;
-            padding: 12px 25px;
-            text-decoration: none;
-            border-radius: 5px;
-            margin: 0 10px;
-            font-weight: bold;
-            transition: background-color 0.3s;
-        }
-
-        .demo-btn:hover {
-            background-color: #059669;
-        }
-
-        .demo-btn.secondary {
-            background-color: #3B82F6;
-        }
-
-        .demo-btn.secondary:hover {
-            background-color: #2563EB;
-        }
-
-        @media (max-width: 768px) {
-            .project-header h1 {
-                font-size: 2rem;
-            }
-
-            .project-header p {
-                font-size: 1rem;
-            }
-
-            .demo-btn {
-                margin: 5px;
-                padding: 10px 20px;
-            }
-
-            .container {
-                padding: 15px;
-            }
-        }
-    </style>
+  @media (max-width:900px){
+    .cta-btns{ margin-left:0; }
+    .mast-nav{ display:none; }
+    .hamburger{ display:flex; }
+    .masthead{ padding:12px 16px; }
+    .mast-left{ gap:10px; min-width:0; flex:1; }
+    .logo{ font-size:.72rem; letter-spacing:1.5px; padding:6px 8px; }
+    .search-box{ flex:1; width:auto; min-width:0; }
+    .search-results{ position:fixed; top:58px; left:12px; right:12px; width:auto; max-width:none; }
+    .src-head h1{ font-size:1.95rem; }
+    .cover-strip img{ height:150px; }
+  }
+</style>
 </head>
 <body>
-    <div class="container">
-        <nav class="back-nav">
-            <a href="stock-analysis-agent.html">← Back to Project Overview</a>
-        </nav>
 
-        <div class="project-header">
-            <h1>📈 Stock Analysis Agent</h1>
-            <p>Core Source Code & Multi-Agent Investment Research Implementation</p>
-
-            <div class="badges">
-                <span class="badge">Python 3.8+</span>
-                <span class="badge">Gemini 2.0 Flash</span>
-                <span class="badge">Multi-Agent</span>
-                <span class="badge">Yahoo Finance</span>
-            </div>
-        </div>
-
-        <div class="highlight-box">
-            <h3>🔍 About This Code Showcase</h3>
-            <p><strong>This curated code snippet demonstrates how the Stock Analysis Agent coordinates 5 specialized AI agents to automate investment research, fundamental analysis, and report generation for Malaysian stocks.</strong></p>
-            <p>Full deployment scripts, API keys, and proprietary screening algorithms are omitted for security. This showcase highlights the core multi-agent orchestration and investment yardstick scoring system.</p>
-        </div>
-
-        <div class="content-section">
-            <h2>📖 Core Algorithm: Multi-Agent Orchestration Engine</h2>
-            <p>The foundation of the Stock Analysis Agent is its ability to coordinate 5 specialized AI agents that work sequentially to perform comprehensive stock analysis:</p>
-
-            <div class="code-container">
-                <div class="code-header">📄 stock_analysis_pipeline.py</div>
-                <div class="code-block">
-<span class="code-keyword">import</span> google.generativeai <span class="code-keyword">as</span> genai
-<span class="code-keyword">import</span> yfinance <span class="code-keyword">as</span> yf
-<span class="code-keyword">from</span> tavily <span class="code-keyword">import</span> TavilyClient
-<span class="code-keyword">from</span> typing <span class="code-keyword">import</span> Dict, List, Optional
-<span class="code-keyword">import</span> json
-
-<span class="code-keyword">class</span> <span class="code-function">StockAnalysisPipeline</span>:
-    <span class="code-string">"""
-    Multi-agent orchestration system for comprehensive stock analysis.
-    Coordinates 5 specialized AI agents for screening, fundamental analysis,
-    business moat research, dividend evaluation, and report generation.
-    """</span>
-
-    <span class="code-keyword">def</span> <span class="code-function">__init__</span>(self, gemini_api_key: str, tavily_api_key: str):
-        genai.configure(api_key=gemini_api_key)
-        self.model = genai.GenerativeModel(<span class="code-string">'gemini-2.0-flash-exp'</span>)
-        self.tavily = TavilyClient(api_key=tavily_api_key)
-
-        <span class="code-comment"># Investment yardstick scoring criteria (7 categories, 100 points total)</span>
-        self.scoring_categories = {
-            <span class="code-string">'fundamentals_profitability'</span>: <span class="code-number">20</span>,  <span class="code-comment"># ROE, EPS, margins</span>
-            <span class="code-string">'financial_health'</span>: <span class="code-number">15</span>,           <span class="code-comment"># Debt, current ratio</span>
-            <span class="code-string">'valuation'</span>: <span class="code-number">20</span>,                  <span class="code-comment"># PE, P/B, P/S ratios</span>
-            <span class="code-string">'business_moat'</span>: <span class="code-number">15</span>,              <span class="code-comment"># Competitive advantages</span>
-            <span class="code-string">'dividends_cashflow'</span>: <span class="code-number">15</span>,         <span class="code-comment"># Dividend sustainability</span>
-            <span class="code-string">'management_outlook'</span>: <span class="code-number">10</span>,         <span class="code-comment"># Track record, governance</span>
-            <span class="code-string">'liquidity'</span>: <span class="code-number">5</span>                    <span class="code-comment"># Trading volume</span>
-        }
-
-    <span class="code-keyword">async</span> <span class="code-function">run_stock_analysis_pipeline</span>(self, ticker: str) -> Dict:
-        <span class="code-string">"""
-        Execute complete 5-agent analysis pipeline for a stock.
-
-        Args:
-            ticker: Stock symbol (e.g., '1818.KL' for Bursa Malaysia)
-
-        Returns:
-            Complete investment analysis with scoring and recommendation
-        """</span>
-
-        print(f<span class="code-string">"🔍 Starting analysis for {ticker}..."</span>)
-
-        <span class="code-comment"># Step 1: Fetch real-time financial data</span>
-        stock_data = self._fetch_stock_data(ticker)
-        <span class="code-keyword">if</span> <span class="code-keyword">not</span> stock_data[<span class="code-string">'valid'</span>]:
-            <span class="code-keyword">return</span> {<span class="code-string">'error'</span>: <span class="code-string">'Failed to fetch stock data'</span>}
-
-        <span class="code-comment"># Step 2: Agent 1 - Stock Screener (validate investment criteria)</span>
-        screening_result = <span class="code-keyword">await</span> self._agent_stock_screener(stock_data)
-        <span class="code-keyword">if</span> <span class="code-keyword">not</span> screening_result[<span class="code-string">'passed'</span>]:
-            <span class="code-keyword">return</span> {
-                <span class="code-string">'ticker'</span>: ticker,
-                <span class="code-string">'screening'</span>: screening_result,
-                <span class="code-string">'recommendation'</span>: <span class="code-string">'FAIL - Does not meet investment criteria'</span>
-            }
-
-        <span class="code-comment"># Step 3: Agent 2 - Fundamental Analyst (score 55 points)</span>
-        fundamental_analysis = <span class="code-keyword">await</span> self._agent_fundamental_analyst(stock_data)
-
-        <span class="code-comment"># Step 4: Agent 3 - Business Moat Analyst (score 15 points via web research)</span>
-        moat_analysis = <span class="code-keyword">await</span> self._agent_business_moat(ticker, stock_data)
-
-        <span class="code-comment"># Step 5: Agent 4 - Dividend & Cash Flow Analyst (score 15 points)</span>
-        dividend_analysis = <span class="code-keyword">await</span> self._agent_dividend_cashflow(stock_data)
-
-        <span class="code-comment"># Step 6: Calculate total yardstick score (0-100)</span>
-        total_score = self._calculate_total_score(
-            fundamental_analysis,
-            moat_analysis,
-            dividend_analysis
-        )
-
-        <span class="code-comment"># Step 7: Agent 5 - Investment Report Generator</span>
-        report = <span class="code-keyword">await</span> self._agent_report_generator(
-            ticker,
-            stock_data,
-            screening_result,
-            fundamental_analysis,
-            moat_analysis,
-            dividend_analysis,
-            total_score
-        )
-
-        <span class="code-keyword">return</span> {
-            <span class="code-string">'ticker'</span>: ticker,
-            <span class="code-string">'total_score'</span>: total_score,
-            <span class="code-string">'recommendation'</span>: self._get_recommendation(total_score),
-            <span class="code-string">'screening'</span>: screening_result,
-            <span class="code-string">'fundamental_analysis'</span>: fundamental_analysis,
-            <span class="code-string">'moat_analysis'</span>: moat_analysis,
-            <span class="code-string">'dividend_analysis'</span>: dividend_analysis,
-            <span class="code-string">'report_path'</span>: report[<span class="code-string">'markdown_path'</span>],
-            <span class="code-string">'chart_path'</span>: report[<span class="code-string">'chart_path'</span>]
-        }
-
-    <span class="code-keyword">def</span> <span class="code-function">_fetch_stock_data</span>(self, ticker: str) -> Dict:
-        <span class="code-string">"""
-        Fetch comprehensive stock data from Yahoo Finance.
-        Includes price, fundamentals, dividends, and financial statements.
-        """</span>
-
-        <span class="code-keyword">try</span>:
-            stock = yf.Ticker(ticker)
-            info = stock.info
-
-            <span class="code-keyword">return</span> {
-                <span class="code-string">'valid'</span>: <span class="code-keyword">True</span>,
-                <span class="code-string">'ticker'</span>: ticker,
-                <span class="code-string">'name'</span>: info.get(<span class="code-string">'longName'</span>, ticker),
-                <span class="code-string">'current_price'</span>: info.get(<span class="code-string">'currentPrice'</span>),
-                <span class="code-string">'market_cap'</span>: info.get(<span class="code-string">'marketCap'</span>),
-                <span class="code-string">'pe_ratio'</span>: info.get(<span class="code-string">'trailingPE'</span>),
-                <span class="code-string">'forward_pe'</span>: info.get(<span class="code-string">'forwardPE'</span>),
-                <span class="code-string">'roe'</span>: info.get(<span class="code-string">'returnOnEquity'</span>, <span class="code-number">0</span>) * <span class="code-number">100</span>,
-                <span class="code-string">'eps'</span>: info.get(<span class="code-string">'trailingEps'</span>),
-                <span class="code-string">'dividend_yield'</span>: info.get(<span class="code-string">'dividendYield'</span>, <span class="code-number">0</span>) * <span class="code-number">100</span>,
-                <span class="code-string">'payout_ratio'</span>: info.get(<span class="code-string">'payoutRatio'</span>, <span class="code-number">0</span>) * <span class="code-number">100</span>,
-                <span class="code-string">'debt_to_equity'</span>: info.get(<span class="code-string">'debtToEquity'</span>),
-                <span class="code-string">'current_ratio'</span>: info.get(<span class="code-string">'currentRatio'</span>),
-                <span class="code-string">'price_to_book'</span>: info.get(<span class="code-string">'priceToBook'</span>),
-                <span class="code-string">'volume'</span>: info.get(<span class="code-string">'volume'</span>),
-                <span class="code-string">'avg_volume'</span>: info.get(<span class="code-string">'averageVolume'</span>)
-            }
-        <span class="code-keyword">except</span> Exception <span class="code-keyword">as</span> e:
-            print(f<span class="code-string">"Error fetching data: {e}"</span>)
-            <span class="code-keyword">return</span> {<span class="code-string">'valid'</span>: <span class="code-keyword">False</span>}
-                </div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>🤖 Agent 1: Stock Screener (Investment Criteria Validation)</h2>
-            <p>The Stock Screener agent validates whether a stock meets the predefined investment criteria for long-term dividend investing:</p>
-
-            <div class="code-container">
-                <div class="code-header">📄 agent_stock_screener.py</div>
-                <div class="code-block">
-<span class="code-keyword">async</span> <span class="code-function">_agent_stock_screener</span>(self, stock_data: Dict) -> Dict:
-    <span class="code-string">"""
-    Agent 1: Validate stock against investment screening criteria.
-
-    Criteria:
-    - Price: Within budget (e.g., ≤ RM 1.00)
-    - PE Ratio: 4-15 (fair valuation, avoid loss-makers)
-    - ROE: ≥ 5% (profitability threshold)
-    - EPS: ≥ 0.01 (actual profit generation)
-    - Dividend Yield: ≥ 1% (passive income potential)
-    - Market Cap: ≥ RM 50M (stability filter)
-    - Volume: ≥ 50,000 shares/day (liquidity)
-    """</span>
-
-    criteria = {
-        <span class="code-string">'max_price'</span>: <span class="code-number">1.00</span>,
-        <span class="code-string">'min_pe'</span>: <span class="code-number">4</span>,
-        <span class="code-string">'max_pe'</span>: <span class="code-number">15</span>,
-        <span class="code-string">'min_roe'</span>: <span class="code-number">5</span>,
-        <span class="code-string">'min_eps'</span>: <span class="code-number">0.01</span>,
-        <span class="code-string">'min_dividend_yield'</span>: <span class="code-number">1</span>,
-        <span class="code-string">'min_market_cap'</span>: <span class="code-number">50_000_000</span>,
-        <span class="code-string">'min_volume'</span>: <span class="code-number">50_000</span>
-    }
-
-    <span class="code-comment"># Build screening prompt for AI validation</span>
-    screening_prompt = f<span class="code-string">"""
-    You are a stock screening agent. Validate this stock against investment criteria.
-
-    Stock Data:
-    - Ticker: {stock_data['ticker']}
-    - Price: RM {stock_data['current_price']}
-    - PE Ratio: {stock_data['pe_ratio']}
-    - ROE: {stock_data['roe']}%
-    - EPS: {stock_data['eps']}
-    - Dividend Yield: {stock_data['dividend_yield']}%
-    - Market Cap: RM {stock_data['market_cap']:,}
-    - Avg Volume: {stock_data['avg_volume']:,}
-
-    Criteria:
-    {json.dumps(criteria, indent=2)}
-
-    Return JSON:
-    {{
-        "passed": true/false,
-        "criteria_results": {{
-            "price": {{"passed": bool, "actual": value, "limit": value}},
-            "pe_ratio": {{"passed": bool, "actual": value, "range": [min, max]}},
-            ...
-        }},
-        "summary": "Brief explanation of pass/fail"
-    }}
-    """</span>
-
-    response = self.model.generate_content(screening_prompt)
-    screening_result = self._parse_json_response(response.text)
-
-    <span class="code-keyword">return</span> screening_result
-                </div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>📊 Agent 2: Fundamental Analyst (55-Point Scoring)</h2>
-            <p>The Fundamental Analyst agent scores stocks across 3 categories: profitability (20pts), financial health (15pts), and valuation (20pts):</p>
-
-            <div class="code-container">
-                <div class="code-header">📄 agent_fundamental_analyst.py</div>
-                <div class="code-block">
-<span class="code-keyword">async</span> <span class="code-function">_agent_fundamental_analyst</span>(self, stock_data: Dict) -> Dict:
-    <span class="code-string">"""
-    Agent 2: Score fundamentals, financial health, and valuation.
-
-    Scoring breakdown:
-    1. Fundamentals & Profitability (20 points):
-       - ROE quality (0-10 points)
-       - EPS growth (0-5 points)
-       - Profit margins (0-5 points)
-
-    2. Financial Health & Solvency (15 points):
-       - Debt-to-equity ratio (0-7 points)
-       - Current ratio (0-5 points)
-       - Book value strength (0-3 points)
-
-    3. Valuation (20 points):
-       - PE ratio fairness (0-10 points)
-       - Price-to-book (0-5 points)
-       - Price-to-sales (0-5 points)
-    """</span>
-
-    fundamental_prompt = f<span class="code-string">"""
-    You are a fundamental analysis expert. Score this stock across 3 categories.
-
-    Stock: {stock_data['ticker']} - {stock_data['name']}
-
-    Financial Metrics:
-    - ROE: {stock_data['roe']:.2f}%
-    - EPS: {stock_data['eps']}
-    - PE Ratio: {stock_data['pe_ratio']}
-    - Price-to-Book: {stock_data['price_to_book']}
-    - Debt-to-Equity: {stock_data['debt_to_equity']}
-    - Current Ratio: {stock_data['current_ratio']}
-
-    Score each category (0-max points) and provide detailed reasoning:
-
-    1. Fundamentals & Profitability (0-20 points)
-       - Evaluate ROE quality, EPS strength, margins
-       - Higher ROE (>15%) = excellent, 5-15% = good, <5% = weak
-
-    2. Financial Health & Solvency (0-15 points)
-       - Assess debt levels, liquidity, balance sheet strength
-       - Low debt (<0.5 D/E) = strong, 0.5-1.5 = moderate, >1.5 = risky
-
-    3. Valuation (0-20 points)
-       - Compare PE to industry average and historical range
-       - PE 4-10 = undervalued, 10-15 = fair, >15 = expensive
-
-    Return JSON with scores and detailed analysis for each category.
-    """</span>
-
-    response = self.model.generate_content(fundamental_prompt)
-    analysis = self._parse_json_response(response.text)
-
-    <span class="code-keyword">return</span> {
-        <span class="code-string">'category_scores'</span>: {
-            <span class="code-string">'fundamentals_profitability'</span>: analysis[<span class="code-string">'fundamentals_score'</span>],
-            <span class="code-string">'financial_health'</span>: analysis[<span class="code-string">'health_score'</span>],
-            <span class="code-string">'valuation'</span>: analysis[<span class="code-string">'valuation_score'</span>]
-        },
-        <span class="code-string">'total_fundamental_score'</span>: sum(analysis[<span class="code-string">'category_scores'</span>].values()),
-        <span class="code-string">'detailed_analysis'</span>: analysis[<span class="code-string">'reasoning'</span>]
-    }
-                </div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>🏰 Agent 3: Business Moat Analyst (Web-Powered Research)</h2>
-            <p>The Business Moat Analyst uses Tavily API to research competitive advantages and scores the company's economic moat (0-15 points):</p>
-
-            <div class="code-container">
-                <div class="code-header">📄 agent_business_moat.py</div>
-                <div class="code-block">
-<span class="code-keyword">async</span> <span class="code-function">_agent_business_moat</span>(self, ticker: str, stock_data: Dict) -> Dict:
-    <span class="code-string">"""
-    Agent 3: Research business moat via web search and score competitive advantages.
-
-    Evaluates:
-    - Brand strength and recognition
-    - Network effects and switching costs
-    - Cost advantages and economies of scale
-    - Regulatory barriers and patents
-    - Competitive positioning
-    """</span>
-
-    <span class="code-comment"># Search for company competitive advantages</span>
-    search_query = f<span class="code-string">"{stock_data['name']} competitive advantages business moat Malaysia"</span>
-    search_results = self.tavily.search(
-        query=search_query,
-        search_depth=<span class="code-string">"advanced"</span>,
-        max_results=<span class="code-number">5</span>
-    )
-
-    <span class="code-comment"># Extract relevant information from search results</span>
-    research_content = <span class="code-string">"\n\n"</span>.join([
-        f<span class="code-string">"Source: {r['url']}\n{r['content']}"</span>
-        <span class="code-keyword">for</span> r <span class="code-keyword">in</span> search_results[<span class="code-string">'results'</span>]
-    ])
-
-    moat_prompt = f<span class="code-string">"""
-    You are a business moat analyst. Evaluate the competitive advantages of this company.
-
-    Company: {stock_data['name']} ({ticker})
-    Industry Research:
-    {research_content}
-
-    Analyze and score (0-15 points) based on:
-
-    1. Brand Strength (0-5 points):
-       - Market recognition, customer loyalty, brand premium
-
-    2. Competitive Barriers (0-5 points):
-       - Switching costs, network effects, regulatory moats
-
-    3. Cost/Scale Advantages (0-5 points):
-       - Economies of scale, proprietary technology, unique assets
-
-    Rate each dimension and provide total moat score (0-15).
-    Explain strengths and weaknesses clearly.
-
-    Return JSON with scores and detailed moat analysis.
-    """</span>
-
-    response = self.model.generate_content(moat_prompt)
-    moat_analysis = self._parse_json_response(response.text)
-
-    <span class="code-keyword">return</span> {
-        <span class="code-string">'moat_score'</span>: moat_analysis[<span class="code-string">'total_moat_score'</span>],
-        <span class="code-string">'moat_strength'</span>: self._classify_moat(moat_analysis[<span class="code-string">'total_moat_score'</span>]),
-        <span class="code-string">'key_advantages'</span>: moat_analysis[<span class="code-string">'strengths'</span>],
-        <span class="code-string">'vulnerabilities'</span>: moat_analysis[<span class="code-string">'weaknesses'</span>],
-        <span class="code-string">'research_sources'</span>: [r[<span class="code-string">'url'</span>] <span class="code-keyword">for</span> r <span class="code-keyword">in</span> search_results[<span class="code-string">'results'</span>]]
-    }
-
-<span class="code-keyword">def</span> <span class="code-function">_classify_moat</span>(self, score: float) -> str:
-    <span class="code-string">"""Classify moat strength based on score."""</span>
-    <span class="code-keyword">if</span> score >= <span class="code-number">12</span>: <span class="code-keyword">return</span> <span class="code-string">"Wide Moat"</span>
-    <span class="code-keyword">elif</span> score >= <span class="code-number">8</span>: <span class="code-keyword">return</span> <span class="code-string">"Narrow Moat"</span>
-    <span class="code-keyword">else</span>: <span class="code-keyword">return</span> <span class="code-string">"No Moat"</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>⚙️ Technical Implementation Notes</h2>
-            <h3>Key Algorithms & Innovations</h3>
-            <ul style="margin: 15px 0; padding-left: 20px;">
-                <li><strong>Multi-Agent Orchestration:</strong> Sequential pipeline coordinates 5 specialized AI agents with clear handoffs</li>
-                <li><strong>Real-Time Data Integration:</strong> Yahoo Finance API provides live financial data for accurate analysis</li>
-                <li><strong>Web-Powered Research:</strong> Tavily API enables qualitative business moat analysis beyond raw financials</li>
-                <li><strong>Investment Yardstick Scoring:</strong> 7-category framework (100 points) provides objective stock evaluation</li>
-                <li><strong>Automated Report Generation:</strong> Markdown reports with visualizations for professional presentation</li>
-            </ul>
-
-            <h3>Why This Approach Works</h3>
-            <ul style="margin: 15px 0; padding-left: 20px;">
-                <li><strong>Comprehensive Analysis:</strong> Combines quantitative fundamentals with qualitative moat research</li>
-                <li><strong>Objective Scoring:</strong> Standardized yardstick enables consistent stock comparison</li>
-                <li><strong>Domain Expertise:</strong> Each agent specializes in one aspect (screening, fundamentals, moat, dividends)</li>
-                <li><strong>Scalable Discovery:</strong> Batch screening can analyze 50+ stocks to find hidden opportunities</li>
-                <li><strong>Transparency:</strong> Clear scoring breakdown shows exactly why a stock received its rating</li>
-            </ul>
-
-            <h3>Investment Recommendations</h3>
-            <ul style="margin: 15px 0; padding-left: 20px;">
-                <li><strong>80-100 points:</strong> Strong Buy 🟢 - Excellent fundamentals, wide moat, sustainable dividends</li>
-                <li><strong>60-79 points:</strong> Buy 🟡 - Good investment with solid potential and acceptable risks</li>
-                <li><strong>40-59 points:</strong> Hold ⚪ - Neutral outlook, monitor for changes before investing</li>
-                <li><strong>0-39 points:</strong> Avoid 🔴 - Significant concerns in fundamentals or business quality</li>
-            </ul>
-        </div>
-
-        <div class="demo-links">
-            <a href="https://colab.research.google.com/drive/1Wji69Sq-IqhtMEJTlxIkQ39ZZ5JAXR6w" target="_blank" class="demo-btn">🚀 Try Live Demo</a>
-            <a href="stock-analysis-agent.html" class="demo-btn secondary">📖 View Full Project Details</a>
-        </div>
-
-        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
-            <a href="index.html">← Back to Portfolio</a> |
-            <a href="stock-analysis-agent.html">View Project Overview</a>
-        </nav>
+  <div class="overlay" id="overlay"></div>
+  <nav class="drawer" id="drawer">
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">&times;</button>
+    <a href="index.html">Home</a>
+    <a href="project-categories.html">Categories</a>
+    <a href="contact.html">Contact</a>
+    <a href="https://lyven81.github.io/data-analyst-portfolio/index.html">Data Portfolio</a>
+  </nav>
+
+  <div class="masthead">
+    <div class="mast-left">
+      <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+      <a class="logo" href="index.html">AI PROJECTS</a>
+      <nav class="mast-nav">
+        <a href="project-categories.html">Categories</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <div class="search-box">
+        <input type="text" class="search-input" id="searchInput" autocomplete="off" placeholder="Search AI projects..." aria-label="Search AI projects">
+        <span class="search-ic">&#128269;</span>
+        <div class="search-results" id="searchResults"></div>
+      </div>
     </div>
+  </div>
+  <hr class="rule-top">
+
+  <div class="crumb">
+    <a href="project-categories.html">Categories</a>
+    <span class="sep">/</span><a id="crumbCat" href="#"></a>
+    <span class="sep">/</span><a id="crumbProj" href="#"></a>
+    <span class="sep">/</span><span>Source</span>
+  </div>
+
+  <section class="src-head">
+    <div class="cover-strip" id="coverStrip" style="display:none"><img id="cover" alt=""></div>
+    <span class="rubric" id="kicker"></span>
+    <h1 id="title"></h1>
+    <p class="sub" id="subtitle"></p>
+    <div class="head-tech" id="headTech"></div>
+    <div class="head-btns" id="headBtns"></div>
+  </section>
+
+  <div id="body"></div>
+
+  <footer>&copy; 2026 Lee Yih Ven | AI Project Portfolio &middot; All rights reserved.</footer>
+  <div class="note">Sample Source-Showcase-E2 (TEMPLATE): source-code page on the index magazine system: slim cover banner, About, Project Structure, code walkthrough with copyable navy-barred code blocks, CTA. Reuse by editing only the PROJECT block at the top of the script.</div>
+
+<script>
+  const SITE = "";
+
+  /* =================================================================
+     EDIT PER PROJECT  -  the ONLY block you change per page.
+     Copy this file, swap PROJECT, save as <slug>-source.html.
+     - structure.code : the project file tree (plain text)
+     - walkthrough[]   : { heading, body, files:[{label, code}] }
+     - notes[]         : { heading, bullets:[...] }
+     Code strings can be multi-line; they render verbatim.
+     ================================================================= */
+  const PROJECT = {
+  "slug": "stock-analysis-agent",
+  "category": "Multi-Agent Decision Systems",
+  "categoryUrl": "category-multi-agent-systems.html",
+  "title": "Stock Analysis Agent",
+  "subtitle": "The multi-agent orchestration engine and three of the specialised agents, screening, fundamentals, and moat, the heart of the pipeline.",
+  "cover": "images/stock-analysis-agent/cover.jpeg",
+  "tech": [
+    "Python 3.8+",
+    "Gemini 2.0 Flash",
+    "Multi-Agent",
+    "Yahoo Finance",
+    "Tavily"
+  ],
+  "overviewUrl": "stock-analysis-agent.html",
+  "demoLabel": "Try Live Demo",
+  "demoUrl": "https://colab.research.google.com/drive/1Wji69Sq-IqhtMEJTlxIkQ39ZZ5JAXR6w",
+  "repoUrl": "https://github.com/lyven81/ai-project/tree/main/projects/stock-analysis-agent",
+  "about": "This curated code shows how the Stock Analysis Agent coordinates five specialised AI agents to automate investment research, fundamental analysis, and report generation for Malaysian stocks. Full deployment scripts, API keys, and proprietary screening algorithms are omitted for security. The excerpts highlight the core multi-agent orchestration and the investment Yardstick scoring system: the engine that sequences the agents, the screener that gates the pipeline, the fundamentals scorer, and the web-powered moat analyst.",
+  "structure": {
+    "label": "projects/stock-analysis-agent/",
+    "code": "projects/stock-analysis-agent/\n  stock_analysis_pipeline.py   the 5-agent orchestration engine\n  agent_stock_screener.py      Agent 1: investment-criteria validation\n  agent_fundamental_analyst.py Agent 2: 55-point fundamentals scoring\n  agent_business_moat.py       Agent 3: web-powered moat research\n  demo.html                    the AI assistant demo (99SMART case)\n  README.md"
+  },
+  "walkthrough": [
+    {
+      "heading": "The Orchestration Engine: 5 Agents in Sequence",
+      "body": "The foundation is a pipeline that coordinates five specialised agents working in sequence. The screener runs first and gates the rest; only stocks that pass flow on to fundamentals, moat, dividends, and the report generator. The Yardstick (7 categories, 100 points) is declared once and drives every scoring step.",
+      "files": [
+        {
+          "label": "stock_analysis_pipeline.py: orchestrate the 5-agent run",
+          "code": "import google.generativeai as genai\nimport yfinance as yf\nfrom tavily import TavilyClient\nfrom typing import Dict, List, Optional\nimport json\n\nclass StockAnalysisPipeline:\n    \"\"\"\n    Multi-agent orchestration system for comprehensive stock analysis.\n    Coordinates 5 specialized AI agents for screening, fundamental analysis,\n    business moat research, dividend evaluation, and report generation.\n    \"\"\"\n\n    def __init__(self, gemini_api_key: str, tavily_api_key: str):\n        genai.configure(api_key=gemini_api_key)\n        self.model = genai.GenerativeModel('gemini-2.0-flash-exp')\n        self.tavily = TavilyClient(api_key=tavily_api_key)\n\n        # Investment yardstick scoring criteria (7 categories, 100 points total)\n        self.scoring_categories = {\n            'fundamentals_profitability': 20,  # ROE, EPS, margins\n            'financial_health': 15,           # Debt, current ratio\n            'valuation': 20,                  # PE, P/B, P/S ratios\n            'business_moat': 15,              # Competitive advantages\n            'dividends_cashflow': 15,         # Dividend sustainability\n            'management_outlook': 10,         # Track record, governance\n            'liquidity': 5                    # Trading volume\n        }\n\n    async def run_stock_analysis_pipeline(self, ticker: str) -> Dict:\n        \"\"\"Execute complete 5-agent analysis pipeline for a stock.\"\"\"\n        print(f\"Starting analysis for {ticker}...\")\n\n        # Step 1: Fetch real-time financial data\n        stock_data = self._fetch_stock_data(ticker)\n        if not stock_data['valid']:\n            return {'error': 'Failed to fetch stock data'}\n\n        # Step 2: Agent 1 - Stock Screener (validate investment criteria)\n        screening_result = await self._agent_stock_screener(stock_data)\n        if not screening_result['passed']:\n            return {\n                'ticker': ticker,\n                'screening': screening_result,\n                'recommendation': 'FAIL - Does not meet investment criteria'\n            }\n\n        # Step 3: Agent 2 - Fundamental Analyst (score 55 points)\n        fundamental_analysis = await self._agent_fundamental_analyst(stock_data)\n        # Step 4: Agent 3 - Business Moat Analyst (15 points via web research)\n        moat_analysis = await self._agent_business_moat(ticker, stock_data)\n        # Step 5: Agent 4 - Dividend & Cash Flow Analyst (15 points)\n        dividend_analysis = await self._agent_dividend_cashflow(stock_data)\n\n        # Step 6: Calculate total yardstick score (0-100)\n        total_score = self._calculate_total_score(\n            fundamental_analysis, moat_analysis, dividend_analysis)\n\n        # Step 7: Agent 5 - Investment Report Generator\n        report = await self._agent_report_generator(\n            ticker, stock_data, screening_result, fundamental_analysis,\n            moat_analysis, dividend_analysis, total_score)\n\n        return {\n            'ticker': ticker,\n            'total_score': total_score,\n            'recommendation': self._get_recommendation(total_score),\n            'report_path': report['markdown_path'],\n            'chart_path': report['chart_path']\n        }"
+        }
+      ]
+    },
+    {
+      "heading": "Agent 1: The Screening Gate",
+      "body": "The screener validates a stock against fixed investment criteria (price, PE, ROE, EPS, dividend yield, market cap, and volume) before any deeper agent runs. It builds a structured prompt from live Yahoo Finance data and returns a pass/fail verdict with per-criterion results, so the rest of the pipeline never wastes effort on a stock that fails the basics.",
+      "files": [
+        {
+          "label": "agent_stock_screener.py: gate on investment criteria",
+          "code": "async def _agent_stock_screener(self, stock_data: Dict) -> Dict:\n    \"\"\"\n    Agent 1: Validate stock against investment screening criteria.\n    - Price within budget, PE 4-15, ROE >= 5%, EPS >= 0.01,\n      Dividend yield >= 1%, Market cap >= RM 50M, Volume >= 50k/day\n    \"\"\"\n    criteria = {\n        'max_price': 1.00, 'min_pe': 4, 'max_pe': 15,\n        'min_roe': 5, 'min_eps': 0.01, 'min_dividend_yield': 1,\n        'min_market_cap': 50_000_000, 'min_volume': 50_000\n    }\n\n    # Build screening prompt for AI validation\n    screening_prompt = f\"\"\"\n    You are a stock screening agent. Validate this stock against criteria.\n\n    Stock Data:\n    - Ticker: {stock_data['ticker']}\n    - Price: RM {stock_data['current_price']}\n    - PE Ratio: {stock_data['pe_ratio']}\n    - ROE: {stock_data['roe']}%\n    - EPS: {stock_data['eps']}\n    - Dividend Yield: {stock_data['dividend_yield']}%\n    - Market Cap: RM {stock_data['market_cap']:,}\n    - Avg Volume: {stock_data['avg_volume']:,}\n\n    Criteria:\n    {json.dumps(criteria, indent=2)}\n\n    Return JSON: passed (bool), criteria_results, summary.\n    \"\"\"\n\n    response = self.model.generate_content(screening_prompt)\n    screening_result = self._parse_json_response(response.text)\n    return screening_result"
+        }
+      ]
+    },
+    {
+      "heading": "Agent 2 & 3: Fundamentals Scoring and Web-Powered Moat",
+      "body": "Agent 2 scores fundamentals, financial health, and valuation (55 points across three categories) from a single grounded prompt. Agent 3 reaches beyond the financials: it uses the Tavily search API to gather qualitative evidence on competitive advantages, then scores brand strength, barriers, and scale, and classifies the result as a wide, narrow, or no moat.",
+      "files": [
+        {
+          "label": "agent_fundamental_analyst.py: score 55 points in one pass",
+          "code": "async def _agent_fundamental_analyst(self, stock_data: Dict) -> Dict:\n    \"\"\"\n    Agent 2: Score fundamentals, financial health, and valuation.\n    1. Fundamentals & Profitability (20): ROE, EPS growth, margins\n    2. Financial Health & Solvency (15): D/E, current ratio, book value\n    3. Valuation (20): PE fairness, price-to-book, price-to-sales\n    \"\"\"\n    fundamental_prompt = f\"\"\"\n    You are a fundamental analysis expert. Score this stock across 3 categories.\n    Stock: {stock_data['ticker']} - {stock_data['name']}\n    ROE: {stock_data['roe']:.2f}%  EPS: {stock_data['eps']}\n    PE: {stock_data['pe_ratio']}  P/B: {stock_data['price_to_book']}\n    D/E: {stock_data['debt_to_equity']}  Current: {stock_data['current_ratio']}\n\n    1. Fundamentals & Profitability (0-20): ROE >15% excellent, 5-15% good\n    2. Financial Health & Solvency (0-15): D/E <0.5 strong, >1.5 risky\n    3. Valuation (0-20): PE 4-10 undervalued, 10-15 fair, >15 expensive\n    Return JSON with scores and detailed analysis per category.\n    \"\"\"\n    response = self.model.generate_content(fundamental_prompt)\n    analysis = self._parse_json_response(response.text)\n    return {\n        'category_scores': {\n            'fundamentals_profitability': analysis['fundamentals_score'],\n            'financial_health': analysis['health_score'],\n            'valuation': analysis['valuation_score']\n        },\n        'total_fundamental_score': sum(analysis['category_scores'].values()),\n        'detailed_analysis': analysis['reasoning']\n    }"
+        },
+        {
+          "label": "agent_business_moat.py: research and score the moat",
+          "code": "async def _agent_business_moat(self, ticker: str, stock_data: Dict) -> Dict:\n    \"\"\"Agent 3: Research the moat via web search, score (0-15).\"\"\"\n    # Search for company competitive advantages\n    search_query = f\"{stock_data['name']} competitive advantages business moat Malaysia\"\n    search_results = self.tavily.search(\n        query=search_query, search_depth=\"advanced\", max_results=5)\n\n    research_content = \"\\n\\n\".join([\n        f\"Source: {r['url']}\\n{r['content']}\"\n        for r in search_results['results']\n    ])\n\n    moat_prompt = f\"\"\"\n    Evaluate the competitive advantages of this company.\n    Company: {stock_data['name']} ({ticker})\n    Research: {research_content}\n    Score (0-15): Brand Strength (0-5), Competitive Barriers (0-5),\n    Cost/Scale Advantages (0-5). Return JSON with scores and analysis.\n    \"\"\"\n    response = self.model.generate_content(moat_prompt)\n    moat_analysis = self._parse_json_response(response.text)\n    return {\n        'moat_score': moat_analysis['total_moat_score'],\n        'moat_strength': self._classify_moat(moat_analysis['total_moat_score']),\n        'key_advantages': moat_analysis['strengths'],\n        'vulnerabilities': moat_analysis['weaknesses'],\n        'research_sources': [r['url'] for r in search_results['results']]\n    }\n\ndef _classify_moat(self, score: float) -> str:\n    \"\"\"Classify moat strength based on score.\"\"\"\n    if score >= 12: return \"Wide Moat\"\n    elif score >= 8: return \"Narrow Moat\"\n    else: return \"No Moat\""
+        }
+      ]
+    }
+  ],
+  "notes": [
+    {
+      "heading": "Why This Design",
+      "bullets": [
+        "<b>Multi-agent orchestration:</b> a sequential pipeline coordinates five specialised agents with clear handoffs, so each agent owns one job.",
+        "<b>Real-time data integration:</b> the Yahoo Finance API supplies live prices and ratios, so the screener and fundamentals reads stay current.",
+        "<b>Web-powered research:</b> the Tavily API lets the moat agent reason about competitive advantages beyond the raw financials.",
+        "<b>Investment Yardstick scoring:</b> a 7-category, 100-point framework gives an objective, comparable rating across every stock.",
+        "<b>Scalable discovery:</b> the same Yardstick powers a batch screener that can scan 50-plus stocks to surface candidates."
+      ]
+    }
+  ],
+  "cta": "Want a multi-agent deep-read pipeline like this built for your own filings or data? Let's scope it."
+};
+  /* ===================== END EDIT BLOCK ===================== */
+
+  const pref = (u) => /^https?:|^mailto:|^tel:/.test(u || '') ? u : (SITE + (u || ''));
+  const esc = (s) => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const rich = (s) => esc(s).replace(/&lt;(\/?(?:b|code))&gt;/g, '<$1>');
+
+  // raw code store for copy buttons
+  const RAW = [];
+  function codeBlock(label, codeStr, extraClass){
+    const idx = RAW.push(codeStr) - 1;
+    const rendered = esc(codeStr).split('\n')
+      .map(line => /^\s*#/.test(line) ? `<span class="cmt">${line}</span>` : line).join('\n');
+    return `<div class="codeblock ${extraClass||''}">`+
+      `<div class="code-bar"><span class="path"><span>${esc(label)}</span></span>`+
+      `<button class="code-copy" data-idx="${idx}">Copy</button></div>`+
+      `<pre><code>${rendered}</code></pre></div>`;
+  }
+
+  // Breadcrumb + header
+  document.title = PROJECT.title + ": Source | AI Project Portfolio";
+  document.getElementById('crumbCat').textContent = PROJECT.category;
+  document.getElementById('crumbCat').href = pref(PROJECT.categoryUrl);
+  document.getElementById('crumbProj').textContent = PROJECT.title;
+  document.getElementById('crumbProj').href = pref(PROJECT.overviewUrl);
+  if (PROJECT.cover){
+    document.getElementById('coverStrip').style.display = '';
+    const c = document.getElementById('cover'); c.src = PROJECT.cover; c.alt = PROJECT.title + " cover";
+  }
+  document.getElementById('kicker').textContent = "Source Walkthrough · " + PROJECT.category;
+  document.getElementById('title').textContent = PROJECT.title;
+  document.getElementById('subtitle').textContent = PROJECT.subtitle;
+  document.getElementById('headTech').innerHTML = (PROJECT.tech||[]).map(t => `<span class="tech-chip">${esc(t)}</span>`).join('');
+  document.getElementById('headBtns').innerHTML =
+    (PROJECT.demoUrl ? `<a class="btn" href="${pref(PROJECT.demoUrl)}" target="_blank" rel="noopener">${esc(PROJECT.demoLabel||'Live Demo')}</a>` : '') +
+    (PROJECT.overviewUrl ? `<a class="btn ghost" href="${pref(PROJECT.overviewUrl)}">Project Overview</a>` : '') +
+    (PROJECT.repoUrl ? `<a class="btn ghost" href="${pref(PROJECT.repoUrl)}" target="_blank" rel="noopener">GitHub Repo</a>` : '');
+
+  const section = (tab, inner) => `<section class="sec"><div class="sec-rule"><span class="tab">${esc(tab)}</span>${inner}</div></section>`;
+  let html = "";
+  const P = PROJECT;
+
+  if (P.about){
+    html += section("About This Code", `<h2>About This Code Showcase</h2><p class="intro">${rich(P.about)}</p>`);
+  }
+  if (P.structure && P.structure.code){
+    html += section("Project Structure", `<h2>Project Structure</h2>`+
+      codeBlock(P.structure.label || 'project/', P.structure.code, 'tree'));
+  }
+  (P.walkthrough||[]).forEach(w => {
+    let inner = `<h2>${esc(w.heading)}</h2>`;
+    if (w.body) inner += `<p class="body">${rich(w.body)}</p>`;
+    (w.files||[]).forEach(f => { inner += codeBlock(f.label, f.code); });
+    html += section("Code", inner);
+  });
+  // CTA
+  html += `<section class="sec"><div class="cta-inner">`+
+    `<div><h3>Interested in the build?</h3><p>${esc(P.cta || "Let's talk.")}</p></div>`+
+    `<div class="cta-btns">`+
+    (P.demoUrl ? `<a class="btn" href="${pref(P.demoUrl)}" target="_blank" rel="noopener">${esc(P.demoLabel||'Live Demo')}</a>` : '')+
+    `<a class="btn ghost" href="${SITE}contact.html">Get in Touch</a>`+
+    `</div></div></section>`;
+
+  document.getElementById('body').innerHTML = html;
+
+  // Copy buttons
+  function copyText(text, btn){
+    const done = ()=>{ const o=btn.textContent; btn.textContent='Copied ✓'; setTimeout(()=>btn.textContent=o.includes('Copied')?'Copy':o,1400); };
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(done).catch(()=>fb(text,done)); }
+    else fb(text,done);
+  }
+  function fb(text,done){ const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(ta); done(); }
+  document.querySelectorAll('.code-copy').forEach(btn =>
+    btn.addEventListener('click', ()=> copyText(RAW[+btn.dataset.idx], btn)));
+
+  // Masthead search
+  const ITEMS = [
+    {t:PROJECT.title, c:PROJECT.category, s:PROJECT.slug},
+    {t:"Courier CS Quality Console", c:"Conversational Data Analytics", s:"courier-cs-quality-console"},
+    {t:"Voucher Analyzer", c:"Conversational Data Analytics", s:"voucher-analyzer"},
+    {t:"Wiseman", c:"Knowledge & Reference Chatbots", s:"wiseman"},
+    {t:"Sunny Car Accessories", c:"Agentic Commerce", s:"sunny-car-accessories"},
+    {t:"Bookshelf", c:"Multi-Agent Decision Systems", s:"bookshelf"}
+  ];
+  const searchInput = document.getElementById('searchInput');
+  const searchResults = document.getElementById('searchResults');
+  function runSearch(q){
+    if(q.trim().length < 2){ searchResults.style.display='none'; return; }
+    const ql = q.toLowerCase();
+    const hits = ITEMS.filter(it => (it.t+' '+it.c).toLowerCase().includes(ql));
+    searchResults.innerHTML = hits.length ? hits.map(it =>
+      `<div class="sr-item"><div class="sr-cat">${esc(it.c)}</div>`+
+      `<a href="${SITE}${it.s}.html"><div class="sr-title">${esc(it.t)}</div></a>`+
+      `<div class="sr-links"><a href="${SITE}${it.s}.html">View Details</a></div></div>`).join('')
+      : `<div class="sr-none">No projects found. Try a different keyword.</div>`;
+    searchResults.style.display='block';
+  }
+  searchInput.addEventListener('input', e => runSearch(e.target.value));
+  document.addEventListener('click', e => { if(!e.target.closest('.search-box')) searchResults.style.display='none'; });
+
+  // Drawer
+  const drawer=document.getElementById('drawer'), overlay=document.getElementById('overlay');
+  const openMenu=()=>{ drawer.classList.add('open'); overlay.classList.add('open'); };
+  const closeMenu=()=>{ drawer.classList.remove('open'); overlay.classList.remove('open'); };
+  document.getElementById('hamburger').addEventListener('click', openMenu);
+  document.getElementById('drawerClose').addEventListener('click', closeMenu);
+  overlay.addEventListener('click', closeMenu);
+  drawer.querySelectorAll('a').forEach(a=>a.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeMenu(); searchResults.style.display='none'; }});
+</script>
 </body>
 </html>

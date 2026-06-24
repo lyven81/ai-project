@@ -1,460 +1,349 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skyread - Source Code</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skyread: Source | AI Project Portfolio</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root{ --ink:#222; --paper:#fff; --hair:#dddddd; --gray:#555; --accent:#B8860B; --navy:#1E3A5F; --code-bg:#fbfbf8; --cmt:#6b8190; }
+  html{ scroll-behavior:smooth; }
+  body{ background:var(--paper); color:var(--ink); font-family:Arial, Helvetica, sans-serif; line-height:1.6; overflow-x:hidden; }
+  a{ color:inherit; text-decoration:none; }
+  a:hover h2, a:hover h3, a:hover h4{ color:var(--accent); }
+  p code, li code{ font-family:"Courier New", monospace; font-size:.86em; background:#f2f3f5; padding:1px 5px; color:var(--navy); }
 
-        body {
-            font-family: 'Arial', sans-serif;
-            line-height: 1.6;
-            color: #222;
-            background-color: #ffffff;
-        }
+  /* Masthead (shared) */
+  .masthead{ display:flex; align-items:center; justify-content:space-between; padding:14px 28px; max-width:1240px; margin:0 auto; gap:18px; }
+  .mast-left{ display:flex; align-items:center; gap:20px; }
+  .logo{ background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; letter-spacing:3px; font-size:.95rem; padding:8px 12px; white-space:nowrap; }
+  .mast-nav{ display:flex; gap:20px; font-family:Arial, Helvetica, sans-serif; font-size:.72rem; letter-spacing:1.4px; text-transform:uppercase; }
+  .mast-nav a:hover{ color:var(--accent); }
+  .hamburger{ display:none; flex-direction:column; gap:4px; background:none; border:none; cursor:pointer; padding:6px; }
+  .hamburger span{ width:22px; height:2px; background:#222; display:block; }
+  .rule-top{ border:none; border-top:3px solid #222; max-width:1240px; margin:0 auto; }
 
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+  /* Search (shared) */
+  .search-box{ position:relative; width:200px; }
+  .search-input{ width:100%; padding:7px 30px 7px 12px; border:1px solid var(--hair); background:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; color:#222; }
+  .search-input:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(184,134,11,.15); }
+  .search-ic{ position:absolute; right:10px; top:50%; transform:translateY(-50%); color:var(--gray); font-size:.8rem; pointer-events:none; }
+  .search-results{ position:absolute; top:calc(100% + 4px); left:0; width:340px; max-width:86vw; background:#fff; border:1px solid #222; max-height:60vh; overflow-y:auto; z-index:120; display:none; }
+  .sr-item{ padding:12px 14px; border-bottom:1px solid var(--hair); }
+  .sr-item:last-child{ border-bottom:none; }
+  .sr-cat{ font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; margin-bottom:4px; color:var(--accent); }
+  .sr-title{ font-weight:700; font-size:1.02rem; color:#222; }
+  .sr-links{ font-size:.58rem; letter-spacing:.8px; text-transform:uppercase; color:var(--gray); margin-top:5px; }
+  .sr-links a:hover{ color:var(--accent); }
+  .sr-none{ padding:16px 14px; font-size:.82rem; color:var(--gray); }
 
-        .back-nav {
-            margin-bottom: 20px;
-        }
+  /* Shared bits */
+  .tab{ display:inline-block; background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.66rem; letter-spacing:2px; text-transform:uppercase; padding:6px 12px; }
+  .rubric{ font-family:Arial, Helvetica, sans-serif; font-size:.62rem; font-weight:700; letter-spacing:1.6px; text-transform:uppercase; color:var(--accent); display:block; margin-bottom:8px; }
+  .tech-chip{ display:inline-block; border:1px solid var(--hair); padding:6px 12px; font-size:.72rem; letter-spacing:.3px; color:#333; white-space:nowrap; }
+  .tech-chip:hover{ border-color:var(--accent); color:var(--accent); }
+  .btn{ display:inline-block; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.7rem; letter-spacing:1.6px; text-transform:uppercase; padding:13px 24px; border:1px solid #222; background:#222; color:#fff; cursor:pointer; transition:.15s; }
+  .btn:hover{ background:var(--accent); border-color:var(--accent); }
+  .btn.ghost{ background:#fff; color:#222; }
+  .btn.ghost:hover{ color:var(--accent); border-color:var(--accent); background:#fff; }
 
-        .back-nav a {
-            color: #007BFF;
-            text-decoration: none;
-            font-size: 1rem;
-        }
+  /* Breadcrumb */
+  .crumb{ max-width:1240px; margin:0 auto; padding:20px 28px 0; font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--gray); }
+  .crumb a:hover{ color:var(--accent); }
+  .crumb .sep{ color:var(--hair); margin:0 8px; }
 
-        .back-nav a:hover {
-            text-decoration: underline;
-        }
+  /* Header (slim cover banner + copy) */
+  .src-head{ max-width:1240px; margin:0 auto; padding:14px 28px 6px; }
+  .cover-strip{ border:1px solid var(--hair); line-height:0; background:#eef1f4; }
+  .cover-strip img{ width:100%; height:190px; object-fit:cover; object-position:center 42%; display:block; }
+  .src-head h1{ font-size:2.5rem; font-weight:900; line-height:1.04; letter-spacing:-.008em; margin-top:18px; }
+  .src-head .sub{ font-style:italic; font-size:1.08rem; color:#333; margin-top:10px; max-width:72ch; }
+  .head-tech{ display:flex; flex-wrap:wrap; gap:9px; margin-top:16px; }
+  .head-btns{ display:flex; flex-wrap:wrap; gap:12px; margin-top:18px; }
 
-        .project-header {
-            text-align: center;
-            margin-bottom: 40px;
-            padding: 40px 0;
-            background: linear-gradient(135deg, #4f46e5, #7c3aed);
-            color: white;
-            border-radius: 10px;
-        }
+  /* Section shell */
+  .sec{ max-width:1240px; margin:0 auto; padding:26px 28px; }
+  .sec-rule{ border-top:3px solid #222; padding-top:16px; }
+  .sec .tab{ margin-bottom:14px; }
+  .sec h2{ font-size:1.7rem; font-weight:900; line-height:1.06; }
+  .sec .intro{ color:#333; font-size:1.02rem; margin-top:10px; max-width:80%; }
+  .sec .body{ color:#333; font-size:1rem; margin-top:10px; max-width:80%; }
 
-        .project-header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
+  /* Code block */
+  .codeblock{ border:1px solid var(--hair); margin-top:16px; }
+  .code-bar{ display:flex; align-items:center; justify-content:space-between; gap:12px; background:var(--navy); color:#fff; padding:8px 12px; }
+  .code-bar .path{ font-family:"Courier New", monospace; font-size:.74rem; letter-spacing:.2px; opacity:.96; display:flex; align-items:center; gap:7px; min-width:0; }
+  .code-bar .path span{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .code-copy{ flex:none; background:none; border:1px solid rgba(255,255,255,.4); color:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.56rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; padding:5px 11px; cursor:pointer; transition:.15s; }
+  .code-copy:hover{ background:rgba(255,255,255,.16); }
+  .codeblock pre{ margin:0; padding:14px 16px; overflow-x:auto; background:var(--code-bg); }
+  .codeblock code{ font-family:"Courier New", monospace; font-size:.82rem; line-height:1.6; color:#1b2a3a; background:none; padding:0; white-space:pre; display:block; }
+  .codeblock code .cmt{ color:var(--cmt); font-style:italic; }
 
-        .project-header p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
+  .tree .code-bar .path::before{ content:"📁"; }
 
-        .badges {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin: 20px 0;
-            flex-wrap: wrap;
-        }
+  /* Notes */
+  .note-block{ margin-top:22px; }
+  .note-block h3{ font-size:1.15rem; font-weight:800; }
+  .blist{ list-style:none; margin-top:12px; border-top:1px solid var(--hair); }
+  .blist li{ padding:12px 0; border-bottom:1px solid var(--hair); color:#333; font-size:.95rem; }
+  .blist li b{ color:#222; }
 
-        .badge {
-            background-color: rgba(255, 255, 255, 0.2);
-            color: white;
-            padding: 5px 12px;
-            border-radius: 15px;
-            font-size: 0.9rem;
-        }
+  /* CTA */
+  .cta-inner{ display:flex; align-items:center; gap:18px; flex-wrap:wrap; border-top:3px solid #222; padding-top:18px; }
+  .cta-inner h3{ font-size:1.4rem; font-weight:900; line-height:1.08; }
+  .cta-inner p{ color:var(--gray); font-size:.95rem; margin-top:4px; }
+  .cta-btns{ margin-left:auto; display:flex; gap:12px; flex-wrap:wrap; }
 
-        .content-section {
-            margin: 40px 0;
-            padding: 30px;
-            background-color: #f9f9f9;
-            border-radius: 8px;
-            border-left: 5px solid #4f46e5;
-        }
+  footer{ background:#222; max-width:1240px; margin:30px auto 0; padding:24px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; letter-spacing:.5px; color:#fff; text-align:center; }
+  .note{ max-width:1240px; margin:14px auto 0; padding:8px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.62rem; letter-spacing:1px; color:#999; }
 
-        .content-section h2 {
-            color: #4f46e5;
-            margin-bottom: 20px;
-            font-size: 1.8rem;
-        }
+  /* Drawer (shared) */
+  .drawer{ position:fixed; top:0; left:-300px; width:280px; height:100vh; background:#fff; z-index:200; box-shadow:2px 0 14px rgba(0,0,0,.15); transition:left .28s ease; padding:74px 26px 26px; }
+  .drawer.open{ left:0; }
+  .drawer a{ display:block; font-family:Arial, Helvetica, sans-serif; font-size:.82rem; letter-spacing:1.2px; text-transform:uppercase; padding:14px 0; border-bottom:1px solid var(--hair); }
+  .overlay{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:150; }
+  .overlay.open{ display:block; }
+  .drawer-close{ position:absolute; top:20px; right:20px; font-family:Arial, Helvetica, sans-serif; font-size:1.4rem; background:none; border:none; cursor:pointer; }
 
-        .content-section h3 {
-            color: #333;
-            margin: 20px 0 10px 0;
-            font-size: 1.3rem;
-        }
-
-        .highlight-box {
-            background: linear-gradient(135deg, #ede9fe, #ddd6fe);
-            padding: 20px;
-            border-radius: 10px;
-            border-left: 5px solid #4f46e5;
-            margin: 20px 0;
-        }
-
-        .code-container {
-            background-color: #1e1e1e;
-            border-radius: 8px;
-            padding: 20px;
-            margin: 20px 0;
-            overflow-x: auto;
-        }
-
-        .code-header {
-            color: #a78bfa;
-            font-weight: bold;
-            margin-bottom: 15px;
-            font-size: 1.1rem;
-            border-bottom: 1px solid #333;
-            padding-bottom: 10px;
-        }
-
-        .code-block {
-            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-            font-size: 14px;
-            line-height: 1.5;
-            color: #d4d4d4;
-        }
-
-        .code-comment {
-            color: #6a9955;
-            font-style: italic;
-        }
-
-        .code-keyword {
-            color: #569cd6;
-        }
-
-        .code-string {
-            color: #ce9178;
-        }
-
-        .code-function {
-            color: #dcdcaa;
-        }
-
-        .code-number {
-            color: #b5cea8;
-        }
-
-        .code-type {
-            color: #4ec9b0;
-        }
-
-        .demo-links {
-            text-align: center;
-            margin: 30px 0;
-        }
-
-        .demo-btn {
-            display: inline-block;
-            background-color: #007BFF;
-            color: white;
-            padding: 12px 25px;
-            text-decoration: none;
-            border-radius: 5px;
-            margin: 0 10px;
-            font-weight: bold;
-            transition: background-color 0.3s;
-        }
-
-        .demo-btn:hover {
-            background-color: #0056b3;
-        }
-
-        .demo-btn.secondary {
-            background-color: #7c3aed;
-        }
-
-        .demo-btn.secondary:hover {
-            background-color: #5b21b6;
-        }
-
-        @media (max-width: 768px) {
-            .project-header h1 {
-                font-size: 2rem;
-            }
-
-            .project-header p {
-                font-size: 1rem;
-            }
-
-            .demo-btn {
-                margin: 5px;
-                padding: 10px 20px;
-            }
-
-            .container {
-                padding: 15px;
-            }
-        }
-    </style>
+  @media (max-width:900px){
+    .cta-btns{ margin-left:0; }
+    .mast-nav{ display:none; }
+    .hamburger{ display:flex; }
+    .masthead{ padding:12px 16px; }
+    .mast-left{ gap:10px; min-width:0; flex:1; }
+    .logo{ font-size:.72rem; letter-spacing:1.5px; padding:6px 8px; }
+    .search-box{ flex:1; width:auto; min-width:0; }
+    .search-results{ position:fixed; top:58px; left:12px; right:12px; width:auto; max-width:none; }
+    .src-head h1{ font-size:1.95rem; }
+    .cover-strip img{ height:150px; }
+  }
+</style>
 </head>
 <body>
-    <div class="container">
-        <nav class="back-nav">
-            <a href="skyread.html">← Back to Project Overview</a>
-        </nav>
 
-        <div class="project-header">
-            <h1>✨ Skyread</h1>
-            <p>Core Source Code & AI Horoscope Generation</p>
+  <div class="overlay" id="overlay"></div>
+  <nav class="drawer" id="drawer">
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">&times;</button>
+    <a href="index.html">Home</a>
+    <a href="project-categories.html">Categories</a>
+    <a href="contact.html">Contact</a>
+    <a href="https://lyven81.github.io/data-analyst-portfolio/index.html">Data Portfolio</a>
+  </nav>
 
-            <div class="badges">
-                <span class="badge">React + TypeScript</span>
-                <span class="badge">Gemini AI</span>
-                <span class="badge">Framer Motion</span>
-                <span class="badge">Vite</span>
-            </div>
-        </div>
-
-        <div class="highlight-box">
-            <h3>🔍 About This Code Showcase</h3>
-            <p><strong>This curated code walkthrough demonstrates how Skyread generates daily horoscope readings using Google Gemini AI with structured JSON schema output, manages bilingual support, and caches readings in localStorage for a fast return-visit experience.</strong></p>
-            <p>This showcase focuses on the two most important parts of the codebase: the Gemini AI service layer (<code>geminiService.ts</code>) and the main app logic (<code>App.tsx</code>).</p>
-        </div>
-
-        <div class="content-section">
-            <h2>🗂️ Project File Structure</h2>
-            <div class="code-container">
-                <div class="code-header">📁 projects/skyread/</div>
-                <div class="code-block">
-skyread/
-├── src/
-│   ├── App.tsx               <span class="code-comment"># Main app — screens, state, language toggle</span>
-│   ├── constants.ts          <span class="code-comment"># 12 zodiac signs with symbols and date ranges</span>
-│   ├── main.tsx              <span class="code-comment"># React entry point</span>
-│   ├── index.css             <span class="code-comment"># Tailwind + celestial background animations</span>
-│   └── services/
-│       └── geminiService.ts  <span class="code-comment"># Gemini AI integration — structured horoscope output</span>
-├── index.html                <span class="code-comment"># Vite HTML entry point</span>
-├── package.json              <span class="code-comment"># Dependencies: React, Framer Motion, Lucide, Gemini SDK</span>
-├── vite.config.ts            <span class="code-comment"># Vite configuration</span>
-├── tsconfig.json             <span class="code-comment"># TypeScript configuration</span>
-└── .env.example              <span class="code-comment"># Environment variable template (GEMINI_API_KEY)</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>🤖 Core AI Layer: geminiService.ts</h2>
-            <p>This is the heart of the app — the Gemini AI service that generates a structured horoscope for a given zodiac sign and language. It uses schema-enforced JSON output to guarantee consistent, typed responses.</p>
-
-            <div class="code-container">
-                <div class="code-header">📄 src/services/geminiService.ts — Structured Horoscope Generation</div>
-                <div class="code-block">
-<span class="code-keyword">import</span> { GoogleGenAI, Type, ThinkingLevel } <span class="code-keyword">from</span> <span class="code-string">"@google/genai"</span>;
-
-<span class="code-keyword">const</span> ai = <span class="code-keyword">new</span> <span class="code-function">GoogleGenAI</span>({ apiKey: process.env.<span class="code-type">GEMINI_API_KEY</span> || <span class="code-string">""</span> });
-
-<span class="code-comment">// Shape of the structured response returned by Gemini</span>
-<span class="code-keyword">export interface</span> <span class="code-type">HoroscopeData</span> {
-  date: <span class="code-type">string</span>;
-  reading: <span class="code-type">string</span>;       <span class="code-comment">// ~100-word daily horoscope</span>
-  skyExplainer: <span class="code-type">string</span>;  <span class="code-comment">// Plain-language planetary movement explanation</span>
-  snapshot: {            <span class="code-comment">// 3 key planets with positions + influences</span>
-    planet: <span class="code-type">string</span>;
-    position: <span class="code-type">string</span>;
-    influence: <span class="code-type">string</span>;
-  }[];
-}
-
-<span class="code-keyword">export async function</span> <span class="code-function">generateDailyHoroscope</span>(
-  sign: <span class="code-type">string</span>,
-  language: <span class="code-string">'en'</span> | <span class="code-string">'zh'</span> = <span class="code-string">'en'</span>
-): <span class="code-type">Promise</span>&lt;<span class="code-type">HoroscopeData</span>&gt; {
-  <span class="code-keyword">const</span> today = <span class="code-keyword">new</span> <span class="code-type">Date</span>().<span class="code-function">toISOString</span>().<span class="code-function">split</span>(<span class="code-string">'T'</span>)[<span class="code-number">0</span>];
-  <span class="code-keyword">const</span> langPrompt = language === <span class="code-string">'zh'</span>
-    ? <span class="code-string">"in Mandarin Chinese (Simplified)"</span>
-    : <span class="code-string">"in English"</span>;
-
-  <span class="code-keyword">const</span> response = <span class="code-keyword">await</span> ai.models.<span class="code-function">generateContent</span>({
-    model: <span class="code-string">"gemini-3-flash-preview"</span>,
-    contents: <span class="code-string">`Generate a daily horoscope for ${sign} for the date ${today} ${langPrompt}.
-    Include:
-    1. A personalized daily reading (about 100 words).
-    2. A "Sky Explainer" that identifies 2-3 real planetary movements happening today
-       and explains in plain language why they affect ${sign}.
-    3. A "Sky Snapshot" — list of 3 key planets, their current astrological position
-       (e.g., "Mars in Leo"), and their brief influence.
-    The tone should be grounded, credible, and atmospheric.`</span>,
-    config: {
-      thinkingConfig: { thinkingLevel: ThinkingLevel.<span class="code-type">LOW</span> }, <span class="code-comment">// Speed over depth</span>
-      responseMimeType: <span class="code-string">"application/json"</span>,
-      responseSchema: {                               <span class="code-comment">// Enforce exact output shape</span>
-        type: Type.<span class="code-type">OBJECT</span>,
-        properties: {
-          date:         { type: Type.<span class="code-type">STRING</span> },
-          reading:      { type: Type.<span class="code-type">STRING</span> },
-          skyExplainer: { type: Type.<span class="code-type">STRING</span> },
-          snapshot: {
-            type: Type.<span class="code-type">ARRAY</span>,
-            items: {
-              type: Type.<span class="code-type">OBJECT</span>,
-              properties: {
-                planet:    { type: Type.<span class="code-type">STRING</span> },
-                position:  { type: Type.<span class="code-type">STRING</span> },
-                influence: { type: Type.<span class="code-type">STRING</span> }
-              },
-              required: [<span class="code-string">"planet"</span>, <span class="code-string">"position"</span>, <span class="code-string">"influence"</span>]
-            }
-          }
-        },
-        required: [<span class="code-string">"date"</span>, <span class="code-string">"reading"</span>, <span class="code-string">"skyExplainer"</span>, <span class="code-string">"snapshot"</span>]
-      }
-    }
-  });
-
-  <span class="code-keyword">return</span> <span class="code-type">JSON</span>.<span class="code-function">parse</span>(response.text); <span class="code-comment">// Safe — schema guarantees valid JSON</span>
-}
-                </div>
-            </div>
-
-            <p style="margin-top: 15px;"><strong>Why this approach works:</strong> By passing a <code>responseSchema</code> to Gemini, the API guarantees the response will always conform to the declared shape. This eliminates defensive JSON parsing, removes the need for fallback logic, and ensures the TypeScript types match reality at runtime.</p>
-        </div>
-
-        <div class="content-section">
-            <h2>⚛️ App State & Screen Management: App.tsx</h2>
-            <p>The main app manages three screens (welcome → home → archive), user preferences, reading caching, and language toggling — all via React state and localStorage.</p>
-
-            <div class="code-container">
-                <div class="code-header">📄 src/App.tsx — Core State & Caching Logic</div>
-                <div class="code-block">
-<span class="code-comment">// Screen and language types</span>
-<span class="code-keyword">type</span> <span class="code-type">Screen</span> = <span class="code-string">'welcome'</span> | <span class="code-string">'home'</span> | <span class="code-string">'archive'</span>;
-<span class="code-keyword">type</span> <span class="code-type">Language</span> = <span class="code-string">'en'</span> | <span class="code-string">'zh'</span>;
-
-<span class="code-keyword">export default function</span> <span class="code-function">App</span>() {
-  <span class="code-comment">// Persist sign and language across sessions via localStorage</span>
-  <span class="code-keyword">const</span> [userSign, setUserSign] = <span class="code-function">useState</span>&lt;<span class="code-type">string</span> | <span class="code-keyword">null</span>&gt;(
-    localStorage.<span class="code-function">getItem</span>(<span class="code-string">'skyread_sign'</span>)
-  );
-  <span class="code-keyword">const</span> [language, setLanguage] = <span class="code-function">useState</span>&lt;<span class="code-type">Language</span>&gt;(
-    () =&gt; (localStorage.<span class="code-function">getItem</span>(<span class="code-string">'skyread_lang'</span>) <span class="code-keyword">as</span> <span class="code-type">Language</span>) || <span class="code-string">'en'</span>
-  );
-  <span class="code-keyword">const</span> [todayReading, setTodayReading] = <span class="code-function">useState</span>&lt;<span class="code-type">HoroscopeData</span> | <span class="code-keyword">null</span>&gt;(<span class="code-keyword">null</span>);
-  <span class="code-keyword">const</span> [archive, setArchive] = <span class="code-function">useState</span>&lt;<span class="code-type">HoroscopeData</span>[]&gt;(() =&gt; {
-    <span class="code-keyword">const</span> saved = localStorage.<span class="code-function">getItem</span>(<span class="code-string">'skyread_archive'</span>);
-    <span class="code-keyword">return</span> saved ? <span class="code-type">JSON</span>.<span class="code-function">parse</span>(saved) : [];
-  });
-
-  <span class="code-comment">// Fetch a new reading — skip if today's reading in this language is cached</span>
-  <span class="code-keyword">const</span> <span class="code-function">fetchDailyReading</span> = <span class="code-keyword">async</span> (sign: <span class="code-type">string</span>, lang: <span class="code-type">Language</span>) =&gt; {
-    <span class="code-keyword">const</span> today = <span class="code-keyword">new</span> <span class="code-type">Date</span>().<span class="code-function">toISOString</span>().<span class="code-function">split</span>(<span class="code-string">'T'</span>)[<span class="code-number">0</span>];
-
-    <span class="code-comment">// Detect language of cached reading via CJK Unicode range</span>
-    <span class="code-keyword">const</span> isCachedInLang = todayReading?.date === today && (
-      lang === <span class="code-string">'zh'</span>
-        ? /[\u4e00-\u9fa5]/.<span class="code-function">test</span>(todayReading.reading)
-        : !/[\u4e00-\u9fa5]/.<span class="code-function">test</span>(todayReading.reading)
-    );
-    <span class="code-keyword">if</span> (isCachedInLang) <span class="code-keyword">return</span>; <span class="code-comment">// Already have today's reading in this language</span>
-
-    setLoading(<span class="code-keyword">true</span>);
-    <span class="code-keyword">try</span> {
-      <span class="code-keyword">const</span> data = <span class="code-keyword">await</span> <span class="code-function">generateDailyHoroscope</span>(sign, lang);
-      setTodayReading(data);
-
-      <span class="code-comment">// Add to archive, keep last 30 days, avoid duplicates</span>
-      <span class="code-keyword">const</span> newArchive = [
-        data,
-        ...archive.<span class="code-function">filter</span>(item =&gt; item.date !== today || item.reading !== data.reading)
-      ].<span class="code-function">slice</span>(<span class="code-number">0</span>, <span class="code-number">30</span>);
-      setArchive(newArchive);
-      localStorage.<span class="code-function">setItem</span>(<span class="code-string">'skyread_archive'</span>, <span class="code-type">JSON</span>.<span class="code-function">stringify</span>(newArchive));
-    } <span class="code-keyword">finally</span> {
-      setLoading(<span class="code-keyword">false</span>);
-    }
-  };
-
-  <span class="code-comment">// Toggle language and force a fresh reading in the new language</span>
-  <span class="code-keyword">const</span> <span class="code-function">toggleLanguage</span> = () =&gt; {
-    <span class="code-keyword">const</span> newLang = language === <span class="code-string">'en'</span> ? <span class="code-string">'zh'</span> : <span class="code-string">'en'</span>;
-    setLanguage(newLang);
-    localStorage.<span class="code-function">setItem</span>(<span class="code-string">'skyread_lang'</span>, newLang);
-    setTodayReading(<span class="code-keyword">null</span>); <span class="code-comment">// Clears cache → triggers re-fetch in new language</span>
-  };
-}
-                </div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>🌟 Animated Loading State</h2>
-            <p>During AI generation, the app cycles through themed loading messages every 2.5 seconds to create an immersive "consulting the stars" experience rather than a generic spinner.</p>
-
-            <div class="code-container">
-                <div class="code-header">📄 src/App.tsx — Rotating Loading Messages</div>
-                <div class="code-block">
-<span class="code-keyword">const</span> TRANSLATIONS = {
-  en: {
-    loadingMessages: [
-      <span class="code-string">"Consulting the celestial charts..."</span>,
-      <span class="code-string">"Tracing planetary alignments..."</span>,
-      <span class="code-string">"Decoding cosmic vibrations..."</span>,
-      <span class="code-string">"Mapping the current sky..."</span>,
-      <span class="code-string">"Translating the language of stars..."</span>,
-      <span class="code-string">"Gleaning insights from the void..."</span>
-    ]
-  },
-  zh: {
-    loadingMessages: [
-      <span class="code-string">"正在查阅天体图..."</span>,
-      <span class="code-string">"正在追踪行星排列..."</span>,
-      <span class="code-string">"正在解码宇宙共振..."</span>,
-      <span class="code-string">"正在绘制当前星空..."</span>,
-      <span class="code-string">"正在翻译星之语言..."</span>,
-      <span class="code-string">"正在从虚空中获取洞见..."</span>
-    ]
-  }
-};
-
-<span class="code-comment">// Cycle messages every 2.5s while loading — stops when loading ends</span>
-<span class="code-function">useEffect</span>(() =&gt; {
-  <span class="code-keyword">let</span> interval: <span class="code-type">NodeJS.Timeout</span>;
-  <span class="code-keyword">if</span> (loading) {
-    <span class="code-keyword">let</span> i = <span class="code-number">0</span>;
-    interval = <span class="code-function">setInterval</span>(() =&gt; {
-      <span class="code-function">setLoadingMessage</span>(t.loadingMessages[i % t.loadingMessages.length]);
-      i++;
-    }, <span class="code-number">2500</span>);
-  }
-  <span class="code-keyword">return</span> () =&gt; <span class="code-function">clearInterval</span>(interval);
-}, [loading, language]);
-                </div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>⚙️ Technical Implementation Notes</h2>
-            <h3>Key Design Decisions</h3>
-            <ul style="margin: 15px 0; padding-left: 20px;">
-                <li><strong>Schema-enforced AI output:</strong> Passing a <code>responseSchema</code> to Gemini ensures the response is always a valid, typed JSON object — no defensive parsing or try/catch needed for schema mismatches</li>
-                <li><strong>CJK range for language detection:</strong> Rather than storing a language tag alongside each cached reading, the app detects language via <code>/[\u4e00-\u9fa5]/</code> Unicode range check — simpler and backwards-compatible</li>
-                <li><strong>localStorage for everything:</strong> Zero backend required — user sign, language, and up to 30 days of readings are all stored client-side, making the app fully offline-capable after first load</li>
-                <li><strong>ThinkingLevel.LOW:</strong> Horoscope generation is creative, not analytical. Low thinking mode reduces latency without sacrificing output quality for this use case</li>
-                <li><strong>Framer Motion AnimatePresence:</strong> Screen transitions use <code>AnimatePresence</code> with <code>mode="wait"</code> for smooth, sequential fade-and-slide animations between welcome, home, and archive screens</li>
-            </ul>
-        </div>
-
-        <div class="demo-links">
-            <a href="https://ais-dev-m2gjhpuvdrj3c3mly7e6rr-168381537832.asia-east1.run.app" target="_blank" class="demo-btn">🚀 Try Live Demo</a>
-            <a href="skyread.html" class="demo-btn secondary">📖 View Full Project Details</a>
-        </div>
-
-        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
-            <a href="index.html">← Back to Portfolio</a> |
-            <a href="skyread.html">View Project Overview</a>
-        </nav>
+  <div class="masthead">
+    <div class="mast-left">
+      <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+      <a class="logo" href="index.html">AI PROJECTS</a>
+      <nav class="mast-nav">
+        <a href="project-categories.html">Categories</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <div class="search-box">
+        <input type="text" class="search-input" id="searchInput" autocomplete="off" placeholder="Search AI projects..." aria-label="Search AI projects">
+        <span class="search-ic">&#128269;</span>
+        <div class="search-results" id="searchResults"></div>
+      </div>
     </div>
+  </div>
+  <hr class="rule-top">
+
+  <div class="crumb">
+    <a href="project-categories.html">Categories</a>
+    <span class="sep">/</span><a id="crumbCat" href="#"></a>
+    <span class="sep">/</span><a id="crumbProj" href="#"></a>
+    <span class="sep">/</span><span>Source</span>
+  </div>
+
+  <section class="src-head">
+    <div class="cover-strip" id="coverStrip" style="display:none"><img id="cover" alt=""></div>
+    <span class="rubric" id="kicker"></span>
+    <h1 id="title"></h1>
+    <p class="sub" id="subtitle"></p>
+    <div class="head-tech" id="headTech"></div>
+    <div class="head-btns" id="headBtns"></div>
+  </section>
+
+  <div id="body"></div>
+
+  <footer>&copy; 2026 Lee Yih Ven | AI Project Portfolio &middot; All rights reserved.</footer>
+  <div class="note">Sample Source-Showcase-E2 (TEMPLATE): source-code page on the index magazine system: slim cover banner, About, Project Structure, code walkthrough with copyable navy-barred code blocks, CTA. Reuse by editing only the PROJECT block at the top of the script.</div>
+
+<script>
+  const SITE = "";
+
+  /* =================================================================
+     EDIT PER PROJECT  -  the ONLY block you change per page.
+     Copy this file, swap PROJECT, save as <slug>-source.html.
+     - structure.code : the project file tree (plain text)
+     - walkthrough[]   : { heading, body, files:[{label, code}] }
+     - notes[]         : { heading, bullets:[...] }
+     Code strings can be multi-line; they render verbatim.
+     ================================================================= */
+  const PROJECT = {
+  "slug": "skyread",
+  "category": "Knowledge & Reference Chatbots",
+  "categoryUrl": "category-knowledge-chatbots.html",
+  "title": "Skyread",
+  "subtitle": "Core Source Code & AI Horoscope Generation",
+  "cover": "images/skyread/cover.jpeg",
+  "tech": [
+    "React + TypeScript",
+    "Gemini AI",
+    "Framer Motion",
+    "Vite"
+  ],
+  "overviewUrl": "skyread.html",
+  "demoLabel": "Try Live Demo",
+  "demoUrl": "https://ais-dev-m2gjhpuvdrj3c3mly7e6rr-168381537832.asia-east1.run.app",
+  "repoUrl": "https://github.com/lyven81/ai-project.git",
+  "about": "This curated code walkthrough demonstrates how Skyread generates daily horoscope readings using Google Gemini AI with structured JSON schema output, manages bilingual support, and caches readings in localStorage for a fast return-visit experience. This showcase focuses on the two most important parts of the codebase: the Gemini AI service layer (<code>geminiService.ts</code>) and the main app logic (<code>App.tsx</code>).",
+  "structure": {
+    "label": "projects/skyread/",
+    "code": "skyread/\n├── src/\n│   ├── App.tsx               # Main app — screens, state, language toggle\n│   ├── constants.ts          # 12 zodiac signs with symbols and date ranges\n│   ├── main.tsx              # React entry point\n│   ├── index.css             # Tailwind + celestial background animations\n│   └── services/\n│       └── geminiService.ts  # Gemini AI integration — structured horoscope output\n├── index.html                # Vite HTML entry point\n├── package.json              # Dependencies: React, Framer Motion, Lucide, Gemini SDK\n├── vite.config.ts            # Vite configuration\n├── tsconfig.json             # TypeScript configuration\n└── .env.example              # Environment variable template (GEMINI_API_KEY)"
+  },
+  "walkthrough": [
+    {
+      "heading": "Core AI Layer: geminiService.ts",
+      "body": "This is the heart of the app, the Gemini AI service that generates a structured horoscope for a given zodiac sign and language. It uses schema-enforced JSON output to guarantee consistent, typed responses. By passing a <code>responseSchema</code> to Gemini, the API guarantees the response will always conform to the declared shape. This eliminates defensive JSON parsing, removes the need for fallback logic, and ensures the TypeScript types match reality at runtime.",
+      "files": [
+        {
+          "label": "src/services/geminiService.ts: Structured Horoscope Generation",
+          "code": "import { GoogleGenAI, Type, ThinkingLevel } from \"@google/genai\";\n\nconst ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || \"\" });\n\n// Shape of the structured response returned by Gemini\nexport interface HoroscopeData {\n  date: string;\n  reading: string;       // ~100-word daily horoscope\n  skyExplainer: string;  // Plain-language planetary movement explanation\n  snapshot: {            // 3 key planets with positions + influences\n    planet: string;\n    position: string;\n    influence: string;\n  }[];\n}\n\nexport async function generateDailyHoroscope(\n  sign: string,\n  language: 'en' | 'zh' = 'en'\n): Promise<HoroscopeData> {\n  const today = new Date().toISOString().split('T')[0];\n  const langPrompt = language === 'zh'\n    ? \"in Mandarin Chinese (Simplified)\"\n    : \"in English\";\n\n  const response = await ai.models.generateContent({\n    model: \"gemini-3-flash-preview\",\n    contents: `Generate a daily horoscope for ${sign} for the date ${today} ${langPrompt}.\n    Include:\n    1. A personalized daily reading (about 100 words).\n    2. A \"Sky Explainer\" that identifies 2-3 real planetary movements happening today\n       and explains in plain language why they affect ${sign}.\n    3. A \"Sky Snapshot\" — list of 3 key planets, their current astrological position\n       (e.g., \"Mars in Leo\"), and their brief influence.\n    The tone should be grounded, credible, and atmospheric.`,\n    config: {\n      thinkingConfig: { thinkingLevel: ThinkingLevel.LOW }, // Speed over depth\n      responseMimeType: \"application/json\",\n      responseSchema: {                               // Enforce exact output shape\n        type: Type.OBJECT,\n        properties: {\n          date:         { type: Type.STRING },\n          reading:      { type: Type.STRING },\n          skyExplainer: { type: Type.STRING },\n          snapshot: {\n            type: Type.ARRAY,\n            items: {\n              type: Type.OBJECT,\n              properties: {\n                planet:    { type: Type.STRING },\n                position:  { type: Type.STRING },\n                influence: { type: Type.STRING }\n              },\n              required: [\"planet\", \"position\", \"influence\"]\n            }\n          }\n        },\n        required: [\"date\", \"reading\", \"skyExplainer\", \"snapshot\"]\n      }\n    }\n  });\n\n  return JSON.parse(response.text); // Safe — schema guarantees valid JSON\n}"
+        }
+      ]
+    },
+    {
+      "heading": "App State & Screen Management: App.tsx",
+      "body": "The main app manages three screens (welcome to home to archive), user preferences, reading caching, and language toggling, all via React state and localStorage.",
+      "files": [
+        {
+          "label": "src/App.tsx: Core State & Caching Logic",
+          "code": "// Screen and language types\ntype Screen = 'welcome' | 'home' | 'archive';\ntype Language = 'en' | 'zh';\n\nexport default function App() {\n  // Persist sign and language across sessions via localStorage\n  const [userSign, setUserSign] = useState<string | null>(\n    localStorage.getItem('skyread_sign')\n  );\n  const [language, setLanguage] = useState<Language>(\n    () => (localStorage.getItem('skyread_lang') as Language) || 'en'\n  );\n  const [todayReading, setTodayReading] = useState<HoroscopeData | null>(null);\n  const [archive, setArchive] = useState<HoroscopeData[]>(() => {\n    const saved = localStorage.getItem('skyread_archive');\n    return saved ? JSON.parse(saved) : [];\n  });\n\n  // Fetch a new reading — skip if today's reading in this language is cached\n  const fetchDailyReading = async (sign: string, lang: Language) => {\n    const today = new Date().toISOString().split('T')[0];\n\n    // Detect language of cached reading via CJK Unicode range\n    const isCachedInLang = todayReading?.date === today && (\n      lang === 'zh'\n        ? /[\\u4e00-\\u9fa5]/.test(todayReading.reading)\n        : !/[\\u4e00-\\u9fa5]/.test(todayReading.reading)\n    );\n    if (isCachedInLang) return; // Already have today's reading in this language\n\n    setLoading(true);\n    try {\n      const data = await generateDailyHoroscope(sign, lang);\n      setTodayReading(data);\n\n      // Add to archive, keep last 30 days, avoid duplicates\n      const newArchive = [\n        data,\n        ...archive.filter(item => item.date !== today || item.reading !== data.reading)\n      ].slice(0, 30);\n      setArchive(newArchive);\n      localStorage.setItem('skyread_archive', JSON.stringify(newArchive));\n    } finally {\n      setLoading(false);\n    }\n  };\n\n  // Toggle language and force a fresh reading in the new language\n  const toggleLanguage = () => {\n    const newLang = language === 'en' ? 'zh' : 'en';\n    setLanguage(newLang);\n    localStorage.setItem('skyread_lang', newLang);\n    setTodayReading(null); // Clears cache → triggers re-fetch in new language\n  };\n}"
+        }
+      ]
+    },
+    {
+      "heading": "Animated Loading State",
+      "body": "During AI generation, the app cycles through themed loading messages every 2.5 seconds to create an immersive 'consulting the stars' experience rather than a generic spinner.",
+      "files": [
+        {
+          "label": "src/App.tsx: Rotating Loading Messages",
+          "code": "const TRANSLATIONS = {\n  en: {\n    loadingMessages: [\n      \"Consulting the celestial charts...\",\n      \"Tracing planetary alignments...\",\n      \"Decoding cosmic vibrations...\",\n      \"Mapping the current sky...\",\n      \"Translating the language of stars...\",\n      \"Gleaning insights from the void...\"\n    ]\n  },\n  zh: {\n    loadingMessages: [\n      \"正在查阅天体图...\",\n      \"正在追踪行星排列...\",\n      \"正在解码宇宙共振...\",\n      \"正在绘制当前星空...\",\n      \"正在翻译星之语言...\",\n      \"正在从虚空中获取洞见...\"\n    ]\n  }\n};\n\n// Cycle messages every 2.5s while loading — stops when loading ends\nuseEffect(() => {\n  let interval: NodeJS.Timeout;\n  if (loading) {\n    let i = 0;\n    interval = setInterval(() => {\n      setLoadingMessage(t.loadingMessages[i % t.loadingMessages.length]);\n      i++;\n    }, 2500);\n  }\n  return () => clearInterval(interval);\n}, [loading, language]);"
+        }
+      ]
+    }
+  ],
+  "cta": "Want a grounded, bilingual AI app like this built for your own audience? Let's scope it."
+};
+  /* ===================== END EDIT BLOCK ===================== */
+
+  const pref = (u) => /^https?:|^mailto:|^tel:/.test(u || '') ? u : (SITE + (u || ''));
+  const esc = (s) => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const rich = (s) => esc(s).replace(/&lt;(\/?(?:b|code))&gt;/g, '<$1>');
+
+  // raw code store for copy buttons
+  const RAW = [];
+  function codeBlock(label, codeStr, extraClass){
+    const idx = RAW.push(codeStr) - 1;
+    const rendered = esc(codeStr).split('\n')
+      .map(line => /^\s*#/.test(line) ? `<span class="cmt">${line}</span>` : line).join('\n');
+    return `<div class="codeblock ${extraClass||''}">`+
+      `<div class="code-bar"><span class="path"><span>${esc(label)}</span></span>`+
+      `<button class="code-copy" data-idx="${idx}">Copy</button></div>`+
+      `<pre><code>${rendered}</code></pre></div>`;
+  }
+
+  // Breadcrumb + header
+  document.title = PROJECT.title + ": Source | AI Project Portfolio";
+  document.getElementById('crumbCat').textContent = PROJECT.category;
+  document.getElementById('crumbCat').href = pref(PROJECT.categoryUrl);
+  document.getElementById('crumbProj').textContent = PROJECT.title;
+  document.getElementById('crumbProj').href = pref(PROJECT.overviewUrl);
+  if (PROJECT.cover){
+    document.getElementById('coverStrip').style.display = '';
+    const c = document.getElementById('cover'); c.src = PROJECT.cover; c.alt = PROJECT.title + " cover";
+  }
+  document.getElementById('kicker').textContent = "Source Walkthrough · " + PROJECT.category;
+  document.getElementById('title').textContent = PROJECT.title;
+  document.getElementById('subtitle').textContent = PROJECT.subtitle;
+  document.getElementById('headTech').innerHTML = (PROJECT.tech||[]).map(t => `<span class="tech-chip">${esc(t)}</span>`).join('');
+  document.getElementById('headBtns').innerHTML =
+    (PROJECT.demoUrl ? `<a class="btn" href="${pref(PROJECT.demoUrl)}" target="_blank" rel="noopener">${esc(PROJECT.demoLabel||'Live Demo')}</a>` : '') +
+    (PROJECT.overviewUrl ? `<a class="btn ghost" href="${pref(PROJECT.overviewUrl)}">Project Overview</a>` : '') +
+    (PROJECT.repoUrl ? `<a class="btn ghost" href="${pref(PROJECT.repoUrl)}" target="_blank" rel="noopener">GitHub Repo</a>` : '');
+
+  const section = (tab, inner) => `<section class="sec"><div class="sec-rule"><span class="tab">${esc(tab)}</span>${inner}</div></section>`;
+  let html = "";
+  const P = PROJECT;
+
+  if (P.about){
+    html += section("About This Code", `<h2>About This Code Showcase</h2><p class="intro">${rich(P.about)}</p>`);
+  }
+  if (P.structure && P.structure.code){
+    html += section("Project Structure", `<h2>Project Structure</h2>`+
+      codeBlock(P.structure.label || 'project/', P.structure.code, 'tree'));
+  }
+  (P.walkthrough||[]).forEach(w => {
+    let inner = `<h2>${esc(w.heading)}</h2>`;
+    if (w.body) inner += `<p class="body">${rich(w.body)}</p>`;
+    (w.files||[]).forEach(f => { inner += codeBlock(f.label, f.code); });
+    html += section("Code", inner);
+  });
+  // CTA
+  html += `<section class="sec"><div class="cta-inner">`+
+    `<div><h3>Interested in the build?</h3><p>${esc(P.cta || "Let's talk.")}</p></div>`+
+    `<div class="cta-btns">`+
+    (P.demoUrl ? `<a class="btn" href="${pref(P.demoUrl)}" target="_blank" rel="noopener">${esc(P.demoLabel||'Live Demo')}</a>` : '')+
+    `<a class="btn ghost" href="${SITE}contact.html">Get in Touch</a>`+
+    `</div></div></section>`;
+
+  document.getElementById('body').innerHTML = html;
+
+  // Copy buttons
+  function copyText(text, btn){
+    const done = ()=>{ const o=btn.textContent; btn.textContent='Copied ✓'; setTimeout(()=>btn.textContent=o.includes('Copied')?'Copy':o,1400); };
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(done).catch(()=>fb(text,done)); }
+    else fb(text,done);
+  }
+  function fb(text,done){ const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(ta); done(); }
+  document.querySelectorAll('.code-copy').forEach(btn =>
+    btn.addEventListener('click', ()=> copyText(RAW[+btn.dataset.idx], btn)));
+
+  // Masthead search
+  const ITEMS = [
+    {t:PROJECT.title, c:PROJECT.category, s:PROJECT.slug},
+    {t:"Courier CS Quality Console", c:"Conversational Data Analytics", s:"courier-cs-quality-console"},
+    {t:"Voucher Analyzer", c:"Conversational Data Analytics", s:"voucher-analyzer"},
+    {t:"Wiseman", c:"Knowledge & Reference Chatbots", s:"wiseman"},
+    {t:"Sunny Car Accessories", c:"Agentic Commerce", s:"sunny-car-accessories"},
+    {t:"Bookshelf", c:"Multi-Agent Decision Systems", s:"bookshelf"}
+  ];
+  const searchInput = document.getElementById('searchInput');
+  const searchResults = document.getElementById('searchResults');
+  function runSearch(q){
+    if(q.trim().length < 2){ searchResults.style.display='none'; return; }
+    const ql = q.toLowerCase();
+    const hits = ITEMS.filter(it => (it.t+' '+it.c).toLowerCase().includes(ql));
+    searchResults.innerHTML = hits.length ? hits.map(it =>
+      `<div class="sr-item"><div class="sr-cat">${esc(it.c)}</div>`+
+      `<a href="${SITE}${it.s}.html"><div class="sr-title">${esc(it.t)}</div></a>`+
+      `<div class="sr-links"><a href="${SITE}${it.s}.html">View Details</a></div></div>`).join('')
+      : `<div class="sr-none">No projects found. Try a different keyword.</div>`;
+    searchResults.style.display='block';
+  }
+  searchInput.addEventListener('input', e => runSearch(e.target.value));
+  document.addEventListener('click', e => { if(!e.target.closest('.search-box')) searchResults.style.display='none'; });
+
+  // Drawer
+  const drawer=document.getElementById('drawer'), overlay=document.getElementById('overlay');
+  const openMenu=()=>{ drawer.classList.add('open'); overlay.classList.add('open'); };
+  const closeMenu=()=>{ drawer.classList.remove('open'); overlay.classList.remove('open'); };
+  document.getElementById('hamburger').addEventListener('click', openMenu);
+  document.getElementById('drawerClose').addEventListener('click', closeMenu);
+  overlay.addEventListener('click', closeMenu);
+  drawer.querySelectorAll('a').forEach(a=>a.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeMenu(); searchResults.style.display='none'; }});
+</script>
 </body>
 </html>

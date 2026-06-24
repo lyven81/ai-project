@@ -1,173 +1,371 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TrendMate - Source Code</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #222; background-color: #ffffff; }
-        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
-        .back-nav { margin-bottom: 20px; }
-        .back-nav a { color: #007BFF; text-decoration: none; font-size: 1rem; }
-        .back-nav a:hover { text-decoration: underline; }
-        .project-header {
-            text-align: center; margin-bottom: 40px; padding: 40px 0;
-            background: linear-gradient(135deg, #2D1B4E, #6B21A8); color: white; border-radius: 10px;
-        }
-        .project-header h1 { font-size: 2.5rem; margin-bottom: 10px; color: #F9A8D4; }
-        .project-header p { font-size: 1.2rem; opacity: 0.9; }
-        .content-section { margin: 40px 0; padding: 30px; background-color: #f9f9f9; border-radius: 8px; border-left: 5px solid #D63384; }
-        .content-section h2 { color: #D63384; margin-bottom: 20px; font-size: 1.8rem; }
-        .content-section h3 { color: #333; margin: 20px 0 10px 0; font-size: 1.3rem; }
-        .content-section p { margin-bottom: 12px; }
-        .content-section ul { padding-left: 20px; }
-        .content-section ul li { margin-bottom: 6px; }
-        .code-block { background-color: #1a0a1e; color: #e0e0e0; border-radius: 8px; padding: 20px; margin: 15px 0; font-family: monospace; font-size: 0.88rem; overflow-x: auto; line-height: 1.6; }
-        .code-block .comment { color: #B09AB8; }
-        .code-block .keyword { color: #F9A8D4; }
-        .code-block .string { color: #FDE8F2; }
-        .file-tree { background: #f4f4f4; border: 1px solid #ddd; border-radius: 8px; padding: 20px; font-family: monospace; font-size: 0.9rem; line-height: 1.8; }
-        .file-tree .folder { color: #D63384; font-weight: bold; }
-        .file-tree .file { color: #444; }
-        .file-tree .desc { color: #888; font-size: 0.8rem; margin-left: 8px; }
-        .demo-links { text-align: center; margin: 30px 0; }
-        .demo-btn { display: inline-block; background-color: #D63384; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; margin: 0 10px; font-weight: bold; }
-        .demo-btn:hover { background-color: #B02060; }
-        .demo-btn.secondary { background-color: #6B21A8; color: white; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TrendMate: Source | AI Project Portfolio</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root{ --ink:#222; --paper:#fff; --hair:#dddddd; --gray:#555; --accent:#B8860B; --navy:#1E3A5F; --code-bg:#fbfbf8; --cmt:#6b8190; }
+  html{ scroll-behavior:smooth; }
+  body{ background:var(--paper); color:var(--ink); font-family:Arial, Helvetica, sans-serif; line-height:1.6; overflow-x:hidden; }
+  a{ color:inherit; text-decoration:none; }
+  a:hover h2, a:hover h3, a:hover h4{ color:var(--accent); }
+  p code, li code{ font-family:"Courier New", monospace; font-size:.86em; background:#f2f3f5; padding:1px 5px; color:var(--navy); }
+
+  /* Masthead (shared) */
+  .masthead{ display:flex; align-items:center; justify-content:space-between; padding:14px 28px; max-width:1240px; margin:0 auto; gap:18px; }
+  .mast-left{ display:flex; align-items:center; gap:20px; }
+  .logo{ background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; letter-spacing:3px; font-size:.95rem; padding:8px 12px; white-space:nowrap; }
+  .mast-nav{ display:flex; gap:20px; font-family:Arial, Helvetica, sans-serif; font-size:.72rem; letter-spacing:1.4px; text-transform:uppercase; }
+  .mast-nav a:hover{ color:var(--accent); }
+  .hamburger{ display:none; flex-direction:column; gap:4px; background:none; border:none; cursor:pointer; padding:6px; }
+  .hamburger span{ width:22px; height:2px; background:#222; display:block; }
+  .rule-top{ border:none; border-top:3px solid #222; max-width:1240px; margin:0 auto; }
+
+  /* Search (shared) */
+  .search-box{ position:relative; width:200px; }
+  .search-input{ width:100%; padding:7px 30px 7px 12px; border:1px solid var(--hair); background:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; color:#222; }
+  .search-input:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(184,134,11,.15); }
+  .search-ic{ position:absolute; right:10px; top:50%; transform:translateY(-50%); color:var(--gray); font-size:.8rem; pointer-events:none; }
+  .search-results{ position:absolute; top:calc(100% + 4px); left:0; width:340px; max-width:86vw; background:#fff; border:1px solid #222; max-height:60vh; overflow-y:auto; z-index:120; display:none; }
+  .sr-item{ padding:12px 14px; border-bottom:1px solid var(--hair); }
+  .sr-item:last-child{ border-bottom:none; }
+  .sr-cat{ font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; margin-bottom:4px; color:var(--accent); }
+  .sr-title{ font-weight:700; font-size:1.02rem; color:#222; }
+  .sr-links{ font-size:.58rem; letter-spacing:.8px; text-transform:uppercase; color:var(--gray); margin-top:5px; }
+  .sr-links a:hover{ color:var(--accent); }
+  .sr-none{ padding:16px 14px; font-size:.82rem; color:var(--gray); }
+
+  /* Shared bits */
+  .tab{ display:inline-block; background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.66rem; letter-spacing:2px; text-transform:uppercase; padding:6px 12px; }
+  .rubric{ font-family:Arial, Helvetica, sans-serif; font-size:.62rem; font-weight:700; letter-spacing:1.6px; text-transform:uppercase; color:var(--accent); display:block; margin-bottom:8px; }
+  .tech-chip{ display:inline-block; border:1px solid var(--hair); padding:6px 12px; font-size:.72rem; letter-spacing:.3px; color:#333; white-space:nowrap; }
+  .tech-chip:hover{ border-color:var(--accent); color:var(--accent); }
+  .btn{ display:inline-block; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.7rem; letter-spacing:1.6px; text-transform:uppercase; padding:13px 24px; border:1px solid #222; background:#222; color:#fff; cursor:pointer; transition:.15s; }
+  .btn:hover{ background:var(--accent); border-color:var(--accent); }
+  .btn.ghost{ background:#fff; color:#222; }
+  .btn.ghost:hover{ color:var(--accent); border-color:var(--accent); background:#fff; }
+
+  /* Breadcrumb */
+  .crumb{ max-width:1240px; margin:0 auto; padding:20px 28px 0; font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--gray); }
+  .crumb a:hover{ color:var(--accent); }
+  .crumb .sep{ color:var(--hair); margin:0 8px; }
+
+  /* Header (slim cover banner + copy) */
+  .src-head{ max-width:1240px; margin:0 auto; padding:14px 28px 6px; }
+  .cover-strip{ border:1px solid var(--hair); line-height:0; background:#eef1f4; }
+  .cover-strip img{ width:100%; height:190px; object-fit:cover; object-position:center 42%; display:block; }
+  .src-head h1{ font-size:2.5rem; font-weight:900; line-height:1.04; letter-spacing:-.008em; margin-top:18px; }
+  .src-head .sub{ font-style:italic; font-size:1.08rem; color:#333; margin-top:10px; max-width:72ch; }
+  .head-tech{ display:flex; flex-wrap:wrap; gap:9px; margin-top:16px; }
+  .head-btns{ display:flex; flex-wrap:wrap; gap:12px; margin-top:18px; }
+
+  /* Section shell */
+  .sec{ max-width:1240px; margin:0 auto; padding:26px 28px; }
+  .sec-rule{ border-top:3px solid #222; padding-top:16px; }
+  .sec .tab{ margin-bottom:14px; }
+  .sec h2{ font-size:1.7rem; font-weight:900; line-height:1.06; }
+  .sec .intro{ color:#333; font-size:1.02rem; margin-top:10px; max-width:80%; }
+  .sec .body{ color:#333; font-size:1rem; margin-top:10px; max-width:80%; }
+
+  /* Code block */
+  .codeblock{ border:1px solid var(--hair); margin-top:16px; }
+  .code-bar{ display:flex; align-items:center; justify-content:space-between; gap:12px; background:var(--navy); color:#fff; padding:8px 12px; }
+  .code-bar .path{ font-family:"Courier New", monospace; font-size:.74rem; letter-spacing:.2px; opacity:.96; display:flex; align-items:center; gap:7px; min-width:0; }
+  .code-bar .path span{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .code-copy{ flex:none; background:none; border:1px solid rgba(255,255,255,.4); color:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.56rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; padding:5px 11px; cursor:pointer; transition:.15s; }
+  .code-copy:hover{ background:rgba(255,255,255,.16); }
+  .codeblock pre{ margin:0; padding:14px 16px; overflow-x:auto; background:var(--code-bg); }
+  .codeblock code{ font-family:"Courier New", monospace; font-size:.82rem; line-height:1.6; color:#1b2a3a; background:none; padding:0; white-space:pre; display:block; }
+  .codeblock code .cmt{ color:var(--cmt); font-style:italic; }
+
+  .tree .code-bar .path::before{ content:"📁"; }
+
+  /* Notes */
+  .note-block{ margin-top:22px; }
+  .note-block h3{ font-size:1.15rem; font-weight:800; }
+  .blist{ list-style:none; margin-top:12px; border-top:1px solid var(--hair); }
+  .blist li{ padding:12px 0; border-bottom:1px solid var(--hair); color:#333; font-size:.95rem; }
+  .blist li b{ color:#222; }
+
+  /* CTA */
+  .cta-inner{ display:flex; align-items:center; gap:18px; flex-wrap:wrap; border-top:3px solid #222; padding-top:18px; }
+  .cta-inner h3{ font-size:1.4rem; font-weight:900; line-height:1.08; }
+  .cta-inner p{ color:var(--gray); font-size:.95rem; margin-top:4px; }
+  .cta-btns{ margin-left:auto; display:flex; gap:12px; flex-wrap:wrap; }
+
+  footer{ background:#222; max-width:1240px; margin:30px auto 0; padding:24px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; letter-spacing:.5px; color:#fff; text-align:center; }
+  .note{ max-width:1240px; margin:14px auto 0; padding:8px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.62rem; letter-spacing:1px; color:#999; }
+
+  /* Drawer (shared) */
+  .drawer{ position:fixed; top:0; left:-300px; width:280px; height:100vh; background:#fff; z-index:200; box-shadow:2px 0 14px rgba(0,0,0,.15); transition:left .28s ease; padding:74px 26px 26px; }
+  .drawer.open{ left:0; }
+  .drawer a{ display:block; font-family:Arial, Helvetica, sans-serif; font-size:.82rem; letter-spacing:1.2px; text-transform:uppercase; padding:14px 0; border-bottom:1px solid var(--hair); }
+  .overlay{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:150; }
+  .overlay.open{ display:block; }
+  .drawer-close{ position:absolute; top:20px; right:20px; font-family:Arial, Helvetica, sans-serif; font-size:1.4rem; background:none; border:none; cursor:pointer; }
+
+  @media (max-width:900px){
+    .cta-btns{ margin-left:0; }
+    .mast-nav{ display:none; }
+    .hamburger{ display:flex; }
+    .masthead{ padding:12px 16px; }
+    .mast-left{ gap:10px; min-width:0; flex:1; }
+    .logo{ font-size:.72rem; letter-spacing:1.5px; padding:6px 8px; }
+    .search-box{ flex:1; width:auto; min-width:0; }
+    .search-results{ position:fixed; top:58px; left:12px; right:12px; width:auto; max-width:none; }
+    .src-head h1{ font-size:1.95rem; }
+    .cover-strip img{ height:150px; }
+  }
+</style>
 </head>
 <body>
-<div class="container">
-    <nav class="back-nav"><a href="trendmate.html">← Back to TrendMate Showcase</a></nav>
 
-    <div class="project-header">
-        <h1>👗 TrendMate</h1>
-        <p>Source Code — Malaysian Fashion Seller Research Assistant</p>
+  <div class="overlay" id="overlay"></div>
+  <nav class="drawer" id="drawer">
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">&times;</button>
+    <a href="index.html">Home</a>
+    <a href="project-categories.html">Categories</a>
+    <a href="contact.html">Contact</a>
+    <a href="https://lyven81.github.io/data-analyst-portfolio/index.html">Data Portfolio</a>
+  </nav>
+
+  <div class="masthead">
+    <div class="mast-left">
+      <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+      <a class="logo" href="index.html">AI PROJECTS</a>
+      <nav class="mast-nav">
+        <a href="project-categories.html">Categories</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <div class="search-box">
+        <input type="text" class="search-input" id="searchInput" autocomplete="off" placeholder="Search AI projects..." aria-label="Search AI projects">
+        <span class="search-ic">&#128269;</span>
+        <div class="search-results" id="searchResults"></div>
+      </div>
     </div>
+  </div>
+  <hr class="rule-top">
 
-    <div class="content-section">
-        <h2>📁 File Structure</h2>
-        <div class="file-tree">
-            <div><span class="folder">projects/trendmate/</span></div>
-            <div>&nbsp;&nbsp;├── <span class="file">app.py</span><span class="desc">— CLI terminal version of the research assistant</span></div>
-            <div>&nbsp;&nbsp;├── <span class="file">web_app.py</span><span class="desc">— Streamlit web interface (main app)</span></div>
-            <div>&nbsp;&nbsp;├── <span class="file">system-prompt.txt</span><span class="desc">— Agent persona, Malaysian fashion focus, 3-sentence format rules</span></div>
-            <div>&nbsp;&nbsp;├── <span class="file">requirements.txt</span><span class="desc">— Python dependencies</span></div>
-            <div>&nbsp;&nbsp;├── <span class="file">.env.example</span><span class="desc">— API key template</span></div>
-            <div>&nbsp;&nbsp;├── <span class="file">demo.html</span><span class="desc">— Static interactive demo page</span></div>
-            <div>&nbsp;&nbsp;├── <span class="file">user-guide.md</span><span class="desc">— Plain language setup and usage guide</span></div>
-            <div>&nbsp;&nbsp;├── <span class="file">problem-statement.md</span><span class="desc">— Problem definition and target users</span></div>
-            <div>&nbsp;&nbsp;└── <span class="file">project-outline.md</span><span class="desc">— App name, features, tech stack, roadmap</span></div>
-        </div>
-    </div>
+  <div class="crumb">
+    <a href="project-categories.html">Categories</a>
+    <span class="sep">/</span><a id="crumbCat" href="#"></a>
+    <span class="sep">/</span><a id="crumbProj" href="#"></a>
+    <span class="sep">/</span><span>Source</span>
+  </div>
 
-    <div class="content-section">
-        <h2>🔑 Key Code: Agent Loop (web_app.py)</h2>
-        <p>TrendMate uses the same ReAct loop as MyPropLex — Claude decides what to search, calls Tavily, reads results, and iterates. The difference is the system prompt which steers Claude toward Malaysian fashion market sources and forces actionable, market-specific answers.</p>
-        <div class="code-block">
-<span class="keyword">def</span> run_agent(user_message, history, client, tavily, system_prompt):
-    <span class="comment"># Add user message to conversation history</span>
-    history.append({<span class="string">"role"</span>: <span class="string">"user"</span>, <span class="string">"content"</span>: user_message})
+  <section class="src-head">
+    <div class="cover-strip" id="coverStrip" style="display:none"><img id="cover" alt=""></div>
+    <span class="rubric" id="kicker"></span>
+    <h1 id="title"></h1>
+    <p class="sub" id="subtitle"></p>
+    <div class="head-tech" id="headTech"></div>
+    <div class="head-btns" id="headBtns"></div>
+  </section>
 
-    <span class="keyword">while</span> True:
-        <span class="comment"># Call Claude with search tool available</span>
-        response = client.messages.create(
-            model=<span class="string">"claude-sonnet-4-6"</span>,
-            max_tokens=2048,
-            system=system_prompt,
-            tools=TOOLS,
-            messages=history
-        )
+  <div id="body"></div>
 
-        <span class="keyword">if</span> response.stop_reason == <span class="string">"end_turn"</span>:
-            <span class="comment"># Claude is done — return the answer</span>
-            text = <span class="string">"\n"</span>.join(b.text <span class="keyword">for</span> b <span class="keyword">in</span> response.content <span class="keyword">if</span> hasattr(b, <span class="string">"text"</span>))
-            history.append({<span class="string">"role"</span>: <span class="string">"assistant"</span>, <span class="string">"content"</span>: response.content})
-            <span class="keyword">return</span> text
+  <footer>&copy; 2026 Lee Yih Ven | AI Project Portfolio &middot; All rights reserved.</footer>
+  <div class="note">Sample Source-Showcase-E2 (TEMPLATE): source-code page on the index magazine system: slim cover banner, About, Project Structure, code walkthrough with copyable navy-barred code blocks, CTA. Reuse by editing only the PROJECT block at the top of the script.</div>
 
-        <span class="keyword">elif</span> response.stop_reason == <span class="string">"tool_use"</span>:
-            <span class="comment"># Claude wants to search — run Tavily and feed results back</span>
-            history.append({<span class="string">"role"</span>: <span class="string">"assistant"</span>, <span class="string">"content"</span>: response.content})
-            tool_results = []
-            <span class="keyword">for</span> block <span class="keyword">in</span> response.content:
-                <span class="keyword">if</span> block.type == <span class="string">"tool_use"</span> <span class="keyword">and</span> block.name == <span class="string">"search_web"</span>:
-                    tool_results.append({
-                        <span class="string">"type"</span>: <span class="string">"tool_result"</span>,
-                        <span class="string">"tool_use_id"</span>: block.id,
-                        <span class="string">"content"</span>: search_web(block.input[<span class="string">"query"</span>], tavily)
-                    })
-            history.append({<span class="string">"role"</span>: <span class="string">"user"</span>, <span class="string">"content"</span>: tool_results})
-        </div>
-    </div>
+<script>
+  const SITE = "";
 
-    <div class="content-section">
-        <h2>🔑 Key Code: System Prompt (system-prompt.txt)</h2>
-        <p>The system prompt is what makes TrendMate a fashion specialist instead of a general chatbot. It tells Claude exactly which sources to prioritise, what format to use, and how to make every answer actionable for a Malaysian seller.</p>
-        <div class="code-block">
-<span class="comment">HOW YOU ANSWER</span>
-1. Search for the latest information before answering.
-   Fashion moves fast — always find current data.
-2. Give actionable, specific recommendations. Not just
-   "baju kurung is trending" but "baju kurung moden in
-   pastel colours is trending for Raya 2025, priced
-   between RM89–RM149 on Shopee."
-3. When talking about prices, always mention the
-   Malaysian market specifically.
+  /* =================================================================
+     EDIT PER PROJECT  -  the ONLY block you change per page.
+     Copy this file, swap PROJECT, save as <slug>-source.html.
+     - structure.code : the project file tree (plain text)
+     - walkthrough[]   : { heading, body, files:[{label, code}] }
+     - notes[]         : { heading, bullets:[...] }
+     Code strings can be multi-line; they render verbatim.
+     ================================================================= */
+  const PROJECT = {
+  "slug": "trendmate",
+  "category": "Industry Specialist Advisors",
+  "categoryUrl": "category-industry-advisors.html",
+  "title": "TrendMate",
+  "subtitle": "The agentic search loop, the niche system prompt, and the preset-question flow, the three excerpts that make this a Malaysian fashion specialist rather than a general chatbot.",
+  "cover": "images/trendmate/cover.jpeg",
+  "tech": [
+    "Python",
+    "Claude Sonnet 4.6",
+    "Tavily Search",
+    "Streamlit",
+    "Agentic Tool Use"
+  ],
+  "overviewUrl": "trendmate.html",
+  "demoLabel": "Try Live Demo",
+  "demoUrl": "projects/trendmate/demo.html",
+  "repoUrl": "https://github.com/lyven81/ai-project/tree/main/projects/trendmate",
+  "about": "These three excerpts are the heart of the project: a ReAct agent loop where Claude decides what to search and reads the results back, a niche system prompt that pins the model to the Malaysian fashion market and a strict 3-sentence format, and the preset-question flow that lets a seller answer a common question with one click. The same agent and search logic powers both the CLI (<code>app.py</code>) and the Streamlit web app (<code>web_app.py</code>).",
+  "structure": {
+    "label": "projects/trendmate/",
+    "code": "projects/trendmate/\n  app.py                CLI terminal version of the research assistant\n  web_app.py            Streamlit web interface (main app)\n  system-prompt.txt     agent persona, Malaysian fashion focus, 3-sentence format rules\n  requirements.txt      Python dependencies\n  .env.example          API key template\n  demo.html             static interactive demo page\n  user-guide.md         plain language setup and usage guide\n  problem-statement.md  problem definition and target users\n  project-outline.md    app name, features, tech stack, roadmap"
+  },
+  "walkthrough": [
+    {
+      "heading": "The Agent Loop (web_app.py)",
+      "body": "TrendMate runs a ReAct loop: Claude decides what to search, calls Tavily, reads the results, and iterates until it has enough to answer. The model is given a search tool and the conversation history; on <code>tool_use</code> it runs Tavily and feeds the results back, and on <code>end_turn</code> it returns the final answer.",
+      "files": [
+        {
+          "label": "web_app.py: Claude decides, searches, and iterates",
+          "code": "def run_agent(user_message, history, client, tavily, system_prompt):\n    # Add user message to conversation history\n    history.append({\"role\": \"user\", \"content\": user_message})\n\n    while True:\n        # Call Claude with search tool available\n        response = client.messages.create(\n            model=\"claude-sonnet-4-6\",\n            max_tokens=2048,\n            system=system_prompt,\n            tools=TOOLS,\n            messages=history\n        )\n\n        if response.stop_reason == \"end_turn\":\n            # Claude is done, return the answer\n            text = \"\\n\".join(b.text for b in response.content if hasattr(b, \"text\"))\n            history.append({\"role\": \"assistant\", \"content\": response.content})\n            return text\n\n        elif response.stop_reason == \"tool_use\":\n            # Claude wants to search, run Tavily and feed results back\n            history.append({\"role\": \"assistant\", \"content\": response.content})\n            tool_results = []\n            for block in response.content:\n                if block.type == \"tool_use\" and block.name == \"search_web\":\n                    tool_results.append({\n                        \"type\": \"tool_result\",\n                        \"tool_use_id\": block.id,\n                        \"content\": search_web(block.input[\"query\"], tavily)\n                    })\n            history.append({\"role\": \"user\", \"content\": tool_results})"
+        }
+      ]
+    },
+    {
+      "heading": "The Niche System Prompt (system-prompt.txt)",
+      "body": "The system prompt is what makes TrendMate a fashion specialist instead of a general chatbot. It tells Claude exactly which sources to prioritise, what format to use, and how to make every answer actionable for a Malaysian seller.",
+      "files": [
+        {
+          "label": "system-prompt.txt: answer rules and strict format",
+          "code": "HOW YOU ANSWER\n1. Search for the latest information before answering.\n   Fashion moves fast, always find current data.\n2. Give actionable, specific recommendations. Not just\n   \"baju kurung is trending\" but \"baju kurung moden in\n   pastel colours is trending for Raya 2025, priced\n   between RM89 and RM149 on Shopee.\"\n3. When talking about prices, always mention the\n   Malaysian market specifically.\n\nFORMAT OF YOUR ANSWERS\n- Maximum 3 sentences per answer. No exceptions.\n- Sentence 1: Direct finding or recommendation (specific:\n  product type, platform, price range).\n- Sentence 2: One piece of evidence (trending on TikTok,\n  top-selling on Shopee, sourcing tip).\n- Sentence 3: One action the seller should take right now,\n  or a timing note."
+        }
+      ]
+    },
+    {
+      "heading": "Preset Questions in the Sidebar",
+      "body": "Preset questions render as clickable sidebar buttons. When a seller clicks one, the question is stored in session state and processed on the next render cycle, the same flow as typing a question manually, so preset and typed input share one path.",
+      "files": [
+        {
+          "label": "web_app.py: preset and typed input share one path",
+          "code": "# In sidebar, render preset buttons\nfor i, q in enumerate(PRESET_QUESTIONS):\n    if st.button(f\"{i+1}. {q}\", key=f\"q{i}\", use_container_width=True):\n        st.session_state.pending_q = q  # Store for next render\n\n# In main area, check for pending question or typed input\nprompt = None\nif st.session_state.pending_q:\n    prompt = st.session_state.pending_q\n    st.session_state.pending_q = None   # Clear immediately\nelif q := st.chat_input(\"Type your fashion market question...\"):\n    prompt = q\n\nif prompt:\n    # Process the question, same path for preset and typed\n    answer = run_agent(prompt, st.session_state.conv_history, ...)"
+        }
+      ]
+    },
+    {
+      "heading": "Dependencies (requirements.txt)",
+      "body": "Four packages run the whole app: the Anthropic SDK for Claude, the Tavily client for live web search, python-dotenv for local key loading, and Streamlit for the web interface.",
+      "files": [
+        {
+          "label": "requirements.txt: the full dependency set",
+          "code": "anthropic>=0.40.0      # Claude API SDK\ntavily-python>=0.3.0   # Web search API\npython-dotenv>=1.0.0   # Load .env files locally\nstreamlit>=1.32.0      # Web interface framework"
+        }
+      ]
+    }
+  ],
+  "notes": [
+    {
+      "heading": "Why This Design",
+      "bullets": [
+        "<b>Search before answering:</b> fashion moves fast, so the loop forces Claude to pull current data from live sources rather than relying on stale model knowledge.",
+        "<b>Strict 3-sentence format:</b> the system prompt caps every answer at a recommendation, the evidence, and one action, so a busy seller can act immediately.",
+        "<b>One path for preset and typed input:</b> sidebar clicks and chat input both flow through <code>run_agent</code>, so there is a single code path to maintain.",
+        "<b>Shared agent across interfaces:</b> the CLI and the Streamlit web app reuse the same agent and search logic, so the behaviour stays identical."
+      ]
+    }
+  ],
+  "cta": "Want a niche AI research assistant like this built for your own sellers or market? Let's scope it."
+};
+  /* ===================== END EDIT BLOCK ===================== */
 
-<span class="comment">FORMAT OF YOUR ANSWERS</span>
-- Maximum 3 sentences per answer. No exceptions.
-- Sentence 1: Direct finding or recommendation (specific:
-  product type, platform, price range).
-- Sentence 2: One piece of evidence (trending on TikTok,
-  top-selling on Shopee, sourcing tip).
-- Sentence 3: One action the seller should take right now,
-  or a timing note.
-        </div>
-    </div>
+  const pref = (u) => /^https?:|^mailto:|^tel:/.test(u || '') ? u : (SITE + (u || ''));
+  const esc = (s) => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const rich = (s) => esc(s).replace(/&lt;(\/?(?:b|code))&gt;/g, '<$1>');
 
-    <div class="content-section">
-        <h2>🔑 Key Code: Preset Questions in Sidebar</h2>
-        <p>Preset questions are displayed as clickable sidebar buttons. When clicked, the question is set in session state and processed on the next render cycle — the same flow as typing a question manually.</p>
-        <div class="code-block">
-<span class="comment"># In sidebar — render preset buttons</span>
-<span class="keyword">for</span> i, q <span class="keyword">in</span> enumerate(PRESET_QUESTIONS):
-    <span class="keyword">if</span> st.button(f<span class="string">"{i+1}. {q}"</span>, key=f<span class="string">"q{i}"</span>, use_container_width=True):
-        st.session_state.pending_q = q  <span class="comment"># Store for next render</span>
+  // raw code store for copy buttons
+  const RAW = [];
+  function codeBlock(label, codeStr, extraClass){
+    const idx = RAW.push(codeStr) - 1;
+    const rendered = esc(codeStr).split('\n')
+      .map(line => /^\s*#/.test(line) ? `<span class="cmt">${line}</span>` : line).join('\n');
+    return `<div class="codeblock ${extraClass||''}">`+
+      `<div class="code-bar"><span class="path"><span>${esc(label)}</span></span>`+
+      `<button class="code-copy" data-idx="${idx}">Copy</button></div>`+
+      `<pre><code>${rendered}</code></pre></div>`;
+  }
 
-<span class="comment"># In main area — check for pending question or typed input</span>
-prompt = None
-<span class="keyword">if</span> st.session_state.pending_q:
-    prompt = st.session_state.pending_q
-    st.session_state.pending_q = None   <span class="comment"># Clear immediately</span>
-<span class="keyword">elif</span> q := st.chat_input(<span class="string">"Type your fashion market question..."</span>):
-    prompt = q
+  // Breadcrumb + header
+  document.title = PROJECT.title + ": Source | AI Project Portfolio";
+  document.getElementById('crumbCat').textContent = PROJECT.category;
+  document.getElementById('crumbCat').href = pref(PROJECT.categoryUrl);
+  document.getElementById('crumbProj').textContent = PROJECT.title;
+  document.getElementById('crumbProj').href = pref(PROJECT.overviewUrl);
+  if (PROJECT.cover){
+    document.getElementById('coverStrip').style.display = '';
+    const c = document.getElementById('cover'); c.src = PROJECT.cover; c.alt = PROJECT.title + " cover";
+  }
+  document.getElementById('kicker').textContent = "Source Walkthrough · " + PROJECT.category;
+  document.getElementById('title').textContent = PROJECT.title;
+  document.getElementById('subtitle').textContent = PROJECT.subtitle;
+  document.getElementById('headTech').innerHTML = (PROJECT.tech||[]).map(t => `<span class="tech-chip">${esc(t)}</span>`).join('');
+  document.getElementById('headBtns').innerHTML =
+    (PROJECT.demoUrl ? `<a class="btn" href="${pref(PROJECT.demoUrl)}" target="_blank" rel="noopener">${esc(PROJECT.demoLabel||'Live Demo')}</a>` : '') +
+    (PROJECT.overviewUrl ? `<a class="btn ghost" href="${pref(PROJECT.overviewUrl)}">Project Overview</a>` : '') +
+    (PROJECT.repoUrl ? `<a class="btn ghost" href="${pref(PROJECT.repoUrl)}" target="_blank" rel="noopener">GitHub Repo</a>` : '');
 
-<span class="keyword">if</span> prompt:
-    <span class="comment"># Process the question — same path for preset and typed</span>
-    answer = run_agent(prompt, st.session_state.conv_history, ...)
-        </div>
-    </div>
+  const section = (tab, inner) => `<section class="sec"><div class="sec-rule"><span class="tab">${esc(tab)}</span>${inner}</div></section>`;
+  let html = "";
+  const P = PROJECT;
 
-    <div class="content-section">
-        <h2>📦 Dependencies (requirements.txt)</h2>
-        <div class="code-block">
-anthropic&gt;=0.40.0      <span class="comment"># Claude API SDK</span>
-tavily-python&gt;=0.3.0   <span class="comment"># Web search API</span>
-python-dotenv&gt;=1.0.0   <span class="comment"># Load .env files locally</span>
-streamlit&gt;=1.32.0      <span class="comment"># Web interface framework</span>
-        </div>
-    </div>
+  if (P.about){
+    html += section("About This Code", `<h2>About This Code Showcase</h2><p class="intro">${rich(P.about)}</p>`);
+  }
+  if (P.structure && P.structure.code){
+    html += section("Project Structure", `<h2>Project Structure</h2>`+
+      codeBlock(P.structure.label || 'project/', P.structure.code, 'tree'));
+  }
+  (P.walkthrough||[]).forEach(w => {
+    let inner = `<h2>${esc(w.heading)}</h2>`;
+    if (w.body) inner += `<p class="body">${rich(w.body)}</p>`;
+    (w.files||[]).forEach(f => { inner += codeBlock(f.label, f.code); });
+    html += section("Code", inner);
+  });
+  // CTA
+  html += `<section class="sec"><div class="cta-inner">`+
+    `<div><h3>Interested in the build?</h3><p>${esc(P.cta || "Let's talk.")}</p></div>`+
+    `<div class="cta-btns">`+
+    (P.demoUrl ? `<a class="btn" href="${pref(P.demoUrl)}" target="_blank" rel="noopener">${esc(P.demoLabel||'Live Demo')}</a>` : '')+
+    `<a class="btn ghost" href="${SITE}contact.html">Get in Touch</a>`+
+    `</div></div></section>`;
 
-    <div class="demo-links">
-        <a href="trendmate.html" class="demo-btn">← Back to Showcase</a>
-        <a href="projects/trendmate/demo.html" target="_blank" class="demo-btn secondary">🚀 Try Live Demo</a>
-    </div>
+  document.getElementById('body').innerHTML = html;
 
-    <nav class="back-nav" style="text-align: center; margin-top: 40px;">
-        <a href="index.html">← Back to Portfolio</a> |
-        <a href="project-categories.html">View All Categories</a>
-    </nav>
-</div>
+  // Copy buttons
+  function copyText(text, btn){
+    const done = ()=>{ const o=btn.textContent; btn.textContent='Copied ✓'; setTimeout(()=>btn.textContent=o.includes('Copied')?'Copy':o,1400); };
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(done).catch(()=>fb(text,done)); }
+    else fb(text,done);
+  }
+  function fb(text,done){ const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(ta); done(); }
+  document.querySelectorAll('.code-copy').forEach(btn =>
+    btn.addEventListener('click', ()=> copyText(RAW[+btn.dataset.idx], btn)));
+
+  // Masthead search
+  const ITEMS = [
+    {t:PROJECT.title, c:PROJECT.category, s:PROJECT.slug},
+    {t:"Courier CS Quality Console", c:"Conversational Data Analytics", s:"courier-cs-quality-console"},
+    {t:"Voucher Analyzer", c:"Conversational Data Analytics", s:"voucher-analyzer"},
+    {t:"Wiseman", c:"Knowledge & Reference Chatbots", s:"wiseman"},
+    {t:"Sunny Car Accessories", c:"Agentic Commerce", s:"sunny-car-accessories"},
+    {t:"Bookshelf", c:"Multi-Agent Decision Systems", s:"bookshelf"}
+  ];
+  const searchInput = document.getElementById('searchInput');
+  const searchResults = document.getElementById('searchResults');
+  function runSearch(q){
+    if(q.trim().length < 2){ searchResults.style.display='none'; return; }
+    const ql = q.toLowerCase();
+    const hits = ITEMS.filter(it => (it.t+' '+it.c).toLowerCase().includes(ql));
+    searchResults.innerHTML = hits.length ? hits.map(it =>
+      `<div class="sr-item"><div class="sr-cat">${esc(it.c)}</div>`+
+      `<a href="${SITE}${it.s}.html"><div class="sr-title">${esc(it.t)}</div></a>`+
+      `<div class="sr-links"><a href="${SITE}${it.s}.html">View Details</a></div></div>`).join('')
+      : `<div class="sr-none">No projects found. Try a different keyword.</div>`;
+    searchResults.style.display='block';
+  }
+  searchInput.addEventListener('input', e => runSearch(e.target.value));
+  document.addEventListener('click', e => { if(!e.target.closest('.search-box')) searchResults.style.display='none'; });
+
+  // Drawer
+  const drawer=document.getElementById('drawer'), overlay=document.getElementById('overlay');
+  const openMenu=()=>{ drawer.classList.add('open'); overlay.classList.add('open'); };
+  const closeMenu=()=>{ drawer.classList.remove('open'); overlay.classList.remove('open'); };
+  document.getElementById('hamburger').addEventListener('click', openMenu);
+  document.getElementById('drawerClose').addEventListener('click', closeMenu);
+  overlay.addEventListener('click', closeMenu);
+  drawer.querySelectorAll('a').forEach(a=>a.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeMenu(); searchResults.style.display='none'; }});
+</script>
 </body>
 </html>

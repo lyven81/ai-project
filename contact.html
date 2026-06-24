@@ -1,515 +1,279 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact | Lee Yih Ven - AI Project Portfolio</title>
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <link rel="icon" type="image/svg+xml" href="favicon.svg">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <style>
-        *, *::before, *::after {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact | AI Project Portfolio</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root{ --ink:#222; --paper:#fff; --rule:#222; --hair:#dddddd; --gray:#555; --accent:#B8860B; --gold:#daa520; --cream:#f5f5dc; }
+  html{ scroll-behavior:smooth; }
+  body{ background:var(--paper); color:var(--ink); font-family:Arial, Helvetica, sans-serif; line-height:1.6; overflow-x:hidden; }
+  a{ color:inherit; text-decoration:none; }
+  a:hover h2, a:hover h3, a:hover h4{ color:var(--accent); }
 
-        html {
-            scroll-behavior: smooth;
-        }
+  /* Masthead (shared with index) */
+  .masthead{ display:flex; align-items:center; justify-content:space-between; padding:14px 28px; max-width:1240px; margin:0 auto; gap:18px; }
+  .mast-left{ display:flex; align-items:center; gap:20px; }
+  .logo{ background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; letter-spacing:3px; font-size:.95rem; padding:8px 12px; white-space:nowrap; }
+  .mast-nav{ display:flex; gap:20px; font-family:Arial, Helvetica, sans-serif; font-size:.72rem; letter-spacing:1.4px; text-transform:uppercase; }
+  .mast-nav a:hover{ color:var(--accent); }
+  .hamburger{ display:none; flex-direction:column; gap:4px; background:none; border:none; cursor:pointer; padding:6px; }
+  .hamburger span{ width:22px; height:2px; background:#222; display:block; }
+  .rule-top{ border:none; border-top:3px solid var(--rule); max-width:1240px; margin:0 auto; }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background-color: #ffffff;
-        }
+  /* Search (shared) */
+  .search-box{ position:relative; width:200px; }
+  .search-input{ width:100%; padding:7px 30px 7px 12px; border:1px solid var(--hair); background:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; color:#222; }
+  .search-input:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(184,134,11,.15); }
+  .search-ic{ position:absolute; right:10px; top:50%; transform:translateY(-50%); color:var(--gray); font-size:.8rem; pointer-events:none; }
+  .search-results{ position:absolute; top:calc(100% + 4px); left:0; width:340px; max-width:86vw; background:#fff; border:1px solid #222; max-height:60vh; overflow-y:auto; z-index:120; display:none; }
+  .sr-item{ padding:12px 14px; border-bottom:1px solid var(--hair); }
+  .sr-item:last-child{ border-bottom:none; }
+  .sr-cat{ font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; margin-bottom:4px; color:var(--accent); }
+  .sr-title{ font-weight:700; font-size:1.02rem; color:#222; }
+  .sr-links{ font-size:.58rem; letter-spacing:.8px; text-transform:uppercase; color:var(--gray); margin-top:5px; }
+  .sr-links a:hover{ color:var(--accent); }
+  .sr-none{ padding:16px 14px; font-size:.82rem; color:var(--gray); }
 
-        /* ── Navbar ── */
-        .navbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-            background: rgba(30, 27, 24, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(201, 168, 76, 0.15);
-            padding: 0 40px;
-            height: 64px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
+  /* Shared type bits */
+  .tab{ display:inline-block; background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.66rem; letter-spacing:2px; text-transform:uppercase; padding:6px 12px; }
+  .rubric{ font-family:Arial, Helvetica, sans-serif; font-size:.62rem; font-weight:700; letter-spacing:1.6px; text-transform:uppercase; color:var(--accent); display:block; margin-bottom:6px; }
+  .lead-dek{ font-style:italic; color:#333; }
+  .viz{ display:flex; align-items:center; justify-content:center; color:#fff; text-shadow:0 2px 10px rgba(0,0,0,.3); line-height:1; }
 
-        .navbar-brand {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: #C9A84C;
-            text-decoration: none;
-        }
+  /* Page head */
+  .page-head{ max-width:1240px; margin:0 auto; padding:28px 28px 6px; }
+  .page-head .tab{ margin-bottom:14px; }
+  .page-head h1{ font-size:2.6rem; font-weight:900; line-height:1.04; letter-spacing:-.005em; }
+  .page-head p{ color:var(--gray); max-width:74ch; margin-top:10px; }
 
-        .navbar-links {
-            display: flex;
-            gap: 32px;
-            list-style: none;
-        }
+  /* ===== DIRECT CHANNELS BAND (4-up, echoes contents/category bands) ===== */
+  .channels{ max-width:1240px; margin:0 auto; padding:14px 28px 34px; }
+  .channels .tab{ margin-bottom:16px; }
+  .channels-grid{ display:grid; grid-template-columns:repeat(4,1fr); border-top:1px solid var(--hair); }
+  .ch-tile{ display:flex; flex-direction:column; padding:20px 18px 22px; border-right:1px solid var(--hair); border-bottom:1px solid var(--hair); }
+  .ch-tile:nth-child(4n){ border-right:none; }
+  .ch-tile:nth-last-child(-n+4){ border-bottom:none; }
+  .ch-icon{ width:48px; height:48px; font-size:1.45rem; margin-bottom:14px; }
+  .ch-label{ font-size:.6rem; font-weight:700; letter-spacing:1.6px; text-transform:uppercase; color:var(--accent); margin-bottom:5px; }
+  .ch-value{ font-size:1.04rem; font-weight:700; line-height:1.28; word-break:break-word; }
+  .ch-tile:hover .ch-value{ color:var(--accent); }
 
-        .navbar-links a {
-            color: #ddd;
-            text-decoration: none;
-            font-size: 0.75rem;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            transition: color 0.3s;
-        }
+  /* ===== SEND A MESSAGE (lead + rail split) ===== */
+  .form-section{ max-width:1240px; margin:0 auto; padding:4px 28px 44px; }
+  .form-masthead{ display:flex; align-items:baseline; gap:16px; flex-wrap:wrap; border-top:3px solid var(--rule); padding-top:14px; }
+  .form-masthead h2{ font-size:1.85rem; font-weight:900; line-height:1.05; }
+  .form-masthead .reply{ font-size:.62rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--accent); margin-left:auto; white-space:nowrap; }
+  .form-desc{ color:var(--gray); font-size:.95rem; margin:10px 0 4px; max-width:84ch; }
 
-        .navbar-links a:hover,
-        .navbar-links a.active {
-            color: #C9A84C;
-        }
+  .form-body{ display:grid; grid-template-columns:1fr 1.5fr; margin-top:20px; }
+  .form-aside{ padding-right:34px; }
+  .form-aside .rubric{ margin-bottom:10px; }
+  .form-aside ul{ list-style:none; }
+  .form-aside li{ padding:11px 0; border-bottom:1px solid var(--hair); font-size:.92rem; color:#333; }
+  .form-aside li:last-child{ border-bottom:none; }
+  .form-aside li b{ color:#222; }
 
-        .navbar-toggle {
-            display: none;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 4px;
-        }
+  .form-fields{ padding-left:34px; border-left:1px solid var(--hair); }
+  .field{ margin-bottom:18px; }
+  .field label{ display:block; font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--gray); margin-bottom:7px; }
+  .field input, .field textarea{ width:100%; padding:11px 13px; border:1px solid var(--hair); background:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.92rem; color:#222; }
+  .field textarea{ min-height:140px; resize:vertical; line-height:1.55; }
+  .field input:focus, .field textarea:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(184,134,11,.15); }
+  .submit-btn{ display:inline-block; background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.7rem; letter-spacing:2px; text-transform:uppercase; padding:13px 26px; border:none; cursor:pointer; transition:background .18s ease; }
+  .submit-btn:hover{ background:var(--accent); }
+  .form-msg{ margin-top:14px; font-size:.86rem; color:var(--gray); display:none; }
+  .form-msg.show{ display:block; }
 
-        .navbar-toggle span {
-            display: block;
-            width: 24px;
-            height: 2px;
-            background: #ddd;
-            margin: 5px 0;
-            transition: all 0.3s;
-        }
+  footer{ background:#222; max-width:1240px; margin:30px auto 0; padding:24px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; letter-spacing:.5px; color:#fff; text-align:center; }
+  .note{ max-width:1240px; margin:14px auto 0; padding:8px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.62rem; letter-spacing:1px; color:#999; }
 
-        /* ── Page Header ── */
-        .page-header {
-            background: linear-gradient(135deg, #1E1B18 0%, #2a2520 50%, #3d2e1e 100%);
-            padding: 140px 40px 80px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
+  /* Drawer (shared) */
+  .drawer{ position:fixed; top:0; left:-300px; width:280px; height:100vh; background:#fff; z-index:200; box-shadow:2px 0 14px rgba(0,0,0,.15); transition:left .28s ease; padding:74px 26px 26px; }
+  .drawer.open{ left:0; }
+  .drawer a{ display:block; font-family:Arial, Helvetica, sans-serif; font-size:.82rem; letter-spacing:1.2px; text-transform:uppercase; padding:14px 0; border-bottom:1px solid var(--hair); }
+  .overlay{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:150; }
+  .overlay.open{ display:block; }
+  .drawer-close{ position:absolute; top:20px; right:20px; font-family:Arial, Helvetica, sans-serif; font-size:1.4rem; background:none; border:none; cursor:pointer; }
 
-        .page-header::before {
-            content: '';
-            position: absolute;
-            top: -80px;
-            right: -80px;
-            width: 300px;
-            height: 300px;
-            border: 1px solid rgba(201, 168, 76, 0.08);
-            border-radius: 50%;
-        }
-
-        .page-header::after {
-            content: '';
-            position: absolute;
-            bottom: -60px;
-            left: -60px;
-            width: 200px;
-            height: 200px;
-            border: 1px solid rgba(201, 168, 76, 0.06);
-            border-radius: 50%;
-        }
-
-        .page-header-content {
-            position: relative;
-            z-index: 1;
-        }
-
-        .page-header-tag {
-            display: inline-block;
-            font-size: 0.7rem;
-            font-weight: 600;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: #C9A84C;
-            margin-bottom: 20px;
-            padding: 6px 16px;
-            border: 1px solid rgba(201, 168, 76, 0.3);
-            border-radius: 20px;
-        }
-
-        .page-header h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 3.2rem;
-            font-weight: 700;
-            color: #fff;
-            line-height: 1.15;
-            margin-bottom: 16px;
-        }
-
-        .page-header-sub {
-            font-size: 1.05rem;
-            color: rgba(255, 255, 255, 0.55);
-            font-weight: 300;
-            max-width: 520px;
-            margin: 0 auto;
-            line-height: 1.7;
-        }
-
-        /* ── Section common ── */
-        .section {
-            padding: 80px 40px;
-        }
-
-        .section-inner {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .bg-light {
-            background: #F8F6F2;
-        }
-
-        /* ── Contact Cards ── */
-        .contact-intro {
-            text-align: center;
-            max-width: 600px;
-            margin: 0 auto 48px;
-            font-size: 1rem;
-            color: #666;
-            line-height: 1.7;
-        }
-
-        .contact-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 24px;
-            margin-bottom: 60px;
-        }
-
-        .contact-card {
-            background: #fff;
-            border-radius: 8px;
-            padding: 32px 28px;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-            transition: transform 0.3s, box-shadow 0.3s;
-            text-align: center;
-            opacity: 0;
-            transform: translateY(30px);
-        }
-
-        .contact-card.visible {
-            opacity: 1;
-            transform: translateY(0);
-            transition: opacity 0.5s ease, transform 0.5s ease, box-shadow 0.3s;
-        }
-
-        .contact-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.1);
-        }
-
-        .contact-card.visible:hover {
-            transform: translateY(-4px);
-        }
-
-        .contact-icon {
-            width: 52px;
-            height: 52px;
-            border-radius: 12px;
-            background: rgba(201, 168, 76, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 16px;
-            font-size: 1.4rem;
-        }
-
-        .contact-card h3 {
-            font-family: 'Inter', sans-serif;
-            font-size: 0.7rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: #C9A84C;
-            margin-bottom: 10px;
-        }
-
-        .contact-card p,
-        .contact-card a {
-            font-size: 0.95rem;
-            color: #333;
-            text-decoration: none;
-            font-weight: 500;
-            line-height: 1.6;
-        }
-
-        .contact-card a:hover {
-            color: #C9A84C;
-        }
-
-        /* ── Contact Form ── */
-        .form-section {
-            max-width: 640px;
-            margin: 0 auto;
-        }
-
-        .form-header {
-            text-align: center;
-            margin-bottom: 36px;
-        }
-
-        .form-header h2 {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #1E1B18;
-            margin-bottom: 10px;
-        }
-
-        .form-header p {
-            font-size: 0.9rem;
-            color: #666;
-        }
-
-        .contact-form {
-            background: #fff;
-            padding: 36px;
-            border-radius: 8px;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-        }
-
-        .contact-form label {
-            display: block;
-            margin-bottom: 6px;
-            color: #333;
-            font-weight: 500;
-            font-size: 0.85rem;
-            letter-spacing: 0.3px;
-        }
-
-        .contact-form input,
-        .contact-form textarea {
-            width: 100%;
-            padding: 12px 14px;
-            margin-bottom: 20px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 0.95rem;
-            font-family: 'Inter', sans-serif;
-            background-color: #F8F6F2;
-            transition: all 0.2s ease;
-        }
-
-        .contact-form input:focus,
-        .contact-form textarea:focus {
-            border-color: #C9A84C;
-            outline: none;
-            background-color: #ffffff;
-            box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.12);
-        }
-
-        .contact-form .submit-btn {
-            width: 100%;
-            background-color: #C9A84C;
-            color: #1E1B18;
-            text-decoration: none;
-            padding: 14px 28px;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            letter-spacing: 0.5px;
-            border: none;
-            cursor: pointer;
-            transition: background 0.3s, transform 0.2s;
-        }
-
-        .contact-form .submit-btn:hover {
-            background-color: #d4b65e;
-            transform: translateY(-2px);
-        }
-
-        /* ── Footer ── */
-        .footer {
-            background: #1E1B18;
-            padding: 48px 40px;
-            text-align: center;
-        }
-
-        .footer-brand {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.1rem;
-            color: #C9A84C;
-            margin-bottom: 8px;
-        }
-
-        .footer-copy {
-            font-size: 0.8rem;
-            color: rgba(255, 255, 255, 0.4);
-        }
-
-        /* ── Responsive ── */
-        @media (max-width: 768px) {
-            .navbar {
-                padding: 0 20px;
-            }
-
-            .navbar-toggle {
-                display: block;
-            }
-
-            .navbar-links {
-                display: none;
-                position: absolute;
-                top: 64px;
-                left: 0;
-                right: 0;
-                background: rgba(30, 27, 24, 0.95);
-                backdrop-filter: blur(12px);
-                flex-direction: column;
-                padding: 20px;
-                gap: 16px;
-                border-bottom: 1px solid rgba(201, 168, 76, 0.15);
-            }
-
-            .navbar-links.open {
-                display: flex;
-            }
-
-            .page-header {
-                padding: 120px 20px 60px;
-            }
-
-            .page-header h1 {
-                font-size: 2.2rem;
-            }
-
-            .section {
-                padding: 60px 20px;
-            }
-
-            .contact-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .contact-form {
-                padding: 24px;
-            }
-
-            .form-header h2 {
-                font-size: 1.5rem;
-            }
-        }
-    </style>
+  @media (max-width:1000px){
+    .channels-grid{ grid-template-columns:repeat(2,1fr); }
+    .ch-tile:nth-child(4n){ border-right:1px solid var(--hair); }
+    .ch-tile:nth-child(2n){ border-right:none; }
+    .ch-tile:nth-last-child(-n+4){ border-bottom:1px solid var(--hair); }
+    .ch-tile:nth-last-child(-n+2){ border-bottom:none; }
+  }
+  @media (max-width:900px){
+    .form-body{ grid-template-columns:1fr; }
+    .form-aside{ padding-right:0; }
+    .form-fields{ padding-left:0; border-left:none; border-top:1px solid var(--hair); margin-top:24px; padding-top:22px; }
+    .mast-nav{ display:none; }
+    .hamburger{ display:flex; }
+    .masthead{ padding:12px 16px; }
+    .mast-left{ gap:10px; min-width:0; flex:1; }
+    .logo{ font-size:.72rem; letter-spacing:1.5px; padding:6px 8px; }
+    .search-box{ flex:1; width:auto; min-width:0; }
+    .search-results{ position:fixed; top:58px; left:12px; right:12px; width:auto; max-width:none; }
+    .page-head h1{ font-size:2rem; }
+  }
+  @media (max-width:560px){
+    .channels-grid{ grid-template-columns:1fr; }
+    .ch-tile{ border-right:none !important; }
+  }
+</style>
 </head>
 <body>
 
-<!-- Navbar -->
-<nav class="navbar">
-    <a href="index.html" class="navbar-brand">AI Projects</a>
-    <button class="navbar-toggle" aria-label="Toggle navigation" onclick="document.querySelector('.navbar-links').classList.toggle('open')">
-        <span></span><span></span><span></span>
-    </button>
-    <ul class="navbar-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="project-categories.html">Categories</a></li>
-        <li><a href="contact.html" class="active">Contact</a></li>
-    </ul>
-</nav>
+  <div class="overlay" id="overlay"></div>
+  <nav class="drawer" id="drawer">
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">&times;</button>
+    <a href="index.html">Home</a>
+    <a href="project-categories.html">Categories</a>
+    <a href="https://lyven81.github.io/data-analyst-portfolio/index.html">Data Portfolio</a>
+  </nav>
 
-<!-- Page Header -->
-<section class="page-header">
-    <div class="page-header-content">
-        <span class="page-header-tag">CONTACT</span>
-        <h1>Get in Touch</h1>
-        <p class="page-header-sub">Have a project in mind or want to collaborate? I'd love to hear from you.</p>
+  <div class="masthead">
+    <div class="mast-left">
+      <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+      <a class="logo" href="index.html">AI PROJECTS</a>
+      <nav class="mast-nav">
+        <a href="index.html">Home</a>
+        <a href="project-categories.html">Categories</a>
+      </nav>
+      <div class="search-box">
+        <input type="text" class="search-input" id="searchInput" autocomplete="off" placeholder="Search AI projects..." aria-label="Search AI projects">
+        <span class="search-ic">&#128269;</span>
+        <div class="search-results" id="searchResults"></div>
+      </div>
     </div>
-</section>
+  </div>
+  <hr class="rule-top">
 
-<!-- Contact Cards -->
-<section class="section bg-light">
-    <div class="section-inner">
-        <p class="contact-intro">Whether you're interested in AI consulting, a custom project, or just want to connect, feel free to reach out through any of the channels below.</p>
+  <div class="page-head">
+    <span class="tab">Contact</span>
+    <h1>Get in Touch</h1>
+    <p>Have a project in mind, or want to collaborate? Whether it is AI consulting, a custom build, or a quick question, reach me through any channel below.</p>
+  </div>
 
-        <div class="contact-grid">
-            <div class="contact-card" data-animate>
-                <div class="contact-icon">&#9993;</div>
-                <h3>Email</h3>
-                <a href="mailto:yven81@gmail.com">yven81@gmail.com</a>
-            </div>
+  <!-- Direct channels band -->
+  <section class="channels">
+    <span class="tab">Direct Channels</span>
+    <div class="channels-grid">
+      <a class="ch-tile" href="mailto:yven81@gmail.com">
+        <span class="viz ch-icon" style="background:linear-gradient(135deg,#0D9488,#2DD4BF)">&#9993;&#65039;</span>
+        <span class="ch-label">Email</span>
+        <span class="ch-value">yven81@gmail.com</span>
+      </a>
+      <a class="ch-tile" href="tel:+60149207099">
+        <span class="viz ch-icon" style="background:linear-gradient(135deg,#2563EB,#1E3A5F)">&#128222;</span>
+        <span class="ch-label">Phone</span>
+        <span class="ch-value">+6014-9207099</span>
+      </a>
+      <a class="ch-tile" href="https://www.linkedin.com/in/leeyihven/" target="_blank" rel="noopener">
+        <span class="viz ch-icon" style="background:linear-gradient(135deg,#0A66C2,#1E3A5F)">&#128279;</span>
+        <span class="ch-label">LinkedIn</span>
+        <span class="ch-value">in/leeyihven</span>
+      </a>
+      <a class="ch-tile" href="https://github.com/lyven81" target="_blank" rel="noopener">
+        <span class="viz ch-icon" style="background:linear-gradient(135deg,#475569,#1E293B)">&#128187;</span>
+        <span class="ch-label">GitHub</span>
+        <span class="ch-value">github.com/lyven81</span>
+      </a>
+    </div>
+  </section>
 
-            <div class="contact-card" data-animate>
-                <div class="contact-icon">&#128222;</div>
-                <h3>Phone</h3>
-                <p>+6014-9207099</p>
-            </div>
+  <!-- Send a message -->
+  <section class="form-section">
+    <div class="form-masthead">
+      <h2>Send a Message</h2>
+      <span class="reply">Reply within 24 hours</span>
+    </div>
+    <p class="form-desc">Have a specific AI project in mind? Tell me the business problem, the data you have, and the outcome you want. The more concrete, the faster I can help.</p>
 
-            <div class="contact-card" data-animate>
-                <div class="contact-icon">&#128101;</div>
-                <h3>LinkedIn</h3>
-                <a href="https://www.linkedin.com/in/leeyihven/" target="_blank">linkedin.com/in/leeyihven</a>
-            </div>
+    <div class="form-body">
+      <aside class="form-aside">
+        <span class="rubric">What to Expect</span>
+        <ul>
+          <li><b>Fastest:</b> email or LinkedIn for a same-day reply.</li>
+          <li><b>Scope:</b> AI consulting, custom builds, dashboards, automation.</li>
+          <li><b>First reply:</b> a few clarifying questions and a rough shape, no obligation.</li>
+        </ul>
+      </aside>
 
-            <div class="contact-card" data-animate>
-                <div class="contact-icon">&#128187;</div>
-                <h3>GitHub</h3>
-                <a href="https://github.com/lyven81" target="_blank">github.com/lyven81</a>
-            </div>
+      <form class="form-fields" action="https://formsubmit.co/yven81@gmail.com" method="POST">
+        <input type="hidden" name="_subject" value="AI Consultation Request">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_template" value="table">
+        <div class="field">
+          <label for="f-name">Name</label>
+          <input type="text" id="f-name" name="name" autocomplete="name" placeholder="Your name" required>
         </div>
-    </div>
-</section>
-
-<!-- Contact Form -->
-<section class="section">
-    <div class="section-inner">
-        <div class="form-section">
-            <div class="form-header">
-                <h2>Send a Message</h2>
-                <p>Have a specific AI project in mind? Fill out the form below and I'll get back to you within 24 hours.</p>
-            </div>
-
-            <form action="https://formsubmit.co/yven81@gmail.com" method="post" class="contact-form">
-                <label for="name">Name</label>
-                <input type="text" id="name" name="name" placeholder="Your Full Name" required>
-
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" placeholder="Your Email Address" required>
-
-                <label for="message">Tell Us About Your AI Project</label>
-                <textarea id="message" name="message" rows="6" placeholder="What AI solutions interest you? (e.g., computer vision, chatbots, image processing, creative AI)" required></textarea>
-
-                <button type="submit" class="submit-btn">Request AI Consultation</button>
-            </form>
+        <div class="field">
+          <label for="f-email">Email</label>
+          <input type="email" id="f-email" name="email" autocomplete="email" placeholder="you@example.com" required>
         </div>
+        <div class="field">
+          <label for="f-msg">Tell me about your AI project</label>
+          <textarea id="f-msg" name="message" placeholder="What are you trying to do, and what data do you have?" required></textarea>
+        </div>
+        <button class="submit-btn" type="submit">Request AI Consultation</button>
+      </form>
     </div>
-</section>
+  </section>
 
-<!-- Footer -->
-<footer class="footer">
-    <p class="footer-brand">Lee Yih Ven | AI Project Portfolio</p>
-    <p class="footer-copy">&copy; 2026 All rights reserved.</p>
-</footer>
+  <footer>&copy; 2026 Lee Yih Ven | AI Project Portfolio &middot; All rights reserved.</footer>
+  <div class="note">Sample Contact-E2: contact page rebuilt on the index magazine structure: 4-up Direct Channels band (matches the contents/category bands), then a Send a Message section in the lead-plus-rail split. Gold palette, in-nav search, mobile hamburger. The form posts to FormSubmit (formsubmit.co/yven81@gmail.com); confirm the activation email on first submit.</div>
 
 <script>
-// IntersectionObserver for scroll-triggered fade-in
-(function() {
-    const observer = new IntersectionObserver(function(entries) {
-        entries.forEach(function(entry) {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-                observer.unobserve(entry.target);
-            }
-        });
-    }, {
-        threshold: 0.1,
-        rootMargin: '0px 0px -40px 0px'
-    });
+  const SITE = "";
 
-    document.querySelectorAll('[data-animate]').forEach(function(el) {
-        observer.observe(el);
-    });
-})();
+  // Project index for the masthead search (featured set; production indexes the full catalog)
+  const ITEMS = [
+    {t:"Courier CS Quality Console", c:"Conversational Data Analytics", s:"courier-cs-quality-console"},
+    {t:"Seasonal Pricing Console", c:"Conversational Data Analytics", s:"seasonal-pricing-console"},
+    {t:"Voucher Analyzer", c:"Conversational Data Analytics", s:"voucher-analyzer"},
+    {t:"Property Lead Tracker", c:"Industry Specialist Advisors", s:"property-lead-tracker"},
+    {t:"Motor Claim Evaluator", c:"Industry Specialist Advisors", s:"motor-claim-evaluator"},
+    {t:"Borrower Risk Evaluator", c:"Industry Specialist Advisors", s:"borrower-risk-evaluator"},
+    {t:"Lucy, Bloom House Concierge", c:"Service Agents", s:"bloom-house-concierge"},
+    {t:"Plumber WhatsApp Agent", c:"Service Agents", s:"plumber-whatsapp-agent"},
+    {t:"Wiseman", c:"Knowledge & Reference Chatbots", s:"wiseman"},
+    {t:"Skyread", c:"Knowledge & Reference Chatbots", s:"skyread"},
+    {t:"Claude PDF Summarizer", c:"Document & Productivity Tools", s:"ai-pdf-summarizer"},
+    {t:"Sunny Car Accessories", c:"Agentic Commerce", s:"sunny-car-accessories"},
+    {t:"Course Creator", c:"Content Automation", s:"course-creator"},
+    {t:"Bookshelf", c:"Multi-Agent Decision Systems", s:"bookshelf"}
+  ];
+
+  const searchInput = document.getElementById('searchInput');
+  const searchResults = document.getElementById('searchResults');
+  function runSearch(q){
+    if(q.trim().length < 2){ searchResults.style.display='none'; return; }
+    const ql = q.toLowerCase();
+    const hits = ITEMS.filter(it => (it.t+' '+it.c).toLowerCase().includes(ql));
+    searchResults.innerHTML = hits.length ? hits.map(it =>
+      `<div class="sr-item"><div class="sr-cat">${it.c}</div>`+
+      `<a href="${SITE}${it.s}.html"><div class="sr-title">${it.t}</div></a>`+
+      `<div class="sr-links"><a href="${SITE}${it.s}.html">View Details</a></div></div>`).join('')
+      : `<div class="sr-none">No projects found. Try a different keyword.</div>`;
+    searchResults.style.display='block';
+  }
+  searchInput.addEventListener('input', e => runSearch(e.target.value));
+  document.addEventListener('click', e => { if(!e.target.closest('.search-box')) searchResults.style.display='none'; });
+
+  // Form posts to FormSubmit (formsubmit.co), no backend needed; submissions arrive by email.
+  // On first submit, FormSubmit sends a one-time confirmation email to activate the endpoint.
+
+  // Drawer
+  const drawer=document.getElementById('drawer'), overlay=document.getElementById('overlay');
+  const openMenu=()=>{ drawer.classList.add('open'); overlay.classList.add('open'); };
+  const closeMenu=()=>{ drawer.classList.remove('open'); overlay.classList.remove('open'); };
+  document.getElementById('hamburger').addEventListener('click', openMenu);
+  document.getElementById('drawerClose').addEventListener('click', closeMenu);
+  overlay.addEventListener('click', closeMenu);
+  drawer.querySelectorAll('a').forEach(a=>a.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeMenu(); searchResults.style.display='none'; }});
 </script>
-
 </body>
 </html>

@@ -1,506 +1,374 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bright Path Tuition Centre - Source Code</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bright Path Tuition Centre: Source | AI Project Portfolio</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root{ --ink:#222; --paper:#fff; --hair:#dddddd; --gray:#555; --accent:#B8860B; --navy:#1E3A5F; --code-bg:#fbfbf8; --cmt:#6b8190; }
+  html{ scroll-behavior:smooth; }
+  body{ background:var(--paper); color:var(--ink); font-family:Arial, Helvetica, sans-serif; line-height:1.6; overflow-x:hidden; }
+  a{ color:inherit; text-decoration:none; }
+  a:hover h2, a:hover h3, a:hover h4{ color:var(--accent); }
+  p code, li code{ font-family:"Courier New", monospace; font-size:.86em; background:#f2f3f5; padding:1px 5px; color:var(--navy); }
 
-        body {
-            font-family: 'Arial', sans-serif;
-            line-height: 1.6;
-            color: #222;
-            background-color: #ffffff;
-        }
+  /* Masthead (shared) */
+  .masthead{ display:flex; align-items:center; justify-content:space-between; padding:14px 28px; max-width:1240px; margin:0 auto; gap:18px; }
+  .mast-left{ display:flex; align-items:center; gap:20px; }
+  .logo{ background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; letter-spacing:3px; font-size:.95rem; padding:8px 12px; white-space:nowrap; }
+  .mast-nav{ display:flex; gap:20px; font-family:Arial, Helvetica, sans-serif; font-size:.72rem; letter-spacing:1.4px; text-transform:uppercase; }
+  .mast-nav a:hover{ color:var(--accent); }
+  .hamburger{ display:none; flex-direction:column; gap:4px; background:none; border:none; cursor:pointer; padding:6px; }
+  .hamburger span{ width:22px; height:2px; background:#222; display:block; }
+  .rule-top{ border:none; border-top:3px solid #222; max-width:1240px; margin:0 auto; }
 
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+  /* Search (shared) */
+  .search-box{ position:relative; width:200px; }
+  .search-input{ width:100%; padding:7px 30px 7px 12px; border:1px solid var(--hair); background:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; color:#222; }
+  .search-input:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(184,134,11,.15); }
+  .search-ic{ position:absolute; right:10px; top:50%; transform:translateY(-50%); color:var(--gray); font-size:.8rem; pointer-events:none; }
+  .search-results{ position:absolute; top:calc(100% + 4px); left:0; width:340px; max-width:86vw; background:#fff; border:1px solid #222; max-height:60vh; overflow-y:auto; z-index:120; display:none; }
+  .sr-item{ padding:12px 14px; border-bottom:1px solid var(--hair); }
+  .sr-item:last-child{ border-bottom:none; }
+  .sr-cat{ font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; margin-bottom:4px; color:var(--accent); }
+  .sr-title{ font-weight:700; font-size:1.02rem; color:#222; }
+  .sr-links{ font-size:.58rem; letter-spacing:.8px; text-transform:uppercase; color:var(--gray); margin-top:5px; }
+  .sr-links a:hover{ color:var(--accent); }
+  .sr-none{ padding:16px 14px; font-size:.82rem; color:var(--gray); }
 
-        .back-nav {
-            margin-bottom: 20px;
-        }
+  /* Shared bits */
+  .tab{ display:inline-block; background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.66rem; letter-spacing:2px; text-transform:uppercase; padding:6px 12px; }
+  .rubric{ font-family:Arial, Helvetica, sans-serif; font-size:.62rem; font-weight:700; letter-spacing:1.6px; text-transform:uppercase; color:var(--accent); display:block; margin-bottom:8px; }
+  .tech-chip{ display:inline-block; border:1px solid var(--hair); padding:6px 12px; font-size:.72rem; letter-spacing:.3px; color:#333; white-space:nowrap; }
+  .tech-chip:hover{ border-color:var(--accent); color:var(--accent); }
+  .btn{ display:inline-block; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.7rem; letter-spacing:1.6px; text-transform:uppercase; padding:13px 24px; border:1px solid #222; background:#222; color:#fff; cursor:pointer; transition:.15s; }
+  .btn:hover{ background:var(--accent); border-color:var(--accent); }
+  .btn.ghost{ background:#fff; color:#222; }
+  .btn.ghost:hover{ color:var(--accent); border-color:var(--accent); background:#fff; }
 
-        .back-nav a {
-            color: #007BFF;
-            text-decoration: none;
-            font-size: 1rem;
-        }
+  /* Breadcrumb */
+  .crumb{ max-width:1240px; margin:0 auto; padding:20px 28px 0; font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--gray); }
+  .crumb a:hover{ color:var(--accent); }
+  .crumb .sep{ color:var(--hair); margin:0 8px; }
 
-        .back-nav a:hover {
-            text-decoration: underline;
-        }
+  /* Header (slim cover banner + copy) */
+  .src-head{ max-width:1240px; margin:0 auto; padding:14px 28px 6px; }
+  .cover-strip{ border:1px solid var(--hair); line-height:0; background:#eef1f4; }
+  .cover-strip img{ width:100%; height:190px; object-fit:cover; object-position:center 42%; display:block; }
+  .src-head h1{ font-size:2.5rem; font-weight:900; line-height:1.04; letter-spacing:-.008em; margin-top:18px; }
+  .src-head .sub{ font-style:italic; font-size:1.08rem; color:#333; margin-top:10px; max-width:72ch; }
+  .head-tech{ display:flex; flex-wrap:wrap; gap:9px; margin-top:16px; }
+  .head-btns{ display:flex; flex-wrap:wrap; gap:12px; margin-top:18px; }
 
-        .project-header {
-            text-align: center;
-            margin-bottom: 40px;
-            padding: 40px 0;
-            background: linear-gradient(135deg, #E91E63, #C2185B);
-            color: white;
-            border-radius: 10px;
-        }
+  /* Section shell */
+  .sec{ max-width:1240px; margin:0 auto; padding:26px 28px; }
+  .sec-rule{ border-top:3px solid #222; padding-top:16px; }
+  .sec .tab{ margin-bottom:14px; }
+  .sec h2{ font-size:1.7rem; font-weight:900; line-height:1.06; }
+  .sec .intro{ color:#333; font-size:1.02rem; margin-top:10px; max-width:80%; }
+  .sec .body{ color:#333; font-size:1rem; margin-top:10px; max-width:80%; }
 
-        .project-header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
+  /* Code block */
+  .codeblock{ border:1px solid var(--hair); margin-top:16px; }
+  .code-bar{ display:flex; align-items:center; justify-content:space-between; gap:12px; background:var(--navy); color:#fff; padding:8px 12px; }
+  .code-bar .path{ font-family:"Courier New", monospace; font-size:.74rem; letter-spacing:.2px; opacity:.96; display:flex; align-items:center; gap:7px; min-width:0; }
+  .code-bar .path span{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .code-copy{ flex:none; background:none; border:1px solid rgba(255,255,255,.4); color:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.56rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; padding:5px 11px; cursor:pointer; transition:.15s; }
+  .code-copy:hover{ background:rgba(255,255,255,.16); }
+  .codeblock pre{ margin:0; padding:14px 16px; overflow-x:auto; background:var(--code-bg); }
+  .codeblock code{ font-family:"Courier New", monospace; font-size:.82rem; line-height:1.6; color:#1b2a3a; background:none; padding:0; white-space:pre; display:block; }
+  .codeblock code .cmt{ color:var(--cmt); font-style:italic; }
 
-        .project-header p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
+  .tree .code-bar .path::before{ content:"📁"; }
 
-        .badges {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin: 20px 0;
-            flex-wrap: wrap;
-        }
+  /* Notes */
+  .note-block{ margin-top:22px; }
+  .note-block h3{ font-size:1.15rem; font-weight:800; }
+  .blist{ list-style:none; margin-top:12px; border-top:1px solid var(--hair); }
+  .blist li{ padding:12px 0; border-bottom:1px solid var(--hair); color:#333; font-size:.95rem; }
+  .blist li b{ color:#222; }
 
-        .badge {
-            background-color: rgba(255, 255, 255, 0.2);
-            color: white;
-            padding: 5px 12px;
-            border-radius: 15px;
-            font-size: 0.9rem;
-        }
+  /* CTA */
+  .cta-inner{ display:flex; align-items:center; gap:18px; flex-wrap:wrap; border-top:3px solid #222; padding-top:18px; }
+  .cta-inner h3{ font-size:1.4rem; font-weight:900; line-height:1.08; }
+  .cta-inner p{ color:var(--gray); font-size:.95rem; margin-top:4px; }
+  .cta-btns{ margin-left:auto; display:flex; gap:12px; flex-wrap:wrap; }
 
-        .content-section {
-            margin: 40px 0;
-            padding: 30px;
-            background-color: #f9f9f9;
-            border-radius: 8px;
-            border-left: 5px solid #E91E63;
-        }
+  footer{ background:#222; max-width:1240px; margin:30px auto 0; padding:24px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; letter-spacing:.5px; color:#fff; text-align:center; }
+  .note{ max-width:1240px; margin:14px auto 0; padding:8px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.62rem; letter-spacing:1px; color:#999; }
 
-        .content-section h2 {
-            color: #E91E63;
-            margin-bottom: 20px;
-            font-size: 1.8rem;
-        }
+  /* Drawer (shared) */
+  .drawer{ position:fixed; top:0; left:-300px; width:280px; height:100vh; background:#fff; z-index:200; box-shadow:2px 0 14px rgba(0,0,0,.15); transition:left .28s ease; padding:74px 26px 26px; }
+  .drawer.open{ left:0; }
+  .drawer a{ display:block; font-family:Arial, Helvetica, sans-serif; font-size:.82rem; letter-spacing:1.2px; text-transform:uppercase; padding:14px 0; border-bottom:1px solid var(--hair); }
+  .overlay{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:150; }
+  .overlay.open{ display:block; }
+  .drawer-close{ position:absolute; top:20px; right:20px; font-family:Arial, Helvetica, sans-serif; font-size:1.4rem; background:none; border:none; cursor:pointer; }
 
-        .content-section h3 {
-            color: #333;
-            margin: 20px 0 10px 0;
-            font-size: 1.3rem;
-        }
-
-        .highlight-box {
-            background: linear-gradient(135deg, #fce4ec, #f8bbd0);
-            padding: 20px;
-            border-radius: 10px;
-            border-left: 5px solid #E91E63;
-            margin: 20px 0;
-        }
-
-        .code-container {
-            background-color: #1e1e1e;
-            border-radius: 8px;
-            padding: 20px;
-            margin: 20px 0;
-            overflow-x: auto;
-        }
-
-        .code-header {
-            color: #f48fb1;
-            font-weight: bold;
-            margin-bottom: 15px;
-            font-size: 1.1rem;
-            border-bottom: 1px solid #333;
-            padding-bottom: 10px;
-        }
-
-        .code-block {
-            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-            font-size: 14px;
-            line-height: 1.5;
-            color: #d4d4d4;
-        }
-
-        .code-comment {
-            color: #6a9955;
-            font-style: italic;
-        }
-
-        .code-keyword {
-            color: #569cd6;
-        }
-
-        .code-string {
-            color: #ce9178;
-        }
-
-        .code-function {
-            color: #dcdcaa;
-        }
-
-        .code-number {
-            color: #b5cea8;
-        }
-
-        .file-list {
-            list-style: none;
-            padding: 0;
-        }
-
-        .file-list li {
-            padding: 10px 15px;
-            margin: 5px 0;
-            background: white;
-            border-radius: 6px;
-            border: 1px solid #ddd;
-        }
-
-        .file-list li strong {
-            color: #E91E63;
-        }
-
-        .demo-links {
-            text-align: center;
-            margin: 30px 0;
-        }
-
-        .demo-btn {
-            display: inline-block;
-            background-color: #007BFF;
-            color: white;
-            padding: 12px 25px;
-            text-decoration: none;
-            border-radius: 5px;
-            margin: 0 10px;
-            font-weight: bold;
-            transition: background-color 0.3s;
-        }
-
-        .demo-btn:hover {
-            background-color: #0056b3;
-        }
-
-        .demo-btn.secondary {
-            background-color: #28a745;
-        }
-
-        .demo-btn.secondary:hover {
-            background-color: #218838;
-        }
-
-        footer {
-            background-color: #333;
-            color: white;
-            padding: 20px;
-            margin-top: 40px;
-            text-align: center;
-        }
-
-        @media (max-width: 768px) {
-            .project-header h1 {
-                font-size: 2rem;
-            }
-
-            .project-header p {
-                font-size: 1rem;
-            }
-
-            .demo-btn {
-                margin: 5px;
-                padding: 10px 20px;
-            }
-
-            .container {
-                padding: 15px;
-            }
-        }
-    </style>
+  @media (max-width:900px){
+    .cta-btns{ margin-left:0; }
+    .mast-nav{ display:none; }
+    .hamburger{ display:flex; }
+    .masthead{ padding:12px 16px; }
+    .mast-left{ gap:10px; min-width:0; flex:1; }
+    .logo{ font-size:.72rem; letter-spacing:1.5px; padding:6px 8px; }
+    .search-box{ flex:1; width:auto; min-width:0; }
+    .search-results{ position:fixed; top:58px; left:12px; right:12px; width:auto; max-width:none; }
+    .src-head h1{ font-size:1.95rem; }
+    .cover-strip img{ height:150px; }
+  }
+</style>
 </head>
 <body>
-    <div class="container">
-        <nav class="back-nav">
-            <a href="bright-path-tuition.html">&larr; Back to Project Overview</a>
-        </nav>
 
-        <div class="project-header">
-            <h1>Bright Path Tuition Centre</h1>
-            <p>Core Source Code &amp; NL-to-SQL Implementation</p>
+  <div class="overlay" id="overlay"></div>
+  <nav class="drawer" id="drawer">
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">&times;</button>
+    <a href="index.html">Home</a>
+    <a href="project-categories.html">Categories</a>
+    <a href="contact.html">Contact</a>
+    <a href="https://lyven81.github.io/data-analyst-portfolio/index.html">Data Portfolio</a>
+  </nav>
 
-            <div class="badges">
-                <span class="badge">Gemini 2.5 Flash</span>
-                <span class="badge">FastAPI</span>
-                <span class="badge">SQLite</span>
-                <span class="badge">Python</span>
-                <span class="badge">GitHub Pages</span>
-            </div>
-        </div>
-
-        <div class="highlight-box">
-            <h3>About This Code Showcase</h3>
-            <p><strong>This curated code showcase demonstrates how Bright Path Tuition Centre translates natural-language management questions into safe SQL queries against a 7-table database of 185 children, 22 specialist tutors, and 63 classes.</strong></p>
-            <p>The snippets below highlight the config-driven schema, seeded demo data, prompt template, and SQL safety validation. Deployment scripts and API keys are omitted for clarity.</p>
-        </div>
-
-        <div class="content-section">
-            <h2>Source Files</h2>
-            <ul class="file-list">
-                <li><strong>config.yaml</strong> &mdash; 7-table schema + business rules + quick actions</li>
-                <li><strong>seed_generator.py</strong> &mdash; Builds data.db with 9 seeded demo stories</li>
-                <li><strong>main.py</strong> &mdash; FastAPI app, NL-to-SQL via Gemini</li>
-                <li><strong>index.html</strong> &mdash; Hybrid demo page (presets + client-side Gemini)</li>
-                <li><strong>data_context.json</strong> &mdash; Compact database context for client-side queries</li>
-                <li><strong>Dockerfile</strong> &mdash; Cloud Run container</li>
-                <li><strong>requirements.txt</strong> &mdash; Python dependencies</li>
-                <li><strong>README.md</strong> &mdash; Portfolio-ready documentation</li>
-            </ul>
-        </div>
-
-        <div class="content-section">
-            <h2>config.yaml &mdash; Schema &amp; Business Rules</h2>
-            <p>The config file defines the full 7-table schema, business rules, and quick actions. The AI agent receives this as context in every query. Here are key tables:</p>
-
-            <div class="code-container">
-                <div class="code-header">config.yaml &mdash; Table Definitions (excerpt)</div>
-                <div class="code-block">
-<span class="code-keyword">schema:</span>
-  <span class="code-keyword">tables:</span>
-
-    <span class="code-keyword">students:</span>
-      <span class="code-comment"># 185 children across Preschool to P6</span>
-      <span class="code-keyword">columns:</span>
-        - <span class="code-string">student_id</span>: INTEGER PRIMARY KEY
-        - <span class="code-string">name</span>: TEXT
-        - <span class="code-string">year_group</span>: TEXT  <span class="code-comment"># Preschool, P1, P2, ... P6</span>
-        - <span class="code-string">date_of_birth</span>: DATE
-        - <span class="code-string">enrolment_date</span>: DATE
-        - <span class="code-string">parent_contact</span>: TEXT
-        - <span class="code-string">status</span>: TEXT  <span class="code-comment"># active, withdrawn, graduated</span>
-
-    <span class="code-keyword">tutors:</span>
-      <span class="code-comment"># 22 specialist tutors with subject expertise</span>
-      <span class="code-keyword">columns:</span>
-        - <span class="code-string">tutor_id</span>: INTEGER PRIMARY KEY
-        - <span class="code-string">name</span>: TEXT
-        - <span class="code-string">subject_expertise</span>: TEXT  <span class="code-comment"># Maths, English, BM, Science</span>
-        - <span class="code-string">hire_date</span>: DATE
-        - <span class="code-string">status</span>: TEXT  <span class="code-comment"># active, on_leave, terminated</span>
-
-    <span class="code-keyword">assessments:</span>
-      <span class="code-comment"># Score records per child per subject</span>
-      <span class="code-keyword">columns:</span>
-        - <span class="code-string">assessment_id</span>: INTEGER PRIMARY KEY
-        - <span class="code-string">student_id</span>: INTEGER REFERENCES students
-        - <span class="code-string">subject</span>: TEXT
-        - <span class="code-string">score</span>: INTEGER  <span class="code-comment"># 0-100</span>
-        - <span class="code-string">assessment_date</span>: DATE
-        - <span class="code-string">assessment_type</span>: TEXT  <span class="code-comment"># PBD, UASA, internal</span>
-
-<span class="code-keyword">business_rules:</span>
-  - <span class="code-string">"Always refer to learners as 'children', never 'students'"</span>
-  - <span class="code-string">"Year 4 is the MOE anchor year from 2026"</span>
-  - <span class="code-string">"P5/P6 children below P4 baseline score trigger escalation"</span>
-  - <span class="code-string">"Maximum class size is 10 children"</span>
-  - <span class="code-string">"Improvement = latest score minus previous score"</span>
-  - <span class="code-string">"Top improver threshold: 15+ marks between assessments"</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>seed_generator.py &mdash; Seeded Demo Stories</h2>
-            <p>The seed generator builds a realistic database with 9 named children whose data tells specific stories &mdash; enabling meaningful demo queries:</p>
-
-            <div class="code-container">
-                <div class="code-header">seed_generator.py &mdash; Seeded Story Children</div>
-                <div class="code-block">
-<span class="code-comment"># 9 seeded children with specific learning trajectories</span>
-<span class="code-comment"># These stories make demo queries return meaningful results</span>
-
-<span class="code-keyword">SEEDED_STORIES</span> = [
-    {
-        <span class="code-string">"name"</span>: <span class="code-string">"Ahmad Rizqi"</span>,
-        <span class="code-string">"year_group"</span>: <span class="code-string">"P4"</span>,
-        <span class="code-string">"story"</span>: <span class="code-string">"Year 4 anchor child — strong in BM, struggling in Maths"</span>,
-        <span class="code-string">"scores"</span>: {
-            <span class="code-string">"BM"</span>: [<span class="code-number">82</span>, <span class="code-number">85</span>, <span class="code-number">88</span>],
-            <span class="code-string">"Maths"</span>: [<span class="code-number">45</span>, <span class="code-number">48</span>, <span class="code-number">52</span>],
-            <span class="code-string">"English"</span>: [<span class="code-number">70</span>, <span class="code-number">72</span>, <span class="code-number">75</span>],
-            <span class="code-string">"Science"</span>: [<span class="code-number">65</span>, <span class="code-number">68</span>, <span class="code-number">70</span>]
-        }
-    },
-    {
-        <span class="code-string">"name"</span>: <span class="code-string">"Mei Ling Tan"</span>,
-        <span class="code-string">"year_group"</span>: <span class="code-string">"P6"</span>,
-        <span class="code-string">"story"</span>: <span class="code-string">"P6 escalation — below P4 baseline in Science, needs urgent help"</span>,
-        <span class="code-string">"scores"</span>: {
-            <span class="code-string">"BM"</span>: [<span class="code-number">60</span>, <span class="code-number">58</span>, <span class="code-number">55</span>],
-            <span class="code-string">"Maths"</span>: [<span class="code-number">55</span>, <span class="code-number">52</span>, <span class="code-number">50</span>],
-            <span class="code-string">"English"</span>: [<span class="code-number">65</span>, <span class="code-number">63</span>, <span class="code-number">60</span>],
-            <span class="code-string">"Science"</span>: [<span class="code-number">40</span>, <span class="code-number">38</span>, <span class="code-number">35</span>]
-        }
-    },
-    {
-        <span class="code-string">"name"</span>: <span class="code-string">"Darren Lim"</span>,
-        <span class="code-string">"year_group"</span>: <span class="code-string">"P5"</span>,
-        <span class="code-string">"story"</span>: <span class="code-string">"Top improver — jumped 20 marks in English after tutor switch"</span>,
-        <span class="code-string">"scores"</span>: {
-            <span class="code-string">"BM"</span>: [<span class="code-number">70</span>, <span class="code-number">72</span>, <span class="code-number">75</span>],
-            <span class="code-string">"Maths"</span>: [<span class="code-number">78</span>, <span class="code-number">80</span>, <span class="code-number">82</span>],
-            <span class="code-string">"English"</span>: [<span class="code-number">50</span>, <span class="code-number">55</span>, <span class="code-number">70</span>],
-            <span class="code-string">"Science"</span>: [<span class="code-number">72</span>, <span class="code-number">74</span>, <span class="code-number">76</span>]
-        }
-    },
-    <span class="code-comment"># ... 6 more seeded stories covering:</span>
-    <span class="code-comment"># - Preschool readiness check</span>
-    <span class="code-comment"># - Consistent high performer (P3)</span>
-    <span class="code-comment"># - Withdrawn child (attendance drop)</span>
-    <span class="code-comment"># - New enrolment (P1, only 1 assessment)</span>
-    <span class="code-comment"># - Multi-subject weakness (P4 anchor concern)</span>
-    <span class="code-comment"># - Tutor quality comparison anchor child</span>
-]
-
-<span class="code-keyword">def</span> <span class="code-function">seed_database</span>(db_path: str):
-    <span class="code-string">"""Build data.db with 185 children (9 seeded + 176 random)"""</span>
-    conn = sqlite3.connect(db_path)
-
-    <span class="code-comment"># Insert seeded children first</span>
-    <span class="code-keyword">for</span> child <span class="code-keyword">in</span> SEEDED_STORIES:
-        insert_student(conn, child)
-        insert_assessments(conn, child)
-
-    <span class="code-comment"># Fill remaining slots with randomised children</span>
-    <span class="code-keyword">for</span> i <span class="code-keyword">in</span> range(<span class="code-number">176</span>):
-        insert_random_student(conn, i)
-
-    conn.commit()
-    conn.close()
-                </div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>main.py &mdash; FastAPI App &amp; NL-to-SQL</h2>
-            <p>The FastAPI backend receives natural language questions, constructs a Gemini prompt with the full schema context, generates SQL, validates it for safety, and returns formatted results:</p>
-
-            <div class="code-container">
-                <div class="code-header">main.py &mdash; Prompt Template</div>
-                <div class="code-block">
-<span class="code-keyword">SYSTEM_PROMPT</span> = <span class="code-string">"""You are a data assistant for Bright Path Tuition Centre.
-You translate natural language questions into SQLite SQL queries.
-
-IMPORTANT RULES:
-- Always refer to learners as "children", never "students"
-- Year 4 (P4) is the MOE anchor year from 2026
-- P5/P6 children scoring below P4 baseline (60%) trigger escalation
-- Maximum class size is 10 children
-- Improvement = latest score - previous score
-- Top improver threshold: 15+ marks between assessments
-- Always use SELECT only — never INSERT, UPDATE, DELETE, or DROP
-
-DATABASE SCHEMA:
-{schema_context}
-
-Given the user's question, return ONLY a valid SQLite SELECT query.
-Do not include explanations or markdown formatting.
-"""</span>
-
-<span class="code-keyword">async def</span> <span class="code-function">generate_sql</span>(question: str) -&gt; str:
-    <span class="code-string">"""Send question + schema to Gemini, get SQL back"""</span>
-    model = genai.GenerativeModel(<span class="code-string">"gemini-2.5-flash"</span>)
-    response = model.generate_content(
-        SYSTEM_PROMPT.format(schema_context=schema_context)
-        + <span class="code-string">f"\n\nQuestion: {question}"</span>,
-        generation_config=genai.GenerationConfig(
-            temperature=<span class="code-number">0.0</span>,
-            max_output_tokens=<span class="code-number">500</span>
-        )
-    )
-    <span class="code-keyword">return</span> response.text.strip()
-                </div>
-            </div>
-
-            <div class="code-container">
-                <div class="code-header">main.py &mdash; SQL Safety Validation</div>
-                <div class="code-block">
-<span class="code-keyword">def</span> <span class="code-function">is_safe_sql</span>(sql):
-    <span class="code-string">"""Block anything that isn't a read-only SELECT or CTE (WITH ... SELECT)."""</span>
-    upper = sql.upper().strip().rstrip(<span class="code-string">";"</span>).strip()
-
-    <span class="code-comment"># Allow both plain SELECT and WITH...SELECT (CTE pattern)</span>
-    <span class="code-keyword">if not</span> (upper.startswith(<span class="code-string">"SELECT"</span>) <span class="code-keyword">or</span> upper.startswith(<span class="code-string">"WITH"</span>)):
-        <span class="code-keyword">return</span> <span class="code-keyword">False</span>
-
-    <span class="code-comment"># Word-boundary check so 'created_at' doesn't trip 'CREATE'</span>
-    dangerous = [<span class="code-string">"INSERT"</span>, <span class="code-string">"UPDATE"</span>, <span class="code-string">"DELETE"</span>, <span class="code-string">"DROP"</span>,
-                 <span class="code-string">"ALTER"</span>, <span class="code-string">"TRUNCATE"</span>, <span class="code-string">"EXEC"</span>,
-                 <span class="code-string">"REPLACE"</span>, <span class="code-string">"ATTACH"</span>]
-
-    <span class="code-keyword">for</span> keyword <span class="code-keyword">in</span> dangerous:
-        <span class="code-keyword">if</span> re.search(<span class="code-string">r"\b"</span> + keyword + <span class="code-string">r"\b"</span>, upper):
-            <span class="code-keyword">return</span> <span class="code-keyword">False</span>
-
-    <span class="code-keyword">return</span> <span class="code-keyword">True</span>
-
-
-<span class="code-keyword">@app</span>.post(<span class="code-string">"/ask"</span>)
-<span class="code-keyword">async def</span> <span class="code-function">ask_question</span>(request: QuestionRequest):
-    <span class="code-string">"""Main endpoint: question in, answer out"""</span>
-    sql = <span class="code-keyword">await</span> generate_sql(request.question)
-
-    <span class="code-keyword">if not</span> is_safe_sql(sql):
-        <span class="code-keyword">return</span> {<span class="code-string">"error"</span>: <span class="code-string">"Generated query failed safety check"</span>}
-
-    <span class="code-comment"># Execute validated SQL against data.db</span>
-    conn = sqlite3.connect(<span class="code-string">"data.db"</span>)
-    cursor = conn.execute(sql)
-    columns = [desc[<span class="code-number">0</span>] <span class="code-keyword">for</span> desc <span class="code-keyword">in</span> cursor.description]
-    rows = cursor.fetchall()
-    conn.close()
-
-    <span class="code-comment"># Format results for the frontend</span>
-    results = [dict(zip(columns, row)) <span class="code-keyword">for</span> row <span class="code-keyword">in</span> rows]
-    <span class="code-keyword">return</span> {<span class="code-string">"sql"</span>: sql, <span class="code-string">"results"</span>: results, <span class="code-string">"count"</span>: len(results)}
-                </div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>Technical Implementation Notes</h2>
-            <h3>Key Design Decisions</h3>
-            <ul style="margin: 15px 0; padding-left: 20px;">
-                <li><strong>Config-driven schema:</strong> The entire database schema and business rules live in config.yaml, making it easy to add tables or update rules without touching application code</li>
-                <li><strong>Temperature 0.0:</strong> Deterministic SQL generation ensures the same question always produces the same query &mdash; critical for trust in a management tool</li>
-                <li><strong>Seeded demo stories:</strong> Nine children with scripted learning trajectories ensure demo queries always return meaningful, explainable results</li>
-                <li><strong>Hybrid deployment:</strong> GitHub Pages serves a static demo with client-side Gemini calls; FastAPI serves the full backend for Cloud Run deployment</li>
-                <li><strong>Read-only SQL enforcement:</strong> The is_safe_sql function uses word-boundary regex to block dangerous SQL keywords without false-positives on column names like 'created_at'. Supports both SELECT and WITH/CTE queries.</li>
-                <li><strong>Malaysian education context:</strong> Business rules encode post-UPSR assessment norms (PBD, UASA, Year 4 anchoring) that generic AI tools would not know</li>
-            </ul>
-
-            <h3>Why SQLite?</h3>
-            <ul style="margin: 15px 0; padding-left: 20px;">
-                <li><strong>Zero configuration:</strong> No database server to provision &mdash; ideal for a single-centre management tool</li>
-                <li><strong>Fast reads:</strong> All analytics queries run in milliseconds on 185 children</li>
-                <li><strong>Portable:</strong> The entire database is a single file, making backups and demo resets trivial</li>
-            </ul>
-        </div>
-
-        <div class="demo-links">
-            <a href="bright-path-tuition/demo.html" class="demo-btn">Try Demo</a>
-            <a href="bright-path-tuition.html" class="demo-btn secondary">View Full Project Details</a>
-        </div>
-
-        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
-            <a href="index.html">&larr; Back to Portfolio</a> |
-            <a href="bright-path-tuition.html">View Project Overview</a>
-        </nav>
+  <div class="masthead">
+    <div class="mast-left">
+      <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+      <a class="logo" href="index.html">AI PROJECTS</a>
+      <nav class="mast-nav">
+        <a href="project-categories.html">Categories</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <div class="search-box">
+        <input type="text" class="search-input" id="searchInput" autocomplete="off" placeholder="Search AI projects..." aria-label="Search AI projects">
+        <span class="search-ic">&#128269;</span>
+        <div class="search-results" id="searchResults"></div>
+      </div>
     </div>
+  </div>
+  <hr class="rule-top">
 
-    <footer>
-        &copy; 2025 Lee Yih Ven | Data-Driven Solutions
-    </footer>
+  <div class="crumb">
+    <a href="project-categories.html">Categories</a>
+    <span class="sep">/</span><a id="crumbCat" href="#"></a>
+    <span class="sep">/</span><a id="crumbProj" href="#"></a>
+    <span class="sep">/</span><span>Source</span>
+  </div>
+
+  <section class="src-head">
+    <div class="cover-strip" id="coverStrip" style="display:none"><img id="cover" alt=""></div>
+    <span class="rubric" id="kicker"></span>
+    <h1 id="title"></h1>
+    <p class="sub" id="subtitle"></p>
+    <div class="head-tech" id="headTech"></div>
+    <div class="head-btns" id="headBtns"></div>
+  </section>
+
+  <div id="body"></div>
+
+  <footer>&copy; 2026 Lee Yih Ven | AI Project Portfolio &middot; All rights reserved.</footer>
+  <div class="note">Sample Source-Showcase-E2 (TEMPLATE): source-code page on the index magazine system: slim cover banner, About, Project Structure, code walkthrough with copyable navy-barred code blocks, CTA. Reuse by editing only the PROJECT block at the top of the script.</div>
+
+<script>
+  const SITE = "";
+
+  /* =================================================================
+     EDIT PER PROJECT  -  the ONLY block you change per page.
+     Copy this file, swap PROJECT, save as <slug>-source.html.
+     - structure.code : the project file tree (plain text)
+     - walkthrough[]   : { heading, body, files:[{label, code}] }
+     - notes[]         : { heading, bullets:[...] }
+     Code strings can be multi-line; they render verbatim.
+     ================================================================= */
+  const PROJECT = {
+  "slug": "bright-path-tuition",
+  "category": "Industry Specialist Advisors",
+  "categoryUrl": "category-industry-advisors.html",
+  "title": "Bright Path Tuition Centre",
+  "subtitle": "Config-driven schema, seeded demo stories, the NL-to-SQL prompt, and SQL safety validation, the excerpts that translate plain-English management questions into safe queries.",
+  "cover": "images/bright-path-tuition/cover.jpeg",
+  "tech": [
+    "Gemini 2.5 Flash",
+    "FastAPI",
+    "Python",
+    "SQLite",
+    "Read-only SQL"
+  ],
+  "overviewUrl": "bright-path-tuition.html",
+  "demoLabel": "Try Demo",
+  "demoUrl": "bright-path-tuition/demo.html",
+  "about": "This curated code showcase demonstrates how Bright Path Tuition Centre translates natural-language management questions into safe SQL queries against a 7-table database of 185 children, 22 specialist tutors, and 63 classes. The snippets below highlight the config-driven schema, seeded demo data, the prompt template, and SQL safety validation. Deployment scripts and API keys are omitted for clarity.",
+  "structure": {
+    "label": "bright-path-tuition/",
+    "code": "bright-path-tuition/\n  config.yaml          7-table schema + business rules + quick actions\n  seed_generator.py    builds data.db with 9 seeded demo stories\n  main.py              FastAPI app, NL-to-SQL via Gemini\n  index.html           hybrid demo page (presets + client-side Gemini)\n  data_context.json    compact database context for client-side queries\n  Dockerfile           Cloud Run container\n  requirements.txt     Python dependencies\n  README.md            portfolio-ready documentation"
+  },
+  "walkthrough": [
+    {
+      "heading": "config.yaml: Schema and Business Rules",
+      "body": "The config file defines the full 7-table schema, business rules, and quick actions. The AI agent receives this as context in every query. The business rules encode post-UPSR norms that a generic model would not know.",
+      "files": [
+        {
+          "label": "config.yaml: table definitions (excerpt)",
+          "code": "schema:\n  tables:\n\n    students:\n      # 185 children across Preschool to P6\n      columns:\n        - student_id: INTEGER PRIMARY KEY\n        - name: TEXT\n        - year_group: TEXT  # Preschool, P1, P2, ... P6\n        - date_of_birth: DATE\n        - enrolment_date: DATE\n        - parent_contact: TEXT\n        - status: TEXT  # active, withdrawn, graduated\n\n    tutors:\n      # 22 specialist tutors with subject expertise\n      columns:\n        - tutor_id: INTEGER PRIMARY KEY\n        - name: TEXT\n        - subject_expertise: TEXT  # Maths, English, BM, Science\n        - hire_date: DATE\n        - status: TEXT  # active, on_leave, terminated\n\n    assessments:\n      # Score records per child per subject\n      columns:\n        - assessment_id: INTEGER PRIMARY KEY\n        - student_id: INTEGER REFERENCES students\n        - subject: TEXT\n        - score: INTEGER  # 0-100\n        - assessment_date: DATE\n        - assessment_type: TEXT  # PBD, UASA, internal\n\nbusiness_rules:\n  - \"Always refer to learners as 'children', never 'students'\"\n  - \"Year 4 is the MOE anchor year from 2026\"\n  - \"P5/P6 children below P4 baseline score trigger escalation\"\n  - \"Maximum class size is 10 children\"\n  - \"Improvement = latest score minus previous score\"\n  - \"Top improver threshold: 15+ marks between assessments\""
+        }
+      ]
+    },
+    {
+      "heading": "seed_generator.py: Seeded Demo Stories",
+      "body": "The seed generator builds a realistic database with 9 named children whose data tells specific stories, enabling meaningful demo queries that always return explainable results.",
+      "files": [
+        {
+          "label": "seed_generator.py: seeded story children",
+          "code": "# 9 seeded children with specific learning trajectories\n# These stories make demo queries return meaningful results\n\nSEEDED_STORIES = [\n    {\n        \"name\": \"Ahmad Rizqi\",\n        \"year_group\": \"P4\",\n        \"story\": \"Year 4 anchor child - strong in BM, struggling in Maths\",\n        \"scores\": {\n            \"BM\": [82, 85, 88],\n            \"Maths\": [45, 48, 52],\n            \"English\": [70, 72, 75],\n            \"Science\": [65, 68, 70]\n        }\n    },\n    {\n        \"name\": \"Mei Ling Tan\",\n        \"year_group\": \"P6\",\n        \"story\": \"P6 escalation - below P4 baseline in Science, needs urgent help\",\n        \"scores\": {\n            \"BM\": [60, 58, 55],\n            \"Maths\": [55, 52, 50],\n            \"English\": [65, 63, 60],\n            \"Science\": [40, 38, 35]\n        }\n    },\n    {\n        \"name\": \"Darren Lim\",\n        \"year_group\": \"P5\",\n        \"story\": \"Top improver - jumped 20 marks in English after tutor switch\",\n        \"scores\": {\n            \"BM\": [70, 72, 75],\n            \"Maths\": [78, 80, 82],\n            \"English\": [50, 55, 70],\n            \"Science\": [72, 74, 76]\n        }\n    },\n    # ... 6 more seeded stories covering:\n    # - Preschool readiness check\n    # - Consistent high performer (P3)\n    # - Withdrawn child (attendance drop)\n    # - New enrolment (P1, only 1 assessment)\n    # - Multi-subject weakness (P4 anchor concern)\n    # - Tutor quality comparison anchor child\n]\n\ndef seed_database(db_path: str):\n    \"\"\"Build data.db with 185 children (9 seeded + 176 random)\"\"\"\n    conn = sqlite3.connect(db_path)\n\n    # Insert seeded children first\n    for child in SEEDED_STORIES:\n        insert_student(conn, child)\n        insert_assessments(conn, child)\n\n    # Fill remaining slots with randomised children\n    for i in range(176):\n        insert_random_student(conn, i)\n\n    conn.commit()\n    conn.close()"
+        }
+      ]
+    },
+    {
+      "heading": "main.py: FastAPI App and NL-to-SQL",
+      "body": "The FastAPI backend receives natural language questions, constructs a Gemini prompt with the full schema context, generates SQL at temperature 0.0, and returns the text. The business rules ride along in the system prompt.",
+      "files": [
+        {
+          "label": "main.py: prompt template",
+          "code": "SYSTEM_PROMPT = \"\"\"You are a data assistant for Bright Path Tuition Centre.\nYou translate natural language questions into SQLite SQL queries.\n\nIMPORTANT RULES:\n- Always refer to learners as \"children\", never \"students\"\n- Year 4 (P4) is the MOE anchor year from 2026\n- P5/P6 children scoring below P4 baseline (60%) trigger escalation\n- Maximum class size is 10 children\n- Improvement = latest score - previous score\n- Top improver threshold: 15+ marks between assessments\n- Always use SELECT only - never INSERT, UPDATE, DELETE, or DROP\n\nDATABASE SCHEMA:\n{schema_context}\n\nGiven the user's question, return ONLY a valid SQLite SELECT query.\nDo not include explanations or markdown formatting.\n\"\"\"\n\nasync def generate_sql(question: str) -> str:\n    \"\"\"Send question + schema to Gemini, get SQL back\"\"\"\n    model = genai.GenerativeModel(\"gemini-2.5-flash\")\n    response = model.generate_content(\n        SYSTEM_PROMPT.format(schema_context=schema_context)\n        + f\"\\n\\nQuestion: {question}\",\n        generation_config=genai.GenerationConfig(\n            temperature=0.0,\n            max_output_tokens=500\n        )\n    )\n    return response.text.strip()"
+        },
+        {
+          "label": "main.py: SQL safety validation",
+          "code": "def is_safe_sql(sql):\n    \"\"\"Block anything that isn't a read-only SELECT or CTE (WITH ... SELECT).\"\"\"\n    upper = sql.upper().strip().rstrip(\";\").strip()\n\n    # Allow both plain SELECT and WITH...SELECT (CTE pattern)\n    if not (upper.startswith(\"SELECT\") or upper.startswith(\"WITH\")):\n        return False\n\n    # Word-boundary check so 'created_at' doesn't trip 'CREATE'\n    dangerous = [\"INSERT\", \"UPDATE\", \"DELETE\", \"DROP\",\n                 \"ALTER\", \"TRUNCATE\", \"EXEC\",\n                 \"REPLACE\", \"ATTACH\"]\n\n    for keyword in dangerous:\n        if re.search(r\"\\b\" + keyword + r\"\\b\", upper):\n            return False\n\n    return True\n\n\n@app.post(\"/ask\")\nasync def ask_question(request: QuestionRequest):\n    \"\"\"Main endpoint: question in, answer out\"\"\"\n    sql = await generate_sql(request.question)\n\n    if not is_safe_sql(sql):\n        return {\"error\": \"Generated query failed safety check\"}\n\n    # Execute validated SQL against data.db\n    conn = sqlite3.connect(\"data.db\")\n    cursor = conn.execute(sql)\n    columns = [desc[0] for desc in cursor.description]\n    rows = cursor.fetchall()\n    conn.close()\n\n    # Format results for the frontend\n    results = [dict(zip(columns, row)) for row in rows]\n    return {\"sql\": sql, \"results\": results, \"count\": len(results)}"
+        }
+      ]
+    }
+  ],
+  "notes": [
+    {
+      "heading": "Key Design Decisions",
+      "bullets": [
+        "<b>Config-driven schema:</b> the entire database schema and business rules live in <code>config.yaml</code>, making it easy to add tables or update rules without touching application code.",
+        "<b>Temperature 0.0:</b> deterministic SQL generation ensures the same question always produces the same query, critical for trust in a management tool.",
+        "<b>Seeded demo stories:</b> nine children with scripted learning trajectories ensure demo queries always return meaningful, explainable results.",
+        "<b>Hybrid deployment:</b> GitHub Pages serves a static demo with client-side Gemini calls; FastAPI serves the full backend for Cloud Run deployment.",
+        "<b>Read-only SQL enforcement:</b> the <code>is_safe_sql</code> function uses word-boundary regex to block dangerous SQL keywords without false-positives on column names like 'created_at'. It supports both SELECT and WITH/CTE queries.",
+        "<b>Malaysian education context:</b> business rules encode post-UPSR assessment norms (PBD, UASA, Year 4 anchoring) that generic AI tools would not know."
+      ]
+    },
+    {
+      "heading": "Why SQLite",
+      "bullets": [
+        "<b>Zero configuration:</b> no database server to provision, ideal for a single-centre management tool.",
+        "<b>Fast reads:</b> all analytics queries run in milliseconds on 185 children.",
+        "<b>Portable:</b> the entire database is a single file, making backups and demo resets trivial."
+      ]
+    }
+  ],
+  "cta": "Want an AI management assistant like this built for your own data? Let's scope it."
+};
+  /* ===================== END EDIT BLOCK ===================== */
+
+  const pref = (u) => /^https?:|^mailto:|^tel:/.test(u || '') ? u : (SITE + (u || ''));
+  const esc = (s) => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const rich = (s) => esc(s).replace(/&lt;(\/?(?:b|code))&gt;/g, '<$1>');
+
+  // raw code store for copy buttons
+  const RAW = [];
+  function codeBlock(label, codeStr, extraClass){
+    const idx = RAW.push(codeStr) - 1;
+    const rendered = esc(codeStr).split('\n')
+      .map(line => /^\s*#/.test(line) ? `<span class="cmt">${line}</span>` : line).join('\n');
+    return `<div class="codeblock ${extraClass||''}">`+
+      `<div class="code-bar"><span class="path"><span>${esc(label)}</span></span>`+
+      `<button class="code-copy" data-idx="${idx}">Copy</button></div>`+
+      `<pre><code>${rendered}</code></pre></div>`;
+  }
+
+  // Breadcrumb + header
+  document.title = PROJECT.title + ": Source | AI Project Portfolio";
+  document.getElementById('crumbCat').textContent = PROJECT.category;
+  document.getElementById('crumbCat').href = pref(PROJECT.categoryUrl);
+  document.getElementById('crumbProj').textContent = PROJECT.title;
+  document.getElementById('crumbProj').href = pref(PROJECT.overviewUrl);
+  if (PROJECT.cover){
+    document.getElementById('coverStrip').style.display = '';
+    const c = document.getElementById('cover'); c.src = PROJECT.cover; c.alt = PROJECT.title + " cover";
+  }
+  document.getElementById('kicker').textContent = "Source Walkthrough · " + PROJECT.category;
+  document.getElementById('title').textContent = PROJECT.title;
+  document.getElementById('subtitle').textContent = PROJECT.subtitle;
+  document.getElementById('headTech').innerHTML = (PROJECT.tech||[]).map(t => `<span class="tech-chip">${esc(t)}</span>`).join('');
+  document.getElementById('headBtns').innerHTML =
+    (PROJECT.demoUrl ? `<a class="btn" href="${pref(PROJECT.demoUrl)}" target="_blank" rel="noopener">${esc(PROJECT.demoLabel||'Live Demo')}</a>` : '') +
+    (PROJECT.overviewUrl ? `<a class="btn ghost" href="${pref(PROJECT.overviewUrl)}">Project Overview</a>` : '') +
+    (PROJECT.repoUrl ? `<a class="btn ghost" href="${pref(PROJECT.repoUrl)}" target="_blank" rel="noopener">GitHub Repo</a>` : '');
+
+  const section = (tab, inner) => `<section class="sec"><div class="sec-rule"><span class="tab">${esc(tab)}</span>${inner}</div></section>`;
+  let html = "";
+  const P = PROJECT;
+
+  if (P.about){
+    html += section("About This Code", `<h2>About This Code Showcase</h2><p class="intro">${rich(P.about)}</p>`);
+  }
+  if (P.structure && P.structure.code){
+    html += section("Project Structure", `<h2>Project Structure</h2>`+
+      codeBlock(P.structure.label || 'project/', P.structure.code, 'tree'));
+  }
+  (P.walkthrough||[]).forEach(w => {
+    let inner = `<h2>${esc(w.heading)}</h2>`;
+    if (w.body) inner += `<p class="body">${rich(w.body)}</p>`;
+    (w.files||[]).forEach(f => { inner += codeBlock(f.label, f.code); });
+    html += section("Code", inner);
+  });
+  // CTA
+  html += `<section class="sec"><div class="cta-inner">`+
+    `<div><h3>Interested in the build?</h3><p>${esc(P.cta || "Let's talk.")}</p></div>`+
+    `<div class="cta-btns">`+
+    (P.demoUrl ? `<a class="btn" href="${pref(P.demoUrl)}" target="_blank" rel="noopener">${esc(P.demoLabel||'Live Demo')}</a>` : '')+
+    `<a class="btn ghost" href="${SITE}contact.html">Get in Touch</a>`+
+    `</div></div></section>`;
+
+  document.getElementById('body').innerHTML = html;
+
+  // Copy buttons
+  function copyText(text, btn){
+    const done = ()=>{ const o=btn.textContent; btn.textContent='Copied ✓'; setTimeout(()=>btn.textContent=o.includes('Copied')?'Copy':o,1400); };
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(done).catch(()=>fb(text,done)); }
+    else fb(text,done);
+  }
+  function fb(text,done){ const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(ta); done(); }
+  document.querySelectorAll('.code-copy').forEach(btn =>
+    btn.addEventListener('click', ()=> copyText(RAW[+btn.dataset.idx], btn)));
+
+  // Masthead search
+  const ITEMS = [
+    {t:PROJECT.title, c:PROJECT.category, s:PROJECT.slug},
+    {t:"Courier CS Quality Console", c:"Conversational Data Analytics", s:"courier-cs-quality-console"},
+    {t:"Voucher Analyzer", c:"Conversational Data Analytics", s:"voucher-analyzer"},
+    {t:"Wiseman", c:"Knowledge & Reference Chatbots", s:"wiseman"},
+    {t:"Sunny Car Accessories", c:"Agentic Commerce", s:"sunny-car-accessories"},
+    {t:"Bookshelf", c:"Multi-Agent Decision Systems", s:"bookshelf"}
+  ];
+  const searchInput = document.getElementById('searchInput');
+  const searchResults = document.getElementById('searchResults');
+  function runSearch(q){
+    if(q.trim().length < 2){ searchResults.style.display='none'; return; }
+    const ql = q.toLowerCase();
+    const hits = ITEMS.filter(it => (it.t+' '+it.c).toLowerCase().includes(ql));
+    searchResults.innerHTML = hits.length ? hits.map(it =>
+      `<div class="sr-item"><div class="sr-cat">${esc(it.c)}</div>`+
+      `<a href="${SITE}${it.s}.html"><div class="sr-title">${esc(it.t)}</div></a>`+
+      `<div class="sr-links"><a href="${SITE}${it.s}.html">View Details</a></div></div>`).join('')
+      : `<div class="sr-none">No projects found. Try a different keyword.</div>`;
+    searchResults.style.display='block';
+  }
+  searchInput.addEventListener('input', e => runSearch(e.target.value));
+  document.addEventListener('click', e => { if(!e.target.closest('.search-box')) searchResults.style.display='none'; });
+
+  // Drawer
+  const drawer=document.getElementById('drawer'), overlay=document.getElementById('overlay');
+  const openMenu=()=>{ drawer.classList.add('open'); overlay.classList.add('open'); };
+  const closeMenu=()=>{ drawer.classList.remove('open'); overlay.classList.remove('open'); };
+  document.getElementById('hamburger').addEventListener('click', openMenu);
+  document.getElementById('drawerClose').addEventListener('click', closeMenu);
+  overlay.addEventListener('click', closeMenu);
+  drawer.querySelectorAll('a').forEach(a=>a.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeMenu(); searchResults.style.display='none'; }});
+</script>
 </body>
 </html>

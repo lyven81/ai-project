@@ -1,196 +1,361 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Klinik Dr Fang Front-Desk Assistant - Source Code</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #222; background-color: #ffffff; }
-        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
-        .back-nav { margin-bottom: 20px; }
-        .back-nav a { color: #E91E63; text-decoration: none; font-size: 1rem; }
-        .back-nav a:hover { text-decoration: underline; }
-        .project-header { text-align: center; margin-bottom: 40px; padding: 40px 0; background: linear-gradient(135deg, #E91E63, #AD1457); color: white; border-radius: 10px; }
-        .project-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
-        .project-header p { font-size: 1.2rem; opacity: 0.9; }
-        .badges { display: flex; justify-content: center; gap: 10px; margin: 20px 0; flex-wrap: wrap; }
-        .badge { background-color: rgba(255, 255, 255, 0.2); color: white; padding: 5px 12px; border-radius: 15px; font-size: 0.9rem; }
-        .content-section { margin: 40px 0; padding: 30px; background-color: #f9f9f9; border-radius: 8px; border-left: 5px solid #E91E63; }
-        .content-section h2 { color: #E91E63; margin-bottom: 20px; font-size: 1.8rem; }
-        .content-section h3 { color: #333; margin: 20px 0 10px 0; font-size: 1.3rem; }
-        .highlight-box { background: linear-gradient(135deg, #fce4ec, #f8bbd0); padding: 20px; border-radius: 10px; border-left: 5px solid #E91E63; margin: 20px 0; }
-        .code-container { background-color: #1e1e1e; border-radius: 8px; padding: 20px; margin: 20px 0; overflow-x: auto; }
-        .code-header { color: #f48fb1; font-weight: bold; margin-bottom: 15px; font-size: 1.1rem; border-bottom: 1px solid #333; padding-bottom: 10px; }
-        .code-block { font-family: 'Consolas', 'Monaco', 'Courier New', monospace; font-size: 14px; line-height: 1.5; color: #d4d4d4; white-space: pre; }
-        .code-comment { color: #6a9955; font-style: italic; }
-        .code-keyword { color: #569cd6; }
-        .code-string { color: #ce9178; }
-        .code-function { color: #dcdcaa; }
-        .code-number { color: #b5cea8; }
-        .demo-links { text-align: center; margin: 30px 0; }
-        .demo-btn { display: inline-block; background-color: #E91E63; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; margin: 0 10px; font-weight: bold; transition: background-color 0.3s; }
-        .demo-btn:hover { background-color: #AD1457; }
-        .demo-btn.secondary { background-color: #607D8B; }
-        .demo-btn.secondary:hover { background-color: #455A64; }
-        @media (max-width: 768px) {
-            .project-header h1 { font-size: 2rem; }
-            .project-header p { font-size: 1rem; }
-            .demo-btn { margin: 5px; padding: 10px 20px; }
-            .container { padding: 15px; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Klinik Dr Fang Front-Desk Assistant: Source | AI Project Portfolio</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root{ --ink:#222; --paper:#fff; --hair:#dddddd; --gray:#555; --accent:#B8860B; --navy:#1E3A5F; --code-bg:#fbfbf8; --cmt:#6b8190; }
+  html{ scroll-behavior:smooth; }
+  body{ background:var(--paper); color:var(--ink); font-family:Arial, Helvetica, sans-serif; line-height:1.6; overflow-x:hidden; }
+  a{ color:inherit; text-decoration:none; }
+  a:hover h2, a:hover h3, a:hover h4{ color:var(--accent); }
+  p code, li code{ font-family:"Courier New", monospace; font-size:.86em; background:#f2f3f5; padding:1px 5px; color:var(--navy); }
+
+  /* Masthead (shared) */
+  .masthead{ display:flex; align-items:center; justify-content:space-between; padding:14px 28px; max-width:1240px; margin:0 auto; gap:18px; }
+  .mast-left{ display:flex; align-items:center; gap:20px; }
+  .logo{ background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; letter-spacing:3px; font-size:.95rem; padding:8px 12px; white-space:nowrap; }
+  .mast-nav{ display:flex; gap:20px; font-family:Arial, Helvetica, sans-serif; font-size:.72rem; letter-spacing:1.4px; text-transform:uppercase; }
+  .mast-nav a:hover{ color:var(--accent); }
+  .hamburger{ display:none; flex-direction:column; gap:4px; background:none; border:none; cursor:pointer; padding:6px; }
+  .hamburger span{ width:22px; height:2px; background:#222; display:block; }
+  .rule-top{ border:none; border-top:3px solid #222; max-width:1240px; margin:0 auto; }
+
+  /* Search (shared) */
+  .search-box{ position:relative; width:200px; }
+  .search-input{ width:100%; padding:7px 30px 7px 12px; border:1px solid var(--hair); background:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; color:#222; }
+  .search-input:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(184,134,11,.15); }
+  .search-ic{ position:absolute; right:10px; top:50%; transform:translateY(-50%); color:var(--gray); font-size:.8rem; pointer-events:none; }
+  .search-results{ position:absolute; top:calc(100% + 4px); left:0; width:340px; max-width:86vw; background:#fff; border:1px solid #222; max-height:60vh; overflow-y:auto; z-index:120; display:none; }
+  .sr-item{ padding:12px 14px; border-bottom:1px solid var(--hair); }
+  .sr-item:last-child{ border-bottom:none; }
+  .sr-cat{ font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; margin-bottom:4px; color:var(--accent); }
+  .sr-title{ font-weight:700; font-size:1.02rem; color:#222; }
+  .sr-links{ font-size:.58rem; letter-spacing:.8px; text-transform:uppercase; color:var(--gray); margin-top:5px; }
+  .sr-links a:hover{ color:var(--accent); }
+  .sr-none{ padding:16px 14px; font-size:.82rem; color:var(--gray); }
+
+  /* Shared bits */
+  .tab{ display:inline-block; background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.66rem; letter-spacing:2px; text-transform:uppercase; padding:6px 12px; }
+  .rubric{ font-family:Arial, Helvetica, sans-serif; font-size:.62rem; font-weight:700; letter-spacing:1.6px; text-transform:uppercase; color:var(--accent); display:block; margin-bottom:8px; }
+  .tech-chip{ display:inline-block; border:1px solid var(--hair); padding:6px 12px; font-size:.72rem; letter-spacing:.3px; color:#333; white-space:nowrap; }
+  .tech-chip:hover{ border-color:var(--accent); color:var(--accent); }
+  .btn{ display:inline-block; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.7rem; letter-spacing:1.6px; text-transform:uppercase; padding:13px 24px; border:1px solid #222; background:#222; color:#fff; cursor:pointer; transition:.15s; }
+  .btn:hover{ background:var(--accent); border-color:var(--accent); }
+  .btn.ghost{ background:#fff; color:#222; }
+  .btn.ghost:hover{ color:var(--accent); border-color:var(--accent); background:#fff; }
+
+  /* Breadcrumb */
+  .crumb{ max-width:1240px; margin:0 auto; padding:20px 28px 0; font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--gray); }
+  .crumb a:hover{ color:var(--accent); }
+  .crumb .sep{ color:var(--hair); margin:0 8px; }
+
+  /* Header (slim cover banner + copy) */
+  .src-head{ max-width:1240px; margin:0 auto; padding:14px 28px 6px; }
+  .cover-strip{ border:1px solid var(--hair); line-height:0; background:#eef1f4; }
+  .cover-strip img{ width:100%; height:190px; object-fit:cover; object-position:center 42%; display:block; }
+  .src-head h1{ font-size:2.5rem; font-weight:900; line-height:1.04; letter-spacing:-.008em; margin-top:18px; }
+  .src-head .sub{ font-style:italic; font-size:1.08rem; color:#333; margin-top:10px; max-width:72ch; }
+  .head-tech{ display:flex; flex-wrap:wrap; gap:9px; margin-top:16px; }
+  .head-btns{ display:flex; flex-wrap:wrap; gap:12px; margin-top:18px; }
+
+  /* Section shell */
+  .sec{ max-width:1240px; margin:0 auto; padding:26px 28px; }
+  .sec-rule{ border-top:3px solid #222; padding-top:16px; }
+  .sec .tab{ margin-bottom:14px; }
+  .sec h2{ font-size:1.7rem; font-weight:900; line-height:1.06; }
+  .sec .intro{ color:#333; font-size:1.02rem; margin-top:10px; max-width:80%; }
+  .sec .body{ color:#333; font-size:1rem; margin-top:10px; max-width:80%; }
+
+  /* Code block */
+  .codeblock{ border:1px solid var(--hair); margin-top:16px; }
+  .code-bar{ display:flex; align-items:center; justify-content:space-between; gap:12px; background:var(--navy); color:#fff; padding:8px 12px; }
+  .code-bar .path{ font-family:"Courier New", monospace; font-size:.74rem; letter-spacing:.2px; opacity:.96; display:flex; align-items:center; gap:7px; min-width:0; }
+  .code-bar .path span{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .code-copy{ flex:none; background:none; border:1px solid rgba(255,255,255,.4); color:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.56rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; padding:5px 11px; cursor:pointer; transition:.15s; }
+  .code-copy:hover{ background:rgba(255,255,255,.16); }
+  .codeblock pre{ margin:0; padding:14px 16px; overflow-x:auto; background:var(--code-bg); }
+  .codeblock code{ font-family:"Courier New", monospace; font-size:.82rem; line-height:1.6; color:#1b2a3a; background:none; padding:0; white-space:pre; display:block; }
+  .codeblock code .cmt{ color:var(--cmt); font-style:italic; }
+
+  .tree .code-bar .path::before{ content:"📁"; }
+
+  /* Notes */
+  .note-block{ margin-top:22px; }
+  .note-block h3{ font-size:1.15rem; font-weight:800; }
+  .blist{ list-style:none; margin-top:12px; border-top:1px solid var(--hair); }
+  .blist li{ padding:12px 0; border-bottom:1px solid var(--hair); color:#333; font-size:.95rem; }
+  .blist li b{ color:#222; }
+
+  /* CTA */
+  .cta-inner{ display:flex; align-items:center; gap:18px; flex-wrap:wrap; border-top:3px solid #222; padding-top:18px; }
+  .cta-inner h3{ font-size:1.4rem; font-weight:900; line-height:1.08; }
+  .cta-inner p{ color:var(--gray); font-size:.95rem; margin-top:4px; }
+  .cta-btns{ margin-left:auto; display:flex; gap:12px; flex-wrap:wrap; }
+
+  footer{ background:#222; max-width:1240px; margin:30px auto 0; padding:24px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; letter-spacing:.5px; color:#fff; text-align:center; }
+  .note{ max-width:1240px; margin:14px auto 0; padding:8px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.62rem; letter-spacing:1px; color:#999; }
+
+  /* Drawer (shared) */
+  .drawer{ position:fixed; top:0; left:-300px; width:280px; height:100vh; background:#fff; z-index:200; box-shadow:2px 0 14px rgba(0,0,0,.15); transition:left .28s ease; padding:74px 26px 26px; }
+  .drawer.open{ left:0; }
+  .drawer a{ display:block; font-family:Arial, Helvetica, sans-serif; font-size:.82rem; letter-spacing:1.2px; text-transform:uppercase; padding:14px 0; border-bottom:1px solid var(--hair); }
+  .overlay{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:150; }
+  .overlay.open{ display:block; }
+  .drawer-close{ position:absolute; top:20px; right:20px; font-family:Arial, Helvetica, sans-serif; font-size:1.4rem; background:none; border:none; cursor:pointer; }
+
+  @media (max-width:900px){
+    .cta-btns{ margin-left:0; }
+    .mast-nav{ display:none; }
+    .hamburger{ display:flex; }
+    .masthead{ padding:12px 16px; }
+    .mast-left{ gap:10px; min-width:0; flex:1; }
+    .logo{ font-size:.72rem; letter-spacing:1.5px; padding:6px 8px; }
+    .search-box{ flex:1; width:auto; min-width:0; }
+    .search-results{ position:fixed; top:58px; left:12px; right:12px; width:auto; max-width:none; }
+    .src-head h1{ font-size:1.95rem; }
+    .cover-strip img{ height:150px; }
+  }
+</style>
 </head>
 <body>
-    <div class="container">
-        <nav class="back-nav">
-            <a href="klinik-dr-fang.html">← Back to Project Overview</a>
-        </nav>
 
-        <div class="project-header">
-            <h1>🩺 Klinik Dr Fang Front-Desk Assistant</h1>
-            <p>The Governed Tool Layer & No-Free-SQL Guarantee</p>
+  <div class="overlay" id="overlay"></div>
+  <nav class="drawer" id="drawer">
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">&times;</button>
+    <a href="index.html">Home</a>
+    <a href="project-categories.html">Categories</a>
+    <a href="contact.html">Contact</a>
+    <a href="https://lyven81.github.io/data-analyst-portfolio/index.html">Data Portfolio</a>
+  </nav>
 
-            <div class="badges">
-                <span class="badge">Python</span>
-                <span class="badge">MCP Toolbox Pattern</span>
-                <span class="badge">SQLite (read-only)</span>
-                <span class="badge">tools.yaml</span>
-            </div>
-        </div>
-
-        <div class="highlight-box">
-            <h3>🔍 About This Code Showcase</h3>
-            <p><strong>These snippets show the heart of the build: a declarative toolset that is the agent's entire universe, and the governed gate that can execute nothing but those fixed, parameterized queries.</strong></p>
-            <p>Synthetic-data generation and the conversational layer are omitted here for clarity. The full project is on GitHub.</p>
-        </div>
-
-        <div class="content-section">
-            <h2>🧾 The Toolset Is the Agent's Universe — tools.yaml</h2>
-            <p>Each tool's SQL is fixed; the agent supplies only bound parameter values. There is deliberately no <code>execute_sql</code>, no <code>list_tables</code>, and no natural-language-to-SQL tool.</p>
-
-            <div class="code-container">
-                <div class="code-header">📄 toolbox/tools.yaml — a tool + the deliberate exclusions</div>
-                <div class="code-block"><span class="code-keyword">sources</span>:
-  klinik-db:
-    kind: sqlite
-    database: ../data/klinik.db   <span class="code-comment"># opened read-only by the runner</span>
-
-<span class="code-keyword">tools</span>:
-  list_inactive_patients:
-    kind: sqlite-sql
-    source: klinik-db
-    description: Lapsing / recall list. Returns name + last visit only.
-    parameters:
-      - name: since_date
-        type: string
-        description: Cut-off ISO date.
-    statement: |
-      SELECT p.name, MAX(cn.visit_date) AS last_visit
-      FROM patients p JOIN case_notes cn ON cn.patient_id = p.id
-      GROUP BY p.id
-      HAVING MAX(cn.visit_date) &lt; :since_date
-      ORDER BY last_visit;
-
-<span class="code-keyword">toolsets</span>:
-  front_desk:                      <span class="code-comment"># scoping = access control</span>
-    - condition_trend
-    - list_inactive_patients
-    - cluster_recent_symptoms
-    <span class="code-comment"># ...10 tools total</span>
-
-<span class="code-comment"># DELIBERATELY EXCLUDED (available in MCP Toolbox, switched OFF on purpose):</span>
-<span class="code-comment">#   execute_sql   — would let the agent author arbitrary SQL.  NOT defined.</span>
-<span class="code-comment">#   list_tables   — schema reconnaissance.                     NOT defined.</span>
-<span class="code-comment">#   any NL2SQL    — natural-language-to-SQL generation.        NOT defined.</span></div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>🔒 The Governed Gate — tool_runner.py</h2>
-            <p>One component touches the database. It refuses any unknown tool, any unexpected parameter, and opens the connection read-only. There is no code path that runs caller-supplied SQL.</p>
-
-            <div class="code-container">
-                <div class="code-header">📄 agent/tool_runner.py — refusal logic + read-only connection</div>
-                <div class="code-block"><span class="code-keyword">class</span> <span class="code-function">GovernedToolset</span>:
-    <span class="code-keyword">def</span> <span class="code-function">__init__</span>(self, toolset_name=<span class="code-string">"front_desk"</span>):
-        cfg = yaml.safe_load(open(TOOLS_YAML))
-        names = cfg[<span class="code-string">"toolsets"</span>][toolset_name]
-        self.loaded = {n: cfg[<span class="code-string">"tools"</span>][n] <span class="code-keyword">for</span> n <span class="code-keyword">in</span> names}  <span class="code-comment"># scoping</span>
-        <span class="code-comment"># READ-ONLY connection (layer 4). Any write is impossible.</span>
-        self.con = sqlite3.connect(<span class="code-string">f"file:{db_path}?mode=ro"</span>, uri=<span class="code-keyword">True</span>)
-
-    <span class="code-keyword">def</span> <span class="code-function">run</span>(self, name, **params):
-        <span class="code-keyword">if</span> name <span class="code-keyword">not in</span> self.loaded:
-            <span class="code-keyword">raise</span> ValueError(
-                <span class="code-string">f"Tool '{name}' is not in this agent's toolset. "</span>
-                <span class="code-string">f"No such capability exists — refused."</span>)
-        spec = self.loaded[name]
-        self._check_params(name, spec, params)        <span class="code-comment"># reject unknown params</span>
-        <span class="code-keyword">if</span> spec[<span class="code-string">"kind"</span>] == <span class="code-string">"sqlite-sql"</span>:
-            <span class="code-comment"># fixed statement, BOUND named params — never concatenated</span>
-            <span class="code-keyword">return</span> [dict(r) <span class="code-keyword">for</span> r <span class="code-keyword">in</span> self.con.execute(spec[<span class="code-string">"statement"</span>], params)]
-        ...
-
-    <span class="code-keyword">def</span> <span class="code-function">_check_params</span>(self, name, spec, params):
-        declared = {p[<span class="code-string">"name"</span>] <span class="code-keyword">for</span> p <span class="code-keyword">in</span> spec.get(<span class="code-string">"parameters"</span>, [])}
-        unknown = set(params) - declared
-        <span class="code-keyword">if</span> unknown:
-            <span class="code-keyword">raise</span> ValueError(<span class="code-string">f"{name}: unknown parameter(s) {sorted(unknown)} — refused."</span>)</div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>🛡️ Proving It — guardrails_demo.py</h2>
-            <p>Every test below is supposed to fail. Running the script confirms the four governance layers are real, not rhetorical.</p>
-
-            <div class="code-container">
-                <div class="code-header">📄 demo/guardrails_demo.py — everything here should be refused</div>
-                <div class="code-block"><span class="code-comment"># Layer 1: no execute_sql tool exists at all</span>
-expect_refused(<span class="code-string">"Call a generic execute_sql tool"</span>,
-               <span class="code-keyword">lambda</span>: ts.run(<span class="code-string">"execute_sql"</span>, sql=<span class="code-string">"SELECT * FROM patients"</span>))
-
-<span class="code-comment"># Layer 2: the agent cannot smuggle in extra parameters</span>
-expect_refused(<span class="code-string">"Inject an unexpected parameter"</span>,
-               <span class="code-keyword">lambda</span>: ts.run(<span class="code-string">"list_inactive_patients"</span>,
-                              since_date=<span class="code-string">"2025-06-01"</span>,
-                              extra=<span class="code-string">"'; DROP TABLE patients;--"</span>))
-
-<span class="code-comment"># Layer 4: the connection itself is read-only</span>
-<span class="code-keyword">def</span> <span class="code-function">attempt_write</span>():
-    ts.con.execute(<span class="code-string">"DELETE FROM appointments WHERE status='no-show'"</span>)
-expect_refused(<span class="code-string">"Direct write on the read-only connection"</span>, attempt_write)
-
-<span class="code-comment"># RESULT: all guardrails held — no free SQL, no writes, no data dumps.</span></div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>⚙️ Why This Design</h2>
-            <h3>Key Decisions</h3>
-            <ul style="margin: 15px 0; padding-left: 20px;">
-                <li><strong>Declarative over imperative:</strong> capabilities live in <code>tools.yaml</code>, not scattered through code — easy to audit, easy to scope per role</li>
-                <li><strong>Defense in depth:</strong> layer 1 prevents free SQL by design; layer 4 (read-only) contains the blast radius if any assumption ever broke</li>
-                <li><strong>Bounded columns:</strong> recall and segment tools return only the columns needed — a recall list is name + due-date, never full clinical notes</li>
-                <li><strong>Two runtimes, one contract:</strong> the official MCP Toolbox binary and the dependency-free local runner honour the same fixed statements</li>
-            </ul>
-            <h3>Why SQLite</h3>
-            <ul style="margin: 15px 0; padding-left: 20px;">
-                <li><strong>Right-sized:</strong> a single-file database is the correct store for a one-desk clinic — matching infrastructure to the business is the consulting judgment</li>
-                <li><strong>Portable demo:</strong> the same file runs in the browser via sql.js, so the live demo costs nothing to host</li>
-                <li><strong>Same pattern scales up:</strong> swap the source for Cloud SQL / AlloyDB and the governance story is unchanged</li>
-            </ul>
-        </div>
-
-        <div class="demo-links">
-            <a href="projects/klinik-dr-fang/demo.html" target="_blank" class="demo-btn">🚀 Try Live Demo</a>
-            <a href="klinik-dr-fang.html" class="demo-btn secondary">📖 View Full Project Details</a>
-        </div>
-
-        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
-            <a href="index.html">← Back to Portfolio</a> |
-            <a href="klinik-dr-fang.html">View Project Overview</a>
-        </nav>
+  <div class="masthead">
+    <div class="mast-left">
+      <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+      <a class="logo" href="index.html">AI PROJECTS</a>
+      <nav class="mast-nav">
+        <a href="project-categories.html">Categories</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <div class="search-box">
+        <input type="text" class="search-input" id="searchInput" autocomplete="off" placeholder="Search AI projects..." aria-label="Search AI projects">
+        <span class="search-ic">&#128269;</span>
+        <div class="search-results" id="searchResults"></div>
+      </div>
     </div>
+  </div>
+  <hr class="rule-top">
+
+  <div class="crumb">
+    <a href="project-categories.html">Categories</a>
+    <span class="sep">/</span><a id="crumbCat" href="#"></a>
+    <span class="sep">/</span><a id="crumbProj" href="#"></a>
+    <span class="sep">/</span><span>Source</span>
+  </div>
+
+  <section class="src-head">
+    <div class="cover-strip" id="coverStrip" style="display:none"><img id="cover" alt=""></div>
+    <span class="rubric" id="kicker"></span>
+    <h1 id="title"></h1>
+    <p class="sub" id="subtitle"></p>
+    <div class="head-tech" id="headTech"></div>
+    <div class="head-btns" id="headBtns"></div>
+  </section>
+
+  <div id="body"></div>
+
+  <footer>&copy; 2026 Lee Yih Ven | AI Project Portfolio &middot; All rights reserved.</footer>
+  <div class="note">Sample Source-Showcase-E2 (TEMPLATE): source-code page on the index magazine system: slim cover banner, About, Project Structure, code walkthrough with copyable navy-barred code blocks, CTA. Reuse by editing only the PROJECT block at the top of the script.</div>
+
+<script>
+  const SITE = "";
+
+  /* =================================================================
+     EDIT PER PROJECT  -  the ONLY block you change per page.
+     Copy this file, swap PROJECT, save as <slug>-source.html.
+     - structure.code : the project file tree (plain text)
+     - walkthrough[]   : { heading, body, files:[{label, code}] }
+     - notes[]         : { heading, bullets:[...] }
+     Code strings can be multi-line; they render verbatim.
+     ================================================================= */
+  const PROJECT = {
+  "slug": "klinik-dr-fang",
+  "category": "Conversational Data Analytics",
+  "categoryUrl": "category-conversational-analytics.html",
+  "title": "Klinik Dr Fang Front-Desk Assistant",
+  "subtitle": "The declarative toolset, the governed gate, and the guardrails demo, the three excerpts that are the heart of the no-free-SQL build.",
+  "cover": "images/klinik-dr-fang/cover.jpeg",
+  "tech": [
+    "Python",
+    "MCP Toolbox Pattern",
+    "SQLite (read-only)",
+    "tools.yaml"
+  ],
+  "overviewUrl": "klinik-dr-fang.html",
+  "demoLabel": "Try Live Demo",
+  "demoUrl": "projects/klinik-dr-fang/demo.html",
+  "repoUrl": "https://github.com/lyven81/ai-project/tree/main/projects/klinik-dr-fang",
+  "about": "These snippets show the heart of the build: a declarative toolset that is the agent's entire universe, and the governed gate that can execute nothing but those fixed, parameterized queries. Synthetic-data generation and the conversational layer are omitted here for clarity. The full project is on GitHub.",
+  "structure": {
+    "label": "projects/klinik-dr-fang/",
+    "code": "projects/klinik-dr-fang/\n  toolbox/\n    tools.yaml              declarative toolset (the agent's entire universe)\n  agent/\n    agent.py                conversational layer (deterministic + live BYOK)\n    tool_runner.py          the governed gate; the only thing touching the DB\n  data/\n    generate_data.py        builds the synthetic SQLite database\n    klinik.db               single-file SQLite store (opened read-only)\n  demo/\n    demo.html               the browser demo (real DB via sql.js)\n    guardrails_demo.py      proves every refusal path holds\n  requirements.txt\n  README.md"
+  },
+  "walkthrough": [
+    {
+      "heading": "The Toolset Is the Agent's Universe: tools.yaml",
+      "body": "Each tool's SQL is fixed; the agent supplies only bound parameter values. There is deliberately no <code>execute_sql</code>, no <code>list_tables</code>, and no natural-language-to-SQL tool.",
+      "files": [
+        {
+          "label": "toolbox/tools.yaml: a tool + the deliberate exclusions",
+          "code": "sources:\n  klinik-db:\n    kind: sqlite\n    database: ../data/klinik.db   # opened read-only by the runner\n\ntools:\n  list_inactive_patients:\n    kind: sqlite-sql\n    source: klinik-db\n    description: Lapsing / recall list. Returns name + last visit only.\n    parameters:\n      - name: since_date\n        type: string\n        description: Cut-off ISO date.\n    statement: |\n      SELECT p.name, MAX(cn.visit_date) AS last_visit\n      FROM patients p JOIN case_notes cn ON cn.patient_id = p.id\n      GROUP BY p.id\n      HAVING MAX(cn.visit_date) < :since_date\n      ORDER BY last_visit;\n\ntoolsets:\n  front_desk:                      # scoping = access control\n    - condition_trend\n    - list_inactive_patients\n    - cluster_recent_symptoms\n    # ...10 tools total\n\n# DELIBERATELY EXCLUDED (available in MCP Toolbox, switched OFF on purpose):\n#   execute_sql   - would let the agent author arbitrary SQL.  NOT defined.\n#   list_tables   - schema reconnaissance.                     NOT defined.\n#   any NL2SQL    - natural-language-to-SQL generation.        NOT defined."
+        }
+      ]
+    },
+    {
+      "heading": "The Governed Gate: tool_runner.py",
+      "body": "One component touches the database. It refuses any unknown tool, any unexpected parameter, and opens the connection read-only. There is no code path that runs caller-supplied SQL.",
+      "files": [
+        {
+          "label": "agent/tool_runner.py: refusal logic + read-only connection",
+          "code": "class GovernedToolset:\n    def __init__(self, toolset_name=\"front_desk\"):\n        cfg = yaml.safe_load(open(TOOLS_YAML))\n        names = cfg[\"toolsets\"][toolset_name]\n        self.loaded = {n: cfg[\"tools\"][n] for n in names}  # scoping\n        # READ-ONLY connection (layer 4). Any write is impossible.\n        self.con = sqlite3.connect(f\"file:{db_path}?mode=ro\", uri=True)\n\n    def run(self, name, **params):\n        if name not in self.loaded:\n            raise ValueError(\n                f\"Tool '{name}' is not in this agent's toolset. \"\n                f\"No such capability exists - refused.\")\n        spec = self.loaded[name]\n        self._check_params(name, spec, params)        # reject unknown params\n        if spec[\"kind\"] == \"sqlite-sql\":\n            # fixed statement, BOUND named params - never concatenated\n            return [dict(r) for r in self.con.execute(spec[\"statement\"], params)]\n        ...\n\n    def _check_params(self, name, spec, params):\n        declared = {p[\"name\"] for p in spec.get(\"parameters\", [])}\n        unknown = set(params) - declared\n        if unknown:\n            raise ValueError(f\"{name}: unknown parameter(s) {sorted(unknown)} - refused.\")"
+        }
+      ]
+    },
+    {
+      "heading": "Proving It: guardrails_demo.py",
+      "body": "Every test below is supposed to fail. Running the script confirms the four governance layers are real, not rhetorical.",
+      "files": [
+        {
+          "label": "demo/guardrails_demo.py: everything here should be refused",
+          "code": "# Layer 1: no execute_sql tool exists at all\nexpect_refused(\"Call a generic execute_sql tool\",\n               lambda: ts.run(\"execute_sql\", sql=\"SELECT * FROM patients\"))\n\n# Layer 2: the agent cannot smuggle in extra parameters\nexpect_refused(\"Inject an unexpected parameter\",\n               lambda: ts.run(\"list_inactive_patients\",\n                              since_date=\"2025-06-01\",\n                              extra=\"'; DROP TABLE patients;--\"))\n\n# Layer 4: the connection itself is read-only\ndef attempt_write():\n    ts.con.execute(\"DELETE FROM appointments WHERE status='no-show'\")\nexpect_refused(\"Direct write on the read-only connection\", attempt_write)\n\n# RESULT: all guardrails held - no free SQL, no writes, no data dumps."
+        }
+      ]
+    }
+  ],
+  "notes": [
+    {
+      "heading": "Why This Design",
+      "bullets": [
+        "<b>Declarative over imperative:</b> capabilities live in <code>tools.yaml</code>, not scattered through code, so they are easy to audit and easy to scope per role.",
+        "<b>Defense in depth:</b> layer 1 prevents free SQL by design; layer 4 (read-only) contains the blast radius if any assumption ever broke.",
+        "<b>Bounded columns:</b> recall and segment tools return only the columns needed; a recall list is name + due-date, never full clinical notes.",
+        "<b>Two runtimes, one contract:</b> the official MCP Toolbox binary and the dependency-free local runner honour the same fixed statements.",
+        "<b>Right-sized SQLite:</b> a single-file database is the correct store for a one-desk clinic, runs in the browser via sql.js for a free demo, and the same pattern scales up to Cloud SQL / AlloyDB with the governance story unchanged."
+      ]
+    }
+  ],
+  "cta": "Want a governed, privacy-safe analytics assistant like this built for your own records? Let's scope it."
+};
+  /* ===================== END EDIT BLOCK ===================== */
+
+  const pref = (u) => /^https?:|^mailto:|^tel:/.test(u || '') ? u : (SITE + (u || ''));
+  const esc = (s) => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const rich = (s) => esc(s).replace(/&lt;(\/?(?:b|code))&gt;/g, '<$1>');
+
+  // raw code store for copy buttons
+  const RAW = [];
+  function codeBlock(label, codeStr, extraClass){
+    const idx = RAW.push(codeStr) - 1;
+    const rendered = esc(codeStr).split('\n')
+      .map(line => /^\s*#/.test(line) ? `<span class="cmt">${line}</span>` : line).join('\n');
+    return `<div class="codeblock ${extraClass||''}">`+
+      `<div class="code-bar"><span class="path"><span>${esc(label)}</span></span>`+
+      `<button class="code-copy" data-idx="${idx}">Copy</button></div>`+
+      `<pre><code>${rendered}</code></pre></div>`;
+  }
+
+  // Breadcrumb + header
+  document.title = PROJECT.title + ": Source | AI Project Portfolio";
+  document.getElementById('crumbCat').textContent = PROJECT.category;
+  document.getElementById('crumbCat').href = pref(PROJECT.categoryUrl);
+  document.getElementById('crumbProj').textContent = PROJECT.title;
+  document.getElementById('crumbProj').href = pref(PROJECT.overviewUrl);
+  if (PROJECT.cover){
+    document.getElementById('coverStrip').style.display = '';
+    const c = document.getElementById('cover'); c.src = PROJECT.cover; c.alt = PROJECT.title + " cover";
+  }
+  document.getElementById('kicker').textContent = "Source Walkthrough · " + PROJECT.category;
+  document.getElementById('title').textContent = PROJECT.title;
+  document.getElementById('subtitle').textContent = PROJECT.subtitle;
+  document.getElementById('headTech').innerHTML = (PROJECT.tech||[]).map(t => `<span class="tech-chip">${esc(t)}</span>`).join('');
+  document.getElementById('headBtns').innerHTML =
+    (PROJECT.demoUrl ? `<a class="btn" href="${pref(PROJECT.demoUrl)}" target="_blank" rel="noopener">${esc(PROJECT.demoLabel||'Live Demo')}</a>` : '') +
+    (PROJECT.overviewUrl ? `<a class="btn ghost" href="${pref(PROJECT.overviewUrl)}">Project Overview</a>` : '') +
+    (PROJECT.repoUrl ? `<a class="btn ghost" href="${pref(PROJECT.repoUrl)}" target="_blank" rel="noopener">GitHub Repo</a>` : '');
+
+  const section = (tab, inner) => `<section class="sec"><div class="sec-rule"><span class="tab">${esc(tab)}</span>${inner}</div></section>`;
+  let html = "";
+  const P = PROJECT;
+
+  if (P.about){
+    html += section("About This Code", `<h2>About This Code Showcase</h2><p class="intro">${rich(P.about)}</p>`);
+  }
+  if (P.structure && P.structure.code){
+    html += section("Project Structure", `<h2>Project Structure</h2>`+
+      codeBlock(P.structure.label || 'project/', P.structure.code, 'tree'));
+  }
+  (P.walkthrough||[]).forEach(w => {
+    let inner = `<h2>${esc(w.heading)}</h2>`;
+    if (w.body) inner += `<p class="body">${rich(w.body)}</p>`;
+    (w.files||[]).forEach(f => { inner += codeBlock(f.label, f.code); });
+    html += section("Code", inner);
+  });
+  // CTA
+  html += `<section class="sec"><div class="cta-inner">`+
+    `<div><h3>Interested in the build?</h3><p>${esc(P.cta || "Let's talk.")}</p></div>`+
+    `<div class="cta-btns">`+
+    (P.demoUrl ? `<a class="btn" href="${pref(P.demoUrl)}" target="_blank" rel="noopener">${esc(P.demoLabel||'Live Demo')}</a>` : '')+
+    `<a class="btn ghost" href="${SITE}contact.html">Get in Touch</a>`+
+    `</div></div></section>`;
+
+  document.getElementById('body').innerHTML = html;
+
+  // Copy buttons
+  function copyText(text, btn){
+    const done = ()=>{ const o=btn.textContent; btn.textContent='Copied ✓'; setTimeout(()=>btn.textContent=o.includes('Copied')?'Copy':o,1400); };
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(done).catch(()=>fb(text,done)); }
+    else fb(text,done);
+  }
+  function fb(text,done){ const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(ta); done(); }
+  document.querySelectorAll('.code-copy').forEach(btn =>
+    btn.addEventListener('click', ()=> copyText(RAW[+btn.dataset.idx], btn)));
+
+  // Masthead search
+  const ITEMS = [
+    {t:PROJECT.title, c:PROJECT.category, s:PROJECT.slug},
+    {t:"Courier CS Quality Console", c:"Conversational Data Analytics", s:"courier-cs-quality-console"},
+    {t:"Voucher Analyzer", c:"Conversational Data Analytics", s:"voucher-analyzer"},
+    {t:"Wiseman", c:"Knowledge & Reference Chatbots", s:"wiseman"},
+    {t:"Sunny Car Accessories", c:"Agentic Commerce", s:"sunny-car-accessories"},
+    {t:"Bookshelf", c:"Multi-Agent Decision Systems", s:"bookshelf"}
+  ];
+  const searchInput = document.getElementById('searchInput');
+  const searchResults = document.getElementById('searchResults');
+  function runSearch(q){
+    if(q.trim().length < 2){ searchResults.style.display='none'; return; }
+    const ql = q.toLowerCase();
+    const hits = ITEMS.filter(it => (it.t+' '+it.c).toLowerCase().includes(ql));
+    searchResults.innerHTML = hits.length ? hits.map(it =>
+      `<div class="sr-item"><div class="sr-cat">${esc(it.c)}</div>`+
+      `<a href="${SITE}${it.s}.html"><div class="sr-title">${esc(it.t)}</div></a>`+
+      `<div class="sr-links"><a href="${SITE}${it.s}.html">View Details</a></div></div>`).join('')
+      : `<div class="sr-none">No projects found. Try a different keyword.</div>`;
+    searchResults.style.display='block';
+  }
+  searchInput.addEventListener('input', e => runSearch(e.target.value));
+  document.addEventListener('click', e => { if(!e.target.closest('.search-box')) searchResults.style.display='none'; });
+
+  // Drawer
+  const drawer=document.getElementById('drawer'), overlay=document.getElementById('overlay');
+  const openMenu=()=>{ drawer.classList.add('open'); overlay.classList.add('open'); };
+  const closeMenu=()=>{ drawer.classList.remove('open'); overlay.classList.remove('open'); };
+  document.getElementById('hamburger').addEventListener('click', openMenu);
+  document.getElementById('drawerClose').addEventListener('click', closeMenu);
+  overlay.addEventListener('click', closeMenu);
+  drawer.querySelectorAll('a').forEach(a=>a.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeMenu(); searchResults.style.display='none'; }});
+</script>
 </body>
 </html>

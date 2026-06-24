@@ -1,160 +1,371 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ecommerce Analyst - Source Code</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #222; background-color: #ffffff; }
-        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
-        .back-nav { margin-bottom: 20px; }
-        .back-nav a { color: #007BFF; text-decoration: none; font-size: 1rem; }
-        .back-nav a:hover { text-decoration: underline; }
-        .project-header { text-align: center; margin-bottom: 40px; padding: 40px 0; background: linear-gradient(135deg, #E91E63, #AD1457); color: white; border-radius: 10px; }
-        .project-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
-        .project-header p { font-size: 1.2rem; opacity: 0.9; }
-        .content-section { margin: 40px 0; padding: 30px; background-color: #f9f9f9; border-radius: 8px; border-left: 5px solid #E91E63; }
-        .content-section h2 { color: #E91E63; margin-bottom: 20px; font-size: 1.8rem; }
-        .content-section h3 { color: #333; margin: 20px 0 10px 0; font-size: 1.3rem; }
-        .code-block { background-color: #1e1e1e; color: #d4d4d4; border-radius: 5px; padding: 20px; margin: 15px 0; font-family: 'Courier New', monospace; overflow-x: auto; font-size: 0.88em; white-space: pre-wrap; line-height: 1.5; }
-        .file-tree { background-color: #f4f4f4; border: 1px solid #ddd; border-radius: 5px; padding: 20px; font-family: 'Courier New', monospace; font-size: 0.95em; white-space: pre; line-height: 1.7; color: #333; }
-        .file-label { background-color: #fce4ec; color: #880e4f; padding: 4px 10px; border-radius: 4px; font-family: 'Courier New', monospace; font-size: 0.9em; display: inline-block; margin: 10px 0 5px 0; font-weight: 600; }
-        .explanation { margin: 12px 0; color: #444; }
-        .demo-btn { display: inline-block; background-color: #007BFF; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; margin: 0 10px; font-weight: bold; transition: background-color 0.3s; }
-        .demo-btn:hover { background-color: #0056b3; }
-        .demo-btn.secondary { background-color: #E91E63; }
-        .demo-btn.secondary:hover { background-color: #AD1457; }
-        .demo-links { text-align: center; margin: 30px 0; }
-        @media (max-width: 768px) { .project-header h1 { font-size: 2rem; } .container { padding: 15px; } }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ecommerce Analyst: Source | AI Project Portfolio</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root{ --ink:#222; --paper:#fff; --hair:#dddddd; --gray:#555; --accent:#B8860B; --navy:#1E3A5F; --code-bg:#fbfbf8; --cmt:#6b8190; }
+  html{ scroll-behavior:smooth; }
+  body{ background:var(--paper); color:var(--ink); font-family:Arial, Helvetica, sans-serif; line-height:1.6; overflow-x:hidden; }
+  a{ color:inherit; text-decoration:none; }
+  a:hover h2, a:hover h3, a:hover h4{ color:var(--accent); }
+  p code, li code{ font-family:"Courier New", monospace; font-size:.86em; background:#f2f3f5; padding:1px 5px; color:var(--navy); }
+
+  /* Masthead (shared) */
+  .masthead{ display:flex; align-items:center; justify-content:space-between; padding:14px 28px; max-width:1240px; margin:0 auto; gap:18px; }
+  .mast-left{ display:flex; align-items:center; gap:20px; }
+  .logo{ background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; letter-spacing:3px; font-size:.95rem; padding:8px 12px; white-space:nowrap; }
+  .mast-nav{ display:flex; gap:20px; font-family:Arial, Helvetica, sans-serif; font-size:.72rem; letter-spacing:1.4px; text-transform:uppercase; }
+  .mast-nav a:hover{ color:var(--accent); }
+  .hamburger{ display:none; flex-direction:column; gap:4px; background:none; border:none; cursor:pointer; padding:6px; }
+  .hamburger span{ width:22px; height:2px; background:#222; display:block; }
+  .rule-top{ border:none; border-top:3px solid #222; max-width:1240px; margin:0 auto; }
+
+  /* Search (shared) */
+  .search-box{ position:relative; width:200px; }
+  .search-input{ width:100%; padding:7px 30px 7px 12px; border:1px solid var(--hair); background:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; color:#222; }
+  .search-input:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(184,134,11,.15); }
+  .search-ic{ position:absolute; right:10px; top:50%; transform:translateY(-50%); color:var(--gray); font-size:.8rem; pointer-events:none; }
+  .search-results{ position:absolute; top:calc(100% + 4px); left:0; width:340px; max-width:86vw; background:#fff; border:1px solid #222; max-height:60vh; overflow-y:auto; z-index:120; display:none; }
+  .sr-item{ padding:12px 14px; border-bottom:1px solid var(--hair); }
+  .sr-item:last-child{ border-bottom:none; }
+  .sr-cat{ font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; margin-bottom:4px; color:var(--accent); }
+  .sr-title{ font-weight:700; font-size:1.02rem; color:#222; }
+  .sr-links{ font-size:.58rem; letter-spacing:.8px; text-transform:uppercase; color:var(--gray); margin-top:5px; }
+  .sr-links a:hover{ color:var(--accent); }
+  .sr-none{ padding:16px 14px; font-size:.82rem; color:var(--gray); }
+
+  /* Shared bits */
+  .tab{ display:inline-block; background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.66rem; letter-spacing:2px; text-transform:uppercase; padding:6px 12px; }
+  .rubric{ font-family:Arial, Helvetica, sans-serif; font-size:.62rem; font-weight:700; letter-spacing:1.6px; text-transform:uppercase; color:var(--accent); display:block; margin-bottom:8px; }
+  .tech-chip{ display:inline-block; border:1px solid var(--hair); padding:6px 12px; font-size:.72rem; letter-spacing:.3px; color:#333; white-space:nowrap; }
+  .tech-chip:hover{ border-color:var(--accent); color:var(--accent); }
+  .btn{ display:inline-block; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.7rem; letter-spacing:1.6px; text-transform:uppercase; padding:13px 24px; border:1px solid #222; background:#222; color:#fff; cursor:pointer; transition:.15s; }
+  .btn:hover{ background:var(--accent); border-color:var(--accent); }
+  .btn.ghost{ background:#fff; color:#222; }
+  .btn.ghost:hover{ color:var(--accent); border-color:var(--accent); background:#fff; }
+
+  /* Breadcrumb */
+  .crumb{ max-width:1240px; margin:0 auto; padding:20px 28px 0; font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--gray); }
+  .crumb a:hover{ color:var(--accent); }
+  .crumb .sep{ color:var(--hair); margin:0 8px; }
+
+  /* Header (slim cover banner + copy) */
+  .src-head{ max-width:1240px; margin:0 auto; padding:14px 28px 6px; }
+  .cover-strip{ border:1px solid var(--hair); line-height:0; background:#eef1f4; }
+  .cover-strip img{ width:100%; height:190px; object-fit:cover; object-position:center 42%; display:block; }
+  .src-head h1{ font-size:2.5rem; font-weight:900; line-height:1.04; letter-spacing:-.008em; margin-top:18px; }
+  .src-head .sub{ font-style:italic; font-size:1.08rem; color:#333; margin-top:10px; max-width:72ch; }
+  .head-tech{ display:flex; flex-wrap:wrap; gap:9px; margin-top:16px; }
+  .head-btns{ display:flex; flex-wrap:wrap; gap:12px; margin-top:18px; }
+
+  /* Section shell */
+  .sec{ max-width:1240px; margin:0 auto; padding:26px 28px; }
+  .sec-rule{ border-top:3px solid #222; padding-top:16px; }
+  .sec .tab{ margin-bottom:14px; }
+  .sec h2{ font-size:1.7rem; font-weight:900; line-height:1.06; }
+  .sec .intro{ color:#333; font-size:1.02rem; margin-top:10px; max-width:80%; }
+  .sec .body{ color:#333; font-size:1rem; margin-top:10px; max-width:80%; }
+
+  /* Code block */
+  .codeblock{ border:1px solid var(--hair); margin-top:16px; }
+  .code-bar{ display:flex; align-items:center; justify-content:space-between; gap:12px; background:var(--navy); color:#fff; padding:8px 12px; }
+  .code-bar .path{ font-family:"Courier New", monospace; font-size:.74rem; letter-spacing:.2px; opacity:.96; display:flex; align-items:center; gap:7px; min-width:0; }
+  .code-bar .path span{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .code-copy{ flex:none; background:none; border:1px solid rgba(255,255,255,.4); color:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.56rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; padding:5px 11px; cursor:pointer; transition:.15s; }
+  .code-copy:hover{ background:rgba(255,255,255,.16); }
+  .codeblock pre{ margin:0; padding:14px 16px; overflow-x:auto; background:var(--code-bg); }
+  .codeblock code{ font-family:"Courier New", monospace; font-size:.82rem; line-height:1.6; color:#1b2a3a; background:none; padding:0; white-space:pre; display:block; }
+  .codeblock code .cmt{ color:var(--cmt); font-style:italic; }
+
+  .tree .code-bar .path::before{ content:"📁"; }
+
+  /* Notes */
+  .note-block{ margin-top:22px; }
+  .note-block h3{ font-size:1.15rem; font-weight:800; }
+  .blist{ list-style:none; margin-top:12px; border-top:1px solid var(--hair); }
+  .blist li{ padding:12px 0; border-bottom:1px solid var(--hair); color:#333; font-size:.95rem; }
+  .blist li b{ color:#222; }
+
+  /* CTA */
+  .cta-inner{ display:flex; align-items:center; gap:18px; flex-wrap:wrap; border-top:3px solid #222; padding-top:18px; }
+  .cta-inner h3{ font-size:1.4rem; font-weight:900; line-height:1.08; }
+  .cta-inner p{ color:var(--gray); font-size:.95rem; margin-top:4px; }
+  .cta-btns{ margin-left:auto; display:flex; gap:12px; flex-wrap:wrap; }
+
+  footer{ background:#222; max-width:1240px; margin:30px auto 0; padding:24px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; letter-spacing:.5px; color:#fff; text-align:center; }
+  .note{ max-width:1240px; margin:14px auto 0; padding:8px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.62rem; letter-spacing:1px; color:#999; }
+
+  /* Drawer (shared) */
+  .drawer{ position:fixed; top:0; left:-300px; width:280px; height:100vh; background:#fff; z-index:200; box-shadow:2px 0 14px rgba(0,0,0,.15); transition:left .28s ease; padding:74px 26px 26px; }
+  .drawer.open{ left:0; }
+  .drawer a{ display:block; font-family:Arial, Helvetica, sans-serif; font-size:.82rem; letter-spacing:1.2px; text-transform:uppercase; padding:14px 0; border-bottom:1px solid var(--hair); }
+  .overlay{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:150; }
+  .overlay.open{ display:block; }
+  .drawer-close{ position:absolute; top:20px; right:20px; font-family:Arial, Helvetica, sans-serif; font-size:1.4rem; background:none; border:none; cursor:pointer; }
+
+  @media (max-width:900px){
+    .cta-btns{ margin-left:0; }
+    .mast-nav{ display:none; }
+    .hamburger{ display:flex; }
+    .masthead{ padding:12px 16px; }
+    .mast-left{ gap:10px; min-width:0; flex:1; }
+    .logo{ font-size:.72rem; letter-spacing:1.5px; padding:6px 8px; }
+    .search-box{ flex:1; width:auto; min-width:0; }
+    .search-results{ position:fixed; top:58px; left:12px; right:12px; width:auto; max-width:none; }
+    .src-head h1{ font-size:1.95rem; }
+    .cover-strip img{ height:150px; }
+  }
+</style>
 </head>
 <body>
-    <div class="container">
-        <nav class="back-nav">
-            <a href="ecommerce-analyst.html">← Back to Showcase</a>
-        </nav>
 
-        <div class="project-header">
-            <h1>📊 Ecommerce Analyst — Source Code</h1>
-            <p>Private analyst for mid-size Malaysian e-commerce sellers</p>
-        </div>
+  <div class="overlay" id="overlay"></div>
+  <nav class="drawer" id="drawer">
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">&times;</button>
+    <a href="index.html">Home</a>
+    <a href="project-categories.html">Categories</a>
+    <a href="contact.html">Contact</a>
+    <a href="https://lyven81.github.io/data-analyst-portfolio/index.html">Data Portfolio</a>
+  </nav>
 
-        <div class="content-section">
-            <h2>📁 Project Structure</h2>
-            <div class="file-tree">projects/ecommerce-analyst/
-├── demo.html              Self-contained static demo (answers inlined)
-├── data_prep.py           Cleans the CSV, localizes regions, regenerates delivery times
-├── precompute_answers.py  Runs 6 quick-actions + Monday brief + examples on full data
-├── problem-statement.md   What we're building and why
-├── project-outline.md     Compiled plan (features, tech, screens, demo)
-├── user-guide.md          Plain-language how-to for the seller
-├── system-prompt.txt      LLM system prompt for live v1.5
-└── data/
-    ├── sample-150.csv     Random 150-row sample (representative view)
-    └── answers.json       Pre-computed demo responses (inlined into demo.html)</div>
-        </div>
-
-        <div class="content-section">
-            <h2>🔧 Key Code Snippets</h2>
-
-            <p class="explanation">The three core files each do one thing. Together they take a raw 34,500-row e-commerce CSV and produce a self-contained static demo page.</p>
-
-            <span class="file-label">data_prep.py — Localize regions and delivery times</span>
-            <p class="explanation">The raw dataset has generic region values (West, South, etc.) and uniform random delivery times that all collapse to the same mean per state. This script fixes both by remapping regions to all 16 Malaysian states with realistic population-weighted distribution, then regenerating delivery times with a per-state logistics mean (1 day Klang Valley, 6–7 days East Malaysia).</p>
-            <div class="code-block">STATE_DELIVERY_MEAN = {
-    "Selangor": 1.2, "Kuala Lumpur": 1.1, "Putrajaya": 1.3,
-    "Negeri Sembilan": 2.2, "Melaka": 2.4, "Johor": 2.6,
-    "Perak": 2.8, "Penang": 2.5,
-    "Kedah": 3.5, "Pahang": 3.8,
-    "Perlis": 4.5, "Terengganu": 4.8, "Kelantan": 5.0,
-    "Sabah": 6.2, "Sarawak": 6.4, "Labuan": 6.8
-}
-
-if "region" in df.columns:
-    rng = np.random.default_rng(seed=42)
-    df["region"] = rng.choice(MALAYSIAN_STATES, size=len(df), p=STATE_WEIGHTS)
-
-if "delivery_time_days" in df.columns:
-    rng = np.random.default_rng(seed=7)
-    means = df["region"].map(STATE_DELIVERY_MEAN).values
-    noise = rng.normal(0, 0.6, size=len(df))
-    df["delivery_time_days"] = np.clip(np.round(means + noise), 1, 9).astype(int)</div>
-
-            <span class="file-label">precompute_answers.py — Monday brief auto-generation</span>
-            <p class="explanation">The Monday brief is not a static string — it's computed every time from the last 7 days of data. This snippet shows how the "3 worries" entries are built: the script finds the state with the highest return rate this week, the weakest category by margin, and the discount band that's dragging margin down — each worded in plain language with specific numbers.</p>
-            <div class="code-block">max_date = df["order_date"].max()
-week_start = max_date - pd.Timedelta(days=6)
-this_week = df[df["order_date"] >= week_start]
-
-this_state_returns = this_week.groupby("region")["returned"].apply(
-    lambda s: (s == "Yes").mean() * 100
-).sort_values(ascending=False)
-worst_state = this_state_returns.index[0]
-
-answers["monday_brief"] = {
-    "week_of": week_start.strftime("%d %b %Y") + " - " + max_date.strftime("%d %b %Y"),
-    "worries": [
-        f"**{worst_state}** return rate is {this_state_returns.iloc[0]:.1f}% this week "
-        f"— well above your average.",
-        f"**{this_cat.index[-1]}** category margin dropped to "
-        f"{fmt_rm(this_cat.iloc[-1])} — worst performer of the 7.",
-        f"Discount orders (≥15%) averaged {disc_margin:.2f} margin per order — "
-        f"check if the volume lift is worth it."
-    ],
-    "decision": (
-        f"**Pause or reprice your weakest SKUs in {worst_state} this week.** "
-        f"Shipping plus returns is eating the margin — better to skip those orders "
-        f"than ship them at a loss."
-    )
-}</div>
-
-            <span class="file-label">demo.html — Rendering pre-computed answers</span>
-            <p class="explanation">The demo page is fully self-contained. It imports Chart.js from a CDN, inlines the answers JSON directly as a JavaScript object, and renders the 6 quick-action buttons, Monday brief card, and ask-anything chat with no backend at all. Each quick-action click clears the chat area and renders the pre-computed answer with its table and Chart.js bar chart.</p>
-            <div class="code-block">const QUICK_KEYS = [
-  'q1_profit_by_category', 'q2_state_shipping', 'q3_returns',
-  'q4_discount_roi', 'q5_top_cohort', 'q6_delivery'
-];
-
-function showAnswer(key) {
-  document.getElementById('chatMessages').innerHTML = '';
-  const a = ANSWERS[key];
-  addMessage('user', a.question);
-  const tableHtml = a.table ? renderTable(a.table) : '';
-  const chartId = 'chart-' + Math.random().toString(36).slice(2, 8);
-  const chartHtml = a.chart
-    ? `&lt;div class="chart-wrap"&gt;&lt;canvas id="${chartId}" height="120"&gt;&lt;/canvas&gt;&lt;/div&gt;`
-    : '';
-  addMessage('agent', `&lt;p&gt;${renderMd(a.summary)}&lt;/p&gt;${chartHtml}${tableHtml}`);
-  if (a.chart) setTimeout(() =&gt; drawChart(chartId, a.chart), 50);
-}</div>
-
-            <span class="file-label">system-prompt.txt — AI character for live v1.5</span>
-            <p class="explanation">The live version uses Gemini 2.5 Flash with this system prompt. Two constraints that matter for a Malaysian SME audience: (1) never mention specific platforms by name (keeps it generic), (2) never hedge with "it depends" when the data gives a clear answer — name a number, name a state, name a SKU.</p>
-            <div class="code-block">You are the Ecommerce Analyst, an AI assistant inside the Ecommerce
-Analyst app for mid-size Malaysian e-commerce sellers.
-
-Your job is to act like a private, trusted analyst who works only
-for this seller — answering questions about their sales data in
-plain language, pointing out blind spots they didn't know to ask
-about, and writing a short Monday morning brief every week.
-
-Always respond in a tone that is warm, direct, Malay-flavored
-English — like a trusted friend who happens to understand numbers.
-Short sentences. Concrete numbers. One actionable takeaway per
-answer.
-
-Never:
-- Share the seller's data with any third party
-- Mention any specific e-commerce platform by name
-- Hedge with "it depends" when the data gives a clear answer —
-  name a number, name a state, name a SKU</div>
-        </div>
-
-        <div class="demo-links">
-            <a href="ecommerce-analyst.html" class="demo-btn">← Back to Showcase</a>
-            <a href="https://github.com/lyven81/ai-project/tree/main/projects/ecommerce-analyst" class="demo-btn secondary">📖 View Full Source on GitHub</a>
-        </div>
+  <div class="masthead">
+    <div class="mast-left">
+      <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+      <a class="logo" href="index.html">AI PROJECTS</a>
+      <nav class="mast-nav">
+        <a href="project-categories.html">Categories</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <div class="search-box">
+        <input type="text" class="search-input" id="searchInput" autocomplete="off" placeholder="Search AI projects..." aria-label="Search AI projects">
+        <span class="search-ic">&#128269;</span>
+        <div class="search-results" id="searchResults"></div>
+      </div>
     </div>
+  </div>
+  <hr class="rule-top">
+
+  <div class="crumb">
+    <a href="project-categories.html">Categories</a>
+    <span class="sep">/</span><a id="crumbCat" href="#"></a>
+    <span class="sep">/</span><a id="crumbProj" href="#"></a>
+    <span class="sep">/</span><span>Source</span>
+  </div>
+
+  <section class="src-head">
+    <div class="cover-strip" id="coverStrip" style="display:none"><img id="cover" alt=""></div>
+    <span class="rubric" id="kicker"></span>
+    <h1 id="title"></h1>
+    <p class="sub" id="subtitle"></p>
+    <div class="head-tech" id="headTech"></div>
+    <div class="head-btns" id="headBtns"></div>
+  </section>
+
+  <div id="body"></div>
+
+  <footer>&copy; 2026 Lee Yih Ven | AI Project Portfolio &middot; All rights reserved.</footer>
+  <div class="note">Sample Source-Showcase-E2 (TEMPLATE): source-code page on the index magazine system: slim cover banner, About, Project Structure, code walkthrough with copyable navy-barred code blocks, CTA. Reuse by editing only the PROJECT block at the top of the script.</div>
+
+<script>
+  const SITE = "";
+
+  /* =================================================================
+     EDIT PER PROJECT  -  the ONLY block you change per page.
+     Copy this file, swap PROJECT, save as <slug>-source.html.
+     - structure.code : the project file tree (plain text)
+     - walkthrough[]   : { heading, body, files:[{label, code}] }
+     - notes[]         : { heading, bullets:[...] }
+     Code strings can be multi-line; they render verbatim.
+     ================================================================= */
+  const PROJECT = {
+  "slug": "ecommerce-analyst",
+  "category": "Conversational Data Analytics",
+  "categoryUrl": "category-conversational-analytics.html",
+  "title": "Ecommerce Analyst",
+  "subtitle": "Three core files take a raw 34,500-row e-commerce CSV, localize it to Malaysia, compute the Monday brief, and render a self-contained static demo.",
+  "cover": "images/ecommerce-analyst/cover.jpeg",
+  "tech": [
+    "Python",
+    "pandas",
+    "Chart.js",
+    "Gemini 2.5 Flash",
+    "Vanilla JS"
+  ],
+  "overviewUrl": "ecommerce-analyst.html",
+  "demoLabel": "Try Live Demo",
+  "demoUrl": "https://lyven81.github.io/ai-project/projects/ecommerce-analyst/demo.html",
+  "repoUrl": "https://github.com/lyven81/ai-project/tree/main/projects/ecommerce-analyst",
+  "about": "The three core files each do one thing. Together they take a raw 34,500-row e-commerce CSV and produce a self-contained static demo page: <code>data_prep.py</code> localizes the data to Malaysia, <code>precompute_answers.py</code> runs the six quick-actions and the Monday brief on the full dataset, and <code>demo.html</code> renders the pre-computed answers with no backend. The live v1.5 character lives in <code>system-prompt.txt</code>.",
+  "structure": {
+    "label": "projects/ecommerce-analyst/",
+    "code": "projects/ecommerce-analyst/\n  demo.html               self-contained static demo (answers inlined)\n  data_prep.py            cleans the CSV, localizes regions, regenerates delivery times\n  precompute_answers.py   runs 6 quick-actions + Monday brief + examples on full data\n  problem-statement.md    what we're building and why\n  project-outline.md      compiled plan (features, tech, screens, demo)\n  user-guide.md           plain-language how-to for the seller\n  system-prompt.txt       LLM system prompt for live v1.5\n  data/\n    sample-150.csv        random 150-row sample (representative view)\n    answers.json          pre-computed demo responses (inlined into demo.html)"
+  },
+  "walkthrough": [
+    {
+      "heading": "Localize Regions and Delivery Times",
+      "body": "The raw dataset has generic region values (West, South) and uniform random delivery times that collapse to the same mean per state. This script remaps regions to all 16 Malaysian states with a realistic population-weighted distribution, then regenerates delivery times with a per-state logistics mean (1 day Klang Valley, 6 to 7 days East Malaysia).",
+      "files": [
+        {
+          "label": "data_prep.py: remap regions, regenerate delivery times",
+          "code": "STATE_DELIVERY_MEAN = {\n    \"Selangor\": 1.2, \"Kuala Lumpur\": 1.1, \"Putrajaya\": 1.3,\n    \"Negeri Sembilan\": 2.2, \"Melaka\": 2.4, \"Johor\": 2.6,\n    \"Perak\": 2.8, \"Penang\": 2.5,\n    \"Kedah\": 3.5, \"Pahang\": 3.8,\n    \"Perlis\": 4.5, \"Terengganu\": 4.8, \"Kelantan\": 5.0,\n    \"Sabah\": 6.2, \"Sarawak\": 6.4, \"Labuan\": 6.8\n}\n\nif \"region\" in df.columns:\n    rng = np.random.default_rng(seed=42)\n    df[\"region\"] = rng.choice(MALAYSIAN_STATES, size=len(df), p=STATE_WEIGHTS)\n\nif \"delivery_time_days\" in df.columns:\n    rng = np.random.default_rng(seed=7)\n    means = df[\"region\"].map(STATE_DELIVERY_MEAN).values\n    noise = rng.normal(0, 0.6, size=len(df))\n    df[\"delivery_time_days\"] = np.clip(np.round(means + noise), 1, 9).astype(int)"
+        }
+      ]
+    },
+    {
+      "heading": "Monday Brief Auto-Generation",
+      "body": "The Monday brief is not a static string; it is computed every time from the last 7 days of data. This snippet shows how the 'three worries' entries are built: the script finds the state with the highest return rate this week, the weakest category by margin, and the discount band dragging margin down, each worded in plain language with specific numbers.",
+      "files": [
+        {
+          "label": "precompute_answers.py: build the three worries and the decision",
+          "code": "max_date = df[\"order_date\"].max()\nweek_start = max_date - pd.Timedelta(days=6)\nthis_week = df[df[\"order_date\"] >= week_start]\n\nthis_state_returns = this_week.groupby(\"region\")[\"returned\"].apply(\n    lambda s: (s == \"Yes\").mean() * 100\n).sort_values(ascending=False)\nworst_state = this_state_returns.index[0]\n\nanswers[\"monday_brief\"] = {\n    \"week_of\": week_start.strftime(\"%d %b %Y\") + \" - \" + max_date.strftime(\"%d %b %Y\"),\n    \"worries\": [\n        f\"**{worst_state}** return rate is {this_state_returns.iloc[0]:.1f}% this week \"\n        f\"- well above your average.\",\n        f\"**{this_cat.index[-1]}** category margin dropped to \"\n        f\"{fmt_rm(this_cat.iloc[-1])} - worst performer of the 7.\",\n        f\"Discount orders (>=15%) averaged {disc_margin:.2f} margin per order - \"\n        f\"check if the volume lift is worth it.\"\n    ],\n    \"decision\": (\n        f\"**Pause or reprice your weakest SKUs in {worst_state} this week.** \"\n        f\"Shipping plus returns is eating the margin - better to skip those orders \"\n        f\"than ship them at a loss.\"\n    )\n}"
+        }
+      ]
+    },
+    {
+      "heading": "Rendering Pre-Computed Answers (no backend)",
+      "body": "The demo page is fully self-contained. It imports Chart.js from a CDN, inlines the answers JSON directly as a JavaScript object, and renders the six quick-action buttons, the Monday brief card, and the ask-anything chat with no backend at all. Each quick-action click clears the chat area and renders the pre-computed answer with its table and Chart.js bar chart.",
+      "files": [
+        {
+          "label": "demo.html: render a quick-action answer client-side",
+          "code": "const QUICK_KEYS = [\n  'q1_profit_by_category', 'q2_state_shipping', 'q3_returns',\n  'q4_discount_roi', 'q5_top_cohort', 'q6_delivery'\n];\n\nfunction showAnswer(key) {\n  document.getElementById('chatMessages').innerHTML = '';\n  const a = ANSWERS[key];\n  addMessage('user', a.question);\n  const tableHtml = a.table ? renderTable(a.table) : '';\n  const chartId = 'chart-' + Math.random().toString(36).slice(2, 8);\n  const chartHtml = a.chart\n    ? `<div class=\"chart-wrap\"><canvas id=\"${chartId}\" height=\"120\"></canvas></div>`\n    : '';\n  addMessage('agent', `<p>${renderMd(a.summary)}</p>${chartHtml}${tableHtml}`);\n  if (a.chart) setTimeout(() => drawChart(chartId, a.chart), 50);\n}"
+        }
+      ]
+    },
+    {
+      "heading": "AI Character for Live v1.5",
+      "body": "The live version uses Gemini 2.5 Flash with this system prompt. Two constraints matter for a Malaysian SME audience: never mention specific platforms by name (keeps it generic), and never hedge with 'it depends' when the data gives a clear answer; name a number, name a state, name a SKU.",
+      "files": [
+        {
+          "label": "system-prompt.txt: the analyst's character and guardrails",
+          "code": "You are the Ecommerce Analyst, an AI assistant inside the Ecommerce\nAnalyst app for mid-size Malaysian e-commerce sellers.\n\nYour job is to act like a private, trusted analyst who works only\nfor this seller - answering questions about their sales data in\nplain language, pointing out blind spots they didn't know to ask\nabout, and writing a short Monday morning brief every week.\n\nAlways respond in a tone that is warm, direct, Malay-flavored\nEnglish - like a trusted friend who happens to understand numbers.\nShort sentences. Concrete numbers. One actionable takeaway per\nanswer.\n\nNever:\n- Share the seller's data with any third party\n- Mention any specific e-commerce platform by name\n- Hedge with \"it depends\" when the data gives a clear answer -\n  name a number, name a state, name a SKU"
+        }
+      ]
+    }
+  ],
+  "notes": [
+    {
+      "heading": "Why This Design",
+      "bullets": [
+        "<b>Self-contained demo:</b> <code>answers.json</code> is inlined into <code>demo.html</code>, so there are no CORS issues and no external fetch; it runs identically on <code>file://</code> and GitHub Pages.",
+        "<b>Pre-computed, zero-cost:</b> the static demo pre-computes six quick-actions plus the Monday brief and example asks, so it shows the output shape with no live model call and no API cost.",
+        "<b>Two-tier launch:</b> the static demo proves the output, while the live v1.5 on Cloud Run runs real-time Gemini Q&A over the seller's own CSV.",
+        "<b>Confidential by construction:</b> the live model runs inside the seller's instance with a privacy-first system prompt; the data never leaves and no platform is named."
+      ]
+    }
+  ],
+  "cta": "Want a private, plain-language analyst like this built for your own store data? Let's scope it."
+};
+  /* ===================== END EDIT BLOCK ===================== */
+
+  const pref = (u) => /^https?:|^mailto:|^tel:/.test(u || '') ? u : (SITE + (u || ''));
+  const esc = (s) => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const rich = (s) => esc(s).replace(/&lt;(\/?(?:b|code))&gt;/g, '<$1>');
+
+  // raw code store for copy buttons
+  const RAW = [];
+  function codeBlock(label, codeStr, extraClass){
+    const idx = RAW.push(codeStr) - 1;
+    const rendered = esc(codeStr).split('\n')
+      .map(line => /^\s*#/.test(line) ? `<span class="cmt">${line}</span>` : line).join('\n');
+    return `<div class="codeblock ${extraClass||''}">`+
+      `<div class="code-bar"><span class="path"><span>${esc(label)}</span></span>`+
+      `<button class="code-copy" data-idx="${idx}">Copy</button></div>`+
+      `<pre><code>${rendered}</code></pre></div>`;
+  }
+
+  // Breadcrumb + header
+  document.title = PROJECT.title + ": Source | AI Project Portfolio";
+  document.getElementById('crumbCat').textContent = PROJECT.category;
+  document.getElementById('crumbCat').href = pref(PROJECT.categoryUrl);
+  document.getElementById('crumbProj').textContent = PROJECT.title;
+  document.getElementById('crumbProj').href = pref(PROJECT.overviewUrl);
+  if (PROJECT.cover){
+    document.getElementById('coverStrip').style.display = '';
+    const c = document.getElementById('cover'); c.src = PROJECT.cover; c.alt = PROJECT.title + " cover";
+  }
+  document.getElementById('kicker').textContent = "Source Walkthrough · " + PROJECT.category;
+  document.getElementById('title').textContent = PROJECT.title;
+  document.getElementById('subtitle').textContent = PROJECT.subtitle;
+  document.getElementById('headTech').innerHTML = (PROJECT.tech||[]).map(t => `<span class="tech-chip">${esc(t)}</span>`).join('');
+  document.getElementById('headBtns').innerHTML =
+    (PROJECT.demoUrl ? `<a class="btn" href="${pref(PROJECT.demoUrl)}" target="_blank" rel="noopener">${esc(PROJECT.demoLabel||'Live Demo')}</a>` : '') +
+    (PROJECT.overviewUrl ? `<a class="btn ghost" href="${pref(PROJECT.overviewUrl)}">Project Overview</a>` : '') +
+    (PROJECT.repoUrl ? `<a class="btn ghost" href="${pref(PROJECT.repoUrl)}" target="_blank" rel="noopener">GitHub Repo</a>` : '');
+
+  const section = (tab, inner) => `<section class="sec"><div class="sec-rule"><span class="tab">${esc(tab)}</span>${inner}</div></section>`;
+  let html = "";
+  const P = PROJECT;
+
+  if (P.about){
+    html += section("About This Code", `<h2>About This Code Showcase</h2><p class="intro">${rich(P.about)}</p>`);
+  }
+  if (P.structure && P.structure.code){
+    html += section("Project Structure", `<h2>Project Structure</h2>`+
+      codeBlock(P.structure.label || 'project/', P.structure.code, 'tree'));
+  }
+  (P.walkthrough||[]).forEach(w => {
+    let inner = `<h2>${esc(w.heading)}</h2>`;
+    if (w.body) inner += `<p class="body">${rich(w.body)}</p>`;
+    (w.files||[]).forEach(f => { inner += codeBlock(f.label, f.code); });
+    html += section("Code", inner);
+  });
+  // CTA
+  html += `<section class="sec"><div class="cta-inner">`+
+    `<div><h3>Interested in the build?</h3><p>${esc(P.cta || "Let's talk.")}</p></div>`+
+    `<div class="cta-btns">`+
+    (P.demoUrl ? `<a class="btn" href="${pref(P.demoUrl)}" target="_blank" rel="noopener">${esc(P.demoLabel||'Live Demo')}</a>` : '')+
+    `<a class="btn ghost" href="${SITE}contact.html">Get in Touch</a>`+
+    `</div></div></section>`;
+
+  document.getElementById('body').innerHTML = html;
+
+  // Copy buttons
+  function copyText(text, btn){
+    const done = ()=>{ const o=btn.textContent; btn.textContent='Copied ✓'; setTimeout(()=>btn.textContent=o.includes('Copied')?'Copy':o,1400); };
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(done).catch(()=>fb(text,done)); }
+    else fb(text,done);
+  }
+  function fb(text,done){ const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(ta); done(); }
+  document.querySelectorAll('.code-copy').forEach(btn =>
+    btn.addEventListener('click', ()=> copyText(RAW[+btn.dataset.idx], btn)));
+
+  // Masthead search
+  const ITEMS = [
+    {t:PROJECT.title, c:PROJECT.category, s:PROJECT.slug},
+    {t:"Courier CS Quality Console", c:"Conversational Data Analytics", s:"courier-cs-quality-console"},
+    {t:"Voucher Analyzer", c:"Conversational Data Analytics", s:"voucher-analyzer"},
+    {t:"Wiseman", c:"Knowledge & Reference Chatbots", s:"wiseman"},
+    {t:"Sunny Car Accessories", c:"Agentic Commerce", s:"sunny-car-accessories"},
+    {t:"Bookshelf", c:"Multi-Agent Decision Systems", s:"bookshelf"}
+  ];
+  const searchInput = document.getElementById('searchInput');
+  const searchResults = document.getElementById('searchResults');
+  function runSearch(q){
+    if(q.trim().length < 2){ searchResults.style.display='none'; return; }
+    const ql = q.toLowerCase();
+    const hits = ITEMS.filter(it => (it.t+' '+it.c).toLowerCase().includes(ql));
+    searchResults.innerHTML = hits.length ? hits.map(it =>
+      `<div class="sr-item"><div class="sr-cat">${esc(it.c)}</div>`+
+      `<a href="${SITE}${it.s}.html"><div class="sr-title">${esc(it.t)}</div></a>`+
+      `<div class="sr-links"><a href="${SITE}${it.s}.html">View Details</a></div></div>`).join('')
+      : `<div class="sr-none">No projects found. Try a different keyword.</div>`;
+    searchResults.style.display='block';
+  }
+  searchInput.addEventListener('input', e => runSearch(e.target.value));
+  document.addEventListener('click', e => { if(!e.target.closest('.search-box')) searchResults.style.display='none'; });
+
+  // Drawer
+  const drawer=document.getElementById('drawer'), overlay=document.getElementById('overlay');
+  const openMenu=()=>{ drawer.classList.add('open'); overlay.classList.add('open'); };
+  const closeMenu=()=>{ drawer.classList.remove('open'); overlay.classList.remove('open'); };
+  document.getElementById('hamburger').addEventListener('click', openMenu);
+  document.getElementById('drawerClose').addEventListener('click', closeMenu);
+  overlay.addEventListener('click', closeMenu);
+  drawer.querySelectorAll('a').forEach(a=>a.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeMenu(); searchResults.style.display='none'; }});
+</script>
 </body>
 </html>

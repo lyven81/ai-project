@@ -1,136 +1,371 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leadership Team — Source Code</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #222; background: #fff; }
-        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
-        .back-nav a { color: #4299E1; text-decoration: none; }
-        .back-nav a:hover { text-decoration: underline; }
-        .header { text-align: center; padding: 40px 0; background: linear-gradient(135deg,#4299E1,#2B6CB0); color: #fff; border-radius: 10px; margin-bottom: 30px; }
-        .header h1 { font-size: 2.2rem; margin-bottom: 10px; }
-        .header p { opacity: 0.9; }
-        .section { margin: 30px 0; padding: 25px; background: #f9f9f9; border-left: 5px solid #4299E1; border-radius: 8px; }
-        .section h2 { color: #4299E1; margin-bottom: 15px; }
-        .file-tree { font-family: monospace; background: #f4f4f4; padding: 18px; border-radius: 6px; white-space: pre; overflow-x: auto; }
-        pre { background: #1e1e1e; color: #d4d4d4; padding: 16px; border-radius: 6px; overflow-x: auto; font-size: 0.85rem; }
-        .explain { background: #fff; border: 1px solid #ddd; padding: 15px; border-radius: 6px; margin: 10px 0; }
-        .explain h4 { color: #4299E1; margin-bottom: 8px; }
-        ul { margin-left: 20px; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leadership Team: Source | AI Project Portfolio</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root{ --ink:#222; --paper:#fff; --hair:#dddddd; --gray:#555; --accent:#B8860B; --navy:#1E3A5F; --code-bg:#fbfbf8; --cmt:#6b8190; }
+  html{ scroll-behavior:smooth; }
+  body{ background:var(--paper); color:var(--ink); font-family:Arial, Helvetica, sans-serif; line-height:1.6; overflow-x:hidden; }
+  a{ color:inherit; text-decoration:none; }
+  a:hover h2, a:hover h3, a:hover h4{ color:var(--accent); }
+  p code, li code{ font-family:"Courier New", monospace; font-size:.86em; background:#f2f3f5; padding:1px 5px; color:var(--navy); }
+
+  /* Masthead (shared) */
+  .masthead{ display:flex; align-items:center; justify-content:space-between; padding:14px 28px; max-width:1240px; margin:0 auto; gap:18px; }
+  .mast-left{ display:flex; align-items:center; gap:20px; }
+  .logo{ background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; letter-spacing:3px; font-size:.95rem; padding:8px 12px; white-space:nowrap; }
+  .mast-nav{ display:flex; gap:20px; font-family:Arial, Helvetica, sans-serif; font-size:.72rem; letter-spacing:1.4px; text-transform:uppercase; }
+  .mast-nav a:hover{ color:var(--accent); }
+  .hamburger{ display:none; flex-direction:column; gap:4px; background:none; border:none; cursor:pointer; padding:6px; }
+  .hamburger span{ width:22px; height:2px; background:#222; display:block; }
+  .rule-top{ border:none; border-top:3px solid #222; max-width:1240px; margin:0 auto; }
+
+  /* Search (shared) */
+  .search-box{ position:relative; width:200px; }
+  .search-input{ width:100%; padding:7px 30px 7px 12px; border:1px solid var(--hair); background:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; color:#222; }
+  .search-input:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(184,134,11,.15); }
+  .search-ic{ position:absolute; right:10px; top:50%; transform:translateY(-50%); color:var(--gray); font-size:.8rem; pointer-events:none; }
+  .search-results{ position:absolute; top:calc(100% + 4px); left:0; width:340px; max-width:86vw; background:#fff; border:1px solid #222; max-height:60vh; overflow-y:auto; z-index:120; display:none; }
+  .sr-item{ padding:12px 14px; border-bottom:1px solid var(--hair); }
+  .sr-item:last-child{ border-bottom:none; }
+  .sr-cat{ font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; margin-bottom:4px; color:var(--accent); }
+  .sr-title{ font-weight:700; font-size:1.02rem; color:#222; }
+  .sr-links{ font-size:.58rem; letter-spacing:.8px; text-transform:uppercase; color:var(--gray); margin-top:5px; }
+  .sr-links a:hover{ color:var(--accent); }
+  .sr-none{ padding:16px 14px; font-size:.82rem; color:var(--gray); }
+
+  /* Shared bits */
+  .tab{ display:inline-block; background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.66rem; letter-spacing:2px; text-transform:uppercase; padding:6px 12px; }
+  .rubric{ font-family:Arial, Helvetica, sans-serif; font-size:.62rem; font-weight:700; letter-spacing:1.6px; text-transform:uppercase; color:var(--accent); display:block; margin-bottom:8px; }
+  .tech-chip{ display:inline-block; border:1px solid var(--hair); padding:6px 12px; font-size:.72rem; letter-spacing:.3px; color:#333; white-space:nowrap; }
+  .tech-chip:hover{ border-color:var(--accent); color:var(--accent); }
+  .btn{ display:inline-block; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.7rem; letter-spacing:1.6px; text-transform:uppercase; padding:13px 24px; border:1px solid #222; background:#222; color:#fff; cursor:pointer; transition:.15s; }
+  .btn:hover{ background:var(--accent); border-color:var(--accent); }
+  .btn.ghost{ background:#fff; color:#222; }
+  .btn.ghost:hover{ color:var(--accent); border-color:var(--accent); background:#fff; }
+
+  /* Breadcrumb */
+  .crumb{ max-width:1240px; margin:0 auto; padding:20px 28px 0; font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--gray); }
+  .crumb a:hover{ color:var(--accent); }
+  .crumb .sep{ color:var(--hair); margin:0 8px; }
+
+  /* Header (slim cover banner + copy) */
+  .src-head{ max-width:1240px; margin:0 auto; padding:14px 28px 6px; }
+  .cover-strip{ border:1px solid var(--hair); line-height:0; background:#eef1f4; }
+  .cover-strip img{ width:100%; height:190px; object-fit:cover; object-position:center 42%; display:block; }
+  .src-head h1{ font-size:2.5rem; font-weight:900; line-height:1.04; letter-spacing:-.008em; margin-top:18px; }
+  .src-head .sub{ font-style:italic; font-size:1.08rem; color:#333; margin-top:10px; max-width:72ch; }
+  .head-tech{ display:flex; flex-wrap:wrap; gap:9px; margin-top:16px; }
+  .head-btns{ display:flex; flex-wrap:wrap; gap:12px; margin-top:18px; }
+
+  /* Section shell */
+  .sec{ max-width:1240px; margin:0 auto; padding:26px 28px; }
+  .sec-rule{ border-top:3px solid #222; padding-top:16px; }
+  .sec .tab{ margin-bottom:14px; }
+  .sec h2{ font-size:1.7rem; font-weight:900; line-height:1.06; }
+  .sec .intro{ color:#333; font-size:1.02rem; margin-top:10px; max-width:80%; }
+  .sec .body{ color:#333; font-size:1rem; margin-top:10px; max-width:80%; }
+
+  /* Code block */
+  .codeblock{ border:1px solid var(--hair); margin-top:16px; }
+  .code-bar{ display:flex; align-items:center; justify-content:space-between; gap:12px; background:var(--navy); color:#fff; padding:8px 12px; }
+  .code-bar .path{ font-family:"Courier New", monospace; font-size:.74rem; letter-spacing:.2px; opacity:.96; display:flex; align-items:center; gap:7px; min-width:0; }
+  .code-bar .path span{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .code-copy{ flex:none; background:none; border:1px solid rgba(255,255,255,.4); color:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.56rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; padding:5px 11px; cursor:pointer; transition:.15s; }
+  .code-copy:hover{ background:rgba(255,255,255,.16); }
+  .codeblock pre{ margin:0; padding:14px 16px; overflow-x:auto; background:var(--code-bg); }
+  .codeblock code{ font-family:"Courier New", monospace; font-size:.82rem; line-height:1.6; color:#1b2a3a; background:none; padding:0; white-space:pre; display:block; }
+  .codeblock code .cmt{ color:var(--cmt); font-style:italic; }
+
+  .tree .code-bar .path::before{ content:"📁"; }
+
+  /* Notes */
+  .note-block{ margin-top:22px; }
+  .note-block h3{ font-size:1.15rem; font-weight:800; }
+  .blist{ list-style:none; margin-top:12px; border-top:1px solid var(--hair); }
+  .blist li{ padding:12px 0; border-bottom:1px solid var(--hair); color:#333; font-size:.95rem; }
+  .blist li b{ color:#222; }
+
+  /* CTA */
+  .cta-inner{ display:flex; align-items:center; gap:18px; flex-wrap:wrap; border-top:3px solid #222; padding-top:18px; }
+  .cta-inner h3{ font-size:1.4rem; font-weight:900; line-height:1.08; }
+  .cta-inner p{ color:var(--gray); font-size:.95rem; margin-top:4px; }
+  .cta-btns{ margin-left:auto; display:flex; gap:12px; flex-wrap:wrap; }
+
+  footer{ background:#222; max-width:1240px; margin:30px auto 0; padding:24px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; letter-spacing:.5px; color:#fff; text-align:center; }
+  .note{ max-width:1240px; margin:14px auto 0; padding:8px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.62rem; letter-spacing:1px; color:#999; }
+
+  /* Drawer (shared) */
+  .drawer{ position:fixed; top:0; left:-300px; width:280px; height:100vh; background:#fff; z-index:200; box-shadow:2px 0 14px rgba(0,0,0,.15); transition:left .28s ease; padding:74px 26px 26px; }
+  .drawer.open{ left:0; }
+  .drawer a{ display:block; font-family:Arial, Helvetica, sans-serif; font-size:.82rem; letter-spacing:1.2px; text-transform:uppercase; padding:14px 0; border-bottom:1px solid var(--hair); }
+  .overlay{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:150; }
+  .overlay.open{ display:block; }
+  .drawer-close{ position:absolute; top:20px; right:20px; font-family:Arial, Helvetica, sans-serif; font-size:1.4rem; background:none; border:none; cursor:pointer; }
+
+  @media (max-width:900px){
+    .cta-btns{ margin-left:0; }
+    .mast-nav{ display:none; }
+    .hamburger{ display:flex; }
+    .masthead{ padding:12px 16px; }
+    .mast-left{ gap:10px; min-width:0; flex:1; }
+    .logo{ font-size:.72rem; letter-spacing:1.5px; padding:6px 8px; }
+    .search-box{ flex:1; width:auto; min-width:0; }
+    .search-results{ position:fixed; top:58px; left:12px; right:12px; width:auto; max-width:none; }
+    .src-head h1{ font-size:1.95rem; }
+    .cover-strip img{ height:150px; }
+  }
+</style>
 </head>
 <body>
-    <div class="container">
-        <nav class="back-nav"><a href="leadership-team.html">← Back to Showcase</a></nav>
 
-        <div class="header">
-            <h1>🌸 Leadership Team — Source Code</h1>
-            <p>A Zoom-style boardroom UI plus a multi-agent Claude Code meeting system</p>
-        </div>
+  <div class="overlay" id="overlay"></div>
+  <nav class="drawer" id="drawer">
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">&times;</button>
+    <a href="index.html">Home</a>
+    <a href="project-categories.html">Categories</a>
+    <a href="contact.html">Contact</a>
+    <a href="https://lyven81.github.io/data-analyst-portfolio/index.html">Data Portfolio</a>
+  </nav>
 
-        <div class="section">
-            <h2>📁 File Structure</h2>
-            <div class="file-tree">projects/leadership-team/
-├── boardroom.html                         # Zoom-style 7-seat boardroom UI
-├── demo.html                              # Same file, served as the live demo
-├── team.jpg                               # Group photo used as seat fallback
-├── user guide.md                          # How to run the boardroom + commands
-├── company-state.md                       # Persistent company state (read by managers)
-└── branding-and-portfolio-action-plan.md  # Current strategy and initiatives</div>
-        </div>
-
-        <div class="section">
-            <h2>🎯 Key Code Highlights</h2>
-
-            <div class="explain">
-                <h4>1. Seven-seat video grid (CSS Grid)</h4>
-                <p>The boardroom is a 4×2 CSS grid. Each tile carries its own accent colour, cropped face region from the group photo, editable name, and a mic indicator.</p>
-            </div>
-<pre>.grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(2, 1fr);
-  gap: 14px;
-}
-.tile[data-seat="1"] { background: #d1f2d1; } /* Aiman */
-.tile[data-seat="4"] { background: #ffe5c2; } /* Founder */
-.tile.speaking { border-color: #36d399; box-shadow: 0 0 26px rgba(54,211,153,0.5); }</pre>
-
-            <div class="explain">
-                <h4>2. Click-to-speak active speaker</h4>
-                <p>Clicking any tile highlights it as the active speaker — a lightweight way to walk through each manager during the meeting.</p>
-            </div>
-<pre>tiles.forEach(tile => {
-  tile.addEventListener('click', (e) => {
-    if (e.target.closest('.upload-btn')) return;
-    tiles.forEach(t => t.classList.remove('speaking'));
-    tile.classList.add('speaking');
-  });
-});</pre>
-
-            <div class="explain">
-                <h4>3. Persistent editable agenda</h4>
-                <p>The side panel renders an editable agenda backed by <code>localStorage</code>. Items can be added, edited, activated, or deleted — all persisted across reloads.</p>
-            </div>
-<pre>function saveAgenda(agenda) {
-  localStorage.setItem('boardroom_agenda', JSON.stringify(agenda));
-  localStorage.setItem('boardroom_agenda_updated', new Date().toISOString());
-  renderLastUpdated();
-}
-
-function addAgendaItem() {
-  const a = loadAgenda();
-  a.push({ title: 'New item — click to edit', active: false });
-  saveAgenda(a);
-  renderAgenda();
-}</pre>
-
-            <div class="explain">
-                <h4>4. Photo upload per seat with drag-to-reposition</h4>
-                <p>Each seat accepts a photo upload. The image is stored in <code>localStorage</code> as a data URL and can be dragged to reposition the crop inside its tile.</p>
-            </div>
-<pre>function uploadPhoto(event, seat) {
-  const file = event.target.files[0];
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    const dataUrl = e.target.result;
-    localStorage.setItem('boardroom_seat_' + seat, dataUrl);
-    const videoEl = document.querySelector(`.tile[data-seat="${seat}"] .video`);
-    videoEl.style.backgroundImage = `url('${dataUrl}')`;
-    videoEl.classList.add('custom');
-  };
-  reader.readAsDataURL(file);
-}</pre>
-
-            <div class="explain">
-                <h4>5. Agent layer — the real meeting</h4>
-                <p>The visual UI is only ambiance. The meeting is run by the <code>board-meeting</code> skill in Claude Code, which orchestrates six manager subagents. Each subagent reads <code>company-state.md</code> before reporting, so contributions stay grounded in actual state.</p>
-            </div>
-<pre># Inside Claude Code
-run board meeting
-
-# → Ms Yap drafts agenda from last week's minutes
-# → Daniel Wong (Chief Researcher) reports
-# → Ryan Goh (Marketing Director) reports
-# → Priya Chen (Editor-in-Chief) reports
-# → Aiman Razak (AI Engineer Lead) reports
-# → Cindy (Mentor) gives strategic observations
-# → Ms Yap writes minutes to `what was discussed.md`</pre>
-        </div>
-
-        <div class="section">
-            <h2>🔗 Full Source</h2>
-            <p>All files live in the portfolio repo:</p>
-            <p><a href="https://github.com/lyven81/ai-project/tree/main/projects/leadership-team" target="_blank">github.com/lyven81/ai-project/tree/main/projects/leadership-team</a></p>
-        </div>
-
-        <nav class="back-nav" style="text-align:center; margin-top: 40px;">
-            <a href="leadership-team.html">← Back to Showcase</a> |
-            <a href="index.html">Back to Portfolio</a>
-        </nav>
+  <div class="masthead">
+    <div class="mast-left">
+      <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+      <a class="logo" href="index.html">AI PROJECTS</a>
+      <nav class="mast-nav">
+        <a href="project-categories.html">Categories</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <div class="search-box">
+        <input type="text" class="search-input" id="searchInput" autocomplete="off" placeholder="Search AI projects..." aria-label="Search AI projects">
+        <span class="search-ic">&#128269;</span>
+        <div class="search-results" id="searchResults"></div>
+      </div>
     </div>
+  </div>
+  <hr class="rule-top">
+
+  <div class="crumb">
+    <a href="project-categories.html">Categories</a>
+    <span class="sep">/</span><a id="crumbCat" href="#"></a>
+    <span class="sep">/</span><a id="crumbProj" href="#"></a>
+    <span class="sep">/</span><span>Source</span>
+  </div>
+
+  <section class="src-head">
+    <div class="cover-strip" id="coverStrip" style="display:none"><img id="cover" alt=""></div>
+    <span class="rubric" id="kicker"></span>
+    <h1 id="title"></h1>
+    <p class="sub" id="subtitle"></p>
+    <div class="head-tech" id="headTech"></div>
+    <div class="head-btns" id="headBtns"></div>
+  </section>
+
+  <div id="body"></div>
+
+  <footer>&copy; 2026 Lee Yih Ven | AI Project Portfolio &middot; All rights reserved.</footer>
+  <div class="note">Sample Source-Showcase-E2 (TEMPLATE): source-code page on the index magazine system: slim cover banner, About, Project Structure, code walkthrough with copyable navy-barred code blocks, CTA. Reuse by editing only the PROJECT block at the top of the script.</div>
+
+<script>
+  const SITE = "";
+
+  /* =================================================================
+     EDIT PER PROJECT  -  the ONLY block you change per page.
+     Copy this file, swap PROJECT, save as <slug>-source.html.
+     - structure.code : the project file tree (plain text)
+     - walkthrough[]   : { heading, body, files:[{label, code}] }
+     - notes[]         : { heading, bullets:[...] }
+     Code strings can be multi-line; they render verbatim.
+     ================================================================= */
+  const PROJECT = {
+  "slug": "leadership-team",
+  "category": "Multi-Agent Decision Systems",
+  "categoryUrl": "category-multi-agent-systems.html",
+  "title": "Leadership Team",
+  "subtitle": "A Zoom-style boardroom UI plus a multi-agent Claude Code meeting system.",
+  "cover": "images/leadership-team/cover.jpeg",
+  "tech": [
+    "HTML5",
+    "CSS Grid",
+    "Vanilla JS",
+    "localStorage",
+    "Claude Code",
+    "Subagents"
+  ],
+  "overviewUrl": "leadership-team.html",
+  "demoLabel": "Try Live Demo",
+  "demoUrl": "https://lyven81.github.io/ai-project/projects/leadership-team/demo.html",
+  "repoUrl": "https://github.com/lyven81/ai-project/tree/main/projects/leadership-team",
+  "about": "A Zoom-style boardroom UI plus a multi-agent Claude Code meeting system. The visual UI is only ambiance; the meeting is run by the <code>board-meeting</code> skill in Claude Code, which orchestrates six manager subagents. Each subagent reads <code>company-state.md</code> before reporting, so contributions stay grounded in actual state.",
+  "structure": {
+    "label": "projects/leadership-team/",
+    "code": "projects/leadership-team/\n├── boardroom.html                         # Zoom-style 7-seat boardroom UI\n├── demo.html                              # Same file, served as the live demo\n├── team.jpg                               # Group photo used as seat fallback\n├── user guide.md                          # How to run the boardroom + commands\n├── company-state.md                       # Persistent company state (read by managers)\n└── branding-and-portfolio-action-plan.md  # Current strategy and initiatives"
+  },
+  "walkthrough": [
+    {
+      "heading": "Seven-seat video grid (CSS Grid)",
+      "body": "The boardroom is a 4x2 CSS grid. Each tile carries its own accent colour, cropped face region from the group photo, editable name, and a mic indicator.",
+      "files": [
+        {
+          "label": "boardroom.html: seven-seat video grid",
+          "code": ".grid {\n  display: grid;\n  grid-template-columns: repeat(4, 1fr);\n  grid-template-rows: repeat(2, 1fr);\n  gap: 14px;\n}\n.tile[data-seat=\"1\"] { background: #d1f2d1; } /* Aiman */\n.tile[data-seat=\"4\"] { background: #ffe5c2; } /* Founder */\n.tile.speaking { border-color: #36d399; box-shadow: 0 0 26px rgba(54,211,153,0.5); }"
+        }
+      ]
+    },
+    {
+      "heading": "Click-to-speak active speaker",
+      "body": "Clicking any tile highlights it as the active speaker, a lightweight way to walk through each manager during the meeting.",
+      "files": [
+        {
+          "label": "boardroom.html: click-to-speak active speaker",
+          "code": "tiles.forEach(tile => {\n  tile.addEventListener('click', (e) => {\n    if (e.target.closest('.upload-btn')) return;\n    tiles.forEach(t => t.classList.remove('speaking'));\n    tile.classList.add('speaking');\n  });\n});"
+        }
+      ]
+    },
+    {
+      "heading": "Persistent editable agenda",
+      "body": "The side panel renders an editable agenda backed by <code>localStorage</code>. Items can be added, edited, activated, or deleted, all persisted across reloads.",
+      "files": [
+        {
+          "label": "boardroom.html: persistent editable agenda",
+          "code": "function saveAgenda(agenda) {\n  localStorage.setItem('boardroom_agenda', JSON.stringify(agenda));\n  localStorage.setItem('boardroom_agenda_updated', new Date().toISOString());\n  renderLastUpdated();\n}\n\nfunction addAgendaItem() {\n  const a = loadAgenda();\n  a.push({ title: 'New item — click to edit', active: false });\n  saveAgenda(a);\n  renderAgenda();\n}"
+        }
+      ]
+    },
+    {
+      "heading": "Photo upload per seat with drag-to-reposition",
+      "body": "Each seat accepts a photo upload. The image is stored in <code>localStorage</code> as a data URL and can be dragged to reposition the crop inside its tile.",
+      "files": [
+        {
+          "label": "boardroom.html: photo upload per seat",
+          "code": "function uploadPhoto(event, seat) {\n  const file = event.target.files[0];\n  const reader = new FileReader();\n  reader.onload = (e) => {\n    const dataUrl = e.target.result;\n    localStorage.setItem('boardroom_seat_' + seat, dataUrl);\n    const videoEl = document.querySelector(`.tile[data-seat=\"${seat}\"] .video`);\n    videoEl.style.backgroundImage = `url('${dataUrl}')`;\n    videoEl.classList.add('custom');\n  };\n  reader.readAsDataURL(file);\n}"
+        }
+      ]
+    },
+    {
+      "heading": "Agent layer: the real meeting",
+      "body": "The visual UI is only ambiance. The meeting is run by the <code>board-meeting</code> skill in Claude Code, which orchestrates six manager subagents. Each subagent reads <code>company-state.md</code> before reporting, so contributions stay grounded in actual state.",
+      "files": [
+        {
+          "label": "board-meeting skill: orchestrated meeting",
+          "code": "# Inside Claude Code\nrun board meeting\n\n# → Ms Yap drafts agenda from last week's minutes\n# → Daniel Wong (Chief Researcher) reports\n# → Ryan Goh (Marketing Director) reports\n# → Priya Chen (Editor-in-Chief) reports\n# → Aiman Razak (AI Engineer Lead) reports\n# → Cindy (Mentor) gives strategic observations\n# → Ms Yap writes minutes to `what was discussed.md`"
+        }
+      ]
+    }
+  ],
+  "cta": "Want a multi-agent boardroom like this built for your own business? Let's scope it."
+};
+  /* ===================== END EDIT BLOCK ===================== */
+
+  const pref = (u) => /^https?:|^mailto:|^tel:/.test(u || '') ? u : (SITE + (u || ''));
+  const esc = (s) => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const rich = (s) => esc(s).replace(/&lt;(\/?(?:b|code))&gt;/g, '<$1>');
+
+  // raw code store for copy buttons
+  const RAW = [];
+  function codeBlock(label, codeStr, extraClass){
+    const idx = RAW.push(codeStr) - 1;
+    const rendered = esc(codeStr).split('\n')
+      .map(line => /^\s*#/.test(line) ? `<span class="cmt">${line}</span>` : line).join('\n');
+    return `<div class="codeblock ${extraClass||''}">`+
+      `<div class="code-bar"><span class="path"><span>${esc(label)}</span></span>`+
+      `<button class="code-copy" data-idx="${idx}">Copy</button></div>`+
+      `<pre><code>${rendered}</code></pre></div>`;
+  }
+
+  // Breadcrumb + header
+  document.title = PROJECT.title + ": Source | AI Project Portfolio";
+  document.getElementById('crumbCat').textContent = PROJECT.category;
+  document.getElementById('crumbCat').href = pref(PROJECT.categoryUrl);
+  document.getElementById('crumbProj').textContent = PROJECT.title;
+  document.getElementById('crumbProj').href = pref(PROJECT.overviewUrl);
+  if (PROJECT.cover){
+    document.getElementById('coverStrip').style.display = '';
+    const c = document.getElementById('cover'); c.src = PROJECT.cover; c.alt = PROJECT.title + " cover";
+  }
+  document.getElementById('kicker').textContent = "Source Walkthrough · " + PROJECT.category;
+  document.getElementById('title').textContent = PROJECT.title;
+  document.getElementById('subtitle').textContent = PROJECT.subtitle;
+  document.getElementById('headTech').innerHTML = (PROJECT.tech||[]).map(t => `<span class="tech-chip">${esc(t)}</span>`).join('');
+  document.getElementById('headBtns').innerHTML =
+    (PROJECT.demoUrl ? `<a class="btn" href="${pref(PROJECT.demoUrl)}" target="_blank" rel="noopener">${esc(PROJECT.demoLabel||'Live Demo')}</a>` : '') +
+    (PROJECT.overviewUrl ? `<a class="btn ghost" href="${pref(PROJECT.overviewUrl)}">Project Overview</a>` : '') +
+    (PROJECT.repoUrl ? `<a class="btn ghost" href="${pref(PROJECT.repoUrl)}" target="_blank" rel="noopener">GitHub Repo</a>` : '');
+
+  const section = (tab, inner) => `<section class="sec"><div class="sec-rule"><span class="tab">${esc(tab)}</span>${inner}</div></section>`;
+  let html = "";
+  const P = PROJECT;
+
+  if (P.about){
+    html += section("About This Code", `<h2>About This Code Showcase</h2><p class="intro">${rich(P.about)}</p>`);
+  }
+  if (P.structure && P.structure.code){
+    html += section("Project Structure", `<h2>Project Structure</h2>`+
+      codeBlock(P.structure.label || 'project/', P.structure.code, 'tree'));
+  }
+  (P.walkthrough||[]).forEach(w => {
+    let inner = `<h2>${esc(w.heading)}</h2>`;
+    if (w.body) inner += `<p class="body">${rich(w.body)}</p>`;
+    (w.files||[]).forEach(f => { inner += codeBlock(f.label, f.code); });
+    html += section("Code", inner);
+  });
+  // CTA
+  html += `<section class="sec"><div class="cta-inner">`+
+    `<div><h3>Interested in the build?</h3><p>${esc(P.cta || "Let's talk.")}</p></div>`+
+    `<div class="cta-btns">`+
+    (P.demoUrl ? `<a class="btn" href="${pref(P.demoUrl)}" target="_blank" rel="noopener">${esc(P.demoLabel||'Live Demo')}</a>` : '')+
+    `<a class="btn ghost" href="${SITE}contact.html">Get in Touch</a>`+
+    `</div></div></section>`;
+
+  document.getElementById('body').innerHTML = html;
+
+  // Copy buttons
+  function copyText(text, btn){
+    const done = ()=>{ const o=btn.textContent; btn.textContent='Copied ✓'; setTimeout(()=>btn.textContent=o.includes('Copied')?'Copy':o,1400); };
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(done).catch(()=>fb(text,done)); }
+    else fb(text,done);
+  }
+  function fb(text,done){ const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(ta); done(); }
+  document.querySelectorAll('.code-copy').forEach(btn =>
+    btn.addEventListener('click', ()=> copyText(RAW[+btn.dataset.idx], btn)));
+
+  // Masthead search
+  const ITEMS = [
+    {t:PROJECT.title, c:PROJECT.category, s:PROJECT.slug},
+    {t:"Courier CS Quality Console", c:"Conversational Data Analytics", s:"courier-cs-quality-console"},
+    {t:"Voucher Analyzer", c:"Conversational Data Analytics", s:"voucher-analyzer"},
+    {t:"Wiseman", c:"Knowledge & Reference Chatbots", s:"wiseman"},
+    {t:"Sunny Car Accessories", c:"Agentic Commerce", s:"sunny-car-accessories"},
+    {t:"Bookshelf", c:"Multi-Agent Decision Systems", s:"bookshelf"}
+  ];
+  const searchInput = document.getElementById('searchInput');
+  const searchResults = document.getElementById('searchResults');
+  function runSearch(q){
+    if(q.trim().length < 2){ searchResults.style.display='none'; return; }
+    const ql = q.toLowerCase();
+    const hits = ITEMS.filter(it => (it.t+' '+it.c).toLowerCase().includes(ql));
+    searchResults.innerHTML = hits.length ? hits.map(it =>
+      `<div class="sr-item"><div class="sr-cat">${esc(it.c)}</div>`+
+      `<a href="${SITE}${it.s}.html"><div class="sr-title">${esc(it.t)}</div></a>`+
+      `<div class="sr-links"><a href="${SITE}${it.s}.html">View Details</a></div></div>`).join('')
+      : `<div class="sr-none">No projects found. Try a different keyword.</div>`;
+    searchResults.style.display='block';
+  }
+  searchInput.addEventListener('input', e => runSearch(e.target.value));
+  document.addEventListener('click', e => { if(!e.target.closest('.search-box')) searchResults.style.display='none'; });
+
+  // Drawer
+  const drawer=document.getElementById('drawer'), overlay=document.getElementById('overlay');
+  const openMenu=()=>{ drawer.classList.add('open'); overlay.classList.add('open'); };
+  const closeMenu=()=>{ drawer.classList.remove('open'); overlay.classList.remove('open'); };
+  document.getElementById('hamburger').addEventListener('click', openMenu);
+  document.getElementById('drawerClose').addEventListener('click', closeMenu);
+  overlay.addEventListener('click', closeMenu);
+  drawer.querySelectorAll('a').forEach(a=>a.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeMenu(); searchResults.style.display='none'; }});
+</script>
 </body>
 </html>

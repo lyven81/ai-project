@@ -1,171 +1,361 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Voucher Analyzer - Source Code</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #222; background-color: #ffffff; }
-        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
-        .back-nav { margin-bottom: 20px; }
-        .back-nav a { color: #007BFF; text-decoration: none; font-size: 1rem; }
-        .back-nav a:hover { text-decoration: underline; }
-        .project-header { text-align: center; margin-bottom: 40px; padding: 40px 0; background: linear-gradient(135deg, #E91E63, #AD1457); color: white; border-radius: 10px; }
-        .project-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
-        .project-header p { font-size: 1.2rem; opacity: 0.9; }
-        .badges { display: flex; justify-content: center; gap: 10px; margin: 20px 0; flex-wrap: wrap; }
-        .badge { background-color: rgba(255, 255, 255, 0.2); color: white; padding: 5px 12px; border-radius: 15px; font-size: 0.9rem; }
-        .content-section { margin: 40px 0; padding: 30px; background-color: #f9f9f9; border-radius: 8px; border-left: 5px solid #E91E63; }
-        .content-section h2 { color: #E91E63; margin-bottom: 20px; font-size: 1.8rem; }
-        .content-section h3 { color: #333; margin: 20px 0 10px 0; font-size: 1.3rem; }
-        .highlight-box { background: linear-gradient(135deg, #fde7ef, #fbd0e0); padding: 20px; border-radius: 10px; border-left: 5px solid #E91E63; margin: 20px 0; }
-        .file-tree { background-color: #f4f4f4; border: 1px solid #ddd; border-radius: 5px; padding: 15px; margin: 15px 0; font-family: 'Consolas', monospace; font-size: 14px; white-space: pre; overflow-x: auto; }
-        .code-container { background-color: #1e1e1e; border-radius: 8px; padding: 20px; margin: 20px 0; overflow-x: auto; }
-        .code-header { color: #f48fb1; font-weight: bold; margin-bottom: 15px; font-size: 1.1rem; border-bottom: 1px solid #333; padding-bottom: 10px; }
-        .code-block { font-family: 'Consolas', 'Monaco', 'Courier New', monospace; font-size: 14px; line-height: 1.5; color: #d4d4d4; white-space: pre; }
-        .code-comment { color: #6a9955; font-style: italic; }
-        .code-keyword { color: #569cd6; }
-        .code-string { color: #ce9178; }
-        .demo-links { text-align: center; margin: 30px 0; }
-        .demo-btn { display: inline-block; background-color: #007BFF; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; margin: 0 10px; font-weight: bold; transition: background-color 0.3s; }
-        .demo-btn:hover { background-color: #0056b3; }
-        .demo-btn.secondary { background-color: #28a745; }
-        .demo-btn.secondary:hover { background-color: #218838; }
-        @media (max-width: 768px) {
-            .project-header h1 { font-size: 2rem; }
-            .project-header p { font-size: 1rem; }
-            .demo-btn { margin: 5px; padding: 10px 20px; }
-            .container { padding: 15px; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Voucher Analyzer: Source | AI Project Portfolio</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root{ --ink:#222; --paper:#fff; --hair:#dddddd; --gray:#555; --accent:#B8860B; --navy:#1E3A5F; --code-bg:#fbfbf8; --cmt:#6b8190; }
+  html{ scroll-behavior:smooth; }
+  body{ background:var(--paper); color:var(--ink); font-family:Arial, Helvetica, sans-serif; line-height:1.6; overflow-x:hidden; }
+  a{ color:inherit; text-decoration:none; }
+  a:hover h2, a:hover h3, a:hover h4{ color:var(--accent); }
+  p code, li code{ font-family:"Courier New", monospace; font-size:.86em; background:#f2f3f5; padding:1px 5px; color:var(--navy); }
+
+  /* Masthead (shared) */
+  .masthead{ display:flex; align-items:center; justify-content:space-between; padding:14px 28px; max-width:1240px; margin:0 auto; gap:18px; }
+  .mast-left{ display:flex; align-items:center; gap:20px; }
+  .logo{ background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; letter-spacing:3px; font-size:.95rem; padding:8px 12px; white-space:nowrap; }
+  .mast-nav{ display:flex; gap:20px; font-family:Arial, Helvetica, sans-serif; font-size:.72rem; letter-spacing:1.4px; text-transform:uppercase; }
+  .mast-nav a:hover{ color:var(--accent); }
+  .hamburger{ display:none; flex-direction:column; gap:4px; background:none; border:none; cursor:pointer; padding:6px; }
+  .hamburger span{ width:22px; height:2px; background:#222; display:block; }
+  .rule-top{ border:none; border-top:3px solid #222; max-width:1240px; margin:0 auto; }
+
+  /* Search (shared) */
+  .search-box{ position:relative; width:200px; }
+  .search-input{ width:100%; padding:7px 30px 7px 12px; border:1px solid var(--hair); background:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; color:#222; }
+  .search-input:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(184,134,11,.15); }
+  .search-ic{ position:absolute; right:10px; top:50%; transform:translateY(-50%); color:var(--gray); font-size:.8rem; pointer-events:none; }
+  .search-results{ position:absolute; top:calc(100% + 4px); left:0; width:340px; max-width:86vw; background:#fff; border:1px solid #222; max-height:60vh; overflow-y:auto; z-index:120; display:none; }
+  .sr-item{ padding:12px 14px; border-bottom:1px solid var(--hair); }
+  .sr-item:last-child{ border-bottom:none; }
+  .sr-cat{ font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; margin-bottom:4px; color:var(--accent); }
+  .sr-title{ font-weight:700; font-size:1.02rem; color:#222; }
+  .sr-links{ font-size:.58rem; letter-spacing:.8px; text-transform:uppercase; color:var(--gray); margin-top:5px; }
+  .sr-links a:hover{ color:var(--accent); }
+  .sr-none{ padding:16px 14px; font-size:.82rem; color:var(--gray); }
+
+  /* Shared bits */
+  .tab{ display:inline-block; background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.66rem; letter-spacing:2px; text-transform:uppercase; padding:6px 12px; }
+  .rubric{ font-family:Arial, Helvetica, sans-serif; font-size:.62rem; font-weight:700; letter-spacing:1.6px; text-transform:uppercase; color:var(--accent); display:block; margin-bottom:8px; }
+  .tech-chip{ display:inline-block; border:1px solid var(--hair); padding:6px 12px; font-size:.72rem; letter-spacing:.3px; color:#333; white-space:nowrap; }
+  .tech-chip:hover{ border-color:var(--accent); color:var(--accent); }
+  .btn{ display:inline-block; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.7rem; letter-spacing:1.6px; text-transform:uppercase; padding:13px 24px; border:1px solid #222; background:#222; color:#fff; cursor:pointer; transition:.15s; }
+  .btn:hover{ background:var(--accent); border-color:var(--accent); }
+  .btn.ghost{ background:#fff; color:#222; }
+  .btn.ghost:hover{ color:var(--accent); border-color:var(--accent); background:#fff; }
+
+  /* Breadcrumb */
+  .crumb{ max-width:1240px; margin:0 auto; padding:20px 28px 0; font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--gray); }
+  .crumb a:hover{ color:var(--accent); }
+  .crumb .sep{ color:var(--hair); margin:0 8px; }
+
+  /* Header (slim cover banner + copy) */
+  .src-head{ max-width:1240px; margin:0 auto; padding:14px 28px 6px; }
+  .cover-strip{ border:1px solid var(--hair); line-height:0; background:#eef1f4; }
+  .cover-strip img{ width:100%; height:190px; object-fit:cover; object-position:center 42%; display:block; }
+  .src-head h1{ font-size:2.5rem; font-weight:900; line-height:1.04; letter-spacing:-.008em; margin-top:18px; }
+  .src-head .sub{ font-style:italic; font-size:1.08rem; color:#333; margin-top:10px; max-width:72ch; }
+  .head-tech{ display:flex; flex-wrap:wrap; gap:9px; margin-top:16px; }
+  .head-btns{ display:flex; flex-wrap:wrap; gap:12px; margin-top:18px; }
+
+  /* Section shell */
+  .sec{ max-width:1240px; margin:0 auto; padding:26px 28px; }
+  .sec-rule{ border-top:3px solid #222; padding-top:16px; }
+  .sec .tab{ margin-bottom:14px; }
+  .sec h2{ font-size:1.7rem; font-weight:900; line-height:1.06; }
+  .sec .intro{ color:#333; font-size:1.02rem; margin-top:10px; max-width:80%; }
+  .sec .body{ color:#333; font-size:1rem; margin-top:10px; max-width:80%; }
+
+  /* Code block */
+  .codeblock{ border:1px solid var(--hair); margin-top:16px; }
+  .code-bar{ display:flex; align-items:center; justify-content:space-between; gap:12px; background:var(--navy); color:#fff; padding:8px 12px; }
+  .code-bar .path{ font-family:"Courier New", monospace; font-size:.74rem; letter-spacing:.2px; opacity:.96; display:flex; align-items:center; gap:7px; min-width:0; }
+  .code-bar .path span{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .code-copy{ flex:none; background:none; border:1px solid rgba(255,255,255,.4); color:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.56rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; padding:5px 11px; cursor:pointer; transition:.15s; }
+  .code-copy:hover{ background:rgba(255,255,255,.16); }
+  .codeblock pre{ margin:0; padding:14px 16px; overflow-x:auto; background:var(--code-bg); }
+  .codeblock code{ font-family:"Courier New", monospace; font-size:.82rem; line-height:1.6; color:#1b2a3a; background:none; padding:0; white-space:pre; display:block; }
+  .codeblock code .cmt{ color:var(--cmt); font-style:italic; }
+
+  .tree .code-bar .path::before{ content:"📁"; }
+
+  /* Notes */
+  .note-block{ margin-top:22px; }
+  .note-block h3{ font-size:1.15rem; font-weight:800; }
+  .blist{ list-style:none; margin-top:12px; border-top:1px solid var(--hair); }
+  .blist li{ padding:12px 0; border-bottom:1px solid var(--hair); color:#333; font-size:.95rem; }
+  .blist li b{ color:#222; }
+
+  /* CTA */
+  .cta-inner{ display:flex; align-items:center; gap:18px; flex-wrap:wrap; border-top:3px solid #222; padding-top:18px; }
+  .cta-inner h3{ font-size:1.4rem; font-weight:900; line-height:1.08; }
+  .cta-inner p{ color:var(--gray); font-size:.95rem; margin-top:4px; }
+  .cta-btns{ margin-left:auto; display:flex; gap:12px; flex-wrap:wrap; }
+
+  footer{ background:#222; max-width:1240px; margin:30px auto 0; padding:24px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; letter-spacing:.5px; color:#fff; text-align:center; }
+  .note{ max-width:1240px; margin:14px auto 0; padding:8px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.62rem; letter-spacing:1px; color:#999; }
+
+  /* Drawer (shared) */
+  .drawer{ position:fixed; top:0; left:-300px; width:280px; height:100vh; background:#fff; z-index:200; box-shadow:2px 0 14px rgba(0,0,0,.15); transition:left .28s ease; padding:74px 26px 26px; }
+  .drawer.open{ left:0; }
+  .drawer a{ display:block; font-family:Arial, Helvetica, sans-serif; font-size:.82rem; letter-spacing:1.2px; text-transform:uppercase; padding:14px 0; border-bottom:1px solid var(--hair); }
+  .overlay{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:150; }
+  .overlay.open{ display:block; }
+  .drawer-close{ position:absolute; top:20px; right:20px; font-family:Arial, Helvetica, sans-serif; font-size:1.4rem; background:none; border:none; cursor:pointer; }
+
+  @media (max-width:900px){
+    .cta-btns{ margin-left:0; }
+    .mast-nav{ display:none; }
+    .hamburger{ display:flex; }
+    .masthead{ padding:12px 16px; }
+    .mast-left{ gap:10px; min-width:0; flex:1; }
+    .logo{ font-size:.72rem; letter-spacing:1.5px; padding:6px 8px; }
+    .search-box{ flex:1; width:auto; min-width:0; }
+    .search-results{ position:fixed; top:58px; left:12px; right:12px; width:auto; max-width:none; }
+    .src-head h1{ font-size:1.95rem; }
+    .cover-strip img{ height:150px; }
+  }
+</style>
 </head>
 <body>
-    <div class="container">
-        <nav class="back-nav">
-            <a href="voucher-analyzer.html">&larr; Back to Project Overview</a>
-        </nav>
 
-        <div class="project-header">
-            <h1>&#128202; Voucher Analyzer</h1>
-            <p>Incrementality engine, recovery check, and governed query layer</p>
-            <div class="badges">
-                <span class="badge">Python</span>
-                <span class="badge">pandas</span>
-                <span class="badge">sql.js</span>
-                <span class="badge">Baseline-Counterfactual</span>
-                <span class="badge">Read-only SQL</span>
-            </div>
-        </div>
+  <div class="overlay" id="overlay"></div>
+  <nav class="drawer" id="drawer">
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">&times;</button>
+    <a href="index.html">Home</a>
+    <a href="project-categories.html">Categories</a>
+    <a href="contact.html">Contact</a>
+    <a href="https://lyven81.github.io/data-analyst-portfolio/index.html">Data Portfolio</a>
+  </nav>
 
-        <div class="highlight-box">
-            <h3>&#128269; About This Code Showcase</h3>
-            <p><strong>These three excerpts are the heart of the project: an incrementality estimate that runs blind to the answer, the recovery check that grades it against a hidden truth, and the governed query layer that powers the live questions.</strong></p>
-            <p>Dataset-generation plumbing is omitted for clarity. The key idea throughout: the per-order ground truth (<code>was_incremental</code>) is withheld from everything the page can see, so the tool genuinely estimates rather than reads the answer.</p>
-        </div>
-
-        <div class="content-section">
-            <h2>&#129518; The Analytical Brain: Incrementality, Estimated Blind</h2>
-            <p>The core skill is separating the sales a voucher truly caused from buyers who would have purchased anyway. The estimate uses a baseline-counterfactual (difference-in-differences style): learn each category's ordinary order rate from non-campaign days, then treat the excess during campaigns as incremental. It never looks at the truth column.</p>
-
-            <div class="code-container">
-                <div class="code-header">&#128196; pipeline.py: withhold the truth, then estimate</div>
-<div class="code-block"><span class="code-comment"># DEPLOYED dataset: the per-order truth column is WITHHELD.</span>
-<span class="code-comment"># The assistant must never see was_incremental.</span>
-df.drop(columns=[<span class="code-string">"was_incremental"</span>]).to_csv(<span class="code-string">"voucher_orders.csv"</span>, index=<span class="code-keyword">False</span>)
-<span class="code-comment"># EVAL copy WITH the truth, for the recovery check only. Never deployed.</span>
-df.to_csv(<span class="code-string">"voucher_orders_eval.csv"</span>, index=<span class="code-keyword">False</span>)
-
-<span class="code-comment"># Incrementality ESTIMATE via baseline-counterfactual (DiD style), per category.</span>
-<span class="code-comment"># Blind to truth: compare in-campaign volume to the baseline learned off-campaign.</span>
-est_share = {}
-<span class="code-keyword">for</span> c <span class="code-keyword">in</span> CATS:
-    base_rate = ((df.category==c) & (~df.in_window) & (df.voucher_id==<span class="code-string">"none"</span>)).sum() / max(nonwin_days, 1)
-    win_orders = ((df.category==c) & (df.in_window)).sum()
-    exp_base   = base_rate * len(win_days)
-    incr_vol   = max(0.0, win_orders - exp_base)        <span class="code-comment"># orders the campaign actually added</span>
-    redemptions = (v.category==c).sum()
-    est_share[c] = float(np.clip(incr_vol / max(redemptions, 1), 0, 1))</div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>&#9989; The Proof: Recovery Check</h2>
-            <p>A blind estimate is only worth trusting if it lands on the real answer. The recovery check compares the per-category estimate against the baked-in truth and reports the error. It recovers an overall 45 percent incremental share against a true 46 percent, while the naive "every redemption is new" read would claim 100 percent.</p>
-
-            <div class="code-container">
-                <div class="code-header">&#128196; pipeline.py: grade the estimate against the hidden truth</div>
-<div class="code-block"><span class="code-comment"># PHASE 3: recovery check, only here is the truth column read.</span>
-true_share = {c: float(v[v.category==c][<span class="code-string">"was_incremental"</span>].mean()) <span class="code-keyword">for</span> c <span class="code-keyword">in</span> CATS}
-mae = np.mean([abs(est_share[c] - true_share[c]) <span class="code-keyword">for</span> c <span class="code-keyword">in</span> CATS])
-
-recovery = dict(
-    by_category = {c: dict(estimate=round(est_share[c],3), truth=round(true_share[c],3)) <span class="code-keyword">for</span> c <span class="code-keyword">in</span> CATS},
-    mean_abs_error = round(mae, 3),                 <span class="code-comment"># about 0.085</span>
-    naive_share    = 1.0,                           <span class="code-comment"># the naive read overstates</span>
-    true_overall   = round(v.was_incremental.mean(), 3),   <span class="code-comment"># 0.46</span>
-    est_overall    = round(np.mean([est_share[c] <span class="code-keyword">for</span> c <span class="code-keyword">in</span> v.category]), 3),  <span class="code-comment"># 0.446</span>
-)</div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>&#128272; The Governed Query Layer (client-side, keyless)</h2>
-            <p>The live questions in the app run real SQL in the browser via sql.js, on the Klinik Dr Fang pattern. Each track is a fixed, parameterised, read-only statement. The model (or the click handler) can pick a track and bind a value; it can never write, extend, or alter the SQL, and the deployed table has no truth column to reach.</p>
-
-            <div class="code-container">
-                <div class="code-header">&#128196; demo.html: fixed, parameterised, read-only tools</div>
-<div class="code-block"><span class="code-comment">// Values only (e.g. {':v': 'F1'}); the SQL itself is fixed.</span>
-<span class="code-keyword">function</span> run(sql, params) {
-  <span class="code-keyword">const</span> st = db.prepare(sql);
-  <span class="code-keyword">if</span> (params) st.bind(params);          <span class="code-comment">// bind a value, never author SQL</span>
-  <span class="code-keyword">const</span> out = [];
-  <span class="code-keyword">while</span> (st.step()) out.push(st.getAsObject());
-  st.free();
-  <span class="code-keyword">return</span> out;
-}
-
-<span class="code-comment">// Track 13: do vouchers bring new buyers or reward returning ones?</span>
-<span class="code-keyword">const</span> rows = run(
-  <span class="code-string">"SELECT customer_type, COUNT(*) AS orders "</span> +
-  <span class="code-string">"FROM orders WHERE voucher_id = :v GROUP BY customer_type"</span>,
-  {<span class="code-string">':v'</span>: <span class="code-string">'F1'</span>}
-);</div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>&#128193; Project Structure</h2>
-            <div class="file-tree">projects/voucher-analyzer/
-  demo.html               the app (self-contained; results inlined)
-  voucher-data.js         redemption records for the live sql.js queries
-  results.json            the engine's computed outputs the UI renders
-  voucher_orders.csv      observable order data (no truth column)
-  voucher_issuance.csv    per-voucher issuance
-  pipeline.py             generates data, runs the engine + recovery check
-  build_assistant_data.py builds voucher-data.js from the orders
-  README.md</div>
-        </div>
-
-        <div class="content-section">
-            <h2>&#9881;&#65039; Why This Design</h2>
-            <ul style="margin: 15px 0; padding-left: 20px;">
-                <li><strong>Offline engine, frozen results:</strong> the brain runs once in Python and writes <code>results.json</code>; the page renders proven numbers, so the displayed answers never drift.</li>
-                <li><strong>Truth firewall:</strong> <code>was_incremental</code> exists only in the eval file, which is never deployed; the live data physically cannot surface the answer key.</li>
-                <li><strong>Match the tool to the job:</strong> incrementality is a counterfactual computation, so it stays in Python; the observable drill-downs are simple aggregations, so they run as governed SQL in the browser.</li>
-                <li><strong>Keyless and free:</strong> the whole app is static, with no backend and no API key, so it runs on GitHub Pages at zero cost.</li>
-            </ul>
-        </div>
-
-        <div class="demo-links">
-            <a href="projects/voucher-analyzer/demo.html" target="_blank" class="demo-btn">&#128640; Try Live Demo</a>
-            <a href="voucher-analyzer.html" class="demo-btn secondary">&#128214; View Full Project Details</a>
-        </div>
-
-        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
-            <a href="index.html">&larr; Back to Portfolio</a> |
-            <a href="voucher-analyzer.html">View Project Overview</a>
-        </nav>
+  <div class="masthead">
+    <div class="mast-left">
+      <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+      <a class="logo" href="index.html">AI PROJECTS</a>
+      <nav class="mast-nav">
+        <a href="project-categories.html">Categories</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <div class="search-box">
+        <input type="text" class="search-input" id="searchInput" autocomplete="off" placeholder="Search AI projects..." aria-label="Search AI projects">
+        <span class="search-ic">&#128269;</span>
+        <div class="search-results" id="searchResults"></div>
+      </div>
     </div>
+  </div>
+  <hr class="rule-top">
+
+  <div class="crumb">
+    <a href="project-categories.html">Categories</a>
+    <span class="sep">/</span><a id="crumbCat" href="#"></a>
+    <span class="sep">/</span><a id="crumbProj" href="#"></a>
+    <span class="sep">/</span><span>Source</span>
+  </div>
+
+  <section class="src-head">
+    <div class="cover-strip" id="coverStrip" style="display:none"><img id="cover" alt=""></div>
+    <span class="rubric" id="kicker"></span>
+    <h1 id="title"></h1>
+    <p class="sub" id="subtitle"></p>
+    <div class="head-tech" id="headTech"></div>
+    <div class="head-btns" id="headBtns"></div>
+  </section>
+
+  <div id="body"></div>
+
+  <footer>&copy; 2026 Lee Yih Ven | AI Project Portfolio &middot; All rights reserved.</footer>
+  <div class="note">Sample Source-Showcase-E2 (TEMPLATE): source-code page on the index magazine system: slim cover banner, About, Project Structure, code walkthrough with copyable navy-barred code blocks, CTA. Reuse by editing only the PROJECT block at the top of the script.</div>
+
+<script>
+  const SITE = "";
+
+  /* =================================================================
+     EDIT PER PROJECT  -  the ONLY block you change per page.
+     Copy this file, swap PROJECT, save as <slug>-source.html.
+     - structure.code : the project file tree (plain text)
+     - walkthrough[]   : { heading, body, files:[{label, code}] }
+     - notes[]         : { heading, bullets:[...] }
+     Code strings can be multi-line; they render verbatim.
+     ================================================================= */
+  const PROJECT = {
+  "slug": "voucher-analyzer",
+  "category": "Conversational Data Analytics",
+  "categoryUrl": "category-conversational-analytics.html",
+  "title": "Voucher Analyzer",
+  "subtitle": "Incrementality engine, recovery check, and governed query layer, the three excerpts that are the heart of the project.",
+  "cover": "images/voucher-analyzer/cover.jpeg",
+  "tech": [
+    "Python",
+    "pandas",
+    "sql.js",
+    "Baseline-Counterfactual",
+    "Read-only SQL"
+  ],
+  "overviewUrl": "voucher-analyzer.html",
+  "demoLabel": "Try Live Demo",
+  "demoUrl": "https://lyven81.github.io/ai-project/projects/voucher-analyzer/demo.html",
+  "repoUrl": "https://github.com/lyven81/ai-project/tree/main/projects/voucher-analyzer",
+  "about": "These three excerpts are the heart of the project: an incrementality estimate that runs blind to the answer, the recovery check that grades it against a hidden truth, and the governed query layer that powers the live questions. Dataset-generation plumbing is omitted for clarity. The key idea throughout: the per-order ground truth (<code>was_incremental</code>) is withheld from everything the page can see, so the tool genuinely estimates rather than reads the answer.",
+  "structure": {
+    "label": "projects/voucher-analyzer/",
+    "code": "projects/voucher-analyzer/\n  demo.html               the app (self-contained; results inlined)\n  voucher-data.js         redemption records for the live sql.js queries\n  results.json            the engine's computed outputs the UI renders\n  voucher_orders.csv      observable order data (no truth column)\n  voucher_issuance.csv    per-voucher issuance\n  pipeline.py             generates data, runs the engine + recovery check\n  build_assistant_data.py builds voucher-data.js from the orders\n  README.md"
+  },
+  "walkthrough": [
+    {
+      "heading": "The Analytical Brain: Incrementality, Estimated Blind",
+      "body": "The core skill is separating the sales a voucher truly caused from buyers who would have purchased anyway. The estimate uses a baseline-counterfactual (difference-in-differences style): learn each category's ordinary order rate from non-campaign days, then treat the excess during campaigns as incremental. It never looks at the truth column.",
+      "files": [
+        {
+          "label": "pipeline.py: withhold the truth, then estimate",
+          "code": "# DEPLOYED dataset: the per-order truth column is WITHHELD.\n# The assistant must never see was_incremental.\ndf.drop(columns=[\"was_incremental\"]).to_csv(\"voucher_orders.csv\", index=False)\n# EVAL copy WITH the truth, for the recovery check only. Never deployed.\ndf.to_csv(\"voucher_orders_eval.csv\", index=False)\n\n# Incrementality ESTIMATE via baseline-counterfactual (DiD style), per category.\n# Blind to truth: compare in-campaign volume to the baseline learned off-campaign.\nest_share = {}\nfor c in CATS:\n    base_rate = ((df.category==c) & (~df.in_window) & (df.voucher_id==\"none\")).sum() / max(nonwin_days, 1)\n    win_orders = ((df.category==c) & (df.in_window)).sum()\n    exp_base   = base_rate * len(win_days)\n    incr_vol   = max(0.0, win_orders - exp_base)        # orders the campaign actually added\n    redemptions = (v.category==c).sum()\n    est_share[c] = float(np.clip(incr_vol / max(redemptions, 1), 0, 1))"
+        }
+      ]
+    },
+    {
+      "heading": "The Proof: Recovery Check",
+      "body": "A blind estimate is only worth trusting if it lands on the real answer. The recovery check compares the per-category estimate against the baked-in truth and reports the error. It recovers an overall 45 percent incremental share against a true 46 percent, while the naive 'every redemption is new' read would claim 100 percent.",
+      "files": [
+        {
+          "label": "pipeline.py: grade the estimate against the hidden truth",
+          "code": "# PHASE 3: recovery check, only here is the truth column read.\ntrue_share = {c: float(v[v.category==c][\"was_incremental\"].mean()) for c in CATS}\nmae = np.mean([abs(est_share[c] - true_share[c]) for c in CATS])\n\nrecovery = dict(\n    by_category = {c: dict(estimate=round(est_share[c],3), truth=round(true_share[c],3)) for c in CATS},\n    mean_abs_error = round(mae, 3),                 # about 0.085\n    naive_share    = 1.0,                           # the naive read overstates\n    true_overall   = round(v.was_incremental.mean(), 3),   # 0.46\n    est_overall    = round(np.mean([est_share[c] for c in v.category]), 3),  # 0.446\n)"
+        }
+      ]
+    },
+    {
+      "heading": "The Governed Query Layer (client-side, keyless)",
+      "body": "The live questions in the app run real SQL in the browser via sql.js, on the Klinik Dr Fang pattern. Each track is a fixed, parameterised, read-only statement. The model (or the click handler) can pick a track and bind a value; it can never write, extend, or alter the SQL, and the deployed table has no truth column to reach.",
+      "files": [
+        {
+          "label": "demo.html: fixed, parameterised, read-only tools",
+          "code": "// Values only (e.g. {':v': 'F1'}); the SQL itself is fixed.\nfunction run(sql, params) {\n  const st = db.prepare(sql);\n  if (params) st.bind(params);          // bind a value, never author SQL\n  const out = [];\n  while (st.step()) out.push(st.getAsObject());\n  st.free();\n  return out;\n}\n\n// Track 13: do vouchers bring new buyers or reward returning ones?\nconst rows = run(\n  \"SELECT customer_type, COUNT(*) AS orders \" +\n  \"FROM orders WHERE voucher_id = :v GROUP BY customer_type\",\n  {':v': 'F1'}\n);"
+        }
+      ]
+    }
+  ],
+  "notes": [
+    {
+      "heading": "Why This Design",
+      "bullets": [
+        "<b>Offline engine, frozen results:</b> the brain runs once in Python and writes <code>results.json</code>; the page renders proven numbers, so the displayed answers never drift.",
+        "<b>Truth firewall:</b> <code>was_incremental</code> exists only in the eval file, which is never deployed; the live data physically cannot surface the answer key.",
+        "<b>Match the tool to the job:</b> incrementality is a counterfactual computation, so it stays in Python; the observable drill-downs are simple aggregations, so they run as governed SQL in the browser.",
+        "<b>Keyless and free:</b> the whole app is static, with no backend and no API key, so it runs on GitHub Pages at zero cost."
+      ]
+    }
+  ],
+  "cta": "Want a governed, zero-cost analytics tool like this built for your own data? Let's scope it."
+};
+  /* ===================== END EDIT BLOCK ===================== */
+
+  const pref = (u) => /^https?:|^mailto:|^tel:/.test(u || '') ? u : (SITE + (u || ''));
+  const esc = (s) => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const rich = (s) => esc(s).replace(/&lt;(\/?(?:b|code))&gt;/g, '<$1>');
+
+  // raw code store for copy buttons
+  const RAW = [];
+  function codeBlock(label, codeStr, extraClass){
+    const idx = RAW.push(codeStr) - 1;
+    const rendered = esc(codeStr).split('\n')
+      .map(line => /^\s*#/.test(line) ? `<span class="cmt">${line}</span>` : line).join('\n');
+    return `<div class="codeblock ${extraClass||''}">`+
+      `<div class="code-bar"><span class="path"><span>${esc(label)}</span></span>`+
+      `<button class="code-copy" data-idx="${idx}">Copy</button></div>`+
+      `<pre><code>${rendered}</code></pre></div>`;
+  }
+
+  // Breadcrumb + header
+  document.title = PROJECT.title + ": Source | AI Project Portfolio";
+  document.getElementById('crumbCat').textContent = PROJECT.category;
+  document.getElementById('crumbCat').href = pref(PROJECT.categoryUrl);
+  document.getElementById('crumbProj').textContent = PROJECT.title;
+  document.getElementById('crumbProj').href = pref(PROJECT.overviewUrl);
+  if (PROJECT.cover){
+    document.getElementById('coverStrip').style.display = '';
+    const c = document.getElementById('cover'); c.src = PROJECT.cover; c.alt = PROJECT.title + " cover";
+  }
+  document.getElementById('kicker').textContent = "Source Walkthrough · " + PROJECT.category;
+  document.getElementById('title').textContent = PROJECT.title;
+  document.getElementById('subtitle').textContent = PROJECT.subtitle;
+  document.getElementById('headTech').innerHTML = (PROJECT.tech||[]).map(t => `<span class="tech-chip">${esc(t)}</span>`).join('');
+  document.getElementById('headBtns').innerHTML =
+    (PROJECT.demoUrl ? `<a class="btn" href="${pref(PROJECT.demoUrl)}" target="_blank" rel="noopener">${esc(PROJECT.demoLabel||'Live Demo')}</a>` : '') +
+    (PROJECT.overviewUrl ? `<a class="btn ghost" href="${pref(PROJECT.overviewUrl)}">Project Overview</a>` : '') +
+    (PROJECT.repoUrl ? `<a class="btn ghost" href="${pref(PROJECT.repoUrl)}" target="_blank" rel="noopener">GitHub Repo</a>` : '');
+
+  const section = (tab, inner) => `<section class="sec"><div class="sec-rule"><span class="tab">${esc(tab)}</span>${inner}</div></section>`;
+  let html = "";
+  const P = PROJECT;
+
+  if (P.about){
+    html += section("About This Code", `<h2>About This Code Showcase</h2><p class="intro">${rich(P.about)}</p>`);
+  }
+  if (P.structure && P.structure.code){
+    html += section("Project Structure", `<h2>Project Structure</h2>`+
+      codeBlock(P.structure.label || 'project/', P.structure.code, 'tree'));
+  }
+  (P.walkthrough||[]).forEach(w => {
+    let inner = `<h2>${esc(w.heading)}</h2>`;
+    if (w.body) inner += `<p class="body">${rich(w.body)}</p>`;
+    (w.files||[]).forEach(f => { inner += codeBlock(f.label, f.code); });
+    html += section("Code", inner);
+  });
+  // CTA
+  html += `<section class="sec"><div class="cta-inner">`+
+    `<div><h3>Interested in the build?</h3><p>${esc(P.cta || "Let's talk.")}</p></div>`+
+    `<div class="cta-btns">`+
+    (P.demoUrl ? `<a class="btn" href="${pref(P.demoUrl)}" target="_blank" rel="noopener">${esc(P.demoLabel||'Live Demo')}</a>` : '')+
+    `<a class="btn ghost" href="${SITE}contact.html">Get in Touch</a>`+
+    `</div></div></section>`;
+
+  document.getElementById('body').innerHTML = html;
+
+  // Copy buttons
+  function copyText(text, btn){
+    const done = ()=>{ const o=btn.textContent; btn.textContent='Copied ✓'; setTimeout(()=>btn.textContent=o.includes('Copied')?'Copy':o,1400); };
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(done).catch(()=>fb(text,done)); }
+    else fb(text,done);
+  }
+  function fb(text,done){ const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(ta); done(); }
+  document.querySelectorAll('.code-copy').forEach(btn =>
+    btn.addEventListener('click', ()=> copyText(RAW[+btn.dataset.idx], btn)));
+
+  // Masthead search
+  const ITEMS = [
+    {t:PROJECT.title, c:PROJECT.category, s:PROJECT.slug},
+    {t:"Courier CS Quality Console", c:"Conversational Data Analytics", s:"courier-cs-quality-console"},
+    {t:"Voucher Analyzer", c:"Conversational Data Analytics", s:"voucher-analyzer"},
+    {t:"Wiseman", c:"Knowledge & Reference Chatbots", s:"wiseman"},
+    {t:"Sunny Car Accessories", c:"Agentic Commerce", s:"sunny-car-accessories"},
+    {t:"Bookshelf", c:"Multi-Agent Decision Systems", s:"bookshelf"}
+  ];
+  const searchInput = document.getElementById('searchInput');
+  const searchResults = document.getElementById('searchResults');
+  function runSearch(q){
+    if(q.trim().length < 2){ searchResults.style.display='none'; return; }
+    const ql = q.toLowerCase();
+    const hits = ITEMS.filter(it => (it.t+' '+it.c).toLowerCase().includes(ql));
+    searchResults.innerHTML = hits.length ? hits.map(it =>
+      `<div class="sr-item"><div class="sr-cat">${esc(it.c)}</div>`+
+      `<a href="${SITE}${it.s}.html"><div class="sr-title">${esc(it.t)}</div></a>`+
+      `<div class="sr-links"><a href="${SITE}${it.s}.html">View Details</a></div></div>`).join('')
+      : `<div class="sr-none">No projects found. Try a different keyword.</div>`;
+    searchResults.style.display='block';
+  }
+  searchInput.addEventListener('input', e => runSearch(e.target.value));
+  document.addEventListener('click', e => { if(!e.target.closest('.search-box')) searchResults.style.display='none'; });
+
+  // Drawer
+  const drawer=document.getElementById('drawer'), overlay=document.getElementById('overlay');
+  const openMenu=()=>{ drawer.classList.add('open'); overlay.classList.add('open'); };
+  const closeMenu=()=>{ drawer.classList.remove('open'); overlay.classList.remove('open'); };
+  document.getElementById('hamburger').addEventListener('click', openMenu);
+  document.getElementById('drawerClose').addEventListener('click', closeMenu);
+  overlay.addEventListener('click', closeMenu);
+  drawer.querySelectorAll('a').forEach(a=>a.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeMenu(); searchResults.style.display='none'; }});
+</script>
 </body>
 </html>

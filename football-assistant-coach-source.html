@@ -1,237 +1,372 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Football Assistant Coach - Source Code</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #222; background-color: #ffffff; }
-        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
-        .back-nav { margin-bottom: 20px; }
-        .back-nav a { color: #007BFF; text-decoration: none; }
-        .back-nav a:hover { text-decoration: underline; }
-        .page-header { text-align: center; padding: 30px 0 20px; margin-bottom: 30px; border-bottom: 2px solid #059669; }
-        .page-header h1 { font-size: 2rem; color: #059669; }
-        .page-header p { color: #555; margin-top: 8px; }
-        .file-section { margin: 30px 0; }
-        .file-title { background: #059669; color: white; padding: 10px 16px; border-radius: 6px 6px 0 0; font-family: monospace; font-size: 1rem; font-weight: bold; }
-        .file-desc { background: #f0fdf4; border: 1px solid #bbf7d0; padding: 10px 16px; font-size: 0.9rem; color: #166534; border-bottom: none; }
-        pre { background: #1e1e1e; color: #d4d4d4; padding: 20px; overflow-x: auto; border-radius: 0 0 6px 6px; font-size: 0.85rem; line-height: 1.6; }
-        .kw { color: #569cd6; }
-        .st { color: #ce9178; }
-        .cm { color: #6a9955; }
-        .fn { color: #dcdcaa; }
-        .num { color: #b5cea8; }
-        footer { text-align: center; padding: 20px; background-color: #222; color: white; margin-top: 40px; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Football Assistant Coach: Source | AI Project Portfolio</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root{ --ink:#222; --paper:#fff; --hair:#dddddd; --gray:#555; --accent:#B8860B; --navy:#1E3A5F; --code-bg:#fbfbf8; --cmt:#6b8190; }
+  html{ scroll-behavior:smooth; }
+  body{ background:var(--paper); color:var(--ink); font-family:Arial, Helvetica, sans-serif; line-height:1.6; overflow-x:hidden; }
+  a{ color:inherit; text-decoration:none; }
+  a:hover h2, a:hover h3, a:hover h4{ color:var(--accent); }
+  p code, li code{ font-family:"Courier New", monospace; font-size:.86em; background:#f2f3f5; padding:1px 5px; color:var(--navy); }
+
+  /* Masthead (shared) */
+  .masthead{ display:flex; align-items:center; justify-content:space-between; padding:14px 28px; max-width:1240px; margin:0 auto; gap:18px; }
+  .mast-left{ display:flex; align-items:center; gap:20px; }
+  .logo{ background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; letter-spacing:3px; font-size:.95rem; padding:8px 12px; white-space:nowrap; }
+  .mast-nav{ display:flex; gap:20px; font-family:Arial, Helvetica, sans-serif; font-size:.72rem; letter-spacing:1.4px; text-transform:uppercase; }
+  .mast-nav a:hover{ color:var(--accent); }
+  .hamburger{ display:none; flex-direction:column; gap:4px; background:none; border:none; cursor:pointer; padding:6px; }
+  .hamburger span{ width:22px; height:2px; background:#222; display:block; }
+  .rule-top{ border:none; border-top:3px solid #222; max-width:1240px; margin:0 auto; }
+
+  /* Search (shared) */
+  .search-box{ position:relative; width:200px; }
+  .search-input{ width:100%; padding:7px 30px 7px 12px; border:1px solid var(--hair); background:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; color:#222; }
+  .search-input:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(184,134,11,.15); }
+  .search-ic{ position:absolute; right:10px; top:50%; transform:translateY(-50%); color:var(--gray); font-size:.8rem; pointer-events:none; }
+  .search-results{ position:absolute; top:calc(100% + 4px); left:0; width:340px; max-width:86vw; background:#fff; border:1px solid #222; max-height:60vh; overflow-y:auto; z-index:120; display:none; }
+  .sr-item{ padding:12px 14px; border-bottom:1px solid var(--hair); }
+  .sr-item:last-child{ border-bottom:none; }
+  .sr-cat{ font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; margin-bottom:4px; color:var(--accent); }
+  .sr-title{ font-weight:700; font-size:1.02rem; color:#222; }
+  .sr-links{ font-size:.58rem; letter-spacing:.8px; text-transform:uppercase; color:var(--gray); margin-top:5px; }
+  .sr-links a:hover{ color:var(--accent); }
+  .sr-none{ padding:16px 14px; font-size:.82rem; color:var(--gray); }
+
+  /* Shared bits */
+  .tab{ display:inline-block; background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.66rem; letter-spacing:2px; text-transform:uppercase; padding:6px 12px; }
+  .rubric{ font-family:Arial, Helvetica, sans-serif; font-size:.62rem; font-weight:700; letter-spacing:1.6px; text-transform:uppercase; color:var(--accent); display:block; margin-bottom:8px; }
+  .tech-chip{ display:inline-block; border:1px solid var(--hair); padding:6px 12px; font-size:.72rem; letter-spacing:.3px; color:#333; white-space:nowrap; }
+  .tech-chip:hover{ border-color:var(--accent); color:var(--accent); }
+  .btn{ display:inline-block; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.7rem; letter-spacing:1.6px; text-transform:uppercase; padding:13px 24px; border:1px solid #222; background:#222; color:#fff; cursor:pointer; transition:.15s; }
+  .btn:hover{ background:var(--accent); border-color:var(--accent); }
+  .btn.ghost{ background:#fff; color:#222; }
+  .btn.ghost:hover{ color:var(--accent); border-color:var(--accent); background:#fff; }
+
+  /* Breadcrumb */
+  .crumb{ max-width:1240px; margin:0 auto; padding:20px 28px 0; font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--gray); }
+  .crumb a:hover{ color:var(--accent); }
+  .crumb .sep{ color:var(--hair); margin:0 8px; }
+
+  /* Header (slim cover banner + copy) */
+  .src-head{ max-width:1240px; margin:0 auto; padding:14px 28px 6px; }
+  .cover-strip{ border:1px solid var(--hair); line-height:0; background:#eef1f4; }
+  .cover-strip img{ width:100%; height:190px; object-fit:cover; object-position:center 42%; display:block; }
+  .src-head h1{ font-size:2.5rem; font-weight:900; line-height:1.04; letter-spacing:-.008em; margin-top:18px; }
+  .src-head .sub{ font-style:italic; font-size:1.08rem; color:#333; margin-top:10px; max-width:72ch; }
+  .head-tech{ display:flex; flex-wrap:wrap; gap:9px; margin-top:16px; }
+  .head-btns{ display:flex; flex-wrap:wrap; gap:12px; margin-top:18px; }
+
+  /* Section shell */
+  .sec{ max-width:1240px; margin:0 auto; padding:26px 28px; }
+  .sec-rule{ border-top:3px solid #222; padding-top:16px; }
+  .sec .tab{ margin-bottom:14px; }
+  .sec h2{ font-size:1.7rem; font-weight:900; line-height:1.06; }
+  .sec .intro{ color:#333; font-size:1.02rem; margin-top:10px; max-width:80%; }
+  .sec .body{ color:#333; font-size:1rem; margin-top:10px; max-width:80%; }
+
+  /* Code block */
+  .codeblock{ border:1px solid var(--hair); margin-top:16px; }
+  .code-bar{ display:flex; align-items:center; justify-content:space-between; gap:12px; background:var(--navy); color:#fff; padding:8px 12px; }
+  .code-bar .path{ font-family:"Courier New", monospace; font-size:.74rem; letter-spacing:.2px; opacity:.96; display:flex; align-items:center; gap:7px; min-width:0; }
+  .code-bar .path span{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .code-copy{ flex:none; background:none; border:1px solid rgba(255,255,255,.4); color:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.56rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; padding:5px 11px; cursor:pointer; transition:.15s; }
+  .code-copy:hover{ background:rgba(255,255,255,.16); }
+  .codeblock pre{ margin:0; padding:14px 16px; overflow-x:auto; background:var(--code-bg); }
+  .codeblock code{ font-family:"Courier New", monospace; font-size:.82rem; line-height:1.6; color:#1b2a3a; background:none; padding:0; white-space:pre; display:block; }
+  .codeblock code .cmt{ color:var(--cmt); font-style:italic; }
+
+  .tree .code-bar .path::before{ content:"📁"; }
+
+  /* Notes */
+  .note-block{ margin-top:22px; }
+  .note-block h3{ font-size:1.15rem; font-weight:800; }
+  .blist{ list-style:none; margin-top:12px; border-top:1px solid var(--hair); }
+  .blist li{ padding:12px 0; border-bottom:1px solid var(--hair); color:#333; font-size:.95rem; }
+  .blist li b{ color:#222; }
+
+  /* CTA */
+  .cta-inner{ display:flex; align-items:center; gap:18px; flex-wrap:wrap; border-top:3px solid #222; padding-top:18px; }
+  .cta-inner h3{ font-size:1.4rem; font-weight:900; line-height:1.08; }
+  .cta-inner p{ color:var(--gray); font-size:.95rem; margin-top:4px; }
+  .cta-btns{ margin-left:auto; display:flex; gap:12px; flex-wrap:wrap; }
+
+  footer{ background:#222; max-width:1240px; margin:30px auto 0; padding:24px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; letter-spacing:.5px; color:#fff; text-align:center; }
+  .note{ max-width:1240px; margin:14px auto 0; padding:8px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.62rem; letter-spacing:1px; color:#999; }
+
+  /* Drawer (shared) */
+  .drawer{ position:fixed; top:0; left:-300px; width:280px; height:100vh; background:#fff; z-index:200; box-shadow:2px 0 14px rgba(0,0,0,.15); transition:left .28s ease; padding:74px 26px 26px; }
+  .drawer.open{ left:0; }
+  .drawer a{ display:block; font-family:Arial, Helvetica, sans-serif; font-size:.82rem; letter-spacing:1.2px; text-transform:uppercase; padding:14px 0; border-bottom:1px solid var(--hair); }
+  .overlay{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:150; }
+  .overlay.open{ display:block; }
+  .drawer-close{ position:absolute; top:20px; right:20px; font-family:Arial, Helvetica, sans-serif; font-size:1.4rem; background:none; border:none; cursor:pointer; }
+
+  @media (max-width:900px){
+    .cta-btns{ margin-left:0; }
+    .mast-nav{ display:none; }
+    .hamburger{ display:flex; }
+    .masthead{ padding:12px 16px; }
+    .mast-left{ gap:10px; min-width:0; flex:1; }
+    .logo{ font-size:.72rem; letter-spacing:1.5px; padding:6px 8px; }
+    .search-box{ flex:1; width:auto; min-width:0; }
+    .search-results{ position:fixed; top:58px; left:12px; right:12px; width:auto; max-width:none; }
+    .src-head h1{ font-size:1.95rem; }
+    .cover-strip img{ height:150px; }
+  }
+</style>
 </head>
 <body>
-<div class="container">
-    <nav class="back-nav">
-        <a href="football-assistant-coach.html">← Back to Project</a>
-    </nav>
 
-    <div class="page-header">
-        <h1>⚽ Football Assistant Coach — Source Code</h1>
-        <p>6-module Python app · Claude Haiku · Streamlit · Multi-agent player evaluation</p>
+  <div class="overlay" id="overlay"></div>
+  <nav class="drawer" id="drawer">
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">&times;</button>
+    <a href="index.html">Home</a>
+    <a href="project-categories.html">Categories</a>
+    <a href="contact.html">Contact</a>
+    <a href="https://lyven81.github.io/data-analyst-portfolio/index.html">Data Portfolio</a>
+  </nav>
+
+  <div class="masthead">
+    <div class="mast-left">
+      <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+      <a class="logo" href="index.html">AI PROJECTS</a>
+      <nav class="mast-nav">
+        <a href="project-categories.html">Categories</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <div class="search-box">
+        <input type="text" class="search-input" id="searchInput" autocomplete="off" placeholder="Search AI projects..." aria-label="Search AI projects">
+        <span class="search-ic">&#128269;</span>
+        <div class="search-results" id="searchResults"></div>
+      </div>
     </div>
+  </div>
+  <hr class="rule-top">
 
-    <div class="file-section">
-        <div class="file-title">📄 config.py</div>
-        <div class="file-desc">All constants — scoring caps, session weights, formation quotas, selection thresholds</div>
-        <pre>MODEL = <span class="st">"claude-haiku-4-5-20251001"</span>
+  <div class="crumb">
+    <a href="project-categories.html">Categories</a>
+    <span class="sep">/</span><a id="crumbCat" href="#"></a>
+    <span class="sep">/</span><a id="crumbProj" href="#"></a>
+    <span class="sep">/</span><span>Source</span>
+  </div>
 
-<span class="cm"># Scoring maximums</span>
-MAX_INDIVIDUAL = <span class="num">35</span>
-MAX_CHEMISTRY  = <span class="num">50</span>
-MAX_UNIVERSAL  = <span class="num">15</span>
-MAX_TOTAL      = <span class="num">100</span>
+  <section class="src-head">
+    <div class="cover-strip" id="coverStrip" style="display:none"><img id="cover" alt=""></div>
+    <span class="rubric" id="kicker"></span>
+    <h1 id="title"></h1>
+    <p class="sub" id="subtitle"></p>
+    <div class="head-tech" id="headTech"></div>
+    <div class="head-btns" id="headBtns"></div>
+  </section>
 
-<span class="cm"># Session weights (must sum to 1.0)</span>
-SESSION_WEIGHTS = {
-    <span class="st">"Monday"</span>:    <span class="num">0.15</span>,
-    <span class="st">"Wednesday"</span>: <span class="num">0.25</span>,
-    <span class="st">"Thursday"</span>:  <span class="num">0.25</span>,
-    <span class="st">"Friday"</span>:    <span class="num">0.35</span>,
-}
+  <div id="body"></div>
 
-<span class="cm"># Session focus: weights for (individual, chemistry, universal) scoring</span>
-SESSION_FOCUS = {
-    <span class="st">"Monday"</span>:    {<span class="st">"individual"</span>: <span class="num">0.30</span>, <span class="st">"chemistry"</span>: <span class="num">0.10</span>, <span class="st">"universal"</span>: <span class="num">0.60</span>},
-    <span class="st">"Wednesday"</span>: {<span class="st">"individual"</span>: <span class="num">0.70</span>, <span class="st">"chemistry"</span>: <span class="num">0.10</span>, <span class="st">"universal"</span>: <span class="num">0.20</span>},
-    <span class="st">"Thursday"</span>:  {<span class="st">"individual"</span>: <span class="num">0.10</span>, <span class="st">"chemistry"</span>: <span class="num">0.70</span>, <span class="st">"universal"</span>: <span class="num">0.20</span>},
-    <span class="st">"Friday"</span>:    {<span class="st">"individual"</span>: <span class="num">0.333</span>, <span class="st">"chemistry"</span>: <span class="num">0.333</span>, <span class="st">"universal"</span>: <span class="num">0.334</span>},
-}
+  <footer>&copy; 2026 Lee Yih Ven | AI Project Portfolio &middot; All rights reserved.</footer>
+  <div class="note">Sample Source-Showcase-E2 (TEMPLATE): source-code page on the index magazine system: slim cover banner, About, Project Structure, code walkthrough with copyable navy-barred code blocks, CTA. Reuse by editing only the PROJECT block at the top of the script.</div>
 
-FORMATIONS = {
-    <span class="st">"4-3-3"</span>: {<span class="st">"GK"</span>: <span class="num">1</span>, <span class="st">"DEF"</span>: <span class="num">4</span>, <span class="st">"MID"</span>: <span class="num">3</span>, <span class="st">"FWD"</span>: <span class="num">3</span>},
-    <span class="st">"4-4-2"</span>: {<span class="st">"GK"</span>: <span class="num">1</span>, <span class="st">"DEF"</span>: <span class="num">4</span>, <span class="st">"MID"</span>: <span class="num">4</span>, <span class="st">"FWD"</span>: <span class="num">2</span>},
-    <span class="st">"3-5-2"</span>: {<span class="st">"GK"</span>: <span class="num">1</span>, <span class="st">"DEF"</span>: <span class="num">3</span>, <span class="st">"MID"</span>: <span class="num">5</span>, <span class="st">"FWD"</span>: <span class="num">2</span>},
-}
+<script>
+  const SITE = "";
 
-THRESHOLD_LINEUP = <span class="num">65</span>
-THRESHOLD_BENCH  = <span class="num">50</span>
-THRESHOLD_UNUSED = <span class="num">40</span></pre>
-    </div>
-
-    <div class="file-section">
-        <div class="file-title">📄 coach.py</div>
-        <div class="file-desc">Position-specific AI coach personas — calls Claude Haiku to evaluate each player in each training session</div>
-        <pre><span class="kw">import</span> os, json, random
-<span class="kw">import</span> anthropic
-<span class="kw">from</span> config <span class="kw">import</span> MODEL, MAX_INDIVIDUAL, MAX_CHEMISTRY, MAX_UNIVERSAL, SESSION_FOCUS
-
-client = anthropic.Anthropic(api_key=os.getenv(<span class="st">"ANTHROPIC_API_KEY"</span>))
-
-POSITION_PERSONAS = {
-    <span class="st">"GK"</span>:  <span class="st">"You are a goalkeeping coach. Evaluate goalkeeper performance on shot-stopping, "</span>
-           <span class="st">"command of area, distribution, communication, and organising the defensive line."</span>,
-    <span class="st">"DEF"</span>: <span class="st">"You are a defensive coach. Evaluate defenders on positioning, tackling, "</span>
-           <span class="st">"aerial duels, pressing discipline, and how well they hold their shape."</span>,
-    <span class="st">"MID"</span>: <span class="st">"You are a midfield coach. Evaluate midfielders on passing range, pressing, "</span>
-           <span class="st">"defensive cover, attacking transitions, and combination play with teammates."</span>,
-    <span class="st">"FWD"</span>: <span class="st">"You are a forward coach. Evaluate forwards on finishing, movement, "</span>
-           <span class="st">"pressing triggers, hold-up play, and runs in behind the defensive line."</span>,
-}
-
-<span class="kw">def</span> <span class="fn">evaluate_player</span>(player, session, session_desc):
-    focus  = SESSION_FOCUS[session]
-    prompt = <span class="st">f"""Evaluate {player['name']}, a {player['position']} (age {player['age']}).
-Style: {player['style']}
-Strength: {player['strength']}
-Weakness: {player['weakness']}
-
-Session: {session} — {session_desc}
-Focus: Individual {int(focus['individual']*100)}%, Chemistry {int(focus['chemistry']*100)}%, Universal {int(focus['universal']*100)}%
-
-Scoring:
-- individual_score: 0-{MAX_INDIVIDUAL} (position-specific technical performance)
-- chemistry_score:  0-{MAX_CHEMISTRY}  (selflessness, support runs, pressing coordination)
-- universal_score:  0-{MAX_UNIVERSAL}  (fitness, attitude, discipline)
-
-Respond ONLY with valid JSON:
-{{"individual_score": int, "chemistry_score": int, "universal_score": int,
-  "highlight": "one sentence", "concern": "one sentence or No concerns today"}}"""</span>
-
-    response = client.messages.create(
-        model=MODEL, max_tokens=<span class="num">300</span>,
-        system=POSITION_PERSONAS[player[<span class="st">"position"</span>]],
-        messages=[{<span class="st">"role"</span>: <span class="st">"user"</span>, <span class="st">"content"</span>: prompt}],
-    )
-    result = json.loads(response.content[<span class="num">0</span>].text.strip())
-    result[<span class="st">"individual_score"</span>] = max(<span class="num">0</span>, min(MAX_INDIVIDUAL, int(result[<span class="st">"individual_score"</span>])))
-    result[<span class="st">"chemistry_score"</span>]  = max(<span class="num">0</span>, min(MAX_CHEMISTRY,  int(result[<span class="st">"chemistry_score"</span>])))
-    result[<span class="st">"universal_score"</span>]  = max(<span class="num">0</span>, min(MAX_UNIVERSAL,  int(result[<span class="st">"universal_score"</span>])))
-    result[<span class="st">"total_score"</span>] = (
-        result[<span class="st">"individual_score"</span>] + result[<span class="st">"chemistry_score"</span>] + result[<span class="st">"universal_score"</span>]
-    )
-    <span class="kw">return</span> result</pre>
-    </div>
-
-    <div class="file-section">
-        <div class="file-title">📄 simulation.py</div>
-        <div class="file-desc">Runs 4 training sessions for all 22 players, computes weighted weekly score and rolling form average</div>
-        <pre><span class="kw">from</span> config <span class="kw">import</span> SESSION_WEIGHTS, SESSION_DESCRIPTIONS, FORM_THIS_WEEK, FORM_LAST_WEEK
-<span class="kw">from</span> coach <span class="kw">import</span> evaluate_player
-
-SESSIONS_ORDER = [<span class="st">"Monday"</span>, <span class="st">"Wednesday"</span>, <span class="st">"Thursday"</span>, <span class="st">"Friday"</span>]
-
-<span class="kw">def</span> <span class="fn">run_week</span>(players, last_week_scores=<span class="kw">None</span>):
-    results = {}
-    <span class="kw">for</span> player <span class="kw">in</span> players:
-        pid = player[<span class="st">"id"</span>]
-        session_results = {}
-        <span class="kw">for</span> session <span class="kw">in</span> SESSIONS_ORDER:
-            session_results[session] = evaluate_player(
-                player, session, SESSION_DESCRIPTIONS[session]
-            )
-
-        <span class="cm"># Weighted weekly score</span>
-        weekly_score = sum(
-            session_results[s][<span class="st">"total_score"</span>] * SESSION_WEIGHTS[s]
-            <span class="kw">for</span> s <span class="kw">in</span> SESSIONS_ORDER
-        )
-
-        <span class="cm"># Rolling form: this week 60% + last week 40%</span>
-        <span class="kw">if</span> last_week_scores <span class="kw">and</span> pid <span class="kw">in</span> last_week_scores:
-            form_score = weekly_score * FORM_THIS_WEEK + last_week_scores[pid] * FORM_LAST_WEEK
-        <span class="kw">else</span>:
-            form_score = weekly_score
-
-        results[pid] = {
-            <span class="st">"name"</span>: player[<span class="st">"name"</span>], <span class="st">"position"</span>: player[<span class="st">"position"</span>],
-            <span class="st">"sessions"</span>: session_results,
-            <span class="st">"weekly_score"</span>: round(weekly_score, <span class="num">1</span>),
-            <span class="st">"form_score"</span>: round(form_score, <span class="num">1</span>),
-            <span class="st">"highlight"</span>: session_results[<span class="st">"Friday"</span>][<span class="st">"highlight"</span>],
-            <span class="st">"concern"</span>: session_results[<span class="st">"Friday"</span>][<span class="st">"concern"</span>],
+  /* =================================================================
+     EDIT PER PROJECT  -  the ONLY block you change per page.
+     Copy this file, swap PROJECT, save as <slug>-source.html.
+     - structure.code : the project file tree (plain text)
+     - walkthrough[]   : { heading, body, files:[{label, code}] }
+     - notes[]         : { heading, bullets:[...] }
+     Code strings can be multi-line; they render verbatim.
+     ================================================================= */
+  const PROJECT = {
+  "slug": "football-assistant-coach",
+  "category": "Industry Specialist Advisors",
+  "categoryUrl": "category-industry-advisors.html",
+  "title": "Football Assistant Coach",
+  "subtitle": "Constants, position-specific coach agents, the weekly simulation, and the formation-aware selection engine, the four modules that drive the squad selection.",
+  "cover": "images/football-assistant-coach/cover.jpeg",
+  "tech": [
+    "Python 3",
+    "Claude Haiku",
+    "Streamlit",
+    "Anthropic SDK",
+    "Multi-Agent"
+  ],
+  "overviewUrl": "football-assistant-coach.html",
+  "demoLabel": "Try Live Demo",
+  "demoUrl": "https://lyven81.github.io/ai-project/projects/football-assistant-coach/demo.html",
+  "repoUrl": "https://github.com/lyven81/ai-project/tree/main/projects/football-assistant-coach",
+  "about": "Four excerpts carry the logic: <code>config.py</code> sets every cap, weight, quota, and threshold; <code>coach.py</code> turns Claude Haiku into a position-specific coach that returns structured JSON scores; <code>simulation.py</code> runs the four weekly sessions and blends a rolling form; and <code>report.py</code> fills formation quotas, builds a bench with a guaranteed goalkeeper, and scores formation fit for the hybrid advisor. The key idea throughout: chemistry carries the heaviest cap, so the players who make the team work are the ones who get picked.",
+  "structure": {
+    "label": "projects/football-assistant-coach/",
+    "code": "projects/football-assistant-coach/\n  config.py        constants: scoring caps, session weights, formation quotas, thresholds\n  players.py       22 hardcoded player profiles with attributes\n  coach.py         PlayerAgent: position-specific Claude calls, structured JSON scores\n  simulation.py    runs 4 sessions per week, weighted weekly score + rolling form\n  report.py        formation-aware selection engine + fit scoring for the advisor\n  app.py           Streamlit UI: dark theme, squad cards, bar chart, advisor\n  requirements.txt\n  run.bat\n  README.md"
+  },
+  "walkthrough": [
+    {
+      "heading": "The Rulebook: Caps, Weights, Quotas, Thresholds",
+      "body": "Every tunable lives in one file. The scoring caps make chemistry the heaviest component (50 of 100), the session weights make the Friday scrimmage count most, the formation quotas drive the selection engine, and the thresholds decide who starts, who benches, and who is unused.",
+      "files": [
+        {
+          "label": "config.py: the single source of truth",
+          "code": "MODEL = \"claude-haiku-4-5-20251001\"\n\n# Scoring maximums\nMAX_INDIVIDUAL = 35\nMAX_CHEMISTRY  = 50\nMAX_UNIVERSAL  = 15\nMAX_TOTAL      = 100\n\n# Session weights (must sum to 1.0)\nSESSION_WEIGHTS = {\n    \"Monday\":    0.15,\n    \"Wednesday\": 0.25,\n    \"Thursday\":  0.25,\n    \"Friday\":    0.35,\n}\n\n# Session focus: weights for (individual, chemistry, universal) scoring\nSESSION_FOCUS = {\n    \"Monday\":    {\"individual\": 0.30, \"chemistry\": 0.10, \"universal\": 0.60},\n    \"Wednesday\": {\"individual\": 0.70, \"chemistry\": 0.10, \"universal\": 0.20},\n    \"Thursday\":  {\"individual\": 0.10, \"chemistry\": 0.70, \"universal\": 0.20},\n    \"Friday\":    {\"individual\": 0.333, \"chemistry\": 0.333, \"universal\": 0.334},\n}\n\nFORMATIONS = {\n    \"4-3-3\": {\"GK\": 1, \"DEF\": 4, \"MID\": 3, \"FWD\": 3},\n    \"4-4-2\": {\"GK\": 1, \"DEF\": 4, \"MID\": 4, \"FWD\": 2},\n    \"3-5-2\": {\"GK\": 1, \"DEF\": 3, \"MID\": 5, \"FWD\": 2},\n}\n\nTHRESHOLD_LINEUP = 65\nTHRESHOLD_BENCH  = 50\nTHRESHOLD_UNUSED = 40"
         }
-    <span class="kw">return</span> results</pre>
-    </div>
+      ]
+    },
+    {
+      "heading": "The Coach Agents: Position-Specific Evaluation",
+      "body": "Each player is judged by the right kind of coach. A position-specific system prompt frames Claude Haiku as a goalkeeping, defensive, midfield, or forward coach, and the user prompt feeds the player, the session, and the focus split. The model returns valid JSON, which is then clamped to the defined caps before a total is computed.",
+      "files": [
+        {
+          "label": "coach.py: persona prompt, structured JSON, clamped scores",
+          "code": "import os, json, random\nimport anthropic\nfrom config import MODEL, MAX_INDIVIDUAL, MAX_CHEMISTRY, MAX_UNIVERSAL, SESSION_FOCUS\n\nclient = anthropic.Anthropic(api_key=os.getenv(\"ANTHROPIC_API_KEY\"))\n\nPOSITION_PERSONAS = {\n    \"GK\":  \"You are a goalkeeping coach. Evaluate goalkeeper performance on shot-stopping, \"\n           \"command of area, distribution, communication, and organising the defensive line.\",\n    \"DEF\": \"You are a defensive coach. Evaluate defenders on positioning, tackling, \"\n           \"aerial duels, pressing discipline, and how well they hold their shape.\",\n    \"MID\": \"You are a midfield coach. Evaluate midfielders on passing range, pressing, \"\n           \"defensive cover, attacking transitions, and combination play with teammates.\",\n    \"FWD\": \"You are a forward coach. Evaluate forwards on finishing, movement, \"\n           \"pressing triggers, hold-up play, and runs in behind the defensive line.\",\n}\n\ndef evaluate_player(player, session, session_desc):\n    focus  = SESSION_FOCUS[session]\n    prompt = f\"\"\"Evaluate {player['name']}, a {player['position']} (age {player['age']}).\nStyle: {player['style']}\nStrength: {player['strength']}\nWeakness: {player['weakness']}\n\nSession: {session} - {session_desc}\nFocus: Individual {int(focus['individual']*100)}%, Chemistry {int(focus['chemistry']*100)}%, Universal {int(focus['universal']*100)}%\n\nScoring:\n- individual_score: 0-{MAX_INDIVIDUAL} (position-specific technical performance)\n- chemistry_score:  0-{MAX_CHEMISTRY}  (selflessness, support runs, pressing coordination)\n- universal_score:  0-{MAX_UNIVERSAL}  (fitness, attitude, discipline)\n\nRespond ONLY with valid JSON:\n{{\"individual_score\": int, \"chemistry_score\": int, \"universal_score\": int,\n  \"highlight\": \"one sentence\", \"concern\": \"one sentence or No concerns today\"}}\"\"\"\n\n    response = client.messages.create(\n        model=MODEL, max_tokens=300,\n        system=POSITION_PERSONAS[player[\"position\"]],\n        messages=[{\"role\": \"user\", \"content\": prompt}],\n    )\n    result = json.loads(response.content[0].text.strip())\n    result[\"individual_score\"] = max(0, min(MAX_INDIVIDUAL, int(result[\"individual_score\"])))\n    result[\"chemistry_score\"]  = max(0, min(MAX_CHEMISTRY,  int(result[\"chemistry_score\"])))\n    result[\"universal_score\"]  = max(0, min(MAX_UNIVERSAL,  int(result[\"universal_score\"])))\n    result[\"total_score\"] = (\n        result[\"individual_score\"] + result[\"chemistry_score\"] + result[\"universal_score\"]\n    )\n    return result"
+        }
+      ]
+    },
+    {
+      "heading": "The Weekly Simulation: Four Sessions, Rolling Form",
+      "body": "For every player, the four sessions are run in order and combined into a weighted weekly score. That score is then blended with last week (this week 60 percent, last week 40 percent) to produce the rolling form figure that selection runs on.",
+      "files": [
+        {
+          "label": "simulation.py: weighted weekly score + rolling form",
+          "code": "from config import SESSION_WEIGHTS, SESSION_DESCRIPTIONS, FORM_THIS_WEEK, FORM_LAST_WEEK\nfrom coach import evaluate_player\n\nSESSIONS_ORDER = [\"Monday\", \"Wednesday\", \"Thursday\", \"Friday\"]\n\ndef run_week(players, last_week_scores=None):\n    results = {}\n    for player in players:\n        pid = player[\"id\"]\n        session_results = {}\n        for session in SESSIONS_ORDER:\n            session_results[session] = evaluate_player(\n                player, session, SESSION_DESCRIPTIONS[session]\n            )\n\n        # Weighted weekly score\n        weekly_score = sum(\n            session_results[s][\"total_score\"] * SESSION_WEIGHTS[s]\n            for s in SESSIONS_ORDER\n        )\n\n        # Rolling form: this week 60% + last week 40%\n        if last_week_scores and pid in last_week_scores:\n            form_score = weekly_score * FORM_THIS_WEEK + last_week_scores[pid] * FORM_LAST_WEEK\n        else:\n            form_score = weekly_score\n\n        results[pid] = {\n            \"name\": player[\"name\"], \"position\": player[\"position\"],\n            \"sessions\": session_results,\n            \"weekly_score\": round(weekly_score, 1),\n            \"form_score\": round(form_score, 1),\n            \"highlight\": session_results[\"Friday\"][\"highlight\"],\n            \"concern\": session_results[\"Friday\"][\"concern\"],\n        }\n    return results"
+        }
+      ]
+    },
+    {
+      "heading": "The Selection Engine + Formation Advisor",
+      "body": "Selection is formation-aware: each position is filled up to its quota, lineup-eligible players (form at or above 65) first. The bench always reserves a goalkeeper before adding the best four outfield players. The advisor scores fit across all three formations by summing the top-N form scores per slot, so it can recommend a different shape than the coach's default.",
+      "files": [
+        {
+          "label": "report.py: formation fit + quota-aware squad selection",
+          "code": "from config import FORMATIONS, THRESHOLD_LINEUP, THRESHOLD_BENCH\n\ndef score_formation_fit(week_results, formation):\n    \"\"\"Sum of top-N form scores per position slot - higher = better natural fit.\"\"\"\n    quotas = FORMATIONS[formation]\n    by_pos = {\"GK\": [], \"DEF\": [], \"MID\": [], \"FWD\": []}\n    for d in week_results.values():\n        by_pos[d[\"position\"]].append(d[\"form_score\"])\n    for pos in by_pos:\n        by_pos[pos].sort(reverse=True)\n    return round(sum(sum(by_pos[p][:n]) for p, n in quotas.items()), 1)\n\ndef recommend_formation(week_results):\n    fit_scores = {f: score_formation_fit(week_results, f) for f in FORMATIONS}\n    best = max(fit_scores, key=fit_scores.get)\n    return best, fit_scores\n\ndef select_squad(week_results, formation, transfer_risk_ids):\n    quotas = FORMATIONS[formation]\n    by_pos = {pos: [] for pos in quotas}\n    for pid, d in week_results.items():\n        by_pos[d[\"position\"]].append({**d, \"id\": pid})\n    for pos in by_pos:\n        by_pos[pos].sort(key=lambda x: x[\"form_score\"], reverse=True)\n\n    lineup, remaining = [], {pos: [] for pos in quotas}\n    for pos, count in quotas.items():\n        eligible = [p for p in by_pos[pos] if p[\"form_score\"] >= THRESHOLD_LINEUP]\n        selected = (eligible + [p for p in by_pos[pos] if p not in eligible])[:count]\n        lineup.extend(selected)\n        remaining[pos] = [p for p in by_pos[pos] if p not in selected]\n\n    # Bench: 1 GK + best 4 outfield\n    bench = []\n    if remaining[\"GK\"]:\n        bench.append(remaining[\"GK\"].pop(0))\n    outfield = sorted(\n        [p for pos in [\"DEF\",\"MID\",\"FWD\"] for p in remaining[pos]],\n        key=lambda x: x[\"form_score\"], reverse=True\n    )\n    bench.extend(outfield[:5 - len(bench)])\n\n    used_ids  = {p[\"id\"] for p in lineup + bench}\n    all_ids   = set(week_results.keys())\n    unused_ids = all_ids - used_ids\n    unused = sorted(\n        [{**week_results[pid], \"id\": pid} for pid in unused_ids],\n        key=lambda x: x[\"form_score\"], reverse=True\n    )\n    transfer_shortlist = [p for p in unused if p[\"id\"] in transfer_risk_ids]\n    return {\"formation\": formation, \"quotas\": quotas,\n            \"lineup\": lineup, \"bench\": bench,\n            \"unused\": unused, \"transfer_shortlist\": transfer_shortlist}"
+        }
+      ]
+    }
+  ],
+  "notes": [
+    {
+      "heading": "Why This Design",
+      "bullets": [
+        "<b>Chemistry-first by construction:</b> the 50-point chemistry cap in <code>config.py</code> makes team play the largest lever, so selflessness and shape outscore lone brilliance.",
+        "<b>Right coach for the role:</b> position-specific personas in <code>coach.py</code> mean a goalkeeper and a forward are judged on the criteria that actually matter for each.",
+        "<b>Smoothed form:</b> blending this week with last week dampens one-off bad sessions, so selection follows a trend, not a single day.",
+        "<b>Formation as advice, not dogma:</b> <code>report.py</code> scores fit across all three shapes and can recommend an alternative to the coach's chosen formation.",
+        "<b>Self-contained:</b> the squad and constants ship with the app, so it runs on Streamlit with only an Anthropic API key and no external dataset."
+      ]
+    }
+  ],
+  "cta": "Want an AI advisor that scores your own roster or pipeline like this built for you? Let's scope it."
+};
+  /* ===================== END EDIT BLOCK ===================== */
 
-    <div class="file-section">
-        <div class="file-title">📄 report.py</div>
-        <div class="file-desc">Formation-aware selection engine + hybrid formation advisor that scores fit across all formations</div>
-        <pre><span class="kw">from</span> config <span class="kw">import</span> FORMATIONS, THRESHOLD_LINEUP, THRESHOLD_BENCH
+  const pref = (u) => /^https?:|^mailto:|^tel:/.test(u || '') ? u : (SITE + (u || ''));
+  const esc = (s) => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const rich = (s) => esc(s).replace(/&lt;(\/?(?:b|code))&gt;/g, '<$1>');
 
-<span class="kw">def</span> <span class="fn">score_formation_fit</span>(week_results, formation):
-    <span class="st">"""Sum of top-N form scores per position slot — higher = better natural fit."""</span>
-    quotas = FORMATIONS[formation]
-    by_pos = {<span class="st">"GK"</span>: [], <span class="st">"DEF"</span>: [], <span class="st">"MID"</span>: [], <span class="st">"FWD"</span>: []}
-    <span class="kw">for</span> d <span class="kw">in</span> week_results.values():
-        by_pos[d[<span class="st">"position"</span>]].append(d[<span class="st">"form_score"</span>])
-    <span class="kw">for</span> pos <span class="kw">in</span> by_pos:
-        by_pos[pos].sort(reverse=<span class="kw">True</span>)
-    <span class="kw">return</span> round(sum(sum(by_pos[p][:n]) <span class="kw">for</span> p, n <span class="kw">in</span> quotas.items()), <span class="num">1</span>)
+  // raw code store for copy buttons
+  const RAW = [];
+  function codeBlock(label, codeStr, extraClass){
+    const idx = RAW.push(codeStr) - 1;
+    const rendered = esc(codeStr).split('\n')
+      .map(line => /^\s*#/.test(line) ? `<span class="cmt">${line}</span>` : line).join('\n');
+    return `<div class="codeblock ${extraClass||''}">`+
+      `<div class="code-bar"><span class="path"><span>${esc(label)}</span></span>`+
+      `<button class="code-copy" data-idx="${idx}">Copy</button></div>`+
+      `<pre><code>${rendered}</code></pre></div>`;
+  }
 
-<span class="kw">def</span> <span class="fn">recommend_formation</span>(week_results):
-    fit_scores = {f: score_formation_fit(week_results, f) <span class="kw">for</span> f <span class="kw">in</span> FORMATIONS}
-    best = max(fit_scores, key=fit_scores.get)
-    <span class="kw">return</span> best, fit_scores
+  // Breadcrumb + header
+  document.title = PROJECT.title + ": Source | AI Project Portfolio";
+  document.getElementById('crumbCat').textContent = PROJECT.category;
+  document.getElementById('crumbCat').href = pref(PROJECT.categoryUrl);
+  document.getElementById('crumbProj').textContent = PROJECT.title;
+  document.getElementById('crumbProj').href = pref(PROJECT.overviewUrl);
+  if (PROJECT.cover){
+    document.getElementById('coverStrip').style.display = '';
+    const c = document.getElementById('cover'); c.src = PROJECT.cover; c.alt = PROJECT.title + " cover";
+  }
+  document.getElementById('kicker').textContent = "Source Walkthrough · " + PROJECT.category;
+  document.getElementById('title').textContent = PROJECT.title;
+  document.getElementById('subtitle').textContent = PROJECT.subtitle;
+  document.getElementById('headTech').innerHTML = (PROJECT.tech||[]).map(t => `<span class="tech-chip">${esc(t)}</span>`).join('');
+  document.getElementById('headBtns').innerHTML =
+    (PROJECT.demoUrl ? `<a class="btn" href="${pref(PROJECT.demoUrl)}" target="_blank" rel="noopener">${esc(PROJECT.demoLabel||'Live Demo')}</a>` : '') +
+    (PROJECT.overviewUrl ? `<a class="btn ghost" href="${pref(PROJECT.overviewUrl)}">Project Overview</a>` : '') +
+    (PROJECT.repoUrl ? `<a class="btn ghost" href="${pref(PROJECT.repoUrl)}" target="_blank" rel="noopener">GitHub Repo</a>` : '');
 
-<span class="kw">def</span> <span class="fn">select_squad</span>(week_results, formation, transfer_risk_ids):
-    quotas = FORMATIONS[formation]
-    by_pos = {pos: [] <span class="kw">for</span> pos <span class="kw">in</span> quotas}
-    <span class="kw">for</span> pid, d <span class="kw">in</span> week_results.items():
-        by_pos[d[<span class="st">"position"</span>]].append({**d, <span class="st">"id"</span>: pid})
-    <span class="kw">for</span> pos <span class="kw">in</span> by_pos:
-        by_pos[pos].sort(key=<span class="kw">lambda</span> x: x[<span class="st">"form_score"</span>], reverse=<span class="kw">True</span>)
+  const section = (tab, inner) => `<section class="sec"><div class="sec-rule"><span class="tab">${esc(tab)}</span>${inner}</div></section>`;
+  let html = "";
+  const P = PROJECT;
 
-    lineup, remaining = [], {pos: [] <span class="kw">for</span> pos <span class="kw">in</span> quotas}
-    <span class="kw">for</span> pos, count <span class="kw">in</span> quotas.items():
-        eligible = [p <span class="kw">for</span> p <span class="kw">in</span> by_pos[pos] <span class="kw">if</span> p[<span class="st">"form_score"</span>] >= THRESHOLD_LINEUP]
-        selected = (eligible + [p <span class="kw">for</span> p <span class="kw">in</span> by_pos[pos] <span class="kw">if</span> p <span class="kw">not in</span> eligible])[:count]
-        lineup.extend(selected)
-        remaining[pos] = [p <span class="kw">for</span> p <span class="kw">in</span> by_pos[pos] <span class="kw">if</span> p <span class="kw">not in</span> selected]
+  if (P.about){
+    html += section("About This Code", `<h2>About This Code Showcase</h2><p class="intro">${rich(P.about)}</p>`);
+  }
+  if (P.structure && P.structure.code){
+    html += section("Project Structure", `<h2>Project Structure</h2>`+
+      codeBlock(P.structure.label || 'project/', P.structure.code, 'tree'));
+  }
+  (P.walkthrough||[]).forEach(w => {
+    let inner = `<h2>${esc(w.heading)}</h2>`;
+    if (w.body) inner += `<p class="body">${rich(w.body)}</p>`;
+    (w.files||[]).forEach(f => { inner += codeBlock(f.label, f.code); });
+    html += section("Code", inner);
+  });
+  // CTA
+  html += `<section class="sec"><div class="cta-inner">`+
+    `<div><h3>Interested in the build?</h3><p>${esc(P.cta || "Let's talk.")}</p></div>`+
+    `<div class="cta-btns">`+
+    (P.demoUrl ? `<a class="btn" href="${pref(P.demoUrl)}" target="_blank" rel="noopener">${esc(P.demoLabel||'Live Demo')}</a>` : '')+
+    `<a class="btn ghost" href="${SITE}contact.html">Get in Touch</a>`+
+    `</div></div></section>`;
 
-    <span class="cm"># Bench: 1 GK + best 4 outfield</span>
-    bench = []
-    <span class="kw">if</span> remaining[<span class="st">"GK"</span>]:
-        bench.append(remaining[<span class="st">"GK"</span>].pop(<span class="num">0</span>))
-    outfield = sorted(
-        [p <span class="kw">for</span> pos <span class="kw">in</span> [<span class="st">"DEF"</span>,<span class="st">"MID"</span>,<span class="st">"FWD"</span>] <span class="kw">for</span> p <span class="kw">in</span> remaining[pos]],
-        key=<span class="kw">lambda</span> x: x[<span class="st">"form_score"</span>], reverse=<span class="kw">True</span>
-    )
-    bench.extend(outfield[:<span class="num">5</span> - len(bench)])
+  document.getElementById('body').innerHTML = html;
 
-    used_ids  = {p[<span class="st">"id"</span>] <span class="kw">for</span> p <span class="kw">in</span> lineup + bench}
-    all_ids   = set(week_results.keys())
-    unused_ids = all_ids - used_ids
-    unused = sorted(
-        [{**week_results[pid], <span class="st">"id"</span>: pid} <span class="kw">for</span> pid <span class="kw">in</span> unused_ids],
-        key=<span class="kw">lambda</span> x: x[<span class="st">"form_score"</span>], reverse=<span class="kw">True</span>
-    )
-    transfer_shortlist = [p <span class="kw">for</span> p <span class="kw">in</span> unused <span class="kw">if</span> p[<span class="st">"id"</span>] <span class="kw">in</span> transfer_risk_ids]
-    <span class="kw">return</span> {<span class="st">"formation"</span>: formation, <span class="st">"quotas"</span>: quotas,
-            <span class="st">"lineup"</span>: lineup, <span class="st">"bench"</span>: bench,
-            <span class="st">"unused"</span>: unused, <span class="st">"transfer_shortlist"</span>: transfer_shortlist}</pre>
-    </div>
+  // Copy buttons
+  function copyText(text, btn){
+    const done = ()=>{ const o=btn.textContent; btn.textContent='Copied ✓'; setTimeout(()=>btn.textContent=o.includes('Copied')?'Copy':o,1400); };
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(done).catch(()=>fb(text,done)); }
+    else fb(text,done);
+  }
+  function fb(text,done){ const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(ta); done(); }
+  document.querySelectorAll('.code-copy').forEach(btn =>
+    btn.addEventListener('click', ()=> copyText(RAW[+btn.dataset.idx], btn)));
 
-</div>
+  // Masthead search
+  const ITEMS = [
+    {t:PROJECT.title, c:PROJECT.category, s:PROJECT.slug},
+    {t:"Courier CS Quality Console", c:"Conversational Data Analytics", s:"courier-cs-quality-console"},
+    {t:"Voucher Analyzer", c:"Conversational Data Analytics", s:"voucher-analyzer"},
+    {t:"Wiseman", c:"Knowledge & Reference Chatbots", s:"wiseman"},
+    {t:"Sunny Car Accessories", c:"Agentic Commerce", s:"sunny-car-accessories"},
+    {t:"Bookshelf", c:"Multi-Agent Decision Systems", s:"bookshelf"}
+  ];
+  const searchInput = document.getElementById('searchInput');
+  const searchResults = document.getElementById('searchResults');
+  function runSearch(q){
+    if(q.trim().length < 2){ searchResults.style.display='none'; return; }
+    const ql = q.toLowerCase();
+    const hits = ITEMS.filter(it => (it.t+' '+it.c).toLowerCase().includes(ql));
+    searchResults.innerHTML = hits.length ? hits.map(it =>
+      `<div class="sr-item"><div class="sr-cat">${esc(it.c)}</div>`+
+      `<a href="${SITE}${it.s}.html"><div class="sr-title">${esc(it.t)}</div></a>`+
+      `<div class="sr-links"><a href="${SITE}${it.s}.html">View Details</a></div></div>`).join('')
+      : `<div class="sr-none">No projects found. Try a different keyword.</div>`;
+    searchResults.style.display='block';
+  }
+  searchInput.addEventListener('input', e => runSearch(e.target.value));
+  document.addEventListener('click', e => { if(!e.target.closest('.search-box')) searchResults.style.display='none'; });
 
-<footer>
-    <p>&copy; 2026 Lee Yih Ven | AI Project Portfolio</p>
-</footer>
+  // Drawer
+  const drawer=document.getElementById('drawer'), overlay=document.getElementById('overlay');
+  const openMenu=()=>{ drawer.classList.add('open'); overlay.classList.add('open'); };
+  const closeMenu=()=>{ drawer.classList.remove('open'); overlay.classList.remove('open'); };
+  document.getElementById('hamburger').addEventListener('click', openMenu);
+  document.getElementById('drawerClose').addEventListener('click', closeMenu);
+  overlay.addEventListener('click', closeMenu);
+  drawer.querySelectorAll('a').forEach(a=>a.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeMenu(); searchResults.style.display='none'; }});
+</script>
 </body>
 </html>

@@ -1,422 +1,364 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Banana Lab - Source Code</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Banana Lab: Source | AI Project Portfolio</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root{ --ink:#222; --paper:#fff; --hair:#dddddd; --gray:#555; --accent:#B8860B; --navy:#1E3A5F; --code-bg:#fbfbf8; --cmt:#6b8190; }
+  html{ scroll-behavior:smooth; }
+  body{ background:var(--paper); color:var(--ink); font-family:Arial, Helvetica, sans-serif; line-height:1.6; overflow-x:hidden; }
+  a{ color:inherit; text-decoration:none; }
+  a:hover h2, a:hover h3, a:hover h4{ color:var(--accent); }
+  p code, li code{ font-family:"Courier New", monospace; font-size:.86em; background:#f2f3f5; padding:1px 5px; color:var(--navy); }
 
-        body {
-            font-family: 'Arial', sans-serif;
-            line-height: 1.6;
-            color: #222;
-            background-color: #ffffff;
-        }
+  /* Masthead (shared) */
+  .masthead{ display:flex; align-items:center; justify-content:space-between; padding:14px 28px; max-width:1240px; margin:0 auto; gap:18px; }
+  .mast-left{ display:flex; align-items:center; gap:20px; }
+  .logo{ background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; letter-spacing:3px; font-size:.95rem; padding:8px 12px; white-space:nowrap; }
+  .mast-nav{ display:flex; gap:20px; font-family:Arial, Helvetica, sans-serif; font-size:.72rem; letter-spacing:1.4px; text-transform:uppercase; }
+  .mast-nav a:hover{ color:var(--accent); }
+  .hamburger{ display:none; flex-direction:column; gap:4px; background:none; border:none; cursor:pointer; padding:6px; }
+  .hamburger span{ width:22px; height:2px; background:#222; display:block; }
+  .rule-top{ border:none; border-top:3px solid #222; max-width:1240px; margin:0 auto; }
 
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+  /* Search (shared) */
+  .search-box{ position:relative; width:200px; }
+  .search-input{ width:100%; padding:7px 30px 7px 12px; border:1px solid var(--hair); background:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; color:#222; }
+  .search-input:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(184,134,11,.15); }
+  .search-ic{ position:absolute; right:10px; top:50%; transform:translateY(-50%); color:var(--gray); font-size:.8rem; pointer-events:none; }
+  .search-results{ position:absolute; top:calc(100% + 4px); left:0; width:340px; max-width:86vw; background:#fff; border:1px solid #222; max-height:60vh; overflow-y:auto; z-index:120; display:none; }
+  .sr-item{ padding:12px 14px; border-bottom:1px solid var(--hair); }
+  .sr-item:last-child{ border-bottom:none; }
+  .sr-cat{ font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; margin-bottom:4px; color:var(--accent); }
+  .sr-title{ font-weight:700; font-size:1.02rem; color:#222; }
+  .sr-links{ font-size:.58rem; letter-spacing:.8px; text-transform:uppercase; color:var(--gray); margin-top:5px; }
+  .sr-links a:hover{ color:var(--accent); }
+  .sr-none{ padding:16px 14px; font-size:.82rem; color:var(--gray); }
 
-        .back-nav {
-            margin-bottom: 20px;
-        }
+  /* Shared bits */
+  .tab{ display:inline-block; background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.66rem; letter-spacing:2px; text-transform:uppercase; padding:6px 12px; }
+  .rubric{ font-family:Arial, Helvetica, sans-serif; font-size:.62rem; font-weight:700; letter-spacing:1.6px; text-transform:uppercase; color:var(--accent); display:block; margin-bottom:8px; }
+  .tech-chip{ display:inline-block; border:1px solid var(--hair); padding:6px 12px; font-size:.72rem; letter-spacing:.3px; color:#333; white-space:nowrap; }
+  .tech-chip:hover{ border-color:var(--accent); color:var(--accent); }
+  .btn{ display:inline-block; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.7rem; letter-spacing:1.6px; text-transform:uppercase; padding:13px 24px; border:1px solid #222; background:#222; color:#fff; cursor:pointer; transition:.15s; }
+  .btn:hover{ background:var(--accent); border-color:var(--accent); }
+  .btn.ghost{ background:#fff; color:#222; }
+  .btn.ghost:hover{ color:var(--accent); border-color:var(--accent); background:#fff; }
 
-        .back-nav a {
-            color: #007BFF;
-            text-decoration: none;
-            font-size: 1rem;
-        }
+  /* Breadcrumb */
+  .crumb{ max-width:1240px; margin:0 auto; padding:20px 28px 0; font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--gray); }
+  .crumb a:hover{ color:var(--accent); }
+  .crumb .sep{ color:var(--hair); margin:0 8px; }
 
-        .back-nav a:hover {
-            text-decoration: underline;
-        }
+  /* Header (slim cover banner + copy) */
+  .src-head{ max-width:1240px; margin:0 auto; padding:14px 28px 6px; }
+  .cover-strip{ border:1px solid var(--hair); line-height:0; background:#eef1f4; }
+  .cover-strip img{ width:100%; height:190px; object-fit:cover; object-position:center 42%; display:block; }
+  .src-head h1{ font-size:2.5rem; font-weight:900; line-height:1.04; letter-spacing:-.008em; margin-top:18px; }
+  .src-head .sub{ font-style:italic; font-size:1.08rem; color:#333; margin-top:10px; max-width:72ch; }
+  .head-tech{ display:flex; flex-wrap:wrap; gap:9px; margin-top:16px; }
+  .head-btns{ display:flex; flex-wrap:wrap; gap:12px; margin-top:18px; }
 
-        .project-header {
-            text-align: center;
-            margin-bottom: 40px;
-            padding: 40px 0;
-            background: linear-gradient(135deg, #4CAF50, #388E3C);
-            color: white;
-            border-radius: 10px;
-        }
+  /* Section shell */
+  .sec{ max-width:1240px; margin:0 auto; padding:26px 28px; }
+  .sec-rule{ border-top:3px solid #222; padding-top:16px; }
+  .sec .tab{ margin-bottom:14px; }
+  .sec h2{ font-size:1.7rem; font-weight:900; line-height:1.06; }
+  .sec .intro{ color:#333; font-size:1.02rem; margin-top:10px; max-width:80%; }
+  .sec .body{ color:#333; font-size:1rem; margin-top:10px; max-width:80%; }
 
-        .project-header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
+  /* Code block */
+  .codeblock{ border:1px solid var(--hair); margin-top:16px; }
+  .code-bar{ display:flex; align-items:center; justify-content:space-between; gap:12px; background:var(--navy); color:#fff; padding:8px 12px; }
+  .code-bar .path{ font-family:"Courier New", monospace; font-size:.74rem; letter-spacing:.2px; opacity:.96; display:flex; align-items:center; gap:7px; min-width:0; }
+  .code-bar .path span{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .code-copy{ flex:none; background:none; border:1px solid rgba(255,255,255,.4); color:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.56rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; padding:5px 11px; cursor:pointer; transition:.15s; }
+  .code-copy:hover{ background:rgba(255,255,255,.16); }
+  .codeblock pre{ margin:0; padding:14px 16px; overflow-x:auto; background:var(--code-bg); }
+  .codeblock code{ font-family:"Courier New", monospace; font-size:.82rem; line-height:1.6; color:#1b2a3a; background:none; padding:0; white-space:pre; display:block; }
+  .codeblock code .cmt{ color:var(--cmt); font-style:italic; }
 
-        .project-header p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
+  .tree .code-bar .path::before{ content:"📁"; }
 
-        .badges {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin: 20px 0;
-            flex-wrap: wrap;
-        }
+  /* Notes */
+  .note-block{ margin-top:22px; }
+  .note-block h3{ font-size:1.15rem; font-weight:800; }
+  .blist{ list-style:none; margin-top:12px; border-top:1px solid var(--hair); }
+  .blist li{ padding:12px 0; border-bottom:1px solid var(--hair); color:#333; font-size:.95rem; }
+  .blist li b{ color:#222; }
 
-        .badge {
-            background-color: rgba(255, 255, 255, 0.2);
-            color: white;
-            padding: 5px 12px;
-            border-radius: 15px;
-            font-size: 0.9rem;
-        }
+  /* CTA */
+  .cta-inner{ display:flex; align-items:center; gap:18px; flex-wrap:wrap; border-top:3px solid #222; padding-top:18px; }
+  .cta-inner h3{ font-size:1.4rem; font-weight:900; line-height:1.08; }
+  .cta-inner p{ color:var(--gray); font-size:.95rem; margin-top:4px; }
+  .cta-btns{ margin-left:auto; display:flex; gap:12px; flex-wrap:wrap; }
 
-        .content-section {
-            margin: 40px 0;
-            padding: 30px;
-            background-color: #f9f9f9;
-            border-radius: 8px;
-            border-left: 5px solid #4CAF50;
-        }
+  footer{ background:#222; max-width:1240px; margin:30px auto 0; padding:24px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; letter-spacing:.5px; color:#fff; text-align:center; }
+  .note{ max-width:1240px; margin:14px auto 0; padding:8px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.62rem; letter-spacing:1px; color:#999; }
 
-        .content-section h2 {
-            color: #4CAF50;
-            margin-bottom: 20px;
-            font-size: 1.8rem;
-        }
+  /* Drawer (shared) */
+  .drawer{ position:fixed; top:0; left:-300px; width:280px; height:100vh; background:#fff; z-index:200; box-shadow:2px 0 14px rgba(0,0,0,.15); transition:left .28s ease; padding:74px 26px 26px; }
+  .drawer.open{ left:0; }
+  .drawer a{ display:block; font-family:Arial, Helvetica, sans-serif; font-size:.82rem; letter-spacing:1.2px; text-transform:uppercase; padding:14px 0; border-bottom:1px solid var(--hair); }
+  .overlay{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:150; }
+  .overlay.open{ display:block; }
+  .drawer-close{ position:absolute; top:20px; right:20px; font-family:Arial, Helvetica, sans-serif; font-size:1.4rem; background:none; border:none; cursor:pointer; }
 
-        .content-section h3 {
-            color: #333;
-            margin: 20px 0 10px 0;
-            font-size: 1.3rem;
-        }
-
-        .highlight-box {
-            background: linear-gradient(135deg, #f1f8e9, #dcedc8);
-            padding: 20px;
-            border-radius: 10px;
-            border-left: 5px solid #4CAF50;
-            margin: 20px 0;
-        }
-
-        .code-container {
-            background-color: #1e1e1e;
-            border-radius: 8px;
-            padding: 20px;
-            margin: 20px 0;
-            overflow-x: auto;
-        }
-
-        .code-header {
-            color: #4ade80;
-            font-weight: bold;
-            margin-bottom: 15px;
-            font-size: 1.1rem;
-            border-bottom: 1px solid #333;
-            padding-bottom: 10px;
-        }
-
-        .code-block {
-            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-            font-size: 14px;
-            line-height: 1.5;
-            color: #d4d4d4;
-            white-space: pre;
-        }
-
-        .code-comment { color: #6a9955; font-style: italic; }
-        .code-keyword { color: #569cd6; }
-        .code-string  { color: #ce9178; }
-        .code-function { color: #dcdcaa; }
-        .code-number  { color: #b5cea8; }
-
-        .demo-links {
-            text-align: center;
-            margin: 30px 0;
-        }
-
-        .demo-btn {
-            display: inline-block;
-            background-color: #007BFF;
-            color: white;
-            padding: 12px 25px;
-            text-decoration: none;
-            border-radius: 5px;
-            margin: 0 10px;
-            font-weight: bold;
-            transition: background-color 0.3s;
-        }
-
-        .demo-btn:hover { background-color: #0056b3; }
-
-        .demo-btn.secondary { background-color: #4CAF50; }
-        .demo-btn.secondary:hover { background-color: #388E3C; }
-
-        @media (max-width: 768px) {
-            .project-header h1 { font-size: 2rem; }
-            .project-header p  { font-size: 1rem; }
-            .demo-btn { margin: 5px; padding: 10px 20px; }
-            .container { padding: 15px; }
-        }
-    </style>
+  @media (max-width:900px){
+    .cta-btns{ margin-left:0; }
+    .mast-nav{ display:none; }
+    .hamburger{ display:flex; }
+    .masthead{ padding:12px 16px; }
+    .mast-left{ gap:10px; min-width:0; flex:1; }
+    .logo{ font-size:.72rem; letter-spacing:1.5px; padding:6px 8px; }
+    .search-box{ flex:1; width:auto; min-width:0; }
+    .search-results{ position:fixed; top:58px; left:12px; right:12px; width:auto; max-width:none; }
+    .src-head h1{ font-size:1.95rem; }
+    .cover-strip img{ height:150px; }
+  }
+</style>
 </head>
 <body>
-    <div class="container">
-        <nav class="back-nav">
-            <a href="banana-lab.html">← Back to Project Overview</a>
-        </nav>
 
-        <div class="project-header">
-            <h1>🍌 Banana Lab</h1>
-            <p>Core Source Code — Multi-Agent Automation System</p>
+  <div class="overlay" id="overlay"></div>
+  <nav class="drawer" id="drawer">
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">&times;</button>
+    <a href="index.html">Home</a>
+    <a href="project-categories.html">Categories</a>
+    <a href="contact.html">Contact</a>
+    <a href="https://lyven81.github.io/data-analyst-portfolio/index.html">Data Portfolio</a>
+  </nav>
 
-            <div class="badges">
-                <span class="badge">Claude API</span>
-                <span class="badge">Python 3</span>
-                <span class="badge">BuilderAgent</span>
-                <span class="badge">SiteAgent</span>
-                <span class="badge">ReporterAgent</span>
-            </div>
-        </div>
-
-        <div class="highlight-box">
-            <h3>About This Code Showcase</h3>
-            <p><strong>This showcase highlights the core logic of Banana Lab's 3-agent automation pipeline — how Claude is called to research and write 50-prompt packs, how the site is rebuilt automatically, and how the weekly report is compiled from local state.</strong></p>
-            <p>API credentials and Gmail passwords are stored in config.json (not shown). The state file (state.json) is the only database — no SQL server required.</p>
-        </div>
-
-        <div class="content-section">
-            <h2>Project File Structure</h2>
-            <div class="code-container">
-                <div class="code-header">📁 Banana Lab/</div>
-                <div class="code-block">Banana Lab/
-├── main.py                  ← Scheduler + CLI entry point
-├── config.json              ← API keys (not committed)
-├── state.json               ← Live data: products, sales (auto-managed)
-├── requirements.txt         ← anthropic, schedule, requests
-│
-├── agents/
-│   ├── builder_agent.py     ← Monday: research niche + generate 50 prompts
-│   ├── site_agent.py        ← Monday: generate product page + rebuild homepage
-│   └── reporter_agent.py   ← Sunday: email weekly P&amp;L report
-│
-├── utils/
-│   ├── state_manager.py     ← CRUD wrapper for state.json
-│   └── email_sender.py      ← Gmail SMTP delivery
-│
-├── products/                ← Generated each Monday (auto-populated)
-│   ├── {slug}.md            ← Prompt pack (owner converts to PDF)
-│   └── {slug}-listing.txt  ← Ready-to-paste Gumroad listing copy
-│
-└── website/                 ← Banana Lab showroom (auto-rebuilt)
-    ├── index.html           ← Homepage product grid
-    ├── about.html           ← About page
-    ├── style.css            ← Banana yellow + black theme
-    └── products/            ← Individual product landing pages</div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>Builder Agent — Niche Research &amp; Prompt Generation</h2>
-            <p>The core of Banana Lab: three Claude API calls per product cycle. First, pick a unique niche. Second, plan five categories. Third, generate 50 prompts in two batches to stay within token limits.</p>
-
-            <div class="code-container">
-                <div class="code-header">📄 agents/builder_agent.py — _research_idea()</div>
-                <div class="code-block"><span class="code-keyword">def</span> <span class="code-function">_research_idea</span>(self, state):
-    existing = [p[<span class="code-string">"title"</span>] <span class="code-keyword">for</span> p <span class="code-keyword">in</span> state.get(<span class="code-string">"products"</span>, [])]
-
-    prompt = f<span class="code-string">"""You are the product researcher for Banana Lab.
-
-Existing products (do not duplicate):
-{json.dumps(existing, indent=2) if existing else "None yet"}
-
-Pick ONE high-demand prompt pack idea for small business owners.
-Return ONLY valid JSON, no markdown fences:
-{{
-  "title": "e.g. 50 ChatGPT Prompts for Restaurant Owners",
-  "slug": "url-friendly-slug-here",
-  "description": "2-3 sentence listing description that sells the pack",
-  "niche": "target niche label",
-  "price": 9.00,
-  "tags": ["tag1", "tag2", "tag3", "tag4", "tag5"],
-  "what_inside": ["bullet 1", "bullet 2", "bullet 3", "bullet 4"]
-}}"""</span>
-
-    msg = self.client.messages.create(
-        model=<span class="code-string">"claude-sonnet-4-6"</span>,
-        max_tokens=<span class="code-number">512</span>,
-        messages=[{<span class="code-string">"role"</span>: <span class="code-string">"user"</span>, <span class="code-string">"content"</span>: prompt}]
-    )
-    raw = msg.content[<span class="code-number">0</span>].text.strip()
-    <span class="code-comment"># Strip accidental markdown fences from Claude's response</span>
-    <span class="code-keyword">if</span> raw.startswith(<span class="code-string">"```"</span>):
-        raw = raw.split(<span class="code-string">"```"</span>)[<span class="code-number">1</span>]
-        <span class="code-keyword">if</span> raw.startswith(<span class="code-string">"json"</span>):
-            raw = raw[<span class="code-number">4</span>:]
-    <span class="code-keyword">return</span> json.loads(raw.strip())</div>
-            </div>
-
-            <div class="code-container">
-                <div class="code-header">📄 agents/builder_agent.py — _generate_prompts() (batched)</div>
-                <div class="code-block"><span class="code-keyword">def</span> <span class="code-function">_generate_prompts</span>(self, idea):
-    <span class="code-string">"""Generate 50 prompts in two batches of 25 to avoid output token limits."""</span>
-
-    <span class="code-comment"># Call 2: determine the 5 categories for this niche</span>
-    cat_msg = self.client.messages.create(
-        model=<span class="code-string">"claude-sonnet-4-6"</span>,
-        max_tokens=<span class="code-number">256</span>,
-        messages=[{<span class="code-string">"role"</span>: <span class="code-string">"user"</span>, <span class="code-string">"content"</span>:
-            f<span class="code-string">"List exactly 5 category names for a ChatGPT prompt pack targeting "</span>
-            f<span class="code-string">"{idea['niche']} owners. Return ONLY a JSON array of 5 strings, no markdown."</span>
-        }]
-    )
-    categories = json.loads(cat_msg.content[<span class="code-number">0</span>].text.strip())
-
-    <span class="code-keyword">def</span> <span class="code-function">_batch</span>(cats, start_number):
-        <span class="code-comment"># Calls 3a and 3b: generate prompts for the given categories</span>
-        batch_cats = <span class="code-string">"\n"</span>.join(f<span class="code-string">"- {c} (10 prompts)"</span> <span class="code-keyword">for</span> c <span class="code-keyword">in</span> cats)
-        p = f<span class="code-string">"""Create ChatGPT prompts for: {idea['title']}
-Write 10 prompts for EACH of these categories:
-{batch_cats}
-
-Rules: niche-specific, use [PLACEHOLDERS IN CAPS], number from {start_number}.
-Return ONLY a valid JSON array: [{{"number": N, "category": "...", "prompt": "..."}}]"""</span>
-
-        msg = self.client.messages.create(
-            model=<span class="code-string">"claude-sonnet-4-6"</span>,
-            max_tokens=<span class="code-number">8000</span>,
-            messages=[{<span class="code-string">"role"</span>: <span class="code-string">"user"</span>, <span class="code-string">"content"</span>: p}]
-        )
-        raw = msg.content[<span class="code-number">0</span>].text.strip()
-        <span class="code-keyword">if</span> raw.startswith(<span class="code-string">"```"</span>):
-            raw = raw.split(<span class="code-string">"```"</span>)[<span class="code-number">1</span>].lstrip(<span class="code-string">"json"</span>).strip().rstrip(<span class="code-string">"```"</span>)
-        <span class="code-keyword">return</span> json.loads(raw.strip())
-
-    <span class="code-comment"># Batch 1: categories 0–2 (30 prompts), Batch 2: categories 3–4 (20 prompts)</span>
-    all_prompts  = _batch(categories[<span class="code-number">0</span>:<span class="code-number">3</span>], <span class="code-number">1</span>)
-    all_prompts += _batch(categories[<span class="code-number">3</span>:<span class="code-number">5</span>], len(all_prompts) + <span class="code-number">1</span>)
-    <span class="code-keyword">return</span> all_prompts</div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>Site Agent — Auto-Rebuild Homepage</h2>
-            <p>After every Builder run, Site Agent reads all products from state.json and rewrites index.html from scratch — newest products first. Each registered product gets its own landing page too.</p>
-
-            <div class="code-container">
-                <div class="code-header">📄 agents/site_agent.py — _rebuild_homepage()</div>
-                <div class="code-block"><span class="code-keyword">def</span> <span class="code-function">_rebuild_homepage</span>(self, products):
-    cards = <span class="code-string">""</span>
-    <span class="code-keyword">for</span> p <span class="code-keyword">in</span> reversed(products):   <span class="code-comment"># newest first</span>
-        cards += f<span class="code-string">"""
-  &lt;div class="product-card"&gt;
-    &lt;div class="card-badge"&gt;AI Prompt Pack&lt;/div&gt;
-    &lt;h3&gt;&lt;a href="products/{p['slug']}.html"&gt;{p['title']}&lt;/a&gt;&lt;/h3&gt;
-    &lt;p&gt;{p['description']}&lt;/p&gt;
-    &lt;div class="card-footer"&gt;
-      &lt;span class="price"&gt;${p['price']}&lt;/span&gt;
-      &lt;a href="{p['gumroad_url']}" class="btn-buy-small"&gt;Get It Now&lt;/a&gt;
-    &lt;/div&gt;
-  &lt;/div&gt;"""</span>
-
-    html = f<span class="code-string">"""&lt;!DOCTYPE html&gt;
-...
-  &lt;section class="products-grid"&gt;
-    &lt;h2&gt;All Packs ({len(products)} available)&lt;/h2&gt;
-    &lt;div class="grid"&gt;{cards}&lt;/div&gt;
-  &lt;/section&gt;
-..."""</span>
-
-    path = os.path.join(self.website_dir, <span class="code-string">"index.html"</span>)
-    <span class="code-keyword">with</span> open(path, <span class="code-string">"w"</span>, encoding=<span class="code-string">"utf-8"</span>) <span class="code-keyword">as</span> f:
-        f.write(html)
-    print(f<span class="code-string">"[Site] Homepage rebuilt: {path}"</span>)</div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>Reporter Agent — Weekly P&amp;L Email</h2>
-            <p>Every Sunday the Reporter reads state.json, calculates revenue and costs entirely from local data (no Gumroad API), and emails a plain-text weekly summary.</p>
-
-            <div class="code-container">
-                <div class="code-header">📄 agents/reporter_agent.py — _build_report()</div>
-                <div class="code-block"><span class="code-keyword">def</span> <span class="code-function">_build_report</span>(self, products, week):
-    live     = [p <span class="code-keyword">for</span> p <span class="code-keyword">in</span> products <span class="code-keyword">if</span> p.get(<span class="code-string">"status"</span>) == <span class="code-string">"live"</span>]
-    pending  = [p <span class="code-keyword">for</span> p <span class="code-keyword">in</span> products <span class="code-keyword">if</span> p.get(<span class="code-string">"status"</span>) == <span class="code-string">"pending_upload"</span>]
-    new_week = [p <span class="code-keyword">for</span> p <span class="code-keyword">in</span> products <span class="code-keyword">if</span> self._days_ago(p.get(<span class="code-string">"created_date"</span>,<span class="code-string">""</span>)) &lt;= <span class="code-number">7</span>]
-
-    revenue_gross = sum(p.get(<span class="code-string">"sales"</span>,<span class="code-number">0</span>) * p.get(<span class="code-string">"price"</span>,<span class="code-number">0</span>) <span class="code-keyword">for</span> p <span class="code-keyword">in</span> live)
-    gumroad_fees  = revenue_gross * <span class="code-number">0.10</span>
-    api_cost_myr  = len(new_week) * <span class="code-number">0.40</span>   <span class="code-comment"># ~RM 0.40 per product build</span>
-    net_myr       = (revenue_gross - gumroad_fees) * <span class="code-number">4.7</span> - api_cost_myr
-
-    lines = [
-        f<span class="code-string">"Banana Lab — Week {week} Report"</span>,
-        <span class="code-string">"=" * 45</span>,
-        f<span class="code-string">"Products live:          {len(live)}"</span>,
-        f<span class="code-string">"Pending upload:         {len(pending)}"</span>,
-        f<span class="code-string">"Total sales (all time): {sum(p.get('sales',0) for p in live)}"</span>,
-        f<span class="code-string">"Gross revenue:          ${revenue_gross:.2f}"</span>,
-        f<span class="code-string">"Gumroad fee (10%):      -${gumroad_fees:.2f}"</span>,
-        f<span class="code-string">"Est. API cost:          -RM {api_cost_myr:.2f}"</span>,
-        f<span class="code-string">"Net profit:             RM {net_myr:.2f}"</span>,
-    ]
-
-    <span class="code-comment"># Flag underperformers: 3+ weeks live, 0 sales</span>
-    <span class="code-keyword">for</span> u <span class="code-keyword">in</span> live:
-        <span class="code-keyword">if</span> u.get(<span class="code-string">"weeks_live"</span>,<span class="code-number">0</span>) &gt;= <span class="code-number">3</span> <span class="code-keyword">and</span> u.get(<span class="code-string">"sales"</span>,<span class="code-number">0</span>) == <span class="code-number">0</span>:
-            lines.append(f<span class="code-string">"Low performer: \"{u['title']}\" — consider price cut or removal"</span>)
-
-    <span class="code-keyword">return</span> <span class="code-string">"\n"</span>.join(lines)</div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>Main Scheduler — Weekly Automation</h2>
-            <p>main.py wires the three agents to a weekly schedule using the Python <code>schedule</code> library, and exposes CLI flags for manual testing and product registration.</p>
-
-            <div class="code-container">
-                <div class="code-header">📄 main.py — Scheduler Setup</div>
-                <div class="code-block"><span class="code-comment"># Scheduled mode — runs indefinitely</span>
-schedule.every().monday.at(<span class="code-string">"09:00"</span>).do(run_monday_pipeline, config=config)
-schedule.every().sunday.at(<span class="code-string">"18:00"</span>).do(run_reporter, config=config)
-
-<span class="code-keyword">while</span> <span class="code-keyword">True</span>:
-    schedule.run_pending()
-    time.sleep(<span class="code-number">30</span>)
-
-<span class="code-comment"># --register flag: attach a Gumroad URL after manual upload</span>
-<span class="code-keyword">if</span> <span class="code-string">"--register"</span> <span class="code-keyword">in</span> args:
-    slug = args[idx + <span class="code-number">1</span>]
-    url  = args[idx + <span class="code-number">2</span>]
-    <span class="code-keyword">if</span> BuilderAgent(config).register(slug, url):
-        run_site(config)   <span class="code-comment"># Rebuild site with new Gumroad link</span></div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>Technical Implementation Notes</h2>
-            <h3>Key Design Decisions</h3>
-            <ul style="margin: 15px 0; padding-left: 20px;">
-                <li><strong>Batched prompt generation:</strong> Splitting 50 prompts into two API calls (30 + 20) was necessary — a single call for 50 prompts reliably hit Claude's 8192 output token limit and returned truncated JSON</li>
-                <li><strong>Markdown over PDF:</strong> Early versions used fpdf2 to generate PDFs but font encoding errors (em dashes, smart quotes from Claude output) and layout bugs made it unreliable. Markdown output is simpler and lets the owner choose their preferred PDF tool</li>
-                <li><strong>No database:</strong> state.json is the only persistence layer — sufficient for a single-owner store with dozens of products, and trivially portable and human-readable</li>
-                <li><strong>pending_upload gate:</strong> Products stay in pending status until <code>--register</code> is called, preventing "Get It Now" buttons with empty hrefs appearing on the live site</li>
-                <li><strong>Static site generation:</strong> SiteAgent writes pure HTML/CSS with no JavaScript framework or build step — the entire website is just file writes from Python string templates</li>
-            </ul>
-        </div>
-
-        <div class="demo-links">
-            <a href="projects/banana-lab/demo.html" target="_blank" class="demo-btn">🚀 View Live Store</a>
-            <a href="banana-lab.html" class="demo-btn secondary">📖 View Full Project Details</a>
-        </div>
-
-        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
-            <a href="index.html">← Back to Portfolio</a> |
-            <a href="banana-lab.html">View Project Overview</a>
-        </nav>
+  <div class="masthead">
+    <div class="mast-left">
+      <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+      <a class="logo" href="index.html">AI PROJECTS</a>
+      <nav class="mast-nav">
+        <a href="project-categories.html">Categories</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <div class="search-box">
+        <input type="text" class="search-input" id="searchInput" autocomplete="off" placeholder="Search AI projects..." aria-label="Search AI projects">
+        <span class="search-ic">&#128269;</span>
+        <div class="search-results" id="searchResults"></div>
+      </div>
     </div>
+  </div>
+  <hr class="rule-top">
+
+  <div class="crumb">
+    <a href="project-categories.html">Categories</a>
+    <span class="sep">/</span><a id="crumbCat" href="#"></a>
+    <span class="sep">/</span><a id="crumbProj" href="#"></a>
+    <span class="sep">/</span><span>Source</span>
+  </div>
+
+  <section class="src-head">
+    <div class="cover-strip" id="coverStrip" style="display:none"><img id="cover" alt=""></div>
+    <span class="rubric" id="kicker"></span>
+    <h1 id="title"></h1>
+    <p class="sub" id="subtitle"></p>
+    <div class="head-tech" id="headTech"></div>
+    <div class="head-btns" id="headBtns"></div>
+  </section>
+
+  <div id="body"></div>
+
+  <footer>&copy; 2026 Lee Yih Ven | AI Project Portfolio &middot; All rights reserved.</footer>
+  <div class="note">Sample Source-Showcase-E2 (TEMPLATE): source-code page on the index magazine system: slim cover banner, About, Project Structure, code walkthrough with copyable navy-barred code blocks, CTA. Reuse by editing only the PROJECT block at the top of the script.</div>
+
+<script>
+  const SITE = "";
+
+  /* =================================================================
+     EDIT PER PROJECT  -  the ONLY block you change per page.
+     Copy this file, swap PROJECT, save as <slug>-source.html.
+     - structure.code : the project file tree (plain text)
+     - walkthrough[]   : { heading, body, files:[{label, code}] }
+     - notes[]         : { heading, bullets:[...] }
+     Code strings can be multi-line; they render verbatim.
+     ================================================================= */
+  const PROJECT = {
+  "slug": "banana-lab",
+  "category": "Content Automation",
+  "categoryUrl": "category-content-automation.html",
+  "title": "Banana Lab",
+  "subtitle": "Core Source Code, Multi-Agent Automation System.",
+  "cover": "images/banana-lab/cover.jpeg",
+  "tech": [
+    "Claude API",
+    "Python 3",
+    "BuilderAgent",
+    "SiteAgent",
+    "ReporterAgent"
+  ],
+  "overviewUrl": "banana-lab.html",
+  "demoLabel": "View Live Store",
+  "demoUrl": "https://lyven81.github.io/ai-project/projects/banana-lab/demo.html",
+  "repoUrl": "https://github.com/lyven81/ai-project/tree/main/projects/banana-lab",
+  "about": "This showcase highlights the core logic of Banana Lab's 3-agent automation pipeline, how Claude is called to research and write 50-prompt packs, how the site is rebuilt automatically, and how the weekly report is compiled from local state. API credentials and Gmail passwords are stored in config.json (not shown). The state file (state.json) is the only database, no SQL server required.",
+  "structure": {
+    "label": "Banana Lab/",
+    "code": "Banana Lab/\n├── main.py                  ← Scheduler + CLI entry point\n├── config.json              ← API keys (not committed)\n├── state.json               ← Live data: products, sales (auto-managed)\n├── requirements.txt         ← anthropic, schedule, requests\n│\n├── agents/\n│   ├── builder_agent.py     ← Monday: research niche + generate 50 prompts\n│   ├── site_agent.py        ← Monday: generate product page + rebuild homepage\n│   └── reporter_agent.py   ← Sunday: email weekly P&L report\n│\n├── utils/\n│   ├── state_manager.py     ← CRUD wrapper for state.json\n│   └── email_sender.py      ← Gmail SMTP delivery\n│\n├── products/                ← Generated each Monday (auto-populated)\n│   ├── {slug}.md            ← Prompt pack (owner converts to PDF)\n│   └── {slug}-listing.txt  ← Ready-to-paste Gumroad listing copy\n│\n└── website/                 ← Banana Lab showroom (auto-rebuilt)\n    ├── index.html           ← Homepage product grid\n    ├── about.html           ← About page\n    ├── style.css            ← Banana yellow + black theme\n    └── products/            ← Individual product landing pages"
+  },
+  "walkthrough": [
+    {
+      "heading": "Builder Agent: Niche Research & Prompt Generation",
+      "body": "The core of Banana Lab: three Claude API calls per product cycle. First, pick a unique niche. Second, plan five categories. Third, generate 50 prompts in two batches to stay within token limits.",
+      "files": [
+        {
+          "label": "agents/builder_agent.py: _research_idea()",
+          "code": "def _research_idea(self, state):\n    existing = [p[\"title\"] for p in state.get(\"products\", [])]\n\n    prompt = f\"\"\"You are the product researcher for Banana Lab.\n\nExisting products (do not duplicate):\n{json.dumps(existing, indent=2) if existing else \"None yet\"}\n\nPick ONE high-demand prompt pack idea for small business owners.\nReturn ONLY valid JSON, no markdown fences:\n{{\n  \"title\": \"e.g. 50 ChatGPT Prompts for Restaurant Owners\",\n  \"slug\": \"url-friendly-slug-here\",\n  \"description\": \"2-3 sentence listing description that sells the pack\",\n  \"niche\": \"target niche label\",\n  \"price\": 9.00,\n  \"tags\": [\"tag1\", \"tag2\", \"tag3\", \"tag4\", \"tag5\"],\n  \"what_inside\": [\"bullet 1\", \"bullet 2\", \"bullet 3\", \"bullet 4\"]\n}}\"\"\"\n\n    msg = self.client.messages.create(\n        model=\"claude-sonnet-4-6\",\n        max_tokens=512,\n        messages=[{\"role\": \"user\", \"content\": prompt}]\n    )\n    raw = msg.content[0].text.strip()\n    # Strip accidental markdown fences from Claude's response\n    if raw.startswith(\"```\"):\n        raw = raw.split(\"```\")[1]\n        if raw.startswith(\"json\"):\n            raw = raw[4:]\n    return json.loads(raw.strip())"
+        },
+        {
+          "label": "agents/builder_agent.py: _generate_prompts() (batched)",
+          "code": "def _generate_prompts(self, idea):\n    \"\"\"Generate 50 prompts in two batches of 25 to avoid output token limits.\"\"\"\n\n    # Call 2: determine the 5 categories for this niche\n    cat_msg = self.client.messages.create(\n        model=\"claude-sonnet-4-6\",\n        max_tokens=256,\n        messages=[{\"role\": \"user\", \"content\":\n            f\"List exactly 5 category names for a ChatGPT prompt pack targeting \"\n            f\"{idea['niche']} owners. Return ONLY a JSON array of 5 strings, no markdown.\"\n        }]\n    )\n    categories = json.loads(cat_msg.content[0].text.strip())\n\n    def _batch(cats, start_number):\n        # Calls 3a and 3b: generate prompts for the given categories\n        batch_cats = \"\\n\".join(f\"- {c} (10 prompts)\" for c in cats)\n        p = f\"\"\"Create ChatGPT prompts for: {idea['title']}\nWrite 10 prompts for EACH of these categories:\n{batch_cats}\n\nRules: niche-specific, use [PLACEHOLDERS IN CAPS], number from {start_number}.\nReturn ONLY a valid JSON array: [{{\"number\": N, \"category\": \"...\", \"prompt\": \"...\"}}]\"\"\"\n\n        msg = self.client.messages.create(\n            model=\"claude-sonnet-4-6\",\n            max_tokens=8000,\n            messages=[{\"role\": \"user\", \"content\": p}]\n        )\n        raw = msg.content[0].text.strip()\n        if raw.startswith(\"```\"):\n            raw = raw.split(\"```\")[1].lstrip(\"json\").strip().rstrip(\"```\")\n        return json.loads(raw.strip())\n\n    # Batch 1: categories 0–2 (30 prompts), Batch 2: categories 3–4 (20 prompts)\n    all_prompts  = _batch(categories[0:3], 1)\n    all_prompts += _batch(categories[3:5], len(all_prompts) + 1)\n    return all_prompts"
+        }
+      ]
+    },
+    {
+      "heading": "Site Agent: Auto-Rebuild Homepage",
+      "body": "After every Builder run, Site Agent reads all products from state.json and rewrites index.html from scratch, newest products first. Each registered product gets its own landing page too.",
+      "files": [
+        {
+          "label": "agents/site_agent.py: _rebuild_homepage()",
+          "code": "def _rebuild_homepage(self, products):\n    cards = \"\"\n    for p in reversed(products):   # newest first\n        cards += f\"\"\"\n  <div class=\"product-card\">\n    <div class=\"card-badge\">AI Prompt Pack</div>\n    <h3><a href=\"products/{p['slug']}.html\">{p['title']}</a></h3>\n    <p>{p['description']}</p>\n    <div class=\"card-footer\">\n      <span class=\"price\">${p['price']}</span>\n      <a href=\"{p['gumroad_url']}\" class=\"btn-buy-small\">Get It Now</a>\n    </div>\n  </div>\"\"\"\n\n    html = f\"\"\"<!DOCTYPE html>\n...\n  <section class=\"products-grid\">\n    <h2>All Packs ({len(products)} available)</h2>\n    <div class=\"grid\">{cards}</div>\n  </section>\n...\"\"\"\n\n    path = os.path.join(self.website_dir, \"index.html\")\n    with open(path, \"w\", encoding=\"utf-8\") as f:\n        f.write(html)\n    print(f\"[Site] Homepage rebuilt: {path}\")"
+        }
+      ]
+    },
+    {
+      "heading": "Reporter Agent: Weekly P&L Email",
+      "body": "Every Sunday the Reporter reads state.json, calculates revenue and costs entirely from local data (no Gumroad API), and emails a plain-text weekly summary.",
+      "files": [
+        {
+          "label": "agents/reporter_agent.py: _build_report()",
+          "code": "def _build_report(self, products, week):\n    live     = [p for p in products if p.get(\"status\") == \"live\"]\n    pending  = [p for p in products if p.get(\"status\") == \"pending_upload\"]\n    new_week = [p for p in products if self._days_ago(p.get(\"created_date\",\"\")) <= 7]\n\n    revenue_gross = sum(p.get(\"sales\",0) * p.get(\"price\",0) for p in live)\n    gumroad_fees  = revenue_gross * 0.10\n    api_cost_myr  = len(new_week) * 0.40   # ~RM 0.40 per product build\n    net_myr       = (revenue_gross - gumroad_fees) * 4.7 - api_cost_myr\n\n    lines = [\n        f\"Banana Lab — Week {week} Report\",\n        \"=\" * 45,\n        f\"Products live:          {len(live)}\",\n        f\"Pending upload:         {len(pending)}\",\n        f\"Total sales (all time): {sum(p.get('sales',0) for p in live)}\",\n        f\"Gross revenue:          ${revenue_gross:.2f}\",\n        f\"Gumroad fee (10%):      -${gumroad_fees:.2f}\",\n        f\"Est. API cost:          -RM {api_cost_myr:.2f}\",\n        f\"Net profit:             RM {net_myr:.2f}\",\n    ]\n\n    # Flag underperformers: 3+ weeks live, 0 sales\n    for u in live:\n        if u.get(\"weeks_live\",0) >= 3 and u.get(\"sales\",0) == 0:\n            lines.append(f\"Low performer: \\\"{u['title']}\\\" — consider price cut or removal\")\n\n    return \"\\n\".join(lines)"
+        }
+      ]
+    },
+    {
+      "heading": "Main Scheduler: Weekly Automation",
+      "body": "main.py wires the three agents to a weekly schedule using the Python <code>schedule</code> library, and exposes CLI flags for manual testing and product registration.",
+      "files": [
+        {
+          "label": "main.py: Scheduler Setup",
+          "code": "# Scheduled mode — runs indefinitely\nschedule.every().monday.at(\"09:00\").do(run_monday_pipeline, config=config)\nschedule.every().sunday.at(\"18:00\").do(run_reporter, config=config)\n\nwhile True:\n    schedule.run_pending()\n    time.sleep(30)\n\n# --register flag: attach a Gumroad URL after manual upload\nif \"--register\" in args:\n    slug = args[idx + 1]\n    url  = args[idx + 2]\n    if BuilderAgent(config).register(slug, url):\n        run_site(config)   # Rebuild site with new Gumroad link"
+        }
+      ]
+    }
+  ],
+  "cta": "Want an automated AI content pipeline like this built for your own store? Let's scope it."
+};
+  /* ===================== END EDIT BLOCK ===================== */
+
+  const pref = (u) => /^https?:|^mailto:|^tel:/.test(u || '') ? u : (SITE + (u || ''));
+  const esc = (s) => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const rich = (s) => esc(s).replace(/&lt;(\/?(?:b|code))&gt;/g, '<$1>');
+
+  // raw code store for copy buttons
+  const RAW = [];
+  function codeBlock(label, codeStr, extraClass){
+    const idx = RAW.push(codeStr) - 1;
+    const rendered = esc(codeStr).split('\n')
+      .map(line => /^\s*#/.test(line) ? `<span class="cmt">${line}</span>` : line).join('\n');
+    return `<div class="codeblock ${extraClass||''}">`+
+      `<div class="code-bar"><span class="path"><span>${esc(label)}</span></span>`+
+      `<button class="code-copy" data-idx="${idx}">Copy</button></div>`+
+      `<pre><code>${rendered}</code></pre></div>`;
+  }
+
+  // Breadcrumb + header
+  document.title = PROJECT.title + ": Source | AI Project Portfolio";
+  document.getElementById('crumbCat').textContent = PROJECT.category;
+  document.getElementById('crumbCat').href = pref(PROJECT.categoryUrl);
+  document.getElementById('crumbProj').textContent = PROJECT.title;
+  document.getElementById('crumbProj').href = pref(PROJECT.overviewUrl);
+  if (PROJECT.cover){
+    document.getElementById('coverStrip').style.display = '';
+    const c = document.getElementById('cover'); c.src = PROJECT.cover; c.alt = PROJECT.title + " cover";
+  }
+  document.getElementById('kicker').textContent = "Source Walkthrough · " + PROJECT.category;
+  document.getElementById('title').textContent = PROJECT.title;
+  document.getElementById('subtitle').textContent = PROJECT.subtitle;
+  document.getElementById('headTech').innerHTML = (PROJECT.tech||[]).map(t => `<span class="tech-chip">${esc(t)}</span>`).join('');
+  document.getElementById('headBtns').innerHTML =
+    (PROJECT.demoUrl ? `<a class="btn" href="${pref(PROJECT.demoUrl)}" target="_blank" rel="noopener">${esc(PROJECT.demoLabel||'Live Demo')}</a>` : '') +
+    (PROJECT.overviewUrl ? `<a class="btn ghost" href="${pref(PROJECT.overviewUrl)}">Project Overview</a>` : '') +
+    (PROJECT.repoUrl ? `<a class="btn ghost" href="${pref(PROJECT.repoUrl)}" target="_blank" rel="noopener">GitHub Repo</a>` : '');
+
+  const section = (tab, inner) => `<section class="sec"><div class="sec-rule"><span class="tab">${esc(tab)}</span>${inner}</div></section>`;
+  let html = "";
+  const P = PROJECT;
+
+  if (P.about){
+    html += section("About This Code", `<h2>About This Code Showcase</h2><p class="intro">${rich(P.about)}</p>`);
+  }
+  if (P.structure && P.structure.code){
+    html += section("Project Structure", `<h2>Project Structure</h2>`+
+      codeBlock(P.structure.label || 'project/', P.structure.code, 'tree'));
+  }
+  (P.walkthrough||[]).forEach(w => {
+    let inner = `<h2>${esc(w.heading)}</h2>`;
+    if (w.body) inner += `<p class="body">${rich(w.body)}</p>`;
+    (w.files||[]).forEach(f => { inner += codeBlock(f.label, f.code); });
+    html += section("Code", inner);
+  });
+  // CTA
+  html += `<section class="sec"><div class="cta-inner">`+
+    `<div><h3>Interested in the build?</h3><p>${esc(P.cta || "Let's talk.")}</p></div>`+
+    `<div class="cta-btns">`+
+    (P.demoUrl ? `<a class="btn" href="${pref(P.demoUrl)}" target="_blank" rel="noopener">${esc(P.demoLabel||'Live Demo')}</a>` : '')+
+    `<a class="btn ghost" href="${SITE}contact.html">Get in Touch</a>`+
+    `</div></div></section>`;
+
+  document.getElementById('body').innerHTML = html;
+
+  // Copy buttons
+  function copyText(text, btn){
+    const done = ()=>{ const o=btn.textContent; btn.textContent='Copied ✓'; setTimeout(()=>btn.textContent=o.includes('Copied')?'Copy':o,1400); };
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(done).catch(()=>fb(text,done)); }
+    else fb(text,done);
+  }
+  function fb(text,done){ const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(ta); done(); }
+  document.querySelectorAll('.code-copy').forEach(btn =>
+    btn.addEventListener('click', ()=> copyText(RAW[+btn.dataset.idx], btn)));
+
+  // Masthead search
+  const ITEMS = [
+    {t:PROJECT.title, c:PROJECT.category, s:PROJECT.slug},
+    {t:"Courier CS Quality Console", c:"Conversational Data Analytics", s:"courier-cs-quality-console"},
+    {t:"Voucher Analyzer", c:"Conversational Data Analytics", s:"voucher-analyzer"},
+    {t:"Wiseman", c:"Knowledge & Reference Chatbots", s:"wiseman"},
+    {t:"Sunny Car Accessories", c:"Agentic Commerce", s:"sunny-car-accessories"},
+    {t:"Bookshelf", c:"Multi-Agent Decision Systems", s:"bookshelf"}
+  ];
+  const searchInput = document.getElementById('searchInput');
+  const searchResults = document.getElementById('searchResults');
+  function runSearch(q){
+    if(q.trim().length < 2){ searchResults.style.display='none'; return; }
+    const ql = q.toLowerCase();
+    const hits = ITEMS.filter(it => (it.t+' '+it.c).toLowerCase().includes(ql));
+    searchResults.innerHTML = hits.length ? hits.map(it =>
+      `<div class="sr-item"><div class="sr-cat">${esc(it.c)}</div>`+
+      `<a href="${SITE}${it.s}.html"><div class="sr-title">${esc(it.t)}</div></a>`+
+      `<div class="sr-links"><a href="${SITE}${it.s}.html">View Details</a></div></div>`).join('')
+      : `<div class="sr-none">No projects found. Try a different keyword.</div>`;
+    searchResults.style.display='block';
+  }
+  searchInput.addEventListener('input', e => runSearch(e.target.value));
+  document.addEventListener('click', e => { if(!e.target.closest('.search-box')) searchResults.style.display='none'; });
+
+  // Drawer
+  const drawer=document.getElementById('drawer'), overlay=document.getElementById('overlay');
+  const openMenu=()=>{ drawer.classList.add('open'); overlay.classList.add('open'); };
+  const closeMenu=()=>{ drawer.classList.remove('open'); overlay.classList.remove('open'); };
+  document.getElementById('hamburger').addEventListener('click', openMenu);
+  document.getElementById('drawerClose').addEventListener('click', closeMenu);
+  overlay.addEventListener('click', closeMenu);
+  drawer.querySelectorAll('a').forEach(a=>a.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeMenu(); searchResults.style.display='none'; }});
+</script>
 </body>
 </html>

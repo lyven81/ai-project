@@ -1,180 +1,373 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Motor Claim Triage and QC Evaluator - Source Code</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #222; background-color: #ffffff; }
-        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
-        .back-nav { margin-bottom: 20px; }
-        .back-nav a { color: #007BFF; text-decoration: none; font-size: 1rem; }
-        .back-nav a:hover { text-decoration: underline; }
-        .project-header { text-align: center; margin-bottom: 40px; padding: 40px 0; background: linear-gradient(135deg, #FF5722, #D84315); color: white; border-radius: 10px; }
-        .project-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
-        .project-header p { font-size: 1.2rem; opacity: 0.9; }
-        .badges { display: flex; justify-content: center; gap: 10px; margin: 20px 0; flex-wrap: wrap; }
-        .badge { background-color: rgba(255, 255, 255, 0.2); color: white; padding: 5px 12px; border-radius: 15px; font-size: 0.9rem; }
-        .content-section { margin: 40px 0; padding: 30px; background-color: #f9f9f9; border-radius: 8px; border-left: 5px solid #FF5722; }
-        .content-section h2 { color: #FF5722; margin-bottom: 20px; font-size: 1.8rem; }
-        .content-section h3 { color: #333; margin: 20px 0 10px 0; font-size: 1.3rem; }
-        .content-section p { margin-bottom: 12px; }
-        .highlight-box { background: linear-gradient(135deg, #fff3ee, #ffe0d4); padding: 20px; border-radius: 10px; border-left: 5px solid #FF5722; margin: 20px 0; }
-        .file-tree { background: #1e1e1e; color: #d4d4d4; padding: 18px 22px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.88rem; line-height: 1.7; white-space: pre; overflow-x: auto; margin: 16px 0; }
-        .code-container { background-color: #1e1e1e; border-radius: 8px; padding: 20px; margin: 20px 0; overflow-x: auto; }
-        .code-header { color: #4ade80; font-weight: bold; margin-bottom: 15px; font-size: 1.05rem; border-bottom: 1px solid #333; padding-bottom: 10px; font-family: 'Consolas', monospace; }
-        .code-block { font-family: 'Consolas', 'Monaco', 'Courier New', monospace; font-size: 13.5px; line-height: 1.55; color: #d4d4d4; white-space: pre; overflow-x: auto; }
-        .kw { color: #569cd6; } .str { color: #ce9178; } .com { color: #6a9955; font-style: italic; } .fn { color: #dcdcaa; } .num { color: #b5cea8; } .ty { color: #4ec9b0; }
-        .demo-links { text-align: center; margin: 30px 0; }
-        .demo-btn { display: inline-block; background-color: #007BFF; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; margin: 0 10px; font-weight: bold; }
-        .demo-btn:hover { background-color: #0056b3; }
-        .demo-btn.secondary { background-color: #28a745; }
-        @media (max-width: 768px) {
-            .project-header h1 { font-size: 2rem; }
-            .demo-btn { margin: 5px; padding: 10px 20px; }
-            .container { padding: 15px; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Motor Claim Triage and QC Evaluator: Source | AI Project Portfolio</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root{ --ink:#222; --paper:#fff; --hair:#dddddd; --gray:#555; --accent:#B8860B; --navy:#1E3A5F; --code-bg:#fbfbf8; --cmt:#6b8190; }
+  html{ scroll-behavior:smooth; }
+  body{ background:var(--paper); color:var(--ink); font-family:Arial, Helvetica, sans-serif; line-height:1.6; overflow-x:hidden; }
+  a{ color:inherit; text-decoration:none; }
+  a:hover h2, a:hover h3, a:hover h4{ color:var(--accent); }
+  p code, li code{ font-family:"Courier New", monospace; font-size:.86em; background:#f2f3f5; padding:1px 5px; color:var(--navy); }
+
+  /* Masthead (shared) */
+  .masthead{ display:flex; align-items:center; justify-content:space-between; padding:14px 28px; max-width:1240px; margin:0 auto; gap:18px; }
+  .mast-left{ display:flex; align-items:center; gap:20px; }
+  .logo{ background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; letter-spacing:3px; font-size:.95rem; padding:8px 12px; white-space:nowrap; }
+  .mast-nav{ display:flex; gap:20px; font-family:Arial, Helvetica, sans-serif; font-size:.72rem; letter-spacing:1.4px; text-transform:uppercase; }
+  .mast-nav a:hover{ color:var(--accent); }
+  .hamburger{ display:none; flex-direction:column; gap:4px; background:none; border:none; cursor:pointer; padding:6px; }
+  .hamburger span{ width:22px; height:2px; background:#222; display:block; }
+  .rule-top{ border:none; border-top:3px solid #222; max-width:1240px; margin:0 auto; }
+
+  /* Search (shared) */
+  .search-box{ position:relative; width:200px; }
+  .search-input{ width:100%; padding:7px 30px 7px 12px; border:1px solid var(--hair); background:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; color:#222; }
+  .search-input:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(184,134,11,.15); }
+  .search-ic{ position:absolute; right:10px; top:50%; transform:translateY(-50%); color:var(--gray); font-size:.8rem; pointer-events:none; }
+  .search-results{ position:absolute; top:calc(100% + 4px); left:0; width:340px; max-width:86vw; background:#fff; border:1px solid #222; max-height:60vh; overflow-y:auto; z-index:120; display:none; }
+  .sr-item{ padding:12px 14px; border-bottom:1px solid var(--hair); }
+  .sr-item:last-child{ border-bottom:none; }
+  .sr-cat{ font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; margin-bottom:4px; color:var(--accent); }
+  .sr-title{ font-weight:700; font-size:1.02rem; color:#222; }
+  .sr-links{ font-size:.58rem; letter-spacing:.8px; text-transform:uppercase; color:var(--gray); margin-top:5px; }
+  .sr-links a:hover{ color:var(--accent); }
+  .sr-none{ padding:16px 14px; font-size:.82rem; color:var(--gray); }
+
+  /* Shared bits */
+  .tab{ display:inline-block; background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.66rem; letter-spacing:2px; text-transform:uppercase; padding:6px 12px; }
+  .rubric{ font-family:Arial, Helvetica, sans-serif; font-size:.62rem; font-weight:700; letter-spacing:1.6px; text-transform:uppercase; color:var(--accent); display:block; margin-bottom:8px; }
+  .tech-chip{ display:inline-block; border:1px solid var(--hair); padding:6px 12px; font-size:.72rem; letter-spacing:.3px; color:#333; white-space:nowrap; }
+  .tech-chip:hover{ border-color:var(--accent); color:var(--accent); }
+  .btn{ display:inline-block; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.7rem; letter-spacing:1.6px; text-transform:uppercase; padding:13px 24px; border:1px solid #222; background:#222; color:#fff; cursor:pointer; transition:.15s; }
+  .btn:hover{ background:var(--accent); border-color:var(--accent); }
+  .btn.ghost{ background:#fff; color:#222; }
+  .btn.ghost:hover{ color:var(--accent); border-color:var(--accent); background:#fff; }
+
+  /* Breadcrumb */
+  .crumb{ max-width:1240px; margin:0 auto; padding:20px 28px 0; font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--gray); }
+  .crumb a:hover{ color:var(--accent); }
+  .crumb .sep{ color:var(--hair); margin:0 8px; }
+
+  /* Header (slim cover banner + copy) */
+  .src-head{ max-width:1240px; margin:0 auto; padding:14px 28px 6px; }
+  .cover-strip{ border:1px solid var(--hair); line-height:0; background:#eef1f4; }
+  .cover-strip img{ width:100%; height:190px; object-fit:cover; object-position:center 42%; display:block; }
+  .src-head h1{ font-size:2.5rem; font-weight:900; line-height:1.04; letter-spacing:-.008em; margin-top:18px; }
+  .src-head .sub{ font-style:italic; font-size:1.08rem; color:#333; margin-top:10px; max-width:72ch; }
+  .head-tech{ display:flex; flex-wrap:wrap; gap:9px; margin-top:16px; }
+  .head-btns{ display:flex; flex-wrap:wrap; gap:12px; margin-top:18px; }
+
+  /* Section shell */
+  .sec{ max-width:1240px; margin:0 auto; padding:26px 28px; }
+  .sec-rule{ border-top:3px solid #222; padding-top:16px; }
+  .sec .tab{ margin-bottom:14px; }
+  .sec h2{ font-size:1.7rem; font-weight:900; line-height:1.06; }
+  .sec .intro{ color:#333; font-size:1.02rem; margin-top:10px; max-width:80%; }
+  .sec .body{ color:#333; font-size:1rem; margin-top:10px; max-width:80%; }
+
+  /* Code block */
+  .codeblock{ border:1px solid var(--hair); margin-top:16px; }
+  .code-bar{ display:flex; align-items:center; justify-content:space-between; gap:12px; background:var(--navy); color:#fff; padding:8px 12px; }
+  .code-bar .path{ font-family:"Courier New", monospace; font-size:.74rem; letter-spacing:.2px; opacity:.96; display:flex; align-items:center; gap:7px; min-width:0; }
+  .code-bar .path span{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .code-copy{ flex:none; background:none; border:1px solid rgba(255,255,255,.4); color:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.56rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; padding:5px 11px; cursor:pointer; transition:.15s; }
+  .code-copy:hover{ background:rgba(255,255,255,.16); }
+  .codeblock pre{ margin:0; padding:14px 16px; overflow-x:auto; background:var(--code-bg); }
+  .codeblock code{ font-family:"Courier New", monospace; font-size:.82rem; line-height:1.6; color:#1b2a3a; background:none; padding:0; white-space:pre; display:block; }
+  .codeblock code .cmt{ color:var(--cmt); font-style:italic; }
+
+  .tree .code-bar .path::before{ content:"📁"; }
+
+  /* Notes */
+  .note-block{ margin-top:22px; }
+  .note-block h3{ font-size:1.15rem; font-weight:800; }
+  .blist{ list-style:none; margin-top:12px; border-top:1px solid var(--hair); }
+  .blist li{ padding:12px 0; border-bottom:1px solid var(--hair); color:#333; font-size:.95rem; }
+  .blist li b{ color:#222; }
+
+  /* CTA */
+  .cta-inner{ display:flex; align-items:center; gap:18px; flex-wrap:wrap; border-top:3px solid #222; padding-top:18px; }
+  .cta-inner h3{ font-size:1.4rem; font-weight:900; line-height:1.08; }
+  .cta-inner p{ color:var(--gray); font-size:.95rem; margin-top:4px; }
+  .cta-btns{ margin-left:auto; display:flex; gap:12px; flex-wrap:wrap; }
+
+  footer{ background:#222; max-width:1240px; margin:30px auto 0; padding:24px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; letter-spacing:.5px; color:#fff; text-align:center; }
+  .note{ max-width:1240px; margin:14px auto 0; padding:8px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.62rem; letter-spacing:1px; color:#999; }
+
+  /* Drawer (shared) */
+  .drawer{ position:fixed; top:0; left:-300px; width:280px; height:100vh; background:#fff; z-index:200; box-shadow:2px 0 14px rgba(0,0,0,.15); transition:left .28s ease; padding:74px 26px 26px; }
+  .drawer.open{ left:0; }
+  .drawer a{ display:block; font-family:Arial, Helvetica, sans-serif; font-size:.82rem; letter-spacing:1.2px; text-transform:uppercase; padding:14px 0; border-bottom:1px solid var(--hair); }
+  .overlay{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:150; }
+  .overlay.open{ display:block; }
+  .drawer-close{ position:absolute; top:20px; right:20px; font-family:Arial, Helvetica, sans-serif; font-size:1.4rem; background:none; border:none; cursor:pointer; }
+
+  @media (max-width:900px){
+    .cta-btns{ margin-left:0; }
+    .mast-nav{ display:none; }
+    .hamburger{ display:flex; }
+    .masthead{ padding:12px 16px; }
+    .mast-left{ gap:10px; min-width:0; flex:1; }
+    .logo{ font-size:.72rem; letter-spacing:1.5px; padding:6px 8px; }
+    .search-box{ flex:1; width:auto; min-width:0; }
+    .search-results{ position:fixed; top:58px; left:12px; right:12px; width:auto; max-width:none; }
+    .src-head h1{ font-size:1.95rem; }
+    .cover-strip img{ height:150px; }
+  }
+</style>
 </head>
 <body>
-    <div class="container">
-        <nav class="back-nav">
-            <a href="motor-claim-evaluator.html">← Back to Project Overview</a>
-        </nav>
 
-        <div class="project-header">
-            <h1>🚗 Motor Claim Triage and QC Evaluator</h1>
-            <p>Source Code &amp; Deterministic Yardstick</p>
-            <div class="badges">
-                <span class="badge">Vanilla JS</span>
-                <span class="badge">No Model, No Key</span>
-                <span class="badge">Python + pandas</span>
-                <span class="badge">Self-Contained</span>
-            </div>
-        </div>
+  <div class="overlay" id="overlay"></div>
+  <nav class="drawer" id="drawer">
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">&times;</button>
+    <a href="index.html">Home</a>
+    <a href="project-categories.html">Categories</a>
+    <a href="contact.html">Contact</a>
+    <a href="https://lyven81.github.io/data-analyst-portfolio/index.html">Data Portfolio</a>
+  </nav>
 
-        <div class="highlight-box">
-            <h3>🔍 About This Code Showcase</h3>
-            <p><strong>These snippets show the parts that make this both a triage tool and an honest evaluator: the fixed yardstick that decides the category, the one-pass classification of the whole book, the full-population metrics, and the Wilson interval.</strong></p>
-            <p>There is no language model in the classification path. The category is a fixed point score over fixed fields, computed in the browser, so the same claim always lands in the same category. The fraud label is used only to score the flags, never to decide them.</p>
-        </div>
-
-        <div class="content-section">
-            <h2>📁 Project Structure</h2>
-            <div class="file-tree">projects/motor-claim-evaluator/
-├── demo.html            &larr; the whole app: triage, scorecard, review dial, check one claim
-├── data/
-│   ├── claims-full.js   &larr; all 15,420 real claims, dictionary-encoded (window.MC)
-│   └── meta.json        &larr; population + per-category counts
-├── build_full_data.py   &larr; encodes dataset.csv -> claims-full.js
-└── dataset.csv          &larr; 15,420 real Kaggle claims (source)</div>
-        </div>
-
-        <div class="content-section">
-            <h2>🧮 The Fixed Yardstick (the whole classifier)</h2>
-            <p>A claim scores points from the signals the data proves predict fraud, and the total decides the category. This is the entire decision: no model, no temperature, no randomness. The same facts always give the same points and the same category.</p>
-            <div class="code-container">
-                <div class="code-header">📄 demo.html · yardstick(claim)</div>
-<div class="code-block"><span class="kw">function</span> <span class="fn">yardstick</span>(o){
-  <span class="kw">let</span> s=<span class="num">0</span>;
-  <span class="kw">if</span>(o.fault===<span class="str">"Policy Holder"</span>) s+=<span class="num">2</span>;
-  <span class="kw">if</span>(o.base_policy===<span class="str">"All Perils"</span>) s+=<span class="num">2</span>;
-  <span class="kw">else if</span>(o.base_policy===<span class="str">"Collision"</span>) s+=<span class="num">1</span>;
-  <span class="kw">if</span>(o.address_change_claim===<span class="str">"under 6 months"</span> || o.address_change_claim===<span class="str">"2 to 3 years"</span>) s+=<span class="num">2</span>;
-  <span class="kw">if</span>(o.days_policy_accident===<span class="str">"none"</span>) s+=<span class="num">2</span>;
-  <span class="kw">if</span>(o.accident_area===<span class="str">"Rural"</span>) s+=<span class="num">1</span>;
-  <span class="kw">if</span>(o.vehicle_price===<span class="str">"less than 20000"</span> || o.vehicle_price===<span class="str">"more than 69000"</span>) s+=<span class="num">1</span>;
-  <span class="kw">if</span>(o.age_of_vehicle===<span class="str">"new"</span> || o.age_of_vehicle===<span class="str">"3 years"</span> || o.age_of_vehicle===<span class="str">"4 years"</span>) s+=<span class="num">1</span>;
-  <span class="kw">const</span> cat = s&lt;=<span class="num">2</span> ? <span class="str">"fast"</span> : s===<span class="num">3</span> ? <span class="str">"approve"</span> : s&lt;=<span class="num">5</span> ? <span class="str">"investigate"</span> : <span class="str">"repudiate"</span>;
-  <span class="kw">return</span> {points:s, cat};
-}</div>
-            </div>
-            <p>The same rule as a governed SQL <code>CASE</code>, for a production claims database:</p>
-            <div class="code-container">
-                <div class="code-header">📄 the equivalent fixed query</div>
-<div class="code-block"><span class="kw">SELECT</span> claim_id, risk_points,
-  <span class="kw">CASE WHEN</span> risk_points&lt;=<span class="num">2</span> <span class="kw">THEN</span> <span class="str">'Fast track'</span>
-       <span class="kw">WHEN</span> risk_points=<span class="num">3</span>  <span class="kw">THEN</span> <span class="str">'Approve'</span>
-       <span class="kw">WHEN</span> risk_points&lt;=<span class="num">5</span> <span class="kw">THEN</span> <span class="str">'Investigate'</span>
-       <span class="kw">ELSE</span> <span class="str">'Repudiate'</span> <span class="kw">END</span> <span class="kw">AS</span> category
-<span class="kw">FROM</span> ( <span class="com">/* risk_points = the same CASE sum as above */</span> );</div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>⚙️ One-Pass Classification of the Whole Book</h2>
-            <p>On load, the dictionary-encoded data is decoded and every claim is classified once. A small histogram by risk points is all the scorecard needs, so the full population is scored instantly with no per-claim cost.</p>
-            <div class="code-container">
-                <div class="code-header">📄 demo.html · classifyAll()</div>
-<div class="code-block"><span class="kw">function</span> <span class="fn">decode</span>(i){ <span class="kw">const</span> r=MC.rows[i], o={id:<span class="str">"CLM-"</span>+(<span class="num">1000</span>+i), isFraud:MC.fraud[i]};
-  MC.fields.<span class="fn">forEach</span>((f,j)=&gt; o[f]=MC.legend[f][r[j]]); <span class="kw">return</span> o; }
-
-<span class="kw">const</span> byPoints = <span class="fn">Array.from</span>({length:<span class="num">12</span>}, ()=&gt;({n:<span class="num">0</span>, fraud:<span class="num">0</span>}));
-<span class="kw">for</span>(<span class="kw">let</span> i=<span class="num">0</span>; i&lt;N; i++){
-  <span class="kw">const</span> y = <span class="fn">yardstick</span>(<span class="fn">decode</span>(i));
-  catCount[y.cat]++;
-  byPoints[y.points].n++;
-  byPoints[y.points].fraud += MC.fraud[i];   <span class="com">// label only counted here, after the rule</span>
-}</div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>📊 Full-Population Metrics from the Histogram</h2>
-            <p>The review threshold flags a claim when its risk points are at or above the dial. Because the histogram already holds the fraud count at every points level, precision, recall, and the false-alarm rate over all 15,420 claims are a quick sum, recomputed instantly as the dial moves.</p>
-            <div class="code-container">
-                <div class="code-header">📄 demo.html · metricsAt(flag)</div>
-<div class="code-block"><span class="kw">function</span> <span class="fn">metricsAt</span>(flag){
-  <span class="kw">let</span> TP=<span class="num">0</span>, FP=<span class="num">0</span>, FN=<span class="num">0</span>, TN=<span class="num">0</span>;
-  <span class="kw">for</span>(<span class="kw">let</span> p=<span class="num">0</span>; p&lt;<span class="num">12</span>; p++){
-    <span class="kw">const</span> b=byPoints[p], flagged = p&gt;=flag;
-    <span class="kw">if</span>(flagged){ TP+=b.fraud; FP+=b.n-b.fraud; }
-    <span class="kw">else</span>{ FN+=b.fraud; TN+=b.n-b.fraud; }
-  }
-  <span class="kw">const</span> prec=TP/(TP+FP||<span class="num">1</span>), rec=TP/(TP+FN||<span class="num">1</span>), fpr=FP/(FP+TN||<span class="num">1</span>);
-  <span class="kw">return</span> {TP,FP,FN,TN, prec, rec, fpr,
-    recCI:<span class="fn">wilson</span>(TP,TP+FN), precCI:<span class="fn">wilson</span>(TP,TP+FP)};
-}</div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>📐 The Confidence Interval (Wilson score)</h2>
-            <p>Every headline number carries a 95% interval. Over the full 15,420-claim population these ranges are very tight, which is the point of scoring everything rather than a sample.</p>
-            <div class="code-container">
-                <div class="code-header">📄 demo.html · wilson(k, n)</div>
-<div class="code-block"><span class="com">// 95% Wilson score interval for a proportion k/n</span>
-<span class="kw">function</span> <span class="fn">wilson</span>(k, n, z){
-  z = z || <span class="num">1.96</span>; <span class="kw">if</span>(n===<span class="num">0</span>) <span class="kw">return</span> [<span class="num">0</span>,<span class="num">0</span>];
-  <span class="kw">const</span> p=k/n, d=<span class="num">1</span>+z*z/n;
-  <span class="kw">const</span> c=(p+z*z/(<span class="num">2</span>*n))/d;
-  <span class="kw">const</span> h=(z*<span class="fn">Math.sqrt</span>(p*(<span class="num">1</span>-p)/n + z*z/(<span class="num">4</span>*n*n)))/d;
-  <span class="kw">return</span> [<span class="fn">clamp</span>(c-h,<span class="num">0</span>,<span class="num">1</span>), <span class="fn">clamp</span>(c+h,<span class="num">0</span>,<span class="num">1</span>)];
-}</div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>🐍 The Compact Data Build</h2>
-            <p>A small Python script keeps only the fields the yardstick and the display need, then dictionary-encodes every claim so all 15,420 fit in about 520 KB and load via a single script tag, no fetch, no backend.</p>
-            <div class="code-container">
-                <div class="code-header">📄 build_full_data.py · excerpt</div>
-<div class="code-block"><span class="com"># list each field's distinct values once; encode each claim as indices into them</span>
-legend = {f: <span class="fn">sorted</span>(df[f].<span class="fn">unique</span>().<span class="fn">tolist</span>()) <span class="kw">for</span> f <span class="kw">in</span> fields}
-index  = {f: {v:i <span class="kw">for</span> i,v <span class="kw">in</span> <span class="fn">enumerate</span>(legend[f])} <span class="kw">for</span> f <span class="kw">in</span> fields}
-rows   = [[index[f][r[f]] <span class="kw">for</span> f <span class="kw">in</span> fields] <span class="kw">for</span> _, r <span class="kw">in</span> df.<span class="fn">iterrows</span>()]
-
-<span class="com"># fraud label travels separately; read only when scoring, never an input to the rule</span>
-fraud  = df[<span class="str">"FraudFound_P"</span>].<span class="fn">astype</span>(<span class="ty">int</span>).<span class="fn">tolist</span>()
-<span class="com"># -> window.MC = { fields, legend, rows, fraud }</span></div>
-            </div>
-        </div>
-
-        <div class="demo-links">
-            <a href="motor-claim-evaluator.html" class="demo-btn">← Back to Showcase</a>
-            <a href="https://github.com/lyven81/ai-project/tree/main/projects/motor-claim-evaluator" target="_blank" class="demo-btn secondary">📦 View on GitHub</a>
-        </div>
+  <div class="masthead">
+    <div class="mast-left">
+      <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+      <a class="logo" href="index.html">AI PROJECTS</a>
+      <nav class="mast-nav">
+        <a href="project-categories.html">Categories</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <div class="search-box">
+        <input type="text" class="search-input" id="searchInput" autocomplete="off" placeholder="Search AI projects..." aria-label="Search AI projects">
+        <span class="search-ic">&#128269;</span>
+        <div class="search-results" id="searchResults"></div>
+      </div>
     </div>
+  </div>
+  <hr class="rule-top">
+
+  <div class="crumb">
+    <a href="project-categories.html">Categories</a>
+    <span class="sep">/</span><a id="crumbCat" href="#"></a>
+    <span class="sep">/</span><a id="crumbProj" href="#"></a>
+    <span class="sep">/</span><span>Source</span>
+  </div>
+
+  <section class="src-head">
+    <div class="cover-strip" id="coverStrip" style="display:none"><img id="cover" alt=""></div>
+    <span class="rubric" id="kicker"></span>
+    <h1 id="title"></h1>
+    <p class="sub" id="subtitle"></p>
+    <div class="head-tech" id="headTech"></div>
+    <div class="head-btns" id="headBtns"></div>
+  </section>
+
+  <div id="body"></div>
+
+  <footer>&copy; 2026 Lee Yih Ven | AI Project Portfolio &middot; All rights reserved.</footer>
+  <div class="note">Sample Source-Showcase-E2 (TEMPLATE): source-code page on the index magazine system: slim cover banner, About, Project Structure, code walkthrough with copyable navy-barred code blocks, CTA. Reuse by editing only the PROJECT block at the top of the script.</div>
+
+<script>
+  const SITE = "";
+
+  /* =================================================================
+     EDIT PER PROJECT  -  the ONLY block you change per page.
+     Copy this file, swap PROJECT, save as <slug>-source.html.
+     - structure.code : the project file tree (plain text)
+     - walkthrough[]   : { heading, body, files:[{label, code}] }
+     - notes[]         : { heading, bullets:[...] }
+     Code strings can be multi-line; they render verbatim.
+     ================================================================= */
+  const PROJECT = {
+  "slug": "motor-claim-evaluator",
+  "category": "Industry Specialist Advisors",
+  "categoryUrl": "category-industry-advisors.html",
+  "title": "Motor Claim Triage and QC Evaluator",
+  "subtitle": "Source Code & Deterministic Yardstick. The fixed yardstick that decides the category, the one-pass classification of the whole book, the full-population metrics, and the Wilson interval.",
+  "cover": "images/motor-claim-evaluator/cover.jpeg",
+  "tech": [
+    "Vanilla JS",
+    "No Model, No Key",
+    "Python + pandas",
+    "Self-Contained"
+  ],
+  "overviewUrl": "motor-claim-evaluator.html",
+  "demoLabel": "Launch Live Demo",
+  "demoUrl": "https://lyven81.github.io/ai-project/projects/motor-claim-evaluator/demo.html",
+  "repoUrl": "https://github.com/lyven81/ai-project/tree/main/projects/motor-claim-evaluator",
+  "about": "These snippets show the parts that make this both a triage tool and an honest evaluator: the fixed yardstick that decides the category, the one-pass classification of the whole book, the full-population metrics, and the Wilson interval. There is no language model in the classification path. The category is a fixed point score over fixed fields, computed in the browser, so the same claim always lands in the same category. The fraud label is used only to score the flags, never to decide them.",
+  "structure": {
+    "label": "projects/motor-claim-evaluator/",
+    "code": "projects/motor-claim-evaluator/\n├── demo.html            the whole app: triage, scorecard, review dial, check one claim\n├── data/\n│   ├── claims-full.js   all 15,420 real claims, dictionary-encoded (window.MC)\n│   └── meta.json        population + per-category counts\n├── build_full_data.py   encodes dataset.csv -> claims-full.js\n└── dataset.csv          15,420 real Kaggle claims (source)"
+  },
+  "walkthrough": [
+    {
+      "heading": "The Fixed Yardstick (the whole classifier)",
+      "body": "A claim scores points from the signals the data proves predict fraud, and the total decides the category. This is the entire decision: no model, no temperature, no randomness. The same facts always give the same points and the same category.",
+      "files": [
+        {
+          "label": "demo.html · yardstick(claim)",
+          "code": "function yardstick(o){\n  let s=0;\n  if(o.fault===\"Policy Holder\") s+=2;\n  if(o.base_policy===\"All Perils\") s+=2;\n  else if(o.base_policy===\"Collision\") s+=1;\n  if(o.address_change_claim===\"under 6 months\" || o.address_change_claim===\"2 to 3 years\") s+=2;\n  if(o.days_policy_accident===\"none\") s+=2;\n  if(o.accident_area===\"Rural\") s+=1;\n  if(o.vehicle_price===\"less than 20000\" || o.vehicle_price===\"more than 69000\") s+=1;\n  if(o.age_of_vehicle===\"new\" || o.age_of_vehicle===\"3 years\" || o.age_of_vehicle===\"4 years\") s+=1;\n  const cat = s<=2 ? \"fast\" : s===3 ? \"approve\" : s<=5 ? \"investigate\" : \"repudiate\";\n  return {points:s, cat};\n}"
+        },
+        {
+          "label": "the equivalent fixed query",
+          "code": "SELECT claim_id, risk_points,\n  CASE WHEN risk_points<=2 THEN 'Fast track'\n       WHEN risk_points=3  THEN 'Approve'\n       WHEN risk_points<=5 THEN 'Investigate'\n       ELSE 'Repudiate' END AS category\nFROM ( /* risk_points = the same CASE sum as above */ );"
+        }
+      ]
+    },
+    {
+      "heading": "One-Pass Classification of the Whole Book",
+      "body": "On load, the dictionary-encoded data is decoded and every claim is classified once. A small histogram by risk points is all the scorecard needs, so the full population is scored instantly with no per-claim cost.",
+      "files": [
+        {
+          "label": "demo.html · classifyAll()",
+          "code": "function decode(i){ const r=MC.rows[i], o={id:\"CLM-\"+(1000+i), isFraud:MC.fraud[i]};\n  MC.fields.forEach((f,j)=> o[f]=MC.legend[f][r[j]]); return o; }\n\nconst byPoints = Array.from({length:12}, ()=>({n:0, fraud:0}));\nfor(let i=0; i<N; i++){\n  const y = yardstick(decode(i));\n  catCount[y.cat]++;\n  byPoints[y.points].n++;\n  byPoints[y.points].fraud += MC.fraud[i];   // label only counted here, after the rule\n}"
+        }
+      ]
+    },
+    {
+      "heading": "Full-Population Metrics from the Histogram",
+      "body": "The review threshold flags a claim when its risk points are at or above the dial. Because the histogram already holds the fraud count at every points level, precision, recall, and the false-alarm rate over all 15,420 claims are a quick sum, recomputed instantly as the dial moves.",
+      "files": [
+        {
+          "label": "demo.html · metricsAt(flag)",
+          "code": "function metricsAt(flag){\n  let TP=0, FP=0, FN=0, TN=0;\n  for(let p=0; p<12; p++){\n    const b=byPoints[p], flagged = p>=flag;\n    if(flagged){ TP+=b.fraud; FP+=b.n-b.fraud; }\n    else{ FN+=b.fraud; TN+=b.n-b.fraud; }\n  }\n  const prec=TP/(TP+FP||1), rec=TP/(TP+FN||1), fpr=FP/(FP+TN||1);\n  return {TP,FP,FN,TN, prec, rec, fpr,\n    recCI:wilson(TP,TP+FN), precCI:wilson(TP,TP+FP)};\n}"
+        }
+      ]
+    },
+    {
+      "heading": "The Confidence Interval (Wilson score)",
+      "body": "Every headline number carries a 95% interval. Over the full 15,420-claim population these ranges are very tight, which is the point of scoring everything rather than a sample.",
+      "files": [
+        {
+          "label": "demo.html · wilson(k, n)",
+          "code": "// 95% Wilson score interval for a proportion k/n\nfunction wilson(k, n, z){\n  z = z || 1.96; if(n===0) return [0,0];\n  const p=k/n, d=1+z*z/n;\n  const c=(p+z*z/(2*n))/d;\n  const h=(z*Math.sqrt(p*(1-p)/n + z*z/(4*n*n)))/d;\n  return [clamp(c-h,0,1), clamp(c+h,0,1)];\n}"
+        }
+      ]
+    },
+    {
+      "heading": "The Compact Data Build",
+      "body": "A small Python script keeps only the fields the yardstick and the display need, then dictionary-encodes every claim so all 15,420 fit in about 520 KB and load via a single script tag, no fetch, no backend.",
+      "files": [
+        {
+          "label": "build_full_data.py · excerpt",
+          "code": "# list each field's distinct values once; encode each claim as indices into them\nlegend = {f: sorted(df[f].unique().tolist()) for f in fields}\nindex  = {f: {v:i for i,v in enumerate(legend[f])} for f in fields}\nrows   = [[index[f][r[f]] for f in fields] for _, r in df.iterrows()]\n\n# fraud label travels separately; read only when scoring, never an input to the rule\nfraud  = df[\"FraudFound_P\"].astype(int).tolist()\n# -> window.MC = { fields, legend, rows, fraud }"
+        }
+      ]
+    }
+  ],
+  "cta": "Want a transparent, governed triage tool like this built for your own claims book? Let's scope it."
+};
+  /* ===================== END EDIT BLOCK ===================== */
+
+  const pref = (u) => /^https?:|^mailto:|^tel:/.test(u || '') ? u : (SITE + (u || ''));
+  const esc = (s) => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const rich = (s) => esc(s).replace(/&lt;(\/?(?:b|code))&gt;/g, '<$1>');
+
+  // raw code store for copy buttons
+  const RAW = [];
+  function codeBlock(label, codeStr, extraClass){
+    const idx = RAW.push(codeStr) - 1;
+    const rendered = esc(codeStr).split('\n')
+      .map(line => /^\s*#/.test(line) ? `<span class="cmt">${line}</span>` : line).join('\n');
+    return `<div class="codeblock ${extraClass||''}">`+
+      `<div class="code-bar"><span class="path"><span>${esc(label)}</span></span>`+
+      `<button class="code-copy" data-idx="${idx}">Copy</button></div>`+
+      `<pre><code>${rendered}</code></pre></div>`;
+  }
+
+  // Breadcrumb + header
+  document.title = PROJECT.title + ": Source | AI Project Portfolio";
+  document.getElementById('crumbCat').textContent = PROJECT.category;
+  document.getElementById('crumbCat').href = pref(PROJECT.categoryUrl);
+  document.getElementById('crumbProj').textContent = PROJECT.title;
+  document.getElementById('crumbProj').href = pref(PROJECT.overviewUrl);
+  if (PROJECT.cover){
+    document.getElementById('coverStrip').style.display = '';
+    const c = document.getElementById('cover'); c.src = PROJECT.cover; c.alt = PROJECT.title + " cover";
+  }
+  document.getElementById('kicker').textContent = "Source Walkthrough · " + PROJECT.category;
+  document.getElementById('title').textContent = PROJECT.title;
+  document.getElementById('subtitle').textContent = PROJECT.subtitle;
+  document.getElementById('headTech').innerHTML = (PROJECT.tech||[]).map(t => `<span class="tech-chip">${esc(t)}</span>`).join('');
+  document.getElementById('headBtns').innerHTML =
+    (PROJECT.demoUrl ? `<a class="btn" href="${pref(PROJECT.demoUrl)}" target="_blank" rel="noopener">${esc(PROJECT.demoLabel||'Live Demo')}</a>` : '') +
+    (PROJECT.overviewUrl ? `<a class="btn ghost" href="${pref(PROJECT.overviewUrl)}">Project Overview</a>` : '') +
+    (PROJECT.repoUrl ? `<a class="btn ghost" href="${pref(PROJECT.repoUrl)}" target="_blank" rel="noopener">GitHub Repo</a>` : '');
+
+  const section = (tab, inner) => `<section class="sec"><div class="sec-rule"><span class="tab">${esc(tab)}</span>${inner}</div></section>`;
+  let html = "";
+  const P = PROJECT;
+
+  if (P.about){
+    html += section("About This Code", `<h2>About This Code Showcase</h2><p class="intro">${rich(P.about)}</p>`);
+  }
+  if (P.structure && P.structure.code){
+    html += section("Project Structure", `<h2>Project Structure</h2>`+
+      codeBlock(P.structure.label || 'project/', P.structure.code, 'tree'));
+  }
+  (P.walkthrough||[]).forEach(w => {
+    let inner = `<h2>${esc(w.heading)}</h2>`;
+    if (w.body) inner += `<p class="body">${rich(w.body)}</p>`;
+    (w.files||[]).forEach(f => { inner += codeBlock(f.label, f.code); });
+    html += section("Code", inner);
+  });
+  // CTA
+  html += `<section class="sec"><div class="cta-inner">`+
+    `<div><h3>Interested in the build?</h3><p>${esc(P.cta || "Let's talk.")}</p></div>`+
+    `<div class="cta-btns">`+
+    (P.demoUrl ? `<a class="btn" href="${pref(P.demoUrl)}" target="_blank" rel="noopener">${esc(P.demoLabel||'Live Demo')}</a>` : '')+
+    `<a class="btn ghost" href="${SITE}contact.html">Get in Touch</a>`+
+    `</div></div></section>`;
+
+  document.getElementById('body').innerHTML = html;
+
+  // Copy buttons
+  function copyText(text, btn){
+    const done = ()=>{ const o=btn.textContent; btn.textContent='Copied ✓'; setTimeout(()=>btn.textContent=o.includes('Copied')?'Copy':o,1400); };
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(done).catch(()=>fb(text,done)); }
+    else fb(text,done);
+  }
+  function fb(text,done){ const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(ta); done(); }
+  document.querySelectorAll('.code-copy').forEach(btn =>
+    btn.addEventListener('click', ()=> copyText(RAW[+btn.dataset.idx], btn)));
+
+  // Masthead search
+  const ITEMS = [
+    {t:PROJECT.title, c:PROJECT.category, s:PROJECT.slug},
+    {t:"Courier CS Quality Console", c:"Conversational Data Analytics", s:"courier-cs-quality-console"},
+    {t:"Voucher Analyzer", c:"Conversational Data Analytics", s:"voucher-analyzer"},
+    {t:"Wiseman", c:"Knowledge & Reference Chatbots", s:"wiseman"},
+    {t:"Sunny Car Accessories", c:"Agentic Commerce", s:"sunny-car-accessories"},
+    {t:"Bookshelf", c:"Multi-Agent Decision Systems", s:"bookshelf"}
+  ];
+  const searchInput = document.getElementById('searchInput');
+  const searchResults = document.getElementById('searchResults');
+  function runSearch(q){
+    if(q.trim().length < 2){ searchResults.style.display='none'; return; }
+    const ql = q.toLowerCase();
+    const hits = ITEMS.filter(it => (it.t+' '+it.c).toLowerCase().includes(ql));
+    searchResults.innerHTML = hits.length ? hits.map(it =>
+      `<div class="sr-item"><div class="sr-cat">${esc(it.c)}</div>`+
+      `<a href="${SITE}${it.s}.html"><div class="sr-title">${esc(it.t)}</div></a>`+
+      `<div class="sr-links"><a href="${SITE}${it.s}.html">View Details</a></div></div>`).join('')
+      : `<div class="sr-none">No projects found. Try a different keyword.</div>`;
+    searchResults.style.display='block';
+  }
+  searchInput.addEventListener('input', e => runSearch(e.target.value));
+  document.addEventListener('click', e => { if(!e.target.closest('.search-box')) searchResults.style.display='none'; });
+
+  // Drawer
+  const drawer=document.getElementById('drawer'), overlay=document.getElementById('overlay');
+  const openMenu=()=>{ drawer.classList.add('open'); overlay.classList.add('open'); };
+  const closeMenu=()=>{ drawer.classList.remove('open'); overlay.classList.remove('open'); };
+  document.getElementById('hamburger').addEventListener('click', openMenu);
+  document.getElementById('drawerClose').addEventListener('click', closeMenu);
+  overlay.addEventListener('click', closeMenu);
+  drawer.querySelectorAll('a').forEach(a=>a.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeMenu(); searchResults.style.display='none'; }});
+</script>
 </body>
 </html>

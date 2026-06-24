@@ -1,1196 +1,359 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lee Yih Ven | AI Project Portfolio</title>
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <link rel="icon" type="image/svg+xml" href="favicon.svg">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <style>
-        *, *::before, *::after {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background-color: #ffffff;
-        }
-
-        /* ── Navbar ── */
-        .navbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-            background: rgba(30, 27, 24, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(201, 168, 76, 0.15);
-            padding: 0 40px;
-            height: 64px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .navbar-brand {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: #C9A84C;
-            text-decoration: none;
-        }
-
-        .navbar-links {
-            display: flex;
-            gap: 32px;
-            list-style: none;
-        }
-
-        .navbar-links a {
-            color: #ddd;
-            text-decoration: none;
-            font-size: 0.75rem;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            transition: color 0.3s;
-        }
-
-        .navbar-links a:hover,
-        .navbar-links a.active {
-            color: #C9A84C;
-        }
-
-        .navbar-toggle {
-            display: none;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 4px;
-        }
-
-        .navbar-toggle span {
-            display: block;
-            width: 24px;
-            height: 2px;
-            background: #ddd;
-            margin: 5px 0;
-            transition: all 0.3s;
-        }
-
-        /* ── Hero ── */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            background: linear-gradient(135deg, #1E1B18 0%, #2a2520 50%, #3d2e1e 100%);
-            position: relative;
-            overflow: hidden;
-            padding: 120px 20px 80px;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: -120px;
-            right: -120px;
-            width: 400px;
-            height: 400px;
-            border: 1px solid rgba(201, 168, 76, 0.08);
-            border-radius: 50%;
-        }
-
-        .hero::after {
-            content: '';
-            position: absolute;
-            bottom: -80px;
-            left: -80px;
-            width: 300px;
-            height: 300px;
-            border: 1px solid rgba(201, 168, 76, 0.06);
-            border-radius: 50%;
-        }
-
-        .hero-deco-1 {
-            position: absolute;
-            top: 20%;
-            left: 8%;
-            width: 1px;
-            height: 120px;
-            background: linear-gradient(to bottom, transparent, rgba(201, 168, 76, 0.15), transparent);
-        }
-
-        .hero-deco-2 {
-            position: absolute;
-            bottom: 25%;
-            right: 10%;
-            width: 80px;
-            height: 80px;
-            border: 1px solid rgba(201, 168, 76, 0.06);
-            border-radius: 50%;
-        }
-
-        .hero-deco-3 {
-            position: absolute;
-            top: 35%;
-            right: 15%;
-            width: 6px;
-            height: 6px;
-            background: rgba(201, 168, 76, 0.12);
-            border-radius: 50%;
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 1;
-            max-width: 700px;
-        }
-
-        .hero-tag {
-            display: inline-block;
-            font-size: 0.7rem;
-            font-weight: 600;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: #C9A84C;
-            margin-bottom: 24px;
-            padding: 6px 16px;
-            border: 1px solid rgba(201, 168, 76, 0.3);
-            border-radius: 20px;
-        }
-
-        .hero h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 4rem;
-            font-weight: 700;
-            color: #fff;
-            line-height: 1.1;
-            margin-bottom: 20px;
-        }
-
-        .hero-tagline {
-            font-size: 1.15rem;
-            color: rgba(255, 255, 255, 0.6);
-            font-weight: 300;
-            margin-bottom: 28px;
-            line-height: 1.7;
-        }
-
-        .search-wrap {
-            position: relative;
-            max-width: 480px;
-            margin: 0 auto 28px auto;
-        }
-        .search-input {
-            width: 100%;
-            padding: 14px 20px 14px 44px;
-            border: 1px solid #C9A84C;
-            border-radius: 8px;
-            background: #FAF6EE;
-            color: #333;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.95rem;
-            outline: none;
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
-        .search-input::placeholder { color: #a09680; }
-        .search-input:focus { border-color: #C9A84C; box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.25); }
-        .search-icon {
-            position: absolute;
-            left: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #8a7340;
-            font-size: 1rem;
-            pointer-events: none;
-        }
-        .search-results {
-            position: absolute;
-            top: calc(100% + 6px);
-            left: 0;
-            right: 0;
-            background: #FBF8F1;
-            border: 1px solid #C9A84C;
-            border-radius: 8px;
-            max-height: 360px;
-            overflow-y: auto;
-            display: none;
-            z-index: 100;
-            box-shadow: 0 12px 40px rgba(0,0,0,0.2);
-        }
-        .search-results.active { display: block; }
-        .search-result-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 16px;
-            border-bottom: 1px solid #EDE6D6;
-            cursor: pointer;
-            transition: background 0.15s;
-            text-decoration: none;
-            color: #333;
-        }
-        .search-result-item:hover { background: #F0E8D4; }
-        .search-result-item:last-child { border-bottom: none; }
-        .sr-name { font-weight: 600; font-size: 0.9rem; color: #3c2415; }
-        .sr-cat { font-size: 0.72rem; color: #8a5400; font-weight: 600; letter-spacing: 0.3px; background: #FFF3E0; padding: 2px 8px; border-radius: 10px; white-space: nowrap; }
-        .sr-desc { font-size: 0.78rem; color: #7a6a55; margin-top: 2px; }
-        .sr-empty { padding: 16px; text-align: center; color: #a09680; font-size: 0.85rem; }
-
-        .btn-gold {
-            display: inline-block;
-            background: #C9A84C;
-            color: #1E1B18;
-            padding: 14px 36px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.9rem;
-            letter-spacing: 0.5px;
-            transition: background 0.3s, transform 0.2s;
-        }
-
-        .btn-gold:hover {
-            background: #d4b65e;
-            transform: translateY(-2px);
-        }
-
-        .btn-outline-gold {
-            display: inline-block;
-            border: 1.5px solid #C9A84C;
-            color: #C9A84C;
-            padding: 12px 28px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 0.85rem;
-            transition: background 0.3s, color 0.3s;
-        }
-
-        .btn-outline-gold:hover {
-            background: #C9A84C;
-            color: #1E1B18;
-        }
-
-        /* ── Section common ── */
-        .section {
-            padding: 100px 40px;
-        }
-
-        .section-inner {
-            max-width: 1100px;
-            margin: 0 auto;
-        }
-
-        .section-tag {
-            display: inline-block;
-            font-size: 0.7rem;
-            font-weight: 600;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: #C9A84C;
-            margin-bottom: 12px;
-        }
-
-        .section-heading {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.2rem;
-            font-weight: 700;
-            color: #1E1B18;
-            margin-bottom: 48px;
-        }
-
-        .bg-light {
-            background: #F8F6F2;
-        }
-
-        /* ── Featured Category (top row) ── */
-        .featured-category {
-            display: flex;
-            gap: 28px;
-            align-items: center;
-            background: #fff;
-            border-radius: 10px;
-            padding: 32px 36px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            margin-bottom: 28px;
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
-            text-decoration: none;
-            color: inherit;
-            transition: box-shadow 0.3s;
-        }
-        .featured-category:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.12); }
-        .featured-category .featured-bar {
-            position: absolute; top: 0; left: 0; right: 0; height: 5px;
-        }
-        .featured-category .featured-icon {
-            width: 64px; height: 64px; border-radius: 14px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.6rem; color: #fff; flex-shrink: 0;
-        }
-        .featured-category .featured-body { flex: 1; }
-        .featured-category .featured-body h3 {
-            font-family: 'Inter', sans-serif; font-size: 1.25rem;
-            font-weight: 700; color: #1E1B18; margin-bottom: 4px;
-        }
-        .featured-category .featured-count {
-            display: inline-block; font-size: 0.72rem; font-weight: 600;
-            padding: 2px 10px; border-radius: 12px; color: #fff; margin-bottom: 8px;
-        }
-        .featured-category .featured-desc {
-            font-size: 0.9rem; color: #555; line-height: 1.5;
-        }
-        .featured-category .featured-btn {
-            background: #C9A84C; color: #fff; padding: 10px 22px;
-            border-radius: 6px; text-decoration: none; font-size: 0.82rem;
-            font-weight: 600; white-space: nowrap; flex-shrink: 0;
-        }
-        .featured-category .featured-btn:hover { background: #b0912e; }
-        .swap-hint {
-            text-align: center; font-size: 0.75rem; color: #999;
-            margin-bottom: 16px; letter-spacing: 0.5px;
-        }
-
-        /* ── Category Cards ── */
-        .category-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
-        }
-
-        .category-card {
-            background: #fff;
-            border-radius: 8px;
-            padding: 28px 24px;
-            text-decoration: none;
-            color: inherit;
-            cursor: pointer;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-            transition: transform 0.3s, box-shadow 0.3s;
-            position: relative;
-            overflow: hidden;
-            opacity: 0;
-            transform: translateY(30px);
-        }
-
-        .category-card.visible {
-            opacity: 1;
-            transform: translateY(0);
-            transition: opacity 0.5s ease, transform 0.5s ease, box-shadow 0.3s;
-        }
-
-        .category-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.1);
-        }
-
-        .category-card.visible:hover {
-            transform: translateY(-4px);
-        }
-
-        .category-bar {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-        }
-
-        .category-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            margin-bottom: 16px;
-            color: #fff;
-        }
-
-        .category-card h3 {
-            font-family: 'Inter', sans-serif;
-            font-size: 1rem;
-            font-weight: 600;
-            color: #1E1B18;
-            margin-bottom: 6px;
-        }
-
-        .category-count {
-            display: inline-block;
-            font-size: 0.7rem;
-            font-weight: 600;
-            padding: 2px 10px;
-            border-radius: 12px;
-            color: #fff;
-            margin-bottom: 10px;
-        }
-
-        .category-desc {
-            font-size: 0.85rem;
-            color: #666;
-            line-height: 1.5;
-        }
-
-        /* ── Featured Project (top row) ── */
-        .featured-project {
-            display: flex;
-            gap: 28px;
-            align-items: stretch;
-            background: #fff;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            margin-bottom: 28px;
-            cursor: pointer;
-            text-decoration: none;
-            color: inherit;
-            transition: box-shadow 0.3s;
-        }
-        .featured-project:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.12); }
-        .featured-project .fp-visual {
-            width: 240px; min-height: 180px; flex-shrink: 0;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 3.5rem; position: relative;
-        }
-        .featured-project .fp-visual::after {
-            content: ''; position: absolute; right: 0; top: 0; bottom: 0; width: 40px;
-            background: linear-gradient(to left, #fff, transparent);
-        }
-        .featured-project .fp-body {
-            padding: 28px 28px 28px 0; display: flex; flex-direction: column; justify-content: center; flex: 1;
-        }
-        .featured-project .fp-tag {
-            display: inline-block; font-size: 0.65rem; font-weight: 600; letter-spacing: 1px;
-            text-transform: uppercase; padding: 3px 10px; border-radius: 4px; color: #fff;
-            margin-bottom: 8px; width: fit-content;
-        }
-        .featured-project .fp-body h3 {
-            font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700;
-            color: #1E1B18; margin-bottom: 8px;
-        }
-        .featured-project .fp-body p {
-            font-size: 0.9rem; color: #666; line-height: 1.5; margin-bottom: 16px;
-        }
-        .featured-project .fp-actions { display: flex; gap: 10px; }
-        .fp-swap-hint {
-            text-align: center; font-size: 0.75rem; color: #999;
-            margin-bottom: 16px; letter-spacing: 0.5px;
-        }
-
-        @media (max-width: 768px) {
-            .featured-project { flex-direction: column; }
-            .featured-project .fp-visual { width: 100%; min-height: 120px; }
-            .featured-project .fp-visual::after {
-                right: auto; top: auto; bottom: 0; left: 0; width: 100%; height: 40px;
-                background: linear-gradient(to top, #fff, transparent);
-            }
-            .featured-project .fp-body { padding: 20px; }
-        }
-
-        /* ── Featured Project Cards ── */
-        .project-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 28px;
-        }
-
-        .project-card {
-            background: #fff;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-            transition: transform 0.3s, box-shadow 0.3s;
-            opacity: 0;
-            transform: translateY(30px);
-        }
-
-        .project-card.visible {
-            opacity: 1;
-            transform: translateY(0);
-            transition: opacity 0.5s ease, transform 0.5s ease, box-shadow 0.3s;
-        }
-
-        .project-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.1);
-        }
-
-        .project-card.visible:hover {
-            transform: translateY(-4px);
-        }
-
-        .project-visual {
-            height: 160px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .project-visual::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 40px;
-            background: linear-gradient(to top, #fff, transparent);
-        }
-
-        .project-body {
-            padding: 24px;
-        }
-
-        .project-category-tag {
-            display: inline-block;
-            font-size: 0.65rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            padding: 3px 10px;
-            border-radius: 4px;
-            color: #fff;
-            margin-bottom: 10px;
-        }
-
-        .project-body h3 {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.15rem;
-            font-weight: 600;
-            color: #1E1B18;
-            margin-bottom: 8px;
-        }
-
-        .project-body p {
-            font-size: 0.85rem;
-            color: #666;
-            line-height: 1.5;
-            margin-bottom: 20px;
-            min-height: 40px;
-        }
-
-        .project-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .project-actions .btn-gold {
-            padding: 10px 20px;
-            font-size: 0.8rem;
-        }
-
-        .project-actions .btn-outline-gold {
-            padding: 9px 18px;
-            font-size: 0.8rem;
-        }
-
-        /* ── Footer ── */
-        .footer {
-            background: #1E1B18;
-            padding: 48px 40px;
-            text-align: center;
-        }
-
-        .footer-brand {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.1rem;
-            color: #C9A84C;
-            margin-bottom: 8px;
-        }
-
-        .footer-copy {
-            font-size: 0.8rem;
-            color: rgba(255, 255, 255, 0.4);
-        }
-
-        /* ── Responsive ── */
-        @media (max-width: 1024px) {
-            .category-grid,
-            .project-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .hero h1 {
-                font-size: 3rem;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .featured-category { flex-direction: column; text-align: center; padding: 24px 20px; }
-            .featured-category .featured-icon { margin: 0 auto 12px; }
-
-            .navbar {
-                padding: 0 20px;
-            }
-
-            .navbar-toggle {
-                display: block;
-            }
-
-            .navbar-links {
-                display: none;
-                position: absolute;
-                top: 64px;
-                left: 0;
-                right: 0;
-                background: rgba(30, 27, 24, 0.95);
-                backdrop-filter: blur(12px);
-                flex-direction: column;
-                padding: 20px;
-                gap: 16px;
-                border-bottom: 1px solid rgba(201, 168, 76, 0.15);
-            }
-
-            .navbar-links.open {
-                display: flex;
-            }
-
-            .hero h1 {
-                font-size: 2.4rem;
-            }
-
-            .hero-tagline {
-                font-size: 1rem;
-            }
-
-            .section {
-                padding: 60px 20px;
-            }
-
-            .category-grid,
-            .project-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .section-heading {
-                font-size: 1.8rem;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lee Yih Ven | AI Project Portfolio</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root{ --ink:#222; --paper:#fff; --rule:#222; --hair:#dddddd; --gray:#555; --accent:#B8860B; --gold:#daa520; --cream:#f5f5dc; }
+  body{ background:var(--paper); color:var(--ink); font-family:Arial, Helvetica, sans-serif; line-height:1.6; overflow-x:hidden; }
+  a{ color:inherit; text-decoration:none; }
+  a:hover h2, a:hover h3, a:hover h4{ color:var(--accent); }
+
+  /* Masthead */
+  .masthead{ display:flex; align-items:center; justify-content:space-between; padding:14px 28px; max-width:1240px; margin:0 auto; gap:18px; }
+  .mast-left{ display:flex; align-items:center; gap:20px; }
+  .logo{ background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; letter-spacing:3px; font-size:.95rem; padding:8px 12px; white-space:nowrap; }
+  .mast-nav{ display:flex; gap:20px; font-family:Arial, Helvetica, sans-serif; font-size:.72rem; letter-spacing:1.4px; text-transform:uppercase; }
+  .mast-nav a:hover{ color:var(--accent); }
+  .hamburger{ display:none; flex-direction:column; gap:4px; background:none; border:none; cursor:pointer; padding:6px; }
+  .hamburger span{ width:22px; height:2px; background:#222; display:block; }
+  .rule-top{ border:none; border-top:3px solid var(--rule); max-width:1240px; margin:0 auto; }
+
+  /* Search (in nav, beside Contact) */
+  .search-box{ position:relative; width:200px; }
+  .search-input{ width:100%; padding:7px 30px 7px 12px; border:1px solid var(--hair); background:#fff;
+    font-family:Arial, Helvetica, sans-serif; font-size:.8rem; color:#222; }
+  .search-input:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(184,134,11,.15); }
+  .search-ic{ position:absolute; right:10px; top:50%; transform:translateY(-50%); color:var(--gray); font-size:.8rem; pointer-events:none; }
+  .search-results{ position:absolute; top:calc(100% + 4px); left:0; width:340px; max-width:86vw; background:#fff; border:1px solid #222;
+    max-height:60vh; overflow-y:auto; z-index:120; display:none; }
+  .sr-item{ padding:12px 14px; border-bottom:1px solid var(--hair); }
+  .sr-item:last-child{ border-bottom:none; }
+  .sr-cat{ font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; margin-bottom:4px; color:var(--accent); }
+  .sr-title{ font-weight:700; font-size:1.02rem; color:#222; }
+  .sr-links{ font-size:.58rem; letter-spacing:.8px; text-transform:uppercase; color:var(--gray); margin-top:5px; }
+  .sr-links a:hover{ color:var(--accent); }
+  .sr-none{ padding:16px 14px; font-size:.82rem; color:var(--gray); }
+
+  /* Shared type bits */
+  .tab{ display:inline-block; background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700;
+    font-size:.66rem; letter-spacing:2px; text-transform:uppercase; padding:6px 12px; margin-bottom:18px; }
+  .rubric{ font-family:Arial, Helvetica, sans-serif; font-size:.64rem; font-weight:700; letter-spacing:1.6px; text-transform:uppercase; margin-bottom:6px; display:block; color:var(--accent); }
+  .byline{ font-family:Arial, Helvetica, sans-serif; font-size:.6rem; letter-spacing:1px; color:var(--gray); text-transform:uppercase; margin-top:8px; }
+  .links{ font-family:Arial, Helvetica, sans-serif; font-size:.58rem; letter-spacing:1px; text-transform:uppercase; margin-top:8px; color:var(--gray); }
+  .links a:hover{ color:var(--accent); }
+  .lead-dek{ font-style:italic; font-size:1.05rem; color:#333; max-width:52ch; }
+
+  /* Visual block (gradient + emoji, no photos) */
+  .viz{ display:flex; align-items:center; justify-content:center; color:#fff; text-shadow:0 2px 10px rgba(0,0,0,.3); line-height:1; }
+
+  /* ---------- UPPER BODY: 2 / 1 / 2 ---------- */
+  .wrap{ max-width:1240px; margin:0 auto; padding:0 28px 10px; }
+  .grid{ display:grid; grid-template-columns:300px 1fr 320px; }
+  .col{ padding:24px 0; display:flex; flex-direction:column; }
+  .col-left{ padding-right:26px; border-right:1px solid var(--hair); }
+  .col-mid{ padding:24px 28px; }
+  .col-right{ padding-left:26px; border-left:1px solid var(--hair); }
+  .col-left #picks{ flex:1; display:flex; flex-direction:column; }
+  .col-right #recent{ flex:1; display:flex; flex-direction:column; }
+
+  /* Lead (center) */
+  .col-mid > a.viz{ flex:1; min-height:300px; margin-bottom:16px; font-size:4.6rem; }
+  .next-kicker{ font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.7rem; letter-spacing:2px; text-transform:uppercase; margin-bottom:6px; color:var(--accent); }
+  .lead-headline{ font-size:2.7rem; font-weight:900; line-height:1.04; letter-spacing:-.005em; margin-bottom:14px; }
+  .col-mid .lead-dek{ margin-bottom:6px; }
+
+  /* Left picks (2) */
+  .pick{ flex:1; display:flex; flex-direction:column; padding:20px 0; border-bottom:1px solid var(--hair); }
+  .pick:first-of-type{ padding-top:0; }
+  .pick:last-child{ border-bottom:none; padding-bottom:0; }
+  .pick > a.viz{ flex:1; min-height:150px; margin-bottom:13px; font-size:2.6rem; }
+  .pick h3{ font-size:1.42rem; font-weight:700; line-height:1.08; }
+
+  /* Right (2) */
+  .recent{ flex:1; display:flex; flex-direction:column; padding:18px 0; border-bottom:1px solid var(--hair); }
+  .recent:first-of-type{ padding-top:0; }
+  .recent:last-child{ border-bottom:none; padding-bottom:0; }
+  .recent > a.viz{ flex:1; min-height:110px; margin-bottom:11px; font-size:2.2rem; }
+  .recent h3{ font-size:1.18rem; font-weight:700; line-height:1.14; }
+  .recent .lead-dek{ font-size:.92rem; margin-top:6px; }
+
+  /* ---------- EXPLORE BY CATEGORY (8 tiles) ---------- */
+  .method{ max-width:1240px; margin:0 auto; padding:8px 28px 36px; }
+  .method-grid{ display:grid; grid-template-columns:repeat(4,1fr); border-top:1px solid var(--hair); }
+  .method-tile{ padding:18px 18px 22px; border-right:1px solid var(--hair); border-bottom:1px solid var(--hair); }
+  .method-tile:nth-child(4n){ border-right:none; }
+  .method-tile:nth-last-child(-n+4){ border-bottom:none; }
+  .method-tile h4{ font-size:1.05rem; font-weight:700; line-height:1.12; margin-bottom:8px; }
+  .method-tile p{ font-family:Arial, Helvetica, sans-serif; font-size:.6rem; letter-spacing:.5px; line-height:1.5; color:var(--gray); margin-bottom:12px; }
+  .method-tile .go{ font-family:Arial, Helvetica, sans-serif; font-size:.6rem; letter-spacing:1px; text-transform:uppercase; color:var(--accent); }
+  .method-tile:hover h4{ color:var(--accent); }
+
+  /* ---------- LOWER BODY: 2 x 2 cards ---------- */
+  .lower{ max-width:1240px; margin:0 auto; padding:8px 28px 50px; }
+  .lower-grid{ display:grid; grid-template-columns:1fr 1fr; border-top:3px solid var(--rule); }
+  .lower-card{ padding:26px 0; border-bottom:1px solid var(--hair); }
+  .lower-card:nth-child(odd){ border-right:1px solid var(--hair); padding-right:34px; }
+  .lower-card:nth-child(even){ padding-left:34px; }
+  .lower-card:nth-last-child(-n+2){ border-bottom:none; }
+  .lower-card a.viz{ height:220px; margin-bottom:15px; font-size:3rem; }
+  .lower-card h3{ font-size:1.7rem; font-weight:700; line-height:1.06; }
+  .lower-card .lead-dek{ margin-top:8px; font-size:1rem; }
+
+  footer{ background:#222; max-width:1240px; margin:0 auto; padding:24px 28px;
+    font-family:Arial, Helvetica, sans-serif; font-size:.8rem; letter-spacing:.5px; color:#fff; text-align:center; }
+  .note{ max-width:1240px; margin:14px auto 0; padding:8px 28px; font-family:Arial, Helvetica, sans-serif;
+    font-size:.62rem; letter-spacing:1px; color:#999; }
+
+  /* Mobile drawer */
+  .drawer{ position:fixed; top:0; left:-300px; width:280px; height:100vh; background:#fff; z-index:200;
+    box-shadow:2px 0 14px rgba(0,0,0,.15); transition:left .28s ease; padding:74px 26px 26px; }
+  .drawer.open{ left:0; }
+  .drawer a{ display:block; font-family:Arial, Helvetica, sans-serif; font-size:.82rem; letter-spacing:1.2px; text-transform:uppercase;
+    padding:14px 0; border-bottom:1px solid var(--hair); }
+  .overlay{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:150; }
+  .overlay.open{ display:block; }
+  .drawer-close{ position:absolute; top:20px; right:20px; font-family:Arial, Helvetica, sans-serif; font-size:1.4rem; background:none; border:none; cursor:pointer; }
+
+  @media (max-width:1000px){
+    .method-grid{ grid-template-columns:repeat(2,1fr); }
+    .method-tile:nth-child(4n){ border-right:1px solid var(--hair); }
+    .method-tile:nth-child(2n){ border-right:none; }
+    .method-tile:nth-last-child(-n+4){ border-bottom:1px solid var(--hair); }
+    .method-tile:nth-last-child(-n+2){ border-bottom:none; }
+  }
+  @media (max-width:900px){
+    .grid{ grid-template-columns:1fr; }
+    .col-left,.col-right{ border:none; padding:22px 0; border-top:1px solid var(--hair); }
+    .col-mid{ padding:22px 0; }
+    .lead-headline{ font-size:2rem; }
+    .col-mid > a.viz{ min-height:230px; }
+    .mast-nav{ display:none; }
+    .hamburger{ display:flex; }
+    .masthead{ padding:12px 16px; }
+    .mast-left{ gap:10px; min-width:0; flex:1; }
+    .logo{ font-size:.72rem; letter-spacing:1.5px; padding:6px 8px; }
+    .search-box{ flex:1; width:auto; min-width:0; }
+    .search-results{ position:fixed; top:58px; left:12px; right:12px; width:auto; max-width:none; }
+    .lower-grid{ grid-template-columns:1fr; }
+    .lower-card:nth-child(odd){ border-right:none; padding-right:0; }
+    .lower-card:nth-child(even){ padding-left:0; }
+    .lower-card{ border-bottom:1px solid var(--hair); }
+    .lower-card:last-child{ border-bottom:none; }
+  }
+  @media (max-width:560px){
+    .method-grid{ grid-template-columns:1fr; }
+    .method-tile{ border-right:none !important; }
+  }
+</style>
 </head>
 <body>
 
-<!-- Navbar -->
-<nav class="navbar">
-    <a href="index.html" class="navbar-brand">AI Projects</a>
-    <button class="navbar-toggle" aria-label="Toggle navigation" onclick="document.querySelector('.navbar-links').classList.toggle('open')">
-        <span></span><span></span><span></span>
-    </button>
-    <ul class="navbar-links">
-        <li><a href="index.html" class="active">Home</a></li>
-        <li><a href="project-categories.html">Categories</a></li>
-        <li><a href="contact.html">Contact</a></li>
-    </ul>
-</nav>
+  <!-- Mobile drawer -->
+  <div class="overlay" id="overlay"></div>
+  <nav class="drawer" id="drawer">
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">&times;</button>
+    <a href="project-categories.html">Categories</a>
+    <a href="contact.html">Contact</a>
+    <a href="https://lyven81.github.io/data-analyst-portfolio/index.html">Data Portfolio</a>
+  </nav>
 
-<!-- Hero -->
-<section class="hero" id="hero">
-    <div class="hero-deco-1"></div>
-    <div class="hero-deco-2"></div>
-    <div class="hero-deco-3"></div>
-    <div class="hero-content">
-        <span class="hero-tag">PORTFOLIO</span>
-        <h1>AI Projects</h1>
-        <p class="hero-tagline">54 production-ready apps across 8 categories</p>
-        <div class="search-wrap">
-            <span class="search-icon">&#x1F50D;</span>
-            <input type="text" class="search-input" id="projectSearch" placeholder="Search projects by name, category, or keyword..." autocomplete="off">
-            <div class="search-results" id="searchResults"></div>
-        </div>
-        <a href="#categories" class="btn-gold">Explore Projects</a>
+  <div class="masthead">
+    <div class="mast-left">
+      <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+      <a class="logo" href="index.html">AI PROJECTS</a>
+      <nav class="mast-nav">
+        <a href="project-categories.html">Categories</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <div class="search-box">
+        <input type="text" class="search-input" id="searchInput" autocomplete="off"
+               placeholder="Search AI projects..." aria-label="Search AI projects">
+        <span class="search-ic">&#128269;</span>
+        <div class="search-results" id="searchResults"></div>
+      </div>
     </div>
-</section>
+  </div>
+  <hr class="rule-top">
 
-<!-- Categories -->
-<section class="section bg-light" id="categories">
-    <div class="section-inner">
-        <span class="section-tag">CATEGORIES</span>
-        <h2 class="section-heading">Browse by Category</h2>
-
-        <!-- Featured category (top row) -->
-        <a href="category-multi-agent-systems.html" class="featured-category" id="featuredCategory" data-animate>
-            <div class="featured-bar" id="featuredBar" style="background:#4299E1;"></div>
-            <div class="featured-icon" id="featuredIcon" style="background:#4299E1;">&#x1F91D;</div>
-            <div class="featured-body">
-                <h3 id="featuredName">Multi-Agent Decision Systems</h3>
-                <span class="featured-count" id="featuredCount" style="background:#4299E1;">7 projects</span>
-                <p class="featured-desc" id="featuredDesc">Coordinated AI agent teams that research, evaluate, and produce a verdict or plan.</p>
-            </div>
-            <span class="featured-btn">View All →</span>
-        </a>
-
-        <p class="swap-hint">Click any category below to feature it</p>
-
-        <!-- Bottom 6 categories (3x2 grid) -->
-        <div class="category-grid" id="categoryGrid">
-
-
-
-            <div class="category-card visible" data-href="category-service-agents.html" data-color="#0D9488" data-icon="&#x1F4C5;" data-name="Service Agents" data-count="7 projects" data-desc="Booking, customer service, and vendor sourcing AI agents — mostly over WhatsApp." onclick="swapCategory(this)">
-                <div class="category-bar" style="background:#0D9488;"></div>
-                <div class="category-icon" style="background:#0D9488;">&#x1F4C5;</div>
-                <h3>Service Agents</h3>
-                <span class="category-count" style="background:#0D9488;">7 projects</span>
-                <p class="category-desc">Booking, customer service, and vendor sourcing AI agents — mostly over WhatsApp.</p>
-            </div>
-
-            <div class="category-card visible" data-href="category-conversational-analytics.html" data-color="#E91E63" data-icon="&#x1F4CA;" data-name="Conversational Data Analytics" data-count="8 projects" data-desc="Ask data questions in plain language and get answers grounded in your data." onclick="swapCategory(this)">
-                <div class="category-bar" style="background:#E91E63;"></div>
-                <div class="category-icon" style="background:#E91E63;">&#x1F4CA;</div>
-                <h3>Conversational Data Analytics</h3>
-                <span class="category-count" style="background:#E91E63;">8 projects</span>
-                <p class="category-desc">Ask data questions in plain language and get answers grounded in your data.</p>
-            </div>
-
-            <div class="category-card visible" data-href="category-content-automation.html" data-color="#4CAF50" data-icon="&#9881;" data-name="Content Automation" data-count="6 projects" data-desc="Autonomous AI pipelines that produce blog posts, courses, ad copy, and lessons." onclick="swapCategory(this)">
-                <div class="category-bar" style="background:#4CAF50;"></div>
-                <div class="category-icon" style="background:#4CAF50;">&#9881;</div>
-                <h3>Content Automation</h3>
-                <span class="category-count" style="background:#4CAF50;">6 projects</span>
-                <p class="category-desc">Autonomous AI pipelines that produce blog posts, courses, ad copy, and lessons.</p>
-            </div>
-
-            <div class="category-card visible" data-href="category-industry-advisors.html" data-color="#FF5722" data-icon="&#x1F3AF;" data-name="Industry Specialist Advisors" data-count="11 projects" data-desc="Vertical-specific AI advisors trained on the rules and language of one industry." onclick="swapCategory(this)">
-                <div class="category-bar" style="background:#FF5722;"></div>
-                <div class="category-icon" style="background:#FF5722;">&#x1F3AF;</div>
-                <h3>Industry Specialist Advisors</h3>
-                <span class="category-count" style="background:#FF5722;">11 projects</span>
-                <p class="category-desc">Vertical-specific AI advisors trained on the rules and language of one industry.</p>
-            </div>
-
-            <div class="category-card visible" data-href="category-knowledge-chatbots.html" data-color="#9C27B0" data-icon="&#x1F4AC;" data-name="Knowledge & Reference Chatbots" data-count="8 projects" data-desc="Topic-specialist conversational AI for divination, traditions, and culture." onclick="swapCategory(this)">
-                <div class="category-bar" style="background:#9C27B0;"></div>
-                <div class="category-icon" style="background:#9C27B0;">&#x1F4AC;</div>
-                <h3>Knowledge & Reference Chatbots</h3>
-                <span class="category-count" style="background:#9C27B0;">8 projects</span>
-                <p class="category-desc">Topic-specialist conversational AI for divination, traditions, and culture.</p>
-            </div>
-
-            <div class="category-card visible" data-href="category-document-productivity.html" data-color="#2196F3" data-icon="&#x1F4C4;" data-name="Document & Productivity Tools" data-count="5 projects" data-desc="Process PDFs, extract receipt data, translate documents, and track operations." onclick="swapCategory(this)">
-                <div class="category-bar" style="background:#2196F3;"></div>
-                <div class="category-icon" style="background:#2196F3;">&#x1F4C4;</div>
-                <h3>Document & Productivity Tools</h3>
-                <span class="category-count" style="background:#2196F3;">5 projects</span>
-                <p class="category-desc">Process PDFs, extract receipt data, translate documents, and track operations.</p>
-            </div>
-
-            <div class="category-card visible" data-href="category-agentic-commerce.html" data-color="#B8860B" data-icon="&#x1F6D2;" data-name="Agentic Commerce" data-count="2 projects" data-desc="Browser-native storefronts AI agents can shop on directly via the W3C WebMCP standard." onclick="swapCategory(this)">
-                <div class="category-bar" style="background:#B8860B;"></div>
-                <div class="category-icon" style="background:#B8860B;">&#x1F6D2;</div>
-                <h3>Agentic Commerce</h3>
-                <span class="category-count" style="background:#B8860B;">2 projects</span>
-                <p class="category-desc">Browser-native storefronts AI agents can shop on directly via the W3C WebMCP standard.</p>
-            </div>
-
-        </div>
+  <!-- ===== UPPER BODY: 2 / 1 / 2 ===== -->
+  <div class="wrap">
+    <div class="grid">
+      <div class="col col-left">
+        <span class="tab">Featured</span>
+        <div id="picks"></div>
+      </div>
+      <div class="col col-mid" id="lead"></div>
+      <div class="col col-right">
+        <span class="tab">Latest</span>
+        <div id="recent"></div>
+      </div>
     </div>
-</section>
+  </div>
 
-<!-- Featured Projects -->
-<section class="section" id="featured">
-    <div class="section-inner">
-        <span class="section-tag">FEATURED</span>
-        <h2 class="section-heading">One from Each Category</h2>
+  <!-- ===== EXPLORE BY CATEGORY ===== -->
+  <section class="method">
+    <span class="tab">Explore by Category</span>
+    <div class="method-grid" id="methodGrid"></div>
+  </section>
 
-        <!-- Featured project (top row) -->
-        <div class="featured-project" id="featuredProject" data-animate onclick="window.open(document.getElementById('fpDemoLink').href, '_blank')">
-            <div class="fp-visual" id="fpVisual" style="background:linear-gradient(135deg, #4299E1 0%, #3182CE 50%, #2B6CB0 100%);">
-                <span style="opacity:0.3; font-size:4rem;" id="fpEmoji">&#x1F91D;</span>
-            </div>
-            <div class="fp-body">
-                <span class="fp-tag" id="fpTag" style="background:#4CAF50;">Content Automation</span>
-                <h3 id="fpName">Course Creator</h3>
-                <p id="fpDesc">A coordinated team of AI agents research, validate, and write course materials. Each agent runs independently on Cloud Run.</p>
-                <div class="fp-actions">
-                    <a href="https://course-creator-662370080553.us-west1.run.app/" id="fpDemoLink" class="btn-gold" target="_blank" onclick="event.stopPropagation();">Launch App</a>
-                    <a href="course-creator.html" id="fpDetailsLink" class="btn-outline-gold" onclick="event.stopPropagation();">View Details</a>
-                </div>
-            </div>
-        </div>
+  <!-- ===== LOWER BODY: 2 x 2 ===== -->
+  <section class="lower">
+    <span class="tab">More Projects</span>
+    <div class="lower-grid" id="lowerGrid"></div>
+  </section>
 
-        <p class="fp-swap-hint">Click any project below to feature it</p>
-
-        <!-- Bottom projects grid -->
-        <div class="project-grid" id="projectGrid">
-
-            <div class="project-card visible" onclick="swapProject(this)" data-gradient="linear-gradient(135deg, #C41E3A 0%, #B8860B 50%, #8B6914 100%)" data-emoji="🏮" data-tag="Agentic Commerce" data-color="#B8860B" data-name="Jade Star Chinese Dining 吉星饭厅 — CNY Reservation" data-desc="Bilingual CNY reservation page for Malaysian Chinese restaurants. 6 set menus, 7 WebMCP tools, agent-callable booking with typed availability." data-demo="projects/ji-xing-cny-reservation/index.html" data-details="ji-xing-cny-reservation.html">
-                <div class="project-visual" style="background:linear-gradient(135deg, #C41E3A 0%, #B8860B 100%);">
-                    <span style="opacity:0.3; font-size:4rem;">🏮</span>
-                </div>
-                <div class="project-body">
-                    <span class="project-category-tag" style="background:#B8860B;">Agentic Commerce</span>
-                    <h3>Jade Star Chinese Dining 吉星饭厅 — CNY Reservation</h3>
-                    <p>Bilingual CNY reservation page for Malaysian Chinese restaurants. 6 set menus, 7 WebMCP tools, agent-callable booking with typed availability.</p>
-                    <div class="project-actions">
-                        <a href="projects/ji-xing-cny-reservation/index.html" class="btn-gold" target="_blank" onclick="event.stopPropagation();">Live Demo</a>
-                        <a href="ji-xing-cny-reservation.html" class="btn-outline-gold" onclick="event.stopPropagation();">View Details</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="project-card visible" onclick="swapProject(this)" data-gradient="linear-gradient(135deg, #0D9488 0%, #14B8A6 50%, #2DD4BF 100%)" data-emoji="🌸" data-tag="Service Agents" data-color="#0D9488" data-name="Lucy — Bloom House Concierge" data-desc="Florist concierge that recommends bouquets and answers delivery questions. Sensitive cases go to a human." data-demo="projects/bloom-house-concierge/index.html" data-details="bloom-house-concierge.html">
-                <div class="project-visual" style="background:linear-gradient(135deg, #0D9488 0%, #14B8A6 50%, #2DD4BF 100%);">
-                    <span style="opacity:0.3; font-size:4rem;">🌸</span>
-                </div>
-                <div class="project-body">
-                    <span class="project-category-tag" style="background:#0D9488;">Service Agents</span>
-                    <h3>Lucy — Bloom House Concierge</h3>
-                    <p>Florist concierge that recommends bouquets and answers delivery questions. Sensitive cases go to a human.</p>
-                    <div class="project-actions">
-                        <a href="projects/bloom-house-concierge/index.html" class="btn-gold" target="_blank" onclick="event.stopPropagation();">Live Demo</a>
-                        <a href="bloom-house-concierge.html" class="btn-outline-gold" onclick="event.stopPropagation();">View Details</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="project-card visible" onclick="swapProject(this)" data-gradient="linear-gradient(135deg, #4299E1 0%, #3182CE 50%, #2B6CB0 100%)" data-emoji="📚" data-tag="Multi-Agent Decision Systems" data-color="#4299E1" data-name="Bookshelf" data-desc="Multi-agent inventory planner for Malaysian bookstores. Pandas data tool + Pydantic Judge + Markdown briefs." data-demo="projects/bookshelf/demo.html" data-details="bookshelf.html">
-                <div class="project-visual" style="background:linear-gradient(135deg, #4299E1 0%, #3182CE 50%, #2B6CB0 100%);">
-                    <span style="opacity:0.3; font-size:4rem;">📚</span>
-                </div>
-                <div class="project-body">
-                    <span class="project-category-tag" style="background:#4299E1;">Multi-Agent Decision Systems</span>
-                    <h3>Bookshelf</h3>
-                    <p>Multi-agent inventory planner for Malaysian bookstores. Pandas data tool + Pydantic Judge + Markdown briefs.</p>
-                    <div class="project-actions">
-                        <a href="projects/bookshelf/demo.html" class="btn-gold" target="_blank" onclick="event.stopPropagation();">Live Demo</a>
-                        <a href="bookshelf.html" class="btn-outline-gold" onclick="event.stopPropagation();">View Details</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="project-card visible" onclick="swapProject(this)" data-gradient="linear-gradient(135deg, #E91E63 0%, #AD1457 50%, #880E4F 100%)" data-emoji="📦" data-tag="Conversational Data Analytics" data-color="#E91E63" data-name="Courier CS Quality Console" data-desc="Grades a courier's AI and human support, then fixes it. Surfaces high-stakes cases closed instead of escalated." data-demo="projects/courier-cs-quality-console/demo.html" data-details="courier-cs-quality-console.html">
-                <div class="project-visual" style="background:linear-gradient(135deg, #E91E63 0%, #AD1457 50%, #880E4F 100%);">
-                    <span style="opacity:0.3; font-size:4rem;">📦</span>
-                </div>
-                <div class="project-body">
-                    <span class="project-category-tag" style="background:#E91E63;">Conversational Data Analytics</span>
-                    <h3>Courier CS Quality Console</h3>
-                    <p>Grades a courier's AI and human support, then fixes it. Surfaces high-stakes cases closed instead of escalated.</p>
-                    <div class="project-actions">
-                        <a href="projects/courier-cs-quality-console/demo.html" class="btn-gold" target="_blank" onclick="event.stopPropagation();">Live Demo</a>
-                        <a href="courier-cs-quality-console.html" class="btn-outline-gold" onclick="event.stopPropagation();">View Details</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="project-card visible" onclick="swapProject(this)" data-gradient="linear-gradient(135deg, #1E3A5F 0%, #2563EB 100%)" data-emoji="🏘️" data-tag="Industry Specialist Advisors" data-color="#FF5722" data-name="Property Lead Tracker" data-desc="Shows a rental agency which channel signs tenants, and at what cost. Flags stale listings and missed leads." data-demo="projects/property-lead-tracker/ui-1-internal-dashboard.html" data-details="property-lead-tracker.html">
-                <div class="project-visual" style="background:linear-gradient(135deg, #1E3A5F 0%, #2563EB 100%);">
-                    <span style="opacity:0.3; font-size:4rem;">🏘️</span>
-                </div>
-                <div class="project-body">
-                    <span class="project-category-tag" style="background:#FF5722;">Industry Specialist Advisors</span>
-                    <h3>Property Lead Tracker</h3>
-                    <p>Shows a rental agency which channel signs tenants, and at what cost. Flags stale listings and missed leads.</p>
-                    <div class="project-actions">
-                        <a href="projects/property-lead-tracker/ui-1-internal-dashboard.html" class="btn-gold" target="_blank" onclick="event.stopPropagation();">Live Demo</a>
-                        <a href="property-lead-tracker.html" class="btn-outline-gold" onclick="event.stopPropagation();">View Details</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="project-card visible" onclick="swapProject(this)" data-gradient="linear-gradient(135deg, #9C27B0 0%, #7B1FA2 50%, #4A148C 100%)" data-emoji="📖" data-tag="Knowledge & Reference Chatbots" data-color="#9C27B0" data-name="Nine Year Plan 2022–2031" data-desc="A reference guide to the Bahá'í Nine Year Plan 2022–2031. Core activities, institutions, statistics, and key messages." data-demo="projects/nine-year-plan/index.html" data-details="nine-year-plan.html">
-                <div class="project-visual" style="background:linear-gradient(135deg, #9C27B0 0%, #7B1FA2 50%, #4A148C 100%);">
-                    <span style="opacity:0.3; font-size:4rem;">📖</span>
-                </div>
-                <div class="project-body">
-                    <span class="project-category-tag" style="background:#9C27B0;">Knowledge & Reference Chatbots</span>
-                    <h3>Nine Year Plan 2022–2031</h3>
-                    <p>A reference guide to the Bahá'í Nine Year Plan 2022–2031. Core activities, institutions, statistics, and key messages.</p>
-                    <div class="project-actions">
-                        <a href="projects/nine-year-plan/index.html" class="btn-gold" target="_blank" onclick="event.stopPropagation();">Live Demo</a>
-                        <a href="nine-year-plan.html" class="btn-outline-gold" onclick="event.stopPropagation();">View Details</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="project-card visible" onclick="swapProject(this)" data-gradient="linear-gradient(135deg, #2196F3 0%, #1976D2 50%, #0D47A1 100%)" data-emoji="📜" data-tag="Document & Productivity Tools" data-color="#2196F3" data-name="Bahai Chinese Translation Workbench" data-desc="AI-assisted translation of Baha'i Sacred Writings into Chinese. Three-stage pipeline with human review and terminology glossary." data-demo="projects/bahai-chinese-translation-workbench/demo.html" data-details="bahai-chinese-translation-workbench.html">
-                <div class="project-visual" style="background:linear-gradient(135deg, #2196F3 0%, #1976D2 50%, #0D47A1 100%);">
-                    <span style="opacity:0.3; font-size:4rem;">📜</span>
-                </div>
-                <div class="project-body">
-                    <span class="project-category-tag" style="background:#2196F3;">Document & Productivity Tools</span>
-                    <h3>Bahai Chinese Translation Workbench</h3>
-                    <p>AI-assisted translation of Baha'i Sacred Writings into Chinese. Three-stage pipeline with human review and terminology glossary.</p>
-                    <div class="project-actions">
-                        <a href="projects/bahai-chinese-translation-workbench/demo.html" class="btn-gold" target="_blank" onclick="event.stopPropagation();">Live Demo</a>
-                        <a href="bahai-chinese-translation-workbench.html" class="btn-outline-gold" onclick="event.stopPropagation();">View Details</a>
-                    </div>
-                </div>
-            </div>
-
-
-
-        </div>
-    </div>
-</section>
-
-<!-- Footer -->
-<footer class="footer">
-    <p class="footer-brand">Lee Yih Ven | AI Project Portfolio</p>
-    <p class="footer-copy">&copy; 2026 All rights reserved.</p>
-</footer>
+  <footer>&copy; 2026 Lee Yih Ven | AI Project Portfolio</footer>
+  <div class="note">Sample AI-E: AI-project homepage in the portfolio magazine layout. No cover images: gradient + emoji visuals (the current AI-project style). 9 projects, newest-first cascade (column-major). Gold palette; two links per card (View Project / Source).</div>
 
 <script>
-// IntersectionObserver for scroll-triggered fade-in
-(function() {
-    const observer = new IntersectionObserver(function(entries) {
-        entries.forEach(function(entry) {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-                observer.unobserve(entry.target);
-            }
-        });
-    }, {
-        threshold: 0.1,
-        rootMargin: '0px 0px -40px 0px'
-    });
+  const SITE = "";
+  const ACCENT = "#B8860B";
 
-    document.querySelectorAll('[data-animate]').forEach(function(el) {
-        observer.observe(el);
-    });
-})();
+  /* FEATURED LIST, newest first. 9 projects fill 9 positions.
+     Cascade (newest -> oldest): 0 Hero | 1 UL-top | 2 UL-bottom | 3 UR-top | 4 UR-bottom
+     | 5 LL-top | 6 LL-bottom | 7 LR-top | 8 LR-bottom -> drop.
+     To feature a new project: prepend one object to items[]. */
+  const items = [
+    {t:"Ecommerce Analyst", c:"Conversational Data Analytics", s:"ecommerce-analyst", emoji:"🛒",
+     grad:"linear-gradient(135deg,#E91E63 0%,#C2185B 100%)",
+     dek:"A private analyst-in-a-box for mid-size Malaysian e-commerce sellers, answering plain-language questions about their own data and writing a proactive Monday brief."},
+    {t:"Klinik Dr Fang Front-Desk Assistant", c:"Conversational Data Analytics", s:"klinik-dr-fang", emoji:"🩺",
+     grad:"linear-gradient(135deg,#E91E63 0%,#AD1457 100%)",
+     dek:"Front-desk AI for clinics that surfaces patterns across patient records, while being structurally incapable of leaking data or running its own SQL."},
+    {t:"Stock Analysis Agent", c:"Multi-Agent Decision Systems", s:"stock-analysis-agent", emoji:"📈",
+     grad:"linear-gradient(135deg,#7C3AED 0%,#4C1D95 100%)",
+     dek:"Turns a 20-page Bursa interim filing into a screening verdict, margin read, moat inventory, and dividend-safety call, in minutes."},
+    {t:"Mentor", c:"Industry Specialist Advisors", s:"mentor", emoji:"🧭",
+     grad:"linear-gradient(135deg,#1E3A5F 0%,#2563EB 100%)",
+     dek:"An AI advisor for solo founders of service and expert businesses, grounded in their real week, not generic theory."},
+    {t:"Long View (Crucix)", c:"Industry Specialist Advisors", s:"long-view", emoji:"🌍",
+     grad:"linear-gradient(135deg,#1E293B 0%,#475569 100%)",
+     dek:"An AI-powered OSINT aggregator that sweeps 27 live sources, detects what actually moved, and briefs you in plain language."},
+    {t:"Good Company", c:"Industry Specialist Advisors", s:"good-company", emoji:"🏢",
+     grad:"linear-gradient(135deg,#0F766E 0%,#134E4A 100%)",
+     dek:"Reads a quarter report PDF and answers two questions retail investors confuse: is this a good business, and is this a good stock?"},
+    {t:"Data Consulting Business Analysis Agent", c:"Multi-Agent Decision Systems", s:"data-consulting-agent", emoji:"💼",
+     grad:"linear-gradient(135deg,#7C3AED 0%,#5B21B6 100%)",
+     dek:"Runs a full SME market analysis as a four-agent AI pipeline, turning thousands of raw transactions into an executive report in under fifteen minutes."},
+    {t:"Voucher Analyzer", c:"Conversational Data Analytics", s:"voucher-analyzer", emoji:"📊",
+     grad:"linear-gradient(135deg,#7C3AED 0%,#4C1D95 100%)",
+     dek:"Show online sellers which vouchers actually made money, not just which spiked sales."},
+    {t:"Courier CS Quality Console", c:"Conversational Data Analytics", s:"courier-cs-quality-console", emoji:"📦",
+     grad:"linear-gradient(135deg,#E91E63 0%,#880E4F 100%)",
+     dek:"Measure and improve customer-service quality for courier teams across chat, WhatsApp and the app."}
+  ];
 
-// ── Category Swap ────────────────────────────────────────────────
-// Current featured state
-var featuredState = {
-    href: 'category-multi-agent-systems.html',
-    color: '#4299E1',
-    icon: '\u{1F91D}',
-    name: 'Multi-Agent Decision Systems',
-    count: '7 projects',
-    desc: 'Coordinated AI agent teams that research, evaluate, and produce a verdict or plan.'
-};
+  const categories = [
+    {c:"Conversational Analytics", url:"category-conversational-analytics.html", p:"Ask your data questions in plain language."},
+    {c:"Service Agents", url:"category-service-agents.html", p:"Front-line customer-service assistants."},
+    {c:"Industry Advisors", url:"category-industry-advisors.html", p:"Decision tools for specific trades."},
+    {c:"Agentic Commerce", url:"category-agentic-commerce.html", p:"Bookings and orders an agent can complete."},
+    {c:"Multi-Agent Systems", url:"category-multi-agent-systems.html", p:"Agents that coordinate to decide."},
+    {c:"Knowledge Chatbots", url:"category-knowledge-chatbots.html", p:"Answer from a trusted knowledge base."},
+    {c:"Content Automation", url:"category-content-automation.html", p:"Generate and repurpose content at scale."},
+    {c:"Document Tools", url:"category-document-productivity.html", p:"Turn documents into structured output."}
+  ];
 
-function swapCategory(clickedCard) {
-    // Save current featured state
-    var oldFeatured = Object.assign({}, featuredState);
+  const linkRow = (it) =>
+    `<div class="links">`+
+    `<a href="${SITE}${it.s}.html">View Project</a> &middot; `+
+    `<a href="${SITE}${it.s}-source.html">Source</a></div>`;
 
-    // Read clicked card data
-    var newData = {
-        href: clickedCard.getAttribute('data-href'),
-        color: clickedCard.getAttribute('data-color'),
-        icon: clickedCard.getAttribute('data-icon'),
-        name: clickedCard.getAttribute('data-name'),
-        count: clickedCard.getAttribute('data-count'),
-        desc: clickedCard.getAttribute('data-desc')
-    };
+  const viz = (it, cls) => `<a class="viz${cls?(' '+cls):''}" style="background:${it.grad}" href="${SITE}${it.s}.html">${it.emoji}</a>`;
 
-    // Update featured (top row)
-    var fc = document.getElementById('featuredCategory');
-    fc.href = newData.href;
-    document.getElementById('featuredBar').style.background = newData.color;
-    document.getElementById('featuredIcon').style.background = newData.color;
-    document.getElementById('featuredIcon').innerHTML = newData.icon;
-    document.getElementById('featuredName').textContent = newData.name;
-    document.getElementById('featuredCount').style.background = newData.color;
-    document.getElementById('featuredCount').textContent = newData.count;
-    document.getElementById('featuredDesc').textContent = newData.desc;
+  // CASCADE
+  const lead       = items[0];
+  const leftPicks  = items.slice(1, 3);
+  const rightItems = items.slice(3, 5);
+  const lowerSrc   = items.slice(5, 9);
+  const lowerOrder = [lowerSrc[0], lowerSrc[2], lowerSrc[1], lowerSrc[3]]; // column-major into row-major grid
 
-    // Update clicked card with old featured data
-    clickedCard.setAttribute('data-href', oldFeatured.href);
-    clickedCard.setAttribute('data-color', oldFeatured.color);
-    clickedCard.setAttribute('data-icon', oldFeatured.icon);
-    clickedCard.setAttribute('data-name', oldFeatured.name);
-    clickedCard.setAttribute('data-count', oldFeatured.count);
-    clickedCard.setAttribute('data-desc', oldFeatured.desc);
+  // CENTER lead
+  const L = lead;
+  document.getElementById('lead').innerHTML =
+    viz(L)+
+    `<div class="next-kicker">Latest Project</div>`+
+    `<a href="${SITE}${L.s}.html"><h2 class="lead-headline">${L.t}</h2></a>`+
+    `<p class="lead-dek">${L.dek}</p>`+
+    `<div class="byline">${L.c}</div>`+linkRow(L);
 
-    var bar = clickedCard.querySelector('.category-bar');
-    var icon = clickedCard.querySelector('.category-icon');
-    var h3 = clickedCard.querySelector('h3');
-    var count = clickedCard.querySelector('.category-count');
-    var desc = clickedCard.querySelector('.category-desc');
+  // LEFT picks
+  document.getElementById('picks').innerHTML = leftPicks.map(it =>
+    `<article class="pick">`+ viz(it) +
+    `<span class="rubric">${it.c}</span>`+
+    `<a href="${SITE}${it.s}.html"><h3>${it.t}</h3></a>`+
+    `<p class="lead-dek">${it.dek}</p>`+linkRow(it)+`</article>`).join('');
 
-    bar.style.background = oldFeatured.color;
-    icon.style.background = oldFeatured.color;
-    icon.innerHTML = oldFeatured.icon;
-    h3.textContent = oldFeatured.name;
-    count.style.background = oldFeatured.color;
-    count.textContent = oldFeatured.count;
-    desc.textContent = oldFeatured.desc;
+  // RIGHT items
+  document.getElementById('recent').innerHTML = rightItems.map(it =>
+    `<article class="recent">`+ viz(it) +
+    `<span class="rubric">${it.c}</span>`+
+    `<a href="${SITE}${it.s}.html"><h3>${it.t}</h3></a>`+
+    `<p class="lead-dek">${it.dek}</p>`+linkRow(it)+`</article>`).join('');
 
-    // Update internal state
-    featuredState = newData;
+  // CATEGORY band
+  document.getElementById('methodGrid').innerHTML = categories.map(cat =>
+    `<a class="method-tile" href="${SITE}${cat.url}">`+
+    `<h4>${cat.c}</h4>`+
+    `<p>${cat.p}</p>`+
+    `<span class="go">View all &rarr;</span></a>`).join('');
 
-    // Smooth scroll to top of categories
-    document.getElementById('categories').scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
+  // LOWER 2 x 2, column-major fill (TL, BL, TR, BR)
+  document.getElementById('lowerGrid').innerHTML = lowerOrder.map(it =>
+    `<article class="lower-card">`+ viz(it, 'viz') +
+    `<span class="rubric">${it.c}</span>`+
+    `<a href="${SITE}${it.s}.html"><h3>${it.t}</h3></a>`+
+    `<p class="lead-dek">${it.dek}</p>`+linkRow(it)+`</article>`).join('');
 
-// ── Featured Project Swap ────────────────────────────────────────
-var fpState = {
-    gradient: 'linear-gradient(135deg, #4299E1 0%, #3182CE 50%, #2B6CB0 100%)',
-    emoji: '\u{1F91D}',
-    tag: 'Content Automation',
-    color: '#4CAF50',
-    name: 'Course Creator',
-    desc: 'A coordinated team of AI agents research, validate, and write course materials. Each agent runs independently on Cloud Run.',
-    demo: 'https://course-creator-662370080553.us-west1.run.app/',
-    details: 'course-creator.html'
-};
+  // SEARCH (over the 9 featured; production would index the full AI-project catalog)
+  const searchInput = document.getElementById('searchInput');
+  const searchResults = document.getElementById('searchResults');
+  function runSearch(q){
+    if(q.trim().length < 2){ searchResults.style.display='none'; return; }
+    const ql = q.toLowerCase();
+    const hits = items.filter(it => (it.t+' '+it.c+' '+it.dek).toLowerCase().includes(ql));
+    searchResults.innerHTML = hits.length ? hits.map(it =>
+      `<div class="sr-item">`+
+      `<div class="sr-cat">${it.c}</div>`+
+      `<a href="${SITE}${it.s}.html"><div class="sr-title">${it.t}</div></a>`+
+      `<div class="sr-links"><a href="${SITE}${it.s}.html">View Project</a> &middot; `+
+      `<a href="${SITE}${it.s}-source.html">Source</a></div></div>`).join('')
+      : `<div class="sr-none">No projects found. Try a different keyword.</div>`;
+    searchResults.style.display='block';
+  }
+  searchInput.addEventListener('input', e => runSearch(e.target.value));
+  document.addEventListener('click', e => { if(!e.target.closest('.search-box')) searchResults.style.display='none'; });
 
-function swapProject(clickedCard) {
-    var oldFp = Object.assign({}, fpState);
-
-    var newData = {
-        gradient: clickedCard.getAttribute('data-gradient'),
-        emoji: clickedCard.getAttribute('data-emoji'),
-        tag: clickedCard.getAttribute('data-tag'),
-        color: clickedCard.getAttribute('data-color'),
-        name: clickedCard.getAttribute('data-name'),
-        desc: clickedCard.getAttribute('data-desc'),
-        demo: clickedCard.getAttribute('data-demo'),
-        details: clickedCard.getAttribute('data-details')
-    };
-
-    // Update featured (top row)
-    document.getElementById('fpVisual').style.background = newData.gradient;
-    document.getElementById('fpEmoji').innerHTML = newData.emoji;
-    document.getElementById('fpTag').style.background = newData.color;
-    document.getElementById('fpTag').textContent = newData.tag;
-    document.getElementById('fpName').textContent = newData.name;
-    document.getElementById('fpDesc').textContent = newData.desc;
-    document.getElementById('fpDemoLink').href = newData.demo;
-    document.getElementById('fpDetailsLink').href = newData.details;
-
-    // Update clicked card with old featured data
-    clickedCard.setAttribute('data-gradient', oldFp.gradient);
-    clickedCard.setAttribute('data-emoji', oldFp.emoji);
-    clickedCard.setAttribute('data-tag', oldFp.tag);
-    clickedCard.setAttribute('data-color', oldFp.color);
-    clickedCard.setAttribute('data-name', oldFp.name);
-    clickedCard.setAttribute('data-desc', oldFp.desc);
-    clickedCard.setAttribute('data-demo', oldFp.demo);
-    clickedCard.setAttribute('data-details', oldFp.details);
-
-    var vis = clickedCard.querySelector('.project-visual');
-    var emo = vis.querySelector('span');
-    var tag = clickedCard.querySelector('.project-category-tag');
-    var h3 = clickedCard.querySelector('h3');
-    var p = clickedCard.querySelector('p');
-    var demoBtn = clickedCard.querySelector('.btn-gold');
-    var detailsBtn = clickedCard.querySelector('.btn-outline-gold');
-
-    vis.style.background = oldFp.gradient;
-    emo.innerHTML = oldFp.emoji;
-    tag.style.background = oldFp.color;
-    tag.textContent = oldFp.tag;
-    h3.textContent = oldFp.name;
-    p.textContent = oldFp.desc;
-    demoBtn.href = oldFp.demo;
-    detailsBtn.href = oldFp.details;
-
-    fpState = newData;
-
-    document.getElementById('featured').scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-
-// ── Project Search ──────────────────────────────────────────────
-var projectDB = [
-  {n:"Seasonal Pricing Console",c:"Conversational Data Analytics",d:"Profit-max nightly rate per Airbnb listing by season, with a governed in-browser query layer and a difference-in-differences recovery check",demo:"projects/seasonal-pricing-console/demo.html",details:"seasonal-pricing-console.html"},
-  {n:"Courier CS Quality Console",c:"Conversational Data Analytics",d:"Measures a courier's AI and human support against a ground-truth answer key, surfaces under-escalated high-stakes cases, and turns it into a monthly review, per-agent appraisals, coaching and an action plan",demo:"projects/courier-cs-quality-console/demo.html",details:"courier-cs-quality-console.html"},
-  {n:"Course Creator",c:"Content Automation",d:"4-agent ADK pipeline that researches, validates, and writes course materials over A2A protocol on Cloud Run",demo:"https://course-creator-662370080553.us-west1.run.app/",details:"course-creator.html"},
-  {n:"Bookshelf",c:"Multi-Agent Decision Systems",d:"Multi-agent inventory planner for Malaysian bookstores — pandas data tool, Pydantic Judge, 6-class SKU taxonomy",demo:"projects/bookshelf/demo.html",details:"bookshelf.html"},
-  {n:"Leadership Team",c:"Multi-Agent Decision Systems",d:"AI boardroom for property agents with six manager subagents",demo:"projects/leadership-team/demo.html",details:"leadership-team.html"},
-  {n:"Lucy — Bloom House Concierge",c:"Service Agents",d:"Florist customer-service agent that recommends bouquets, answers delivery questions, escalates to a human, or declines off-topic asks",demo:"projects/bloom-house-concierge/index.html",details:"bloom-house-concierge.html"},
-  {n:"Wee Auto Car Care",c:"Service Agents",d:"Bay and mechanic dashboard for car workshops with 4-state bookability",demo:"projects/wee-auto-car-care/demo.html",details:"wee-auto-car-care.html"},
-  {n:"Kereta Sewa Jalan-jalan",c:"Service Agents",d:"AI car rental agent for Klang Valley fleet",demo:"projects/car-rental-booking-agent/demo.html",details:"car-rental-booking-agent.html"},
-  {n:"Badminton Court Booking Agent",c:"Service Agents",d:"Smart pricing and instant conflict checks for courts",demo:"projects/badminton-booking-agent/demo.html",details:"badminton-booking-agent.html"},
-  {n:"Soon Heng Air-Cond Service",c:"Service Agents",d:"WhatsApp service agent for aircon business in Seremban",demo:"projects/soon-heng-aircon-agent/demo.html",details:"soon-heng-aircon-agent.html"},
-  {n:"Hire Gardener",c:"Service Agents",d:"AI handles vendor hunt over WhatsApp — quotes and booking",demo:"projects/hire-gardener/demo.html",details:"hire-gardener.html"},
-  {n:"Plumber WhatsApp Agent",c:"Service Agents",d:"WhatsApp booking agent for solo plumbers — bahasa santai, fixed pricing, schedule-aware",demo:"projects/plumber-whatsapp-agent/demo.html",details:"plumber-whatsapp-agent.html"},
-  {n:"Kopitiam Digital Waiter",c:"Document & Productivity Tools",d:"Real-time sales tracker for Malaysian kopitiam owners",demo:"https://kopitiam-digital-waiter-169218045868.us-west1.run.app/",details:"kopitiam-digital-waiter.html"},
-  {n:"Banana Lab",c:"Content Automation",d:"AI writes a new 50-prompt pack every Monday",demo:"projects/banana-lab/demo.html",details:"banana-lab.html"},
-  {n:"Marketing Agency",c:"Content Automation",d:"Weekly blog + 4 LinkedIn posts in one command",demo:"projects/marketing-agency/demo.html",details:"marketing-agency.html"},
-  {n:"Sundry Shop Assistant",c:"Conversational Data Analytics",d:"Voice advisor for Malaysian kedai runcit owners, 10 MCP tools over POS sales data in santai Malay",demo:"https://sundry-shop-assistant-522143897885.asia-southeast1.run.app",details:"sundry-shop-assistant.html"},
-  {n:"Hoo Tim Analytics Agent",c:"Conversational Data Analytics",d:"Live AI agent + MCP tools for Selangor snack distributor",demo:"projects/hoo-tim-analytics-agent/demo.html",details:"hoo-tim-analytics-agent.html"},
-  {n:"Ecommerce Analyst",c:"Conversational Data Analytics",d:"Private analyst for mid-size e-commerce sellers",demo:"projects/ecommerce-analyst/demo.html",details:"ecommerce-analyst.html"},
-  {n:"Market Research Agent",c:"Conversational Data Analytics",d:"Answers a local shop owner's 10 location, pricing and demand questions from a data pack plus cached Google Maps, at near-zero cost",demo:"https://market-research-agent-522143897885.asia-southeast1.run.app",details:"market-research-agent.html"},
-  {n:"Klinik Dr Fang Front-Desk Assistant",c:"Conversational Data Analytics",d:"Pattern-finding AI over clinic records with a no-free-SQL governance guarantee",demo:"projects/klinik-dr-fang/demo.html",details:"klinik-dr-fang.html"},
-  {n:"Voucher Analyzer",c:"Conversational Data Analytics",d:"Promotion incrementality for e-commerce sellers; separates true incremental sales from subsidised baseline and scores each voucher",demo:"projects/voucher-analyzer/demo.html",details:"voucher-analyzer.html"},
-  {n:"Bright Path Tuition Centre",c:"Industry Specialist Advisors",d:"AI management assistant for premium tuition centres",demo:"bright-path-tuition/demo.html",details:"bright-path-tuition.html"},
-  {n:"Borrower Risk Evaluator",c:"Industry Specialist Advisors",d:"Loan-default classifier that measures its own accuracy with a live scorecard",demo:"projects/borrower-risk-evaluator/demo.html",details:"borrower-risk-evaluator.html"},
-  {n:"Motor Claim Triage and QC Evaluator",c:"Industry Specialist Advisors",d:"Deterministic motor claim triage into four categories with a fraud scorecard measured on real outcomes",demo:"projects/motor-claim-evaluator/demo.html",details:"motor-claim-evaluator.html"},
-  {n:"Property Lead Tracker",c:"Industry Specialist Advisors",d:"Which lead channel signs tenants for a rental agency and at what cost, with stale-listing and after-hours leak flags and white-label owner reports",demo:"projects/property-lead-tracker/ui-1-internal-dashboard.html",details:"property-lead-tracker.html"},
-  {n:"Good Company",c:"Industry Specialist Advisors",d:"Reads quarter reports and runs 7-step stock analysis",demo:"projects/good-company/demo.html",details:"good-company.html"},
-  {n:"Football Assistant Coach",c:"Industry Specialist Advisors",d:"AI coaches 22 players and picks Starting XI",demo:"projects/football-assistant-coach/demo.html",details:"football-assistant-coach.html"},
-  {n:"TrendMate",c:"Industry Specialist Advisors",d:"Shopee and Lazada trend and pricing research",demo:"projects/trendmate/demo.html",details:"trendmate.html"},
-  {n:"Long View",c:"Industry Specialist Advisors",d:"27 OSINT sources swept with AI summaries and alerts",demo:"projects/long-view/demo.html",details:"long-view.html"},
-  {n:"MyPropLex",c:"Industry Specialist Advisors",d:"Malaysian property law research agent — NLC, HDA, STA, RPGT",demo:"projects/myproplex/demo.html",details:"myproplex.html"},
-  {n:"Social Media Marketer",c:"Multi-Agent Decision Systems",d:"5 AI agents compete on the same budget across channels",demo:"projects/social-media-marketer/demo.html",details:"social-media-marketer.html"},
-  {n:"Stock Analysis Agent",c:"Multi-Agent Decision Systems",d:"Investment report on Malaysian stocks — moat, dividends, fundamentals",demo:"projects/stock-analysis-agent/demo.html",details:"stock-analysis-agent.html"},
-  {n:"Science Learning Materials Builder",c:"Content Automation",d:"Complete science lesson packs for any grade level",demo:"apps/science-builder.html",details:"science-learning-materials-builder.html"},
-  {n:"Public Sentiment Collection Agent",c:"Multi-Agent Decision Systems",d:"Track public sentiment by region with bias detection",demo:"projects/public-sentiment-collection-agent/demo.html",details:"public-sentiment-agent.html"},
-  {n:"Data Consulting Business Analyst",c:"Multi-Agent Decision Systems",d:"Market scanning and competitor mapping with AI",demo:"projects/data-consulting-business-analyst/demo.html",details:"data-consulting-agent.html"},
-  {n:"Stock Manager",c:"Multi-Agent Decision Systems",d:"Three AI agents restock inventory via Google Sheets",demo:"projects/stock-manager/demo.html",details:"stock-manager.html"},
-  {n:"Mentor",c:"Industry Specialist Advisors",d:"AI advisor for solo service founders grounded in proven frameworks",demo:"projects/mentor/demo.html",details:"mentor.html"},
-  {n:"North Star Learning Center",c:"Industry Specialist Advisors",d:"AI ecosystem for Malaysian post-UPSR tuition centres — three role views, Gemini parent letters, peer-mentor links",demo:"https://north-star-learning-center-522143897885.asia-southeast1.run.app",details:"north-star-learning-center.html"},
-  {n:"Skyread",c:"Knowledge & Reference Chatbots",d:"Daily horoscope with real planetary movement insights — EN/ZH",demo:"projects/skyread/demo.html",details:"skyread.html"},
-  {n:"Wiseman",c:"Knowledge & Reference Chatbots",d:"Five-panel cosmic reading in Mandarin from birth date",demo:"projects/wiseman/demo.html",details:"wiseman.html"},
-  {n:"Tarot Guru",c:"Knowledge & Reference Chatbots",d:"AI picks the right spread and writes a narrative tarot reading",demo:"projects/tarot-guru/demo.html",details:"tarot-guru.html"},
-  {n:"Master Wong",c:"Knowledge & Reference Chatbots",d:"I Ching readings in plain Mandarin",demo:"projects/master-wong/demo.html",details:"master-wong.html"},
-  {n:"Chinese Traditional Calendar",c:"Knowledge & Reference Chatbots",d:"Auspicious dates in natural language with traditional calendar guidance",demo:"projects/chinese-calender/demo.html",details:"chinese-traditional-calendar.html"},
-  {n:"Feng Shui Consultant",c:"Knowledge & Reference Chatbots",d:"Traditional Feng Shui consultation — space optimization and directional analysis",demo:"projects/fengshui-chatbot/demo.html",details:"fengshui-chatbot.html"},
-  {n:"Horoscope Chatbot",c:"Knowledge & Reference Chatbots",d:"Zodiac Q&A chatbot",demo:"projects/horoscope-chatbot/demo.html",details:"horoscope-chatbot.html"},
-  {n:"Unusual Coloring Book",c:"Content Automation",d:"Choose-your-own-adventure coloring book with AI illustrations",demo:"projects/unusual-coloring-book/demo.html",details:"unusual-coloring-book.html"},
-  {n:"Sarawak Laksa",c:"Knowledge & Reference Chatbots",d:"Interactive guide to Kuching's most iconic dish",demo:"projects/sarawak-laksa/index.html",details:"sarawak-laksa.html"},
-  {n:"Nine Year Plan 2022-2031",c:"Knowledge & Reference Chatbots",d:"Reference guide to the Bahai Nine Year Plan",demo:"projects/nine-year-plan/index.html",details:"nine-year-plan.html"},
-  {n:"Back-to-School",c:"Content Automation",d:"5 AI copywriters turn one brief into a full BM campaign",demo:"projects/back-to-school-campaign/demo.html",details:"back-to-school-campaign.html"},
-  {n:"Claude PDF Summarizer",c:"Document & Productivity Tools",d:"Upload any PDF and get a structured AI summary instantly",demo:"https://summarizer-218391175125.asia-southeast1.run.app/",details:"ai-pdf-summarizer.html"},
-  {n:"Expense Tracker AI",c:"Document & Productivity Tools",d:"Snap a receipt and AI categorizes it — no data leaves your device",demo:"https://expense-tracker-ai-169218045868.us-west1.run.app/",details:"expense-tracker-ai.html"},
-  {n:"PDF-to-Audio Reader",c:"Document & Productivity Tools",d:"Turn any PDF into navigable audio with chapter structure",demo:"https://pdf-to-audio-reader-169218045868.us-west1.run.app/",details:"pdf-to-audio-reader.html"},
-  {n:"Bahai Chinese Translation Workbench",c:"Document & Productivity Tools",d:"AI-assisted translation pipeline for Sacred Writings into Chinese",demo:"projects/bahai-chinese-translation-workbench/demo.html",details:"bahai-chinese-translation-workbench.html"},
-  {n:"Sunny Car Accessories",c:"Agentic Commerce",d:"Browser-native multi-category storefront with 18 SKUs and 7 WebMCP tools agent-callable from Chrome 146+",demo:"projects/sunny-car-accessories/index.html",details:"sunny-car-accessories.html"},
-  {n:"Jade Star Chinese Dining 吉星饭厅 — CNY Reservation",c:"Agentic Commerce",d:"Bilingual CNY festival reservation page for Malaysian Chinese restaurants — 6 set menus, 7 WebMCP tools, agent-callable booking with checkAvailability returning typed table counts",demo:"projects/ji-xing-cny-reservation/index.html",details:"ji-xing-cny-reservation.html"},
-];
-
-var searchInput = document.getElementById('projectSearch');
-var searchResults = document.getElementById('searchResults');
-
-searchInput.addEventListener('input', function() {
-    var q = this.value.trim().toLowerCase();
-    if (q.length < 2) { searchResults.classList.remove('active'); return; }
-    var matches = projectDB.filter(function(p) {
-        return p.n.toLowerCase().indexOf(q) !== -1 || p.c.toLowerCase().indexOf(q) !== -1 || p.d.toLowerCase().indexOf(q) !== -1;
-    });
-    if (matches.length === 0) {
-        searchResults.innerHTML = '<div class="sr-empty">No projects found for "' + q + '"</div>';
-    } else {
-        searchResults.innerHTML = matches.slice(0, 10).map(function(p) {
-            return '<a class="search-result-item" href="' + p.details + '">' +
-                '<div><div class="sr-name">' + p.n + '</div><div class="sr-desc">' + p.d + '</div></div>' +
-                '<div class="sr-cat">' + p.c + '</div></a>';
-        }).join('');
-        if (matches.length > 10) {
-            searchResults.innerHTML += '<div class="sr-empty">' + (matches.length - 10) + ' more results...</div>';
-        }
-    }
-    searchResults.classList.add('active');
-});
-
-searchInput.addEventListener('blur', function() {
-    setTimeout(function() { searchResults.classList.remove('active'); }, 200);
-});
-searchInput.addEventListener('focus', function() {
-    if (this.value.trim().length >= 2) searchResults.classList.add('active');
-});
+  // HAMBURGER drawer
+  const drawer=document.getElementById('drawer'), overlay=document.getElementById('overlay');
+  const openMenu=()=>{ drawer.classList.add('open'); overlay.classList.add('open'); };
+  const closeMenu=()=>{ drawer.classList.remove('open'); overlay.classList.remove('open'); };
+  document.getElementById('hamburger').addEventListener('click', openMenu);
+  document.getElementById('drawerClose').addEventListener('click', closeMenu);
+  overlay.addEventListener('click', closeMenu);
+  drawer.querySelectorAll('a').forEach(a=>a.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeMenu(); searchResults.style.display='none'; }});
 </script>
 
+<script>
+(function(){
+  function run(){
+    document.querySelectorAll('a.viz[href]').forEach(function(a){
+      var h=a.getAttribute('href')||''; var m=h.match(/([a-z0-9-]+).html(?:$|[?#])/i);
+      if(!m) return; var slug=m[1];
+      if(slug==='index'||slug==='contact'||slug==='project-categories'||slug.indexOf('category-')===0) return;
+      var ext=(slug==='plumber-whatsapp-agent'||slug==='bookshelf')?'jpg':'jpeg';
+      var src='images/'+slug+'/cover.'+ext;
+      var img=new Image();
+      img.onload=function(){ a.style.backgroundImage="url('"+src+"')"; a.style.backgroundSize="cover"; a.style.backgroundPosition="center"; a.textContent=''; };
+      img.src=src;
+    });
+  }
+  if(document.readyState!=='loading') setTimeout(run,0); else document.addEventListener('DOMContentLoaded',run);
+})();
+</script>
 </body>
 </html>

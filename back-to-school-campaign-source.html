@@ -1,173 +1,391 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Back-to-School — Source Code</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #222; background-color: #ffffff; }
-        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
-        .back-nav { margin-bottom: 20px; }
-        .back-nav a { color: #007BFF; text-decoration: none; font-size: 1rem; }
-        .back-nav a:hover { text-decoration: underline; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Back-to-School Campaign: Source | AI Project Portfolio</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root{ --ink:#222; --paper:#fff; --hair:#dddddd; --gray:#555; --accent:#B8860B; --navy:#1E3A5F; --code-bg:#fbfbf8; --cmt:#6b8190; }
+  html{ scroll-behavior:smooth; }
+  body{ background:var(--paper); color:var(--ink); font-family:Arial, Helvetica, sans-serif; line-height:1.6; overflow-x:hidden; }
+  a{ color:inherit; text-decoration:none; }
+  a:hover h2, a:hover h3, a:hover h4{ color:var(--accent); }
+  p code, li code{ font-family:"Courier New", monospace; font-size:.86em; background:#f2f3f5; padding:1px 5px; color:var(--navy); }
 
-        .project-header { text-align: center; margin-bottom: 40px; padding: 40px 20px; background: linear-gradient(135deg, #FF5722, #E64A19); color: white; border-radius: 10px; }
-        .project-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
-        .project-header p { font-size: 1.2rem; opacity: 0.9; }
-        .badges { display: flex; justify-content: center; gap: 10px; margin: 20px 0; flex-wrap: wrap; }
-        .badge { background-color: rgba(255,255,255,0.2); color: white; padding: 5px 12px; border-radius: 15px; font-size: 0.9rem; }
+  /* Masthead (shared) */
+  .masthead{ display:flex; align-items:center; justify-content:space-between; padding:14px 28px; max-width:1240px; margin:0 auto; gap:18px; }
+  .mast-left{ display:flex; align-items:center; gap:20px; }
+  .logo{ background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; letter-spacing:3px; font-size:.95rem; padding:8px 12px; white-space:nowrap; }
+  .mast-nav{ display:flex; gap:20px; font-family:Arial, Helvetica, sans-serif; font-size:.72rem; letter-spacing:1.4px; text-transform:uppercase; }
+  .mast-nav a:hover{ color:var(--accent); }
+  .hamburger{ display:none; flex-direction:column; gap:4px; background:none; border:none; cursor:pointer; padding:6px; }
+  .hamburger span{ width:22px; height:2px; background:#222; display:block; }
+  .rule-top{ border:none; border-top:3px solid #222; max-width:1240px; margin:0 auto; }
 
-        .content-section { margin: 40px 0; padding: 30px; background-color: #f9f9f9; border-radius: 8px; border-left: 5px solid #FF5722; }
-        .content-section h2 { color: #FF5722; margin-bottom: 20px; font-size: 1.8rem; }
-        .content-section h3 { color: #333; margin: 20px 0 10px 0; font-size: 1.3rem; }
+  /* Search (shared) */
+  .search-box{ position:relative; width:200px; }
+  .search-input{ width:100%; padding:7px 30px 7px 12px; border:1px solid var(--hair); background:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; color:#222; }
+  .search-input:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(184,134,11,.15); }
+  .search-ic{ position:absolute; right:10px; top:50%; transform:translateY(-50%); color:var(--gray); font-size:.8rem; pointer-events:none; }
+  .search-results{ position:absolute; top:calc(100% + 4px); left:0; width:340px; max-width:86vw; background:#fff; border:1px solid #222; max-height:60vh; overflow-y:auto; z-index:120; display:none; }
+  .sr-item{ padding:12px 14px; border-bottom:1px solid var(--hair); }
+  .sr-item:last-child{ border-bottom:none; }
+  .sr-cat{ font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; margin-bottom:4px; color:var(--accent); }
+  .sr-title{ font-weight:700; font-size:1.02rem; color:#222; }
+  .sr-links{ font-size:.58rem; letter-spacing:.8px; text-transform:uppercase; color:var(--gray); margin-top:5px; }
+  .sr-links a:hover{ color:var(--accent); }
+  .sr-none{ padding:16px 14px; font-size:.82rem; color:var(--gray); }
 
-        .code-block { background-color: #1e1e1e; color: #d4d4d4; border-radius: 8px; padding: 20px; margin: 15px 0; font-family: 'Courier New', monospace; font-size: 0.85rem; overflow-x: auto; line-height: 1.7; white-space: pre-wrap; }
-        .code-block .comment { color: #6a9955; }
-        .code-block .keyword { color: #569cd6; }
-        .code-block .string { color: #ce9178; }
-        .code-block .function { color: #dcdcaa; }
+  /* Shared bits */
+  .tab{ display:inline-block; background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.66rem; letter-spacing:2px; text-transform:uppercase; padding:6px 12px; }
+  .rubric{ font-family:Arial, Helvetica, sans-serif; font-size:.62rem; font-weight:700; letter-spacing:1.6px; text-transform:uppercase; color:var(--accent); display:block; margin-bottom:8px; }
+  .tech-chip{ display:inline-block; border:1px solid var(--hair); padding:6px 12px; font-size:.72rem; letter-spacing:.3px; color:#333; white-space:nowrap; }
+  .tech-chip:hover{ border-color:var(--accent); color:var(--accent); }
+  .btn{ display:inline-block; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.7rem; letter-spacing:1.6px; text-transform:uppercase; padding:13px 24px; border:1px solid #222; background:#222; color:#fff; cursor:pointer; transition:.15s; }
+  .btn:hover{ background:var(--accent); border-color:var(--accent); }
+  .btn.ghost{ background:#fff; color:#222; }
+  .btn.ghost:hover{ color:var(--accent); border-color:var(--accent); background:#fff; }
 
-        .file-tree { background: #f4f4f4; border: 1px solid #ddd; border-radius: 5px; padding: 20px; margin: 15px 0; font-family: monospace; line-height: 2; }
+  /* Breadcrumb */
+  .crumb{ max-width:1240px; margin:0 auto; padding:20px 28px 0; font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--gray); }
+  .crumb a:hover{ color:var(--accent); }
+  .crumb .sep{ color:var(--hair); margin:0 8px; }
 
-        @media (max-width: 768px) {
-            .project-header h1 { font-size: 2rem; }
-            .container { padding: 15px; }
-        }
-    </style>
+  /* Header (slim cover banner + copy) */
+  .src-head{ max-width:1240px; margin:0 auto; padding:14px 28px 6px; }
+  .cover-strip{ border:1px solid var(--hair); line-height:0; background:#eef1f4; }
+  .cover-strip img{ width:100%; height:190px; object-fit:cover; object-position:center 42%; display:block; }
+  .src-head h1{ font-size:2.5rem; font-weight:900; line-height:1.04; letter-spacing:-.008em; margin-top:18px; }
+  .src-head .sub{ font-style:italic; font-size:1.08rem; color:#333; margin-top:10px; max-width:72ch; }
+  .head-tech{ display:flex; flex-wrap:wrap; gap:9px; margin-top:16px; }
+  .head-btns{ display:flex; flex-wrap:wrap; gap:12px; margin-top:18px; }
+
+  /* Section shell */
+  .sec{ max-width:1240px; margin:0 auto; padding:26px 28px; }
+  .sec-rule{ border-top:3px solid #222; padding-top:16px; }
+  .sec .tab{ margin-bottom:14px; }
+  .sec h2{ font-size:1.7rem; font-weight:900; line-height:1.06; }
+  .sec .intro{ color:#333; font-size:1.02rem; margin-top:10px; max-width:80%; }
+  .sec .body{ color:#333; font-size:1rem; margin-top:10px; max-width:80%; }
+
+  /* Code block */
+  .codeblock{ border:1px solid var(--hair); margin-top:16px; }
+  .code-bar{ display:flex; align-items:center; justify-content:space-between; gap:12px; background:var(--navy); color:#fff; padding:8px 12px; }
+  .code-bar .path{ font-family:"Courier New", monospace; font-size:.74rem; letter-spacing:.2px; opacity:.96; display:flex; align-items:center; gap:7px; min-width:0; }
+  .code-bar .path span{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .code-copy{ flex:none; background:none; border:1px solid rgba(255,255,255,.4); color:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.56rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; padding:5px 11px; cursor:pointer; transition:.15s; }
+  .code-copy:hover{ background:rgba(255,255,255,.16); }
+  .codeblock pre{ margin:0; padding:14px 16px; overflow-x:auto; background:var(--code-bg); }
+  .codeblock code{ font-family:"Courier New", monospace; font-size:.82rem; line-height:1.6; color:#1b2a3a; background:none; padding:0; white-space:pre; display:block; }
+  .codeblock code .cmt{ color:var(--cmt); font-style:italic; }
+
+  .tree .code-bar .path::before{ content:"📁"; }
+
+  /* Notes */
+  .note-block{ margin-top:22px; }
+  .note-block h3{ font-size:1.15rem; font-weight:800; }
+  .blist{ list-style:none; margin-top:12px; border-top:1px solid var(--hair); }
+  .blist li{ padding:12px 0; border-bottom:1px solid var(--hair); color:#333; font-size:.95rem; }
+  .blist li b{ color:#222; }
+
+  /* CTA */
+  .cta-inner{ display:flex; align-items:center; gap:18px; flex-wrap:wrap; border-top:3px solid #222; padding-top:18px; }
+  .cta-inner h3{ font-size:1.4rem; font-weight:900; line-height:1.08; }
+  .cta-inner p{ color:var(--gray); font-size:.95rem; margin-top:4px; }
+  .cta-btns{ margin-left:auto; display:flex; gap:12px; flex-wrap:wrap; }
+
+  footer{ background:#222; max-width:1240px; margin:30px auto 0; padding:24px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; letter-spacing:.5px; color:#fff; text-align:center; }
+  .note{ max-width:1240px; margin:14px auto 0; padding:8px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.62rem; letter-spacing:1px; color:#999; }
+
+  /* Drawer (shared) */
+  .drawer{ position:fixed; top:0; left:-300px; width:280px; height:100vh; background:#fff; z-index:200; box-shadow:2px 0 14px rgba(0,0,0,.15); transition:left .28s ease; padding:74px 26px 26px; }
+  .drawer.open{ left:0; }
+  .drawer a{ display:block; font-family:Arial, Helvetica, sans-serif; font-size:.82rem; letter-spacing:1.2px; text-transform:uppercase; padding:14px 0; border-bottom:1px solid var(--hair); }
+  .overlay{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:150; }
+  .overlay.open{ display:block; }
+  .drawer-close{ position:absolute; top:20px; right:20px; font-family:Arial, Helvetica, sans-serif; font-size:1.4rem; background:none; border:none; cursor:pointer; }
+
+  @media (max-width:900px){
+    .cta-btns{ margin-left:0; }
+    .mast-nav{ display:none; }
+    .hamburger{ display:flex; }
+    .masthead{ padding:12px 16px; }
+    .mast-left{ gap:10px; min-width:0; flex:1; }
+    .logo{ font-size:.72rem; letter-spacing:1.5px; padding:6px 8px; }
+    .search-box{ flex:1; width:auto; min-width:0; }
+    .search-results{ position:fixed; top:58px; left:12px; right:12px; width:auto; max-width:none; }
+    .src-head h1{ font-size:1.95rem; }
+    .cover-strip img{ height:150px; }
+  }
+</style>
 </head>
 <body>
-    <div class="container">
-        <nav class="back-nav">
-            <a href="back-to-school-campaign.html">&larr; Back to Showcase</a>
-        </nav>
 
-        <div class="project-header">
-            <h1>Back-to-School</h1>
-            <p>Source Code Walkthrough</p>
-            <div class="badges">
-                <span class="badge">Gemini 2.5 Flash-Lite</span>
-                <span class="badge">Vanilla JS</span>
-                <span class="badge">BYO-Key</span>
-                <span class="badge">Single HTML</span>
-            </div>
-        </div>
+  <div class="overlay" id="overlay"></div>
+  <nav class="drawer" id="drawer">
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">&times;</button>
+    <a href="index.html">Home</a>
+    <a href="project-categories.html">Categories</a>
+    <a href="contact.html">Contact</a>
+    <a href="https://lyven81.github.io/data-analyst-portfolio/index.html">Data Portfolio</a>
+  </nav>
 
-        <div class="content-section">
-            <h2>File Structure</h2>
-            <div class="file-tree">
-projects/back-to-school-campaign/<br>
-├── demo.html &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# The complete app (single self-contained file)<br>
-├── problem-statement.md &nbsp;&nbsp;&nbsp;# Business context and persona<br>
-├── project-outline.md &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Full design document<br>
-├── system-prompt.txt &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# The 5-writer system prompt sent to Gemini<br>
-└── user-guide.md &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Plain-language usage instructions
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>1. Preset Campaign Briefs</h2>
-            <p>Three preset briefs are hardcoded as JavaScript objects. Each fills the form with a complete campaign for Kiddoz Uniform House in Bangi — the user can try the app instantly without typing anything.</p>
-            <div class="code-block"><span class="keyword">const</span> PRESETS = {
-  <span class="string">jan</span>: {
-    store: <span class="string">'Kiddoz Uniform House'</span>,
-    location: <span class="string">'Bangi, Selangor'</span>,
-    products: <span class="string">'Set lengkap baju sekolah dari RM89. Baju putih RM25, pinafore RM35, seluar sukan RM20, kasut sekolah hitam RM45...'</span>,
-    campaign: <span class="string">'Back to School Januari 2026 — Sekolah buka 2 Januari. Stok sedia, semua saiz ada.'</span>,
-    audience: <span class="string">'Ibu bapa pelajar sekolah rendah di Bangi dan sekitar Kajang/Putrajaya'</span>
-  },
-  <span class="string">jun</span>: { <span class="comment">/* Mid-year preset */</span> },
-  <span class="string">clearance</span>: { <span class="comment">/* Year-end clearance preset */</span> }
-};</div>
-        </div>
-
-        <div class="content-section">
-            <h2>2. The 5-Writer System Prompt</h2>
-            <p>The core of the app is a structured system prompt that defines 5 specialist copywriter personas. Each writer has strict format rules matching their platform's reading behaviour. The prompt enforces Bahasa Melayu output and prevents hallucinated prices or products.</p>
-            <div class="code-block"><span class="keyword">function</span> <span class="function">buildSystemPrompt</span>(brief, toneInstruction) {
-  <span class="keyword">return</span> <span class="string">`Kamu adalah pasukan 5 penulis iklan profesional.
-Setiap penulis menulis untuk satu platform dengan gaya tersendiri.
-
-ARAHAN NADA:
-${toneInstruction}
-
-BRIEF KEMPEN:
-${brief}
-
-PERANAN SETIAP PENULIS:
-
-1. PENULIS WHATSAPP — 4-6 baris, urgency, CTA jelas
-2. PENULIS INSTAGRAM — Hook + 3-5 perenggan + hashtag BM
-3. PENULIS EMAIL — 3-email drip (Teaser → Tawaran → Last Call)
-4. PENULIS BLOG — 300-500 patah perkataan, cerita relatable
-5. PENULIS SEO — 150-200 patah perkataan, kata kunci natural
-
-FORMAT OUTPUT:
-JSON dengan 5 kunci: "whatsapp", "instagram", "email", "blog", "seo"`</span>;
-}</div>
-        </div>
-
-        <div class="content-section">
-            <h2>3. Tone Selector</h2>
-            <p>Three BM tone options change the writing instruction injected into the system prompt. All three stay within Malay-dominant range — there is no full-English option.</p>
-            <div class="code-block"><span class="keyword">function</span> <span class="function">getToneInstruction</span>() {
-  <span class="keyword">const</span> tone = document.getElementById(<span class="string">'f-tone'</span>).value;
-  <span class="keyword">if</span> (tone === <span class="string">'bm-formal'</span>)
-    <span class="keyword">return</span> <span class="string">'Gunakan Bahasa Melayu formal dan sopan.'</span>;
-  <span class="keyword">if</span> (tone === <span class="string">'campur'</span>)
-    <span class="keyword">return</span> <span class="string">'Gunakan campuran BM dan English (Manglish).'</span>;
-  <span class="keyword">return</span> <span class="string">'Gunakan BM santai dan mesra. Tulis macam kawan bercakap.'</span>;
-}</div>
-        </div>
-
-        <div class="content-section">
-            <h2>4. BYO-Key Gemini API Call</h2>
-            <p>The app calls Gemini 2.5 Flash-Lite directly from the browser. The API key is stored in sessionStorage — never persisted to disk, never sent anywhere except Google's API endpoint. Temperature 0.7 gives creative variety while keeping the copy grounded in the brief.</p>
-            <div class="code-block"><span class="keyword">const</span> res = <span class="keyword">await</span> <span class="function">fetch</span>(
-  <span class="string">`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${apiKey}`</span>,
-  {
-    method: <span class="string">'POST'</span>,
-    headers: { <span class="string">'Content-Type'</span>: <span class="string">'application/json'</span> },
-    body: JSON.stringify({
-      system_instruction: { parts: [{ text: systemPrompt }] },
-      contents: [{ role: <span class="string">'user'</span>, parts: [{ text: <span class="string">'Janakan kempen 5-channel.'</span> }] }],
-      generationConfig: { temperature: 0.7, maxOutputTokens: 8000 }
-    })
-  }
-);</div>
-        </div>
-
-        <div class="content-section">
-            <h2>5. JSON Parsing &amp; Tab Rendering</h2>
-            <p>Gemini returns a JSON object with 5 keys. The app strips any markdown code fences (Gemini sometimes wraps JSON in ```), parses the result, and populates each tab panel.</p>
-            <div class="code-block"><span class="keyword">let</span> raw = data.candidates?.[0]?.content?.parts?.[0]?.text || <span class="string">''</span>;
-<span class="comment">// Strip markdown code fences if present</span>
-raw = raw.replace(<span class="string">/^```json?\s*/i</span>, <span class="string">''</span>).replace(<span class="string">/\s*```$/i</span>, <span class="string">''</span>).trim();
-<span class="keyword">const</span> output = JSON.parse(raw);
-
-channels.forEach(ch => {
-  <span class="keyword">const</span> el = document.getElementById(<span class="string">'out-'</span> + ch);
-  el.textContent = output[ch] || <span class="string">'Tiada output untuk channel ini.'</span>;
-});</div>
-        </div>
-
-        <div class="content-section">
-            <h2>6. Per-Channel Regeneration</h2>
-            <p>Each channel tab has a "Jana Semula" button that regenerates only that writer's output — using a separate, single-writer prompt at a slightly higher temperature (0.8) to produce a different take on the same brief.</p>
-            <div class="code-block"><span class="keyword">async function</span> <span class="function">regenChannel</span>(channel) {
-  <span class="keyword">const</span> prompt = <span class="string">`Kamu adalah ${channelNames[channel]} dari pasukan kempen.
-Tulis semula output untuk platform ${channel} sahaja.
-Guna gaya berbeza dari versi sebelum ini.`</span>;
-
-  <span class="comment">// Uses temperature 0.8 for creative variation</span>
-  generationConfig: { temperature: 0.8, maxOutputTokens: 1200 }
-}</div>
-        </div>
-
-        <nav class="back-nav" style="margin-top: 40px; text-align: center;">
-            <a href="back-to-school-campaign.html">&larr; Back to Showcase</a> &nbsp;|&nbsp;
-            <a href="index.html">Home</a>
-        </nav>
+  <div class="masthead">
+    <div class="mast-left">
+      <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+      <a class="logo" href="index.html">AI PROJECTS</a>
+      <nav class="mast-nav">
+        <a href="project-categories.html">Categories</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <div class="search-box">
+        <input type="text" class="search-input" id="searchInput" autocomplete="off" placeholder="Search AI projects..." aria-label="Search AI projects">
+        <span class="search-ic">&#128269;</span>
+        <div class="search-results" id="searchResults"></div>
+      </div>
     </div>
+  </div>
+  <hr class="rule-top">
+
+  <div class="crumb">
+    <a href="project-categories.html">Categories</a>
+    <span class="sep">/</span><a id="crumbCat" href="#"></a>
+    <span class="sep">/</span><a id="crumbProj" href="#"></a>
+    <span class="sep">/</span><span>Source</span>
+  </div>
+
+  <section class="src-head">
+    <div class="cover-strip" id="coverStrip" style="display:none"><img id="cover" alt=""></div>
+    <span class="rubric" id="kicker"></span>
+    <h1 id="title"></h1>
+    <p class="sub" id="subtitle"></p>
+    <div class="head-tech" id="headTech"></div>
+    <div class="head-btns" id="headBtns"></div>
+  </section>
+
+  <div id="body"></div>
+
+  <footer>&copy; 2026 Lee Yih Ven | AI Project Portfolio &middot; All rights reserved.</footer>
+  <div class="note">Sample Source-Showcase-E2 (TEMPLATE): source-code page on the index magazine system: slim cover banner, About, Project Structure, code walkthrough with copyable navy-barred code blocks, CTA. Reuse by editing only the PROJECT block at the top of the script.</div>
+
+<script>
+  const SITE = "";
+
+  /* =================================================================
+     EDIT PER PROJECT  -  the ONLY block you change per page.
+     Copy this file, swap PROJECT, save as <slug>-source.html.
+     - structure.code : the project file tree (plain text)
+     - walkthrough[]   : { heading, body, files:[{label, code}] }
+     - notes[]         : { heading, bullets:[...] }
+     Code strings can be multi-line; they render verbatim.
+     ================================================================= */
+  const PROJECT = {
+  "slug": "back-to-school-campaign",
+  "category": "Content Automation",
+  "categoryUrl": "category-content-automation.html",
+  "title": "Back-to-School Campaign",
+  "subtitle": "The five-writer system prompt, the BYO-key Gemini call, JSON tab rendering, and per-channel regeneration, the parts that make one brief become five channels.",
+  "cover": "images/back-to-school-campaign/cover.jpeg",
+  "tech": [
+    "Gemini 2.5 Flash-Lite",
+    "Vanilla JS",
+    "BYO-Key",
+    "Single HTML",
+    "Bahasa Melayu"
+  ],
+  "overviewUrl": "back-to-school-campaign.html",
+  "demoLabel": "Try Live Demo",
+  "demoUrl": "https://lyven81.github.io/ai-project/projects/back-to-school-campaign/demo.html",
+  "repoUrl": "https://github.com/lyven81/ai-project/tree/main/projects/back-to-school-campaign",
+  "about": "The whole app is a single self-contained HTML file. Three pieces do the real work: a structured system prompt that defines five specialist copywriter personas, a BYO-key Gemini call made straight from the browser, and a small parse-and-render layer that turns one JSON response into five copy-paste tabs. Per-channel regeneration lets the user refresh one writer without rerunning the campaign. The API key lives only in <code>sessionStorage</code>, never persisted and never sent anywhere except Google.",
+  "structure": {
+    "label": "projects/back-to-school-campaign/",
+    "code": "projects/back-to-school-campaign/\n  demo.html              the complete app (single self-contained file)\n  problem-statement.md   business context and persona\n  project-outline.md     full design document\n  system-prompt.txt      the 5-writer system prompt sent to Gemini\n  user-guide.md          plain-language usage instructions"
+  },
+  "walkthrough": [
+    {
+      "heading": "Preset Campaign Briefs",
+      "body": "Three preset briefs are hardcoded as JavaScript objects. Each fills the form with a complete campaign for Kiddoz Uniform House in Bangi, so the user can try the app instantly without typing anything.",
+      "files": [
+        {
+          "label": "demo.html: three hardcoded preset briefs",
+          "code": "const PRESETS = {\n  jan: {\n    store: 'Kiddoz Uniform House',\n    location: 'Bangi, Selangor',\n    products: 'Set lengkap baju sekolah dari RM89. Baju putih RM25, pinafore RM35, seluar sukan RM20, kasut sekolah hitam RM45...',\n    campaign: 'Back to School Januari 2026 - Sekolah buka 2 Januari. Stok sedia, semua saiz ada.',\n    audience: 'Ibu bapa pelajar sekolah rendah di Bangi dan sekitar Kajang/Putrajaya'\n  },\n  jun: { /* Mid-year preset */ },\n  clearance: { /* Year-end clearance preset */ }\n};"
+        }
+      ]
+    },
+    {
+      "heading": "The 5-Writer System Prompt",
+      "body": "The core of the app is a structured system prompt that defines five specialist copywriter personas. Each writer has strict format rules matching its platform's reading behaviour. The prompt enforces Bahasa Melayu output and prevents hallucinated prices or products.",
+      "files": [
+        {
+          "label": "demo.html: build the five-persona system prompt",
+          "code": "function buildSystemPrompt(brief, toneInstruction) {\n  return `Kamu adalah pasukan 5 penulis iklan profesional.\nSetiap penulis menulis untuk satu platform dengan gaya tersendiri.\n\nARAHAN NADA:\n${toneInstruction}\n\nBRIEF KEMPEN:\n${brief}\n\nPERANAN SETIAP PENULIS:\n\n1. PENULIS WHATSAPP - 4-6 baris, urgency, CTA jelas\n2. PENULIS INSTAGRAM - Hook + 3-5 perenggan + hashtag BM\n3. PENULIS EMAIL - 3-email drip (Teaser, Tawaran, Last Call)\n4. PENULIS BLOG - 300-500 patah perkataan, cerita relatable\n5. PENULIS SEO - 150-200 patah perkataan, kata kunci natural\n\nFORMAT OUTPUT:\nJSON dengan 5 kunci: \"whatsapp\", \"instagram\", \"email\", \"blog\", \"seo\"`;\n}"
+        }
+      ]
+    },
+    {
+      "heading": "Tone Selector",
+      "body": "Three BM tone options change the writing instruction injected into the system prompt. All three stay within Malay-dominant range; there is no full-English option.",
+      "files": [
+        {
+          "label": "demo.html: map the tone choice to an instruction",
+          "code": "function getToneInstruction() {\n  const tone = document.getElementById('f-tone').value;\n  if (tone === 'bm-formal')\n    return 'Gunakan Bahasa Melayu formal dan sopan.';\n  if (tone === 'campur')\n    return 'Gunakan campuran BM dan English (Manglish).';\n  return 'Gunakan BM santai dan mesra. Tulis macam kawan bercakap.';\n}"
+        }
+      ]
+    },
+    {
+      "heading": "BYO-Key Gemini API Call",
+      "body": "The app calls Gemini 2.5 Flash-Lite directly from the browser. The API key is stored in sessionStorage, never persisted to disk and never sent anywhere except Google's API endpoint. Temperature 0.7 gives creative variety while keeping the copy grounded in the brief.",
+      "files": [
+        {
+          "label": "demo.html: client-side call to Gemini",
+          "code": "const res = await fetch(\n  `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${apiKey}`,\n  {\n    method: 'POST',\n    headers: { 'Content-Type': 'application/json' },\n    body: JSON.stringify({\n      system_instruction: { parts: [{ text: systemPrompt }] },\n      contents: [{ role: 'user', parts: [{ text: 'Janakan kempen 5-channel.' }] }],\n      generationConfig: { temperature: 0.7, maxOutputTokens: 8000 }\n    })\n  }\n);"
+        }
+      ]
+    },
+    {
+      "heading": "JSON Parsing & Tab Rendering",
+      "body": "Gemini returns a JSON object with five keys. The app strips any markdown code fences (Gemini sometimes wraps JSON in triple backticks), parses the result, and populates each tab panel.",
+      "files": [
+        {
+          "label": "demo.html: strip fences, parse, fill tabs",
+          "code": "let raw = data.candidates?.[0]?.content?.parts?.[0]?.text || '';\n// Strip markdown code fences if present\nraw = raw.replace(/^```json?\\s*/i, '').replace(/\\s*```$/i, '').trim();\nconst output = JSON.parse(raw);\n\nchannels.forEach(ch => {\n  const el = document.getElementById('out-' + ch);\n  el.textContent = output[ch] || 'Tiada output untuk channel ini.';\n});"
+        }
+      ]
+    },
+    {
+      "heading": "Per-Channel Regeneration",
+      "body": "Each channel tab has a 'Jana Semula' button that regenerates only that writer's output, using a separate single-writer prompt at a slightly higher temperature (0.8) to produce a different take on the same brief.",
+      "files": [
+        {
+          "label": "demo.html: regenerate one writer only",
+          "code": "async function regenChannel(channel) {\n  const prompt = `Kamu adalah ${channelNames[channel]} dari pasukan kempen.\nTulis semula output untuk platform ${channel} sahaja.\nGuna gaya berbeza dari versi sebelum ini.`;\n\n  // Uses temperature 0.8 for creative variation\n  generationConfig: { temperature: 0.8, maxOutputTokens: 1200 }\n}"
+        }
+      ]
+    }
+  ],
+  "notes": [
+    {
+      "heading": "Why This Design",
+      "bullets": [
+        "<b>Single file, no build:</b> the whole app is one self-contained HTML file with no build tools and no dependencies, so it runs on GitHub Pages at zero cost.",
+        "<b>Keyless storage:</b> the Gemini key lives only in <code>sessionStorage</code>, never persisted and never sent anywhere except Google.",
+        "<b>Five personas, one call:</b> all five writers are defined in one system prompt and return one JSON object, so a single request fills every channel.",
+        "<b>Targeted refresh:</b> per-channel regeneration runs a single-writer prompt at temperature 0.8, so the user can refine one channel without rerunning the campaign."
+      ]
+    }
+  ],
+  "cta": "Want a near-free, five-channel copywriting tool like this built for your own shop? Let's scope it."
+};
+  /* ===================== END EDIT BLOCK ===================== */
+
+  const pref = (u) => /^https?:|^mailto:|^tel:/.test(u || '') ? u : (SITE + (u || ''));
+  const esc = (s) => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const rich = (s) => esc(s).replace(/&lt;(\/?(?:b|code))&gt;/g, '<$1>');
+
+  // raw code store for copy buttons
+  const RAW = [];
+  function codeBlock(label, codeStr, extraClass){
+    const idx = RAW.push(codeStr) - 1;
+    const rendered = esc(codeStr).split('\n')
+      .map(line => /^\s*#/.test(line) ? `<span class="cmt">${line}</span>` : line).join('\n');
+    return `<div class="codeblock ${extraClass||''}">`+
+      `<div class="code-bar"><span class="path"><span>${esc(label)}</span></span>`+
+      `<button class="code-copy" data-idx="${idx}">Copy</button></div>`+
+      `<pre><code>${rendered}</code></pre></div>`;
+  }
+
+  // Breadcrumb + header
+  document.title = PROJECT.title + ": Source | AI Project Portfolio";
+  document.getElementById('crumbCat').textContent = PROJECT.category;
+  document.getElementById('crumbCat').href = pref(PROJECT.categoryUrl);
+  document.getElementById('crumbProj').textContent = PROJECT.title;
+  document.getElementById('crumbProj').href = pref(PROJECT.overviewUrl);
+  if (PROJECT.cover){
+    document.getElementById('coverStrip').style.display = '';
+    const c = document.getElementById('cover'); c.src = PROJECT.cover; c.alt = PROJECT.title + " cover";
+  }
+  document.getElementById('kicker').textContent = "Source Walkthrough · " + PROJECT.category;
+  document.getElementById('title').textContent = PROJECT.title;
+  document.getElementById('subtitle').textContent = PROJECT.subtitle;
+  document.getElementById('headTech').innerHTML = (PROJECT.tech||[]).map(t => `<span class="tech-chip">${esc(t)}</span>`).join('');
+  document.getElementById('headBtns').innerHTML =
+    (PROJECT.demoUrl ? `<a class="btn" href="${pref(PROJECT.demoUrl)}" target="_blank" rel="noopener">${esc(PROJECT.demoLabel||'Live Demo')}</a>` : '') +
+    (PROJECT.overviewUrl ? `<a class="btn ghost" href="${pref(PROJECT.overviewUrl)}">Project Overview</a>` : '') +
+    (PROJECT.repoUrl ? `<a class="btn ghost" href="${pref(PROJECT.repoUrl)}" target="_blank" rel="noopener">GitHub Repo</a>` : '');
+
+  const section = (tab, inner) => `<section class="sec"><div class="sec-rule"><span class="tab">${esc(tab)}</span>${inner}</div></section>`;
+  let html = "";
+  const P = PROJECT;
+
+  if (P.about){
+    html += section("About This Code", `<h2>About This Code Showcase</h2><p class="intro">${rich(P.about)}</p>`);
+  }
+  if (P.structure && P.structure.code){
+    html += section("Project Structure", `<h2>Project Structure</h2>`+
+      codeBlock(P.structure.label || 'project/', P.structure.code, 'tree'));
+  }
+  (P.walkthrough||[]).forEach(w => {
+    let inner = `<h2>${esc(w.heading)}</h2>`;
+    if (w.body) inner += `<p class="body">${rich(w.body)}</p>`;
+    (w.files||[]).forEach(f => { inner += codeBlock(f.label, f.code); });
+    html += section("Code", inner);
+  });
+  // CTA
+  html += `<section class="sec"><div class="cta-inner">`+
+    `<div><h3>Interested in the build?</h3><p>${esc(P.cta || "Let's talk.")}</p></div>`+
+    `<div class="cta-btns">`+
+    (P.demoUrl ? `<a class="btn" href="${pref(P.demoUrl)}" target="_blank" rel="noopener">${esc(P.demoLabel||'Live Demo')}</a>` : '')+
+    `<a class="btn ghost" href="${SITE}contact.html">Get in Touch</a>`+
+    `</div></div></section>`;
+
+  document.getElementById('body').innerHTML = html;
+
+  // Copy buttons
+  function copyText(text, btn){
+    const done = ()=>{ const o=btn.textContent; btn.textContent='Copied ✓'; setTimeout(()=>btn.textContent=o.includes('Copied')?'Copy':o,1400); };
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(done).catch(()=>fb(text,done)); }
+    else fb(text,done);
+  }
+  function fb(text,done){ const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(ta); done(); }
+  document.querySelectorAll('.code-copy').forEach(btn =>
+    btn.addEventListener('click', ()=> copyText(RAW[+btn.dataset.idx], btn)));
+
+  // Masthead search
+  const ITEMS = [
+    {t:PROJECT.title, c:PROJECT.category, s:PROJECT.slug},
+    {t:"Courier CS Quality Console", c:"Conversational Data Analytics", s:"courier-cs-quality-console"},
+    {t:"Voucher Analyzer", c:"Conversational Data Analytics", s:"voucher-analyzer"},
+    {t:"Wiseman", c:"Knowledge & Reference Chatbots", s:"wiseman"},
+    {t:"Sunny Car Accessories", c:"Agentic Commerce", s:"sunny-car-accessories"},
+    {t:"Bookshelf", c:"Multi-Agent Decision Systems", s:"bookshelf"}
+  ];
+  const searchInput = document.getElementById('searchInput');
+  const searchResults = document.getElementById('searchResults');
+  function runSearch(q){
+    if(q.trim().length < 2){ searchResults.style.display='none'; return; }
+    const ql = q.toLowerCase();
+    const hits = ITEMS.filter(it => (it.t+' '+it.c).toLowerCase().includes(ql));
+    searchResults.innerHTML = hits.length ? hits.map(it =>
+      `<div class="sr-item"><div class="sr-cat">${esc(it.c)}</div>`+
+      `<a href="${SITE}${it.s}.html"><div class="sr-title">${esc(it.t)}</div></a>`+
+      `<div class="sr-links"><a href="${SITE}${it.s}.html">View Details</a></div></div>`).join('')
+      : `<div class="sr-none">No projects found. Try a different keyword.</div>`;
+    searchResults.style.display='block';
+  }
+  searchInput.addEventListener('input', e => runSearch(e.target.value));
+  document.addEventListener('click', e => { if(!e.target.closest('.search-box')) searchResults.style.display='none'; });
+
+  // Drawer
+  const drawer=document.getElementById('drawer'), overlay=document.getElementById('overlay');
+  const openMenu=()=>{ drawer.classList.add('open'); overlay.classList.add('open'); };
+  const closeMenu=()=>{ drawer.classList.remove('open'); overlay.classList.remove('open'); };
+  document.getElementById('hamburger').addEventListener('click', openMenu);
+  document.getElementById('drawerClose').addEventListener('click', closeMenu);
+  overlay.addEventListener('click', closeMenu);
+  drawer.querySelectorAll('a').forEach(a=>a.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeMenu(); searchResults.style.display='none'; }});
+</script>
 </body>
 </html>

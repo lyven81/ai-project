@@ -1,195 +1,380 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hoo Tim Analytics Agent — Source Code</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #222; background: #fff; }
-        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
-        .back-nav a { color: #B45309; text-decoration: none; }
-        .back-nav a:hover { text-decoration: underline; }
-        .header { text-align: center; padding: 40px 0; background: linear-gradient(135deg,#B45309,#7C2D12); color: #fff; border-radius: 10px; margin-bottom: 30px; }
-        .header h1 { font-size: 2.2rem; margin-bottom: 10px; }
-        .header p { opacity: 0.9; }
-        .section { margin: 30px 0; padding: 25px; background: #faf6ec; border-left: 5px solid #B45309; border-radius: 8px; }
-        .section h2 { color: #B45309; margin-bottom: 15px; }
-        .file-tree { font-family: monospace; background: #f4f4f4; padding: 18px; border-radius: 6px; white-space: pre; overflow-x: auto; }
-        pre { background: #1e1e1e; color: #d4d4d4; padding: 16px; border-radius: 6px; overflow-x: auto; font-size: 0.85rem; }
-        .explain { background: #fff; border: 1px solid #e5d9b0; padding: 15px; border-radius: 6px; margin: 10px 0; }
-        .explain h4 { color: #B45309; margin-bottom: 8px; }
-        .explain code { background: #fff3e0; color: #8a5400; padding: 2px 6px; border-radius: 3px; font-family: 'Courier New', monospace; font-size: 0.92em; }
-        ul { margin-left: 20px; }
-        footer { text-align: center; padding: 20px; background-color: #333; color: white; margin-top: 40px; border-radius: 8px; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hoo Tim Analytics Agent: Source | AI Project Portfolio</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root{ --ink:#222; --paper:#fff; --hair:#dddddd; --gray:#555; --accent:#B8860B; --navy:#1E3A5F; --code-bg:#fbfbf8; --cmt:#6b8190; }
+  html{ scroll-behavior:smooth; }
+  body{ background:var(--paper); color:var(--ink); font-family:Arial, Helvetica, sans-serif; line-height:1.6; overflow-x:hidden; }
+  a{ color:inherit; text-decoration:none; }
+  a:hover h2, a:hover h3, a:hover h4{ color:var(--accent); }
+  p code, li code{ font-family:"Courier New", monospace; font-size:.86em; background:#f2f3f5; padding:1px 5px; color:var(--navy); }
+
+  /* Masthead (shared) */
+  .masthead{ display:flex; align-items:center; justify-content:space-between; padding:14px 28px; max-width:1240px; margin:0 auto; gap:18px; }
+  .mast-left{ display:flex; align-items:center; gap:20px; }
+  .logo{ background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; letter-spacing:3px; font-size:.95rem; padding:8px 12px; white-space:nowrap; }
+  .mast-nav{ display:flex; gap:20px; font-family:Arial, Helvetica, sans-serif; font-size:.72rem; letter-spacing:1.4px; text-transform:uppercase; }
+  .mast-nav a:hover{ color:var(--accent); }
+  .hamburger{ display:none; flex-direction:column; gap:4px; background:none; border:none; cursor:pointer; padding:6px; }
+  .hamburger span{ width:22px; height:2px; background:#222; display:block; }
+  .rule-top{ border:none; border-top:3px solid #222; max-width:1240px; margin:0 auto; }
+
+  /* Search (shared) */
+  .search-box{ position:relative; width:200px; }
+  .search-input{ width:100%; padding:7px 30px 7px 12px; border:1px solid var(--hair); background:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; color:#222; }
+  .search-input:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(184,134,11,.15); }
+  .search-ic{ position:absolute; right:10px; top:50%; transform:translateY(-50%); color:var(--gray); font-size:.8rem; pointer-events:none; }
+  .search-results{ position:absolute; top:calc(100% + 4px); left:0; width:340px; max-width:86vw; background:#fff; border:1px solid #222; max-height:60vh; overflow-y:auto; z-index:120; display:none; }
+  .sr-item{ padding:12px 14px; border-bottom:1px solid var(--hair); }
+  .sr-item:last-child{ border-bottom:none; }
+  .sr-cat{ font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; margin-bottom:4px; color:var(--accent); }
+  .sr-title{ font-weight:700; font-size:1.02rem; color:#222; }
+  .sr-links{ font-size:.58rem; letter-spacing:.8px; text-transform:uppercase; color:var(--gray); margin-top:5px; }
+  .sr-links a:hover{ color:var(--accent); }
+  .sr-none{ padding:16px 14px; font-size:.82rem; color:var(--gray); }
+
+  /* Shared bits */
+  .tab{ display:inline-block; background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.66rem; letter-spacing:2px; text-transform:uppercase; padding:6px 12px; }
+  .rubric{ font-family:Arial, Helvetica, sans-serif; font-size:.62rem; font-weight:700; letter-spacing:1.6px; text-transform:uppercase; color:var(--accent); display:block; margin-bottom:8px; }
+  .tech-chip{ display:inline-block; border:1px solid var(--hair); padding:6px 12px; font-size:.72rem; letter-spacing:.3px; color:#333; white-space:nowrap; }
+  .tech-chip:hover{ border-color:var(--accent); color:var(--accent); }
+  .btn{ display:inline-block; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.7rem; letter-spacing:1.6px; text-transform:uppercase; padding:13px 24px; border:1px solid #222; background:#222; color:#fff; cursor:pointer; transition:.15s; }
+  .btn:hover{ background:var(--accent); border-color:var(--accent); }
+  .btn.ghost{ background:#fff; color:#222; }
+  .btn.ghost:hover{ color:var(--accent); border-color:var(--accent); background:#fff; }
+
+  /* Breadcrumb */
+  .crumb{ max-width:1240px; margin:0 auto; padding:20px 28px 0; font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--gray); }
+  .crumb a:hover{ color:var(--accent); }
+  .crumb .sep{ color:var(--hair); margin:0 8px; }
+
+  /* Header (slim cover banner + copy) */
+  .src-head{ max-width:1240px; margin:0 auto; padding:14px 28px 6px; }
+  .cover-strip{ border:1px solid var(--hair); line-height:0; background:#eef1f4; }
+  .cover-strip img{ width:100%; height:190px; object-fit:cover; object-position:center 42%; display:block; }
+  .src-head h1{ font-size:2.5rem; font-weight:900; line-height:1.04; letter-spacing:-.008em; margin-top:18px; }
+  .src-head .sub{ font-style:italic; font-size:1.08rem; color:#333; margin-top:10px; max-width:72ch; }
+  .head-tech{ display:flex; flex-wrap:wrap; gap:9px; margin-top:16px; }
+  .head-btns{ display:flex; flex-wrap:wrap; gap:12px; margin-top:18px; }
+
+  /* Section shell */
+  .sec{ max-width:1240px; margin:0 auto; padding:26px 28px; }
+  .sec-rule{ border-top:3px solid #222; padding-top:16px; }
+  .sec .tab{ margin-bottom:14px; }
+  .sec h2{ font-size:1.7rem; font-weight:900; line-height:1.06; }
+  .sec .intro{ color:#333; font-size:1.02rem; margin-top:10px; max-width:80%; }
+  .sec .body{ color:#333; font-size:1rem; margin-top:10px; max-width:80%; }
+
+  /* Code block */
+  .codeblock{ border:1px solid var(--hair); margin-top:16px; }
+  .code-bar{ display:flex; align-items:center; justify-content:space-between; gap:12px; background:var(--navy); color:#fff; padding:8px 12px; }
+  .code-bar .path{ font-family:"Courier New", monospace; font-size:.74rem; letter-spacing:.2px; opacity:.96; display:flex; align-items:center; gap:7px; min-width:0; }
+  .code-bar .path span{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .code-copy{ flex:none; background:none; border:1px solid rgba(255,255,255,.4); color:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.56rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; padding:5px 11px; cursor:pointer; transition:.15s; }
+  .code-copy:hover{ background:rgba(255,255,255,.16); }
+  .codeblock pre{ margin:0; padding:14px 16px; overflow-x:auto; background:var(--code-bg); }
+  .codeblock code{ font-family:"Courier New", monospace; font-size:.82rem; line-height:1.6; color:#1b2a3a; background:none; padding:0; white-space:pre; display:block; }
+  .codeblock code .cmt{ color:var(--cmt); font-style:italic; }
+
+  .tree .code-bar .path::before{ content:"📁"; }
+
+  /* Notes */
+  .note-block{ margin-top:22px; }
+  .note-block h3{ font-size:1.15rem; font-weight:800; }
+  .blist{ list-style:none; margin-top:12px; border-top:1px solid var(--hair); }
+  .blist li{ padding:12px 0; border-bottom:1px solid var(--hair); color:#333; font-size:.95rem; }
+  .blist li b{ color:#222; }
+
+  /* CTA */
+  .cta-inner{ display:flex; align-items:center; gap:18px; flex-wrap:wrap; border-top:3px solid #222; padding-top:18px; }
+  .cta-inner h3{ font-size:1.4rem; font-weight:900; line-height:1.08; }
+  .cta-inner p{ color:var(--gray); font-size:.95rem; margin-top:4px; }
+  .cta-btns{ margin-left:auto; display:flex; gap:12px; flex-wrap:wrap; }
+
+  footer{ background:#222; max-width:1240px; margin:30px auto 0; padding:24px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; letter-spacing:.5px; color:#fff; text-align:center; }
+  .note{ max-width:1240px; margin:14px auto 0; padding:8px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.62rem; letter-spacing:1px; color:#999; }
+
+  /* Drawer (shared) */
+  .drawer{ position:fixed; top:0; left:-300px; width:280px; height:100vh; background:#fff; z-index:200; box-shadow:2px 0 14px rgba(0,0,0,.15); transition:left .28s ease; padding:74px 26px 26px; }
+  .drawer.open{ left:0; }
+  .drawer a{ display:block; font-family:Arial, Helvetica, sans-serif; font-size:.82rem; letter-spacing:1.2px; text-transform:uppercase; padding:14px 0; border-bottom:1px solid var(--hair); }
+  .overlay{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:150; }
+  .overlay.open{ display:block; }
+  .drawer-close{ position:absolute; top:20px; right:20px; font-family:Arial, Helvetica, sans-serif; font-size:1.4rem; background:none; border:none; cursor:pointer; }
+
+  @media (max-width:900px){
+    .cta-btns{ margin-left:0; }
+    .mast-nav{ display:none; }
+    .hamburger{ display:flex; }
+    .masthead{ padding:12px 16px; }
+    .mast-left{ gap:10px; min-width:0; flex:1; }
+    .logo{ font-size:.72rem; letter-spacing:1.5px; padding:6px 8px; }
+    .search-box{ flex:1; width:auto; min-width:0; }
+    .search-results{ position:fixed; top:58px; left:12px; right:12px; width:auto; max-width:none; }
+    .src-head h1{ font-size:1.95rem; }
+    .cover-strip img{ height:150px; }
+  }
+</style>
 </head>
 <body>
-    <div class="container">
-        <nav class="back-nav"><a href="hoo-tim-analytics-agent.html">← Back to Showcase</a></nav>
 
-        <div class="header">
-            <h1>🍪 Hoo Tim Analytics Agent — Source Code</h1>
-            <p>Live AI agent + MCP tools, BYO Gemini key, 100% browser-side</p>
-        </div>
+  <div class="overlay" id="overlay"></div>
+  <nav class="drawer" id="drawer">
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">&times;</button>
+    <a href="index.html">Home</a>
+    <a href="project-categories.html">Categories</a>
+    <a href="contact.html">Contact</a>
+    <a href="https://lyven81.github.io/data-analyst-portfolio/index.html">Data Portfolio</a>
+  </nav>
 
-        <div class="section">
-            <h2>📁 File Structure</h2>
-            <div class="file-tree">projects/hoo-tim-analytics-agent/
-├── demo.html         # Two-panel UI + tool dispatcher + Gemini call
-├── data.js           # 129 KB of pre-aggregated distribution views
-├── precompute.py     # Reads dataset.csv, emits data.js (11 views)
-├── dataset.csv       # 6,074 synthetic order lines (Dec 2025)
-└── README.md         # Project summary and architecture</div>
-        </div>
-
-        <div class="section">
-            <h2>🎯 Key Code Highlights</h2>
-
-            <div class="explain">
-                <h4>1. MCP tools — in-browser query layer</h4>
-                <p>Five deterministic tools run directly against the pre-aggregated <code>window.HOOTIM_DATA</code> object. No server, no calls out. Each tool returns pure JSON for Gemini to narrate.</p>
-            </div>
-<pre>const TOOLS = {
-  get_aggregate: (dim) => {
-    const map = { district: D.district, channel: D.channel,
-                  category: D.category, sku: D.sku.slice(0, 40) };
-    return map[dim] || null;
-  },
-  get_top_n: (dim, n, direction) => {
-    const sorted = [...(D[dim] || [])];
-    const dir = direction === 'asc' ? 1 : -1;
-    const metric = dim === 'sku' ? 'quantity' : 'revenue';
-    sorted.sort((a, b) => dir * (a[metric] - b[metric]));
-    return sorted.slice(0, n);
-  },
-  get_cross_tab: (rowDim, colDim) => { /* district × channel, category × channel */ },
-  get_delivery_performance: (groupBy) => { /* on-time / late % */ },
-  get_time_series: (period) => { /* daily trend or campaign window */ },
-};</pre>
-
-            <div class="explain">
-                <h4>2. Keyword-based tool dispatcher</h4>
-                <p>Rather than round-trip function calling, a lightweight regex matcher picks relevant tools from the user's question. This keeps latency low and cost predictable — one Gemini call per question.</p>
-            </div>
-<pre>function dispatchTools(question) {
-  const q = question.toLowerCase();
-  const calls = [];
-
-  if (/\bsku\b|slow mov|bottom.*sku/.test(q)) {
-    calls.push({ tool: 'get_top_n', args: { dim: 'sku', n: 10,
-                 direction: /slow|bottom/.test(q) ? 'asc' : 'desc' },
-                 output: TOOLS.get_top_n('sku', 10, ...) });
-  }
-  if (/district.*channel|channel.*district/.test(q)) {
-    calls.push({ tool: 'get_cross_tab',
-                 args: { row: 'district', col: 'channel' },
-                 output: D.district_channel_matrix });
-  }
-  if (/deliver|on[- ]?time|late/.test(q)) {
-    const groupBy = /channel/.test(q) ? 'channel' : 'district';
-    calls.push({ tool: 'get_delivery_performance',
-                 args: { group_by: groupBy },
-                 output: TOOLS.get_delivery_performance(groupBy) });
-  }
-  // ...9 more dispatch rules
-  return calls;
-}</pre>
-
-            <div class="explain">
-                <h4>3. Precompute step — aggregate once, ship tiny</h4>
-                <p>The raw dataset is 6,074 rows × 14 columns (~950 KB). Shipping it to the browser would be wasteful. <code>precompute.py</code> rolls it into 11 aggregated views totalling 129 KB — enough for every preset question.</p>
-            </div>
-<pre># precompute.py excerpt
-by_district = defaultdict(lambda: {"revenue": 0, "deliveries": defaultdict(int), ...})
-for r in rows:
-    by_district[r["district"]]["revenue"] += r["revenue"]
-    by_district[r["district"]]["deliveries"][classify_delivery(r)] += 1
-
-district_table = [{
-    "district": d,
-    "revenue": round(v["revenue"], 2),
-    "on_time_pct": round(v["deliveries"]["on_time"] / total_d * 100, 1),
-    "slightly_late_pct": round(v["deliveries"]["slightly_late"] / total_d * 100, 1),
-    "very_late_pct": round(v["deliveries"]["very_late"] / total_d * 100, 1),
-    ...
-} for d, v in by_district.items()]</pre>
-
-            <div class="explain">
-                <h4>4. Grounded Gemini call — strict "don't invent"</h4>
-                <p>The system prompt pins the agent to the tool output. Gemini 2.5 Flash is cheap, fast, and obedient with temperature 0.2. The MCP outputs are inlined so the model has no excuse to hallucinate numbers.</p>
-            </div>
-<pre>const systemPrompt = `You are the Hoo Tim Analytics Agent...
-
-RESPONSE RULES:
-- Ground every number in the tool output below. Do not invent figures.
-- Use markdown with a clean table, then a short "Insight" paragraph
-  and a "Recommendation" bullet.
-- Keep answers under 250 words unless more detail is demanded.
-- Use "RM" prefix for money, comma thousands, round to nearest RM.
-- Audience: Malaysian SME business owner — practical language.
-
-MCP TOOL OUTPUTS:
-${toolContext}`;
-
-await fetch(`https://generativelanguage.googleapis.com/v1beta/
-    models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    system_instruction: { parts: [{ text: systemPrompt }] },
-    contents: [{ role: 'user', parts: [{ text }] }],
-    generationConfig: { temperature: 0.2, maxOutputTokens: 1400 }
-  })
-});</pre>
-
-            <div class="explain">
-                <h4>5. BYO-key security — sessionStorage only</h4>
-                <p>The user's Gemini key is kept in <code>sessionStorage</code> — it disappears when the tab closes. It is never sent anywhere except directly to <code>generativelanguage.googleapis.com</code>.</p>
-            </div>
-<pre>const savedKey = sessionStorage.getItem('hootim_gemini_key');
-if (savedKey) { apiKeyInput.value = savedKey; apiDot.classList.add('ok'); }
-
-function saveKey() {
-  const k = apiKeyInput.value.trim();
-  if (!k) return;
-  sessionStorage.setItem('hootim_gemini_key', k);
-  apiDot.classList.add('ok');
-}</pre>
-
-            <div class="explain">
-                <h4>6. Live tool trace — transparent reasoning</h4>
-                <p>Every question renders a dark terminal-style trace line showing which MCP tools were called, their arguments, and the row count returned. Users can see exactly what the agent looked at before writing the answer.</p>
-            </div>
-<pre>function addTrace(calls) {
-  const lines = calls.map(c => {
-    const rowCount = Array.isArray(c.output)
-      ? c.output.length + ' rows'
-      : Object.keys(c.output).length + ' keys';
-    return `&lt;span class="trace-line"&gt;▸
-      &lt;span class="trace-key"&gt;${c.tool}&lt;/span&gt;
-      (${JSON.stringify(c.args)}) →
-      &lt;span class="trace-val"&gt;${rowCount}&lt;/span&gt;
-      &lt;/span&gt;`;
-  }).join('');
-  // append to chat…
-}</pre>
-        </div>
-
-        <div class="section">
-            <h2>🔗 Full Source</h2>
-            <p>All files live in the portfolio repo:</p>
-            <p><a href="https://github.com/lyven81/ai-project/tree/main/projects/hoo-tim-analytics-agent" target="_blank">github.com/lyven81/ai-project/tree/main/projects/hoo-tim-analytics-agent</a></p>
-        </div>
-
-        <nav class="back-nav" style="text-align:center; margin-top: 40px;">
-            <a href="hoo-tim-analytics-agent.html">← Back to Showcase</a> |
-            <a href="index.html">Back to Portfolio</a>
-        </nav>
-
-        <footer>
-            <p>&copy; 2025 Lee Yih Ven | Data-Driven Solutions</p>
-        </footer>
+  <div class="masthead">
+    <div class="mast-left">
+      <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+      <a class="logo" href="index.html">AI PROJECTS</a>
+      <nav class="mast-nav">
+        <a href="project-categories.html">Categories</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <div class="search-box">
+        <input type="text" class="search-input" id="searchInput" autocomplete="off" placeholder="Search AI projects..." aria-label="Search AI projects">
+        <span class="search-ic">&#128269;</span>
+        <div class="search-results" id="searchResults"></div>
+      </div>
     </div>
+  </div>
+  <hr class="rule-top">
+
+  <div class="crumb">
+    <a href="project-categories.html">Categories</a>
+    <span class="sep">/</span><a id="crumbCat" href="#"></a>
+    <span class="sep">/</span><a id="crumbProj" href="#"></a>
+    <span class="sep">/</span><span>Source</span>
+  </div>
+
+  <section class="src-head">
+    <div class="cover-strip" id="coverStrip" style="display:none"><img id="cover" alt=""></div>
+    <span class="rubric" id="kicker"></span>
+    <h1 id="title"></h1>
+    <p class="sub" id="subtitle"></p>
+    <div class="head-tech" id="headTech"></div>
+    <div class="head-btns" id="headBtns"></div>
+  </section>
+
+  <div id="body"></div>
+
+  <footer>&copy; 2026 Lee Yih Ven | AI Project Portfolio &middot; All rights reserved.</footer>
+  <div class="note">Sample Source-Showcase-E2 (TEMPLATE): source-code page on the index magazine system: slim cover banner, About, Project Structure, code walkthrough with copyable navy-barred code blocks, CTA. Reuse by editing only the PROJECT block at the top of the script.</div>
+
+<script>
+  const SITE = "";
+
+  /* =================================================================
+     EDIT PER PROJECT  -  the ONLY block you change per page.
+     Copy this file, swap PROJECT, save as <slug>-source.html.
+     - structure.code : the project file tree (plain text)
+     - walkthrough[]   : { heading, body, files:[{label, code}] }
+     - notes[]         : { heading, bullets:[...] }
+     Code strings can be multi-line; they render verbatim.
+     ================================================================= */
+  const PROJECT = {
+  "slug": "hoo-tim-analytics-agent",
+  "category": "Conversational Data Analytics",
+  "categoryUrl": "category-conversational-analytics.html",
+  "title": "Hoo Tim Analytics Agent",
+  "subtitle": "Live AI agent + MCP tools, BYO Gemini key, 100% browser-side.",
+  "cover": "images/hoo-tim-analytics-agent/cover.jpeg",
+  "tech": [
+    "Gemini 2.5 Flash",
+    "MCP-style Tools",
+    "Python (precompute)",
+    "Vanilla JS",
+    "GitHub Pages"
+  ],
+  "overviewUrl": "hoo-tim-analytics-agent.html",
+  "demoLabel": "Try Live Demo",
+  "demoUrl": "https://lyven81.github.io/ai-project/projects/hoo-tim-analytics-agent/demo.html",
+  "repoUrl": "https://github.com/lyven81/ai-project/tree/main/projects/hoo-tim-analytics-agent",
+  "about": "Five deterministic MCP tools run directly against the pre-aggregated <code>window.HOOTIM_DATA</code> object: no server, no calls out. A lightweight keyword dispatcher picks relevant tools from the user's question, <code>precompute.py</code> rolls the raw dataset into tiny aggregated views, and Gemini 2.5 Flash is pinned to the tool output so it has no excuse to hallucinate numbers. The BYO key is kept in <code>sessionStorage</code> only, and every question renders a transparent tool trace.",
+  "structure": {
+    "label": "projects/hoo-tim-analytics-agent/",
+    "code": "projects/hoo-tim-analytics-agent/\n├── demo.html         # Two-panel UI + tool dispatcher + Gemini call\n├── data.js           # 129 KB of pre-aggregated distribution views\n├── precompute.py     # Reads dataset.csv, emits data.js (11 views)\n├── dataset.csv       # 6,074 synthetic order lines (Dec 2025)\n└── README.md         # Project summary and architecture"
+  },
+  "walkthrough": [
+    {
+      "heading": "MCP tools: in-browser query layer",
+      "body": "Five deterministic tools run directly against the pre-aggregated <code>window.HOOTIM_DATA</code> object. No server, no calls out. Each tool returns pure JSON for Gemini to narrate.",
+      "files": [
+        {
+          "label": "MCP tools: in-browser query layer",
+          "code": "const TOOLS = {\n  get_aggregate: (dim) => {\n    const map = { district: D.district, channel: D.channel,\n                  category: D.category, sku: D.sku.slice(0, 40) };\n    return map[dim] || null;\n  },\n  get_top_n: (dim, n, direction) => {\n    const sorted = [...(D[dim] || [])];\n    const dir = direction === 'asc' ? 1 : -1;\n    const metric = dim === 'sku' ? 'quantity' : 'revenue';\n    sorted.sort((a, b) => dir * (a[metric] - b[metric]));\n    return sorted.slice(0, n);\n  },\n  get_cross_tab: (rowDim, colDim) => { /* district × channel, category × channel */ },\n  get_delivery_performance: (groupBy) => { /* on-time / late % */ },\n  get_time_series: (period) => { /* daily trend or campaign window */ },\n};"
+        }
+      ]
+    },
+    {
+      "heading": "Keyword-based tool dispatcher",
+      "body": "Rather than round-trip function calling, a lightweight regex matcher picks relevant tools from the user's question. This keeps latency low and cost predictable: one Gemini call per question.",
+      "files": [
+        {
+          "label": "Keyword-based tool dispatcher",
+          "code": "function dispatchTools(question) {\n  const q = question.toLowerCase();\n  const calls = [];\n\n  if (/\bsku\b|slow mov|bottom.*sku/.test(q)) {\n    calls.push({ tool: 'get_top_n', args: { dim: 'sku', n: 10,\n                 direction: /slow|bottom/.test(q) ? 'asc' : 'desc' },\n                 output: TOOLS.get_top_n('sku', 10, ...) });\n  }\n  if (/district.*channel|channel.*district/.test(q)) {\n    calls.push({ tool: 'get_cross_tab',\n                 args: { row: 'district', col: 'channel' },\n                 output: D.district_channel_matrix });\n  }\n  if (/deliver|on[- ]?time|late/.test(q)) {\n    const groupBy = /channel/.test(q) ? 'channel' : 'district';\n    calls.push({ tool: 'get_delivery_performance',\n                 args: { group_by: groupBy },\n                 output: TOOLS.get_delivery_performance(groupBy) });\n  }\n  // ...9 more dispatch rules\n  return calls;\n}"
+        }
+      ]
+    },
+    {
+      "heading": "Precompute step: aggregate once, ship tiny",
+      "body": "The raw dataset is 6,074 rows × 14 columns (~950 KB). Shipping it to the browser would be wasteful. <code>precompute.py</code> rolls it into 11 aggregated views totalling 129 KB, enough for every preset question.",
+      "files": [
+        {
+          "label": "Precompute step: aggregate once, ship tiny",
+          "code": "# precompute.py excerpt\nby_district = defaultdict(lambda: {\"revenue\": 0, \"deliveries\": defaultdict(int), ...})\nfor r in rows:\n    by_district[r[\"district\"]][\"revenue\"] += r[\"revenue\"]\n    by_district[r[\"district\"]][\"deliveries\"][classify_delivery(r)] += 1\n\ndistrict_table = [{\n    \"district\": d,\n    \"revenue\": round(v[\"revenue\"], 2),\n    \"on_time_pct\": round(v[\"deliveries\"][\"on_time\"] / total_d * 100, 1),\n    \"slightly_late_pct\": round(v[\"deliveries\"][\"slightly_late\"] / total_d * 100, 1),\n    \"very_late_pct\": round(v[\"deliveries\"][\"very_late\"] / total_d * 100, 1),\n    ...\n} for d, v in by_district.items()]"
+        }
+      ]
+    },
+    {
+      "heading": "Grounded Gemini call: strict \"don't invent\"",
+      "body": "The system prompt pins the agent to the tool output. Gemini 2.5 Flash is cheap, fast, and obedient with temperature 0.2. The MCP outputs are inlined so the model has no excuse to hallucinate numbers.",
+      "files": [
+        {
+          "label": "Grounded Gemini call: strict \"don't invent\"",
+          "code": "const systemPrompt = `You are the Hoo Tim Analytics Agent...\n\nRESPONSE RULES:\n- Ground every number in the tool output below. Do not invent figures.\n- Use markdown with a clean table, then a short \"Insight\" paragraph\n  and a \"Recommendation\" bullet.\n- Keep answers under 250 words unless more detail is demanded.\n- Use \"RM\" prefix for money, comma thousands, round to nearest RM.\n- Audience: Malaysian SME business owner — practical language.\n\nMCP TOOL OUTPUTS:\n${toolContext}`;\n\nawait fetch(`https://generativelanguage.googleapis.com/v1beta/\n    models/gemini-2.5-flash:generateContent?key=${apiKey}`, {\n  method: 'POST',\n  headers: { 'Content-Type': 'application/json' },\n  body: JSON.stringify({\n    system_instruction: { parts: [{ text: systemPrompt }] },\n    contents: [{ role: 'user', parts: [{ text }] }],\n    generationConfig: { temperature: 0.2, maxOutputTokens: 1400 }\n  })\n});"
+        }
+      ]
+    },
+    {
+      "heading": "BYO-key security: sessionStorage only",
+      "body": "The user's Gemini key is kept in <code>sessionStorage</code>: it disappears when the tab closes. It is never sent anywhere except directly to <code>generativelanguage.googleapis.com</code>.",
+      "files": [
+        {
+          "label": "BYO-key security: sessionStorage only",
+          "code": "const savedKey = sessionStorage.getItem('hootim_gemini_key');\nif (savedKey) { apiKeyInput.value = savedKey; apiDot.classList.add('ok'); }\n\nfunction saveKey() {\n  const k = apiKeyInput.value.trim();\n  if (!k) return;\n  sessionStorage.setItem('hootim_gemini_key', k);\n  apiDot.classList.add('ok');\n}"
+        }
+      ]
+    },
+    {
+      "heading": "Live tool trace: transparent reasoning",
+      "body": "Every question renders a dark terminal-style trace line showing which MCP tools were called, their arguments, and the row count returned. Users can see exactly what the agent looked at before writing the answer.",
+      "files": [
+        {
+          "label": "Live tool trace: transparent reasoning",
+          "code": "function addTrace(calls) {\n  const lines = calls.map(c => {\n    const rowCount = Array.isArray(c.output)\n      ? c.output.length + ' rows'\n      : Object.keys(c.output).length + ' keys';\n    return `<span class=\"trace-line\">▸\n      <span class=\"trace-key\">${c.tool}</span>\n      (${JSON.stringify(c.args)}) →\n      <span class=\"trace-val\">${rowCount}</span>\n      </span>`;\n  }).join('');\n  // append to chat…\n}"
+        }
+      ]
+    }
+  ],
+  "cta": "Want a live, governed analytics agent like this built for your own data? Let's scope it."
+};
+  /* ===================== END EDIT BLOCK ===================== */
+
+  const pref = (u) => /^https?:|^mailto:|^tel:/.test(u || '') ? u : (SITE + (u || ''));
+  const esc = (s) => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const rich = (s) => esc(s).replace(/&lt;(\/?(?:b|code))&gt;/g, '<$1>');
+
+  // raw code store for copy buttons
+  const RAW = [];
+  function codeBlock(label, codeStr, extraClass){
+    const idx = RAW.push(codeStr) - 1;
+    const rendered = esc(codeStr).split('\n')
+      .map(line => /^\s*#/.test(line) ? `<span class="cmt">${line}</span>` : line).join('\n');
+    return `<div class="codeblock ${extraClass||''}">`+
+      `<div class="code-bar"><span class="path"><span>${esc(label)}</span></span>`+
+      `<button class="code-copy" data-idx="${idx}">Copy</button></div>`+
+      `<pre><code>${rendered}</code></pre></div>`;
+  }
+
+  // Breadcrumb + header
+  document.title = PROJECT.title + ": Source | AI Project Portfolio";
+  document.getElementById('crumbCat').textContent = PROJECT.category;
+  document.getElementById('crumbCat').href = pref(PROJECT.categoryUrl);
+  document.getElementById('crumbProj').textContent = PROJECT.title;
+  document.getElementById('crumbProj').href = pref(PROJECT.overviewUrl);
+  if (PROJECT.cover){
+    document.getElementById('coverStrip').style.display = '';
+    const c = document.getElementById('cover'); c.src = PROJECT.cover; c.alt = PROJECT.title + " cover";
+  }
+  document.getElementById('kicker').textContent = "Source Walkthrough · " + PROJECT.category;
+  document.getElementById('title').textContent = PROJECT.title;
+  document.getElementById('subtitle').textContent = PROJECT.subtitle;
+  document.getElementById('headTech').innerHTML = (PROJECT.tech||[]).map(t => `<span class="tech-chip">${esc(t)}</span>`).join('');
+  document.getElementById('headBtns').innerHTML =
+    (PROJECT.demoUrl ? `<a class="btn" href="${pref(PROJECT.demoUrl)}" target="_blank" rel="noopener">${esc(PROJECT.demoLabel||'Live Demo')}</a>` : '') +
+    (PROJECT.overviewUrl ? `<a class="btn ghost" href="${pref(PROJECT.overviewUrl)}">Project Overview</a>` : '') +
+    (PROJECT.repoUrl ? `<a class="btn ghost" href="${pref(PROJECT.repoUrl)}" target="_blank" rel="noopener">GitHub Repo</a>` : '');
+
+  const section = (tab, inner) => `<section class="sec"><div class="sec-rule"><span class="tab">${esc(tab)}</span>${inner}</div></section>`;
+  let html = "";
+  const P = PROJECT;
+
+  if (P.about){
+    html += section("About This Code", `<h2>About This Code Showcase</h2><p class="intro">${rich(P.about)}</p>`);
+  }
+  if (P.structure && P.structure.code){
+    html += section("Project Structure", `<h2>Project Structure</h2>`+
+      codeBlock(P.structure.label || 'project/', P.structure.code, 'tree'));
+  }
+  (P.walkthrough||[]).forEach(w => {
+    let inner = `<h2>${esc(w.heading)}</h2>`;
+    if (w.body) inner += `<p class="body">${rich(w.body)}</p>`;
+    (w.files||[]).forEach(f => { inner += codeBlock(f.label, f.code); });
+    html += section("Code", inner);
+  });
+  // CTA
+  html += `<section class="sec"><div class="cta-inner">`+
+    `<div><h3>Interested in the build?</h3><p>${esc(P.cta || "Let's talk.")}</p></div>`+
+    `<div class="cta-btns">`+
+    (P.demoUrl ? `<a class="btn" href="${pref(P.demoUrl)}" target="_blank" rel="noopener">${esc(P.demoLabel||'Live Demo')}</a>` : '')+
+    `<a class="btn ghost" href="${SITE}contact.html">Get in Touch</a>`+
+    `</div></div></section>`;
+
+  document.getElementById('body').innerHTML = html;
+
+  // Copy buttons
+  function copyText(text, btn){
+    const done = ()=>{ const o=btn.textContent; btn.textContent='Copied ✓'; setTimeout(()=>btn.textContent=o.includes('Copied')?'Copy':o,1400); };
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(done).catch(()=>fb(text,done)); }
+    else fb(text,done);
+  }
+  function fb(text,done){ const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(ta); done(); }
+  document.querySelectorAll('.code-copy').forEach(btn =>
+    btn.addEventListener('click', ()=> copyText(RAW[+btn.dataset.idx], btn)));
+
+  // Masthead search
+  const ITEMS = [
+    {t:PROJECT.title, c:PROJECT.category, s:PROJECT.slug},
+    {t:"Courier CS Quality Console", c:"Conversational Data Analytics", s:"courier-cs-quality-console"},
+    {t:"Voucher Analyzer", c:"Conversational Data Analytics", s:"voucher-analyzer"},
+    {t:"Wiseman", c:"Knowledge & Reference Chatbots", s:"wiseman"},
+    {t:"Sunny Car Accessories", c:"Agentic Commerce", s:"sunny-car-accessories"},
+    {t:"Bookshelf", c:"Multi-Agent Decision Systems", s:"bookshelf"}
+  ];
+  const searchInput = document.getElementById('searchInput');
+  const searchResults = document.getElementById('searchResults');
+  function runSearch(q){
+    if(q.trim().length < 2){ searchResults.style.display='none'; return; }
+    const ql = q.toLowerCase();
+    const hits = ITEMS.filter(it => (it.t+' '+it.c).toLowerCase().includes(ql));
+    searchResults.innerHTML = hits.length ? hits.map(it =>
+      `<div class="sr-item"><div class="sr-cat">${esc(it.c)}</div>`+
+      `<a href="${SITE}${it.s}.html"><div class="sr-title">${esc(it.t)}</div></a>`+
+      `<div class="sr-links"><a href="${SITE}${it.s}.html">View Details</a></div></div>`).join('')
+      : `<div class="sr-none">No projects found. Try a different keyword.</div>`;
+    searchResults.style.display='block';
+  }
+  searchInput.addEventListener('input', e => runSearch(e.target.value));
+  document.addEventListener('click', e => { if(!e.target.closest('.search-box')) searchResults.style.display='none'; });
+
+  // Drawer
+  const drawer=document.getElementById('drawer'), overlay=document.getElementById('overlay');
+  const openMenu=()=>{ drawer.classList.add('open'); overlay.classList.add('open'); };
+  const closeMenu=()=>{ drawer.classList.remove('open'); overlay.classList.remove('open'); };
+  document.getElementById('hamburger').addEventListener('click', openMenu);
+  document.getElementById('drawerClose').addEventListener('click', closeMenu);
+  overlay.addEventListener('click', closeMenu);
+  drawer.querySelectorAll('a').forEach(a=>a.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeMenu(); searchResults.style.display='none'; }});
+</script>
 </body>
 </html>

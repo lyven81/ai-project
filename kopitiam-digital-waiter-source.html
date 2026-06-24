@@ -1,466 +1,350 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kopitiam Digital Waiter - Source Code</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kopitiam Digital Waiter: Source | AI Project Portfolio</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root{ --ink:#222; --paper:#fff; --hair:#dddddd; --gray:#555; --accent:#B8860B; --navy:#1E3A5F; --code-bg:#fbfbf8; --cmt:#6b8190; }
+  html{ scroll-behavior:smooth; }
+  body{ background:var(--paper); color:var(--ink); font-family:Arial, Helvetica, sans-serif; line-height:1.6; overflow-x:hidden; }
+  a{ color:inherit; text-decoration:none; }
+  a:hover h2, a:hover h3, a:hover h4{ color:var(--accent); }
+  p code, li code{ font-family:"Courier New", monospace; font-size:.86em; background:#f2f3f5; padding:1px 5px; color:var(--navy); }
 
-        body {
-            font-family: 'Arial', sans-serif;
-            line-height: 1.6;
-            color: #222;
-            background-color: #ffffff;
-        }
+  /* Masthead (shared) */
+  .masthead{ display:flex; align-items:center; justify-content:space-between; padding:14px 28px; max-width:1240px; margin:0 auto; gap:18px; }
+  .mast-left{ display:flex; align-items:center; gap:20px; }
+  .logo{ background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; letter-spacing:3px; font-size:.95rem; padding:8px 12px; white-space:nowrap; }
+  .mast-nav{ display:flex; gap:20px; font-family:Arial, Helvetica, sans-serif; font-size:.72rem; letter-spacing:1.4px; text-transform:uppercase; }
+  .mast-nav a:hover{ color:var(--accent); }
+  .hamburger{ display:none; flex-direction:column; gap:4px; background:none; border:none; cursor:pointer; padding:6px; }
+  .hamburger span{ width:22px; height:2px; background:#222; display:block; }
+  .rule-top{ border:none; border-top:3px solid #222; max-width:1240px; margin:0 auto; }
 
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+  /* Search (shared) */
+  .search-box{ position:relative; width:200px; }
+  .search-input{ width:100%; padding:7px 30px 7px 12px; border:1px solid var(--hair); background:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; color:#222; }
+  .search-input:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(184,134,11,.15); }
+  .search-ic{ position:absolute; right:10px; top:50%; transform:translateY(-50%); color:var(--gray); font-size:.8rem; pointer-events:none; }
+  .search-results{ position:absolute; top:calc(100% + 4px); left:0; width:340px; max-width:86vw; background:#fff; border:1px solid #222; max-height:60vh; overflow-y:auto; z-index:120; display:none; }
+  .sr-item{ padding:12px 14px; border-bottom:1px solid var(--hair); }
+  .sr-item:last-child{ border-bottom:none; }
+  .sr-cat{ font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; margin-bottom:4px; color:var(--accent); }
+  .sr-title{ font-weight:700; font-size:1.02rem; color:#222; }
+  .sr-links{ font-size:.58rem; letter-spacing:.8px; text-transform:uppercase; color:var(--gray); margin-top:5px; }
+  .sr-links a:hover{ color:var(--accent); }
+  .sr-none{ padding:16px 14px; font-size:.82rem; color:var(--gray); }
 
-        .back-nav {
-            margin-bottom: 20px;
-        }
+  /* Shared bits */
+  .tab{ display:inline-block; background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.66rem; letter-spacing:2px; text-transform:uppercase; padding:6px 12px; }
+  .rubric{ font-family:Arial, Helvetica, sans-serif; font-size:.62rem; font-weight:700; letter-spacing:1.6px; text-transform:uppercase; color:var(--accent); display:block; margin-bottom:8px; }
+  .tech-chip{ display:inline-block; border:1px solid var(--hair); padding:6px 12px; font-size:.72rem; letter-spacing:.3px; color:#333; white-space:nowrap; }
+  .tech-chip:hover{ border-color:var(--accent); color:var(--accent); }
+  .btn{ display:inline-block; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.7rem; letter-spacing:1.6px; text-transform:uppercase; padding:13px 24px; border:1px solid #222; background:#222; color:#fff; cursor:pointer; transition:.15s; }
+  .btn:hover{ background:var(--accent); border-color:var(--accent); }
+  .btn.ghost{ background:#fff; color:#222; }
+  .btn.ghost:hover{ color:var(--accent); border-color:var(--accent); background:#fff; }
 
-        .back-nav a {
-            color: #007BFF;
-            text-decoration: none;
-            font-size: 1rem;
-        }
+  /* Breadcrumb */
+  .crumb{ max-width:1240px; margin:0 auto; padding:20px 28px 0; font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--gray); }
+  .crumb a:hover{ color:var(--accent); }
+  .crumb .sep{ color:var(--hair); margin:0 8px; }
 
-        .back-nav a:hover {
-            text-decoration: underline;
-        }
+  /* Header (slim cover banner + copy) */
+  .src-head{ max-width:1240px; margin:0 auto; padding:14px 28px 6px; }
+  .cover-strip{ border:1px solid var(--hair); line-height:0; background:#eef1f4; }
+  .cover-strip img{ width:100%; height:190px; object-fit:cover; object-position:center 42%; display:block; }
+  .src-head h1{ font-size:2.5rem; font-weight:900; line-height:1.04; letter-spacing:-.008em; margin-top:18px; }
+  .src-head .sub{ font-style:italic; font-size:1.08rem; color:#333; margin-top:10px; max-width:72ch; }
+  .head-tech{ display:flex; flex-wrap:wrap; gap:9px; margin-top:16px; }
+  .head-btns{ display:flex; flex-wrap:wrap; gap:12px; margin-top:18px; }
 
-        .project-header {
-            text-align: center;
-            margin-bottom: 40px;
-            padding: 40px 0;
-            background: linear-gradient(135deg, #059669, #047857);
-            color: white;
-            border-radius: 10px;
-        }
+  /* Section shell */
+  .sec{ max-width:1240px; margin:0 auto; padding:26px 28px; }
+  .sec-rule{ border-top:3px solid #222; padding-top:16px; }
+  .sec .tab{ margin-bottom:14px; }
+  .sec h2{ font-size:1.7rem; font-weight:900; line-height:1.06; }
+  .sec .intro{ color:#333; font-size:1.02rem; margin-top:10px; max-width:80%; }
+  .sec .body{ color:#333; font-size:1rem; margin-top:10px; max-width:80%; }
 
-        .project-header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
+  /* Code block */
+  .codeblock{ border:1px solid var(--hair); margin-top:16px; }
+  .code-bar{ display:flex; align-items:center; justify-content:space-between; gap:12px; background:var(--navy); color:#fff; padding:8px 12px; }
+  .code-bar .path{ font-family:"Courier New", monospace; font-size:.74rem; letter-spacing:.2px; opacity:.96; display:flex; align-items:center; gap:7px; min-width:0; }
+  .code-bar .path span{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .code-copy{ flex:none; background:none; border:1px solid rgba(255,255,255,.4); color:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.56rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; padding:5px 11px; cursor:pointer; transition:.15s; }
+  .code-copy:hover{ background:rgba(255,255,255,.16); }
+  .codeblock pre{ margin:0; padding:14px 16px; overflow-x:auto; background:var(--code-bg); }
+  .codeblock code{ font-family:"Courier New", monospace; font-size:.82rem; line-height:1.6; color:#1b2a3a; background:none; padding:0; white-space:pre; display:block; }
+  .codeblock code .cmt{ color:var(--cmt); font-style:italic; }
 
-        .project-header p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
+  .tree .code-bar .path::before{ content:"📁"; }
 
-        .badges {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin: 20px 0;
-            flex-wrap: wrap;
-        }
+  /* Notes */
+  .note-block{ margin-top:22px; }
+  .note-block h3{ font-size:1.15rem; font-weight:800; }
+  .blist{ list-style:none; margin-top:12px; border-top:1px solid var(--hair); }
+  .blist li{ padding:12px 0; border-bottom:1px solid var(--hair); color:#333; font-size:.95rem; }
+  .blist li b{ color:#222; }
 
-        .badge {
-            background-color: rgba(255, 255, 255, 0.2);
-            color: white;
-            padding: 5px 12px;
-            border-radius: 15px;
-            font-size: 0.9rem;
-        }
+  /* CTA */
+  .cta-inner{ display:flex; align-items:center; gap:18px; flex-wrap:wrap; border-top:3px solid #222; padding-top:18px; }
+  .cta-inner h3{ font-size:1.4rem; font-weight:900; line-height:1.08; }
+  .cta-inner p{ color:var(--gray); font-size:.95rem; margin-top:4px; }
+  .cta-btns{ margin-left:auto; display:flex; gap:12px; flex-wrap:wrap; }
 
-        .content-section {
-            margin: 40px 0;
-            padding: 30px;
-            background-color: #f9f9f9;
-            border-radius: 8px;
-            border-left: 5px solid #059669;
-        }
+  footer{ background:#222; max-width:1240px; margin:30px auto 0; padding:24px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; letter-spacing:.5px; color:#fff; text-align:center; }
+  .note{ max-width:1240px; margin:14px auto 0; padding:8px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.62rem; letter-spacing:1px; color:#999; }
 
-        .content-section h2 {
-            color: #059669;
-            margin-bottom: 20px;
-            font-size: 1.8rem;
-        }
+  /* Drawer (shared) */
+  .drawer{ position:fixed; top:0; left:-300px; width:280px; height:100vh; background:#fff; z-index:200; box-shadow:2px 0 14px rgba(0,0,0,.15); transition:left .28s ease; padding:74px 26px 26px; }
+  .drawer.open{ left:0; }
+  .drawer a{ display:block; font-family:Arial, Helvetica, sans-serif; font-size:.82rem; letter-spacing:1.2px; text-transform:uppercase; padding:14px 0; border-bottom:1px solid var(--hair); }
+  .overlay{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:150; }
+  .overlay.open{ display:block; }
+  .drawer-close{ position:absolute; top:20px; right:20px; font-family:Arial, Helvetica, sans-serif; font-size:1.4rem; background:none; border:none; cursor:pointer; }
 
-        .content-section h3 {
-            color: #333;
-            margin: 20px 0 10px 0;
-            font-size: 1.3rem;
-        }
-
-        .highlight-box {
-            background: linear-gradient(135deg, #f0fdf4, #dcfce7);
-            padding: 20px;
-            border-radius: 10px;
-            border-left: 5px solid #059669;
-            margin: 20px 0;
-        }
-
-        .code-container {
-            background-color: #1e1e1e;
-            border-radius: 8px;
-            padding: 20px;
-            margin: 20px 0;
-            overflow-x: auto;
-        }
-
-        .code-header {
-            color: #4ade80;
-            font-weight: bold;
-            margin-bottom: 15px;
-            font-size: 1.1rem;
-            border-bottom: 1px solid #333;
-            padding-bottom: 10px;
-        }
-
-        .code-block {
-            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-            font-size: 14px;
-            line-height: 1.5;
-            color: #d4d4d4;
-        }
-
-        .code-comment {
-            color: #6a9955;
-            font-style: italic;
-        }
-
-        .code-keyword {
-            color: #569cd6;
-        }
-
-        .code-string {
-            color: #ce9178;
-        }
-
-        .code-function {
-            color: #dcdcaa;
-        }
-
-        .code-number {
-            color: #b5cea8;
-        }
-
-        .demo-links {
-            text-align: center;
-            margin: 30px 0;
-        }
-
-        .demo-btn {
-            display: inline-block;
-            background-color: #007BFF;
-            color: white;
-            padding: 12px 25px;
-            text-decoration: none;
-            border-radius: 5px;
-            margin: 0 10px;
-            font-weight: bold;
-            transition: background-color 0.3s;
-        }
-
-        .demo-btn:hover {
-            background-color: #0056b3;
-        }
-
-        .demo-btn.secondary {
-            background-color: #28a745;
-        }
-
-        .demo-btn.secondary:hover {
-            background-color: #218838;
-        }
-
-        @media (max-width: 768px) {
-            .project-header h1 {
-                font-size: 2rem;
-            }
-
-            .project-header p {
-                font-size: 1rem;
-            }
-
-            .demo-btn {
-                margin: 5px;
-                padding: 10px 20px;
-            }
-
-            .container {
-                padding: 15px;
-            }
-        }
-    </style>
+  @media (max-width:900px){
+    .cta-btns{ margin-left:0; }
+    .mast-nav{ display:none; }
+    .hamburger{ display:flex; }
+    .masthead{ padding:12px 16px; }
+    .mast-left{ gap:10px; min-width:0; flex:1; }
+    .logo{ font-size:.72rem; letter-spacing:1.5px; padding:6px 8px; }
+    .search-box{ flex:1; width:auto; min-width:0; }
+    .search-results{ position:fixed; top:58px; left:12px; right:12px; width:auto; max-width:none; }
+    .src-head h1{ font-size:1.95rem; }
+    .cover-strip img{ height:150px; }
+  }
+</style>
 </head>
 <body>
-    <div class="container">
-        <nav class="back-nav">
-            <a href="kopitiam-digital-waiter.html">← Back to Project Overview</a>
-        </nav>
 
-        <div class="project-header">
-            <h1>☕ Kopitiam Digital Waiter</h1>
-            <p>Core Source Code & Sales Tracking Implementation</p>
+  <div class="overlay" id="overlay"></div>
+  <nav class="drawer" id="drawer">
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">&times;</button>
+    <a href="index.html">Home</a>
+    <a href="project-categories.html">Categories</a>
+    <a href="contact.html">Contact</a>
+    <a href="https://lyven81.github.io/data-analyst-portfolio/index.html">Data Portfolio</a>
+  </nav>
 
-            <div class="badges">
-                <span class="badge">React 19</span>
-                <span class="badge">TypeScript</span>
-                <span class="badge">Express.js</span>
-                <span class="badge">SQLite</span>
-                <span class="badge">Gemini AI</span>
-            </div>
-        </div>
-
-        <div class="highlight-box">
-            <h3>🔍 About This Code Showcase</h3>
-            <p><strong>This curated code snippet demonstrates how the Kopitiam Digital Waiter records sales, queries real-time statistics, and surfaces AI-powered business tips for Malaysian Kopitiam owners.</strong></p>
-            <p>Deployment scripts and proprietary configuration details are omitted for clarity. This showcase highlights the core backend API logic and the React frontend sales recording flow.</p>
-        </div>
-
-        <div class="content-section">
-            <h2>🗄️ Core Algorithm: Sales API & Statistics Engine</h2>
-            <p>The backend is a single Express.js server that manages SQLite sales data and exposes REST endpoints for the React frontend. Here is the core of the statistics engine:</p>
-
-            <div class="code-container">
-                <div class="code-header">📄 server.ts — Today's Stats Endpoint</div>
-                <div class="code-block">
-<span class="code-keyword">app</span>.get(<span class="code-string">"/api/stats/today"</span>, (req, res) =&gt; {
-  <span class="code-comment">// Aggregate today's revenue, item count, and transaction count</span>
-  <span class="code-keyword">const</span> stats = db.prepare(<span class="code-string">`
-    SELECT
-      SUM(total_cents) as totalRevenue,
-      SUM(quantity) as totalItems,
-      COUNT(DISTINCT id) as totalTransactions
-    FROM sales
-    WHERE date(datetime) = date('now')
-  `</span>).get();
-
-  <span class="code-comment">// Detect milestone: any item sold 10+ times today</span>
-  <span class="code-keyword">const</span> topItem = db.prepare(<span class="code-string">`
-    SELECT item_name, SUM(quantity) as qty
-    FROM sales
-    WHERE date(datetime) = date('now')
-    GROUP BY item_name
-    ORDER BY qty DESC
-    LIMIT 1
-  `</span>).get();
-
-  <span class="code-keyword">const</span> alerts = [];
-  <span class="code-keyword">if</span> (topItem &amp;&amp; topItem.qty &gt;= <span class="code-number">10</span>) {
-    <span class="code-keyword">const</span> item = MENU_ITEMS.find(i =&gt; i.id === topItem.item_name);
-    alerts.push(<span class="code-string">`You just hit ${topItem.qty} ${item?.name} orders!`</span>);
-  }
-
-  <span class="code-comment">// AI-aware quick tip: reference today's top seller or all-time best seller</span>
-  <span class="code-keyword">const</span> topItemAllTime = db.prepare(<span class="code-string">`
-    SELECT item_name, SUM(quantity) as qty
-    FROM sales GROUP BY item_name ORDER BY qty DESC LIMIT 1
-  `</span>).get();
-
-  <span class="code-keyword">let</span> quickTip = <span class="code-string">"Boss, start recording sales to see tips here!"</span>;
-  <span class="code-keyword">if</span> (topItem &amp;&amp; topItem.qty &gt; <span class="code-number">0</span>) {
-    <span class="code-keyword">const</span> item = MENU_ITEMS.find(i =&gt; i.id === topItem.item_name);
-    quickTip = <span class="code-string">`Boss, ${item?.name} is moving fast today! Check your inventory.`</span>;
-  } <span class="code-keyword">else if</span> (topItemAllTime) {
-    <span class="code-keyword">const</span> item = MENU_ITEMS.find(i =&gt; i.id === topItemAllTime.item_name);
-    quickTip = <span class="code-string">`Boss, ${item?.name} is usually your best seller. Ready for the rush?`</span>;
-  }
-
-  <span class="code-comment">// Top 3 items today for the live mini-analytics in logbook</span>
-  <span class="code-keyword">const</span> topItemsToday = db.prepare(<span class="code-string">`
-    SELECT item_name as id, SUM(quantity) as value
-    FROM sales WHERE date(datetime) = date('now')
-    GROUP BY item_name ORDER BY value DESC LIMIT 3
-  `</span>).all().map(row =&gt; ({
-    ...row,
-    name: MENU_ITEMS.find(i =&gt; i.id === row.id)?.name || row.id
-  }));
-
-  res.json({
-    revenue: stats.totalRevenue || <span class="code-number">0</span>,
-    items: stats.totalItems || <span class="code-number">0</span>,
-    transactions: stats.totalTransactions || <span class="code-number">0</span>,
-    alerts,
-    quickTip,
-    topItems: topItemsToday
-  });
-});
-                </div>
-            </div>
-
-            <div class="code-container">
-                <div class="code-header">📄 server.ts — Analytics Endpoint (Busy Hours + Daily Trends)</div>
-                <div class="code-block">
-<span class="code-keyword">app</span>.get(<span class="code-string">"/api/stats/analytics"</span>, (req, res) =&gt; {
-  <span class="code-comment">// Group all sales by hour-of-day to find peak selling periods</span>
-  <span class="code-keyword">const</span> busyHours = db.prepare(<span class="code-string">`
-    SELECT strftime('%H', datetime) as hour, SUM(quantity) as count
-    FROM sales
-    GROUP BY hour
-    ORDER BY hour ASC
-  `</span>).all();
-
-  <span class="code-comment">// Last 7 days of daily revenue for trend chart</span>
-  <span class="code-keyword">const</span> dailyTrends = db.prepare(<span class="code-string">`
-    SELECT date(datetime) as date, SUM(total_cents) as revenue
-    FROM sales
-    GROUP BY date
-    ORDER BY date DESC
-    LIMIT 7
-  `</span>).all().reverse(); <span class="code-comment">// Reverse so oldest is leftmost on chart</span>
-
-  res.json({ busyHours, dailyTrends });
-});
-                </div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>⚛️ Frontend: Sales Logbook Component</h2>
-            <p>The Logbook tab is where Kopitiam owners record sales. It features a menu grid with quantity selectors and a one-tap record button per item:</p>
-
-            <div class="code-container">
-                <div class="code-header">📄 src/App.tsx — Logbook Component</div>
-                <div class="code-block">
-<span class="code-keyword">function</span> <span class="code-function">Logbook</span>({ menu, onRecord, stats }) {
-  <span class="code-keyword">const</span> [quantities, setQuantities] = useState&lt;Record&lt;string, number&gt;&gt;({});
-  <span class="code-keyword">const</span> [recording, setRecording] = useState&lt;string | null&gt;(null);
-
-  <span class="code-keyword">const</span> <span class="code-function">updateQty</span> = (id: string, delta: number) =&gt; {
-    setQuantities(prev =&gt; ({
-      ...prev,
-      [id]: Math.max(<span class="code-number">0</span>, (prev[id] || <span class="code-number">0</span>) + delta)
-    }));
-  };
-
-  <span class="code-keyword">const</span> <span class="code-function">handleRecord</span> = async (id: string) =&gt; {
-    <span class="code-keyword">const</span> qty = quantities[id] || <span class="code-number">1</span>;
-    setRecording(id);
-    <span class="code-keyword">await</span> onRecord(id, qty); <span class="code-comment">// POST to /api/sales</span>
-    setQuantities(prev =&gt; ({ ...prev, [id]: <span class="code-number">0</span> })); <span class="code-comment">// Reset qty after recording</span>
-    setTimeout(() =&gt; setRecording(null), <span class="code-number">1000</span>);
-  };
-
-  <span class="code-keyword">return</span> (
-    &lt;div className=<span class="code-string">"space-y-6"</span>&gt;
-      <span class="code-comment">{/* Today's Summary Bar at top of logbook */}</span>
-      {stats &amp;&amp; (
-        &lt;div className=<span class="code-string">"grid grid-cols-1 gap-4 lg:grid-cols-3"</span>&gt;
-          &lt;div className=<span class="code-string">"flex items-center justify-between rounded-2xl bg-emerald-600 p-4 text-white lg:col-span-2"</span>&gt;
-            &lt;div&gt;
-              &lt;p className=<span class="code-string">"text-xs font-medium opacity-80"</span>&gt;Today's Sales&lt;/p&gt;
-              &lt;p className=<span class="code-string">"text-xl font-black"</span>&gt;RM {(stats.revenue / <span class="code-number">100</span>).toFixed(<span class="code-number">2</span>)}&lt;/p&gt;
-            &lt;/div&gt;
-          &lt;/div&gt;
-          <span class="code-comment">{/* Live mini top-items panel */}</span>
-          &lt;TopItemsPanel items={stats.topItems} /&gt;
-        &lt;/div&gt;
-      )}
-
-      <span class="code-comment">{/* Menu grid — one card per item */}</span>
-      &lt;div className=<span class="code-string">"grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4"</span>&gt;
-        {menu.map(item =&gt; (
-          &lt;MenuCard
-            key={item.id}
-            item={item}
-            quantity={quantities[item.id] || <span class="code-number">0</span>}
-            onDecrease={() =&gt; updateQty(item.id, -<span class="code-number">1</span>)}
-            onIncrease={() =&gt; updateQty(item.id, <span class="code-number">1</span>)}
-            onRecord={() =&gt; handleRecord(item.id)}
-            isRecording={recording === item.id}
-          /&gt;
-        ))}
-      &lt;/div&gt;
-    &lt;/div&gt;
-  );
-}
-                </div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>🗃️ Database Schema & CSV Seeding</h2>
-            <p>The app uses SQLite for lightweight, zero-config data storage. On first launch it seeds from historical Kopitiam sales data:</p>
-
-            <div class="code-container">
-                <div class="code-header">📄 server.ts — Database Initialization & CSV Seeding</div>
-                <div class="code-block">
-<span class="code-comment">// Create sales table if it doesn't exist</span>
-db.exec(<span class="code-string">`
-  CREATE TABLE IF NOT EXISTS sales (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    datetime DATETIME DEFAULT CURRENT_TIMESTAMP,
-    item_name TEXT,
-    quantity INTEGER,
-    price_cents INTEGER,
-    total_cents INTEGER
-  )
-`</span>);
-
-<span class="code-comment">// Seed from CSV only if the database is empty</span>
-<span class="code-keyword">const</span> count = db.prepare(<span class="code-string">"SELECT COUNT(*) as count FROM sales"</span>).get();
-<span class="code-keyword">if</span> (count.count === <span class="code-number">0</span>) {
-  <span class="code-keyword">const</span> csvContent = fs.readFileSync(<span class="code-string">"Kopitiam_dataset.csv"</span>, <span class="code-string">"utf-8"</span>);
-  <span class="code-keyword">const</span> records = parse(csvContent, { columns: <span class="code-keyword">true</span>, skip_empty_lines: <span class="code-keyword">true</span> });
-
-  <span class="code-keyword">const</span> insert = db.prepare(<span class="code-string">`
-    INSERT INTO sales (datetime, item_name, quantity, price_cents, total_cents)
-    VALUES (?, ?, ?, ?, ?)
-  `</span>);
-
-  <span class="code-comment">// Use a transaction for fast bulk insert</span>
-  db.transaction(() =&gt; {
-    <span class="code-keyword">for</span> (<span class="code-keyword">const</span> record <span class="code-keyword">of</span> records) {
-      <span class="code-comment">// Parse datetime format: "11/7/2019 15:35" → ISO string</span>
-      <span class="code-keyword">const</span> [datePart, timePart] = record.datetime.split(<span class="code-string">" "</span>);
-      <span class="code-keyword">const</span> [day, month, year] = datePart.split(<span class="code-string">"/"</span>);
-      <span class="code-keyword">const</span> isoDate = <span class="code-string">`${year}-${month.padStart(2,'0')}-${day.padStart(2,'0')}T${timePart}:00`</span>;
-
-      <span class="code-keyword">for</span> (<span class="code-keyword">const</span> item <span class="code-keyword">of</span> MENU_ITEMS) {
-        <span class="code-keyword">const</span> qty = parseInt(record[item.id]);
-        <span class="code-keyword">if</span> (qty &gt; <span class="code-number">0</span>) {
-          insert.run(isoDate, item.id, qty, item.price, qty * item.price);
-        }
-      }
-    }
-  })();
-}
-                </div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>⚙️ Technical Implementation Notes</h2>
-            <h3>Key Design Decisions</h3>
-            <ul style="margin: 15px 0; padding-left: 20px;">
-                <li><strong>Single-process architecture:</strong> Express serves both the API and the compiled React app, simplifying Cloud Run deployment to one container</li>
-                <li><strong>Prices stored in cents:</strong> All monetary values use integers (cents) to avoid floating-point rounding errors in financial calculations</li>
-                <li><strong>CSV seeding on startup:</strong> Owners get immediate analytics from historical data without any manual import step</li>
-                <li><strong>Transactional bulk insert:</strong> SQLite transaction wraps the entire CSV seed for 10–100x faster initial load</li>
-                <li><strong>Optimistic UI updates:</strong> Frontend refreshes all stats after each sale recording to keep the dashboard in sync</li>
-                <li><strong>Framer Motion animations:</strong> Smooth tab transitions and button feedback give the app a polished, native-app feel</li>
-            </ul>
-
-            <h3>Why SQLite?</h3>
-            <ul style="margin: 15px 0; padding-left: 20px;">
-                <li><strong>Zero configuration:</strong> No database server to provision — ideal for a single-owner small business tool</li>
-                <li><strong>Fast reads:</strong> All analytics queries run in milliseconds on typical Kopitiam sales volumes</li>
-                <li><strong>Portable:</strong> The entire database is a single file, making backups trivial</li>
-            </ul>
-        </div>
-
-        <div class="demo-links">
-            <a href="https://kopitiam-digital-waiter-169218045868.us-west1.run.app" target="_blank" class="demo-btn">🚀 Try Live Demo</a>
-            <a href="kopitiam-digital-waiter.html" class="demo-btn secondary">📖 View Full Project Details</a>
-        </div>
-
-        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
-            <a href="index.html">← Back to Portfolio</a> |
-            <a href="kopitiam-digital-waiter.html">View Project Overview</a>
-        </nav>
+  <div class="masthead">
+    <div class="mast-left">
+      <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+      <a class="logo" href="index.html">AI PROJECTS</a>
+      <nav class="mast-nav">
+        <a href="project-categories.html">Categories</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <div class="search-box">
+        <input type="text" class="search-input" id="searchInput" autocomplete="off" placeholder="Search AI projects..." aria-label="Search AI projects">
+        <span class="search-ic">&#128269;</span>
+        <div class="search-results" id="searchResults"></div>
+      </div>
     </div>
+  </div>
+  <hr class="rule-top">
+
+  <div class="crumb">
+    <a href="project-categories.html">Categories</a>
+    <span class="sep">/</span><a id="crumbCat" href="#"></a>
+    <span class="sep">/</span><a id="crumbProj" href="#"></a>
+    <span class="sep">/</span><span>Source</span>
+  </div>
+
+  <section class="src-head">
+    <div class="cover-strip" id="coverStrip" style="display:none"><img id="cover" alt=""></div>
+    <span class="rubric" id="kicker"></span>
+    <h1 id="title"></h1>
+    <p class="sub" id="subtitle"></p>
+    <div class="head-tech" id="headTech"></div>
+    <div class="head-btns" id="headBtns"></div>
+  </section>
+
+  <div id="body"></div>
+
+  <footer>&copy; 2026 Lee Yih Ven | AI Project Portfolio &middot; All rights reserved.</footer>
+  <div class="note">Sample Source-Showcase-E2 (TEMPLATE): source-code page on the index magazine system: slim cover banner, About, Project Structure, code walkthrough with copyable navy-barred code blocks, CTA. Reuse by editing only the PROJECT block at the top of the script.</div>
+
+<script>
+  const SITE = "";
+
+  /* =================================================================
+     EDIT PER PROJECT  -  the ONLY block you change per page.
+     Copy this file, swap PROJECT, save as <slug>-source.html.
+     - structure.code : the project file tree (plain text)
+     - walkthrough[]   : { heading, body, files:[{label, code}] }
+     - notes[]         : { heading, bullets:[...] }
+     Code strings can be multi-line; they render verbatim.
+     ================================================================= */
+  const PROJECT = {
+  "slug": "kopitiam-digital-waiter",
+  "category": "Document & Productivity Tools",
+  "categoryUrl": "category-document-productivity.html",
+  "title": "Kopitiam Digital Waiter",
+  "subtitle": "Core Source Code & Sales Tracking Implementation.",
+  "cover": "images/kopitiam-digital-waiter/cover.jpeg",
+  "tech": [
+    "React 19",
+    "TypeScript",
+    "Express.js",
+    "SQLite",
+    "Gemini AI"
+  ],
+  "overviewUrl": "kopitiam-digital-waiter.html",
+  "demoLabel": "Try Live Demo",
+  "demoUrl": "https://kopitiam-digital-waiter-169218045868.us-west1.run.app",
+  "repoUrl": "https://github.com/lyven81/ai-project/tree/main/projects/kopitiam-digital-waiter",
+  "about": "This curated code snippet demonstrates how the Kopitiam Digital Waiter records sales, queries real-time statistics, and surfaces AI-powered business tips for Malaysian Kopitiam owners. Deployment scripts and proprietary configuration details are omitted for clarity. This showcase highlights the core backend API logic and the React frontend sales recording flow.",
+  "walkthrough": [
+    {
+      "heading": "Core Algorithm: Sales API & Statistics Engine",
+      "body": "The backend is a single Express.js server that manages SQLite sales data and exposes REST endpoints for the React frontend. Here is the core of the statistics engine.",
+      "files": [
+        {
+          "label": "server.ts: Today's Stats Endpoint",
+          "code": "app.get(\"/api/stats/today\", (req, res) => {\n  // Aggregate today's revenue, item count, and transaction count\n  const stats = db.prepare(`\n    SELECT\n      SUM(total_cents) as totalRevenue,\n      SUM(quantity) as totalItems,\n      COUNT(DISTINCT id) as totalTransactions\n    FROM sales\n    WHERE date(datetime) = date('now')\n  `).get();\n\n  // Detect milestone: any item sold 10+ times today\n  const topItem = db.prepare(`\n    SELECT item_name, SUM(quantity) as qty\n    FROM sales\n    WHERE date(datetime) = date('now')\n    GROUP BY item_name\n    ORDER BY qty DESC\n    LIMIT 1\n  `).get();\n\n  const alerts = [];\n  if (topItem && topItem.qty >= 10) {\n    const item = MENU_ITEMS.find(i => i.id === topItem.item_name);\n    alerts.push(`You just hit ${topItem.qty} ${item?.name} orders!`);\n  }\n\n  // AI-aware quick tip: reference today's top seller or all-time best seller\n  const topItemAllTime = db.prepare(`\n    SELECT item_name, SUM(quantity) as qty\n    FROM sales GROUP BY item_name ORDER BY qty DESC LIMIT 1\n  `).get();\n\n  let quickTip = \"Boss, start recording sales to see tips here!\";\n  if (topItem && topItem.qty > 0) {\n    const item = MENU_ITEMS.find(i => i.id === topItem.item_name);\n    quickTip = `Boss, ${item?.name} is moving fast today! Check your inventory.`;\n  } else if (topItemAllTime) {\n    const item = MENU_ITEMS.find(i => i.id === topItemAllTime.item_name);\n    quickTip = `Boss, ${item?.name} is usually your best seller. Ready for the rush?`;\n  }\n\n  // Top 3 items today for the live mini-analytics in logbook\n  const topItemsToday = db.prepare(`\n    SELECT item_name as id, SUM(quantity) as value\n    FROM sales WHERE date(datetime) = date('now')\n    GROUP BY item_name ORDER BY value DESC LIMIT 3\n  `).all().map(row => ({\n    ...row,\n    name: MENU_ITEMS.find(i => i.id === row.id)?.name || row.id\n  }));\n\n  res.json({\n    revenue: stats.totalRevenue || 0,\n    items: stats.totalItems || 0,\n    transactions: stats.totalTransactions || 0,\n    alerts,\n    quickTip,\n    topItems: topItemsToday\n  });\n});"
+        },
+        {
+          "label": "server.ts: Analytics Endpoint (Busy Hours + Daily Trends)",
+          "code": "app.get(\"/api/stats/analytics\", (req, res) => {\n  // Group all sales by hour-of-day to find peak selling periods\n  const busyHours = db.prepare(`\n    SELECT strftime('%H', datetime) as hour, SUM(quantity) as count\n    FROM sales\n    GROUP BY hour\n    ORDER BY hour ASC\n  `).all();\n\n  // Last 7 days of daily revenue for trend chart\n  const dailyTrends = db.prepare(`\n    SELECT date(datetime) as date, SUM(total_cents) as revenue\n    FROM sales\n    GROUP BY date\n    ORDER BY date DESC\n    LIMIT 7\n  `).all().reverse(); // Reverse so oldest is leftmost on chart\n\n  res.json({ busyHours, dailyTrends });\n});"
+        }
+      ]
+    },
+    {
+      "heading": "Frontend: Sales Logbook Component",
+      "body": "The Logbook tab is where Kopitiam owners record sales. It features a menu grid with quantity selectors and a one-tap record button per item.",
+      "files": [
+        {
+          "label": "src/App.tsx: Logbook Component",
+          "code": "function Logbook({ menu, onRecord, stats }) {\n  const [quantities, setQuantities] = useState<Record<string, number>>({});\n  const [recording, setRecording] = useState<string | null>(null);\n\n  const updateQty = (id: string, delta: number) => {\n    setQuantities(prev => ({\n      ...prev,\n      [id]: Math.max(0, (prev[id] || 0) + delta)\n    }));\n  };\n\n  const handleRecord = async (id: string) => {\n    const qty = quantities[id] || 1;\n    setRecording(id);\n    await onRecord(id, qty); // POST to /api/sales\n    setQuantities(prev => ({ ...prev, [id]: 0 })); // Reset qty after recording\n    setTimeout(() => setRecording(null), 1000);\n  };\n\n  return (\n    <div className=\"space-y-6\">\n      {/* Today's Summary Bar at top of logbook */}\n      {stats && (\n        <div className=\"grid grid-cols-1 gap-4 lg:grid-cols-3\">\n          <div className=\"flex items-center justify-between rounded-2xl bg-emerald-600 p-4 text-white lg:col-span-2\">\n            <div>\n              <p className=\"text-xs font-medium opacity-80\">Today's Sales</p>\n              <p className=\"text-xl font-black\">RM {(stats.revenue / 100).toFixed(2)}</p>\n            </div>\n          </div>\n          {/* Live mini top-items panel */}\n          <TopItemsPanel items={stats.topItems} />\n        </div>\n      )}\n\n      {/* Menu grid — one card per item */}\n      <div className=\"grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4\">\n        {menu.map(item => (\n          <MenuCard\n            key={item.id}\n            item={item}\n            quantity={quantities[item.id] || 0}\n            onDecrease={() => updateQty(item.id, -1)}\n            onIncrease={() => updateQty(item.id, 1)}\n            onRecord={() => handleRecord(item.id)}\n            isRecording={recording === item.id}\n          />\n        ))}\n      </div>\n    </div>\n  );\n}"
+        }
+      ]
+    },
+    {
+      "heading": "Database Schema & CSV Seeding",
+      "body": "The app uses SQLite for lightweight, zero-config data storage. On first launch it seeds from historical Kopitiam sales data.",
+      "files": [
+        {
+          "label": "server.ts: Database Initialization & CSV Seeding",
+          "code": "// Create sales table if it doesn't exist\ndb.exec(`\n  CREATE TABLE IF NOT EXISTS sales (\n    id INTEGER PRIMARY KEY AUTOINCREMENT,\n    datetime DATETIME DEFAULT CURRENT_TIMESTAMP,\n    item_name TEXT,\n    quantity INTEGER,\n    price_cents INTEGER,\n    total_cents INTEGER\n  )\n`);\n\n// Seed from CSV only if the database is empty\nconst count = db.prepare(\"SELECT COUNT(*) as count FROM sales\").get();\nif (count.count === 0) {\n  const csvContent = fs.readFileSync(\"Kopitiam_dataset.csv\", \"utf-8\");\n  const records = parse(csvContent, { columns: true, skip_empty_lines: true });\n\n  const insert = db.prepare(`\n    INSERT INTO sales (datetime, item_name, quantity, price_cents, total_cents)\n    VALUES (?, ?, ?, ?, ?)\n  `);\n\n  // Use a transaction for fast bulk insert\n  db.transaction(() => {\n    for (const record of records) {\n      // Parse datetime format: \"11/7/2019 15:35\" → ISO string\n      const [datePart, timePart] = record.datetime.split(\" \");\n      const [day, month, year] = datePart.split(\"/\");\n      const isoDate = `${year}-${month.padStart(2,'0')}-${day.padStart(2,'0')}T${timePart}:00`;\n\n      for (const item of MENU_ITEMS) {\n        const qty = parseInt(record[item.id]);\n        if (qty > 0) {\n          insert.run(isoDate, item.id, qty, item.price, qty * item.price);\n        }\n      }\n    }\n  })();\n}"
+        }
+      ]
+    }
+  ],
+  "cta": "Want a real-time sales tracker like this built for your own business? Let's scope it."
+};
+  /* ===================== END EDIT BLOCK ===================== */
+
+  const pref = (u) => /^https?:|^mailto:|^tel:/.test(u || '') ? u : (SITE + (u || ''));
+  const esc = (s) => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const rich = (s) => esc(s).replace(/&lt;(\/?(?:b|code))&gt;/g, '<$1>');
+
+  // raw code store for copy buttons
+  const RAW = [];
+  function codeBlock(label, codeStr, extraClass){
+    const idx = RAW.push(codeStr) - 1;
+    const rendered = esc(codeStr).split('\n')
+      .map(line => /^\s*#/.test(line) ? `<span class="cmt">${line}</span>` : line).join('\n');
+    return `<div class="codeblock ${extraClass||''}">`+
+      `<div class="code-bar"><span class="path"><span>${esc(label)}</span></span>`+
+      `<button class="code-copy" data-idx="${idx}">Copy</button></div>`+
+      `<pre><code>${rendered}</code></pre></div>`;
+  }
+
+  // Breadcrumb + header
+  document.title = PROJECT.title + ": Source | AI Project Portfolio";
+  document.getElementById('crumbCat').textContent = PROJECT.category;
+  document.getElementById('crumbCat').href = pref(PROJECT.categoryUrl);
+  document.getElementById('crumbProj').textContent = PROJECT.title;
+  document.getElementById('crumbProj').href = pref(PROJECT.overviewUrl);
+  if (PROJECT.cover){
+    document.getElementById('coverStrip').style.display = '';
+    const c = document.getElementById('cover'); c.src = PROJECT.cover; c.alt = PROJECT.title + " cover";
+  }
+  document.getElementById('kicker').textContent = "Source Walkthrough · " + PROJECT.category;
+  document.getElementById('title').textContent = PROJECT.title;
+  document.getElementById('subtitle').textContent = PROJECT.subtitle;
+  document.getElementById('headTech').innerHTML = (PROJECT.tech||[]).map(t => `<span class="tech-chip">${esc(t)}</span>`).join('');
+  document.getElementById('headBtns').innerHTML =
+    (PROJECT.demoUrl ? `<a class="btn" href="${pref(PROJECT.demoUrl)}" target="_blank" rel="noopener">${esc(PROJECT.demoLabel||'Live Demo')}</a>` : '') +
+    (PROJECT.overviewUrl ? `<a class="btn ghost" href="${pref(PROJECT.overviewUrl)}">Project Overview</a>` : '') +
+    (PROJECT.repoUrl ? `<a class="btn ghost" href="${pref(PROJECT.repoUrl)}" target="_blank" rel="noopener">GitHub Repo</a>` : '');
+
+  const section = (tab, inner) => `<section class="sec"><div class="sec-rule"><span class="tab">${esc(tab)}</span>${inner}</div></section>`;
+  let html = "";
+  const P = PROJECT;
+
+  if (P.about){
+    html += section("About This Code", `<h2>About This Code Showcase</h2><p class="intro">${rich(P.about)}</p>`);
+  }
+  if (P.structure && P.structure.code){
+    html += section("Project Structure", `<h2>Project Structure</h2>`+
+      codeBlock(P.structure.label || 'project/', P.structure.code, 'tree'));
+  }
+  (P.walkthrough||[]).forEach(w => {
+    let inner = `<h2>${esc(w.heading)}</h2>`;
+    if (w.body) inner += `<p class="body">${rich(w.body)}</p>`;
+    (w.files||[]).forEach(f => { inner += codeBlock(f.label, f.code); });
+    html += section("Code", inner);
+  });
+  // CTA
+  html += `<section class="sec"><div class="cta-inner">`+
+    `<div><h3>Interested in the build?</h3><p>${esc(P.cta || "Let's talk.")}</p></div>`+
+    `<div class="cta-btns">`+
+    (P.demoUrl ? `<a class="btn" href="${pref(P.demoUrl)}" target="_blank" rel="noopener">${esc(P.demoLabel||'Live Demo')}</a>` : '')+
+    `<a class="btn ghost" href="${SITE}contact.html">Get in Touch</a>`+
+    `</div></div></section>`;
+
+  document.getElementById('body').innerHTML = html;
+
+  // Copy buttons
+  function copyText(text, btn){
+    const done = ()=>{ const o=btn.textContent; btn.textContent='Copied ✓'; setTimeout(()=>btn.textContent=o.includes('Copied')?'Copy':o,1400); };
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(done).catch(()=>fb(text,done)); }
+    else fb(text,done);
+  }
+  function fb(text,done){ const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(ta); done(); }
+  document.querySelectorAll('.code-copy').forEach(btn =>
+    btn.addEventListener('click', ()=> copyText(RAW[+btn.dataset.idx], btn)));
+
+  // Masthead search
+  const ITEMS = [
+    {t:PROJECT.title, c:PROJECT.category, s:PROJECT.slug},
+    {t:"Courier CS Quality Console", c:"Conversational Data Analytics", s:"courier-cs-quality-console"},
+    {t:"Voucher Analyzer", c:"Conversational Data Analytics", s:"voucher-analyzer"},
+    {t:"Wiseman", c:"Knowledge & Reference Chatbots", s:"wiseman"},
+    {t:"Sunny Car Accessories", c:"Agentic Commerce", s:"sunny-car-accessories"},
+    {t:"Bookshelf", c:"Multi-Agent Decision Systems", s:"bookshelf"}
+  ];
+  const searchInput = document.getElementById('searchInput');
+  const searchResults = document.getElementById('searchResults');
+  function runSearch(q){
+    if(q.trim().length < 2){ searchResults.style.display='none'; return; }
+    const ql = q.toLowerCase();
+    const hits = ITEMS.filter(it => (it.t+' '+it.c).toLowerCase().includes(ql));
+    searchResults.innerHTML = hits.length ? hits.map(it =>
+      `<div class="sr-item"><div class="sr-cat">${esc(it.c)}</div>`+
+      `<a href="${SITE}${it.s}.html"><div class="sr-title">${esc(it.t)}</div></a>`+
+      `<div class="sr-links"><a href="${SITE}${it.s}.html">View Details</a></div></div>`).join('')
+      : `<div class="sr-none">No projects found. Try a different keyword.</div>`;
+    searchResults.style.display='block';
+  }
+  searchInput.addEventListener('input', e => runSearch(e.target.value));
+  document.addEventListener('click', e => { if(!e.target.closest('.search-box')) searchResults.style.display='none'; });
+
+  // Drawer
+  const drawer=document.getElementById('drawer'), overlay=document.getElementById('overlay');
+  const openMenu=()=>{ drawer.classList.add('open'); overlay.classList.add('open'); };
+  const closeMenu=()=>{ drawer.classList.remove('open'); overlay.classList.remove('open'); };
+  document.getElementById('hamburger').addEventListener('click', openMenu);
+  document.getElementById('drawerClose').addEventListener('click', closeMenu);
+  overlay.addEventListener('click', closeMenu);
+  drawer.querySelectorAll('a').forEach(a=>a.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeMenu(); searchResults.style.display='none'; }});
+</script>
 </body>
 </html>

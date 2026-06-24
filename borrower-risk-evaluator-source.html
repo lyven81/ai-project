@@ -1,179 +1,369 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Borrower Risk Evaluator - Source Code</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #222; background-color: #ffffff; }
-        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
-        .back-nav { margin-bottom: 20px; }
-        .back-nav a { color: #007BFF; text-decoration: none; font-size: 1rem; }
-        .back-nav a:hover { text-decoration: underline; }
-        .project-header { text-align: center; margin-bottom: 40px; padding: 40px 0; background: linear-gradient(135deg, #FF5722, #D84315); color: white; border-radius: 10px; }
-        .project-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
-        .project-header p { font-size: 1.2rem; opacity: 0.9; }
-        .badges { display: flex; justify-content: center; gap: 10px; margin: 20px 0; flex-wrap: wrap; }
-        .badge { background-color: rgba(255, 255, 255, 0.2); color: white; padding: 5px 12px; border-radius: 15px; font-size: 0.9rem; }
-        .content-section { margin: 40px 0; padding: 30px; background-color: #f9f9f9; border-radius: 8px; border-left: 5px solid #FF5722; }
-        .content-section h2 { color: #FF5722; margin-bottom: 20px; font-size: 1.8rem; }
-        .content-section h3 { color: #333; margin: 20px 0 10px 0; font-size: 1.3rem; }
-        .content-section p { margin-bottom: 12px; }
-        .highlight-box { background: linear-gradient(135deg, #fff3ee, #ffe0d4); padding: 20px; border-radius: 10px; border-left: 5px solid #FF5722; margin: 20px 0; }
-        .file-tree { background: #1e1e1e; color: #d4d4d4; padding: 18px 22px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.88rem; line-height: 1.7; white-space: pre; overflow-x: auto; margin: 16px 0; }
-        .code-container { background-color: #1e1e1e; border-radius: 8px; padding: 20px; margin: 20px 0; overflow-x: auto; }
-        .code-header { color: #4ade80; font-weight: bold; margin-bottom: 15px; font-size: 1.05rem; border-bottom: 1px solid #333; padding-bottom: 10px; font-family: 'Consolas', monospace; }
-        .code-block { font-family: 'Consolas', 'Monaco', 'Courier New', monospace; font-size: 13.5px; line-height: 1.55; color: #d4d4d4; white-space: pre; overflow-x: auto; }
-        .kw { color: #569cd6; } .str { color: #ce9178; } .com { color: #6a9955; font-style: italic; } .fn { color: #dcdcaa; } .num { color: #b5cea8; } .ty { color: #4ec9b0; }
-        .demo-links { text-align: center; margin: 30px 0; }
-        .demo-btn { display: inline-block; background-color: #007BFF; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; margin: 0 10px; font-weight: bold; }
-        .demo-btn:hover { background-color: #0056b3; }
-        .demo-btn.secondary { background-color: #28a745; }
-        @media (max-width: 768px) {
-            .project-header h1 { font-size: 2rem; }
-            .demo-btn { margin: 5px; padding: 10px 20px; }
-            .container { padding: 15px; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Borrower Risk Evaluator: Source | AI Project Portfolio</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root{ --ink:#222; --paper:#fff; --hair:#dddddd; --gray:#555; --accent:#B8860B; --navy:#1E3A5F; --code-bg:#fbfbf8; --cmt:#6b8190; }
+  html{ scroll-behavior:smooth; }
+  body{ background:var(--paper); color:var(--ink); font-family:Arial, Helvetica, sans-serif; line-height:1.6; overflow-x:hidden; }
+  a{ color:inherit; text-decoration:none; }
+  a:hover h2, a:hover h3, a:hover h4{ color:var(--accent); }
+  p code, li code{ font-family:"Courier New", monospace; font-size:.86em; background:#f2f3f5; padding:1px 5px; color:var(--navy); }
+
+  /* Masthead (shared) */
+  .masthead{ display:flex; align-items:center; justify-content:space-between; padding:14px 28px; max-width:1240px; margin:0 auto; gap:18px; }
+  .mast-left{ display:flex; align-items:center; gap:20px; }
+  .logo{ background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; letter-spacing:3px; font-size:.95rem; padding:8px 12px; white-space:nowrap; }
+  .mast-nav{ display:flex; gap:20px; font-family:Arial, Helvetica, sans-serif; font-size:.72rem; letter-spacing:1.4px; text-transform:uppercase; }
+  .mast-nav a:hover{ color:var(--accent); }
+  .hamburger{ display:none; flex-direction:column; gap:4px; background:none; border:none; cursor:pointer; padding:6px; }
+  .hamburger span{ width:22px; height:2px; background:#222; display:block; }
+  .rule-top{ border:none; border-top:3px solid #222; max-width:1240px; margin:0 auto; }
+
+  /* Search (shared) */
+  .search-box{ position:relative; width:200px; }
+  .search-input{ width:100%; padding:7px 30px 7px 12px; border:1px solid var(--hair); background:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; color:#222; }
+  .search-input:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(184,134,11,.15); }
+  .search-ic{ position:absolute; right:10px; top:50%; transform:translateY(-50%); color:var(--gray); font-size:.8rem; pointer-events:none; }
+  .search-results{ position:absolute; top:calc(100% + 4px); left:0; width:340px; max-width:86vw; background:#fff; border:1px solid #222; max-height:60vh; overflow-y:auto; z-index:120; display:none; }
+  .sr-item{ padding:12px 14px; border-bottom:1px solid var(--hair); }
+  .sr-item:last-child{ border-bottom:none; }
+  .sr-cat{ font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; margin-bottom:4px; color:var(--accent); }
+  .sr-title{ font-weight:700; font-size:1.02rem; color:#222; }
+  .sr-links{ font-size:.58rem; letter-spacing:.8px; text-transform:uppercase; color:var(--gray); margin-top:5px; }
+  .sr-links a:hover{ color:var(--accent); }
+  .sr-none{ padding:16px 14px; font-size:.82rem; color:var(--gray); }
+
+  /* Shared bits */
+  .tab{ display:inline-block; background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.66rem; letter-spacing:2px; text-transform:uppercase; padding:6px 12px; }
+  .rubric{ font-family:Arial, Helvetica, sans-serif; font-size:.62rem; font-weight:700; letter-spacing:1.6px; text-transform:uppercase; color:var(--accent); display:block; margin-bottom:8px; }
+  .tech-chip{ display:inline-block; border:1px solid var(--hair); padding:6px 12px; font-size:.72rem; letter-spacing:.3px; color:#333; white-space:nowrap; }
+  .tech-chip:hover{ border-color:var(--accent); color:var(--accent); }
+  .btn{ display:inline-block; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.7rem; letter-spacing:1.6px; text-transform:uppercase; padding:13px 24px; border:1px solid #222; background:#222; color:#fff; cursor:pointer; transition:.15s; }
+  .btn:hover{ background:var(--accent); border-color:var(--accent); }
+  .btn.ghost{ background:#fff; color:#222; }
+  .btn.ghost:hover{ color:var(--accent); border-color:var(--accent); background:#fff; }
+
+  /* Breadcrumb */
+  .crumb{ max-width:1240px; margin:0 auto; padding:20px 28px 0; font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--gray); }
+  .crumb a:hover{ color:var(--accent); }
+  .crumb .sep{ color:var(--hair); margin:0 8px; }
+
+  /* Header (slim cover banner + copy) */
+  .src-head{ max-width:1240px; margin:0 auto; padding:14px 28px 6px; }
+  .cover-strip{ border:1px solid var(--hair); line-height:0; background:#eef1f4; }
+  .cover-strip img{ width:100%; height:190px; object-fit:cover; object-position:center 42%; display:block; }
+  .src-head h1{ font-size:2.5rem; font-weight:900; line-height:1.04; letter-spacing:-.008em; margin-top:18px; }
+  .src-head .sub{ font-style:italic; font-size:1.08rem; color:#333; margin-top:10px; max-width:72ch; }
+  .head-tech{ display:flex; flex-wrap:wrap; gap:9px; margin-top:16px; }
+  .head-btns{ display:flex; flex-wrap:wrap; gap:12px; margin-top:18px; }
+
+  /* Section shell */
+  .sec{ max-width:1240px; margin:0 auto; padding:26px 28px; }
+  .sec-rule{ border-top:3px solid #222; padding-top:16px; }
+  .sec .tab{ margin-bottom:14px; }
+  .sec h2{ font-size:1.7rem; font-weight:900; line-height:1.06; }
+  .sec .intro{ color:#333; font-size:1.02rem; margin-top:10px; max-width:80%; }
+  .sec .body{ color:#333; font-size:1rem; margin-top:10px; max-width:80%; }
+
+  /* Code block */
+  .codeblock{ border:1px solid var(--hair); margin-top:16px; }
+  .code-bar{ display:flex; align-items:center; justify-content:space-between; gap:12px; background:var(--navy); color:#fff; padding:8px 12px; }
+  .code-bar .path{ font-family:"Courier New", monospace; font-size:.74rem; letter-spacing:.2px; opacity:.96; display:flex; align-items:center; gap:7px; min-width:0; }
+  .code-bar .path span{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .code-copy{ flex:none; background:none; border:1px solid rgba(255,255,255,.4); color:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.56rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; padding:5px 11px; cursor:pointer; transition:.15s; }
+  .code-copy:hover{ background:rgba(255,255,255,.16); }
+  .codeblock pre{ margin:0; padding:14px 16px; overflow-x:auto; background:var(--code-bg); }
+  .codeblock code{ font-family:"Courier New", monospace; font-size:.82rem; line-height:1.6; color:#1b2a3a; background:none; padding:0; white-space:pre; display:block; }
+  .codeblock code .cmt{ color:var(--cmt); font-style:italic; }
+
+  .tree .code-bar .path::before{ content:"📁"; }
+
+  /* Notes */
+  .note-block{ margin-top:22px; }
+  .note-block h3{ font-size:1.15rem; font-weight:800; }
+  .blist{ list-style:none; margin-top:12px; border-top:1px solid var(--hair); }
+  .blist li{ padding:12px 0; border-bottom:1px solid var(--hair); color:#333; font-size:.95rem; }
+  .blist li b{ color:#222; }
+
+  /* CTA */
+  .cta-inner{ display:flex; align-items:center; gap:18px; flex-wrap:wrap; border-top:3px solid #222; padding-top:18px; }
+  .cta-inner h3{ font-size:1.4rem; font-weight:900; line-height:1.08; }
+  .cta-inner p{ color:var(--gray); font-size:.95rem; margin-top:4px; }
+  .cta-btns{ margin-left:auto; display:flex; gap:12px; flex-wrap:wrap; }
+
+  footer{ background:#222; max-width:1240px; margin:30px auto 0; padding:24px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; letter-spacing:.5px; color:#fff; text-align:center; }
+  .note{ max-width:1240px; margin:14px auto 0; padding:8px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.62rem; letter-spacing:1px; color:#999; }
+
+  /* Drawer (shared) */
+  .drawer{ position:fixed; top:0; left:-300px; width:280px; height:100vh; background:#fff; z-index:200; box-shadow:2px 0 14px rgba(0,0,0,.15); transition:left .28s ease; padding:74px 26px 26px; }
+  .drawer.open{ left:0; }
+  .drawer a{ display:block; font-family:Arial, Helvetica, sans-serif; font-size:.82rem; letter-spacing:1.2px; text-transform:uppercase; padding:14px 0; border-bottom:1px solid var(--hair); }
+  .overlay{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:150; }
+  .overlay.open{ display:block; }
+  .drawer-close{ position:absolute; top:20px; right:20px; font-family:Arial, Helvetica, sans-serif; font-size:1.4rem; background:none; border:none; cursor:pointer; }
+
+  @media (max-width:900px){
+    .cta-btns{ margin-left:0; }
+    .mast-nav{ display:none; }
+    .hamburger{ display:flex; }
+    .masthead{ padding:12px 16px; }
+    .mast-left{ gap:10px; min-width:0; flex:1; }
+    .logo{ font-size:.72rem; letter-spacing:1.5px; padding:6px 8px; }
+    .search-box{ flex:1; width:auto; min-width:0; }
+    .search-results{ position:fixed; top:58px; left:12px; right:12px; width:auto; max-width:none; }
+    .src-head h1{ font-size:1.95rem; }
+    .cover-strip img{ height:150px; }
+  }
+</style>
 </head>
 <body>
-    <div class="container">
-        <nav class="back-nav">
-            <a href="borrower-risk-evaluator.html">← Back to Project Overview</a>
-        </nav>
 
-        <div class="project-header">
-            <h1>📊 Borrower Risk Evaluator</h1>
-            <p>Source Code &amp; Evaluation Engine</p>
-            <div class="badges">
-                <span class="badge">Vanilla JS</span>
-                <span class="badge">Gemini AI</span>
-                <span class="badge">Python + pandas</span>
-                <span class="badge">Self-Contained</span>
-            </div>
-        </div>
+  <div class="overlay" id="overlay"></div>
+  <nav class="drawer" id="drawer">
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">&times;</button>
+    <a href="index.html">Home</a>
+    <a href="project-categories.html">Categories</a>
+    <a href="contact.html">Contact</a>
+    <a href="https://lyven81.github.io/data-analyst-portfolio/index.html">Data Portfolio</a>
+  </nav>
 
-        <div class="highlight-box">
-            <h3>🔍 About This Code Showcase</h3>
-            <p><strong>These snippets show the parts that make this an evaluation project: the typed Gemini verdict, the honest mapping that hides the label from the model, the metrics engine, and the confidence interval.</strong></p>
-            <p>The full page is a single self-contained HTML file with no backend. Real borrowers are prepared offline by a keyless Python script and shipped as a static JavaScript asset.</p>
-        </div>
-
-        <div class="content-section">
-            <h2>📁 Project Structure</h2>
-            <div class="file-tree">projects/borrower-risk-evaluator/
-├── index.html          &larr; the whole app: classify, score, charts, safety dial
-├── demo.html           &larr; same file, the launch target
-├── data/
-│   ├── borrowers.js    &larr; 150 real held-out borrowers (window.BORROWERS)
-│   └── meta.json       &larr; headline counts
-├── prep_data.py        &larr; keyless: clean dataset.csv -> sample -> emit borrowers.js
-├── dataset.csv         &larr; 32,577 real labelled loans (source)
-├── system-prompt.txt   &larr; the single documented classification prompt + taxonomy
-├── problem-statement.md
-├── project-outline.md
-└── user-guide.md</div>
-        </div>
-
-        <div class="content-section">
-            <h2>🧠 The Typed Verdict (Gemini, structured output)</h2>
-            <p>The classifier asks Gemini for a strict JSON object: status, confidence, and reason. A response schema forces the shape, and temperature 0 makes the verdict consistent. The borrower's facts go in; the true label never does.</p>
-            <div class="code-container">
-                <div class="code-header">📄 index.html — classifyOne()</div>
-<div class="code-block"><span class="kw">const</span> SCHEMA = {<span class="ty">type</span>:<span class="str">"OBJECT"</span>, properties:{
-  status:{<span class="ty">type</span>:<span class="str">"STRING"</span>, <span class="ty">enum</span>:[<span class="str">"DEFAULT"</span>,<span class="str">"NO DEFAULT"</span>]},
-  confidence:{<span class="ty">type</span>:<span class="str">"NUMBER"</span>},
-  reason:{<span class="ty">type</span>:<span class="str">"STRING"</span>}
-}, required:[<span class="str">"status"</span>,<span class="str">"confidence"</span>,<span class="str">"reason"</span>]};
-
-<span class="kw">async function</span> <span class="fn">classifyOne</span>(f, key){
-  <span class="kw">const</span> body = {contents:[{role:<span class="str">"user"</span>, parts:[{text:<span class="fn">buildPrompt</span>(f)}]}],
-    generationConfig:{temperature:<span class="num">0</span>, responseMimeType:<span class="str">"application/json"</span>, responseSchema:SCHEMA}};
-  <span class="kw">const</span> res = <span class="kw">await</span> <span class="fn">fetch</span>(url, {method:<span class="str">"POST"</span>, headers:{...}, body:<span class="fn">JSON.stringify</span>(body)});
-  <span class="kw">const</span> out = <span class="fn">JSON.parse</span>(text);
-  <span class="com">// "NO DEFAULT" contains the word DEFAULT, so test for "NO" first</span>
-  <span class="kw">const</span> status = out.status.<span class="fn">toUpperCase</span>().<span class="fn">includes</span>(<span class="str">"NO DEFAULT"</span>) ? <span class="str">"NO DEFAULT"</span> : <span class="str">"DEFAULT"</span>;
-  <span class="kw">return</span> {status, confidence:<span class="fn">clamp</span>(conf, <span class="num">0.5</span>, <span class="num">1</span>), reason:out.reason};
-}</div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>🔒 The Honest Mapping (label used only for scoring)</h2>
-            <p>The model's status and confidence become a default probability <code>p</code>. The real outcome <code>truth</code> is attached for scoring, but it is never part of the prompt. This is what makes the scorecard trustworthy.</p>
-            <div class="code-container">
-                <div class="code-header">📄 index.html — toRow()</div>
-<div class="code-block"><span class="kw">function</span> <span class="fn">toRow</span>(rec, verdict){
-  <span class="kw">const</span> f = rec.features;
-  <span class="com">// status + confidence -> probability of default</span>
-  <span class="kw">const</span> p = verdict.status === <span class="str">"DEFAULT"</span> ? verdict.confidence : <span class="num">1</span> - verdict.confidence;
-  <span class="kw">return</span> {
-    id:rec.id, grade:f.loan_grade, intent:f.loan_intent, intRate:f.interest_rate,
-    lti:f.loan_to_income_pct/<span class="num">100</span>,
-    p:p,                                  <span class="com">// the prediction</span>
-    truth:rec.true_label === <span class="str">"DEFAULT"</span> ? <span class="num">1</span> : <span class="num">0</span>,   <span class="com">// scored AFTER, never shown to the model</span>
-    reason:verdict.reason
-  };
-}</div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>📊 The Metrics Engine</h2>
-            <p>One pass over the predictions builds the confusion matrix, precision, recall, F1, and the high-confidence accuracy and coverage at the current safety-dial threshold. This is the evaluation harness that ports straight to production.</p>
-            <div class="code-container">
-                <div class="code-header">📄 index.html — compute(threshold)</div>
-<div class="code-block"><span class="kw">function</span> <span class="fn">compute</span>(t){
-  <span class="kw">let</span> TP=<span class="num">0</span>, FP=<span class="num">0</span>, FN=<span class="num">0</span>, TN=<span class="num">0</span>, hcC=<span class="num">0</span>, hcT=<span class="num">0</span>;
-  <span class="kw">for</span>(<span class="kw">const</span> r <span class="kw">of</span> ROWS){
-    <span class="kw">const</span> pred = r.p >= <span class="num">0.5</span> ? <span class="num">1</span> : <span class="num">0</span>, conf = <span class="fn">Math.max</span>(r.p, <span class="num">1</span>-r.p);
-    <span class="kw">if</span>(pred &amp;&amp; r.truth) TP++; <span class="kw">else if</span>(pred) FP++; <span class="kw">else if</span>(r.truth) FN++; <span class="kw">else</span> TN++;
-    <span class="kw">if</span>(conf >= t){ hcT++; <span class="kw">if</span>(pred === r.truth) hcC++; }  <span class="com">// cleared at this confidence</span>
-  }
-  <span class="kw">const</span> prec = TP/(TP+FP||<span class="num">1</span>), rec = TP/(TP+FN||<span class="num">1</span>);
-  <span class="kw">return</span> {acc:(TP+TN)/ROWS.length, prec, rec, f1:<span class="num">2</span>*prec*rec/((prec+rec)||<span class="num">1</span>),
-    hcAcc:hcT?hcC/hcT:<span class="num">1</span>, cov:hcT/ROWS.length, TP, FP, FN, TN, hcC, hcT};
-}</div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>📐 The Confidence Interval (Wilson score)</h2>
-            <p>Every headline number carries a 95% interval, so the audience knows the margin of error and can watch it tighten as the sample grows. This is what answers "you only tested 150, is that enough?".</p>
-            <div class="code-container">
-                <div class="code-header">📄 index.html — wilson()</div>
-<div class="code-block"><span class="com">// 95% Wilson score interval for a proportion k/n</span>
-<span class="kw">function</span> <span class="fn">wilson</span>(k, n){
-  <span class="kw">if</span>(!n) <span class="kw">return</span> [<span class="num">0</span>,<span class="num">0</span>];
-  <span class="kw">const</span> z=<span class="num">1.96</span>, p=k/n, d=<span class="num">1</span>+z*z/n;
-  <span class="kw">const</span> c=(p+z*z/(<span class="num">2</span>*n))/d;
-  <span class="kw">const</span> m=(z*<span class="fn">Math.sqrt</span>(p*(<span class="num">1</span>-p)/n + z*z/(<span class="num">4</span>*n*n)))/d;
-  <span class="kw">return</span> [<span class="fn">clamp</span>(c-m,<span class="num">0</span>,<span class="num">1</span>), <span class="fn">clamp</span>(c+m,<span class="num">0</span>,<span class="num">1</span>)];
-}</div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>🐍 The Keyless Data Prep</h2>
-            <p>A small Python script cleans the real dataset, parses the currency loan amounts, derives the explainability ratios, and emits a stratified sample of real borrowers as a JavaScript asset the page loads directly.</p>
-            <div class="code-container">
-                <div class="code-header">📄 prep_data.py — excerpt</div>
-<div class="code-block"><span class="kw">def</span> <span class="fn">parse_amount</span>(val):              <span class="com"># "£35,000.00" -> 35000.0</span>
-    s = re.<span class="fn">sub</span>(<span class="str">r"[^0-9.]"</span>, <span class="str">""</span>, <span class="fn">str</span>(val))
-    <span class="kw">return</span> <span class="fn">float</span>(s) <span class="kw">if</span> s <span class="kw">else</span> <span class="kw">None</span>
-
-<span class="com"># keep the real ~21% default rate in the sample</span>
-df[<span class="str">"loan_to_income_pct"</span>] = (df[<span class="str">"loan_amount"</span>] / df[<span class="str">"customer_income"</span>] * <span class="num">100</span>).<span class="fn">round</span>(<span class="num">1</span>)
-sample = <span class="fn">stratified</span>(df, SAMPLE_N, SEED)
-<span class="com"># -> window.BORROWERS = [ {id, features, true_label}, ... ]</span></div>
-            </div>
-        </div>
-
-        <div class="demo-links">
-            <a href="borrower-risk-evaluator.html" class="demo-btn">← Back to Showcase</a>
-            <a href="https://github.com/lyven81/ai-project/tree/main/projects/borrower-risk-evaluator" target="_blank" class="demo-btn secondary">📦 View on GitHub</a>
-        </div>
+  <div class="masthead">
+    <div class="mast-left">
+      <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+      <a class="logo" href="index.html">AI PROJECTS</a>
+      <nav class="mast-nav">
+        <a href="project-categories.html">Categories</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <div class="search-box">
+        <input type="text" class="search-input" id="searchInput" autocomplete="off" placeholder="Search AI projects..." aria-label="Search AI projects">
+        <span class="search-ic">&#128269;</span>
+        <div class="search-results" id="searchResults"></div>
+      </div>
     </div>
+  </div>
+  <hr class="rule-top">
+
+  <div class="crumb">
+    <a href="project-categories.html">Categories</a>
+    <span class="sep">/</span><a id="crumbCat" href="#"></a>
+    <span class="sep">/</span><a id="crumbProj" href="#"></a>
+    <span class="sep">/</span><span>Source</span>
+  </div>
+
+  <section class="src-head">
+    <div class="cover-strip" id="coverStrip" style="display:none"><img id="cover" alt=""></div>
+    <span class="rubric" id="kicker"></span>
+    <h1 id="title"></h1>
+    <p class="sub" id="subtitle"></p>
+    <div class="head-tech" id="headTech"></div>
+    <div class="head-btns" id="headBtns"></div>
+  </section>
+
+  <div id="body"></div>
+
+  <footer>&copy; 2026 Lee Yih Ven | AI Project Portfolio &middot; All rights reserved.</footer>
+  <div class="note">Sample Source-Showcase-E2 (TEMPLATE): source-code page on the index magazine system: slim cover banner, About, Project Structure, code walkthrough with copyable navy-barred code blocks, CTA. Reuse by editing only the PROJECT block at the top of the script.</div>
+
+<script>
+  const SITE = "";
+
+  /* =================================================================
+     EDIT PER PROJECT  -  the ONLY block you change per page.
+     Copy this file, swap PROJECT, save as <slug>-source.html.
+     - structure.code : the project file tree (plain text)
+     - walkthrough[]   : { heading, body, files:[{label, code}] }
+     - notes[]         : { heading, bullets:[...] }
+     Code strings can be multi-line; they render verbatim.
+     ================================================================= */
+  const PROJECT = {
+  "slug": "borrower-risk-evaluator",
+  "category": "Industry Specialist Advisors",
+  "categoryUrl": "category-industry-advisors.html",
+  "title": "Borrower Risk Evaluator",
+  "subtitle": "These snippets show the parts that make this an evaluation project: the typed Gemini verdict, the honest mapping that hides the label from the model, the metrics engine, and the confidence interval.",
+  "cover": "images/borrower-risk-evaluator/cover.jpeg",
+  "tech": [
+    "Vanilla JS",
+    "Gemini AI",
+    "Python + pandas",
+    "Self-Contained"
+  ],
+  "overviewUrl": "borrower-risk-evaluator.html",
+  "demoLabel": "Try Live Demo",
+  "demoUrl": "https://lyven81.github.io/ai-project/projects/borrower-risk-evaluator/demo.html",
+  "repoUrl": "https://github.com/lyven81/ai-project/tree/main/projects/borrower-risk-evaluator",
+  "about": "These snippets show the parts that make this an evaluation project: the typed Gemini verdict, the honest mapping that hides the label from the model, the metrics engine, and the confidence interval. The full page is a single self-contained HTML file with no backend. Real borrowers are prepared offline by a keyless Python script and shipped as a static JavaScript asset.",
+  "structure": {
+    "label": "projects/borrower-risk-evaluator/",
+    "code": "projects/borrower-risk-evaluator/\n├── index.html          ← the whole app: classify, score, charts, safety dial\n├── demo.html           ← same file, the launch target\n├── data/\n│   ├── borrowers.js    ← 150 real held-out borrowers (window.BORROWERS)\n│   └── meta.json       ← headline counts\n├── prep_data.py        ← keyless: clean dataset.csv -> sample -> emit borrowers.js\n├── dataset.csv         ← 32,577 real labelled loans (source)\n├── system-prompt.txt   ← the single documented classification prompt + taxonomy\n├── problem-statement.md\n├── project-outline.md\n└── user-guide.md"
+  },
+  "walkthrough": [
+    {
+      "heading": "The Typed Verdict (Gemini, structured output)",
+      "body": "The classifier asks Gemini for a strict JSON object: status, confidence, and reason. A response schema forces the shape, and temperature 0 makes the verdict consistent. The borrower's facts go in; the true label never does.",
+      "files": [
+        {
+          "label": "index.html: classifyOne()",
+          "code": "const SCHEMA = {type:\"OBJECT\", properties:{\n  status:{type:\"STRING\", enum:[\"DEFAULT\",\"NO DEFAULT\"]},\n  confidence:{type:\"NUMBER\"},\n  reason:{type:\"STRING\"}\n}, required:[\"status\",\"confidence\",\"reason\"]};\n\nasync function classifyOne(f, key){\n  const body = {contents:[{role:\"user\", parts:[{text:buildPrompt(f)}]}],\n    generationConfig:{temperature:0, responseMimeType:\"application/json\", responseSchema:SCHEMA}};\n  const res = await fetch(url, {method:\"POST\", headers:{...}, body:JSON.stringify(body)});\n  const out = JSON.parse(text);\n  // \"NO DEFAULT\" contains the word DEFAULT, so test for \"NO\" first\n  const status = out.status.toUpperCase().includes(\"NO DEFAULT\") ? \"NO DEFAULT\" : \"DEFAULT\";\n  return {status, confidence:clamp(conf, 0.5, 1), reason:out.reason};\n}"
+        }
+      ]
+    },
+    {
+      "heading": "The Honest Mapping (label used only for scoring)",
+      "body": "The model's status and confidence become a default probability <code>p</code>. The real outcome <code>truth</code> is attached for scoring, but it is never part of the prompt. This is what makes the scorecard trustworthy.",
+      "files": [
+        {
+          "label": "index.html: toRow()",
+          "code": "function toRow(rec, verdict){\n  const f = rec.features;\n  // status + confidence -> probability of default\n  const p = verdict.status === \"DEFAULT\" ? verdict.confidence : 1 - verdict.confidence;\n  return {\n    id:rec.id, grade:f.loan_grade, intent:f.loan_intent, intRate:f.interest_rate,\n    lti:f.loan_to_income_pct/100,\n    p:p,                                  // the prediction\n    truth:rec.true_label === \"DEFAULT\" ? 1 : 0,   // scored AFTER, never shown to the model\n    reason:verdict.reason\n  };\n}"
+        }
+      ]
+    },
+    {
+      "heading": "The Metrics Engine",
+      "body": "One pass over the predictions builds the confusion matrix, precision, recall, F1, and the high-confidence accuracy and coverage at the current safety-dial threshold. This is the evaluation harness that ports straight to production.",
+      "files": [
+        {
+          "label": "index.html: compute(threshold)",
+          "code": "function compute(t){\n  let TP=0, FP=0, FN=0, TN=0, hcC=0, hcT=0;\n  for(const r of ROWS){\n    const pred = r.p >= 0.5 ? 1 : 0, conf = Math.max(r.p, 1-r.p);\n    if(pred && r.truth) TP++; else if(pred) FP++; else if(r.truth) FN++; else TN++;\n    if(conf >= t){ hcT++; if(pred === r.truth) hcC++; }  // cleared at this confidence\n  }\n  const prec = TP/(TP+FP||1), rec = TP/(TP+FN||1);\n  return {acc:(TP+TN)/ROWS.length, prec, rec, f1:2*prec*rec/((prec+rec)||1),\n    hcAcc:hcT?hcC/hcT:1, cov:hcT/ROWS.length, TP, FP, FN, TN, hcC, hcT};\n}"
+        }
+      ]
+    },
+    {
+      "heading": "The Confidence Interval (Wilson score)",
+      "body": "Every headline number carries a 95% interval, so the audience knows the margin of error and can watch it tighten as the sample grows. This is what answers \"you only tested 150, is that enough?\".",
+      "files": [
+        {
+          "label": "index.html: wilson()",
+          "code": "// 95% Wilson score interval for a proportion k/n\nfunction wilson(k, n){\n  if(!n) return [0,0];\n  const z=1.96, p=k/n, d=1+z*z/n;\n  const c=(p+z*z/(2*n))/d;\n  const m=(z*Math.sqrt(p*(1-p)/n + z*z/(4*n*n)))/d;\n  return [clamp(c-m,0,1), clamp(c+m,0,1)];\n}"
+        }
+      ]
+    },
+    {
+      "heading": "The Keyless Data Prep",
+      "body": "A small Python script cleans the real dataset, parses the currency loan amounts, derives the explainability ratios, and emits a stratified sample of real borrowers as a JavaScript asset the page loads directly.",
+      "files": [
+        {
+          "label": "prep_data.py: excerpt",
+          "code": "def parse_amount(val):              # \"£35,000.00\" -> 35000.0\n    s = re.sub(r\"[^0-9.]\", \"\", str(val))\n    return float(s) if s else None\n\n# keep the real ~21% default rate in the sample\ndf[\"loan_to_income_pct\"] = (df[\"loan_amount\"] / df[\"customer_income\"] * 100).round(1)\nsample = stratified(df, SAMPLE_N, SEED)\n# -> window.BORROWERS = [ {id, features, true_label}, ... ]"
+        }
+      ]
+    }
+  ],
+  "cta": "Want a governed, measurable AI classifier like this built for your own data? Let's scope it."
+};
+  /* ===================== END EDIT BLOCK ===================== */
+
+  const pref = (u) => /^https?:|^mailto:|^tel:/.test(u || '') ? u : (SITE + (u || ''));
+  const esc = (s) => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const rich = (s) => esc(s).replace(/&lt;(\/?(?:b|code))&gt;/g, '<$1>');
+
+  // raw code store for copy buttons
+  const RAW = [];
+  function codeBlock(label, codeStr, extraClass){
+    const idx = RAW.push(codeStr) - 1;
+    const rendered = esc(codeStr).split('\n')
+      .map(line => /^\s*#/.test(line) ? `<span class="cmt">${line}</span>` : line).join('\n');
+    return `<div class="codeblock ${extraClass||''}">`+
+      `<div class="code-bar"><span class="path"><span>${esc(label)}</span></span>`+
+      `<button class="code-copy" data-idx="${idx}">Copy</button></div>`+
+      `<pre><code>${rendered}</code></pre></div>`;
+  }
+
+  // Breadcrumb + header
+  document.title = PROJECT.title + ": Source | AI Project Portfolio";
+  document.getElementById('crumbCat').textContent = PROJECT.category;
+  document.getElementById('crumbCat').href = pref(PROJECT.categoryUrl);
+  document.getElementById('crumbProj').textContent = PROJECT.title;
+  document.getElementById('crumbProj').href = pref(PROJECT.overviewUrl);
+  if (PROJECT.cover){
+    document.getElementById('coverStrip').style.display = '';
+    const c = document.getElementById('cover'); c.src = PROJECT.cover; c.alt = PROJECT.title + " cover";
+  }
+  document.getElementById('kicker').textContent = "Source Walkthrough · " + PROJECT.category;
+  document.getElementById('title').textContent = PROJECT.title;
+  document.getElementById('subtitle').textContent = PROJECT.subtitle;
+  document.getElementById('headTech').innerHTML = (PROJECT.tech||[]).map(t => `<span class="tech-chip">${esc(t)}</span>`).join('');
+  document.getElementById('headBtns').innerHTML =
+    (PROJECT.demoUrl ? `<a class="btn" href="${pref(PROJECT.demoUrl)}" target="_blank" rel="noopener">${esc(PROJECT.demoLabel||'Live Demo')}</a>` : '') +
+    (PROJECT.overviewUrl ? `<a class="btn ghost" href="${pref(PROJECT.overviewUrl)}">Project Overview</a>` : '') +
+    (PROJECT.repoUrl ? `<a class="btn ghost" href="${pref(PROJECT.repoUrl)}" target="_blank" rel="noopener">GitHub Repo</a>` : '');
+
+  const section = (tab, inner) => `<section class="sec"><div class="sec-rule"><span class="tab">${esc(tab)}</span>${inner}</div></section>`;
+  let html = "";
+  const P = PROJECT;
+
+  if (P.about){
+    html += section("About This Code", `<h2>About This Code Showcase</h2><p class="intro">${rich(P.about)}</p>`);
+  }
+  if (P.structure && P.structure.code){
+    html += section("Project Structure", `<h2>Project Structure</h2>`+
+      codeBlock(P.structure.label || 'project/', P.structure.code, 'tree'));
+  }
+  (P.walkthrough||[]).forEach(w => {
+    let inner = `<h2>${esc(w.heading)}</h2>`;
+    if (w.body) inner += `<p class="body">${rich(w.body)}</p>`;
+    (w.files||[]).forEach(f => { inner += codeBlock(f.label, f.code); });
+    html += section("Code", inner);
+  });
+  // CTA
+  html += `<section class="sec"><div class="cta-inner">`+
+    `<div><h3>Interested in the build?</h3><p>${esc(P.cta || "Let's talk.")}</p></div>`+
+    `<div class="cta-btns">`+
+    (P.demoUrl ? `<a class="btn" href="${pref(P.demoUrl)}" target="_blank" rel="noopener">${esc(P.demoLabel||'Live Demo')}</a>` : '')+
+    `<a class="btn ghost" href="${SITE}contact.html">Get in Touch</a>`+
+    `</div></div></section>`;
+
+  document.getElementById('body').innerHTML = html;
+
+  // Copy buttons
+  function copyText(text, btn){
+    const done = ()=>{ const o=btn.textContent; btn.textContent='Copied ✓'; setTimeout(()=>btn.textContent=o.includes('Copied')?'Copy':o,1400); };
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(done).catch(()=>fb(text,done)); }
+    else fb(text,done);
+  }
+  function fb(text,done){ const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(ta); done(); }
+  document.querySelectorAll('.code-copy').forEach(btn =>
+    btn.addEventListener('click', ()=> copyText(RAW[+btn.dataset.idx], btn)));
+
+  // Masthead search
+  const ITEMS = [
+    {t:PROJECT.title, c:PROJECT.category, s:PROJECT.slug},
+    {t:"Courier CS Quality Console", c:"Conversational Data Analytics", s:"courier-cs-quality-console"},
+    {t:"Voucher Analyzer", c:"Conversational Data Analytics", s:"voucher-analyzer"},
+    {t:"Wiseman", c:"Knowledge & Reference Chatbots", s:"wiseman"},
+    {t:"Sunny Car Accessories", c:"Agentic Commerce", s:"sunny-car-accessories"},
+    {t:"Bookshelf", c:"Multi-Agent Decision Systems", s:"bookshelf"}
+  ];
+  const searchInput = document.getElementById('searchInput');
+  const searchResults = document.getElementById('searchResults');
+  function runSearch(q){
+    if(q.trim().length < 2){ searchResults.style.display='none'; return; }
+    const ql = q.toLowerCase();
+    const hits = ITEMS.filter(it => (it.t+' '+it.c).toLowerCase().includes(ql));
+    searchResults.innerHTML = hits.length ? hits.map(it =>
+      `<div class="sr-item"><div class="sr-cat">${esc(it.c)}</div>`+
+      `<a href="${SITE}${it.s}.html"><div class="sr-title">${esc(it.t)}</div></a>`+
+      `<div class="sr-links"><a href="${SITE}${it.s}.html">View Details</a></div></div>`).join('')
+      : `<div class="sr-none">No projects found. Try a different keyword.</div>`;
+    searchResults.style.display='block';
+  }
+  searchInput.addEventListener('input', e => runSearch(e.target.value));
+  document.addEventListener('click', e => { if(!e.target.closest('.search-box')) searchResults.style.display='none'; });
+
+  // Drawer
+  const drawer=document.getElementById('drawer'), overlay=document.getElementById('overlay');
+  const openMenu=()=>{ drawer.classList.add('open'); overlay.classList.add('open'); };
+  const closeMenu=()=>{ drawer.classList.remove('open'); overlay.classList.remove('open'); };
+  document.getElementById('hamburger').addEventListener('click', openMenu);
+  document.getElementById('drawerClose').addEventListener('click', closeMenu);
+  overlay.addEventListener('click', closeMenu);
+  drawer.querySelectorAll('a').forEach(a=>a.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeMenu(); searchResults.style.display='none'; }});
+</script>
 </body>
 </html>

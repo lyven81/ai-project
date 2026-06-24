@@ -1,512 +1,335 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI PDF Summarizer - Source Code</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude PDF Summarizer: Source | AI Project Portfolio</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root{ --ink:#222; --paper:#fff; --hair:#dddddd; --gray:#555; --accent:#B8860B; --navy:#1E3A5F; --code-bg:#fbfbf8; --cmt:#6b8190; }
+  html{ scroll-behavior:smooth; }
+  body{ background:var(--paper); color:var(--ink); font-family:Arial, Helvetica, sans-serif; line-height:1.6; overflow-x:hidden; }
+  a{ color:inherit; text-decoration:none; }
+  a:hover h2, a:hover h3, a:hover h4{ color:var(--accent); }
+  p code, li code{ font-family:"Courier New", monospace; font-size:.86em; background:#f2f3f5; padding:1px 5px; color:var(--navy); }
 
-        body {
-            font-family: 'Arial', sans-serif;
-            line-height: 1.6;
-            color: #222;
-            background-color: #ffffff;
-        }
+  /* Masthead (shared) */
+  .masthead{ display:flex; align-items:center; justify-content:space-between; padding:14px 28px; max-width:1240px; margin:0 auto; gap:18px; }
+  .mast-left{ display:flex; align-items:center; gap:20px; }
+  .logo{ background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; letter-spacing:3px; font-size:.95rem; padding:8px 12px; white-space:nowrap; }
+  .mast-nav{ display:flex; gap:20px; font-family:Arial, Helvetica, sans-serif; font-size:.72rem; letter-spacing:1.4px; text-transform:uppercase; }
+  .mast-nav a:hover{ color:var(--accent); }
+  .hamburger{ display:none; flex-direction:column; gap:4px; background:none; border:none; cursor:pointer; padding:6px; }
+  .hamburger span{ width:22px; height:2px; background:#222; display:block; }
+  .rule-top{ border:none; border-top:3px solid #222; max-width:1240px; margin:0 auto; }
 
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+  /* Search (shared) */
+  .search-box{ position:relative; width:200px; }
+  .search-input{ width:100%; padding:7px 30px 7px 12px; border:1px solid var(--hair); background:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; color:#222; }
+  .search-input:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(184,134,11,.15); }
+  .search-ic{ position:absolute; right:10px; top:50%; transform:translateY(-50%); color:var(--gray); font-size:.8rem; pointer-events:none; }
+  .search-results{ position:absolute; top:calc(100% + 4px); left:0; width:340px; max-width:86vw; background:#fff; border:1px solid #222; max-height:60vh; overflow-y:auto; z-index:120; display:none; }
+  .sr-item{ padding:12px 14px; border-bottom:1px solid var(--hair); }
+  .sr-item:last-child{ border-bottom:none; }
+  .sr-cat{ font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; margin-bottom:4px; color:var(--accent); }
+  .sr-title{ font-weight:700; font-size:1.02rem; color:#222; }
+  .sr-links{ font-size:.58rem; letter-spacing:.8px; text-transform:uppercase; color:var(--gray); margin-top:5px; }
+  .sr-links a:hover{ color:var(--accent); }
+  .sr-none{ padding:16px 14px; font-size:.82rem; color:var(--gray); }
 
-        .back-nav {
-            margin-bottom: 20px;
-        }
+  /* Shared bits */
+  .tab{ display:inline-block; background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.66rem; letter-spacing:2px; text-transform:uppercase; padding:6px 12px; }
+  .rubric{ font-family:Arial, Helvetica, sans-serif; font-size:.62rem; font-weight:700; letter-spacing:1.6px; text-transform:uppercase; color:var(--accent); display:block; margin-bottom:8px; }
+  .tech-chip{ display:inline-block; border:1px solid var(--hair); padding:6px 12px; font-size:.72rem; letter-spacing:.3px; color:#333; white-space:nowrap; }
+  .tech-chip:hover{ border-color:var(--accent); color:var(--accent); }
+  .btn{ display:inline-block; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.7rem; letter-spacing:1.6px; text-transform:uppercase; padding:13px 24px; border:1px solid #222; background:#222; color:#fff; cursor:pointer; transition:.15s; }
+  .btn:hover{ background:var(--accent); border-color:var(--accent); }
+  .btn.ghost{ background:#fff; color:#222; }
+  .btn.ghost:hover{ color:var(--accent); border-color:var(--accent); background:#fff; }
 
-        .back-nav a {
-            color: #007BFF;
-            text-decoration: none;
-            font-size: 1rem;
-        }
+  /* Breadcrumb */
+  .crumb{ max-width:1240px; margin:0 auto; padding:20px 28px 0; font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--gray); }
+  .crumb a:hover{ color:var(--accent); }
+  .crumb .sep{ color:var(--hair); margin:0 8px; }
 
-        .back-nav a:hover {
-            text-decoration: underline;
-        }
+  /* Header (slim cover banner + copy) */
+  .src-head{ max-width:1240px; margin:0 auto; padding:14px 28px 6px; }
+  .cover-strip{ border:1px solid var(--hair); line-height:0; background:#eef1f4; }
+  .cover-strip img{ width:100%; height:190px; object-fit:cover; object-position:center 42%; display:block; }
+  .src-head h1{ font-size:2.5rem; font-weight:900; line-height:1.04; letter-spacing:-.008em; margin-top:18px; }
+  .src-head .sub{ font-style:italic; font-size:1.08rem; color:#333; margin-top:10px; max-width:72ch; }
+  .head-tech{ display:flex; flex-wrap:wrap; gap:9px; margin-top:16px; }
+  .head-btns{ display:flex; flex-wrap:wrap; gap:12px; margin-top:18px; }
 
-        .project-header {
-            text-align: center;
-            margin-bottom: 40px;
-            padding: 40px 0;
-            background: linear-gradient(135deg, #2196F3, #1976D2);
-            color: white;
-            border-radius: 10px;
-        }
+  /* Section shell */
+  .sec{ max-width:1240px; margin:0 auto; padding:26px 28px; }
+  .sec-rule{ border-top:3px solid #222; padding-top:16px; }
+  .sec .tab{ margin-bottom:14px; }
+  .sec h2{ font-size:1.7rem; font-weight:900; line-height:1.06; }
+  .sec .intro{ color:#333; font-size:1.02rem; margin-top:10px; max-width:80%; }
+  .sec .body{ color:#333; font-size:1rem; margin-top:10px; max-width:80%; }
 
-        .project-header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
+  /* Code block */
+  .codeblock{ border:1px solid var(--hair); margin-top:16px; }
+  .code-bar{ display:flex; align-items:center; justify-content:space-between; gap:12px; background:var(--navy); color:#fff; padding:8px 12px; }
+  .code-bar .path{ font-family:"Courier New", monospace; font-size:.74rem; letter-spacing:.2px; opacity:.96; display:flex; align-items:center; gap:7px; min-width:0; }
+  .code-bar .path span{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .code-copy{ flex:none; background:none; border:1px solid rgba(255,255,255,.4); color:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.56rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; padding:5px 11px; cursor:pointer; transition:.15s; }
+  .code-copy:hover{ background:rgba(255,255,255,.16); }
+  .codeblock pre{ margin:0; padding:14px 16px; overflow-x:auto; background:var(--code-bg); }
+  .codeblock code{ font-family:"Courier New", monospace; font-size:.82rem; line-height:1.6; color:#1b2a3a; background:none; padding:0; white-space:pre; display:block; }
+  .codeblock code .cmt{ color:var(--cmt); font-style:italic; }
 
-        .project-header p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
+  .tree .code-bar .path::before{ content:"📁"; }
 
-        .badges {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin: 20px 0;
-            flex-wrap: wrap;
-        }
+  /* Notes */
+  .note-block{ margin-top:22px; }
+  .note-block h3{ font-size:1.15rem; font-weight:800; }
+  .blist{ list-style:none; margin-top:12px; border-top:1px solid var(--hair); }
+  .blist li{ padding:12px 0; border-bottom:1px solid var(--hair); color:#333; font-size:.95rem; }
+  .blist li b{ color:#222; }
 
-        .badge {
-            background-color: rgba(255, 255, 255, 0.2);
-            color: white;
-            padding: 5px 12px;
-            border-radius: 15px;
-            font-size: 0.9rem;
-        }
+  /* CTA */
+  .cta-inner{ display:flex; align-items:center; gap:18px; flex-wrap:wrap; border-top:3px solid #222; padding-top:18px; }
+  .cta-inner h3{ font-size:1.4rem; font-weight:900; line-height:1.08; }
+  .cta-inner p{ color:var(--gray); font-size:.95rem; margin-top:4px; }
+  .cta-btns{ margin-left:auto; display:flex; gap:12px; flex-wrap:wrap; }
 
-        .content-section {
-            margin: 40px 0;
-            padding: 30px;
-            background-color: #f9f9f9;
-            border-radius: 8px;
-            border-left: 5px solid #2196F3;
-        }
+  footer{ background:#222; max-width:1240px; margin:30px auto 0; padding:24px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; letter-spacing:.5px; color:#fff; text-align:center; }
+  .note{ max-width:1240px; margin:14px auto 0; padding:8px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.62rem; letter-spacing:1px; color:#999; }
 
-        .content-section h2 {
-            color: #2196F3;
-            margin-bottom: 20px;
-            font-size: 1.8rem;
-        }
+  /* Drawer (shared) */
+  .drawer{ position:fixed; top:0; left:-300px; width:280px; height:100vh; background:#fff; z-index:200; box-shadow:2px 0 14px rgba(0,0,0,.15); transition:left .28s ease; padding:74px 26px 26px; }
+  .drawer.open{ left:0; }
+  .drawer a{ display:block; font-family:Arial, Helvetica, sans-serif; font-size:.82rem; letter-spacing:1.2px; text-transform:uppercase; padding:14px 0; border-bottom:1px solid var(--hair); }
+  .overlay{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:150; }
+  .overlay.open{ display:block; }
+  .drawer-close{ position:absolute; top:20px; right:20px; font-family:Arial, Helvetica, sans-serif; font-size:1.4rem; background:none; border:none; cursor:pointer; }
 
-        .content-section h3 {
-            color: #333;
-            margin: 20px 0 10px 0;
-            font-size: 1.3rem;
-        }
-
-        .highlight-box {
-            background: linear-gradient(135deg, #FFF8E1, #FFF3C4);
-            padding: 20px;
-            border-radius: 10px;
-            border-left: 5px solid #2196F3;
-            margin: 20px 0;
-        }
-
-        .code-container {
-            background-color: #1e1e1e;
-            border-radius: 8px;
-            padding: 20px;
-            margin: 20px 0;
-            overflow-x: auto;
-        }
-
-        .code-header {
-            color: #569cd6;
-            font-weight: bold;
-            margin-bottom: 15px;
-            font-size: 1.1rem;
-            border-bottom: 1px solid #333;
-            padding-bottom: 10px;
-        }
-
-        .code-block {
-            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-            font-size: 14px;
-            line-height: 1.5;
-            color: #d4d4d4;
-        }
-
-        .code-comment {
-            color: #6a9955;
-            font-style: italic;
-        }
-
-        .code-keyword {
-            color: #569cd6;
-        }
-
-        .code-string {
-            color: #ce9178;
-        }
-
-        .code-function {
-            color: #dcdcaa;
-        }
-
-        .code-number {
-            color: #b5cea8;
-        }
-
-        .demo-links {
-            text-align: center;
-            margin: 30px 0;
-        }
-
-        .demo-btn {
-            display: inline-block;
-            background-color: #007BFF;
-            color: white;
-            padding: 12px 25px;
-            text-decoration: none;
-            border-radius: 5px;
-            margin: 0 10px;
-            font-weight: bold;
-            transition: background-color 0.3s;
-        }
-
-        .demo-btn:hover {
-            background-color: #0056b3;
-        }
-
-        .demo-btn.secondary {
-            background-color: #28a745;
-        }
-
-        .demo-btn.secondary:hover {
-            background-color: #218838;
-        }
-
-        @media (max-width: 768px) {
-            .project-header h1 {
-                font-size: 2rem;
-            }
-
-            .project-header p {
-                font-size: 1rem;
-            }
-
-            .demo-btn {
-                margin: 5px;
-                padding: 10px 20px;
-            }
-
-            .container {
-                padding: 15px;
-            }
-        }
-    </style>
+  @media (max-width:900px){
+    .cta-btns{ margin-left:0; }
+    .mast-nav{ display:none; }
+    .hamburger{ display:flex; }
+    .masthead{ padding:12px 16px; }
+    .mast-left{ gap:10px; min-width:0; flex:1; }
+    .logo{ font-size:.72rem; letter-spacing:1.5px; padding:6px 8px; }
+    .search-box{ flex:1; width:auto; min-width:0; }
+    .search-results{ position:fixed; top:58px; left:12px; right:12px; width:auto; max-width:none; }
+    .src-head h1{ font-size:1.95rem; }
+    .cover-strip img{ height:150px; }
+  }
+</style>
 </head>
 <body>
-    <div class="container">
-        <nav class="back-nav">
-            <a href="ai-pdf-summarizer.html">← Back to Project Overview</a>
-        </nav>
 
-        <div class="project-header">
-            <h1>📄 AI PDF Summarizer</h1>
-            <p>Core Source Code & Document Processing Implementation</p>
+  <div class="overlay" id="overlay"></div>
+  <nav class="drawer" id="drawer">
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">&times;</button>
+    <a href="index.html">Home</a>
+    <a href="project-categories.html">Categories</a>
+    <a href="contact.html">Contact</a>
+    <a href="https://lyven81.github.io/data-analyst-portfolio/index.html">Data Portfolio</a>
+  </nav>
 
-            <div class="badges">
-                <span class="badge">Python 3.9</span>
-                <span class="badge">Streamlit</span>
-                <span class="badge">Gemini AI</span>
-                <span class="badge">PDF Processing</span>
-            </div>
-        </div>
-
-        <div class="highlight-box">
-            <h3>🔍 About This Code Showcase</h3>
-            <p><strong>This curated code snippet demonstrates how the AI PDF Summarizer extracts, processes, and intelligently summarizes complex PDF documents using advanced NLP techniques.</strong></p>
-            <p>Full deployment scripts, API integrations, and proprietary details are omitted for clarity and security. This showcase highlights the core document processing and AI summarization algorithms.</p>
-        </div>
-
-        <div class="content-section">
-            <h2>📖 Core Algorithm: Document Intelligence Engine</h2>
-            <p>The foundation of the AI PDF Summarizer is its ability to extract meaningful content from PDFs, understand document structure, and generate intelligent summaries tailored to user needs:</p>
-
-            <div class="code-container">
-                <div class="code-header">📄 document_processor.py</div>
-                <div class="code-block">
-<span class="code-keyword">import</span> PyPDF2
-<span class="code-keyword">import</span> google.generativeai <span class="code-keyword">as</span> genai
-<span class="code-keyword">from</span> typing <span class="code-keyword">import</span> List, Dict, Optional
-<span class="code-keyword">import</span> re
-
-<span class="code-keyword">class</span> <span class="code-function">DocumentProcessor</span>:
-    <span class="code-string">"""
-    Advanced PDF processing engine that extracts, analyzes, and summarizes
-    complex documents while preserving important context and structure.
-    """</span>
-
-    <span class="code-keyword">def</span> <span class="code-function">__init__</span>(self, api_key: str):
-        genai.configure(api_key=api_key)
-        self.model = genai.GenerativeModel(<span class="code-string">'gemini-pro'</span>)
-
-        <span class="code-comment"># Pre-configured summarization strategies for different document types</span>
-        self.summarization_strategies = {
-            <span class="code-string">'research_paper'</span>: self._research_paper_strategy,
-            <span class="code-string">'business_report'</span>: self._business_report_strategy,
-            <span class="code-string">'technical_manual'</span>: self._technical_manual_strategy,
-            <span class="code-string">'legal_document'</span>: self._legal_document_strategy,
-            <span class="code-string">'general'</span>: self._general_strategy
-        }
-
-    <span class="code-keyword">def</span> <span class="code-function">process_pdf_intelligent</span>(self, pdf_file, summary_type: str = <span class="code-string">'general'</span>) -> Dict:
-        <span class="code-string">"""
-        Process PDF with intelligent content analysis and context-aware summarization.
-
-        Args:
-            pdf_file: Uploaded PDF file object
-            summary_type: Type of document for specialized processing
-
-        Returns:
-            Dictionary containing extracted text, document metadata, and AI summary
-        """</span>
-
-        <span class="code-comment"># Step 1: Extract raw content with structure preservation</span>
-        extracted_content = self._extract_structured_content(pdf_file)
-
-        <span class="code-comment"># Step 2: Analyze document characteristics and type</span>
-        document_analysis = self._analyze_document_structure(extracted_content)
-
-        <span class="code-comment"># Step 3: Apply intelligent chunking for large documents</span>
-        content_chunks = self._intelligent_chunking(extracted_content, document_analysis)
-
-        <span class="code-comment"># Step 4: Generate context-aware summary using appropriate strategy</span>
-        strategy = self.summarization_strategies.get(summary_type, self._general_strategy)
-        summary = <span class="code-keyword">await</span> strategy(content_chunks, document_analysis)
-
-        <span class="code-keyword">return</span> {
-            <span class="code-string">'original_text'</span>: extracted_content[<span class="code-string">'full_text'</span>],
-            <span class="code-string">'document_metadata'</span>: document_analysis,
-            <span class="code-string">'summary'</span>: summary,
-            <span class="code-string">'key_insights'</span>: summary[<span class="code-string">'insights'</span>],
-            <span class="code-string">'processing_stats'</span>: self._generate_processing_stats(extracted_content, summary)
-        }
-
-    <span class="code-keyword">def</span> <span class="code-function">_extract_structured_content</span>(self, pdf_file) -> Dict:
-        <span class="code-string">"""
-        Extract content while preserving document structure, headers, and formatting.
-        This enables better understanding of document hierarchy and importance.
-        """</span>
-
-        pdf_reader = PyPDF2.PdfReader(pdf_file)
-        content_structure = {
-            <span class="code-string">'full_text'</span>: <span class="code-string">''</span>,
-            <span class="code-string">'pages'</span>: [],
-            <span class="code-string">'headers'</span>: [],
-            <span class="code-string">'sections'</span>: [],
-            <span class="code-string">'metadata'</span>: pdf_reader.metadata
-        }
-
-        <span class="code-keyword">for</span> page_num, page <span class="code-keyword">in</span> enumerate(pdf_reader.pages):
-            page_text = page.extract_text()
-
-            <span class="code-comment"># Detect headers and section breaks using typography patterns</span>
-            headers = self._detect_headers(page_text)
-            sections = self._identify_sections(page_text, headers)
-
-            content_structure[<span class="code-string">'pages'</span>].append({
-                <span class="code-string">'page_number'</span>: page_num + <span class="code-number">1</span>,
-                <span class="code-string">'text'</span>: page_text,
-                <span class="code-string">'headers'</span>: headers,
-                <span class="code-string">'sections'</span>: sections
-            })
-
-            content_structure[<span class="code-string">'full_text'</span>] += page_text + <span class="code-string">'\n\n'</span>
-            content_structure[<span class="code-string">'headers'</span>].extend(headers)
-            content_structure[<span class="code-string">'sections'</span>].extend(sections)
-
-        <span class="code-keyword">return</span> content_structure
-
-    <span class="code-keyword">def</span> <span class="code-function">_intelligent_chunking</span>(self, content: Dict, analysis: Dict) -> List[Dict]:
-        <span class="code-string">"""
-        Smart content chunking that respects document structure and context.
-        Prevents breaking related concepts across chunks for better AI processing.
-        """</span>
-
-        chunks = []
-        current_chunk = <span class="code-string">''</span>
-        max_chunk_size = <span class="code-number">4000</span>  <span class="code-comment"># Optimal for AI processing</span>
-
-        <span class="code-keyword">for</span> section <span class="code-keyword">in</span> content[<span class="code-string">'sections'</span>]:
-            section_text = section[<span class="code-string">'content'</span>]
-
-            <span class="code-comment"># If adding this section would exceed limit, finalize current chunk</span>
-            <span class="code-keyword">if</span> len(current_chunk) + len(section_text) > max_chunk_size:
-                <span class="code-keyword">if</span> current_chunk:  <span class="code-comment"># Don't add empty chunks</span>
-                    chunks.append({
-                        <span class="code-string">'content'</span>: current_chunk,
-                        <span class="code-string">'section_headers'</span>: self._extract_chunk_headers(current_chunk),
-                        <span class="code-string">'importance_score'</span>: self._calculate_importance(current_chunk, analysis)
-                    })
-                current_chunk = section_text
-            <span class="code-keyword">else</span>:
-                current_chunk += <span class="code-string">'\n\n'</span> + section_text
-
-        <span class="code-comment"># Add final chunk</span>
-        <span class="code-keyword">if</span> current_chunk:
-            chunks.append({
-                <span class="code-string">'content'</span>: current_chunk,
-                <span class="code-string">'section_headers'</span>: self._extract_chunk_headers(current_chunk),
-                <span class="code-string">'importance_score'</span>: self._calculate_importance(current_chunk, analysis)
-            })
-
-        <span class="code-comment"># Sort chunks by importance for prioritized processing</span>
-        <span class="code-keyword">return</span> sorted(chunks, key=<span class="code-keyword">lambda</span> x: x[<span class="code-string">'importance_score'</span>], reverse=<span class="code-keyword">True</span>)
-                </div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>🧠 Advanced Summarization Engine</h2>
-            <p>The summarization engine uses specialized strategies for different document types, ensuring optimal results for research papers, business reports, and technical manuals:</p>
-
-            <div class="code-container">
-                <div class="code-header">📄 summarization_engine.py</div>
-                <div class="code-block">
-<span class="code-keyword">class</span> <span class="code-function">SummarizationEngine</span>:
-    <span class="code-keyword">async</span> <span class="code-function">_research_paper_strategy</span>(self, chunks: List[Dict], analysis: Dict) -> Dict:
-        <span class="code-string">"""
-        Specialized summarization for academic research papers.
-        Focuses on methodology, findings, and implications.
-        """</span>
-
-        <span class="code-comment"># Identify key academic sections</span>
-        abstract_chunk = self._find_section(chunks, [<span class="code-string">'abstract'</span>, <span class="code-string">'summary'</span>])
-        methodology_chunk = self._find_section(chunks, [<span class="code-string">'methodology'</span>, <span class="code-string">'methods'</span>, <span class="code-string">'approach'</span>])
-        results_chunk = self._find_section(chunks, [<span class="code-string">'results'</span>, <span class="code-string">'findings'</span>, <span class="code-string">'outcomes'</span>])
-        conclusion_chunk = self._find_section(chunks, [<span class="code-string">'conclusion'</span>, <span class="code-string">'discussion'</span>, <span class="code-string">'implications'</span>])
-
-        <span class="code-comment"># Generate comprehensive research summary</span>
-        summary_prompt = f<span class="code-string">"""
-        Analyze this research paper and provide a comprehensive academic summary:
-
-        Document Analysis: {analysis}
-
-        Focus on:
-        1. Research question and objectives
-        2. Methodology and experimental design
-        3. Key findings and statistical significance
-        4. Limitations and future research directions
-        5. Practical implications and applications
-
-        Provide citations to specific sections where possible.
-        """</span>
-
-        research_summary = <span class="code-keyword">await</span> self._generate_ai_summary(
-            self._combine_priority_chunks([abstract_chunk, methodology_chunk, results_chunk, conclusion_chunk]),
-            summary_prompt
-        )
-
-        <span class="code-keyword">return</span> {
-            <span class="code-string">'summary_type'</span>: <span class="code-string">'research_paper'</span>,
-            <span class="code-string">'main_summary'</span>: research_summary,
-            <span class="code-string">'insights'</span>: <span class="code-keyword">await</span> self._extract_research_insights(chunks),
-            <span class="code-string">'key_sections'</span>: {
-                <span class="code-string">'methodology'</span>: methodology_chunk[<span class="code-string">'content'</span>][:<span class="code-number">500</span>] <span class="code-keyword">if</span> methodology_chunk <span class="code-keyword">else</span> <span class="code-string">None</span>,
-                <span class="code-string">'findings'</span>: results_chunk[<span class="code-string">'content'</span>][:500] <span class="code-keyword">if</span> results_chunk <span class="code-keyword">else</span> <span class="code-string">None</span>
-            }
-        }
-
-    <span class="code-keyword">async</span> <span class="code-function">_business_report_strategy</span>(self, chunks: List[Dict], analysis: Dict) -> Dict:
-        <span class="code-string">"""
-        Business-focused summarization emphasizing key metrics and actionable insights.
-        Optimized for executive summaries and strategic decision-making.
-        """</span>
-
-        <span class="code-comment"># Identify business-critical sections</span>
-        executive_summary = self._find_section(chunks, [<span class="code-string">'executive summary'</span>, <span class="code-string">'overview'</span>])
-        financial_data = self._find_section(chunks, [<span class="code-string">'financial'</span>, <span class="code-string">'revenue'</span>, <span class="code-string">'performance'</span>])
-        recommendations = self._find_section(chunks, [<span class="code-string">'recommendations'</span>, <span class="code-string">'action items'</span>, <span class="code-string">'next steps'</span>])
-
-        business_prompt = f<span class="code-string">"""
-        Summarize this business document for executive review:
-
-        Document Type: {analysis.get('document_type', 'Business Report')}
-
-        Extract and highlight:
-        1. Key performance indicators and metrics
-        2. Strategic recommendations and action items
-        3. Risk factors and opportunities
-        4. Financial implications and ROI
-        5. Timeline and implementation priorities
-
-        Format for executive consumption with clear bullet points.
-        """</span>
-
-        business_summary = <span class="code-keyword">await</span> self._generate_ai_summary(
-            self._combine_priority_chunks([executive_summary, financial_data, recommendations]),
-            business_prompt
-        )
-
-        <span class="code-keyword">return</span> {
-            <span class="code-string">'summary_type'</span>: <span class="code-string">'business_report'</span>,
-            <span class="code-string">'main_summary'</span>: business_summary,
-            <span class="code-string">'insights'</span>: <span class="code-keyword">await</span> self._extract_business_insights(chunks),
-            <span class="code-string">'action_items'</span>: <span class="code-keyword">await</span> self._extract_action_items(chunks),
-            <span class="code-string">'metrics'</span>: <span class="code-keyword">await</span> self._extract_key_metrics(chunks)
-        }
-
-    <span class="code-keyword">def</span> <span class="code-function">_analyze_document_structure</span>(self, content: Dict) -> Dict:
-        <span class="code-string">"""
-        Analyze document characteristics to determine optimal processing strategy.
-        Uses pattern recognition to classify document type and complexity.
-        """</span>
-
-        full_text = content[<span class="code-string">'full_text'</span>].lower()
-        headers = [h.lower() <span class="code-keyword">for</span> h <span class="code-keyword">in</span> content[<span class="code-string">'headers'</span>]]
-
-        <span class="code-comment"># Pattern matching for document type classification</span>
-        doc_type = <span class="code-string">'general'</span>
-
-        <span class="code-keyword">if</span> any(keyword <span class="code-keyword">in</span> full_text <span class="code-keyword">for</span> keyword <span class="code-keyword">in</span> [<span class="code-string">'abstract'</span>, <span class="code-string">'methodology'</span>, <span class="code-string">'references'</span>, <span class="code-string">'citation'</span>]):
-            doc_type = <span class="code-string">'research_paper'</span>
-        <span class="code-keyword">elif</span> any(keyword <span class="code-keyword">in</span> full_text <span class="code-keyword">for</span> keyword <span class="code-keyword">in</span> [<span class="code-string">'revenue'</span>, <span class="code-string">'quarterly'</span>, <span class="code-string">'executive summary'</span>, <span class="code-string">'roi'</span>]):
-            doc_type = <span class="code-string">'business_report'</span>
-        <span class="code-keyword">elif</span> any(keyword <span class="code-keyword">in</span> full_text <span class="code-keyword">for</span> keyword <span class="code-keyword">in</span> [<span class="code-string">'installation'</span>, <span class="code-string">'configuration'</span>, <span class="code-string">'user manual'</span>, <span class="code-string">'api'</span>]):
-            doc_type = <span class="code-string">'technical_manual'</span>
-
-        <span class="code-keyword">return</span> {
-            <span class="code-string">'document_type'</span>: doc_type,
-            <span class="code-string">'page_count'</span>: len(content[<span class="code-string">'pages'</span>]),
-            <span class="code-string">'word_count'</span>: len(content[<span class="code-string">'full_text'</span>].split()),
-            <span class="code-string">'complexity_score'</span>: self._calculate_complexity(content),
-            <span class="code-string">'section_count'</span>: len(content[<span class="code-string">'sections'</span>]),
-            <span class="code-string">'has_structured_content'</span>: len(headers) > <span class="code-number">3</span>
-        }
-                </div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>⚙️ Technical Implementation Notes</h2>
-            <h3>Key Algorithms & Innovations</h3>
-            <ul style="margin: 15px 0; padding-left: 20px;">
-                <li><strong>Intelligent Chunking:</strong> Context-aware content segmentation that preserves document structure</li>
-                <li><strong>Document Classification:</strong> Automated document type detection for specialized processing strategies</li>
-                <li><strong>Structure Preservation:</strong> Advanced header and section detection maintains document hierarchy</li>
-                <li><strong>Multi-Strategy Summarization:</strong> Specialized algorithms for research papers, business reports, and technical documents</li>
-                <li><strong>Importance Scoring:</strong> Priority-based content processing ensures critical information is highlighted</li>
-            </ul>
-
-            <h3>Why This Approach Works</h3>
-            <ul style="margin: 15px 0; padding-left: 20px;">
-                <li><strong>Context-Aware Processing:</strong> Understands document structure for more accurate summarization</li>
-                <li><strong>Scalable Architecture:</strong> Handles documents from single pages to 100+ page reports</li>
-                <li><strong>Domain Expertise:</strong> Specialized strategies deliver relevant insights for different document types</li>
-                <li><strong>Quality Assurance:</strong> Multiple validation steps ensure summary accuracy and completeness</li>
-            </ul>
-        </div>
-
-        <div class="demo-links">
-            <a href="https://ai-pdf-summarizer-169218045868.us-west1.run.app/" target="_blank" class="demo-btn">🚀 Try Live Demo</a>
-            <a href="ai-pdf-summarizer.html" class="demo-btn secondary">📖 View Full Project Details</a>
-        </div>
-
-        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
-            <a href="index.html">← Back to Portfolio</a> |
-            <a href="ai-pdf-summarizer.html">View Project Overview</a>
-        </nav>
+  <div class="masthead">
+    <div class="mast-left">
+      <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+      <a class="logo" href="index.html">AI PROJECTS</a>
+      <nav class="mast-nav">
+        <a href="project-categories.html">Categories</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <div class="search-box">
+        <input type="text" class="search-input" id="searchInput" autocomplete="off" placeholder="Search AI projects..." aria-label="Search AI projects">
+        <span class="search-ic">&#128269;</span>
+        <div class="search-results" id="searchResults"></div>
+      </div>
     </div>
+  </div>
+  <hr class="rule-top">
+
+  <div class="crumb">
+    <a href="project-categories.html">Categories</a>
+    <span class="sep">/</span><a id="crumbCat" href="#"></a>
+    <span class="sep">/</span><a id="crumbProj" href="#"></a>
+    <span class="sep">/</span><span>Source</span>
+  </div>
+
+  <section class="src-head">
+    <div class="cover-strip" id="coverStrip" style="display:none"><img id="cover" alt=""></div>
+    <span class="rubric" id="kicker"></span>
+    <h1 id="title"></h1>
+    <p class="sub" id="subtitle"></p>
+    <div class="head-tech" id="headTech"></div>
+    <div class="head-btns" id="headBtns"></div>
+  </section>
+
+  <div id="body"></div>
+
+  <footer>&copy; 2026 Lee Yih Ven | AI Project Portfolio &middot; All rights reserved.</footer>
+  <div class="note">Sample Source-Showcase-E2 (TEMPLATE): source-code page on the index magazine system: slim cover banner, About, Project Structure, code walkthrough with copyable navy-barred code blocks, CTA. Reuse by editing only the PROJECT block at the top of the script.</div>
+
+<script>
+  const SITE = "";
+
+  /* =================================================================
+     EDIT PER PROJECT  -  the ONLY block you change per page.
+     Copy this file, swap PROJECT, save as <slug>-source.html.
+     - structure.code : the project file tree (plain text)
+     - walkthrough[]   : { heading, body, files:[{label, code}] }
+     - notes[]         : { heading, bullets:[...] }
+     Code strings can be multi-line; they render verbatim.
+     ================================================================= */
+  const PROJECT = {
+  "slug": "ai-pdf-summarizer",
+  "category": "Document & Productivity Tools",
+  "categoryUrl": "category-document-productivity.html",
+  "title": "Claude PDF Summarizer",
+  "subtitle": "Core Source Code & Document Processing Implementation.",
+  "cover": "images/ai-pdf-summarizer/cover.jpeg",
+  "tech": [
+    "Python 3.9",
+    "Streamlit",
+    "Gemini AI",
+    "PDF Processing"
+  ],
+  "overviewUrl": "ai-pdf-summarizer.html",
+  "demoLabel": "Try Live Demo",
+  "demoUrl": "https://summarizer-218391175125.asia-southeast1.run.app/",
+  "repoUrl": "https://github.com/lyven81/ai-project/tree/main/projects/claude-pdf-summarizer",
+  "about": "This curated code snippet demonstrates how the AI PDF Summarizer extracts, processes, and intelligently summarizes complex PDF documents using advanced NLP techniques. Full deployment scripts, API integrations, and proprietary details are omitted for clarity and security. This showcase highlights the core document processing and AI summarization algorithms.",
+  "walkthrough": [
+    {
+      "heading": "Core Algorithm: Document Intelligence Engine",
+      "body": "The foundation of the AI PDF Summarizer is its ability to extract meaningful content from PDFs, understand document structure, and generate intelligent summaries tailored to user needs.",
+      "files": [
+        {
+          "label": "document_processor.py",
+          "code": "import PyPDF2\nimport google.generativeai as genai\nfrom typing import List, Dict, Optional\nimport re\n\nclass DocumentProcessor:\n    \"\"\"\n    Advanced PDF processing engine that extracts, analyzes, and summarizes\n    complex documents while preserving important context and structure.\n    \"\"\"\n\n    def __init__(self, api_key: str):\n        genai.configure(api_key=api_key)\n        self.model = genai.GenerativeModel('gemini-pro')\n\n        # Pre-configured summarization strategies for different document types\n        self.summarization_strategies = {\n            'research_paper': self._research_paper_strategy,\n            'business_report': self._business_report_strategy,\n            'technical_manual': self._technical_manual_strategy,\n            'legal_document': self._legal_document_strategy,\n            'general': self._general_strategy\n        }\n\n    def process_pdf_intelligent(self, pdf_file, summary_type: str = 'general') -> Dict:\n        \"\"\"\n        Process PDF with intelligent content analysis and context-aware summarization.\n\n        Args:\n            pdf_file: Uploaded PDF file object\n            summary_type: Type of document for specialized processing\n\n        Returns:\n            Dictionary containing extracted text, document metadata, and AI summary\n        \"\"\"\n\n        # Step 1: Extract raw content with structure preservation\n        extracted_content = self._extract_structured_content(pdf_file)\n\n        # Step 2: Analyze document characteristics and type\n        document_analysis = self._analyze_document_structure(extracted_content)\n\n        # Step 3: Apply intelligent chunking for large documents\n        content_chunks = self._intelligent_chunking(extracted_content, document_analysis)\n\n        # Step 4: Generate context-aware summary using appropriate strategy\n        strategy = self.summarization_strategies.get(summary_type, self._general_strategy)\n        summary = await strategy(content_chunks, document_analysis)\n\n        return {\n            'original_text': extracted_content['full_text'],\n            'document_metadata': document_analysis,\n            'summary': summary,\n            'key_insights': summary['insights'],\n            'processing_stats': self._generate_processing_stats(extracted_content, summary)\n        }\n\n    def _extract_structured_content(self, pdf_file) -> Dict:\n        \"\"\"\n        Extract content while preserving document structure, headers, and formatting.\n        This enables better understanding of document hierarchy and importance.\n        \"\"\"\n\n        pdf_reader = PyPDF2.PdfReader(pdf_file)\n        content_structure = {\n            'full_text': '',\n            'pages': [],\n            'headers': [],\n            'sections': [],\n            'metadata': pdf_reader.metadata\n        }\n\n        for page_num, page in enumerate(pdf_reader.pages):\n            page_text = page.extract_text()\n\n            # Detect headers and section breaks using typography patterns\n            headers = self._detect_headers(page_text)\n            sections = self._identify_sections(page_text, headers)\n\n            content_structure['pages'].append({\n                'page_number': page_num + 1,\n                'text': page_text,\n                'headers': headers,\n                'sections': sections\n            })\n\n            content_structure['full_text'] += page_text + '\n\n'\n            content_structure['headers'].extend(headers)\n            content_structure['sections'].extend(sections)\n\n        return content_structure\n\n    def _intelligent_chunking(self, content: Dict, analysis: Dict) -> List[Dict]:\n        \"\"\"\n        Smart content chunking that respects document structure and context.\n        Prevents breaking related concepts across chunks for better AI processing.\n        \"\"\"\n\n        chunks = []\n        current_chunk = ''\n        max_chunk_size = 4000  # Optimal for AI processing\n\n        for section in content['sections']:\n            section_text = section['content']\n\n            # If adding this section would exceed limit, finalize current chunk\n            if len(current_chunk) + len(section_text) > max_chunk_size:\n                if current_chunk:  # Don't add empty chunks\n                    chunks.append({\n                        'content': current_chunk,\n                        'section_headers': self._extract_chunk_headers(current_chunk),\n                        'importance_score': self._calculate_importance(current_chunk, analysis)\n                    })\n                current_chunk = section_text\n            else:\n                current_chunk += '\n\n' + section_text\n\n        # Add final chunk\n        if current_chunk:\n            chunks.append({\n                'content': current_chunk,\n                'section_headers': self._extract_chunk_headers(current_chunk),\n                'importance_score': self._calculate_importance(current_chunk, analysis)\n            })\n\n        # Sort chunks by importance for prioritized processing\n        return sorted(chunks, key=lambda x: x['importance_score'], reverse=True)"
+        }
+      ]
+    },
+    {
+      "heading": "Advanced Summarization Engine",
+      "body": "The summarization engine uses specialized strategies for different document types, ensuring optimal results for research papers, business reports, and technical manuals.",
+      "files": [
+        {
+          "label": "summarization_engine.py",
+          "code": "class SummarizationEngine:\n    async _research_paper_strategy(self, chunks: List[Dict], analysis: Dict) -> Dict:\n        \"\"\"\n        Specialized summarization for academic research papers.\n        Focuses on methodology, findings, and implications.\n        \"\"\"\n\n        # Identify key academic sections\n        abstract_chunk = self._find_section(chunks, ['abstract', 'summary'])\n        methodology_chunk = self._find_section(chunks, ['methodology', 'methods', 'approach'])\n        results_chunk = self._find_section(chunks, ['results', 'findings', 'outcomes'])\n        conclusion_chunk = self._find_section(chunks, ['conclusion', 'discussion', 'implications'])\n\n        # Generate comprehensive research summary\n        summary_prompt = f\"\"\"\n        Analyze this research paper and provide a comprehensive academic summary:\n\n        Document Analysis: {analysis}\n\n        Focus on:\n        1. Research question and objectives\n        2. Methodology and experimental design\n        3. Key findings and statistical significance\n        4. Limitations and future research directions\n        5. Practical implications and applications\n\n        Provide citations to specific sections where possible.\n        \"\"\"\n\n        research_summary = await self._generate_ai_summary(\n            self._combine_priority_chunks([abstract_chunk, methodology_chunk, results_chunk, conclusion_chunk]),\n            summary_prompt\n        )\n\n        return {\n            'summary_type': 'research_paper',\n            'main_summary': research_summary,\n            'insights': await self._extract_research_insights(chunks),\n            'key_sections': {\n                'methodology': methodology_chunk['content'][:500] if methodology_chunk else None,\n                'findings': results_chunk['content'][:500] if results_chunk else None\n            }\n        }\n\n    async _business_report_strategy(self, chunks: List[Dict], analysis: Dict) -> Dict:\n        \"\"\"\n        Business-focused summarization emphasizing key metrics and actionable insights.\n        Optimized for executive summaries and strategic decision-making.\n        \"\"\"\n\n        # Identify business-critical sections\n        executive_summary = self._find_section(chunks, ['executive summary', 'overview'])\n        financial_data = self._find_section(chunks, ['financial', 'revenue', 'performance'])\n        recommendations = self._find_section(chunks, ['recommendations', 'action items', 'next steps'])\n\n        business_prompt = f\"\"\"\n        Summarize this business document for executive review:\n\n        Document Type: {analysis.get('document_type', 'Business Report')}\n\n        Extract and highlight:\n        1. Key performance indicators and metrics\n        2. Strategic recommendations and action items\n        3. Risk factors and opportunities\n        4. Financial implications and ROI\n        5. Timeline and implementation priorities\n\n        Format for executive consumption with clear bullet points.\n        \"\"\"\n\n        business_summary = await self._generate_ai_summary(\n            self._combine_priority_chunks([executive_summary, financial_data, recommendations]),\n            business_prompt\n        )\n\n        return {\n            'summary_type': 'business_report',\n            'main_summary': business_summary,\n            'insights': await self._extract_business_insights(chunks),\n            'action_items': await self._extract_action_items(chunks),\n            'metrics': await self._extract_key_metrics(chunks)\n        }\n\n    def _analyze_document_structure(self, content: Dict) -> Dict:\n        \"\"\"\n        Analyze document characteristics to determine optimal processing strategy.\n        Uses pattern recognition to classify document type and complexity.\n        \"\"\"\n\n        full_text = content['full_text'].lower()\n        headers = [h.lower() for h in content['headers']]\n\n        # Pattern matching for document type classification\n        doc_type = 'general'\n\n        if any(keyword in full_text for keyword in ['abstract', 'methodology', 'references', 'citation']):\n            doc_type = 'research_paper'\n        elif any(keyword in full_text for keyword in ['revenue', 'quarterly', 'executive summary', 'roi']):\n            doc_type = 'business_report'\n        elif any(keyword in full_text for keyword in ['installation', 'configuration', 'user manual', 'api']):\n            doc_type = 'technical_manual'\n\n        return {\n            'document_type': doc_type,\n            'page_count': len(content['pages']),\n            'word_count': len(content['full_text'].split()),\n            'complexity_score': self._calculate_complexity(content),\n            'section_count': len(content['sections']),\n            'has_structured_content': len(headers) > 3\n        }"
+        }
+      ]
+    }
+  ],
+  "cta": "Want an AI document-processing tool like this built for your own workflow? Let's scope it."
+};
+  /* ===================== END EDIT BLOCK ===================== */
+
+  const pref = (u) => /^https?:|^mailto:|^tel:/.test(u || '') ? u : (SITE + (u || ''));
+  const esc = (s) => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const rich = (s) => esc(s).replace(/&lt;(\/?(?:b|code))&gt;/g, '<$1>');
+
+  // raw code store for copy buttons
+  const RAW = [];
+  function codeBlock(label, codeStr, extraClass){
+    const idx = RAW.push(codeStr) - 1;
+    const rendered = esc(codeStr).split('\n')
+      .map(line => /^\s*#/.test(line) ? `<span class="cmt">${line}</span>` : line).join('\n');
+    return `<div class="codeblock ${extraClass||''}">`+
+      `<div class="code-bar"><span class="path"><span>${esc(label)}</span></span>`+
+      `<button class="code-copy" data-idx="${idx}">Copy</button></div>`+
+      `<pre><code>${rendered}</code></pre></div>`;
+  }
+
+  // Breadcrumb + header
+  document.title = PROJECT.title + ": Source | AI Project Portfolio";
+  document.getElementById('crumbCat').textContent = PROJECT.category;
+  document.getElementById('crumbCat').href = pref(PROJECT.categoryUrl);
+  document.getElementById('crumbProj').textContent = PROJECT.title;
+  document.getElementById('crumbProj').href = pref(PROJECT.overviewUrl);
+  if (PROJECT.cover){
+    document.getElementById('coverStrip').style.display = '';
+    const c = document.getElementById('cover'); c.src = PROJECT.cover; c.alt = PROJECT.title + " cover";
+  }
+  document.getElementById('kicker').textContent = "Source Walkthrough · " + PROJECT.category;
+  document.getElementById('title').textContent = PROJECT.title;
+  document.getElementById('subtitle').textContent = PROJECT.subtitle;
+  document.getElementById('headTech').innerHTML = (PROJECT.tech||[]).map(t => `<span class="tech-chip">${esc(t)}</span>`).join('');
+  document.getElementById('headBtns').innerHTML =
+    (PROJECT.demoUrl ? `<a class="btn" href="${pref(PROJECT.demoUrl)}" target="_blank" rel="noopener">${esc(PROJECT.demoLabel||'Live Demo')}</a>` : '') +
+    (PROJECT.overviewUrl ? `<a class="btn ghost" href="${pref(PROJECT.overviewUrl)}">Project Overview</a>` : '') +
+    (PROJECT.repoUrl ? `<a class="btn ghost" href="${pref(PROJECT.repoUrl)}" target="_blank" rel="noopener">GitHub Repo</a>` : '');
+
+  const section = (tab, inner) => `<section class="sec"><div class="sec-rule"><span class="tab">${esc(tab)}</span>${inner}</div></section>`;
+  let html = "";
+  const P = PROJECT;
+
+  if (P.about){
+    html += section("About This Code", `<h2>About This Code Showcase</h2><p class="intro">${rich(P.about)}</p>`);
+  }
+  if (P.structure && P.structure.code){
+    html += section("Project Structure", `<h2>Project Structure</h2>`+
+      codeBlock(P.structure.label || 'project/', P.structure.code, 'tree'));
+  }
+  (P.walkthrough||[]).forEach(w => {
+    let inner = `<h2>${esc(w.heading)}</h2>`;
+    if (w.body) inner += `<p class="body">${rich(w.body)}</p>`;
+    (w.files||[]).forEach(f => { inner += codeBlock(f.label, f.code); });
+    html += section("Code", inner);
+  });
+  // CTA
+  html += `<section class="sec"><div class="cta-inner">`+
+    `<div><h3>Interested in the build?</h3><p>${esc(P.cta || "Let's talk.")}</p></div>`+
+    `<div class="cta-btns">`+
+    (P.demoUrl ? `<a class="btn" href="${pref(P.demoUrl)}" target="_blank" rel="noopener">${esc(P.demoLabel||'Live Demo')}</a>` : '')+
+    `<a class="btn ghost" href="${SITE}contact.html">Get in Touch</a>`+
+    `</div></div></section>`;
+
+  document.getElementById('body').innerHTML = html;
+
+  // Copy buttons
+  function copyText(text, btn){
+    const done = ()=>{ const o=btn.textContent; btn.textContent='Copied ✓'; setTimeout(()=>btn.textContent=o.includes('Copied')?'Copy':o,1400); };
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(done).catch(()=>fb(text,done)); }
+    else fb(text,done);
+  }
+  function fb(text,done){ const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(ta); done(); }
+  document.querySelectorAll('.code-copy').forEach(btn =>
+    btn.addEventListener('click', ()=> copyText(RAW[+btn.dataset.idx], btn)));
+
+  // Masthead search
+  const ITEMS = [
+    {t:PROJECT.title, c:PROJECT.category, s:PROJECT.slug},
+    {t:"Courier CS Quality Console", c:"Conversational Data Analytics", s:"courier-cs-quality-console"},
+    {t:"Voucher Analyzer", c:"Conversational Data Analytics", s:"voucher-analyzer"},
+    {t:"Wiseman", c:"Knowledge & Reference Chatbots", s:"wiseman"},
+    {t:"Sunny Car Accessories", c:"Agentic Commerce", s:"sunny-car-accessories"},
+    {t:"Bookshelf", c:"Multi-Agent Decision Systems", s:"bookshelf"}
+  ];
+  const searchInput = document.getElementById('searchInput');
+  const searchResults = document.getElementById('searchResults');
+  function runSearch(q){
+    if(q.trim().length < 2){ searchResults.style.display='none'; return; }
+    const ql = q.toLowerCase();
+    const hits = ITEMS.filter(it => (it.t+' '+it.c).toLowerCase().includes(ql));
+    searchResults.innerHTML = hits.length ? hits.map(it =>
+      `<div class="sr-item"><div class="sr-cat">${esc(it.c)}</div>`+
+      `<a href="${SITE}${it.s}.html"><div class="sr-title">${esc(it.t)}</div></a>`+
+      `<div class="sr-links"><a href="${SITE}${it.s}.html">View Details</a></div></div>`).join('')
+      : `<div class="sr-none">No projects found. Try a different keyword.</div>`;
+    searchResults.style.display='block';
+  }
+  searchInput.addEventListener('input', e => runSearch(e.target.value));
+  document.addEventListener('click', e => { if(!e.target.closest('.search-box')) searchResults.style.display='none'; });
+
+  // Drawer
+  const drawer=document.getElementById('drawer'), overlay=document.getElementById('overlay');
+  const openMenu=()=>{ drawer.classList.add('open'); overlay.classList.add('open'); };
+  const closeMenu=()=>{ drawer.classList.remove('open'); overlay.classList.remove('open'); };
+  document.getElementById('hamburger').addEventListener('click', openMenu);
+  document.getElementById('drawerClose').addEventListener('click', closeMenu);
+  overlay.addEventListener('click', closeMenu);
+  drawer.querySelectorAll('a').forEach(a=>a.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeMenu(); searchResults.style.display='none'; }});
+</script>
 </body>
 </html>

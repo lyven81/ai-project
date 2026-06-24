@@ -1,333 +1,339 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tarot Guru — Source Code</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tarot Guru: Source | AI Project Portfolio</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root{ --ink:#222; --paper:#fff; --hair:#dddddd; --gray:#555; --accent:#B8860B; --navy:#1E3A5F; --code-bg:#fbfbf8; --cmt:#6b8190; }
+  html{ scroll-behavior:smooth; }
+  body{ background:var(--paper); color:var(--ink); font-family:Arial, Helvetica, sans-serif; line-height:1.6; overflow-x:hidden; }
+  a{ color:inherit; text-decoration:none; }
+  a:hover h2, a:hover h3, a:hover h4{ color:var(--accent); }
+  p code, li code{ font-family:"Courier New", monospace; font-size:.86em; background:#f2f3f5; padding:1px 5px; color:var(--navy); }
 
-        body {
-            font-family: 'Arial', sans-serif;
-            line-height: 1.6;
-            color: #222;
-            background-color: #ffffff;
-        }
+  /* Masthead (shared) */
+  .masthead{ display:flex; align-items:center; justify-content:space-between; padding:14px 28px; max-width:1240px; margin:0 auto; gap:18px; }
+  .mast-left{ display:flex; align-items:center; gap:20px; }
+  .logo{ background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; letter-spacing:3px; font-size:.95rem; padding:8px 12px; white-space:nowrap; }
+  .mast-nav{ display:flex; gap:20px; font-family:Arial, Helvetica, sans-serif; font-size:.72rem; letter-spacing:1.4px; text-transform:uppercase; }
+  .mast-nav a:hover{ color:var(--accent); }
+  .hamburger{ display:none; flex-direction:column; gap:4px; background:none; border:none; cursor:pointer; padding:6px; }
+  .hamburger span{ width:22px; height:2px; background:#222; display:block; }
+  .rule-top{ border:none; border-top:3px solid #222; max-width:1240px; margin:0 auto; }
 
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+  /* Search (shared) */
+  .search-box{ position:relative; width:200px; }
+  .search-input{ width:100%; padding:7px 30px 7px 12px; border:1px solid var(--hair); background:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; color:#222; }
+  .search-input:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(184,134,11,.15); }
+  .search-ic{ position:absolute; right:10px; top:50%; transform:translateY(-50%); color:var(--gray); font-size:.8rem; pointer-events:none; }
+  .search-results{ position:absolute; top:calc(100% + 4px); left:0; width:340px; max-width:86vw; background:#fff; border:1px solid #222; max-height:60vh; overflow-y:auto; z-index:120; display:none; }
+  .sr-item{ padding:12px 14px; border-bottom:1px solid var(--hair); }
+  .sr-item:last-child{ border-bottom:none; }
+  .sr-cat{ font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; margin-bottom:4px; color:var(--accent); }
+  .sr-title{ font-weight:700; font-size:1.02rem; color:#222; }
+  .sr-links{ font-size:.58rem; letter-spacing:.8px; text-transform:uppercase; color:var(--gray); margin-top:5px; }
+  .sr-links a:hover{ color:var(--accent); }
+  .sr-none{ padding:16px 14px; font-size:.82rem; color:var(--gray); }
 
-        .back-nav {
-            margin-bottom: 20px;
-        }
+  /* Shared bits */
+  .tab{ display:inline-block; background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.66rem; letter-spacing:2px; text-transform:uppercase; padding:6px 12px; }
+  .rubric{ font-family:Arial, Helvetica, sans-serif; font-size:.62rem; font-weight:700; letter-spacing:1.6px; text-transform:uppercase; color:var(--accent); display:block; margin-bottom:8px; }
+  .tech-chip{ display:inline-block; border:1px solid var(--hair); padding:6px 12px; font-size:.72rem; letter-spacing:.3px; color:#333; white-space:nowrap; }
+  .tech-chip:hover{ border-color:var(--accent); color:var(--accent); }
+  .btn{ display:inline-block; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.7rem; letter-spacing:1.6px; text-transform:uppercase; padding:13px 24px; border:1px solid #222; background:#222; color:#fff; cursor:pointer; transition:.15s; }
+  .btn:hover{ background:var(--accent); border-color:var(--accent); }
+  .btn.ghost{ background:#fff; color:#222; }
+  .btn.ghost:hover{ color:var(--accent); border-color:var(--accent); background:#fff; }
 
-        .back-nav a {
-            color: #007BFF;
-            text-decoration: none;
-            font-size: 1rem;
-        }
+  /* Breadcrumb */
+  .crumb{ max-width:1240px; margin:0 auto; padding:20px 28px 0; font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--gray); }
+  .crumb a:hover{ color:var(--accent); }
+  .crumb .sep{ color:var(--hair); margin:0 8px; }
 
-        .back-nav a:hover {
-            text-decoration: underline;
-        }
+  /* Header (slim cover banner + copy) */
+  .src-head{ max-width:1240px; margin:0 auto; padding:14px 28px 6px; }
+  .cover-strip{ border:1px solid var(--hair); line-height:0; background:#eef1f4; }
+  .cover-strip img{ width:100%; height:190px; object-fit:cover; object-position:center 42%; display:block; }
+  .src-head h1{ font-size:2.5rem; font-weight:900; line-height:1.04; letter-spacing:-.008em; margin-top:18px; }
+  .src-head .sub{ font-style:italic; font-size:1.08rem; color:#333; margin-top:10px; max-width:72ch; }
+  .head-tech{ display:flex; flex-wrap:wrap; gap:9px; margin-top:16px; }
+  .head-btns{ display:flex; flex-wrap:wrap; gap:12px; margin-top:18px; }
 
-        .project-header {
-            text-align: center;
-            margin-bottom: 40px;
-            padding: 40px 0;
-            background: linear-gradient(135deg, #9C27B0, #6A1B9A);
-            color: white;
-            border-radius: 10px;
-        }
+  /* Section shell */
+  .sec{ max-width:1240px; margin:0 auto; padding:26px 28px; }
+  .sec-rule{ border-top:3px solid #222; padding-top:16px; }
+  .sec .tab{ margin-bottom:14px; }
+  .sec h2{ font-size:1.7rem; font-weight:900; line-height:1.06; }
+  .sec .intro{ color:#333; font-size:1.02rem; margin-top:10px; max-width:80%; }
+  .sec .body{ color:#333; font-size:1rem; margin-top:10px; max-width:80%; }
 
-        .project-header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
+  /* Code block */
+  .codeblock{ border:1px solid var(--hair); margin-top:16px; }
+  .code-bar{ display:flex; align-items:center; justify-content:space-between; gap:12px; background:var(--navy); color:#fff; padding:8px 12px; }
+  .code-bar .path{ font-family:"Courier New", monospace; font-size:.74rem; letter-spacing:.2px; opacity:.96; display:flex; align-items:center; gap:7px; min-width:0; }
+  .code-bar .path span{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .code-copy{ flex:none; background:none; border:1px solid rgba(255,255,255,.4); color:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.56rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; padding:5px 11px; cursor:pointer; transition:.15s; }
+  .code-copy:hover{ background:rgba(255,255,255,.16); }
+  .codeblock pre{ margin:0; padding:14px 16px; overflow-x:auto; background:var(--code-bg); }
+  .codeblock code{ font-family:"Courier New", monospace; font-size:.82rem; line-height:1.6; color:#1b2a3a; background:none; padding:0; white-space:pre; display:block; }
+  .codeblock code .cmt{ color:var(--cmt); font-style:italic; }
 
-        .project-header p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
+  .tree .code-bar .path::before{ content:"📁"; }
 
-        .badges {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin: 20px 0;
-            flex-wrap: wrap;
-        }
+  /* Notes */
+  .note-block{ margin-top:22px; }
+  .note-block h3{ font-size:1.15rem; font-weight:800; }
+  .blist{ list-style:none; margin-top:12px; border-top:1px solid var(--hair); }
+  .blist li{ padding:12px 0; border-bottom:1px solid var(--hair); color:#333; font-size:.95rem; }
+  .blist li b{ color:#222; }
 
-        .badge {
-            background-color: rgba(255, 255, 255, 0.2);
-            color: white;
-            padding: 5px 12px;
-            border-radius: 15px;
-            font-size: 0.9rem;
-        }
+  /* CTA */
+  .cta-inner{ display:flex; align-items:center; gap:18px; flex-wrap:wrap; border-top:3px solid #222; padding-top:18px; }
+  .cta-inner h3{ font-size:1.4rem; font-weight:900; line-height:1.08; }
+  .cta-inner p{ color:var(--gray); font-size:.95rem; margin-top:4px; }
+  .cta-btns{ margin-left:auto; display:flex; gap:12px; flex-wrap:wrap; }
 
-        .content-section {
-            margin: 40px 0;
-            padding: 30px;
-            background-color: #f9f9f9;
-            border-radius: 8px;
-            border-left: 5px solid #9C27B0;
-        }
+  footer{ background:#222; max-width:1240px; margin:30px auto 0; padding:24px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; letter-spacing:.5px; color:#fff; text-align:center; }
+  .note{ max-width:1240px; margin:14px auto 0; padding:8px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.62rem; letter-spacing:1px; color:#999; }
 
-        .content-section h2 {
-            color: #9C27B0;
-            margin-bottom: 20px;
-            font-size: 1.8rem;
-        }
+  /* Drawer (shared) */
+  .drawer{ position:fixed; top:0; left:-300px; width:280px; height:100vh; background:#fff; z-index:200; box-shadow:2px 0 14px rgba(0,0,0,.15); transition:left .28s ease; padding:74px 26px 26px; }
+  .drawer.open{ left:0; }
+  .drawer a{ display:block; font-family:Arial, Helvetica, sans-serif; font-size:.82rem; letter-spacing:1.2px; text-transform:uppercase; padding:14px 0; border-bottom:1px solid var(--hair); }
+  .overlay{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:150; }
+  .overlay.open{ display:block; }
+  .drawer-close{ position:absolute; top:20px; right:20px; font-family:Arial, Helvetica, sans-serif; font-size:1.4rem; background:none; border:none; cursor:pointer; }
 
-        .content-section h3 {
-            color: #333;
-            margin: 20px 0 10px 0;
-            font-size: 1.3rem;
-        }
-
-        .highlight-box {
-            background: linear-gradient(135deg, #f3e5f5, #e1bee7);
-            padding: 20px;
-            border-radius: 10px;
-            border-left: 5px solid #9C27B0;
-            margin: 20px 0;
-        }
-
-        .code-container {
-            background-color: #1e1e1e;
-            border-radius: 8px;
-            padding: 20px;
-            margin: 20px 0;
-            overflow-x: auto;
-        }
-
-        .code-header {
-            color: #ce93d8;
-            font-weight: bold;
-            margin-bottom: 15px;
-            font-size: 1.1rem;
-            border-bottom: 1px solid #333;
-            padding-bottom: 10px;
-        }
-
-        .code-block {
-            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-            font-size: 14px;
-            line-height: 1.5;
-            color: #d4d4d4;
-        }
-
-        .code-comment {
-            color: #6a9955;
-            font-style: italic;
-        }
-
-        .code-keyword {
-            color: #569cd6;
-        }
-
-        .code-string {
-            color: #ce9178;
-        }
-
-        .code-function {
-            color: #dcdcaa;
-        }
-
-        .code-number {
-            color: #b5cea8;
-        }
-
-        .demo-links {
-            text-align: center;
-            margin: 30px 0;
-        }
-
-        .demo-btn {
-            display: inline-block;
-            background-color: #9C27B0;
-            color: white;
-            padding: 12px 25px;
-            text-decoration: none;
-            border-radius: 5px;
-            margin: 0 10px;
-            font-weight: bold;
-            transition: background-color 0.3s;
-        }
-
-        .demo-btn:hover {
-            background-color: #7B1FA2;
-        }
-
-        .demo-btn.secondary {
-            background-color: #6A1B9A;
-        }
-
-        .demo-btn.secondary:hover {
-            background-color: #4A148C;
-        }
-
-        @media (max-width: 768px) {
-            .project-header h1 {
-                font-size: 2rem;
-            }
-
-            .project-header p {
-                font-size: 1rem;
-            }
-
-            .demo-btn {
-                margin: 5px;
-                padding: 10px 20px;
-            }
-
-            .container {
-                padding: 15px;
-            }
-        }
-    </style>
+  @media (max-width:900px){
+    .cta-btns{ margin-left:0; }
+    .mast-nav{ display:none; }
+    .hamburger{ display:flex; }
+    .masthead{ padding:12px 16px; }
+    .mast-left{ gap:10px; min-width:0; flex:1; }
+    .logo{ font-size:.72rem; letter-spacing:1.5px; padding:6px 8px; }
+    .search-box{ flex:1; width:auto; min-width:0; }
+    .search-results{ position:fixed; top:58px; left:12px; right:12px; width:auto; max-width:none; }
+    .src-head h1{ font-size:1.95rem; }
+    .cover-strip img{ height:150px; }
+  }
+</style>
 </head>
 <body>
-    <div class="container">
-        <nav class="back-nav">
-            <a href="tarot-guru.html">&larr; Back to Project Overview</a>
-        </nav>
 
-        <div class="project-header">
-            <h1>Tarot Guru</h1>
-            <p>AI-powered personal tarot reading with context-aware spreads and follow-up chat</p>
+  <div class="overlay" id="overlay"></div>
+  <nav class="drawer" id="drawer">
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">&times;</button>
+    <a href="index.html">Home</a>
+    <a href="project-categories.html">Categories</a>
+    <a href="contact.html">Contact</a>
+    <a href="https://lyven81.github.io/data-analyst-portfolio/index.html">Data Portfolio</a>
+  </nav>
 
-            <div class="badges">
-                <span class="badge">Node.js</span>
-                <span class="badge">Express</span>
-                <span class="badge">Claude API</span>
-                <span class="badge">ES Modules</span>
-            </div>
-        </div>
-
-        <div class="highlight-box">
-            <h3>About This Code Showcase</h3>
-            <p><strong>This curated selection shows how Tarot Guru implements a multi-step reading flow: the user describes their situation, Claude recommends a spread, cards are drawn programmatically, Claude interprets the spread, and the user can ask follow-up questions.</strong></p>
-            <p>The architecture separates card data, spread logic, and AI interpretation into distinct modules under <code>apis/</code>, keeping each concern clean and testable.</p>
-        </div>
-
-        <div class="content-section">
-            <h2>File Structure</h2>
-            <div class="code-container">
-                <div class="code-block">
-tarot-guru/
-├── server.mjs              <span class="code-comment"># Express server — 5 API routes</span>
-├── tarot.config.mjs        <span class="code-comment"># Port, session dir, Claude model</span>
-├── package.json            <span class="code-comment"># Dependencies: express, dotenv</span>
-├── apis/
-│   ├── reading.mjs         <span class="code-comment"># AI recommendation, interpretation &amp; chat</span>
-│   ├── spreads.mjs         <span class="code-comment"># Spread definitions &amp; card drawing logic</span>
-│   └── cards.mjs           <span class="code-comment"># Full 78-card tarot deck data</span>
-├── lib/
-│   └── llm.mjs             <span class="code-comment"># Claude API wrapper</span>
-├── sessions/               <span class="code-comment"># Saved reading sessions (JSON)</span>
-└── dashboard/public/       <span class="code-comment"># Frontend HTML/CSS/JS</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>Core: Multi-Step Reading Flow</h2>
-            <p>The server orchestrates a four-step flow: (1) user describes their question, (2) Claude recommends a spread type, (3) cards are drawn randomly from the 78-card deck, (4) Claude interprets the drawn cards in context. A fifth endpoint handles follow-up chat.</p>
-
-            <div class="code-container">
-                <div class="code-header">server.mjs — Recommend, Draw &amp; Read Routes</div>
-                <div class="code-block">
-<span class="code-keyword">import</span> { getRecommendation, getInitialReading, getChatReply } <span class="code-keyword">from</span> <span class="code-string">'./apis/reading.mjs'</span>
-<span class="code-keyword">import</span> { drawSpread } <span class="code-keyword">from</span> <span class="code-string">'./apis/spreads.mjs'</span>
-
-<span class="code-comment">// Step 1: Claude reads the user's context and recommends a spread</span>
-app.post(<span class="code-string">'/api/recommend'</span>, <span class="code-keyword">async</span> (req, res) =&gt; {
-  <span class="code-keyword">const</span> { userMessage } = req.body
-  <span class="code-keyword">const</span> result = <span class="code-keyword">await</span> <span class="code-function">getRecommendation</span>(userMessage)
-  res.json({ ok: <span class="code-keyword">true</span>, ...result })
-})
-
-<span class="code-comment">// Step 2: Draw cards for the recommended spread type</span>
-app.post(<span class="code-string">'/api/draw'</span>, <span class="code-keyword">async</span> (req, res) =&gt; {
-  <span class="code-keyword">const</span> { spreadType } = req.body
-  <span class="code-keyword">const</span> drawnCards = <span class="code-function">drawSpread</span>(spreadType)
-  res.json({ ok: <span class="code-keyword">true</span>, drawnCards })
-})
-
-<span class="code-comment">// Step 3: Claude interprets the drawn cards</span>
-app.post(<span class="code-string">'/api/read'</span>, <span class="code-keyword">async</span> (req, res) =&gt; {
-  <span class="code-keyword">const</span> { question, drawnCards } = req.body
-  <span class="code-keyword">const</span> reading = <span class="code-keyword">await</span> <span class="code-function">getInitialReading</span>(question, drawnCards)
-  res.json({ ok: <span class="code-keyword">true</span>, reading })
-})
-
-<span class="code-comment">// Step 4: Follow-up conversation with full reading context</span>
-app.post(<span class="code-string">'/api/chat'</span>, <span class="code-keyword">async</span> (req, res) =&gt; {
-  <span class="code-keyword">const</span> { question, drawnCards, initialReading, history, message } = req.body
-  <span class="code-keyword">const</span> reply = <span class="code-keyword">await</span> <span class="code-function">getChatReply</span>({ question, drawnCards, initialReading, history, message })
-  res.json({ ok: <span class="code-keyword">true</span>, reply })
-})
-                </div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>Session Persistence</h2>
-            <p>Each completed reading can be saved to a timestamped JSON file. This lets users revisit past readings and tracks the full context — question, drawn cards, AI interpretation, and follow-up chat history.</p>
-
-            <div class="code-container">
-                <div class="code-header">server.mjs — Save Session Route</div>
-                <div class="code-block">
-<span class="code-comment">// POST /api/save — Save the complete reading session to disk</span>
-app.post(<span class="code-string">'/api/save'</span>, <span class="code-keyword">async</span> (req, res) =&gt; {
-  <span class="code-keyword">const</span> { session } = req.body
-  <span class="code-keyword">const</span> now = <span class="code-keyword">new</span> Date()
-  <span class="code-keyword">const</span> pad = n =&gt; String(n).padStart(<span class="code-number">2</span>, <span class="code-string">'0'</span>)
-
-  <span class="code-comment">// Filename format: 2026-03-28-14-30.json</span>
-  <span class="code-keyword">const</span> filename = <span class="code-string">`${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}-${pad(now.getHours())}-${pad(now.getMinutes())}.json`</span>
-
-  <span class="code-keyword">const</span> filepath = join(config.sessionsDir, filename)
-  writeFileSync(filepath, JSON.stringify({
-    savedAt: now.toISOString(),
-    ...session
-  }, <span class="code-keyword">null</span>, <span class="code-number">2</span>))
-
-  res.json({ ok: <span class="code-keyword">true</span>, filename })
-})
-                </div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>Technical Implementation Notes</h2>
-            <h3>Key Design Decisions</h3>
-            <ul style="margin: 15px 0; padding-left: 20px;">
-                <li><strong>Context-aware spread selection:</strong> Claude analyzes the user's question to recommend the most appropriate tarot spread (e.g., Celtic Cross for complex life questions, Three-Card for quick guidance)</li>
-                <li><strong>Programmatic card drawing:</strong> Cards are drawn randomly from the full 78-card Rider-Waite deck via <code>spreads.mjs</code>, keeping the randomness separate from AI interpretation</li>
-                <li><strong>Stateful follow-up chat:</strong> The chat endpoint receives the original question, drawn cards, initial reading, and full conversation history — so Claude can reference specific cards and prior insights</li>
-                <li><strong>Session saving:</strong> Complete reading sessions are saved as JSON files with timestamps, enabling users to review and reflect on past readings</li>
-                <li><strong>Minimal dependencies:</strong> Only Express and dotenv — the entire app runs with two npm packages</li>
-            </ul>
-        </div>
-
-        <div class="demo-links">
-            <a href="tarot-guru.html" class="demo-btn secondary">View Full Project Details</a>
-        </div>
-
-        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
-            <a href="index.html">&larr; Back to Portfolio</a> |
-            <a href="project-categories.html">View All Categories</a>
-        </nav>
+  <div class="masthead">
+    <div class="mast-left">
+      <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+      <a class="logo" href="index.html">AI PROJECTS</a>
+      <nav class="mast-nav">
+        <a href="project-categories.html">Categories</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <div class="search-box">
+        <input type="text" class="search-input" id="searchInput" autocomplete="off" placeholder="Search AI projects..." aria-label="Search AI projects">
+        <span class="search-ic">&#128269;</span>
+        <div class="search-results" id="searchResults"></div>
+      </div>
     </div>
+  </div>
+  <hr class="rule-top">
+
+  <div class="crumb">
+    <a href="project-categories.html">Categories</a>
+    <span class="sep">/</span><a id="crumbCat" href="#"></a>
+    <span class="sep">/</span><a id="crumbProj" href="#"></a>
+    <span class="sep">/</span><span>Source</span>
+  </div>
+
+  <section class="src-head">
+    <div class="cover-strip" id="coverStrip" style="display:none"><img id="cover" alt=""></div>
+    <span class="rubric" id="kicker"></span>
+    <h1 id="title"></h1>
+    <p class="sub" id="subtitle"></p>
+    <div class="head-tech" id="headTech"></div>
+    <div class="head-btns" id="headBtns"></div>
+  </section>
+
+  <div id="body"></div>
+
+  <footer>&copy; 2026 Lee Yih Ven | AI Project Portfolio &middot; All rights reserved.</footer>
+  <div class="note">Sample Source-Showcase-E2 (TEMPLATE): source-code page on the index magazine system: slim cover banner, About, Project Structure, code walkthrough with copyable navy-barred code blocks, CTA. Reuse by editing only the PROJECT block at the top of the script.</div>
+
+<script>
+  const SITE = "";
+
+  /* =================================================================
+     EDIT PER PROJECT  -  the ONLY block you change per page.
+     Copy this file, swap PROJECT, save as <slug>-source.html.
+     - structure.code : the project file tree (plain text)
+     - walkthrough[]   : { heading, body, files:[{label, code}] }
+     - notes[]         : { heading, bullets:[...] }
+     Code strings can be multi-line; they render verbatim.
+     ================================================================= */
+  const PROJECT = {
+  "slug": "tarot-guru",
+  "category": "Knowledge & Reference Chatbots",
+  "categoryUrl": "category-knowledge-chatbots.html",
+  "title": "Tarot Guru",
+  "subtitle": "AI-powered personal tarot reading with context-aware spreads and follow-up chat.",
+  "cover": "images/tarot-guru/cover.jpeg",
+  "tech": [
+    "Node.js",
+    "Express",
+    "Claude API",
+    "ES Modules"
+  ],
+  "overviewUrl": "tarot-guru.html",
+  "demoLabel": "Try Live Demo",
+  "demoUrl": "https://lyven81.github.io/ai-project/projects/tarot-guru/demo.html",
+  "repoUrl": "https://github.com/lyven81/ai-project/tree/main/projects/tarot-guru",
+  "about": "This curated selection shows how Tarot Guru implements a multi-step reading flow: the user describes their situation, Claude recommends a spread, cards are drawn programmatically, Claude interprets the spread, and the user can ask follow-up questions. The architecture separates card data, spread logic, and AI interpretation into distinct modules under <code>apis/</code>, keeping each concern clean and testable.",
+  "structure": {
+    "label": "tarot-guru/",
+    "code": "tarot-guru/\n├── server.mjs              # Express server — 5 API routes\n├── tarot.config.mjs        # Port, session dir, Claude model\n├── package.json            # Dependencies: express, dotenv\n├── apis/\n│   ├── reading.mjs         # AI recommendation, interpretation & chat\n│   ├── spreads.mjs         # Spread definitions & card drawing logic\n│   └── cards.mjs           # Full 78-card tarot deck data\n├── lib/\n│   └── llm.mjs             # Claude API wrapper\n├── sessions/               # Saved reading sessions (JSON)\n└── dashboard/public/       # Frontend HTML/CSS/JS"
+  },
+  "walkthrough": [
+    {
+      "heading": "Core: Multi-Step Reading Flow",
+      "body": "The server orchestrates a four-step flow: (1) user describes their question, (2) Claude recommends a spread type, (3) cards are drawn randomly from the 78-card deck, (4) Claude interprets the drawn cards in context. A fifth endpoint handles follow-up chat.",
+      "files": [
+        {
+          "label": "server.mjs: Recommend, Draw & Read Routes",
+          "code": "import { getRecommendation, getInitialReading, getChatReply } from './apis/reading.mjs'\nimport { drawSpread } from './apis/spreads.mjs'\n\n// Step 1: Claude reads the user's context and recommends a spread\napp.post('/api/recommend', async (req, res) => {\n  const { userMessage } = req.body\n  const result = await getRecommendation(userMessage)\n  res.json({ ok: true, ...result })\n})\n\n// Step 2: Draw cards for the recommended spread type\napp.post('/api/draw', async (req, res) => {\n  const { spreadType } = req.body\n  const drawnCards = drawSpread(spreadType)\n  res.json({ ok: true, drawnCards })\n})\n\n// Step 3: Claude interprets the drawn cards\napp.post('/api/read', async (req, res) => {\n  const { question, drawnCards } = req.body\n  const reading = await getInitialReading(question, drawnCards)\n  res.json({ ok: true, reading })\n})\n\n// Step 4: Follow-up conversation with full reading context\napp.post('/api/chat', async (req, res) => {\n  const { question, drawnCards, initialReading, history, message } = req.body\n  const reply = await getChatReply({ question, drawnCards, initialReading, history, message })\n  res.json({ ok: true, reply })\n})"
+        }
+      ]
+    },
+    {
+      "heading": "Session Persistence",
+      "body": "Each completed reading can be saved to a timestamped JSON file. This lets users revisit past readings and tracks the full context, question, drawn cards, AI interpretation, and follow-up chat history.",
+      "files": [
+        {
+          "label": "server.mjs: Save Session Route",
+          "code": "// POST /api/save — Save the complete reading session to disk\napp.post('/api/save', async (req, res) => {\n  const { session } = req.body\n  const now = new Date()\n  const pad = n => String(n).padStart(2, '0')\n\n  // Filename format: 2026-03-28-14-30.json\n  const filename = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}-${pad(now.getHours())}-${pad(now.getMinutes())}.json`\n\n  const filepath = join(config.sessionsDir, filename)\n  writeFileSync(filepath, JSON.stringify({\n    savedAt: now.toISOString(),\n    ...session\n  }, null, 2))\n\n  res.json({ ok: true, filename })\n})"
+        }
+      ]
+    }
+  ],
+  "cta": "Want a private, context-aware AI reading tool like this built for your own use? Let's scope it."
+};
+  /* ===================== END EDIT BLOCK ===================== */
+
+  const pref = (u) => /^https?:|^mailto:|^tel:/.test(u || '') ? u : (SITE + (u || ''));
+  const esc = (s) => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const rich = (s) => esc(s).replace(/&lt;(\/?(?:b|code))&gt;/g, '<$1>');
+
+  // raw code store for copy buttons
+  const RAW = [];
+  function codeBlock(label, codeStr, extraClass){
+    const idx = RAW.push(codeStr) - 1;
+    const rendered = esc(codeStr).split('\n')
+      .map(line => /^\s*#/.test(line) ? `<span class="cmt">${line}</span>` : line).join('\n');
+    return `<div class="codeblock ${extraClass||''}">`+
+      `<div class="code-bar"><span class="path"><span>${esc(label)}</span></span>`+
+      `<button class="code-copy" data-idx="${idx}">Copy</button></div>`+
+      `<pre><code>${rendered}</code></pre></div>`;
+  }
+
+  // Breadcrumb + header
+  document.title = PROJECT.title + ": Source | AI Project Portfolio";
+  document.getElementById('crumbCat').textContent = PROJECT.category;
+  document.getElementById('crumbCat').href = pref(PROJECT.categoryUrl);
+  document.getElementById('crumbProj').textContent = PROJECT.title;
+  document.getElementById('crumbProj').href = pref(PROJECT.overviewUrl);
+  if (PROJECT.cover){
+    document.getElementById('coverStrip').style.display = '';
+    const c = document.getElementById('cover'); c.src = PROJECT.cover; c.alt = PROJECT.title + " cover";
+  }
+  document.getElementById('kicker').textContent = "Source Walkthrough · " + PROJECT.category;
+  document.getElementById('title').textContent = PROJECT.title;
+  document.getElementById('subtitle').textContent = PROJECT.subtitle;
+  document.getElementById('headTech').innerHTML = (PROJECT.tech||[]).map(t => `<span class="tech-chip">${esc(t)}</span>`).join('');
+  document.getElementById('headBtns').innerHTML =
+    (PROJECT.demoUrl ? `<a class="btn" href="${pref(PROJECT.demoUrl)}" target="_blank" rel="noopener">${esc(PROJECT.demoLabel||'Live Demo')}</a>` : '') +
+    (PROJECT.overviewUrl ? `<a class="btn ghost" href="${pref(PROJECT.overviewUrl)}">Project Overview</a>` : '') +
+    (PROJECT.repoUrl ? `<a class="btn ghost" href="${pref(PROJECT.repoUrl)}" target="_blank" rel="noopener">GitHub Repo</a>` : '');
+
+  const section = (tab, inner) => `<section class="sec"><div class="sec-rule"><span class="tab">${esc(tab)}</span>${inner}</div></section>`;
+  let html = "";
+  const P = PROJECT;
+
+  if (P.about){
+    html += section("About This Code", `<h2>About This Code Showcase</h2><p class="intro">${rich(P.about)}</p>`);
+  }
+  if (P.structure && P.structure.code){
+    html += section("Project Structure", `<h2>Project Structure</h2>`+
+      codeBlock(P.structure.label || 'project/', P.structure.code, 'tree'));
+  }
+  (P.walkthrough||[]).forEach(w => {
+    let inner = `<h2>${esc(w.heading)}</h2>`;
+    if (w.body) inner += `<p class="body">${rich(w.body)}</p>`;
+    (w.files||[]).forEach(f => { inner += codeBlock(f.label, f.code); });
+    html += section("Code", inner);
+  });
+  // CTA
+  html += `<section class="sec"><div class="cta-inner">`+
+    `<div><h3>Interested in the build?</h3><p>${esc(P.cta || "Let's talk.")}</p></div>`+
+    `<div class="cta-btns">`+
+    (P.demoUrl ? `<a class="btn" href="${pref(P.demoUrl)}" target="_blank" rel="noopener">${esc(P.demoLabel||'Live Demo')}</a>` : '')+
+    `<a class="btn ghost" href="${SITE}contact.html">Get in Touch</a>`+
+    `</div></div></section>`;
+
+  document.getElementById('body').innerHTML = html;
+
+  // Copy buttons
+  function copyText(text, btn){
+    const done = ()=>{ const o=btn.textContent; btn.textContent='Copied ✓'; setTimeout(()=>btn.textContent=o.includes('Copied')?'Copy':o,1400); };
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(done).catch(()=>fb(text,done)); }
+    else fb(text,done);
+  }
+  function fb(text,done){ const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(ta); done(); }
+  document.querySelectorAll('.code-copy').forEach(btn =>
+    btn.addEventListener('click', ()=> copyText(RAW[+btn.dataset.idx], btn)));
+
+  // Masthead search
+  const ITEMS = [
+    {t:PROJECT.title, c:PROJECT.category, s:PROJECT.slug},
+    {t:"Courier CS Quality Console", c:"Conversational Data Analytics", s:"courier-cs-quality-console"},
+    {t:"Voucher Analyzer", c:"Conversational Data Analytics", s:"voucher-analyzer"},
+    {t:"Wiseman", c:"Knowledge & Reference Chatbots", s:"wiseman"},
+    {t:"Sunny Car Accessories", c:"Agentic Commerce", s:"sunny-car-accessories"},
+    {t:"Bookshelf", c:"Multi-Agent Decision Systems", s:"bookshelf"}
+  ];
+  const searchInput = document.getElementById('searchInput');
+  const searchResults = document.getElementById('searchResults');
+  function runSearch(q){
+    if(q.trim().length < 2){ searchResults.style.display='none'; return; }
+    const ql = q.toLowerCase();
+    const hits = ITEMS.filter(it => (it.t+' '+it.c).toLowerCase().includes(ql));
+    searchResults.innerHTML = hits.length ? hits.map(it =>
+      `<div class="sr-item"><div class="sr-cat">${esc(it.c)}</div>`+
+      `<a href="${SITE}${it.s}.html"><div class="sr-title">${esc(it.t)}</div></a>`+
+      `<div class="sr-links"><a href="${SITE}${it.s}.html">View Details</a></div></div>`).join('')
+      : `<div class="sr-none">No projects found. Try a different keyword.</div>`;
+    searchResults.style.display='block';
+  }
+  searchInput.addEventListener('input', e => runSearch(e.target.value));
+  document.addEventListener('click', e => { if(!e.target.closest('.search-box')) searchResults.style.display='none'; });
+
+  // Drawer
+  const drawer=document.getElementById('drawer'), overlay=document.getElementById('overlay');
+  const openMenu=()=>{ drawer.classList.add('open'); overlay.classList.add('open'); };
+  const closeMenu=()=>{ drawer.classList.remove('open'); overlay.classList.remove('open'); };
+  document.getElementById('hamburger').addEventListener('click', openMenu);
+  document.getElementById('drawerClose').addEventListener('click', closeMenu);
+  overlay.addEventListener('click', closeMenu);
+  drawer.querySelectorAll('a').forEach(a=>a.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeMenu(); searchResults.style.display='none'; }});
+</script>
 </body>
 </html>

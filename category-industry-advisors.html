@@ -1,422 +1,428 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Industry Specialist Advisors | Lee Yih Ven</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Industry Specialist Advisors | AI Project Portfolio</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root{ --ink:#222; --paper:#fff; --rule:#222; --hair:#dddddd; --gray:#555; --accent:#B8860B; --gold:#daa520; --cream:#f5f5dc; }
+  html{ scroll-behavior:smooth; }
+  body{ background:var(--paper); color:var(--ink); font-family:Arial, Helvetica, sans-serif; line-height:1.6; overflow-x:hidden; }
+  a{ color:inherit; text-decoration:none; }
+  a:hover h2, a:hover h3, a:hover h4{ color:var(--accent); }
 
-    body {
-      font-family: 'Poppins', sans-serif;
-      line-height: 1.6;
-      background-color: #ffffff;
-      color: #222;
-    }
+  /* Masthead (shared) */
+  .masthead{ display:flex; align-items:center; justify-content:space-between; padding:14px 28px; max-width:1240px; margin:0 auto; gap:18px; }
+  .mast-left{ display:flex; align-items:center; gap:20px; }
+  .logo{ background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; letter-spacing:3px; font-size:.95rem; padding:8px 12px; white-space:nowrap; }
+  .mast-nav{ display:flex; gap:20px; font-family:Arial, Helvetica, sans-serif; font-size:.72rem; letter-spacing:1.4px; text-transform:uppercase; }
+  .mast-nav a:hover{ color:var(--accent); }
+  .hamburger{ display:none; flex-direction:column; gap:4px; background:none; border:none; cursor:pointer; padding:6px; }
+  .hamburger span{ width:22px; height:2px; background:#222; display:block; }
+  .rule-top{ border:none; border-top:3px solid var(--rule); max-width:1240px; margin:0 auto; }
 
-    header {
-      text-align: center;
-      padding: 50px 20px 30px;
-      background: #f9f9f9;
-      border-bottom: 1px solid #eee;
-      margin-bottom: 40px;
-    }
+  /* Search (shared) */
+  .search-box{ position:relative; width:200px; }
+  .search-input{ width:100%; padding:7px 30px 7px 12px; border:1px solid var(--hair); background:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; color:#222; }
+  .search-input:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(184,134,11,.15); }
+  .search-ic{ position:absolute; right:10px; top:50%; transform:translateY(-50%); color:var(--gray); font-size:.8rem; pointer-events:none; }
+  .search-results{ position:absolute; top:calc(100% + 4px); left:0; width:340px; max-width:86vw; background:#fff; border:1px solid #222; max-height:60vh; overflow-y:auto; z-index:120; display:none; }
+  .sr-item{ padding:12px 14px; border-bottom:1px solid var(--hair); }
+  .sr-item:last-child{ border-bottom:none; }
+  .sr-cat{ font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; margin-bottom:4px; color:var(--accent); }
+  .sr-title{ font-weight:700; font-size:1.02rem; color:#222; }
+  .sr-links{ font-size:.58rem; letter-spacing:.8px; text-transform:uppercase; color:var(--gray); margin-top:5px; }
+  .sr-links a:hover{ color:var(--accent); }
+  .sr-none{ padding:16px 14px; font-size:.82rem; color:var(--gray); }
 
-    header h1 {
-      font-size: 2.2rem;
-      font-weight: 600;
-      color: #222;
-      margin-bottom: 8px;
-    }
+  /* Shared type bits */
+  .tab{ display:inline-block; background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.66rem; letter-spacing:2px; text-transform:uppercase; padding:6px 12px; }
+  .rubric{ font-family:Arial, Helvetica, sans-serif; font-size:.62rem; font-weight:700; letter-spacing:1.6px; text-transform:uppercase; color:var(--accent); display:block; margin-bottom:6px; }
+  .links{ font-family:Arial, Helvetica, sans-serif; font-size:.58rem; letter-spacing:1px; text-transform:uppercase; margin-top:10px; color:var(--gray); }
+  .links a:hover{ color:var(--accent); }
+  .lead-dek{ font-style:italic; color:#333; }
+  .viz{ display:flex; align-items:center; justify-content:center; color:#fff; text-shadow:0 2px 10px rgba(0,0,0,.3); line-height:1; }
 
-    header p {
-      font-size: 1rem;
-      color: #555;
-      max-width: 620px;
-      margin: 0 auto;
-    }
+  /* Breadcrumb */
+  .crumb{ max-width:1240px; margin:0 auto; padding:20px 28px 0; font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--gray); }
+  .crumb a:hover{ color:var(--accent); }
+  .crumb .sep{ color:var(--hair); margin:0 8px; }
 
-    nav {
-      text-align: center;
-      margin-bottom: 40px;
-    }
+  /* Page head */
+  .page-head{ max-width:1240px; margin:0 auto; padding:14px 28px 6px; }
+  .page-head .tab{ margin-bottom:14px; }
+  .page-head h1{ font-size:2.7rem; font-weight:900; line-height:1.04; letter-spacing:-.006em; }
+  .page-head p{ color:var(--gray); max-width:74ch; margin-top:10px; font-size:1.02rem; }
 
-    nav a {
-      color: #007BFF;
-      text-decoration: none;
-      margin: 0 15px;
-      font-size: 1rem;
-    }
+  /* ===== LEAD FEATURE (flagship, horizontal) ===== */
+  .feature{ max-width:1240px; margin:0 auto; padding:18px 28px 10px; }
+  .feature .tab{ margin-bottom:16px; }
+  .feature-inner{ display:grid; grid-template-columns:1.15fr 1fr; border-top:3px solid var(--rule); }
+  .feature-viz{ min-height:340px; font-size:5rem; }
+  .feature-copy{ padding:26px 0 26px 36px; display:flex; flex-direction:column; justify-content:center; }
+  .feature-copy h2{ font-size:2.4rem; font-weight:800; line-height:1.05; letter-spacing:-.006em; }
+  .feature-copy .lead-dek{ font-size:1.1rem; margin-top:10px; max-width:48ch; }
 
-    nav a:hover { text-decoration: underline; }
+  /* ===== ALL PROJECTS GRID ===== */
+  .allproj{ max-width:1240px; margin:0 auto; padding:22px 28px 40px; }
+  .allproj-head{ display:flex; align-items:baseline; gap:16px; flex-wrap:wrap; border-top:1px solid var(--hair); padding-top:18px; }
+  .allproj-head h3{ font-size:1.5rem; font-weight:900; line-height:1.05; }
+  .allproj-head .count{ font-size:.62rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--accent); }
+  .proj-grid{ display:grid; grid-template-columns:repeat(3,1fr); border-top:1px solid var(--hair); margin-top:18px; }
+  .proj-card{ display:flex; flex-direction:column; padding:22px; border-right:1px solid var(--hair); border-bottom:1px solid var(--hair); }
+  .proj-card:nth-child(3n){ border-right:none; }
+  .proj-card .viz{ min-height:150px; font-size:2.6rem; margin-bottom:13px; }
+  .proj-card h4{ font-size:1.18rem; font-weight:700; line-height:1.14; }
+  .proj-card .lead-dek{ font-size:.92rem; margin-top:6px; }
+  .proj-card .links{ margin-top:auto; padding-top:13px; }
 
-    .container {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 0 20px 60px;
-    }
+  /* ===== BUILT WITH ===== */
+  .builtwith{ max-width:1240px; margin:0 auto; padding:6px 28px 36px; }
+  .builtwith .tab{ margin-bottom:14px; }
+  .tech-row{ display:flex; flex-wrap:wrap; gap:10px; border-top:1px solid var(--hair); padding-top:18px; }
+  .tech{ border:1px solid var(--hair); padding:7px 13px; font-size:.74rem; letter-spacing:.4px; color:#333; white-space:nowrap; }
+  .tech:hover{ border-color:var(--accent); color:var(--accent); }
 
-    .category-section {
-      margin-bottom: 50px;
-    }
+  /* ===== CTA ===== */
+  .cta{ max-width:1240px; margin:0 auto; padding:6px 28px 44px; }
+  .cta-inner{ display:flex; align-items:baseline; gap:16px; flex-wrap:wrap; border-top:3px solid var(--rule); padding-top:18px; }
+  .cta-inner h3{ font-size:1.4rem; font-weight:900; line-height:1.06; }
+  .cta-inner p{ color:var(--gray); font-size:.95rem; }
+  .cta-inner .go{ margin-left:auto; font-size:.66rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--accent); white-space:nowrap; }
 
-    .category-header {
-      border-left: 4px solid #FF5722;
-      padding-left: 16px;
-      margin-bottom: 24px;
-    }
+  footer{ background:#222; max-width:1240px; margin:30px auto 0; padding:24px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; letter-spacing:.5px; color:#fff; text-align:center; }
+  .note{ max-width:1240px; margin:14px auto 0; padding:8px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.62rem; letter-spacing:1px; color:#999; }
 
-    .category-header h2 {
-      font-size: 1.4rem;
-      font-weight: 600;
-      color: #222;
-      margin-bottom: 4px;
-    }
+  /* Drawer (shared) */
+  .drawer{ position:fixed; top:0; left:-300px; width:280px; height:100vh; background:#fff; z-index:200; box-shadow:2px 0 14px rgba(0,0,0,.15); transition:left .28s ease; padding:74px 26px 26px; }
+  .drawer.open{ left:0; }
+  .drawer a{ display:block; font-family:Arial, Helvetica, sans-serif; font-size:.82rem; letter-spacing:1.2px; text-transform:uppercase; padding:14px 0; border-bottom:1px solid var(--hair); }
+  .overlay{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:150; }
+  .overlay.open{ display:block; }
+  .drawer-close{ position:absolute; top:20px; right:20px; font-family:Arial, Helvetica, sans-serif; font-size:1.4rem; background:none; border:none; cursor:pointer; }
 
-    .category-header p {
-      font-size: 0.9rem;
-      color: #666;
-    }
-
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 24px;
-    }
-
-    .project-card {
-      background: #f9f9f9;
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .project-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 6px 16px rgba(0,0,0,0.1);
-    }
-
-    .project-visual {
-      height: 100px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2.5rem;
-    }
-
-    .project-body {
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      flex: 1;
-    }
-
-    .project-name {
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: #222;
-      margin-bottom: 8px;
-    }
-
-    .project-desc {
-      font-size: 0.85rem;
-      color: #666;
-      margin-bottom: 16px;
-      line-height: 1.5;
-    }
-
-    .project-buttons {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-top: auto;
-    }
-
-    .btn-demo, .btn-details {
-      display: inline-block;
-      padding: 7px 14px;
-      border-radius: 4px;
-      font-size: 0.82rem;
-      font-weight: 500;
-      text-decoration: none;
-      transition: all 0.2s ease;
-      flex: 1;
-      text-align: center;
-      min-width: 100px;
-    }
-
-    .btn-demo {
-      background-color: #f5f5dc;
-      color: #333;
-    }
-
-    .btn-demo:hover {
-      background-color: #daa520;
-      color: white;
-    }
-
-    .btn-details {
-      background-color: transparent;
-      color: #007BFF;
-      border: 1px solid #007BFF;
-    }
-
-    .btn-details:hover {
-      background-color: #007BFF;
-      color: white;
-    }
-
-    .tech-stack {
-      background: #f9f9f9;
-      border-top: 1px solid #eee;
-      border-bottom: 1px solid #eee;
-      padding: 28px 20px;
-      text-align: center;
-    }
-
-    .tech-stack-label {
-      font-size: 0.75rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: #999;
-      margin-bottom: 14px;
-    }
-
-    .tech-stack-items {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    .tech-tag {
-      background: white;
-      border: 1px solid #ddd;
-      border-radius: 20px;
-      padding: 4px 14px;
-      font-size: 0.82rem;
-      color: #444;
-    }
-
-    footer {
-      text-align: center;
-      padding: 20px;
-      background-color: #222;
-      color: white;
-      font-size: 0.9rem;
-    }
-
-    .fade-in {
-      opacity: 0;
-      transform: translateY(20px);
-      animation: fadeInUp 0.5s ease forwards;
-    }
-
-    @keyframes fadeInUp {
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @media (max-width: 768px) {
-      header h1 { font-size: 1.8rem; }
-      .projects-grid { grid-template-columns: 1fr; }
-      .tech-stack-items { gap: 8px; }
-    }
-  </style>
+  @media (max-width:1000px){
+    .feature-inner{ grid-template-columns:1fr; }
+    .feature-viz{ min-height:240px; }
+    .feature-copy{ padding:22px 0 4px; }
+  }
+  @media (max-width:900px){
+    .proj-grid{ grid-template-columns:repeat(2,1fr); }
+    .proj-card:nth-child(3n){ border-right:1px solid var(--hair); }
+    .proj-card:nth-child(2n){ border-right:none; }
+    .mast-nav{ display:none; }
+    .hamburger{ display:flex; }
+    .masthead{ padding:12px 16px; }
+    .mast-left{ gap:10px; min-width:0; flex:1; }
+    .logo{ font-size:.72rem; letter-spacing:1.5px; padding:6px 8px; }
+    .search-box{ flex:1; width:auto; min-width:0; }
+    .search-results{ position:fixed; top:58px; left:12px; right:12px; width:auto; max-width:none; }
+    .page-head h1{ font-size:2.1rem; }
+    .feature-copy h2{ font-size:1.9rem; }
+    .cta-inner .go{ margin-left:0; }
+  }
+  @media (max-width:560px){
+    .proj-grid{ grid-template-columns:1fr; }
+    .proj-card{ border-right:none !important; }
+  }
+</style>
 </head>
 <body>
 
-<header>
-  <h1 class="fade-in">Industry Specialist Advisors</h1>
-  <p class="fade-in">Vertical-specific AI advisors trained on the rules, data, and language of one industry.</p>
-</header>
+  <div class="overlay" id="overlay"></div>
+  <nav class="drawer" id="drawer">
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">&times;</button>
+    <a href="index.html">Home</a>
+    <a href="project-categories.html">Categories</a>
+    <a href="contact.html">Contact</a>
+    <a href="https://lyven81.github.io/data-analyst-portfolio/index.html">Data Portfolio</a>
+  </nav>
 
-<nav>
-  <a href="index.html">Home</a>
-  <a href="project-categories.html">Project Categories</a>
-  <a href="contact.html">Contact</a>
-</nav>
-
-<div class="container">
-
-  <section class="category-section fade-in">
-    <div class="category-header">
-      <h2>&#x1F3AF; All Projects — Industry Specialist Advisors</h2>
-      <p>Domain expert AI for tuition centres, sports teams, fashion retailers, property law, and more. 11 projects.</p>
+  <div class="masthead">
+    <div class="mast-left">
+      <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+      <a class="logo" href="index.html">AI PROJECTS</a>
+      <nav class="mast-nav">
+        <a href="project-categories.html">Categories</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <div class="search-box">
+        <input type="text" class="search-input" id="searchInput" autocomplete="off" placeholder="Search AI projects..." aria-label="Search AI projects">
+        <span class="search-ic">&#128269;</span>
+        <div class="search-results" id="searchResults"></div>
+      </div>
     </div>
-    <div class="projects-grid">
+  </div>
+  <hr class="rule-top">
 
+  <div class="crumb">
+    <a href="project-categories.html">Categories</a>
+    <span class="sep">/</span><span id="crumbHere"></span>
+  </div>
 
-      <div class="project-card">
-        <div class="project-visual" style="background: linear-gradient(135deg, #E91E63, #C2185B);">🎓</div>
-        <div class="project-body">
-          <h3 class="project-name">Bright Path Tuition Centre</h3>
-          <p class="project-desc">AI agent for premium tuition centres. Finds mastery gaps and proposes fixes for every child.</p>
-          <div class="project-buttons">
-            <a href="bright-path-tuition/demo.html" target="_blank" class="btn-demo">Live Demo</a>
-            <a href="bright-path-tuition.html" class="btn-details">View Details</a>
-          </div>
-        </div>
+  <div class="page-head">
+    <span class="tab">Category</span>
+    <h1 id="catTitle"></h1>
+    <p id="catIntro"></p>
+  </div>
+
+  <!-- Lead feature -->
+  <section class="feature">
+    <span class="tab">Featured Project</span>
+    <div class="feature-inner" id="feature"></div>
+  </section>
+
+  <!-- All projects -->
+  <section class="allproj">
+    <div class="allproj-head">
+      <h3>All Projects</h3>
+      <span class="count" id="projCount"></span>
+    </div>
+    <div class="proj-grid" id="projGrid"></div>
+  </section>
+
+  <!-- Built with -->
+  <section class="builtwith">
+    <span class="tab">Built With</span>
+    <div class="tech-row" id="techRow"></div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <div class="cta-inner">
+      <div>
+        <h3>Have a similar project?</h3>
+        <p id="ctaLine"></p>
       </div>
-
-      <div class="project-card">
-        <div class="project-visual" style="background: linear-gradient(135deg, #065f46, #10b981);">⚽</div>
-        <div class="project-body">
-          <h3 class="project-name">Football Assistant Coach</h3>
-          <p class="project-desc">AI coaches 22 players across 4 sessions every week. Picks your Starting XI with team chemistry ranked above individual talent.</p>
-          <div class="project-buttons">
-            <a href="projects/football-assistant-coach/demo.html" target="_blank" class="btn-demo">Live Demo</a>
-            <a href="football-assistant-coach.html" class="btn-details">View Details</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="project-card">
-        <div class="project-visual" style="background: linear-gradient(135deg, #2D1B4E, #6B21A8);">📊</div>
-        <div class="project-body">
-          <h3 class="project-name">TrendMate</h3>
-          <p class="project-desc">Know what's selling on Shopee and Lazada before you stock up. Get trend and pricing research in 3 sentences.</p>
-          <div class="project-buttons">
-            <a href="projects/trendmate/demo.html" target="_blank" class="btn-demo">Live Demo</a>
-            <a href="trendmate.html" class="btn-details">View Details</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="project-card">
-        <div class="project-visual" style="background: linear-gradient(135deg, #1e3a5f, #2563eb);">🏠</div>
-        <div class="project-body">
-          <h3 class="project-name">MyPropLex</h3>
-          <p class="project-desc">Get cited answers to Malaysian property law questions in seconds. Covers NLC, HDA, STA, RPGT, and RERA.</p>
-          <div class="project-buttons">
-            <a href="projects/myproplex/demo.html" target="_blank" class="btn-demo">Live Demo</a>
-            <a href="myproplex.html" class="btn-details">View Details</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="project-card">
-        <div class="project-visual" style="background: linear-gradient(135deg, #9C27B0, #6A1B9A);">🧭</div>
-        <div class="project-body">
-          <h3 class="project-name">Mentor</h3>
-          <p class="project-desc">AI advisor for solo service founders. Grounded in proven frameworks, not generic fluff.</p>
-          <div class="project-buttons">
-            <a href="projects/mentor/demo.html" class="btn-demo">Live Demo</a>
-            <a href="mentor.html" class="btn-details">View Details</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="project-card">
-        <div class="project-visual" style="background: linear-gradient(135deg, #1a365d, #2b6cb0);">📈</div>
-        <div class="project-body">
-          <h3 class="project-name">Good Company</h3>
-          <p class="project-desc">Reads quarter reports and runs a 7-step analysis. Tells you if a company is worth investing in.</p>
-          <div class="project-buttons">
-            <a href="projects/good-company/demo.html" class="btn-demo">Live Demo</a>
-            <a href="good-company.html" class="btn-details">View Details</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="project-card">
-        <div class="project-visual" style="background: linear-gradient(135deg, #111827, #1f3a5c);">🌍</div>
-        <div class="project-body">
-          <h3 class="project-name">Long View · Crucix</h3>
-          <p class="project-desc">27 OSINT sources swept every 15 minutes with AI summaries. Alerts pushed to Telegram and Discord automatically.</p>
-          <div class="project-buttons">
-            <a href="projects/long-view/demo.html" target="_blank" class="btn-demo">Live Demo</a>
-            <a href="long-view.html" class="btn-details">View Details</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="project-card">
-        <div class="project-visual" style="background: linear-gradient(135deg, #FF5722, #BF360C);">🌟</div>
-        <div class="project-body">
-          <h3 class="project-name">North Star Learning Center</h3>
-          <p class="project-desc">AI ecosystem for Malaysian tuition centres. Catches gaps early; parents get stories, not scores.</p>
-          <div class="project-buttons">
-            <a href="https://north-star-learning-center-522143897885.asia-southeast1.run.app" target="_blank" class="btn-demo">Launch App</a>
-            <a href="north-star-learning-center.html" class="btn-details">View Details</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="project-card">
-        <div class="project-visual" style="background: linear-gradient(135deg, #FF5722, #D84315);">📊</div>
-        <div class="project-body">
-          <h3 class="project-name">Borrower Risk Evaluator</h3>
-          <p class="project-desc">Loan-default classifier that proves its own accuracy. Scores itself live against real outcomes for lenders.</p>
-          <div class="project-buttons">
-            <a href="projects/borrower-risk-evaluator/demo.html" class="btn-demo">Live Demo</a>
-            <a href="borrower-risk-evaluator.html" class="btn-details">View Details</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="project-card">
-        <div class="project-visual" style="background: linear-gradient(135deg, #FF5722, #E64A19);">🚗</div>
-        <div class="project-body">
-          <h3 class="project-name">Motor Claim Triage and QC Evaluator</h3>
-          <p class="project-desc">Sorts motor claims into four categories with a fixed rule, then scores the fraud flags against real outcomes.</p>
-          <div class="project-buttons">
-            <a href="projects/motor-claim-evaluator/demo.html" class="btn-demo">Live Demo</a>
-            <a href="motor-claim-evaluator.html" class="btn-details">View Details</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="project-card">
-        <div class="project-visual" style="background: linear-gradient(135deg, #1E3A5F, #2563EB);">🏘️</div>
-        <div class="project-body">
-          <h3 class="project-name">Property Lead Tracker</h3>
-          <p class="project-desc">Shows a rental agency which channel signs tenants, and at what cost. Flags stale listings and missed leads.</p>
-          <div class="project-buttons">
-            <a href="projects/property-lead-tracker/ui-1-internal-dashboard.html" target="_blank" class="btn-demo">Live Demo</a>
-            <a href="property-lead-tracker.html" class="btn-details">View Details</a>
-          </div>
-        </div>
-      </div>
-
-
+      <a class="go" href="contact.html">Get in touch &rarr;</a>
     </div>
   </section>
 
-</div>
-
-<!-- Tech Stack Strip -->
-<div class="tech-stack">
-  <div class="tech-stack-label">Built with</div>
-  <div class="tech-stack-items">
-    <span class="tech-tag">Python</span>
-    <span class="tech-tag">Streamlit</span>
-    <span class="tech-tag">FastAPI</span>
-    <span class="tech-tag">Google Gemini 2.5 Flash</span>
-    <span class="tech-tag">Meta WhatsApp Cloud API</span>
-    <span class="tech-tag">TinyDB</span>
-    <span class="tech-tag">Docker</span>
-  </div>
-</div>
-
-<footer>
-  <p>&copy; 2026 Lee Yih Ven | AI Project Portfolio</p>
-</footer>
+  <footer>&copy; 2026 Lee Yih Ven | AI Project Portfolio &middot; All rights reserved.</footer>
+  <div class="note">Sample Category-Page-E2 (TEMPLATE): one individual category page on the index magazine system: breadcrumb, lead feature, All Projects editorial grid, Built With strip, contact CTA. Reuse for the other 8 categories by editing only the CATEGORY block at the top of the script.</div>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const els = document.querySelectorAll('.fade-in');
-    els.forEach((el, i) => {
-      el.style.animationDelay = `${i * 0.1}s`;
-    });
-  });
+  const SITE = "";
+
+  /* =================================================================
+     EDIT PER CATEGORY  -  this is the ONLY block you change per page.
+     Copy this file, swap CATEGORY, save as category-<slug>.html.
+     - heading   : category name (H1 + breadcrumb)
+     - intro     : one-line summary shown under the title (include the count)
+     - ctaLine   : the line above the "Get in touch" CTA
+     - builtWith : tech chips for the Built With strip
+     - projects  : first item = the Featured lead; the rest fill the grid
+         demoLabel : "Live Demo" or "Launch App" (matches your site)
+         demoUrl / details : relative to SITE, or a full https:// URL
+     ================================================================= */
+  const CATEGORY = {
+  "heading": "Industry Specialist Advisors",
+  "intro": "Vertical-specific AI advisors trained on the rules and language of one industry. 11 projects.",
+  "ctaLine": "Have an industry workflow to encode as an advisor? Let's talk.",
+  "builtWith": [
+    "Python",
+    "Gemini / Claude",
+    "Deterministic Scoring",
+    "Vanilla JS",
+    "GitHub Pages"
+  ],
+  "projects": [
+    {
+      "emoji": "📊",
+      "grad": "linear-gradient(135deg, #FF5722, #D84315)",
+      "name": "Borrower Risk Evaluator",
+      "desc": "Loan-default classifier that proves its own accuracy. Scores itself live against real outcomes for lenders.",
+      "demoLabel": "Live Demo",
+      "demoUrl": "https://lyven81.github.io/ai-project/projects/borrower-risk-evaluator/demo.html",
+      "details": "borrower-risk-evaluator.html"
+    },
+    {
+      "emoji": "🚗",
+      "grad": "linear-gradient(135deg, #FF5722, #E64A19)",
+      "name": "Motor Claim Triage and QC Evaluator",
+      "desc": "Sorts motor claims into four categories with a fixed rule, then scores the fraud flags against real outcomes.",
+      "demoLabel": "Live Demo",
+      "demoUrl": "https://lyven81.github.io/ai-project/projects/motor-claim-evaluator/demo.html",
+      "details": "motor-claim-evaluator.html"
+    },
+    {
+      "emoji": "🏘️",
+      "grad": "linear-gradient(135deg, #1E3A5F, #2563EB)",
+      "name": "Property Lead Tracker",
+      "desc": "Shows a rental agency which channel signs tenants, and at what cost. Flags stale listings and missed leads.",
+      "demoLabel": "Live Demo",
+      "demoUrl": "https://lyven81.github.io/ai-project/projects/property-lead-tracker/ui-1-internal-dashboard.html",
+      "details": "property-lead-tracker.html"
+    },
+    {
+      "emoji": "🌍",
+      "grad": "linear-gradient(135deg, #FF5722, #D84315)",
+      "name": "Long View (Crucix)",
+      "desc": "An AI-powered OSINT aggregator that sweeps 27 live sources, detects what actually moved, and briefs you in plain language.",
+      "demoLabel": "Live Demo",
+      "demoUrl": "projects/long-view/demo.html",
+      "details": "long-view.html"
+    },
+    {
+      "emoji": "🧭",
+      "grad": "linear-gradient(135deg, #FF5722, #E64A19)",
+      "name": "Mentor",
+      "desc": "An AI advisor for solo founders of service and expert businesses, grounded in their real week, not generic theory.",
+      "demoLabel": "Live Demo",
+      "demoUrl": "https://lyven81.github.io/ai-project/projects/mentor/demo.html",
+      "details": "mentor.html"
+    },
+    {
+      "emoji": "📚",
+      "grad": "linear-gradient(135deg, #1E3A5F, #2563EB)",
+      "name": "Bright Path Tuition Centre",
+      "desc": "An AI management assistant that answers a tuition centre manager's questions in plain English, built for Malaysia's post-UPSR assessment world.",
+      "demoLabel": "Live Demo",
+      "demoUrl": "bright-path-tuition/demo.html",
+      "details": "bright-path-tuition.html"
+    },
+    {
+      "emoji": "⚽",
+      "grad": "linear-gradient(135deg, #FF5722, #D84315)",
+      "name": "Football Assistant Coach",
+      "desc": "Picks the Starting XI from four AI-evaluated training sessions, rewarding the players who make the team work, not just the stars.",
+      "demoLabel": "Live Demo",
+      "demoUrl": "https://lyven81.github.io/ai-project/projects/football-assistant-coach/demo.html",
+      "details": "football-assistant-coach.html"
+    },
+    {
+      "emoji": "🏢",
+      "grad": "linear-gradient(135deg, #FF5722, #E64A19)",
+      "name": "Good Company",
+      "desc": "Reads a quarter report PDF and answers two questions retail investors confuse: is this a good business, and is this a good stock?",
+      "demoLabel": "Live Demo",
+      "demoUrl": "https://lyven81.github.io/ai-project/projects/good-company/demo.html",
+      "details": "good-company.html"
+    },
+    {
+      "emoji": "⚖️",
+      "grad": "linear-gradient(135deg, #1E3A5F, #2563EB)",
+      "name": "MyPropLex",
+      "desc": "An AI research assistant that turns hours of Malaysian property law lookup into a cited, plain-language answer in under two minutes.",
+      "demoLabel": "Live Demo",
+      "demoUrl": "https://lyven81.github.io/ai-project/projects/myproplex/demo.html",
+      "details": "myproplex.html"
+    },
+    {
+      "emoji": "🌟",
+      "grad": "linear-gradient(135deg, #FF5722, #D84315)",
+      "name": "North Star Learning Center",
+      "desc": "A supportive AI ecosystem that catches struggling children early and writes warm parent stories, for Malaysian small-class tuition centres.",
+      "demoLabel": "Launch App",
+      "demoUrl": "https://north-star-learning-center-522143897885.asia-southeast1.run.app",
+      "details": "north-star-learning-center.html"
+    },
+    {
+      "emoji": "👗",
+      "grad": "linear-gradient(135deg, #FF5722, #E64A19)",
+      "name": "TrendMate",
+      "desc": "An AI market research assistant for Malaysian online fashion sellers: what to stock, how to price it, and when to promote, in plain language they can act on now.",
+      "demoLabel": "Live Demo",
+      "demoUrl": "projects/trendmate/demo.html",
+      "details": "trendmate.html"
+    }
+  ]
+};
+  /* ===================== END EDIT BLOCK ===================== */
+
+  const pref = (u) => /^https?:|^mailto:|^tel:/.test(u) ? u : (SITE + u);
+  const projectLinks = (p) =>
+    `<div class="links"><a href="${pref(p.demoUrl)}">${p.demoLabel || 'Live Demo'}</a> &middot; `+
+    `<a href="${pref(p.details)}">View Details</a></div>`;
+
+  // Breadcrumb + head
+  document.getElementById('crumbHere').textContent = CATEGORY.heading;
+  document.getElementById('catTitle').textContent = CATEGORY.heading;
+  document.getElementById('catIntro').textContent = CATEGORY.intro;
+  document.getElementById('ctaLine').textContent = CATEGORY.ctaLine;
+  document.getElementById('projCount').textContent = CATEGORY.projects.length + (CATEGORY.projects.length === 1 ? ' project' : ' projects');
+
+  // Featured lead (first project)
+  const lead = CATEGORY.projects[0];
+  document.getElementById('feature').innerHTML = `
+    <a class="viz feature-viz" style="background:${lead.grad}" href="${pref(lead.details)}">${lead.emoji}</a>
+    <div class="feature-copy">
+      <span class="rubric">${CATEGORY.heading}</span>
+      <a href="${pref(lead.details)}"><h2>${lead.name}</h2></a>
+      <p class="lead-dek">${lead.desc}</p>
+      ${projectLinks(lead)}
+    </div>`;
+
+  // All projects grid (every project, including the featured one)
+  document.getElementById('projGrid').innerHTML = CATEGORY.projects.map(p => `
+    <article class="proj-card">
+      <a class="viz" style="background:${p.grad}" href="${pref(p.details)}">${p.emoji}</a>
+      <a href="${pref(p.details)}"><h4>${p.name}</h4></a>
+      <p class="lead-dek">${p.desc}</p>
+      ${projectLinks(p)}
+    </article>`).join('');
+
+  // Built with
+  document.getElementById('techRow').innerHTML = CATEGORY.builtWith.map(t => `<span class="tech">${t}</span>`).join('');
+
+  // Masthead search (this category's projects + a few site-wide; production indexes the full catalog)
+  const SITEWIDE = [
+    {t:"Voucher Analyzer", c:"Conversational Data Analytics", s:"voucher-analyzer"},
+    {t:"Property Lead Tracker", c:"Industry Specialist Advisors", s:"property-lead-tracker"},
+    {t:"Wiseman", c:"Knowledge & Reference Chatbots", s:"wiseman"},
+    {t:"Claude PDF Summarizer", c:"Document & Productivity Tools", s:"ai-pdf-summarizer"},
+    {t:"Sunny Car Accessories", c:"Agentic Commerce", s:"sunny-car-accessories"},
+    {t:"Course Creator", c:"Content Automation", s:"course-creator"},
+    {t:"Bookshelf", c:"Multi-Agent Decision Systems", s:"bookshelf"}
+  ];
+  const slugOf = (u) => (u || '').replace(/\.html$/,'').split('/').pop();
+  const localItems = CATEGORY.projects.map(p => ({t:p.name, c:CATEGORY.heading, s:slugOf(p.details)}));
+  const ITEMS = localItems.concat(SITEWIDE);
+
+  const searchInput = document.getElementById('searchInput');
+  const searchResults = document.getElementById('searchResults');
+  function runSearch(q){
+    if(q.trim().length < 2){ searchResults.style.display='none'; return; }
+    const ql = q.toLowerCase();
+    const hits = ITEMS.filter(it => (it.t+' '+it.c).toLowerCase().includes(ql));
+    searchResults.innerHTML = hits.length ? hits.map(it =>
+      `<div class="sr-item"><div class="sr-cat">${it.c}</div>`+
+      `<a href="${SITE}${it.s}.html"><div class="sr-title">${it.t}</div></a>`+
+      `<div class="sr-links"><a href="${SITE}${it.s}.html">View Details</a></div></div>`).join('')
+      : `<div class="sr-none">No projects found. Try a different keyword.</div>`;
+    searchResults.style.display='block';
+  }
+  searchInput.addEventListener('input', e => runSearch(e.target.value));
+  document.addEventListener('click', e => { if(!e.target.closest('.search-box')) searchResults.style.display='none'; });
+
+  // Drawer
+  const drawer=document.getElementById('drawer'), overlay=document.getElementById('overlay');
+  const openMenu=()=>{ drawer.classList.add('open'); overlay.classList.add('open'); };
+  const closeMenu=()=>{ drawer.classList.remove('open'); overlay.classList.remove('open'); };
+  document.getElementById('hamburger').addEventListener('click', openMenu);
+  document.getElementById('drawerClose').addEventListener('click', closeMenu);
+  overlay.addEventListener('click', closeMenu);
+  drawer.querySelectorAll('a').forEach(a=>a.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeMenu(); searchResults.style.display='none'; }});
 </script>
 
+<script>
+(function(){
+  function run(){
+    document.querySelectorAll('a.viz[href]').forEach(function(a){
+      var h=a.getAttribute('href')||''; var m=h.match(/([a-z0-9-]+).html(?:$|[?#])/i);
+      if(!m) return; var slug=m[1];
+      if(slug==='index'||slug==='contact'||slug==='project-categories'||slug.indexOf('category-')===0) return;
+      var ext=(slug==='plumber-whatsapp-agent'||slug==='bookshelf')?'jpg':'jpeg';
+      var src='images/'+slug+'/cover.'+ext;
+      var img=new Image();
+      img.onload=function(){ a.style.backgroundImage="url('"+src+"')"; a.style.backgroundSize="cover"; a.style.backgroundPosition="center"; a.textContent=''; };
+      img.src=src;
+    });
+  }
+  if(document.readyState!=='loading') setTimeout(run,0); else document.addEventListener('DOMContentLoaded',run);
+})();
+</script>
 </body>
 </html>

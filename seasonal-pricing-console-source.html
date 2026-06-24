@@ -1,101 +1,361 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Seasonal Pricing Console - Source Code</title>
-    <style>
-        *{margin:0;padding:0;box-sizing:border-box}
-        body{font-family:'Arial',sans-serif;line-height:1.6;color:#222;background-color:#fff}
-        .container{max-width:1000px;margin:0 auto;padding:20px}
-        .back-nav{margin-bottom:20px}
-        .back-nav a{color:#E91E63;text-decoration:none;font-size:1rem}
-        .back-nav a:hover{text-decoration:underline}
-        .project-header{text-align:center;margin-bottom:40px;padding:40px 0;background:linear-gradient(135deg,#E91E63,#AD1457);color:white;border-radius:10px}
-        .project-header h1{font-size:2.3rem;margin-bottom:10px}
-        .project-header p{font-size:1.1rem;opacity:.9}
-        .content-section{margin:40px 0;padding:30px;background-color:#f9f9f9;border-radius:8px;border-left:5px solid #E91E63}
-        .content-section h2{color:#E91E63;margin-bottom:14px;font-size:1.6rem}
-        .content-section h3{color:#333;margin:18px 0 8px;font-size:1.15rem}
-        .code-block{background-color:#0f2233;color:#cfe3f5;border-radius:6px;padding:15px;margin:12px 0;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.82rem;overflow-x:auto;white-space:pre;line-height:1.45}
-        p{margin:8px 0}
-        @media (max-width:768px){.project-header h1{font-size:1.8rem}.container{padding:15px}}
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seasonal Pricing Console: Source | AI Project Portfolio</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root{ --ink:#222; --paper:#fff; --hair:#dddddd; --gray:#555; --accent:#B8860B; --navy:#1E3A5F; --code-bg:#fbfbf8; --cmt:#6b8190; }
+  html{ scroll-behavior:smooth; }
+  body{ background:var(--paper); color:var(--ink); font-family:Arial, Helvetica, sans-serif; line-height:1.6; overflow-x:hidden; }
+  a{ color:inherit; text-decoration:none; }
+  a:hover h2, a:hover h3, a:hover h4{ color:var(--accent); }
+  p code, li code{ font-family:"Courier New", monospace; font-size:.86em; background:#f2f3f5; padding:1px 5px; color:var(--navy); }
+
+  /* Masthead (shared) */
+  .masthead{ display:flex; align-items:center; justify-content:space-between; padding:14px 28px; max-width:1240px; margin:0 auto; gap:18px; }
+  .mast-left{ display:flex; align-items:center; gap:20px; }
+  .logo{ background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; letter-spacing:3px; font-size:.95rem; padding:8px 12px; white-space:nowrap; }
+  .mast-nav{ display:flex; gap:20px; font-family:Arial, Helvetica, sans-serif; font-size:.72rem; letter-spacing:1.4px; text-transform:uppercase; }
+  .mast-nav a:hover{ color:var(--accent); }
+  .hamburger{ display:none; flex-direction:column; gap:4px; background:none; border:none; cursor:pointer; padding:6px; }
+  .hamburger span{ width:22px; height:2px; background:#222; display:block; }
+  .rule-top{ border:none; border-top:3px solid #222; max-width:1240px; margin:0 auto; }
+
+  /* Search (shared) */
+  .search-box{ position:relative; width:200px; }
+  .search-input{ width:100%; padding:7px 30px 7px 12px; border:1px solid var(--hair); background:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; color:#222; }
+  .search-input:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(184,134,11,.15); }
+  .search-ic{ position:absolute; right:10px; top:50%; transform:translateY(-50%); color:var(--gray); font-size:.8rem; pointer-events:none; }
+  .search-results{ position:absolute; top:calc(100% + 4px); left:0; width:340px; max-width:86vw; background:#fff; border:1px solid #222; max-height:60vh; overflow-y:auto; z-index:120; display:none; }
+  .sr-item{ padding:12px 14px; border-bottom:1px solid var(--hair); }
+  .sr-item:last-child{ border-bottom:none; }
+  .sr-cat{ font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; margin-bottom:4px; color:var(--accent); }
+  .sr-title{ font-weight:700; font-size:1.02rem; color:#222; }
+  .sr-links{ font-size:.58rem; letter-spacing:.8px; text-transform:uppercase; color:var(--gray); margin-top:5px; }
+  .sr-links a:hover{ color:var(--accent); }
+  .sr-none{ padding:16px 14px; font-size:.82rem; color:var(--gray); }
+
+  /* Shared bits */
+  .tab{ display:inline-block; background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.66rem; letter-spacing:2px; text-transform:uppercase; padding:6px 12px; }
+  .rubric{ font-family:Arial, Helvetica, sans-serif; font-size:.62rem; font-weight:700; letter-spacing:1.6px; text-transform:uppercase; color:var(--accent); display:block; margin-bottom:8px; }
+  .tech-chip{ display:inline-block; border:1px solid var(--hair); padding:6px 12px; font-size:.72rem; letter-spacing:.3px; color:#333; white-space:nowrap; }
+  .tech-chip:hover{ border-color:var(--accent); color:var(--accent); }
+  .btn{ display:inline-block; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.7rem; letter-spacing:1.6px; text-transform:uppercase; padding:13px 24px; border:1px solid #222; background:#222; color:#fff; cursor:pointer; transition:.15s; }
+  .btn:hover{ background:var(--accent); border-color:var(--accent); }
+  .btn.ghost{ background:#fff; color:#222; }
+  .btn.ghost:hover{ color:var(--accent); border-color:var(--accent); background:#fff; }
+
+  /* Breadcrumb */
+  .crumb{ max-width:1240px; margin:0 auto; padding:20px 28px 0; font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--gray); }
+  .crumb a:hover{ color:var(--accent); }
+  .crumb .sep{ color:var(--hair); margin:0 8px; }
+
+  /* Header (slim cover banner + copy) */
+  .src-head{ max-width:1240px; margin:0 auto; padding:14px 28px 6px; }
+  .cover-strip{ border:1px solid var(--hair); line-height:0; background:#eef1f4; }
+  .cover-strip img{ width:100%; height:190px; object-fit:cover; object-position:center 42%; display:block; }
+  .src-head h1{ font-size:2.5rem; font-weight:900; line-height:1.04; letter-spacing:-.008em; margin-top:18px; }
+  .src-head .sub{ font-style:italic; font-size:1.08rem; color:#333; margin-top:10px; max-width:72ch; }
+  .head-tech{ display:flex; flex-wrap:wrap; gap:9px; margin-top:16px; }
+  .head-btns{ display:flex; flex-wrap:wrap; gap:12px; margin-top:18px; }
+
+  /* Section shell */
+  .sec{ max-width:1240px; margin:0 auto; padding:26px 28px; }
+  .sec-rule{ border-top:3px solid #222; padding-top:16px; }
+  .sec .tab{ margin-bottom:14px; }
+  .sec h2{ font-size:1.7rem; font-weight:900; line-height:1.06; }
+  .sec .intro{ color:#333; font-size:1.02rem; margin-top:10px; max-width:80%; }
+  .sec .body{ color:#333; font-size:1rem; margin-top:10px; max-width:80%; }
+
+  /* Code block */
+  .codeblock{ border:1px solid var(--hair); margin-top:16px; }
+  .code-bar{ display:flex; align-items:center; justify-content:space-between; gap:12px; background:var(--navy); color:#fff; padding:8px 12px; }
+  .code-bar .path{ font-family:"Courier New", monospace; font-size:.74rem; letter-spacing:.2px; opacity:.96; display:flex; align-items:center; gap:7px; min-width:0; }
+  .code-bar .path span{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .code-copy{ flex:none; background:none; border:1px solid rgba(255,255,255,.4); color:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.56rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; padding:5px 11px; cursor:pointer; transition:.15s; }
+  .code-copy:hover{ background:rgba(255,255,255,.16); }
+  .codeblock pre{ margin:0; padding:14px 16px; overflow-x:auto; background:var(--code-bg); }
+  .codeblock code{ font-family:"Courier New", monospace; font-size:.82rem; line-height:1.6; color:#1b2a3a; background:none; padding:0; white-space:pre; display:block; }
+  .codeblock code .cmt{ color:var(--cmt); font-style:italic; }
+
+  .tree .code-bar .path::before{ content:"📁"; }
+
+  /* Notes */
+  .note-block{ margin-top:22px; }
+  .note-block h3{ font-size:1.15rem; font-weight:800; }
+  .blist{ list-style:none; margin-top:12px; border-top:1px solid var(--hair); }
+  .blist li{ padding:12px 0; border-bottom:1px solid var(--hair); color:#333; font-size:.95rem; }
+  .blist li b{ color:#222; }
+
+  /* CTA */
+  .cta-inner{ display:flex; align-items:center; gap:18px; flex-wrap:wrap; border-top:3px solid #222; padding-top:18px; }
+  .cta-inner h3{ font-size:1.4rem; font-weight:900; line-height:1.08; }
+  .cta-inner p{ color:var(--gray); font-size:.95rem; margin-top:4px; }
+  .cta-btns{ margin-left:auto; display:flex; gap:12px; flex-wrap:wrap; }
+
+  footer{ background:#222; max-width:1240px; margin:30px auto 0; padding:24px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; letter-spacing:.5px; color:#fff; text-align:center; }
+  .note{ max-width:1240px; margin:14px auto 0; padding:8px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.62rem; letter-spacing:1px; color:#999; }
+
+  /* Drawer (shared) */
+  .drawer{ position:fixed; top:0; left:-300px; width:280px; height:100vh; background:#fff; z-index:200; box-shadow:2px 0 14px rgba(0,0,0,.15); transition:left .28s ease; padding:74px 26px 26px; }
+  .drawer.open{ left:0; }
+  .drawer a{ display:block; font-family:Arial, Helvetica, sans-serif; font-size:.82rem; letter-spacing:1.2px; text-transform:uppercase; padding:14px 0; border-bottom:1px solid var(--hair); }
+  .overlay{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:150; }
+  .overlay.open{ display:block; }
+  .drawer-close{ position:absolute; top:20px; right:20px; font-family:Arial, Helvetica, sans-serif; font-size:1.4rem; background:none; border:none; cursor:pointer; }
+
+  @media (max-width:900px){
+    .cta-btns{ margin-left:0; }
+    .mast-nav{ display:none; }
+    .hamburger{ display:flex; }
+    .masthead{ padding:12px 16px; }
+    .mast-left{ gap:10px; min-width:0; flex:1; }
+    .logo{ font-size:.72rem; letter-spacing:1.5px; padding:6px 8px; }
+    .search-box{ flex:1; width:auto; min-width:0; }
+    .search-results{ position:fixed; top:58px; left:12px; right:12px; width:auto; max-width:none; }
+    .src-head h1{ font-size:1.95rem; }
+    .cover-strip img{ height:150px; }
+  }
+</style>
 </head>
 <body>
-    <div class="container">
-        <nav class="back-nav"><a href="seasonal-pricing-console.html">← Back to Showcase</a></nav>
-        <div class="project-header">
-            <h1>🏷️ Seasonal Pricing Console — Source</h1>
-            <p>How the data, the estimator, the proof, and the governed query layer fit together</p>
-        </div>
 
-        <div class="content-section">
-            <h2>📁 Project Structure</h2>
-            <div class="code-block">projects/seasonal-pricing-console/
-├── demo.html          # the console: self-contained, data embedded, sql.js in-browser
-├── generate_data.py   # synthetic generator with a baked-in elasticity ground truth
-├── analyze.py         # DiD elasticity estimator + recovery check + optimal price
-├── build_db.py        # builds the small SQLite DB the governed queries run on
-├── results.json       # the locked results the console renders
-└── README.md          # how it works and how to run it</div>
-            <p>The build follows one order: <strong>data → brain → prove the brain → UI</strong>. Nothing is rendered until the estimate has recovered a known answer.</p>
-        </div>
+  <div class="overlay" id="overlay"></div>
+  <nav class="drawer" id="drawer">
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">&times;</button>
+    <a href="index.html">Home</a>
+    <a href="project-categories.html">Categories</a>
+    <a href="contact.html">Contact</a>
+    <a href="https://lyven81.github.io/data-analyst-portfolio/index.html">Data Portfolio</a>
+  </nav>
 
-        <div class="content-section">
-            <h2>1. Data: a known truth baked in</h2>
-            <p>The generator simulates three years of listing-nights and bakes a known price elasticity into each listing and season, then makes occupancy actually respond to price through that elasticity. Because the truth is known, the estimate can later be graded against it.</p>
-            <div class="code-block"># generate_data.py (excerpt)
-TYPE_ELAST = {"Studio":-1.60,"1BR":-1.25,"2BR":-1.05,"3BR":-0.85}
-SEASON_ELAST_FACTOR = {"peak":0.80,"shoulder":1.00,"trough":1.20}
-# occupancy responds to price via the baked-in elasticity:
-price_response = (price/base) ** el          # el = true elasticity
-occ = BASE_OCC * dw_term * DEMAND_SEASON[s] * price_response
-booked = int(rng.random() &lt; occ)</div>
-        </div>
-
-        <div class="content-section">
-            <h2>2. Brain: difference-in-differences elasticity</h2>
-            <p>Elasticity is the slope of log(occupancy) on log(price). The trap is that the host raises prices in peak season exactly when demand is high. Listing fixed effects and a weekend control remove that, so the price effect is identified from month-to-month price changes, with confidence intervals from the regression.</p>
-            <div class="code-block"># analyze.py (excerpt)
-# y = ln(occupancy); regress on ln(price) with listing fixed effects + weekend
-X = np.column_stack([FE, np.log(price), is_weekend])   # FE = listing dummies
-beta, cov = wls(X, y, w)
-elasticity = beta[ei]                 # coef on ln(price)
-ci_low, ci_high = elasticity - 1.96*se, elasticity + 1.96*se</div>
-        </div>
-
-        <div class="content-section">
-            <h2>3. Prove: the recovery check (the hard gate)</h2>
-            <p>Before any rate is trusted, the estimate is compared with the baked-in truth, and against a naive price-vs-occupancy read. The controlled estimator is 3.2x closer to the truth and lands inside the 95% interval in every cell.</p>
-            <div class="code-block"># analyze.py (excerpt)
-recovery = dict(
-  mean_abs_error      = 0.224,   # controlled estimator vs known truth
-  naive_mean_abs_error= 0.713,   # naive read (no controls), badly biased
-  truth_in_ci_rate    = 1.0,     # truth inside 95% CI in 12/12 cells
-)
-# optimal price: profit-max rate from the fitted curve, net of cost,
-# bounded to prices already observed that season (no extrapolation)</div>
-        </div>
-
-        <div class="content-section">
-            <h2>4. Governed query layer (in the browser)</h2>
-            <p>The "Pricing Questions" tab answers four questions with fixed, parameterized read-only SQL run client-side via sql.js. The layer picks an approved track and binds values; it can never author its own SQL, and the hidden true sensitivity is never queried.</p>
-            <div class="code-block">// demo.html (excerpt) — sql.js builds a small table, runs FIXED queries
-db.run("CREATE TABLE rates(listing_id, listing_title, property_type, season,
-  elasticity, current_avg_price, optimal_price, ...);");
-RATE_ROWS.forEach(r => st.run(r));
-
-// fixed, read-only query — only values flow, never SQL
-const sql = "SELECT listing_title, ROUND(SUM(uplift_rm)) AS uplift " +
-            "FROM rates GROUP BY listing_title ORDER BY uplift DESC";
-const rows = run(sql);   // rendered live in the browser</div>
-        </div>
-
-        <nav class="back-nav" style="text-align:center;margin-top:40px;">
-            <a href="seasonal-pricing-console.html">← Back to Showcase</a> |
-            <a href="https://github.com/lyven81/ai-project/tree/main/projects/seasonal-pricing-console" target="_blank">View Full Code on GitHub</a>
-        </nav>
+  <div class="masthead">
+    <div class="mast-left">
+      <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+      <a class="logo" href="index.html">AI PROJECTS</a>
+      <nav class="mast-nav">
+        <a href="project-categories.html">Categories</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <div class="search-box">
+        <input type="text" class="search-input" id="searchInput" autocomplete="off" placeholder="Search AI projects..." aria-label="Search AI projects">
+        <span class="search-ic">&#128269;</span>
+        <div class="search-results" id="searchResults"></div>
+      </div>
     </div>
+  </div>
+  <hr class="rule-top">
+
+  <div class="crumb">
+    <a href="project-categories.html">Categories</a>
+    <span class="sep">/</span><a id="crumbCat" href="#"></a>
+    <span class="sep">/</span><a id="crumbProj" href="#"></a>
+    <span class="sep">/</span><span>Source</span>
+  </div>
+
+  <section class="src-head">
+    <div class="cover-strip" id="coverStrip" style="display:none"><img id="cover" alt=""></div>
+    <span class="rubric" id="kicker"></span>
+    <h1 id="title"></h1>
+    <p class="sub" id="subtitle"></p>
+    <div class="head-tech" id="headTech"></div>
+    <div class="head-btns" id="headBtns"></div>
+  </section>
+
+  <div id="body"></div>
+
+  <footer>&copy; 2026 Lee Yih Ven | AI Project Portfolio &middot; All rights reserved.</footer>
+  <div class="note">Sample Source-Showcase-E2 (TEMPLATE): source-code page on the index magazine system: slim cover banner, About, Project Structure, code walkthrough with copyable navy-barred code blocks, CTA. Reuse by editing only the PROJECT block at the top of the script.</div>
+
+<script>
+  const SITE = "";
+
+  /* =================================================================
+     EDIT PER PROJECT  -  the ONLY block you change per page.
+     Copy this file, swap PROJECT, save as <slug>-source.html.
+     - structure.code : the project file tree (plain text)
+     - walkthrough[]   : { heading, body, files:[{label, code}] }
+     - notes[]         : { heading, bullets:[...] }
+     Code strings can be multi-line; they render verbatim.
+     ================================================================= */
+  const PROJECT = {
+  "slug": "seasonal-pricing-console",
+  "category": "Conversational Data Analytics",
+  "categoryUrl": "category-conversational-analytics.html",
+  "title": "Seasonal Pricing Console",
+  "subtitle": "How the data, the estimator, the proof, and the governed query layer fit together.",
+  "cover": "images/seasonal-pricing-console/cover.jpeg",
+  "tech": [
+    "Python",
+    "NumPy",
+    "pandas",
+    "sql.js",
+    "Difference-in-Differences",
+    "Read-only SQL"
+  ],
+  "overviewUrl": "seasonal-pricing-console.html",
+  "demoLabel": "Try Live Demo",
+  "demoUrl": "https://lyven81.github.io/ai-project/projects/seasonal-pricing-console/demo.html",
+  "repoUrl": "https://github.com/lyven81/ai-project/tree/main/projects/seasonal-pricing-console",
+  "about": "The build follows one order: <b>data to brain to prove the brain to UI</b>. Nothing is rendered until the estimate has recovered a known answer. The generator bakes a known price elasticity into each listing and season, the difference-in-differences estimator recovers it blind, the recovery check gates it against the baked-in truth, and the governed query layer answers the live pricing questions in the browser with fixed read-only SQL.",
+  "structure": {
+    "label": "projects/seasonal-pricing-console/",
+    "code": "projects/seasonal-pricing-console/\n├── demo.html          # the console: self-contained, data embedded, sql.js in-browser\n├── generate_data.py   # synthetic generator with a baked-in elasticity ground truth\n├── analyze.py         # DiD elasticity estimator + recovery check + optimal price\n├── build_db.py        # builds the small SQLite DB the governed queries run on\n├── results.json       # the locked results the console renders\n└── README.md          # how it works and how to run it"
+  },
+  "walkthrough": [
+    {
+      "heading": "Data: a known truth baked in",
+      "body": "The generator simulates three years of listing-nights and bakes a known price elasticity into each listing and season, then makes occupancy actually respond to price through that elasticity. Because the truth is known, the estimate can later be graded against it.",
+      "files": [
+        {
+          "label": "generate_data.py (excerpt)",
+          "code": "# generate_data.py (excerpt)\nTYPE_ELAST = {\"Studio\":-1.60,\"1BR\":-1.25,\"2BR\":-1.05,\"3BR\":-0.85}\nSEASON_ELAST_FACTOR = {\"peak\":0.80,\"shoulder\":1.00,\"trough\":1.20}\n# occupancy responds to price via the baked-in elasticity:\nprice_response = (price/base) ** el          # el = true elasticity\nocc = BASE_OCC * dw_term * DEMAND_SEASON[s] * price_response\nbooked = int(rng.random() < occ)"
+        }
+      ]
+    },
+    {
+      "heading": "Brain: difference-in-differences elasticity",
+      "body": "Elasticity is the slope of log(occupancy) on log(price). The trap is that the host raises prices in peak season exactly when demand is high. Listing fixed effects and a weekend control remove that, so the price effect is identified from month-to-month price changes, with confidence intervals from the regression.",
+      "files": [
+        {
+          "label": "analyze.py (excerpt)",
+          "code": "# analyze.py (excerpt)\n# y = ln(occupancy); regress on ln(price) with listing fixed effects + weekend\nX = np.column_stack([FE, np.log(price), is_weekend])   # FE = listing dummies\nbeta, cov = wls(X, y, w)\nelasticity = beta[ei]                 # coef on ln(price)\nci_low, ci_high = elasticity - 1.96*se, elasticity + 1.96*se"
+        }
+      ]
+    },
+    {
+      "heading": "Prove: the recovery check (the hard gate)",
+      "body": "Before any rate is trusted, the estimate is compared with the baked-in truth, and against a naive price-vs-occupancy read. The controlled estimator is 3.2x closer to the truth and lands inside the 95% interval in every cell.",
+      "files": [
+        {
+          "label": "analyze.py (excerpt)",
+          "code": "# analyze.py (excerpt)\nrecovery = dict(\n  mean_abs_error      = 0.224,   # controlled estimator vs known truth\n  naive_mean_abs_error= 0.713,   # naive read (no controls), badly biased\n  truth_in_ci_rate    = 1.0,     # truth inside 95% CI in 12/12 cells\n)\n# optimal price: profit-max rate from the fitted curve, net of cost,\n# bounded to prices already observed that season (no extrapolation)"
+        }
+      ]
+    },
+    {
+      "heading": "Governed query layer (in the browser)",
+      "body": "The \"Pricing Questions\" tab answers four questions with fixed, parameterized read-only SQL run client-side via sql.js. The layer picks an approved track and binds values; it can never author its own SQL, and the hidden true sensitivity is never queried.",
+      "files": [
+        {
+          "label": "demo.html (excerpt)",
+          "code": "// demo.html (excerpt) — sql.js builds a small table, runs FIXED queries\ndb.run(\"CREATE TABLE rates(listing_id, listing_title, property_type, season,\n  elasticity, current_avg_price, optimal_price, ...);\");\nRATE_ROWS.forEach(r => st.run(r));\n\n// fixed, read-only query — only values flow, never SQL\nconst sql = \"SELECT listing_title, ROUND(SUM(uplift_rm)) AS uplift \" +\n            \"FROM rates GROUP BY listing_title ORDER BY uplift DESC\";\nconst rows = run(sql);   // rendered live in the browser"
+        }
+      ]
+    }
+  ],
+  "cta": "Want a governed, zero-cost analytics tool like this built for your own data? Let's scope it."
+};
+  /* ===================== END EDIT BLOCK ===================== */
+
+  const pref = (u) => /^https?:|^mailto:|^tel:/.test(u || '') ? u : (SITE + (u || ''));
+  const esc = (s) => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const rich = (s) => esc(s).replace(/&lt;(\/?(?:b|code))&gt;/g, '<$1>');
+
+  // raw code store for copy buttons
+  const RAW = [];
+  function codeBlock(label, codeStr, extraClass){
+    const idx = RAW.push(codeStr) - 1;
+    const rendered = esc(codeStr).split('\n')
+      .map(line => /^\s*#/.test(line) ? `<span class="cmt">${line}</span>` : line).join('\n');
+    return `<div class="codeblock ${extraClass||''}">`+
+      `<div class="code-bar"><span class="path"><span>${esc(label)}</span></span>`+
+      `<button class="code-copy" data-idx="${idx}">Copy</button></div>`+
+      `<pre><code>${rendered}</code></pre></div>`;
+  }
+
+  // Breadcrumb + header
+  document.title = PROJECT.title + ": Source | AI Project Portfolio";
+  document.getElementById('crumbCat').textContent = PROJECT.category;
+  document.getElementById('crumbCat').href = pref(PROJECT.categoryUrl);
+  document.getElementById('crumbProj').textContent = PROJECT.title;
+  document.getElementById('crumbProj').href = pref(PROJECT.overviewUrl);
+  if (PROJECT.cover){
+    document.getElementById('coverStrip').style.display = '';
+    const c = document.getElementById('cover'); c.src = PROJECT.cover; c.alt = PROJECT.title + " cover";
+  }
+  document.getElementById('kicker').textContent = "Source Walkthrough · " + PROJECT.category;
+  document.getElementById('title').textContent = PROJECT.title;
+  document.getElementById('subtitle').textContent = PROJECT.subtitle;
+  document.getElementById('headTech').innerHTML = (PROJECT.tech||[]).map(t => `<span class="tech-chip">${esc(t)}</span>`).join('');
+  document.getElementById('headBtns').innerHTML =
+    (PROJECT.demoUrl ? `<a class="btn" href="${pref(PROJECT.demoUrl)}" target="_blank" rel="noopener">${esc(PROJECT.demoLabel||'Live Demo')}</a>` : '') +
+    (PROJECT.overviewUrl ? `<a class="btn ghost" href="${pref(PROJECT.overviewUrl)}">Project Overview</a>` : '') +
+    (PROJECT.repoUrl ? `<a class="btn ghost" href="${pref(PROJECT.repoUrl)}" target="_blank" rel="noopener">GitHub Repo</a>` : '');
+
+  const section = (tab, inner) => `<section class="sec"><div class="sec-rule"><span class="tab">${esc(tab)}</span>${inner}</div></section>`;
+  let html = "";
+  const P = PROJECT;
+
+  if (P.about){
+    html += section("About This Code", `<h2>About This Code Showcase</h2><p class="intro">${rich(P.about)}</p>`);
+  }
+  if (P.structure && P.structure.code){
+    html += section("Project Structure", `<h2>Project Structure</h2>`+
+      codeBlock(P.structure.label || 'project/', P.structure.code, 'tree'));
+  }
+  (P.walkthrough||[]).forEach(w => {
+    let inner = `<h2>${esc(w.heading)}</h2>`;
+    if (w.body) inner += `<p class="body">${rich(w.body)}</p>`;
+    (w.files||[]).forEach(f => { inner += codeBlock(f.label, f.code); });
+    html += section("Code", inner);
+  });
+  // CTA
+  html += `<section class="sec"><div class="cta-inner">`+
+    `<div><h3>Interested in the build?</h3><p>${esc(P.cta || "Let's talk.")}</p></div>`+
+    `<div class="cta-btns">`+
+    (P.demoUrl ? `<a class="btn" href="${pref(P.demoUrl)}" target="_blank" rel="noopener">${esc(P.demoLabel||'Live Demo')}</a>` : '')+
+    `<a class="btn ghost" href="${SITE}contact.html">Get in Touch</a>`+
+    `</div></div></section>`;
+
+  document.getElementById('body').innerHTML = html;
+
+  // Copy buttons
+  function copyText(text, btn){
+    const done = ()=>{ const o=btn.textContent; btn.textContent='Copied ✓'; setTimeout(()=>btn.textContent=o.includes('Copied')?'Copy':o,1400); };
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(done).catch(()=>fb(text,done)); }
+    else fb(text,done);
+  }
+  function fb(text,done){ const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(ta); done(); }
+  document.querySelectorAll('.code-copy').forEach(btn =>
+    btn.addEventListener('click', ()=> copyText(RAW[+btn.dataset.idx], btn)));
+
+  // Masthead search
+  const ITEMS = [
+    {t:PROJECT.title, c:PROJECT.category, s:PROJECT.slug},
+    {t:"Courier CS Quality Console", c:"Conversational Data Analytics", s:"courier-cs-quality-console"},
+    {t:"Voucher Analyzer", c:"Conversational Data Analytics", s:"voucher-analyzer"},
+    {t:"Wiseman", c:"Knowledge & Reference Chatbots", s:"wiseman"},
+    {t:"Sunny Car Accessories", c:"Agentic Commerce", s:"sunny-car-accessories"},
+    {t:"Bookshelf", c:"Multi-Agent Decision Systems", s:"bookshelf"}
+  ];
+  const searchInput = document.getElementById('searchInput');
+  const searchResults = document.getElementById('searchResults');
+  function runSearch(q){
+    if(q.trim().length < 2){ searchResults.style.display='none'; return; }
+    const ql = q.toLowerCase();
+    const hits = ITEMS.filter(it => (it.t+' '+it.c).toLowerCase().includes(ql));
+    searchResults.innerHTML = hits.length ? hits.map(it =>
+      `<div class="sr-item"><div class="sr-cat">${esc(it.c)}</div>`+
+      `<a href="${SITE}${it.s}.html"><div class="sr-title">${esc(it.t)}</div></a>`+
+      `<div class="sr-links"><a href="${SITE}${it.s}.html">View Details</a></div></div>`).join('')
+      : `<div class="sr-none">No projects found. Try a different keyword.</div>`;
+    searchResults.style.display='block';
+  }
+  searchInput.addEventListener('input', e => runSearch(e.target.value));
+  document.addEventListener('click', e => { if(!e.target.closest('.search-box')) searchResults.style.display='none'; });
+
+  // Drawer
+  const drawer=document.getElementById('drawer'), overlay=document.getElementById('overlay');
+  const openMenu=()=>{ drawer.classList.add('open'); overlay.classList.add('open'); };
+  const closeMenu=()=>{ drawer.classList.remove('open'); overlay.classList.remove('open'); };
+  document.getElementById('hamburger').addEventListener('click', openMenu);
+  document.getElementById('drawerClose').addEventListener('click', closeMenu);
+  overlay.addEventListener('click', closeMenu);
+  drawer.querySelectorAll('a').forEach(a=>a.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeMenu(); searchResults.style.display='none'; }});
+</script>
 </body>
 </html>

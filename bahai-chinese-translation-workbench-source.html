@@ -1,438 +1,353 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bahai Chinese Translation Workbench - Source Code</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bahai Chinese Translation Workbench: Source | AI Project Portfolio</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root{ --ink:#222; --paper:#fff; --hair:#dddddd; --gray:#555; --accent:#B8860B; --navy:#1E3A5F; --code-bg:#fbfbf8; --cmt:#6b8190; }
+  html{ scroll-behavior:smooth; }
+  body{ background:var(--paper); color:var(--ink); font-family:Arial, Helvetica, sans-serif; line-height:1.6; overflow-x:hidden; }
+  a{ color:inherit; text-decoration:none; }
+  a:hover h2, a:hover h3, a:hover h4{ color:var(--accent); }
+  p code, li code{ font-family:"Courier New", monospace; font-size:.86em; background:#f2f3f5; padding:1px 5px; color:var(--navy); }
 
-        body {
-            font-family: 'Arial', sans-serif;
-            line-height: 1.6;
-            color: #222;
-            background-color: #ffffff;
-        }
+  /* Masthead (shared) */
+  .masthead{ display:flex; align-items:center; justify-content:space-between; padding:14px 28px; max-width:1240px; margin:0 auto; gap:18px; }
+  .mast-left{ display:flex; align-items:center; gap:20px; }
+  .logo{ background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; letter-spacing:3px; font-size:.95rem; padding:8px 12px; white-space:nowrap; }
+  .mast-nav{ display:flex; gap:20px; font-family:Arial, Helvetica, sans-serif; font-size:.72rem; letter-spacing:1.4px; text-transform:uppercase; }
+  .mast-nav a:hover{ color:var(--accent); }
+  .hamburger{ display:none; flex-direction:column; gap:4px; background:none; border:none; cursor:pointer; padding:6px; }
+  .hamburger span{ width:22px; height:2px; background:#222; display:block; }
+  .rule-top{ border:none; border-top:3px solid #222; max-width:1240px; margin:0 auto; }
 
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+  /* Search (shared) */
+  .search-box{ position:relative; width:200px; }
+  .search-input{ width:100%; padding:7px 30px 7px 12px; border:1px solid var(--hair); background:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; color:#222; }
+  .search-input:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(184,134,11,.15); }
+  .search-ic{ position:absolute; right:10px; top:50%; transform:translateY(-50%); color:var(--gray); font-size:.8rem; pointer-events:none; }
+  .search-results{ position:absolute; top:calc(100% + 4px); left:0; width:340px; max-width:86vw; background:#fff; border:1px solid #222; max-height:60vh; overflow-y:auto; z-index:120; display:none; }
+  .sr-item{ padding:12px 14px; border-bottom:1px solid var(--hair); }
+  .sr-item:last-child{ border-bottom:none; }
+  .sr-cat{ font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; margin-bottom:4px; color:var(--accent); }
+  .sr-title{ font-weight:700; font-size:1.02rem; color:#222; }
+  .sr-links{ font-size:.58rem; letter-spacing:.8px; text-transform:uppercase; color:var(--gray); margin-top:5px; }
+  .sr-links a:hover{ color:var(--accent); }
+  .sr-none{ padding:16px 14px; font-size:.82rem; color:var(--gray); }
 
-        .back-nav {
-            margin-bottom: 20px;
-        }
+  /* Shared bits */
+  .tab{ display:inline-block; background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.66rem; letter-spacing:2px; text-transform:uppercase; padding:6px 12px; }
+  .rubric{ font-family:Arial, Helvetica, sans-serif; font-size:.62rem; font-weight:700; letter-spacing:1.6px; text-transform:uppercase; color:var(--accent); display:block; margin-bottom:8px; }
+  .tech-chip{ display:inline-block; border:1px solid var(--hair); padding:6px 12px; font-size:.72rem; letter-spacing:.3px; color:#333; white-space:nowrap; }
+  .tech-chip:hover{ border-color:var(--accent); color:var(--accent); }
+  .btn{ display:inline-block; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.7rem; letter-spacing:1.6px; text-transform:uppercase; padding:13px 24px; border:1px solid #222; background:#222; color:#fff; cursor:pointer; transition:.15s; }
+  .btn:hover{ background:var(--accent); border-color:var(--accent); }
+  .btn.ghost{ background:#fff; color:#222; }
+  .btn.ghost:hover{ color:var(--accent); border-color:var(--accent); background:#fff; }
 
-        .back-nav a {
-            color: #007BFF;
-            text-decoration: none;
-            font-size: 1rem;
-        }
+  /* Breadcrumb */
+  .crumb{ max-width:1240px; margin:0 auto; padding:20px 28px 0; font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--gray); }
+  .crumb a:hover{ color:var(--accent); }
+  .crumb .sep{ color:var(--hair); margin:0 8px; }
 
-        .back-nav a:hover {
-            text-decoration: underline;
-        }
+  /* Header (slim cover banner + copy) */
+  .src-head{ max-width:1240px; margin:0 auto; padding:14px 28px 6px; }
+  .cover-strip{ border:1px solid var(--hair); line-height:0; background:#eef1f4; }
+  .cover-strip img{ width:100%; height:190px; object-fit:cover; object-position:center 42%; display:block; }
+  .src-head h1{ font-size:2.5rem; font-weight:900; line-height:1.04; letter-spacing:-.008em; margin-top:18px; }
+  .src-head .sub{ font-style:italic; font-size:1.08rem; color:#333; margin-top:10px; max-width:72ch; }
+  .head-tech{ display:flex; flex-wrap:wrap; gap:9px; margin-top:16px; }
+  .head-btns{ display:flex; flex-wrap:wrap; gap:12px; margin-top:18px; }
 
-        .project-header {
-            text-align: center;
-            margin-bottom: 40px;
-            padding: 40px 0;
-            background: linear-gradient(135deg, #2196F3, #1565C0);
-            color: white;
-            border-radius: 10px;
-        }
+  /* Section shell */
+  .sec{ max-width:1240px; margin:0 auto; padding:26px 28px; }
+  .sec-rule{ border-top:3px solid #222; padding-top:16px; }
+  .sec .tab{ margin-bottom:14px; }
+  .sec h2{ font-size:1.7rem; font-weight:900; line-height:1.06; }
+  .sec .intro{ color:#333; font-size:1.02rem; margin-top:10px; max-width:80%; }
+  .sec .body{ color:#333; font-size:1rem; margin-top:10px; max-width:80%; }
 
-        .project-header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
+  /* Code block */
+  .codeblock{ border:1px solid var(--hair); margin-top:16px; }
+  .code-bar{ display:flex; align-items:center; justify-content:space-between; gap:12px; background:var(--navy); color:#fff; padding:8px 12px; }
+  .code-bar .path{ font-family:"Courier New", monospace; font-size:.74rem; letter-spacing:.2px; opacity:.96; display:flex; align-items:center; gap:7px; min-width:0; }
+  .code-bar .path span{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .code-copy{ flex:none; background:none; border:1px solid rgba(255,255,255,.4); color:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.56rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; padding:5px 11px; cursor:pointer; transition:.15s; }
+  .code-copy:hover{ background:rgba(255,255,255,.16); }
+  .codeblock pre{ margin:0; padding:14px 16px; overflow-x:auto; background:var(--code-bg); }
+  .codeblock code{ font-family:"Courier New", monospace; font-size:.82rem; line-height:1.6; color:#1b2a3a; background:none; padding:0; white-space:pre; display:block; }
+  .codeblock code .cmt{ color:var(--cmt); font-style:italic; }
 
-        .project-header p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
+  .tree .code-bar .path::before{ content:"📁"; }
 
-        .badges {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin: 20px 0;
-            flex-wrap: wrap;
-        }
+  /* Notes */
+  .note-block{ margin-top:22px; }
+  .note-block h3{ font-size:1.15rem; font-weight:800; }
+  .blist{ list-style:none; margin-top:12px; border-top:1px solid var(--hair); }
+  .blist li{ padding:12px 0; border-bottom:1px solid var(--hair); color:#333; font-size:.95rem; }
+  .blist li b{ color:#222; }
 
-        .badge {
-            background-color: rgba(255, 255, 255, 0.2);
-            color: white;
-            padding: 5px 12px;
-            border-radius: 15px;
-            font-size: 0.9rem;
-        }
+  /* CTA */
+  .cta-inner{ display:flex; align-items:center; gap:18px; flex-wrap:wrap; border-top:3px solid #222; padding-top:18px; }
+  .cta-inner h3{ font-size:1.4rem; font-weight:900; line-height:1.08; }
+  .cta-inner p{ color:var(--gray); font-size:.95rem; margin-top:4px; }
+  .cta-btns{ margin-left:auto; display:flex; gap:12px; flex-wrap:wrap; }
 
-        .content-section {
-            margin: 40px 0;
-            padding: 30px;
-            background-color: #f9f9f9;
-            border-radius: 8px;
-            border-left: 5px solid #2196F3;
-        }
+  footer{ background:#222; max-width:1240px; margin:30px auto 0; padding:24px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; letter-spacing:.5px; color:#fff; text-align:center; }
+  .note{ max-width:1240px; margin:14px auto 0; padding:8px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.62rem; letter-spacing:1px; color:#999; }
 
-        .content-section h2 {
-            color: #2196F3;
-            margin-bottom: 20px;
-            font-size: 1.8rem;
-        }
+  /* Drawer (shared) */
+  .drawer{ position:fixed; top:0; left:-300px; width:280px; height:100vh; background:#fff; z-index:200; box-shadow:2px 0 14px rgba(0,0,0,.15); transition:left .28s ease; padding:74px 26px 26px; }
+  .drawer.open{ left:0; }
+  .drawer a{ display:block; font-family:Arial, Helvetica, sans-serif; font-size:.82rem; letter-spacing:1.2px; text-transform:uppercase; padding:14px 0; border-bottom:1px solid var(--hair); }
+  .overlay{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:150; }
+  .overlay.open{ display:block; }
+  .drawer-close{ position:absolute; top:20px; right:20px; font-family:Arial, Helvetica, sans-serif; font-size:1.4rem; background:none; border:none; cursor:pointer; }
 
-        .content-section h3 {
-            color: #333;
-            margin: 20px 0 10px 0;
-            font-size: 1.3rem;
-        }
-
-        .highlight-box {
-            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
-            padding: 20px;
-            border-radius: 10px;
-            border-left: 5px solid #2196F3;
-            margin: 20px 0;
-        }
-
-        .code-container {
-            background-color: #1e1e1e;
-            border-radius: 8px;
-            padding: 20px;
-            margin: 20px 0;
-            overflow-x: auto;
-        }
-
-        .code-header {
-            color: #64b5f6;
-            font-weight: bold;
-            margin-bottom: 15px;
-            font-size: 1.1rem;
-            border-bottom: 1px solid #333;
-            padding-bottom: 10px;
-        }
-
-        .code-block {
-            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-            font-size: 14px;
-            line-height: 1.5;
-            color: #d4d4d4;
-        }
-
-        .code-comment {
-            color: #6a9955;
-            font-style: italic;
-        }
-
-        .code-keyword {
-            color: #569cd6;
-        }
-
-        .code-string {
-            color: #ce9178;
-        }
-
-        .code-function {
-            color: #dcdcaa;
-        }
-
-        .code-number {
-            color: #b5cea8;
-        }
-
-        .demo-links {
-            text-align: center;
-            margin: 30px 0;
-        }
-
-        .demo-btn {
-            display: inline-block;
-            background-color: #007BFF;
-            color: white;
-            padding: 12px 25px;
-            text-decoration: none;
-            border-radius: 5px;
-            margin: 0 10px;
-            font-weight: bold;
-            transition: background-color 0.3s;
-        }
-
-        .demo-btn:hover {
-            background-color: #0056b3;
-        }
-
-        .demo-btn.secondary {
-            background-color: #2196F3;
-        }
-
-        .demo-btn.secondary:hover {
-            background-color: #1565C0;
-        }
-
-        .file-tree {
-            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-            background-color: #f4f4f4;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 15px;
-            margin: 15px 0;
-            font-size: 14px;
-            line-height: 1.8;
-        }
-
-        @media (max-width: 768px) {
-            .project-header h1 {
-                font-size: 2rem;
-            }
-
-            .project-header p {
-                font-size: 1rem;
-            }
-
-            .demo-btn {
-                margin: 5px;
-                padding: 10px 20px;
-            }
-
-            .container {
-                padding: 15px;
-            }
-        }
-    </style>
+  @media (max-width:900px){
+    .cta-btns{ margin-left:0; }
+    .mast-nav{ display:none; }
+    .hamburger{ display:flex; }
+    .masthead{ padding:12px 16px; }
+    .mast-left{ gap:10px; min-width:0; flex:1; }
+    .logo{ font-size:.72rem; letter-spacing:1.5px; padding:6px 8px; }
+    .search-box{ flex:1; width:auto; min-width:0; }
+    .search-results{ position:fixed; top:58px; left:12px; right:12px; width:auto; max-width:none; }
+    .src-head h1{ font-size:1.95rem; }
+    .cover-strip img{ height:150px; }
+  }
+</style>
 </head>
 <body>
-    <div class="container">
-        <nav class="back-nav">
-            <a href="bahai-chinese-translation-workbench.html">&larr; Back to Project Overview</a>
-        </nav>
 
-        <div class="project-header">
-            <h1>Bahai Chinese Translation Workbench</h1>
-            <p>Core Source Code &amp; Translation Pipeline Implementation</p>
+  <div class="overlay" id="overlay"></div>
+  <nav class="drawer" id="drawer">
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">&times;</button>
+    <a href="index.html">Home</a>
+    <a href="project-categories.html">Categories</a>
+    <a href="contact.html">Contact</a>
+    <a href="https://lyven81.github.io/data-analyst-portfolio/index.html">Data Portfolio</a>
+  </nav>
 
-            <div class="badges">
-                <span class="badge">Claude Sonnet 4.6</span>
-                <span class="badge">FastAPI</span>
-                <span class="badge">SQLite</span>
-                <span class="badge">Anthropic SDK</span>
-            </div>
-        </div>
-
-        <div class="highlight-box">
-            <h3>About This Code Showcase</h3>
-            <p><strong>This curated code showcase demonstrates the core translation pipeline: how the AI translation prompt encodes three quality standards with glossary injection, how the stage gate logic enforces human governance, and how the recursive unwrapping function handles structured AI output.</strong></p>
-            <p>Environment configuration and deployment scripts are omitted for clarity. This showcase highlights the AI agent prompts, backend stage logic, and output parsing.</p>
-        </div>
-
-        <div class="content-section">
-            <h2>File Structure</h2>
-
-            <div class="file-tree">
-projects/bahai-chinese-translation-workbench/
-├── app.py              # FastAPI server — routes, stage gate logic
-├── agents.py           # AI agents — translation &amp; editing prompts
-├── db.py               # SQLite database — schema, CRUD, audit log
-├── glossary.json       # 20-term terminology glossary (JSON)
-├── index.html          # Frontend UI — 3-stage pipeline interface
-├── requirements.txt    # Python dependencies
-├── Dockerfile          # Container build for Cloud Run
-├── start.bat           # Windows quick-start script
-└── workbench.db        # SQLite database file (auto-created)
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>Three-Standard Translation Prompt</h2>
-            <p>The translation agent's system prompt encodes the three quality standards and injects the full terminology glossary. This is the core of how the AI understands the translation requirements.</p>
-
-            <div class="code-container">
-                <div class="code-header">agents.py &mdash; TRANSLATION_SYSTEM_PROMPT</div>
-                <div class="code-block">
-<span class="code-keyword">TRANSLATION_SYSTEM_PROMPT</span> = <span class="code-string">"""You are translating Baha'i Sacred Writings into Chinese (简体中文).
-
-Three standards govern your translation:
-1. ACCURACY (准确): Faithful to the original meaning. Never add, omit, or reinterpret.
-2. BEAUTY (文风优美): Elevated, literary Chinese register. Not colloquial.
-   The language must carry the weight and dignity of sacred scripture.
-   Follow the poetic, classical-influenced modern Chinese style —
-   not contemporary casual language.
-3. CONSISTENCY (风格一致): Consistent with the translation style established
-   by Shoghi Effendi (the Guardian). Use formal, classical-influenced
-   modern Chinese. Use Chinese punctuation marks (，。；：！？""''《》).
-
-TERMINOLOGY GLOSSARY — You MUST use these approved translations:
-{glossary_block}
-
-RULES:
-- Translate the complete text. Do not summarize or skip any passage.
-- Preserve paragraph structure from the source.
-- For terms in the glossary, use the approved Chinese translation exactly.
-- For proper nouns not in the glossary, transliterate and add the original
-  in parentheses on first occurrence.
-- Do not add explanatory notes or commentary within the translation itself.
-
-Return your output as JSON with these keys:
-- "translation": the complete Chinese translation (string)
-- "term_usage": list of glossary terms you applied
-- "notes": any translator notes on difficult passages or choices made
-
-Return ONLY the JSON object, no other text."""</span>
-                </div>
-            </div>
-
-            <div class="code-container">
-                <div class="code-header">agents.py &mdash; translation_agent() function</div>
-                <div class="code-block">
-<span class="code-keyword">def</span> <span class="code-function">translation_agent</span>(source_text, source_lang, glossary):
-    <span class="code-string">"""Stage 1: Generate Chinese translation draft from source text."""</span>
-    client = _get_client()
-    glossary_block = format_glossary_for_prompt(glossary)
-    system_prompt = TRANSLATION_SYSTEM_PROMPT.replace(<span class="code-string">"{glossary_block}"</span>, glossary_block)
-
-    lang_label = {<span class="code-string">"en"</span>: <span class="code-string">"English"</span>, <span class="code-string">"ar"</span>: <span class="code-string">"Arabic"</span>, <span class="code-string">"fa"</span>: <span class="code-string">"Persian"</span>}.get(source_lang, <span class="code-string">"English"</span>)
-
-    response = client.messages.create(
-        model=MODEL,
-        max_tokens=<span class="code-number">4096</span>,
-        temperature=<span class="code-number">0.3</span>,
-        system=system_prompt,
-        messages=[{<span class="code-string">"role"</span>: <span class="code-string">"user"</span>, <span class="code-string">"content"</span>: f<span class="code-string">"Translate the following {lang_label} text into Chinese:\n\n{source_text}"</span>}],
-    )
-
-    response_text = response.content[<span class="code-number">0</span>].text
-    parsed = _parse_json_response(response_text)
-    <span class="code-keyword">if</span> parsed <span class="code-keyword">and</span> <span class="code-string">"translation"</span> <span class="code-keyword">in</span> parsed:
-        result = {<span class="code-string">"translation"</span>: parsed[<span class="code-string">"translation"</span>],
-                  <span class="code-string">"term_usage"</span>: parsed.get(<span class="code-string">"term_usage"</span>, []),
-                  <span class="code-string">"notes"</span>: parsed.get(<span class="code-string">"notes"</span>, <span class="code-string">""</span>)}
-    <span class="code-keyword">else</span>:
-        result = {<span class="code-string">"translation"</span>: response_text, <span class="code-string">"term_usage"</span>: [],
-                  <span class="code-string">"notes"</span>: <span class="code-string">"Warning: Could not parse structured response."</span>}
-    <span class="code-keyword">return</span> result
-                </div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>Stage Gate Logic</h2>
-            <p>The backend enforces strict stage sequencing. The review endpoint validates that the document is at Stage 2 and routes based on the human reviewer's decision (approve, edit, or reject).</p>
-
-            <div class="code-container">
-                <div class="code-header">app.py &mdash; Review endpoint (Stage 2 gate)</div>
-                <div class="code-block">
-<span class="code-keyword">@app</span>.post(<span class="code-string">"/api/documents/{doc_id}/review"</span>)
-<span class="code-keyword">def</span> <span class="code-function">review_doc</span>(doc_id: int, req: ReviewRequest):
-    doc = get_document(doc_id)
-    <span class="code-keyword">if</span> doc <span class="code-keyword">is None</span>:
-        <span class="code-keyword">raise</span> HTTPException(status_code=<span class="code-number">404</span>, detail=<span class="code-string">"Document not found"</span>)
-    <span class="code-keyword">if</span> doc[<span class="code-string">"current_stage"</span>] != <span class="code-number">2</span>:
-        <span class="code-keyword">raise</span> HTTPException(status_code=<span class="code-number">400</span>,
-            detail=<span class="code-string">"Document is not at Stage 2 (review)"</span>)
-
-    stages = get_stage_outputs(doc_id)
-    stage1_output = next((s <span class="code-keyword">for</span> s <span class="code-keyword">in</span> stages <span class="code-keyword">if</span> s[<span class="code-string">"stage"</span>] == <span class="code-number">1</span>), <span class="code-keyword">None</span>)
-
-    <span class="code-keyword">if</span> req.decision == <span class="code-string">"approve"</span>:
-        <span class="code-comment"># Pass AI translation as-is to Stage 3</span>
-        save_stage_output(doc_id=doc_id, stage=<span class="code-number">2</span>,
-            input_text=stage1_output[<span class="code-string">"output_text"</span>],
-            output_text=stage1_output[<span class="code-string">"output_text"</span>],
-            operator=<span class="code-string">"human"</span>, human_notes=req.notes)
-        log_audit(doc_id, <span class="code-string">"stage2_approved"</span>)
-        update_document_stage(doc_id, <span class="code-number">3</span>)
-
-    <span class="code-keyword">elif</span> req.decision == <span class="code-string">"edit"</span>:
-        <span class="code-comment"># Use human-edited text for Stage 3</span>
-        save_stage_output(doc_id=doc_id, stage=<span class="code-number">2</span>,
-            input_text=stage1_output[<span class="code-string">"output_text"</span>],
-            output_text=req.edited_text,
-            operator=<span class="code-string">"human"</span>, human_notes=req.notes)
-        log_audit(doc_id, <span class="code-string">"stage2_edited"</span>)
-        update_document_stage(doc_id, <span class="code-number">3</span>)
-
-    <span class="code-keyword">elif</span> req.decision == <span class="code-string">"reject"</span>:
-        <span class="code-comment"># Block — do not advance stage</span>
-        log_audit(doc_id, <span class="code-string">"stage2_rejected"</span>)
-
-    <span class="code-keyword">return</span> _build_response(doc_id)
-                </div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>Recursive JSON Unwrapping</h2>
-            <p>LLMs sometimes wrap output in markdown code fences or nested JSON. The <code>_unwrap_text</code> function recursively strips these layers to extract the actual translation text.</p>
-
-            <div class="code-container">
-                <div class="code-header">agents.py &mdash; _unwrap_text() function</div>
-                <div class="code-block">
-<span class="code-keyword">def</span> <span class="code-function">_unwrap_text</span>(raw, target_keys=<span class="code-keyword">None</span>):
-    <span class="code-string">"""Recursively unwrap JSON/markdown until plain text is found.
-    target_keys: list of JSON keys to extract
-        (e.g. ['translation', 'edited_text', 'typeset_text'])
-    """</span>
-    <span class="code-keyword">if</span> target_keys <span class="code-keyword">is None</span>:
-        target_keys = [<span class="code-string">"translation"</span>, <span class="code-string">"edited_text"</span>, <span class="code-string">"typeset_text"</span>]
-    text = raw
-    <span class="code-keyword">for</span> _ <span class="code-keyword">in</span> range(<span class="code-number">5</span>):  <span class="code-comment"># Max 5 unwrap iterations</span>
-        text = _strip_markdown_fences(text)
-        <span class="code-keyword">if</span> text.strip().startswith(<span class="code-string">"{"</span>):
-            <span class="code-keyword">try</span>:
-                data = json.loads(text)
-                extracted = <span class="code-keyword">None</span>
-                <span class="code-keyword">for</span> k <span class="code-keyword">in</span> target_keys:
-                    <span class="code-keyword">if</span> k <span class="code-keyword">in</span> data <span class="code-keyword">and</span> isinstance(data[k], str):
-                        extracted = data[k]
-                        <span class="code-keyword">break</span>
-                <span class="code-keyword">if</span> extracted:
-                    text = extracted
-                    <span class="code-keyword">continue</span>
-                <span class="code-keyword">else</span>:
-                    <span class="code-keyword">break</span>
-            <span class="code-keyword">except</span> (json.JSONDecodeError, TypeError):
-                <span class="code-keyword">break</span>
-        <span class="code-keyword">else</span>:
-            <span class="code-keyword">break</span>
-    <span class="code-keyword">return</span> text
-                </div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>Technical Implementation Notes</h2>
-            <h3>Key Design Decisions</h3>
-            <ul style="margin: 15px 0; padding-left: 20px;">
-                <li><strong>Three-standard prompt engineering:</strong> Both translation and editing prompts encode accuracy, beauty, and consistency as explicit evaluation criteria for the AI</li>
-                <li><strong>Glossary injection:</strong> The full 20-term glossary is formatted and injected into every AI call, ensuring theological term consistency across all translations</li>
-                <li><strong>Strict stage gates:</strong> The backend validates stage sequence at every endpoint — documents cannot skip stages or advance without proper authorization</li>
-                <li><strong>Recursive unwrapping:</strong> Up to 5 iterations of markdown/JSON stripping handles the common LLM behavior of wrapping output in code fences</li>
-                <li><strong>Audit trail:</strong> Every action is logged with timestamps, providing full traceability for translation governance</li>
-                <li><strong>Human-in-the-loop:</strong> Stage 2 is always human-operated — the system enforces that no AI output reaches final publication without human review</li>
-            </ul>
-
-            <h3>Why SQLite?</h3>
-            <ul style="margin: 15px 0; padding-left: 20px;">
-                <li><strong>Zero configuration:</strong> No database server needed — ideal for a small team translation tool</li>
-                <li><strong>Full audit trail:</strong> Stage outputs and audit logs are stored with timestamps for governance compliance</li>
-                <li><strong>Portable:</strong> The entire database is a single file, making backups and sharing straightforward</li>
-            </ul>
-        </div>
-
-        <div class="demo-links">
-            <a href="projects/bahai-chinese-translation-workbench/demo.html" class="demo-btn">Launch Demo</a>
-            <a href="bahai-chinese-translation-workbench.html" class="demo-btn secondary">View Full Project Details</a>
-        </div>
-
-        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
-            <a href="index.html">&larr; Back to Portfolio</a> |
-            <a href="bahai-chinese-translation-workbench.html">View Project Overview</a>
-        </nav>
+  <div class="masthead">
+    <div class="mast-left">
+      <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+      <a class="logo" href="index.html">AI PROJECTS</a>
+      <nav class="mast-nav">
+        <a href="project-categories.html">Categories</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <div class="search-box">
+        <input type="text" class="search-input" id="searchInput" autocomplete="off" placeholder="Search AI projects..." aria-label="Search AI projects">
+        <span class="search-ic">&#128269;</span>
+        <div class="search-results" id="searchResults"></div>
+      </div>
     </div>
+  </div>
+  <hr class="rule-top">
+
+  <div class="crumb">
+    <a href="project-categories.html">Categories</a>
+    <span class="sep">/</span><a id="crumbCat" href="#"></a>
+    <span class="sep">/</span><a id="crumbProj" href="#"></a>
+    <span class="sep">/</span><span>Source</span>
+  </div>
+
+  <section class="src-head">
+    <div class="cover-strip" id="coverStrip" style="display:none"><img id="cover" alt=""></div>
+    <span class="rubric" id="kicker"></span>
+    <h1 id="title"></h1>
+    <p class="sub" id="subtitle"></p>
+    <div class="head-tech" id="headTech"></div>
+    <div class="head-btns" id="headBtns"></div>
+  </section>
+
+  <div id="body"></div>
+
+  <footer>&copy; 2026 Lee Yih Ven | AI Project Portfolio &middot; All rights reserved.</footer>
+  <div class="note">Sample Source-Showcase-E2 (TEMPLATE): source-code page on the index magazine system: slim cover banner, About, Project Structure, code walkthrough with copyable navy-barred code blocks, CTA. Reuse by editing only the PROJECT block at the top of the script.</div>
+
+<script>
+  const SITE = "";
+
+  /* =================================================================
+     EDIT PER PROJECT  -  the ONLY block you change per page.
+     Copy this file, swap PROJECT, save as <slug>-source.html.
+     - structure.code : the project file tree (plain text)
+     - walkthrough[]   : { heading, body, files:[{label, code}] }
+     - notes[]         : { heading, bullets:[...] }
+     Code strings can be multi-line; they render verbatim.
+     ================================================================= */
+  const PROJECT = {
+  "slug": "bahai-chinese-translation-workbench",
+  "category": "Document & Productivity Tools",
+  "categoryUrl": "category-document-productivity.html",
+  "title": "Bahai Chinese Translation Workbench",
+  "subtitle": "Core Source Code & Translation Pipeline Implementation.",
+  "cover": "images/bahai-chinese-translation-workbench/cover.jpeg",
+  "tech": [
+    "Claude Sonnet 4.6",
+    "FastAPI",
+    "SQLite",
+    "Anthropic SDK"
+  ],
+  "overviewUrl": "bahai-chinese-translation-workbench.html",
+  "demoLabel": "Launch Demo",
+  "demoUrl": "https://lyven81.github.io/ai-project/projects/bahai-chinese-translation-workbench/demo.html",
+  "repoUrl": "https://github.com/lyven81/ai-project/tree/main/projects/bahai-chinese-translation-workbench",
+  "about": "This curated code showcase demonstrates the core translation pipeline: how the AI translation prompt encodes three quality standards with glossary injection, how the stage gate logic enforces human governance, and how the recursive unwrapping function handles structured AI output. Environment configuration and deployment scripts are omitted for clarity. This showcase highlights the AI agent prompts, backend stage logic, and output parsing.",
+  "structure": {
+    "label": "projects/bahai-chinese-translation-workbench/",
+    "code": "projects/bahai-chinese-translation-workbench/\n├── app.py              # FastAPI server — routes, stage gate logic\n├── agents.py           # AI agents — translation & editing prompts\n├── db.py               # SQLite database — schema, CRUD, audit log\n├── glossary.json       # 20-term terminology glossary (JSON)\n├── index.html          # Frontend UI — 3-stage pipeline interface\n├── requirements.txt    # Python dependencies\n├── Dockerfile          # Container build for Cloud Run\n├── start.bat           # Windows quick-start script\n└── workbench.db        # SQLite database file (auto-created)"
+  },
+  "walkthrough": [
+    {
+      "heading": "Three-Standard Translation Prompt",
+      "body": "The translation agent's system prompt encodes the three quality standards and injects the full terminology glossary. This is the core of how the AI understands the translation requirements.",
+      "files": [
+        {
+          "label": "agents.py: TRANSLATION_SYSTEM_PROMPT",
+          "code": "TRANSLATION_SYSTEM_PROMPT = \"\"\"You are translating Baha'i Sacred Writings into Chinese (简体中文).\n\nThree standards govern your translation:\n1. ACCURACY (准确): Faithful to the original meaning. Never add, omit, or reinterpret.\n2. BEAUTY (文风优美): Elevated, literary Chinese register. Not colloquial.\n   The language must carry the weight and dignity of sacred scripture.\n   Follow the poetic, classical-influenced modern Chinese style —\n   not contemporary casual language.\n3. CONSISTENCY (风格一致): Consistent with the translation style established\n   by Shoghi Effendi (the Guardian). Use formal, classical-influenced\n   modern Chinese. Use Chinese punctuation marks (，。；：！？\"\"''《》).\n\nTERMINOLOGY GLOSSARY — You MUST use these approved translations:\n{glossary_block}\n\nRULES:\n- Translate the complete text. Do not summarize or skip any passage.\n- Preserve paragraph structure from the source.\n- For terms in the glossary, use the approved Chinese translation exactly.\n- For proper nouns not in the glossary, transliterate and add the original\n  in parentheses on first occurrence.\n- Do not add explanatory notes or commentary within the translation itself.\n\nReturn your output as JSON with these keys:\n- \"translation\": the complete Chinese translation (string)\n- \"term_usage\": list of glossary terms you applied\n- \"notes\": any translator notes on difficult passages or choices made\n\nReturn ONLY the JSON object, no other text.\"\"\""
+        },
+        {
+          "label": "agents.py: translation_agent() function",
+          "code": "def translation_agent(source_text, source_lang, glossary):\n    \"\"\"Stage 1: Generate Chinese translation draft from source text.\"\"\"\n    client = _get_client()\n    glossary_block = format_glossary_for_prompt(glossary)\n    system_prompt = TRANSLATION_SYSTEM_PROMPT.replace(\"{glossary_block}\", glossary_block)\n\n    lang_label = {\"en\": \"English\", \"ar\": \"Arabic\", \"fa\": \"Persian\"}.get(source_lang, \"English\")\n\n    response = client.messages.create(\n        model=MODEL,\n        max_tokens=4096,\n        temperature=0.3,\n        system=system_prompt,\n        messages=[{\"role\": \"user\", \"content\": f\"Translate the following {lang_label} text into Chinese:\n\n{source_text}\"}],\n    )\n\n    response_text = response.content[0].text\n    parsed = _parse_json_response(response_text)\n    if parsed and \"translation\" in parsed:\n        result = {\"translation\": parsed[\"translation\"],\n                  \"term_usage\": parsed.get(\"term_usage\", []),\n                  \"notes\": parsed.get(\"notes\", \"\")}\n    else:\n        result = {\"translation\": response_text, \"term_usage\": [],\n                  \"notes\": \"Warning: Could not parse structured response.\"}\n    return result"
+        }
+      ]
+    },
+    {
+      "heading": "Stage Gate Logic",
+      "body": "The backend enforces strict stage sequencing. The review endpoint validates that the document is at Stage 2 and routes based on the human reviewer's decision (approve, edit, or reject).",
+      "files": [
+        {
+          "label": "app.py: Review endpoint (Stage 2 gate)",
+          "code": "@app.post(\"/api/documents/{doc_id}/review\")\ndef review_doc(doc_id: int, req: ReviewRequest):\n    doc = get_document(doc_id)\n    if doc is None:\n        raise HTTPException(status_code=404, detail=\"Document not found\")\n    if doc[\"current_stage\"] != 2:\n        raise HTTPException(status_code=400,\n            detail=\"Document is not at Stage 2 (review)\")\n\n    stages = get_stage_outputs(doc_id)\n    stage1_output = next((s for s in stages if s[\"stage\"] == 1), None)\n\n    if req.decision == \"approve\":\n        # Pass AI translation as-is to Stage 3\n        save_stage_output(doc_id=doc_id, stage=2,\n            input_text=stage1_output[\"output_text\"],\n            output_text=stage1_output[\"output_text\"],\n            operator=\"human\", human_notes=req.notes)\n        log_audit(doc_id, \"stage2_approved\")\n        update_document_stage(doc_id, 3)\n\n    elif req.decision == \"edit\":\n        # Use human-edited text for Stage 3\n        save_stage_output(doc_id=doc_id, stage=2,\n            input_text=stage1_output[\"output_text\"],\n            output_text=req.edited_text,\n            operator=\"human\", human_notes=req.notes)\n        log_audit(doc_id, \"stage2_edited\")\n        update_document_stage(doc_id, 3)\n\n    elif req.decision == \"reject\":\n        # Block — do not advance stage\n        log_audit(doc_id, \"stage2_rejected\")\n\n    return _build_response(doc_id)"
+        }
+      ]
+    },
+    {
+      "heading": "Recursive JSON Unwrapping",
+      "body": "LLMs sometimes wrap output in markdown code fences or nested JSON. The <code>_unwrap_text</code> function recursively strips these layers to extract the actual translation text.",
+      "files": [
+        {
+          "label": "agents.py: _unwrap_text() function",
+          "code": "def _unwrap_text(raw, target_keys=None):\n    \"\"\"Recursively unwrap JSON/markdown until plain text is found.\n    target_keys: list of JSON keys to extract\n        (e.g. ['translation', 'edited_text', 'typeset_text'])\n    \"\"\"\n    if target_keys is None:\n        target_keys = [\"translation\", \"edited_text\", \"typeset_text\"]\n    text = raw\n    for _ in range(5):  # Max 5 unwrap iterations\n        text = _strip_markdown_fences(text)\n        if text.strip().startswith(\"{\"):\n            try:\n                data = json.loads(text)\n                extracted = None\n                for k in target_keys:\n                    if k in data and isinstance(data[k], str):\n                        extracted = data[k]\n                        break\n                if extracted:\n                    text = extracted\n                    continue\n                else:\n                    break\n            except (json.JSONDecodeError, TypeError):\n                break\n        else:\n            break\n    return text"
+        }
+      ]
+    }
+  ],
+  "cta": "Want a governed, AI-assisted document pipeline like this built for your own team? Let's scope it."
+};
+  /* ===================== END EDIT BLOCK ===================== */
+
+  const pref = (u) => /^https?:|^mailto:|^tel:/.test(u || '') ? u : (SITE + (u || ''));
+  const esc = (s) => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const rich = (s) => esc(s).replace(/&lt;(\/?(?:b|code))&gt;/g, '<$1>');
+
+  // raw code store for copy buttons
+  const RAW = [];
+  function codeBlock(label, codeStr, extraClass){
+    const idx = RAW.push(codeStr) - 1;
+    const rendered = esc(codeStr).split('\n')
+      .map(line => /^\s*#/.test(line) ? `<span class="cmt">${line}</span>` : line).join('\n');
+    return `<div class="codeblock ${extraClass||''}">`+
+      `<div class="code-bar"><span class="path"><span>${esc(label)}</span></span>`+
+      `<button class="code-copy" data-idx="${idx}">Copy</button></div>`+
+      `<pre><code>${rendered}</code></pre></div>`;
+  }
+
+  // Breadcrumb + header
+  document.title = PROJECT.title + ": Source | AI Project Portfolio";
+  document.getElementById('crumbCat').textContent = PROJECT.category;
+  document.getElementById('crumbCat').href = pref(PROJECT.categoryUrl);
+  document.getElementById('crumbProj').textContent = PROJECT.title;
+  document.getElementById('crumbProj').href = pref(PROJECT.overviewUrl);
+  if (PROJECT.cover){
+    document.getElementById('coverStrip').style.display = '';
+    const c = document.getElementById('cover'); c.src = PROJECT.cover; c.alt = PROJECT.title + " cover";
+  }
+  document.getElementById('kicker').textContent = "Source Walkthrough · " + PROJECT.category;
+  document.getElementById('title').textContent = PROJECT.title;
+  document.getElementById('subtitle').textContent = PROJECT.subtitle;
+  document.getElementById('headTech').innerHTML = (PROJECT.tech||[]).map(t => `<span class="tech-chip">${esc(t)}</span>`).join('');
+  document.getElementById('headBtns').innerHTML =
+    (PROJECT.demoUrl ? `<a class="btn" href="${pref(PROJECT.demoUrl)}" target="_blank" rel="noopener">${esc(PROJECT.demoLabel||'Live Demo')}</a>` : '') +
+    (PROJECT.overviewUrl ? `<a class="btn ghost" href="${pref(PROJECT.overviewUrl)}">Project Overview</a>` : '') +
+    (PROJECT.repoUrl ? `<a class="btn ghost" href="${pref(PROJECT.repoUrl)}" target="_blank" rel="noopener">GitHub Repo</a>` : '');
+
+  const section = (tab, inner) => `<section class="sec"><div class="sec-rule"><span class="tab">${esc(tab)}</span>${inner}</div></section>`;
+  let html = "";
+  const P = PROJECT;
+
+  if (P.about){
+    html += section("About This Code", `<h2>About This Code Showcase</h2><p class="intro">${rich(P.about)}</p>`);
+  }
+  if (P.structure && P.structure.code){
+    html += section("Project Structure", `<h2>Project Structure</h2>`+
+      codeBlock(P.structure.label || 'project/', P.structure.code, 'tree'));
+  }
+  (P.walkthrough||[]).forEach(w => {
+    let inner = `<h2>${esc(w.heading)}</h2>`;
+    if (w.body) inner += `<p class="body">${rich(w.body)}</p>`;
+    (w.files||[]).forEach(f => { inner += codeBlock(f.label, f.code); });
+    html += section("Code", inner);
+  });
+  // CTA
+  html += `<section class="sec"><div class="cta-inner">`+
+    `<div><h3>Interested in the build?</h3><p>${esc(P.cta || "Let's talk.")}</p></div>`+
+    `<div class="cta-btns">`+
+    (P.demoUrl ? `<a class="btn" href="${pref(P.demoUrl)}" target="_blank" rel="noopener">${esc(P.demoLabel||'Live Demo')}</a>` : '')+
+    `<a class="btn ghost" href="${SITE}contact.html">Get in Touch</a>`+
+    `</div></div></section>`;
+
+  document.getElementById('body').innerHTML = html;
+
+  // Copy buttons
+  function copyText(text, btn){
+    const done = ()=>{ const o=btn.textContent; btn.textContent='Copied ✓'; setTimeout(()=>btn.textContent=o.includes('Copied')?'Copy':o,1400); };
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(done).catch(()=>fb(text,done)); }
+    else fb(text,done);
+  }
+  function fb(text,done){ const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(ta); done(); }
+  document.querySelectorAll('.code-copy').forEach(btn =>
+    btn.addEventListener('click', ()=> copyText(RAW[+btn.dataset.idx], btn)));
+
+  // Masthead search
+  const ITEMS = [
+    {t:PROJECT.title, c:PROJECT.category, s:PROJECT.slug},
+    {t:"Courier CS Quality Console", c:"Conversational Data Analytics", s:"courier-cs-quality-console"},
+    {t:"Voucher Analyzer", c:"Conversational Data Analytics", s:"voucher-analyzer"},
+    {t:"Wiseman", c:"Knowledge & Reference Chatbots", s:"wiseman"},
+    {t:"Sunny Car Accessories", c:"Agentic Commerce", s:"sunny-car-accessories"},
+    {t:"Bookshelf", c:"Multi-Agent Decision Systems", s:"bookshelf"}
+  ];
+  const searchInput = document.getElementById('searchInput');
+  const searchResults = document.getElementById('searchResults');
+  function runSearch(q){
+    if(q.trim().length < 2){ searchResults.style.display='none'; return; }
+    const ql = q.toLowerCase();
+    const hits = ITEMS.filter(it => (it.t+' '+it.c).toLowerCase().includes(ql));
+    searchResults.innerHTML = hits.length ? hits.map(it =>
+      `<div class="sr-item"><div class="sr-cat">${esc(it.c)}</div>`+
+      `<a href="${SITE}${it.s}.html"><div class="sr-title">${esc(it.t)}</div></a>`+
+      `<div class="sr-links"><a href="${SITE}${it.s}.html">View Details</a></div></div>`).join('')
+      : `<div class="sr-none">No projects found. Try a different keyword.</div>`;
+    searchResults.style.display='block';
+  }
+  searchInput.addEventListener('input', e => runSearch(e.target.value));
+  document.addEventListener('click', e => { if(!e.target.closest('.search-box')) searchResults.style.display='none'; });
+
+  // Drawer
+  const drawer=document.getElementById('drawer'), overlay=document.getElementById('overlay');
+  const openMenu=()=>{ drawer.classList.add('open'); overlay.classList.add('open'); };
+  const closeMenu=()=>{ drawer.classList.remove('open'); overlay.classList.remove('open'); };
+  document.getElementById('hamburger').addEventListener('click', openMenu);
+  document.getElementById('drawerClose').addEventListener('click', closeMenu);
+  overlay.addEventListener('click', closeMenu);
+  drawer.querySelectorAll('a').forEach(a=>a.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeMenu(); searchResults.style.display='none'; }});
+</script>
 </body>
 </html>

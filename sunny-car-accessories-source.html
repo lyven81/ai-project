@@ -1,355 +1,379 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sunny Car Accessories - Source Code</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #222; background-color: #ffffff; }
-        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
-        .back-nav { margin-bottom: 20px; }
-        .back-nav a { color: #007BFF; text-decoration: none; font-size: 1rem; }
-        .back-nav a:hover { text-decoration: underline; }
-        .project-header { text-align: center; margin-bottom: 40px; padding: 40px 0; background: linear-gradient(135deg, #B8860B, #8B6914); color: white; border-radius: 10px; }
-        .project-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
-        .project-header p { font-size: 1.2rem; opacity: 0.9; }
-        .badges { display: flex; justify-content: center; gap: 10px; margin: 20px 0; flex-wrap: wrap; }
-        .badge { background-color: rgba(255,255,255,0.2); color: white; padding: 5px 12px; border-radius: 15px; font-size: 0.9rem; }
-        .content-section { margin: 40px 0; padding: 30px; background-color: #f9f9f9; border-radius: 8px; border-left: 5px solid #B8860B; }
-        .content-section h2 { color: #B8860B; margin-bottom: 20px; font-size: 1.8rem; }
-        .content-section h3 { color: #333; margin: 20px 0 10px 0; font-size: 1.3rem; }
-        .highlight-box { background: linear-gradient(135deg, #FFF9E6, #FFEFC1); padding: 20px; border-radius: 10px; border-left: 5px solid #B8860B; margin: 20px 0; }
-        .code-container { background-color: #1e1e1e; border-radius: 8px; padding: 20px; margin: 20px 0; overflow-x: auto; }
-        .code-header { color: #FFD580; font-weight: bold; margin-bottom: 15px; font-size: 1.1rem; border-bottom: 1px solid #333; padding-bottom: 10px; }
-        .code-block { font-family: 'Consolas', 'Monaco', 'Courier New', monospace; font-size: 14px; line-height: 1.5; color: #d4d4d4; white-space: pre-wrap; }
-        .code-comment { color: #6a9955; font-style: italic; }
-        .code-keyword { color: #569cd6; }
-        .code-string { color: #ce9178; }
-        .code-function { color: #dcdcaa; }
-        .code-number { color: #b5cea8; }
-        .code-property { color: #9cdcfe; }
-        .demo-links { text-align: center; margin: 30px 0; }
-        .demo-btn { display: inline-block; background-color: #007BFF; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; margin: 0 10px; font-weight: bold; transition: background-color 0.3s; }
-        .demo-btn:hover { background-color: #0056b3; }
-        .demo-btn.secondary { background-color: #28a745; }
-        .demo-btn.secondary:hover { background-color: #218838; }
-        @media (max-width: 768px) {
-            .project-header h1 { font-size: 2rem; }
-            .project-header p { font-size: 1rem; }
-            .demo-btn { margin: 5px; padding: 10px 20px; }
-            .container { padding: 15px; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sunny Car Accessories: Source | AI Project Portfolio</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root{ --ink:#222; --paper:#fff; --hair:#dddddd; --gray:#555; --accent:#B8860B; --navy:#1E3A5F; --code-bg:#fbfbf8; --cmt:#6b8190; }
+  html{ scroll-behavior:smooth; }
+  body{ background:var(--paper); color:var(--ink); font-family:Arial, Helvetica, sans-serif; line-height:1.6; overflow-x:hidden; }
+  a{ color:inherit; text-decoration:none; }
+  a:hover h2, a:hover h3, a:hover h4{ color:var(--accent); }
+  p code, li code{ font-family:"Courier New", monospace; font-size:.86em; background:#f2f3f5; padding:1px 5px; color:var(--navy); }
+
+  /* Masthead (shared) */
+  .masthead{ display:flex; align-items:center; justify-content:space-between; padding:14px 28px; max-width:1240px; margin:0 auto; gap:18px; }
+  .mast-left{ display:flex; align-items:center; gap:20px; }
+  .logo{ background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; letter-spacing:3px; font-size:.95rem; padding:8px 12px; white-space:nowrap; }
+  .mast-nav{ display:flex; gap:20px; font-family:Arial, Helvetica, sans-serif; font-size:.72rem; letter-spacing:1.4px; text-transform:uppercase; }
+  .mast-nav a:hover{ color:var(--accent); }
+  .hamburger{ display:none; flex-direction:column; gap:4px; background:none; border:none; cursor:pointer; padding:6px; }
+  .hamburger span{ width:22px; height:2px; background:#222; display:block; }
+  .rule-top{ border:none; border-top:3px solid #222; max-width:1240px; margin:0 auto; }
+
+  /* Search (shared) */
+  .search-box{ position:relative; width:200px; }
+  .search-input{ width:100%; padding:7px 30px 7px 12px; border:1px solid var(--hair); background:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; color:#222; }
+  .search-input:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(184,134,11,.15); }
+  .search-ic{ position:absolute; right:10px; top:50%; transform:translateY(-50%); color:var(--gray); font-size:.8rem; pointer-events:none; }
+  .search-results{ position:absolute; top:calc(100% + 4px); left:0; width:340px; max-width:86vw; background:#fff; border:1px solid #222; max-height:60vh; overflow-y:auto; z-index:120; display:none; }
+  .sr-item{ padding:12px 14px; border-bottom:1px solid var(--hair); }
+  .sr-item:last-child{ border-bottom:none; }
+  .sr-cat{ font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; margin-bottom:4px; color:var(--accent); }
+  .sr-title{ font-weight:700; font-size:1.02rem; color:#222; }
+  .sr-links{ font-size:.58rem; letter-spacing:.8px; text-transform:uppercase; color:var(--gray); margin-top:5px; }
+  .sr-links a:hover{ color:var(--accent); }
+  .sr-none{ padding:16px 14px; font-size:.82rem; color:var(--gray); }
+
+  /* Shared bits */
+  .tab{ display:inline-block; background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.66rem; letter-spacing:2px; text-transform:uppercase; padding:6px 12px; }
+  .rubric{ font-family:Arial, Helvetica, sans-serif; font-size:.62rem; font-weight:700; letter-spacing:1.6px; text-transform:uppercase; color:var(--accent); display:block; margin-bottom:8px; }
+  .tech-chip{ display:inline-block; border:1px solid var(--hair); padding:6px 12px; font-size:.72rem; letter-spacing:.3px; color:#333; white-space:nowrap; }
+  .tech-chip:hover{ border-color:var(--accent); color:var(--accent); }
+  .btn{ display:inline-block; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.7rem; letter-spacing:1.6px; text-transform:uppercase; padding:13px 24px; border:1px solid #222; background:#222; color:#fff; cursor:pointer; transition:.15s; }
+  .btn:hover{ background:var(--accent); border-color:var(--accent); }
+  .btn.ghost{ background:#fff; color:#222; }
+  .btn.ghost:hover{ color:var(--accent); border-color:var(--accent); background:#fff; }
+
+  /* Breadcrumb */
+  .crumb{ max-width:1240px; margin:0 auto; padding:20px 28px 0; font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--gray); }
+  .crumb a:hover{ color:var(--accent); }
+  .crumb .sep{ color:var(--hair); margin:0 8px; }
+
+  /* Header (slim cover banner + copy) */
+  .src-head{ max-width:1240px; margin:0 auto; padding:14px 28px 6px; }
+  .cover-strip{ border:1px solid var(--hair); line-height:0; background:#eef1f4; }
+  .cover-strip img{ width:100%; height:190px; object-fit:cover; object-position:center 42%; display:block; }
+  .src-head h1{ font-size:2.5rem; font-weight:900; line-height:1.04; letter-spacing:-.008em; margin-top:18px; }
+  .src-head .sub{ font-style:italic; font-size:1.08rem; color:#333; margin-top:10px; max-width:72ch; }
+  .head-tech{ display:flex; flex-wrap:wrap; gap:9px; margin-top:16px; }
+  .head-btns{ display:flex; flex-wrap:wrap; gap:12px; margin-top:18px; }
+
+  /* Section shell */
+  .sec{ max-width:1240px; margin:0 auto; padding:26px 28px; }
+  .sec-rule{ border-top:3px solid #222; padding-top:16px; }
+  .sec .tab{ margin-bottom:14px; }
+  .sec h2{ font-size:1.7rem; font-weight:900; line-height:1.06; }
+  .sec .intro{ color:#333; font-size:1.02rem; margin-top:10px; max-width:80%; }
+  .sec .body{ color:#333; font-size:1rem; margin-top:10px; max-width:80%; }
+
+  /* Code block */
+  .codeblock{ border:1px solid var(--hair); margin-top:16px; }
+  .code-bar{ display:flex; align-items:center; justify-content:space-between; gap:12px; background:var(--navy); color:#fff; padding:8px 12px; }
+  .code-bar .path{ font-family:"Courier New", monospace; font-size:.74rem; letter-spacing:.2px; opacity:.96; display:flex; align-items:center; gap:7px; min-width:0; }
+  .code-bar .path span{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .code-copy{ flex:none; background:none; border:1px solid rgba(255,255,255,.4); color:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.56rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; padding:5px 11px; cursor:pointer; transition:.15s; }
+  .code-copy:hover{ background:rgba(255,255,255,.16); }
+  .codeblock pre{ margin:0; padding:14px 16px; overflow-x:auto; background:var(--code-bg); }
+  .codeblock code{ font-family:"Courier New", monospace; font-size:.82rem; line-height:1.6; color:#1b2a3a; background:none; padding:0; white-space:pre; display:block; }
+  .codeblock code .cmt{ color:var(--cmt); font-style:italic; }
+
+  .tree .code-bar .path::before{ content:"📁"; }
+
+  /* Notes */
+  .note-block{ margin-top:22px; }
+  .note-block h3{ font-size:1.15rem; font-weight:800; }
+  .blist{ list-style:none; margin-top:12px; border-top:1px solid var(--hair); }
+  .blist li{ padding:12px 0; border-bottom:1px solid var(--hair); color:#333; font-size:.95rem; }
+  .blist li b{ color:#222; }
+
+  /* CTA */
+  .cta-inner{ display:flex; align-items:center; gap:18px; flex-wrap:wrap; border-top:3px solid #222; padding-top:18px; }
+  .cta-inner h3{ font-size:1.4rem; font-weight:900; line-height:1.08; }
+  .cta-inner p{ color:var(--gray); font-size:.95rem; margin-top:4px; }
+  .cta-btns{ margin-left:auto; display:flex; gap:12px; flex-wrap:wrap; }
+
+  footer{ background:#222; max-width:1240px; margin:30px auto 0; padding:24px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; letter-spacing:.5px; color:#fff; text-align:center; }
+  .note{ max-width:1240px; margin:14px auto 0; padding:8px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.62rem; letter-spacing:1px; color:#999; }
+
+  /* Drawer (shared) */
+  .drawer{ position:fixed; top:0; left:-300px; width:280px; height:100vh; background:#fff; z-index:200; box-shadow:2px 0 14px rgba(0,0,0,.15); transition:left .28s ease; padding:74px 26px 26px; }
+  .drawer.open{ left:0; }
+  .drawer a{ display:block; font-family:Arial, Helvetica, sans-serif; font-size:.82rem; letter-spacing:1.2px; text-transform:uppercase; padding:14px 0; border-bottom:1px solid var(--hair); }
+  .overlay{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:150; }
+  .overlay.open{ display:block; }
+  .drawer-close{ position:absolute; top:20px; right:20px; font-family:Arial, Helvetica, sans-serif; font-size:1.4rem; background:none; border:none; cursor:pointer; }
+
+  @media (max-width:900px){
+    .cta-btns{ margin-left:0; }
+    .mast-nav{ display:none; }
+    .hamburger{ display:flex; }
+    .masthead{ padding:12px 16px; }
+    .mast-left{ gap:10px; min-width:0; flex:1; }
+    .logo{ font-size:.72rem; letter-spacing:1.5px; padding:6px 8px; }
+    .search-box{ flex:1; width:auto; min-width:0; }
+    .search-results{ position:fixed; top:58px; left:12px; right:12px; width:auto; max-width:none; }
+    .src-head h1{ font-size:1.95rem; }
+    .cover-strip img{ height:150px; }
+  }
+</style>
 </head>
 <body>
-    <div class="container">
-        <nav class="back-nav">
-            <a href="sunny-car-accessories.html">&larr; Back to Project Overview</a>
-        </nav>
 
-        <div class="project-header">
-            <h1>Sunny Car Accessories</h1>
-            <p>Source Code & WebMCP Architecture</p>
-            <div class="badges">
-                <span class="badge">WebMCP (W3C)</span>
-                <span class="badge">navigator.modelContext</span>
-                <span class="badge">Per-View Scoping</span>
-                <span class="badge">Inspector Panel</span>
-            </div>
-        </div>
+  <div class="overlay" id="overlay"></div>
+  <nav class="drawer" id="drawer">
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">&times;</button>
+    <a href="index.html">Home</a>
+    <a href="project-categories.html">Categories</a>
+    <a href="contact.html">Contact</a>
+    <a href="https://lyven81.github.io/data-analyst-portfolio/index.html">Data Portfolio</a>
+  </nav>
 
-        <div class="highlight-box">
-            <h3>About This Code Showcase</h3>
-            <p><strong>This curated code showcase walks through the WebMCP integration in Sunny Car Accessories — from how 7 typed tools are defined, to how the per-view tool surface swaps as the user navigates, to the Inspector Panel that proves the demo is genuinely active.</strong></p>
-            <p>The entire app runs client-side in a single static HTML file. The WebMCP layer is purely additive — humans see a normal storefront; agents see a typed contract via <code>navigator.modelContext</code>.</p>
-        </div>
-
-        <div class="content-section">
-            <h2>Core: Tool Definitions (TOOLS object)</h2>
-            <p>Each tool is a typed contract — name, human-readable description, JSON inputSchema for the agent to read, and an async <code>execute()</code> handler that runs the business logic and returns structured JSON.</p>
-
-            <div class="code-container">
-                <div class="code-header">index.html — checkFitment (the killer demo tool)</div>
-                <div class="code-block"><span class="code-keyword">const</span> TOOLS = {
-  <span class="code-property">checkFitment</span>: {
-    <span class="code-property">name</span>: <span class="code-string">'checkFitment'</span>,
-    <span class="code-property">description</span>: <span class="code-string">'Check whether a part fits a specific vehicle.'</span>,
-    <span class="code-property">inputSchema</span>: {
-      <span class="code-property">type</span>: <span class="code-string">'object'</span>,
-      <span class="code-property">properties</span>: {
-        <span class="code-property">sku</span>: { type: <span class="code-string">'string'</span>, description: <span class="code-string">'Product SKU to check'</span> },
-        <span class="code-property">vehicleMake</span>: { type: <span class="code-string">'string'</span>, enum: [<span class="code-string">'Honda'</span>,<span class="code-string">'Toyota'</span>,<span class="code-string">'Perodua'</span>,<span class="code-string">'Proton'</span>] },
-        <span class="code-property">vehicleModel</span>: { type: <span class="code-string">'string'</span>, description: <span class="code-string">'e.g. Civic, Myvi, Saga'</span> },
-        <span class="code-property">year</span>: { type: <span class="code-string">'number'</span>, description: <span class="code-string">'Vehicle model year'</span> }
-      },
-      <span class="code-property">required</span>: [<span class="code-string">'sku'</span>, <span class="code-string">'vehicleMake'</span>]
-    },
-    <span class="code-property">execute</span>: <span class="code-keyword">async</span> ({ sku, vehicleMake, vehicleModel, year }) =&gt; {
-      <span class="code-keyword">const</span> p = CATALOG.find(x =&gt; x.sku === sku);
-      <span class="code-keyword">if</span> (!p) <span class="code-keyword">return</span> { type: <span class="code-string">'text'</span>, text: JSON.stringify({ error: <span class="code-string">'SKU not found'</span> }) };
-      <span class="code-keyword">if</span> (p.fitment === <span class="code-string">'universal'</span>) {
-        <span class="code-keyword">return</span> { type: <span class="code-string">'text'</span>, text: JSON.stringify({ fits: <span class="code-keyword">true</span>, reason: <span class="code-string">'Universal fit'</span> }) };
-      }
-      <span class="code-keyword">const</span> fits = Array.isArray(p.fitment) &amp;&amp; p.fitment.includes(vehicleMake);
-      <span class="code-keyword">return</span> { type: <span class="code-string">'text'</span>, text: JSON.stringify({ fits, sku, vehicleMake, compatibleMakes: p.fitment }) };
-    }
-  }
-  <span class="code-comment">// ... 6 more tools: searchAccessories, getProductDetails, addToCart, getCart, removeFromCart, checkout</span>
-};</div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>Per-View Tool Scoping (the killer feature)</h2>
-            <p>WebMCP's design choice: agents see only the 3–5 tools relevant to where they currently are. Tool surface morphs on every view change. <code>provideContext()</code> is called fresh per view.</p>
-
-            <div class="code-container">
-                <div class="code-header">index.html — VIEW_TOOLS map + updateWebMCPContext()</div>
-                <div class="code-block"><span class="code-comment">// Per-view tool surface — demonstrates per-page scoping</span>
-<span class="code-keyword">const</span> VIEW_TOOLS = {
-  <span class="code-property">home</span>:     [<span class="code-string">'searchAccessories'</span>],
-  <span class="code-property">category</span>: [<span class="code-string">'searchAccessories'</span>, <span class="code-string">'getProductDetails'</span>],
-  <span class="code-property">product</span>:  [<span class="code-string">'getProductDetails'</span>, <span class="code-string">'checkFitment'</span>, <span class="code-string">'addToCart'</span>],
-  <span class="code-property">cart</span>:     [<span class="code-string">'getCart'</span>, <span class="code-string">'removeFromCart'</span>],
-  <span class="code-property">checkout</span>: [<span class="code-string">'getCart'</span>, <span class="code-string">'checkout'</span>],
-  <span class="code-property">track</span>:    []  <span class="code-comment">// post-purchase: nothing for agents to do</span>
-};
-
-<span class="code-comment">// Hooked into showView() — fires on EVERY view transition</span>
-<span class="code-keyword">function</span> <span class="code-function">updateWebMCPContext</span>() {
-  <span class="code-keyword">const</span> viewToolNames = VIEW_TOOLS[state.currentView] || [];
-  <span class="code-keyword">const</span> tools = viewToolNames.map(n =&gt; TOOLS[n]).filter(Boolean);
-  webMCP.provideContext({ tools });
-}
-
-<span class="code-keyword">function</span> <span class="code-function">showView</span>(viewName, params = {}) {
-  state.currentView = viewName;
-  <span class="code-comment">// ... show/hide view DOM ...</span>
-  <span class="code-keyword">if</span> (viewName === <span class="code-string">'home'</span>) renderHome();
-  <span class="code-comment">// ... other render branches ...</span>
-  updateWebMCPContext();  <span class="code-comment">// ← swap tool surface here</span>
-  window.scrollTo(<span class="code-number">0</span>, <span class="code-number">0</span>);
-}</div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>WebMCP Wrapper (real API + compatibility fallback)</h2>
-            <p>The <code>webMCP</code> wrapper uses <code>navigator.modelContext</code> when present, falls back to a local registry otherwise. This makes the Inspector Panel work identically across browsers — a real Chrome 146+ install vs a compatibility-mode browser show the same UI behavior.</p>
-
-            <div class="code-container">
-                <div class="code-header">index.html — webMCP wrapper</div>
-                <div class="code-block"><span class="code-keyword">const</span> webMCP = {
-  <span class="code-property">tools</span>: [],
-  <span class="code-property">log</span>: [],
-  <span class="code-property">isSupported</span>: () =&gt; <span class="code-string">'modelContext'</span> <span class="code-keyword">in</span> navigator,
-
-  <span class="code-function">provideContext</span>({ tools }) {
-    <span class="code-keyword">this</span>.tools = tools;
-    <span class="code-keyword">if</span> (<span class="code-keyword">this</span>.isSupported() &amp;&amp; navigator.modelContext.provideContext) {
-      <span class="code-keyword">try</span> {
-        navigator.modelContext.provideContext({ tools });  <span class="code-comment">// real API</span>
-      } <span class="code-keyword">catch</span> (e) { console.warn(<span class="code-string">'WebMCP error:'</span>, e); }
-    }
-    updateInspectorPanel();
-  },
-
-  <span class="code-keyword">async</span> <span class="code-function">invokeTool</span>(name, params = {}) {
-    <span class="code-keyword">const</span> tool = <span class="code-keyword">this</span>.tools.find(t =&gt; t.name === name);
-    <span class="code-keyword">if</span> (!tool) <span class="code-keyword">return</span> { error: <span class="code-string">'Tool not registered on this view'</span> };
-
-    <span class="code-keyword">const</span> entry = { ts: timeStamp(), name, params, result: <span class="code-keyword">null</span> };
-    <span class="code-keyword">this</span>.log.push(entry);
-    updateInspectorPanel();
-
-    <span class="code-keyword">try</span> {
-      <span class="code-keyword">const</span> result = <span class="code-keyword">await</span> tool.execute(params);
-      entry.result = result;
-      updateInspectorPanel();
-      <span class="code-keyword">return</span> result;
-    } <span class="code-keyword">catch</span> (e) {
-      entry.result = { error: e.message };
-      <span class="code-keyword">return</span> { error: e.message };
-    }
-  },
-
-  <span class="code-keyword">async</span> <span class="code-function">requestUserInteraction</span>({ title, message }) {
-    <span class="code-keyword">return</span> <span class="code-keyword">new</span> Promise(resolve =&gt; {
-      <span class="code-comment">// Show custom modal — Allow once / Deny — resolves the Promise</span>
-      document.getElementById(<span class="code-string">'confirm-title'</span>).textContent = title;
-      document.getElementById(<span class="code-string">'confirm-message'</span>).textContent = message;
-      document.getElementById(<span class="code-string">'confirm-modal'</span>).classList.remove(<span class="code-string">'hidden'</span>);
-      window._confirmResolve = resolve;
-    });
-  }
-};</div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>requestUserInteraction() — Human-in-the-Loop on Checkout</h2>
-            <p>The destructive <code>checkout</code> tool gates execution behind a mandatory human confirmation. Even if an agent invokes it autonomously, the order cannot proceed without explicit user approval — Allow once / Deny.</p>
-
-            <div class="code-container">
-                <div class="code-header">index.html — checkout tool definition</div>
-                <div class="code-block"><span class="code-property">checkout</span>: {
-  <span class="code-property">name</span>: <span class="code-string">'checkout'</span>,
-  <span class="code-property">description</span>: <span class="code-string">'Place the order. Triggers requestUserInteraction() before charging.'</span>,
-  <span class="code-property">inputSchema</span>: {
-    type: <span class="code-string">'object'</span>,
-    properties: { paymentMethod: { type: <span class="code-string">'string'</span>, enum: [<span class="code-string">'DuitNow'</span>,<span class="code-string">'FPX'</span>,<span class="code-string">'COD'</span>] } },
-    required: [<span class="code-string">'paymentMethod'</span>]
-  },
-  <span class="code-property">execute</span>: <span class="code-keyword">async</span> ({ paymentMethod }) =&gt; {
-    <span class="code-keyword">if</span> (state.cart.length === <span class="code-number">0</span>)
-      <span class="code-keyword">return</span> { type: <span class="code-string">'text'</span>, text: JSON.stringify({ success: <span class="code-keyword">false</span>, error: <span class="code-string">'Cart is empty'</span> }) };
-
-    <span class="code-keyword">const</span> total = cartTotal();
-
-    <span class="code-comment">// ← THE GATE — pauses execution, waits for user approval</span>
-    <span class="code-keyword">const</span> confirmed = <span class="code-keyword">await</span> webMCP.requestUserInteraction({
-      title: <span class="code-string">'Confirm purchase'</span>,
-      message: <span class="code-string">`Agent is about to place order: RM ${total.toFixed(0)} via ${paymentMethod}. Approve?`</span>
-    });
-
-    <span class="code-keyword">if</span> (!confirmed)
-      <span class="code-keyword">return</span> { type: <span class="code-string">'text'</span>, text: JSON.stringify({ success: <span class="code-keyword">false</span>, reason: <span class="code-string">'User declined'</span> }) };
-
-    <span class="code-keyword">const</span> result = placeOrder(<span class="code-keyword">null</span>);
-    <span class="code-keyword">return</span> { type: <span class="code-string">'text'</span>, text: JSON.stringify(result) };
-  }
-}</div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>Inspector Panel — 4 Tabs of Live Introspection</h2>
-            <p>The Inspector Panel is the proof layer that turns the invisible WebMCP API into a visible demonstration. Status badge updates per view; 4 tabs show live tools, run sample invocations, log results, and reveal the source code that produced the surface.</p>
-
-            <div class="code-container">
-                <div class="code-header">index.html — updateInspectorPanel() + tab switching</div>
-                <div class="code-block"><span class="code-keyword">function</span> <span class="code-function">updateInspectorPanel</span>() {
-  <span class="code-keyword">const</span> status = document.getElementById(<span class="code-string">'inspector-status'</span>);
-  <span class="code-keyword">if</span> (webMCP.isSupported()) {
-    status.innerHTML = <span class="code-string">`✅ WebMCP active · ${webMCP.tools.length} tool${webMCP.tools.length !== 1 ? 's' : ''} on &lt;strong&gt;${state.currentView}&lt;/strong&gt; view`</span>;
-  } <span class="code-keyword">else</span> {
-    status.innerHTML = <span class="code-string">`⚠️ WebMCP not detected · running in compatibility mode · ${webMCP.tools.length} tools on ${state.currentView}`</span>;
-  }
-  <span class="code-keyword">const</span> activeTab = document.querySelector(<span class="code-string">'.inspector-tab.active'</span>)?.dataset.tab || <span class="code-string">'tools'</span>;
-  renderInspectorPane(activeTab);
-}
-
-<span class="code-keyword">function</span> <span class="code-function">renderInspectorPane</span>(tab) {
-  <span class="code-keyword">const</span> pane = document.querySelector(<span class="code-string">`[data-pane="${tab}"]`</span>);
-
-  <span class="code-keyword">if</span> (tab === <span class="code-string">'tools'</span>) {
-    <span class="code-comment">// Live list of registered tools — expandable to show inputSchema JSON</span>
-    pane.innerHTML = webMCP.tools.map(t =&gt; <span class="code-string">`
-      &lt;details class="tool-entry"&gt;
-        &lt;summary&gt;&lt;strong&gt;${t.name}&lt;/strong&gt; — ${t.description}&lt;/summary&gt;
-        &lt;pre&gt;${JSON.stringify(t.inputSchema, null, 2)}&lt;/pre&gt;
-      &lt;/details&gt;`</span>).join(<span class="code-string">''</span>);
-  } <span class="code-keyword">else if</span> (tab === <span class="code-string">'try'</span>) {
-    <span class="code-comment">// Buttons that invoke tools with sample params — demonstrates tool calls work</span>
-    pane.innerHTML = webMCP.tools.map(t =&gt; {
-      <span class="code-keyword">const</span> sample = sampleParamsFor(t.name);
-      <span class="code-keyword">return</span> <span class="code-string">`&lt;button onclick='runFromInspector("${t.name}", ${JSON.stringify(sample)})'&gt;
-                ▶ Run ${t.name}&lt;/button&gt;`</span>;
-    }).join(<span class="code-string">''</span>);
-  } <span class="code-keyword">else if</span> (tab === <span class="code-string">'log'</span>) {
-    <span class="code-comment">// Timestamped log of every tool call — agent or human-triggered</span>
-    pane.innerHTML = webMCP.log.slice(-<span class="code-number">12</span>).reverse().map(l =&gt; <span class="code-string">`
-      ${l.ts} ${l.name}(${JSON.stringify(l.params)}) → ${JSON.stringify(l.result)}`</span>).join(<span class="code-string">''</span>);
-  } <span class="code-keyword">else if</span> (tab === <span class="code-string">'source'</span>) {
-    <span class="code-comment">// Shows the actual provideContext() code that produced this view's surface</span>
-    pane.innerHTML = <span class="code-string">`&lt;pre&gt;${getSourceForView(state.currentView)}&lt;/pre&gt;`</span>;
-  }
-}</div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>agentInvoked Detection</h2>
-            <p>Per WebMCP spec slide 13: <code>submitEvent.agentInvoked</code> tells the form handler "this submission came from an agent, not a human." Useful for analytics splits (agent traffic vs human traffic) and merchant-side fraud / bot detection.</p>
-
-            <div class="code-container">
-                <div class="code-header">index.html — global form submit listener</div>
-                <div class="code-block"><span class="code-comment">// Detect agent-invoked form submissions</span>
-document.addEventListener(<span class="code-string">'submit'</span>, (e) =&gt; {
-  <span class="code-keyword">if</span> (e.agentInvoked) {
-    console.log(<span class="code-string">'[WebMCP] Form was submitted by an agent, not a human'</span>);
-    webMCP.log.push({
-      ts: timeStamp(),
-      name: <span class="code-string">'(form submit)'</span>,
-      params: { agentInvoked: <span class="code-keyword">true</span> },
-      result: { detected: <span class="code-string">'agent submission'</span> }
-    });
-    updateInspectorPanel();
-    <span class="code-comment">// In production: also log to BigQuery / merchant analytics</span>
-  }
-});</div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>Catalog Data Model</h2>
-            <p>The 18-SKU catalog is a JS array. Each product has SKU, name, brand, category, price, image, description, variantType (color / size / brand / scent / null), variants array, fitment (universal | array of compatible vehicle makes), stock, rating, reviews. Same shape parameterizes any retail vertical via the WebMCP webstore template.</p>
-
-            <div class="code-container">
-                <div class="code-header">index.html — sample CATALOG entries</div>
-                <div class="code-block"><span class="code-keyword">const</span> CATALOG = [
-  {
-    <span class="code-property">sku</span>: <span class="code-string">'INT-001'</span>,
-    <span class="code-property">name</span>: <span class="code-string">'Premium Leather Seat Cover Set'</span>,
-    <span class="code-property">brand</span>: <span class="code-string">'AutoLuxe'</span>,
-    <span class="code-property">category</span>: <span class="code-string">'interior'</span>,
-    <span class="code-property">price</span>: <span class="code-number">280</span>,
-    <span class="code-property">image</span>: <span class="code-string">'images/products/int-001-leather-seat-cover.jpg'</span>,
-    <span class="code-property">description</span>: <span class="code-string">'5-piece premium leather seat cover set...'</span>,
-    <span class="code-property">variantType</span>: <span class="code-string">'color'</span>,
-    <span class="code-property">variants</span>: [<span class="code-string">'Black'</span>,<span class="code-string">'Beige'</span>,<span class="code-string">'Grey'</span>,<span class="code-string">'Brown'</span>,<span class="code-string">'Red'</span>],
-    <span class="code-property">fitment</span>: <span class="code-string">'universal'</span>,
-    <span class="code-property">stock</span>: <span class="code-number">12</span>,
-    <span class="code-property">rating</span>: <span class="code-number">4.5</span>,
-    <span class="code-property">reviews</span>: <span class="code-number">87</span>
-  },
-  {
-    <span class="code-property">sku</span>: <span class="code-string">'INT-002'</span>,
-    <span class="code-property">name</span>: <span class="code-string">'3D Floor Mats'</span>,
-    <span class="code-property">brand</span>: <span class="code-string">'TerraGuard'</span>,
-    <span class="code-property">category</span>: <span class="code-string">'interior'</span>,
-    <span class="code-property">price</span>: <span class="code-number">180</span>,
-    <span class="code-property">variantType</span>: <span class="code-keyword">null</span>,
-    <span class="code-property">variants</span>: [],
-    <span class="code-property">fitment</span>: [<span class="code-string">'Honda'</span>,<span class="code-string">'Toyota'</span>,<span class="code-string">'Perodua'</span>,<span class="code-string">'Proton'</span>],  <span class="code-comment">// model-specific!</span>
-    <span class="code-property">stock</span>: <span class="code-number">25</span>,
-    <span class="code-property">rating</span>: <span class="code-number">4.7</span>,
-    <span class="code-property">reviews</span>: <span class="code-number">156</span>
-  }
-  <span class="code-comment">// ... 16 more SKUs</span>
-];</div>
-            </div>
-
-            <h3>Key Design Decisions</h3>
-            <ul style="margin: 15px 0; padding-left: 20px;">
-                <li><strong>Single-file static HTML over framework:</strong> No build step, deployable to any static host (GitHub Pages, S3, Cloudflare). Per-view scoping demonstrated via JS state machine, not React/Vue routing.</li>
-                <li><strong>webMCP wrapper over direct API:</strong> Lets the Inspector Panel work identically with or without browser support — critical for the "compatibility mode" honest disclosure</li>
-                <li><strong>Per-view tool scoping over monolithic surface:</strong> Demonstrates the killer WebMCP feature; better security posture (destructive tools only on relevant pages); lower agent token cost (3-5 tools at a time, not 7)</li>
-                <li><strong>Custom confirm modal over native dialog():</strong> Brand-consistent UI, async Promise-based, polyfills <code>requestUserInteraction()</code> when the spec API isn't yet available</li>
-                <li><strong>localStorage cart over server session:</strong> Zero backend; cart survives page reload; works on file:// for offline demo testing</li>
-            </ul>
-        </div>
-
-        <div class="demo-links">
-            <a href="projects/sunny-car-accessories/index.html" class="demo-btn">Try Live Demo</a>
-            <a href="sunny-car-accessories.html" class="demo-btn secondary">View Full Project Details</a>
-        </div>
-
-        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
-            <a href="index.html">&larr; Back to Portfolio</a> |
-            <a href="sunny-car-accessories.html">View Project Overview</a>
-        </nav>
+  <div class="masthead">
+    <div class="mast-left">
+      <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+      <a class="logo" href="index.html">AI PROJECTS</a>
+      <nav class="mast-nav">
+        <a href="project-categories.html">Categories</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <div class="search-box">
+        <input type="text" class="search-input" id="searchInput" autocomplete="off" placeholder="Search AI projects..." aria-label="Search AI projects">
+        <span class="search-ic">&#128269;</span>
+        <div class="search-results" id="searchResults"></div>
+      </div>
     </div>
+  </div>
+  <hr class="rule-top">
+
+  <div class="crumb">
+    <a href="project-categories.html">Categories</a>
+    <span class="sep">/</span><a id="crumbCat" href="#"></a>
+    <span class="sep">/</span><a id="crumbProj" href="#"></a>
+    <span class="sep">/</span><span>Source</span>
+  </div>
+
+  <section class="src-head">
+    <div class="cover-strip" id="coverStrip" style="display:none"><img id="cover" alt=""></div>
+    <span class="rubric" id="kicker"></span>
+    <h1 id="title"></h1>
+    <p class="sub" id="subtitle"></p>
+    <div class="head-tech" id="headTech"></div>
+    <div class="head-btns" id="headBtns"></div>
+  </section>
+
+  <div id="body"></div>
+
+  <footer>&copy; 2026 Lee Yih Ven | AI Project Portfolio &middot; All rights reserved.</footer>
+  <div class="note">Sample Source-Showcase-E2 (TEMPLATE): source-code page on the index magazine system: slim cover banner, About, Project Structure, code walkthrough with copyable navy-barred code blocks, CTA. Reuse by editing only the PROJECT block at the top of the script.</div>
+
+<script>
+  const SITE = "";
+
+  /* =================================================================
+     EDIT PER PROJECT  -  the ONLY block you change per page.
+     Copy this file, swap PROJECT, save as <slug>-source.html.
+     - structure.code : the project file tree (plain text)
+     - walkthrough[]   : { heading, body, files:[{label, code}] }
+     - notes[]         : { heading, bullets:[...] }
+     Code strings can be multi-line; they render verbatim.
+     ================================================================= */
+  const PROJECT = {
+  "slug": "sunny-car-accessories",
+  "category": "Agentic Commerce",
+  "categoryUrl": "category-agentic-commerce.html",
+  "title": "Sunny Car Accessories",
+  "subtitle": "Source Code & WebMCP Architecture: tool definitions, per-view scoping, the webMCP wrapper, the checkout gate, the Inspector Panel, and agent detection.",
+  "cover": "images/sunny-car-accessories/cover.jpeg",
+  "tech": [
+    "WebMCP (W3C)",
+    "navigator.modelContext",
+    "Per-View Scoping",
+    "Inspector Panel"
+  ],
+  "overviewUrl": "sunny-car-accessories.html",
+  "demoLabel": "Try Live Demo",
+  "demoUrl": "https://lyven81.github.io/ai-project/projects/sunny-car-accessories/index.html",
+  "repoUrl": "https://github.com/lyven81/ai-project/tree/main/projects/sunny-car-accessories",
+  "about": "This curated code showcase walks through the WebMCP integration in Sunny Car Accessories: from how 7 typed tools are defined, to how the per-view tool surface swaps as the user navigates, to the Inspector Panel that proves the demo is genuinely active. The entire app runs client-side in a single static HTML file. The WebMCP layer is purely additive: humans see a normal storefront; agents see a typed contract via <code>navigator.modelContext</code>.",
+  "structure": {
+    "label": "projects/sunny-car-accessories/",
+    "code": "projects/sunny-car-accessories/\n  index.html             # Main app — multi-view SPA + WebMCP layer + Inspector Panel\n  images/\n    hero/\n      hero-banner.jpg    # 1600×600 — Malaysian car-accessory shop interior\n    categories/\n      interior.jpg\n      exterior.jpg\n      performance.jpg\n      tech.jpg           # 1200×600 each — category banners\n    products/\n      int-001-...jpg\n      ...                # 18 product images, 800×800 each\n                         # AI-generated via Imagen 3 with consistent style anchor"
+  },
+  "walkthrough": [
+    {
+      "heading": "Core: Tool Definitions (TOOLS object)",
+      "body": "Each tool is a typed contract: name, human-readable description, JSON inputSchema for the agent to read, and an async <code>execute()</code> handler that runs the business logic and returns structured JSON.",
+      "files": [
+        {
+          "label": "index.html: checkFitment (the killer demo tool)",
+          "code": "const TOOLS = {\n  checkFitment: {\n    name: 'checkFitment',\n    description: 'Check whether a part fits a specific vehicle.',\n    inputSchema: {\n      type: 'object',\n      properties: {\n        sku: { type: 'string', description: 'Product SKU to check' },\n        vehicleMake: { type: 'string', enum: ['Honda','Toyota','Perodua','Proton'] },\n        vehicleModel: { type: 'string', description: 'e.g. Civic, Myvi, Saga' },\n        year: { type: 'number', description: 'Vehicle model year' }\n      },\n      required: ['sku', 'vehicleMake']\n    },\n    execute: async ({ sku, vehicleMake, vehicleModel, year }) => {\n      const p = CATALOG.find(x => x.sku === sku);\n      if (!p) return { type: 'text', text: JSON.stringify({ error: 'SKU not found' }) };\n      if (p.fitment === 'universal') {\n        return { type: 'text', text: JSON.stringify({ fits: true, reason: 'Universal fit' }) };\n      }\n      const fits = Array.isArray(p.fitment) && p.fitment.includes(vehicleMake);\n      return { type: 'text', text: JSON.stringify({ fits, sku, vehicleMake, compatibleMakes: p.fitment }) };\n    }\n  }\n  // ... 6 more tools: searchAccessories, getProductDetails, addToCart, getCart, removeFromCart, checkout\n};"
+        }
+      ]
+    },
+    {
+      "heading": "Per-View Tool Scoping (the killer feature)",
+      "body": "WebMCP's design choice: agents see only the 3 to 5 tools relevant to where they currently are. Tool surface morphs on every view change. <code>provideContext()</code> is called fresh per view.",
+      "files": [
+        {
+          "label": "index.html: VIEW_TOOLS map + updateWebMCPContext()",
+          "code": "// Per-view tool surface — demonstrates per-page scoping\nconst VIEW_TOOLS = {\n  home:     ['searchAccessories'],\n  category: ['searchAccessories', 'getProductDetails'],\n  product:  ['getProductDetails', 'checkFitment', 'addToCart'],\n  cart:     ['getCart', 'removeFromCart'],\n  checkout: ['getCart', 'checkout'],\n  track:    []  // post-purchase: nothing for agents to do\n};\n\n// Hooked into showView() — fires on EVERY view transition\nfunction updateWebMCPContext() {\n  const viewToolNames = VIEW_TOOLS[state.currentView] || [];\n  const tools = viewToolNames.map(n => TOOLS[n]).filter(Boolean);\n  webMCP.provideContext({ tools });\n}\n\nfunction showView(viewName, params = {}) {\n  state.currentView = viewName;\n  // ... show/hide view DOM ...\n  if (viewName === 'home') renderHome();\n  // ... other render branches ...\n  updateWebMCPContext();  // ← swap tool surface here\n  window.scrollTo(0, 0);\n}"
+        }
+      ]
+    },
+    {
+      "heading": "WebMCP Wrapper (real API + compatibility fallback)",
+      "body": "The <code>webMCP</code> wrapper uses <code>navigator.modelContext</code> when present, falls back to a local registry otherwise. This makes the Inspector Panel work identically across browsers: a real Chrome 146+ install versus a compatibility-mode browser show the same UI behavior.",
+      "files": [
+        {
+          "label": "index.html: webMCP wrapper",
+          "code": "const webMCP = {\n  tools: [],\n  log: [],\n  isSupported: () => 'modelContext' in navigator,\n\n  provideContext({ tools }) {\n    this.tools = tools;\n    if (this.isSupported() && navigator.modelContext.provideContext) {\n      try {\n        navigator.modelContext.provideContext({ tools });  // real API\n      } catch (e) { console.warn('WebMCP error:', e); }\n    }\n    updateInspectorPanel();\n  },\n\n  async invokeTool(name, params = {}) {\n    const tool = this.tools.find(t => t.name === name);\n    if (!tool) return { error: 'Tool not registered on this view' };\n\n    const entry = { ts: timeStamp(), name, params, result: null };\n    this.log.push(entry);\n    updateInspectorPanel();\n\n    try {\n      const result = await tool.execute(params);\n      entry.result = result;\n      updateInspectorPanel();\n      return result;\n    } catch (e) {\n      entry.result = { error: e.message };\n      return { error: e.message };\n    }\n  },\n\n  async requestUserInteraction({ title, message }) {\n    return new Promise(resolve => {\n      // Show custom modal — Allow once / Deny — resolves the Promise\n      document.getElementById('confirm-title').textContent = title;\n      document.getElementById('confirm-message').textContent = message;\n      document.getElementById('confirm-modal').classList.remove('hidden');\n      window._confirmResolve = resolve;\n    });\n  }\n};"
+        }
+      ]
+    },
+    {
+      "heading": "requestUserInteraction(): Human-in-the-Loop on Checkout",
+      "body": "The destructive <code>checkout</code> tool gates execution behind a mandatory human confirmation. Even if an agent invokes it autonomously, the order cannot proceed without explicit user approval: Allow once / Deny.",
+      "files": [
+        {
+          "label": "index.html: checkout tool definition",
+          "code": "checkout: {\n  name: 'checkout',\n  description: 'Place the order. Triggers requestUserInteraction() before charging.',\n  inputSchema: {\n    type: 'object',\n    properties: { paymentMethod: { type: 'string', enum: ['DuitNow','FPX','COD'] } },\n    required: ['paymentMethod']\n  },\n  execute: async ({ paymentMethod }) => {\n    if (state.cart.length === 0)\n      return { type: 'text', text: JSON.stringify({ success: false, error: 'Cart is empty' }) };\n\n    const total = cartTotal();\n\n    // ← THE GATE — pauses execution, waits for user approval\n    const confirmed = await webMCP.requestUserInteraction({\n      title: 'Confirm purchase',\n      message: `Agent is about to place order: RM ${total.toFixed(0)} via ${paymentMethod}. Approve?`\n    });\n\n    if (!confirmed)\n      return { type: 'text', text: JSON.stringify({ success: false, reason: 'User declined' }) };\n\n    const result = placeOrder(null);\n    return { type: 'text', text: JSON.stringify(result) };\n  }\n}"
+        }
+      ]
+    },
+    {
+      "heading": "Inspector Panel: 4 Tabs of Live Introspection",
+      "body": "The Inspector Panel is the proof layer that turns the invisible WebMCP API into a visible demonstration. Status badge updates per view; 4 tabs show live tools, run sample invocations, log results, and reveal the source code that produced the surface.",
+      "files": [
+        {
+          "label": "index.html: updateInspectorPanel() + tab switching",
+          "code": "function updateInspectorPanel() {\n  const status = document.getElementById('inspector-status');\n  if (webMCP.isSupported()) {\n    status.innerHTML = `✅ WebMCP active · ${webMCP.tools.length} tool${webMCP.tools.length !== 1 ? 's' : ''} on <strong>${state.currentView}</strong> view`;\n  } else {\n    status.innerHTML = `⚠️ WebMCP not detected · running in compatibility mode · ${webMCP.tools.length} tools on ${state.currentView}`;\n  }\n  const activeTab = document.querySelector('.inspector-tab.active')?.dataset.tab || 'tools';\n  renderInspectorPane(activeTab);\n}\n\nfunction renderInspectorPane(tab) {\n  const pane = document.querySelector(`[data-pane=\"${tab}\"]`);\n\n  if (tab === 'tools') {\n    // Live list of registered tools — expandable to show inputSchema JSON\n    pane.innerHTML = webMCP.tools.map(t => `\n      <details class=\"tool-entry\">\n        <summary><strong>${t.name}</strong> — ${t.description}</summary>\n        <pre>${JSON.stringify(t.inputSchema, null, 2)}</pre>\n      </details>`).join('');\n  } else if (tab === 'try') {\n    // Buttons that invoke tools with sample params — demonstrates tool calls work\n    pane.innerHTML = webMCP.tools.map(t => {\n      const sample = sampleParamsFor(t.name);\n      return `<button onclick='runFromInspector(\"${t.name}\", ${JSON.stringify(sample)})'>\n                ▶ Run ${t.name}</button>`;\n    }).join('');\n  } else if (tab === 'log') {\n    // Timestamped log of every tool call — agent or human-triggered\n    pane.innerHTML = webMCP.log.slice(-12).reverse().map(l => `\n      ${l.ts} ${l.name}(${JSON.stringify(l.params)}) → ${JSON.stringify(l.result)}`).join('');\n  } else if (tab === 'source') {\n    // Shows the actual provideContext() code that produced this view's surface\n    pane.innerHTML = `<pre>${getSourceForView(state.currentView)}</pre>`;\n  }\n}"
+        }
+      ]
+    },
+    {
+      "heading": "agentInvoked Detection",
+      "body": "Per WebMCP spec slide 13: <code>submitEvent.agentInvoked</code> tells the form handler this submission came from an agent, not a human. Useful for analytics splits (agent traffic versus human traffic) and merchant-side fraud or bot detection.",
+      "files": [
+        {
+          "label": "index.html: global form submit listener",
+          "code": "// Detect agent-invoked form submissions\ndocument.addEventListener('submit', (e) => {\n  if (e.agentInvoked) {\n    console.log('[WebMCP] Form was submitted by an agent, not a human');\n    webMCP.log.push({\n      ts: timeStamp(),\n      name: '(form submit)',\n      params: { agentInvoked: true },\n      result: { detected: 'agent submission' }\n    });\n    updateInspectorPanel();\n    // In production: also log to BigQuery / merchant analytics\n  }\n});"
+        }
+      ]
+    }
+  ],
+  "cta": "Want an agent-ready storefront like this built for your own shop? Let's scope it."
+};
+  /* ===================== END EDIT BLOCK ===================== */
+
+  const pref = (u) => /^https?:|^mailto:|^tel:/.test(u || '') ? u : (SITE + (u || ''));
+  const esc = (s) => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const rich = (s) => esc(s).replace(/&lt;(\/?(?:b|code))&gt;/g, '<$1>');
+
+  // raw code store for copy buttons
+  const RAW = [];
+  function codeBlock(label, codeStr, extraClass){
+    const idx = RAW.push(codeStr) - 1;
+    const rendered = esc(codeStr).split('\n')
+      .map(line => /^\s*#/.test(line) ? `<span class="cmt">${line}</span>` : line).join('\n');
+    return `<div class="codeblock ${extraClass||''}">`+
+      `<div class="code-bar"><span class="path"><span>${esc(label)}</span></span>`+
+      `<button class="code-copy" data-idx="${idx}">Copy</button></div>`+
+      `<pre><code>${rendered}</code></pre></div>`;
+  }
+
+  // Breadcrumb + header
+  document.title = PROJECT.title + ": Source | AI Project Portfolio";
+  document.getElementById('crumbCat').textContent = PROJECT.category;
+  document.getElementById('crumbCat').href = pref(PROJECT.categoryUrl);
+  document.getElementById('crumbProj').textContent = PROJECT.title;
+  document.getElementById('crumbProj').href = pref(PROJECT.overviewUrl);
+  if (PROJECT.cover){
+    document.getElementById('coverStrip').style.display = '';
+    const c = document.getElementById('cover'); c.src = PROJECT.cover; c.alt = PROJECT.title + " cover";
+  }
+  document.getElementById('kicker').textContent = "Source Walkthrough · " + PROJECT.category;
+  document.getElementById('title').textContent = PROJECT.title;
+  document.getElementById('subtitle').textContent = PROJECT.subtitle;
+  document.getElementById('headTech').innerHTML = (PROJECT.tech||[]).map(t => `<span class="tech-chip">${esc(t)}</span>`).join('');
+  document.getElementById('headBtns').innerHTML =
+    (PROJECT.demoUrl ? `<a class="btn" href="${pref(PROJECT.demoUrl)}" target="_blank" rel="noopener">${esc(PROJECT.demoLabel||'Live Demo')}</a>` : '') +
+    (PROJECT.overviewUrl ? `<a class="btn ghost" href="${pref(PROJECT.overviewUrl)}">Project Overview</a>` : '') +
+    (PROJECT.repoUrl ? `<a class="btn ghost" href="${pref(PROJECT.repoUrl)}" target="_blank" rel="noopener">GitHub Repo</a>` : '');
+
+  const section = (tab, inner) => `<section class="sec"><div class="sec-rule"><span class="tab">${esc(tab)}</span>${inner}</div></section>`;
+  let html = "";
+  const P = PROJECT;
+
+  if (P.about){
+    html += section("About This Code", `<h2>About This Code Showcase</h2><p class="intro">${rich(P.about)}</p>`);
+  }
+  if (P.structure && P.structure.code){
+    html += section("Project Structure", `<h2>Project Structure</h2>`+
+      codeBlock(P.structure.label || 'project/', P.structure.code, 'tree'));
+  }
+  (P.walkthrough||[]).forEach(w => {
+    let inner = `<h2>${esc(w.heading)}</h2>`;
+    if (w.body) inner += `<p class="body">${rich(w.body)}</p>`;
+    (w.files||[]).forEach(f => { inner += codeBlock(f.label, f.code); });
+    html += section("Code", inner);
+  });
+  // CTA
+  html += `<section class="sec"><div class="cta-inner">`+
+    `<div><h3>Interested in the build?</h3><p>${esc(P.cta || "Let's talk.")}</p></div>`+
+    `<div class="cta-btns">`+
+    (P.demoUrl ? `<a class="btn" href="${pref(P.demoUrl)}" target="_blank" rel="noopener">${esc(P.demoLabel||'Live Demo')}</a>` : '')+
+    `<a class="btn ghost" href="${SITE}contact.html">Get in Touch</a>`+
+    `</div></div></section>`;
+
+  document.getElementById('body').innerHTML = html;
+
+  // Copy buttons
+  function copyText(text, btn){
+    const done = ()=>{ const o=btn.textContent; btn.textContent='Copied ✓'; setTimeout(()=>btn.textContent=o.includes('Copied')?'Copy':o,1400); };
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(done).catch(()=>fb(text,done)); }
+    else fb(text,done);
+  }
+  function fb(text,done){ const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(ta); done(); }
+  document.querySelectorAll('.code-copy').forEach(btn =>
+    btn.addEventListener('click', ()=> copyText(RAW[+btn.dataset.idx], btn)));
+
+  // Masthead search
+  const ITEMS = [
+    {t:PROJECT.title, c:PROJECT.category, s:PROJECT.slug},
+    {t:"Courier CS Quality Console", c:"Conversational Data Analytics", s:"courier-cs-quality-console"},
+    {t:"Voucher Analyzer", c:"Conversational Data Analytics", s:"voucher-analyzer"},
+    {t:"Wiseman", c:"Knowledge & Reference Chatbots", s:"wiseman"},
+    {t:"Sunny Car Accessories", c:"Agentic Commerce", s:"sunny-car-accessories"},
+    {t:"Bookshelf", c:"Multi-Agent Decision Systems", s:"bookshelf"}
+  ];
+  const searchInput = document.getElementById('searchInput');
+  const searchResults = document.getElementById('searchResults');
+  function runSearch(q){
+    if(q.trim().length < 2){ searchResults.style.display='none'; return; }
+    const ql = q.toLowerCase();
+    const hits = ITEMS.filter(it => (it.t+' '+it.c).toLowerCase().includes(ql));
+    searchResults.innerHTML = hits.length ? hits.map(it =>
+      `<div class="sr-item"><div class="sr-cat">${esc(it.c)}</div>`+
+      `<a href="${SITE}${it.s}.html"><div class="sr-title">${esc(it.t)}</div></a>`+
+      `<div class="sr-links"><a href="${SITE}${it.s}.html">View Details</a></div></div>`).join('')
+      : `<div class="sr-none">No projects found. Try a different keyword.</div>`;
+    searchResults.style.display='block';
+  }
+  searchInput.addEventListener('input', e => runSearch(e.target.value));
+  document.addEventListener('click', e => { if(!e.target.closest('.search-box')) searchResults.style.display='none'; });
+
+  // Drawer
+  const drawer=document.getElementById('drawer'), overlay=document.getElementById('overlay');
+  const openMenu=()=>{ drawer.classList.add('open'); overlay.classList.add('open'); };
+  const closeMenu=()=>{ drawer.classList.remove('open'); overlay.classList.remove('open'); };
+  document.getElementById('hamburger').addEventListener('click', openMenu);
+  document.getElementById('drawerClose').addEventListener('click', closeMenu);
+  overlay.addEventListener('click', closeMenu);
+  drawer.querySelectorAll('a').forEach(a=>a.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeMenu(); searchResults.style.display='none'; }});
+</script>
 </body>
 </html>

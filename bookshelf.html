@@ -1,532 +1,572 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bookshelf - Multi-Agent Inventory Planner for Malaysian Bookstores</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bookshelf | AI Project Portfolio</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root{ --ink:#222; --paper:#fff; --hair:#dddddd; --gray:#555; --accent:#B8860B; --navy:#1E3A5F; --teal:#0D9488; }
+  html{ scroll-behavior:smooth; }
+  body{ background:var(--paper); color:var(--ink); font-family:Arial, Helvetica, sans-serif; line-height:1.6; overflow-x:hidden; }
+  a{ color:inherit; text-decoration:none; }
+  a:hover h2, a:hover h3, a:hover h4{ color:var(--accent); }
+  code{ font-family:"Courier New", monospace; font-size:.86em; background:#f2f3f5; padding:1px 5px; color:var(--navy); }
 
-        body {
-            font-family: 'Arial', sans-serif;
-            line-height: 1.6;
-            color: #222;
-            background-color: #ffffff;
-        }
+  /* Masthead (shared) */
+  .masthead{ display:flex; align-items:center; justify-content:space-between; padding:14px 28px; max-width:1240px; margin:0 auto; gap:18px; }
+  .mast-left{ display:flex; align-items:center; gap:20px; }
+  .logo{ background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; letter-spacing:3px; font-size:.95rem; padding:8px 12px; white-space:nowrap; }
+  .mast-nav{ display:flex; gap:20px; font-family:Arial, Helvetica, sans-serif; font-size:.72rem; letter-spacing:1.4px; text-transform:uppercase; }
+  .mast-nav a:hover{ color:var(--accent); }
+  .hamburger{ display:none; flex-direction:column; gap:4px; background:none; border:none; cursor:pointer; padding:6px; }
+  .hamburger span{ width:22px; height:2px; background:#222; display:block; }
+  .rule-top{ border:none; border-top:3px solid #222; max-width:1240px; margin:0 auto; }
 
-        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+  /* Search (shared) */
+  .search-box{ position:relative; width:200px; }
+  .search-input{ width:100%; padding:7px 30px 7px 12px; border:1px solid var(--hair); background:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; color:#222; }
+  .search-input:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(184,134,11,.15); }
+  .search-ic{ position:absolute; right:10px; top:50%; transform:translateY(-50%); color:var(--gray); font-size:.8rem; pointer-events:none; }
+  .search-results{ position:absolute; top:calc(100% + 4px); left:0; width:340px; max-width:86vw; background:#fff; border:1px solid #222; max-height:60vh; overflow-y:auto; z-index:120; display:none; }
+  .sr-item{ padding:12px 14px; border-bottom:1px solid var(--hair); }
+  .sr-item:last-child{ border-bottom:none; }
+  .sr-cat{ font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; margin-bottom:4px; color:var(--accent); }
+  .sr-title{ font-weight:700; font-size:1.02rem; color:#222; }
+  .sr-links{ font-size:.58rem; letter-spacing:.8px; text-transform:uppercase; color:var(--gray); margin-top:5px; }
+  .sr-links a:hover{ color:var(--accent); }
+  .sr-none{ padding:16px 14px; font-size:.82rem; color:var(--gray); }
 
-        .back-nav { margin-bottom: 20px; }
-        .back-nav a { color: #007BFF; text-decoration: none; font-size: 1rem; }
-        .back-nav a:hover { text-decoration: underline; }
+  /* Shared type bits */
+  .tab{ display:inline-block; background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.66rem; letter-spacing:2px; text-transform:uppercase; padding:6px 12px; }
+  .rubric{ font-family:Arial, Helvetica, sans-serif; font-size:.62rem; font-weight:700; letter-spacing:1.6px; text-transform:uppercase; color:var(--accent); display:block; margin-bottom:8px; }
+  .links{ font-family:Arial, Helvetica, sans-serif; font-size:.58rem; letter-spacing:1px; text-transform:uppercase; margin-top:10px; color:var(--gray); }
+  .links a:hover{ color:var(--accent); }
+  .lead-dek{ font-style:italic; color:#333; }
+  .tech-chip{ display:inline-block; border:1px solid var(--hair); padding:6px 12px; font-size:.72rem; letter-spacing:.3px; color:#333; white-space:nowrap; }
+  .tech-chip:hover{ border-color:var(--accent); color:var(--accent); }
 
-        .project-header {
-            text-align: center;
-            margin-bottom: 40px;
-            padding: 40px 0;
-            background: linear-gradient(135deg, #4299E1, #2B6CB0);
-            color: white;
-            border-radius: 10px;
-        }
-        .project-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
-        .project-header p { font-size: 1.2rem; opacity: 0.95; }
+  /* Breadcrumb */
+  .crumb{ max-width:1240px; margin:0 auto; padding:20px 28px 0; font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--gray); }
+  .crumb a:hover{ color:var(--accent); }
+  .crumb .sep{ color:var(--hair); margin:0 8px; }
 
-        .badges { display: flex; justify-content: center; gap: 10px; margin: 20px 0; flex-wrap: wrap; }
-        .badge { background-color: rgba(255,255,255,0.2); color: white; padding: 5px 12px; border-radius: 15px; font-size: 0.9rem; }
+  /* ===== HERO (cover image feature opener) ===== */
+  .hero{ max-width:1240px; margin:0 auto; padding:16px 28px 8px; }
+  .cover-wrap{ border:1px solid var(--hair); box-shadow:0 1px 0 rgba(30,58,95,.06); line-height:0; background:#eef1f4; }
+  .cover{ width:100%; aspect-ratio:2 / 1; object-fit:cover; display:block; }
+  .hero-copy{ padding:22px 0 6px; }
+  .hero-copy h1{ font-size:2.7rem; font-weight:900; line-height:1.03; letter-spacing:-.008em; }
+  .hero-copy .tagline{ font-style:italic; font-size:1.15rem; color:#333; margin-top:10px; max-width:60ch; }
+  .hero-tech{ display:flex; flex-wrap:wrap; gap:9px; margin-top:16px; }
+  .hero-btns{ display:flex; flex-wrap:wrap; gap:12px; margin-top:18px; }
+  .btn{ display:inline-block; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.7rem; letter-spacing:1.6px; text-transform:uppercase; padding:13px 24px; border:1px solid #222; background:#222; color:#fff; cursor:pointer; transition:.15s; }
+  .btn:hover{ background:var(--accent); border-color:var(--accent); }
+  .btn.ghost{ background:#fff; color:#222; }
+  .btn.ghost:hover{ color:var(--accent); border-color:var(--accent); background:#fff; }
 
-        .demo-links { text-align: center; margin: 30px 0; }
-        .demo-btn {
-            display: inline-block;
-            background-color: #007BFF;
-            color: white;
-            padding: 12px 25px;
-            text-decoration: none;
-            border-radius: 5px;
-            margin: 0 10px 10px;
-            font-weight: bold;
-            transition: background-color 0.3s;
-        }
-        .demo-btn:hover { background-color: #0056b3; }
-        .demo-btn.secondary { background-color: #28a745; }
-        .demo-btn.secondary:hover { background-color: #218838; }
+  /* ===== SECTION SHELL ===== */
+  .sec{ max-width:1240px; margin:0 auto; padding:26px 28px; }
+  .sec-rule{ border-top:3px solid #222; padding-top:16px; }
+  .sec .tab{ margin-bottom:14px; }
+  .sec h2{ font-size:1.7rem; font-weight:900; line-height:1.06; }
+  .sec .intro{ color:#333; font-size:1.02rem; margin-top:10px; max-width:80ch; }
 
-        .content-section {
-            margin: 40px 0;
-            padding: 30px;
-            background-color: #f9f9f9;
-            border-radius: 8px;
-            border-left: 5px solid #4299E1;
-        }
-        .content-section h2 { color: #2B6CB0; margin-bottom: 20px; font-size: 1.8rem; }
-        .content-section h3 { color: #333; margin: 24px 0 12px; font-size: 1.2rem; }
-        .content-section p { margin-bottom: 16px; }
-        .content-section ul, .content-section ol { margin: 12px 0 12px 28px; }
-        .content-section li { margin-bottom: 8px; }
-        .content-section strong { color: #2B6CB0; }
-        .content-section code { background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-size: 0.92em; }
+  /* Two-column challenge / solution */
+  .duo{ display:grid; grid-template-columns:1fr 1fr; margin-top:20px; }
+  .duo > div:first-child{ padding-right:30px; border-right:1px solid var(--hair); }
+  .duo > div:last-child{ padding-left:30px; }
+  .duo p{ color:#333; }
 
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 18px;
-            margin-top: 16px;
-        }
-        .feature-item {
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            padding: 18px;
-        }
-        .feature-item h4 { color: #2B6CB0; margin-bottom: 8px; font-size: 1.05rem; }
-        .feature-item p { font-size: 0.95rem; margin-bottom: 0; }
+  /* Editorial bullet list */
+  .blist{ list-style:none; margin-top:18px; border-top:1px solid var(--hair); }
+  .blist li{ padding:13px 0; border-bottom:1px solid var(--hair); color:#333; font-size:.96rem; }
+  .blist li b{ color:#222; }
 
-        .tech-stack { display: flex; gap: 8px; flex-wrap: wrap; margin: 8px 0 24px; }
-        .tech-item {
-            background: #4299E1;
-            color: white;
-            padding: 5px 12px;
-            border-radius: 15px;
-            font-size: 0.85rem;
-        }
+  /* Feature / AI grid (borderless hairline cards) */
+  .fgrid{ display:grid; grid-template-columns:repeat(3,1fr); border-top:1px solid var(--hair); margin-top:20px; }
+  .fcard{ padding:20px 22px; border-right:1px solid var(--hair); border-bottom:1px solid var(--hair); }
+  .fcard:nth-child(3n){ border-right:none; }
+  .fcard .fe{ font-size:1.5rem; }
+  .fcard h4{ font-size:1.08rem; font-weight:700; line-height:1.18; margin:9px 0 6px; }
+  .fcard p{ font-size:.9rem; color:#444; line-height:1.5; }
 
-        .code-block {
-            background: #1a202c;
-            color: #e2e8f0;
-            padding: 16px;
-            border-radius: 6px;
-            font-family: 'Courier New', monospace;
-            font-size: 0.88rem;
-            white-space: pre-wrap;
-            overflow-x: auto;
-            margin: 12px 0;
-        }
+  /* Comparison table */
+  .table-scroll{ overflow-x:auto; margin-top:20px; border-top:1px solid var(--hair); }
+  table.cmp{ width:100%; border-collapse:collapse; min-width:640px; }
+  table.cmp th, table.cmp td{ text-align:left; vertical-align:top; padding:13px 16px; border-bottom:1px solid var(--hair); font-size:.9rem; }
+  table.cmp thead th{ font-size:.62rem; font-weight:700; letter-spacing:1.2px; text-transform:uppercase; color:var(--navy); border-bottom:2px solid var(--accent); }
+  table.cmp tbody td:first-child{ font-weight:700; color:#222; white-space:nowrap; }
+  table.cmp tbody tr:hover{ background:#fbfbf8; }
 
-        .metrics-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
-            margin: 16px 0;
-        }
-        .metric-card {
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            padding: 18px;
-            text-align: center;
-        }
-        .metric-card .num { font-size: 1.8rem; font-weight: 700; color: #2B6CB0; display: block; }
-        .metric-card .label { font-size: 0.9rem; color: #475569; margin-top: 4px; display: block; }
+  /* Architecture stacks */
+  .stacks{ display:grid; grid-template-columns:repeat(2,1fr); gap:22px 34px; margin-top:20px; }
+  .stack .rubric{ margin-bottom:10px; }
+  .stack-chips{ display:flex; flex-wrap:wrap; gap:8px; }
+  .sys-list{ list-style:none; margin-top:24px; border-top:1px solid var(--hair); }
+  .sys-list li{ padding:13px 0 13px 0; border-bottom:1px solid var(--hair); color:#333; font-size:.95rem; }
+  .sys-list li b{ color:var(--navy); }
 
-        .compare-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 16px 0 8px;
-            font-size: 0.95rem;
-            background: #ffffff;
-        }
-        .compare-table th, .compare-table td {
-            border: 1px solid #e2e8f0;
-            padding: 10px 14px;
-            text-align: left;
-            vertical-align: top;
-        }
-        .compare-table th { background: #edf2f7; color: #2B6CB0; font-weight: 700; }
-        .compare-table td.win { background: #f0fff4; color: #2f855a; font-weight: 600; }
-        .compare-table td.lose { background: #fff5f5; color: #c53030; }
-        .compare-table td.tie { background: #fffaf0; color: #b7791f; }
+  /* Metrics row */
+  .metrics{ display:grid; grid-template-columns:repeat(4,1fr); border-top:1px solid var(--hair); margin-top:20px; }
+  .metric{ padding:22px 18px; border-right:1px solid var(--hair); }
+  .metric:last-child{ border-right:none; }
+  .metric .v{ font-size:2.6rem; font-weight:900; line-height:1; color:#222; letter-spacing:-.01em; }
+  .metric .l{ font-size:.62rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--gray); margin-top:9px; }
 
-        .arch-diagram {
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            padding: 20px;
-            margin: 16px 0;
-            font-family: 'Courier New', monospace;
-            font-size: 0.88rem;
-            line-height: 1.8;
-            color: #2d3748;
-            text-align: center;
-            white-space: pre;
-            overflow-x: auto;
-        }
+  /* CTA */
+  .cta-inner{ display:flex; align-items:center; gap:18px; flex-wrap:wrap; border-top:3px solid #222; padding-top:18px; }
+  .cta-inner h3{ font-size:1.4rem; font-weight:900; line-height:1.08; }
+  .cta-inner p{ color:var(--gray); font-size:.95rem; margin-top:4px; }
+  .cta-btns{ margin-left:auto; display:flex; gap:12px; flex-wrap:wrap; }
 
-        .limitation-box {
-            background: #fffaf0;
-            border-left: 4px solid #ed8936;
-            padding: 16px 20px;
-            border-radius: 6px;
-            margin: 16px 0;
-        }
-        .limitation-box h4 { color: #c05621; margin-bottom: 6px; }
-        .limitation-box p { font-size: 0.95rem; margin-bottom: 0; color: #7b341e; }
+  footer{ background:#222; max-width:1240px; margin:30px auto 0; padding:24px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; letter-spacing:.5px; color:#fff; text-align:center; }
+  .note{ max-width:1240px; margin:14px auto 0; padding:8px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.62rem; letter-spacing:1px; color:#999; }
 
-        .bottom-nav {
-            text-align: center;
-            margin: 40px 0 20px;
-        }
-        .bottom-nav a {
-            color: #007BFF;
-            text-decoration: none;
-            margin: 0 12px;
-            font-weight: 500;
-        }
-        .bottom-nav a:hover { text-decoration: underline; }
+  /* Drawer (shared) */
+  .drawer{ position:fixed; top:0; left:-300px; width:280px; height:100vh; background:#fff; z-index:200; box-shadow:2px 0 14px rgba(0,0,0,.15); transition:left .28s ease; padding:74px 26px 26px; }
+  .drawer.open{ left:0; }
+  .drawer a{ display:block; font-family:Arial, Helvetica, sans-serif; font-size:.82rem; letter-spacing:1.2px; text-transform:uppercase; padding:14px 0; border-bottom:1px solid var(--hair); }
+  .overlay{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:150; }
+  .overlay.open{ display:block; }
+  .drawer-close{ position:absolute; top:20px; right:20px; font-family:Arial, Helvetica, sans-serif; font-size:1.4rem; background:none; border:none; cursor:pointer; }
 
-        @media (max-width: 600px) {
-            .project-header h1 { font-size: 1.8rem; }
-            .project-header p { font-size: 1rem; }
-            .content-section { padding: 18px; }
-            .demo-btn { display: block; margin: 8px 0; }
-        }
-    </style>
+  @media (max-width:900px){
+    .duo{ grid-template-columns:1fr; }
+    .duo > div:first-child{ padding-right:0; border-right:none; padding-bottom:18px; border-bottom:1px solid var(--hair); margin-bottom:18px; }
+    .duo > div:last-child{ padding-left:0; }
+    .fgrid{ grid-template-columns:repeat(2,1fr); }
+    .fcard:nth-child(3n){ border-right:1px solid var(--hair); }
+    .fcard:nth-child(2n){ border-right:none; }
+    .stacks{ grid-template-columns:1fr; }
+    .metrics{ grid-template-columns:repeat(2,1fr); }
+    .metric:nth-child(2n){ border-right:none; }
+    .metric:nth-child(-n+2){ border-bottom:1px solid var(--hair); }
+    .cta-btns{ margin-left:0; }
+    .mast-nav{ display:none; }
+    .hamburger{ display:flex; }
+    .masthead{ padding:12px 16px; }
+    .mast-left{ gap:10px; min-width:0; flex:1; }
+    .logo{ font-size:.72rem; letter-spacing:1.5px; padding:6px 8px; }
+    .search-box{ flex:1; width:auto; min-width:0; }
+    .search-results{ position:fixed; top:58px; left:12px; right:12px; width:auto; max-width:none; }
+    .hero-copy h1{ font-size:2.05rem; }
+  }
+  @media (max-width:560px){
+    .fgrid{ grid-template-columns:1fr; }
+    .fcard{ border-right:none !important; }
+    .metrics{ grid-template-columns:1fr; }
+    .metric{ border-right:none; border-bottom:1px solid var(--hair); }
+    .metric:last-child{ border-bottom:none; }
+  }
+</style>
 </head>
 <body>
-    <div class="container">
-        <div class="back-nav">
-            <a href="index.html">← Back to Portfolio</a>
-        </div>
 
-        <div class="project-header">
-            <h1>📚 Bookshelf</h1>
-            <p>Multi-Agent Inventory Planner for Malaysian Bookstores</p>
-            <div class="badges">
-                <span class="badge">Multi-Agent System</span>
-                <span class="badge">Google ADK</span>
-                <span class="badge">A2A Protocol</span>
-                <span class="badge">Gemini 2.5 Flash</span>
-                <span class="badge">FastAPI</span>
-                <span class="badge">pandas</span>
-            </div>
-        </div>
+  <div class="overlay" id="overlay"></div>
+  <nav class="drawer" id="drawer">
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">&times;</button>
+    <a href="index.html">Home</a>
+    <a href="project-categories.html">Categories</a>
+    <a href="contact.html">Contact</a>
+    <a href="https://lyven81.github.io/data-analyst-portfolio/index.html">Data Portfolio</a>
+  </nav>
 
-        <div class="demo-links">
-            <a href="projects/bookshelf/demo.html" class="demo-btn">🚀 Launch Demo</a>
-            <a href="bookshelf-source.html" class="demo-btn secondary">📁 View Source Code</a>
-        </div>
-
-        <div class="content-section">
-            <h2>📋 Project Overview &amp; Problem Statement</h2>
-            <p><strong>Challenge:</strong> Malaysian SME bookstore owners sit on tens of thousands of sales rows but rarely turn the data into stocking decisions. Pareto analysis, dead-stock detection, seasonal pre-stocking, and aging clearance each require hours of pivot-table work. Most owners run on intuition and miss obsolete syllabi (UPSR was abolished in 2021), dormant religious titles, and pre-school-season restocking windows.</p>
-
-            <p><strong>Solution:</strong> Bookshelf is a 4-agent decision-support system where the owner asks any business question in plain Malaysian English and receives a focused brief grounded in their actual sales data. A deterministic pandas tool computes exact metrics; a Pydantic-typed Judge gates the research; a Content Builder turns the validated metrics into a 600-word actionable brief.</p>
-
-            <h3>What the owner can do</h3>
-            <ul>
-                <li>Ask any inventory question — Pareto, dead stock, seasonal timing, aging, margin ranking</li>
-                <li>Get specific SKUs with exact RM impact, not vague guidance</li>
-                <li>Spot structurally obsolete inventory (e.g. discontinued exam syllabi the owner forgot to clear)</li>
-                <li>Plan pre-school-season stock-up dates from the actual seasonal index per subcategory</li>
-                <li>Trust the numbers — they come from pandas aggregation, not LLM approximation</li>
-            </ul>
-        </div>
-
-        <div class="content-section">
-            <h2>🧠 Why a Multi-Agent System Beats a Chat-on-Document Tool</h2>
-            <p>Tools like Google NotebookLM let an owner upload a CSV and ask questions. They are fast, polished, and free. Bookshelf is slower (~140 seconds per question vs sub-10 seconds) and operationally heavier. The trade is intentional — chat-on-document tools hit a wall on numerical aggregation and quality validation. Bookshelf is built for decisions worth thousands of ringgit, where exact numbers and a quality gate matter more than speed.</p>
-
-            <table class="compare-table">
-                <thead>
-                    <tr>
-                        <th>Question type</th>
-                        <th>Chat-on-document tool (e.g. NotebookLM)</th>
-                        <th>Bookshelf multi-agent system</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Exact aggregates ("RM impact of dropping these 8 SKUs")</td>
-                        <td class="lose">Approximates from chunks — often wrong by 5–20%</td>
-                        <td class="win">pandas computes exactly</td>
-                    </tr>
-                    <tr>
-                        <td>Ranked lists by computed metric ("top 10 by velocity × margin")</td>
-                        <td class="lose">Cannot sort the whole 100k rows in one prompt</td>
-                        <td class="win">data_tool sorts deterministically before LLM sees it</td>
-                    </tr>
-                    <tr>
-                        <td>Quality validation before recommendations</td>
-                        <td class="lose">Single LLM call, no validation</td>
-                        <td class="win">Judge agent gates the brief; loops up to 3× on fail</td>
-                    </tr>
-                    <tr>
-                        <td>Speed for casual exploration</td>
-                        <td class="win">Sub-10s response</td>
-                        <td class="lose">~140s end-to-end</td>
-                    </tr>
-                    <tr>
-                        <td>Multimodal output (audio overview, mind map, quizzes)</td>
-                        <td class="win">Built-in</td>
-                        <td class="tie">Not in Phase 1</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <h3>Where Bookshelf is structurally better</h3>
-            <p>The real value of building a system isn't beating NotebookLM at chat. It's that a system can do four things NotebookLM cannot:</p>
-            <ul>
-                <li><strong>Live POS integration</strong> — Bookshelf can hook directly to a Square / SAP-BO BS1 / Excel export and re-run nightly. NotebookLM needs a fresh upload every time.</li>
-                <li><strong>Push delivery, not pull chat</strong> — Bookshelf can become a Monday WhatsApp message: <em>"This week: drop these 5 SKUs (RM 320 stuck), pre-stock these 8 for school season (Dec 28 cutoff)."</em> NotebookLM is a tab the owner has to remember to open.</li>
-                <li><strong>Structured outputs the shop's systems can consume</strong> — Bookshelf can emit a CSV of "discontinue" SKUs straight into the POS for clearance pricing. NotebookLM emits prose only.</li>
-                <li><strong>Privacy-preserving deployment</strong> — Some shops won't upload sales data to a public chat tool. Bookshelf can run on the customer's own Cloud Run + private database.</li>
-            </ul>
-
-            <p>The Phase 1 build proves the architecture. The wedges above (Phase 4+) are where the system pays back the complexity premium.</p>
-        </div>
-
-        <div class="content-section">
-            <h2>🏗️ Architecture &amp; Execution Flow</h2>
-
-            <div class="arch-diagram">USER question
-     │
-     ▼
-┌──────────────────────────────────────────────────────────┐
-│  Web App (FastAPI, port 8000)                            │
-│  Thin HTTP/SSE client — does NOT import ADK              │
-└──────────────────────────────────────────────────────────┘
-     │  POST /run_sse
-     ▼
-┌──────────────────────────────────────────────────────────┐
-│  Orchestrator agent (port 8004)                          │
-│  SequentialAgent:                                         │
-│    LoopAgent(max_iterations=3) [                          │
-│      Researcher → Judge → EscalationChecker              │
-│    ] → Content Builder                                    │
-└──────────────────────────────────────────────────────────┘
-     │  RemoteA2aAgent over HTTP (A2A protocol)
-     ▼
-┌─────────────┐  ┌──────────┐  ┌─────────────────┐
-│ Researcher  │  │  Judge   │  │ Content Builder │
-│ (port 8001) │  │  (8002)  │  │     (8003)      │
-│ pandas      │  │ Pydantic │  │ Markdown brief  │
-│ data_tool   │  │ verdict  │  │ + 6-class SKU   │
-└─────────────┘  └──────────┘  └─────────────────┘</div>
-
-            <h3>Why split it this way</h3>
-            <ul>
-                <li><strong>Researcher</strong> calls a deterministic pandas tool — the same input always yields the same metrics dict. The LLM is just the wrapper that decides when to call it.</li>
-                <li><strong>Judge</strong> emits a Pydantic <code>JudgeVerdict</code> (status / issues / confidence / feedback) with structured-output decoding — no string parsing.</li>
-                <li><strong>EscalationChecker</strong> is a 5-line deterministic Python class that breaks the LoopAgent on Judge pass. Not every component needs an LLM.</li>
-                <li><strong>Content Builder</strong> reads the Researcher's JSON + Judge's verdict + the user's original question and produces a focused 600-word brief.</li>
-                <li><strong>Each agent is its own Cloud Run service.</strong> Independently scaled, independently deployed, discoverable via A2A agent cards (<code>/.well-known/agent-card.json</code>).</li>
-            </ul>
-        </div>
-
-        <div class="content-section">
-            <h2>🖥️ Application Features</h2>
-
-            <div class="features-grid">
-                <div class="feature-item">
-                    <h4>🗨️ Single ask-anything bar</h4>
-                    <p>One text input. Owner types any inventory question — broad ("what should I do?") or specific ("should I drop Naruto Vol 5?"). No menu navigation, no upload step.</p>
-                </div>
-                <div class="feature-item">
-                    <h4>📊 Deterministic data tool</h4>
-                    <p>pandas computes per-SKU revenue, margin, velocity, Pareto rank, last-sale date, aging class, seasonal indices, channel breakdown. Output JSON-serialised so the Judge can validate it byte-for-byte.</p>
-                </div>
-                <div class="feature-item">
-                    <h4>⚖️ Quality-gated loop</h4>
-                    <p>Judge runs after Researcher and emits status="pass" or "fail" with structured feedback. EscalationChecker breaks the loop on pass; on fail, Researcher reruns with the feedback. Max 3 iterations.</p>
-                </div>
-                <div class="feature-item">
-                    <h4>🏷️ 6-class SKU taxonomy</h4>
-                    <p>Content Builder classifies SKUs into push / hold / drop / restock-seasonal / discontinue / source-similar — not just "good" vs "bad". Each action maps to a different shop-floor decision.</p>
-                </div>
-                <div class="feature-item">
-                    <h4>🇲🇾 Malaysian retail context</h4>
-                    <p>Built-in awareness of KSSR/KSSM workbook tiers, SPM/UPSR exam syllabi (UPSR abolished 2021), Ramadan dip, January back-to-school spike, school-bulk vs in-store channel mix.</p>
-                </div>
-                <div class="feature-item">
-                    <h4>📅 Aging detection</h4>
-                    <p>Each SKU gets an aging_class (fresh / slowing / stale / stuck) based on days since last sale. Aging-stale SKUs are preserved in the LLM context even when they're mid-revenue, so dormant titles surface.</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>🧪 Sample Outputs (from real agent runs)</h2>
-            <p>Five questions captured live from the running pipeline against 101,990 rows of Malaysian bookstore sales data (Jan 2024 – Dec 2025). Click <a href="projects/bookshelf/demo.html"><strong>Launch Demo</strong></a> to browse them.</p>
-
-            <div class="features-grid">
-                <div class="feature-item">
-                    <h4>1. What's selling best?</h4>
-                    <p>Top 6 SKUs are SPM/Form-5 workbooks &amp; the Casio fx-570 calculator — RM 693k revenue, 39.6% margin on the top SKU. Surfaced as <strong>push</strong> actions.</p>
-                </div>
-                <div class="feature-item">
-                    <h4>2. Which to drop?</h4>
-                    <p>Caught the entire UPSR-syllabus cluster (4 SKUs, RM 16,980 stuck) as <strong>discontinue</strong>. UPSR was abolished in Malaysia in 2021.</p>
-                </div>
-                <div class="feature-item">
-                    <h4>3. When to stock for school season?</h4>
-                    <p>SPM workbooks peak January (index 1.31) and December (1.18). Form 5 KSSM peaks January (1.59) and December (1.38). Pre-stock by November.</p>
-                </div>
-                <div class="feature-item">
-                    <h4>4. Aging clearance?</h4>
-                    <p>3 stale SKUs surfaced — <em>Tuhan Manusia</em> (152 days dormant), <em>Pakej UPSR Lengkap</em> (140 days), <em>般若心经</em> (96 days). RM 8,447 to clear.</p>
-                </div>
-                <div class="feature-item">
-                    <h4>5. Best margin to push?</h4>
-                    <p>Modul SPM Matematik — 43.7% margin, RM 418k revenue, 546 units/month. Bundle with Add Math &amp; Sciences (all 42–43% margin).</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>🛠️ Technical Stack &amp; Implementation</h2>
-
-            <h3>Frontend</h3>
-            <div class="tech-stack">
-                <span class="tech-item">Vanilla HTML/JS</span>
-                <span class="tech-item">marked.js</span>
-                <span class="tech-item">Server-Sent Events</span>
-                <span class="tech-item">CSS (Inter font)</span>
-            </div>
-
-            <h3>Backend / Agents</h3>
-            <div class="tech-stack">
-                <span class="tech-item">Python 3.11+</span>
-                <span class="tech-item">FastAPI 0.124</span>
-                <span class="tech-item">uvicorn 0.40</span>
-                <span class="tech-item">Google ADK 1.27</span>
-                <span class="tech-item">A2A SDK 0.3</span>
-                <span class="tech-item">Gemini 2.5 Flash</span>
-                <span class="tech-item">Pydantic 2.x</span>
-                <span class="tech-item">pandas 2.x</span>
-                <span class="tech-item">openpyxl</span>
-            </div>
-
-            <h3>Deployment (planned)</h3>
-            <div class="tech-stack">
-                <span class="tech-item">Google Cloud Run</span>
-                <span class="tech-item">Docker (per agent)</span>
-                <span class="tech-item">A2A protocol over HTTP</span>
-                <span class="tech-item">authenticated_httpx</span>
-            </div>
-
-            <h3>How the agents talk to each other</h3>
-            <ul>
-                <li><strong>A2A protocol over HTTP.</strong> Each agent service exposes <code>/.well-known/agent-card.json</code> describing its capabilities. The orchestrator's <code>RemoteA2aAgent</code> loads the card and proxies calls.</li>
-                <li><strong>Session state shared across the loop.</strong> <code>after_agent_callback</code> writes each agent's output (research_findings, judge_feedback) into <code>session.state</code>, so downstream agents read it without re-passing it.</li>
-                <li><strong>Authenticated transport.</strong> On Cloud Run, inter-agent calls carry Google identity tokens via <code>authenticated_httpx</code>. Locally, auth is bypassed (localhost detection).</li>
-            </ul>
-        </div>
-
-        <div class="content-section">
-            <h2>📖 Run It Locally</h2>
-
-            <h3>Prerequisites</h3>
-            <ul>
-                <li><strong>Python 3.11+</strong></li>
-                <li><strong>Gemini API key</strong> — free at <a href="https://aistudio.google.com/apikey" target="_blank">aistudio.google.com/apikey</a></li>
-            </ul>
-
-            <h3>Quick start (Windows)</h3>
-            <div class="code-block"># Clone the repo
-git clone https://github.com/lyven81/ai-project.git
-cd ai-project/projects/bookshelf
-
-# Install dependencies
-pip install -e .
-
-# Set your Gemini key
-copy .env.example .env
-# Edit .env and paste GOOGLE_API_KEY=AIza...
-
-# Start all 5 services (5 cmd windows open)
-start.bat
-# Browser opens at http://localhost:8000</div>
-
-            <h3>What start.bat does</h3>
-            <ul>
-                <li>Loads <code>.env</code></li>
-                <li>Spawns 4 agent services in dedicated cmd windows: Researcher (8001), Judge (8002), Content Builder (8003), Orchestrator (8004)</li>
-                <li>Spawns the web app on port 8000</li>
-                <li>Sets <code>PYTHONUTF8=1</code> globally (em-dash encoding fix on Windows)</li>
-            </ul>
-        </div>
-
-        <div class="content-section">
-            <h2>📊 Real-Run Metrics</h2>
-
-            <div class="metrics-grid">
-                <div class="metric-card">
-                    <span class="num">101,990</span>
-                    <span class="label">sales rows analysed</span>
-                </div>
-                <div class="metric-card">
-                    <span class="num">385</span>
-                    <span class="label">unique SKUs</span>
-                </div>
-                <div class="metric-card">
-                    <span class="num">RM 18.87M</span>
-                    <span class="label">revenue dataset</span>
-                </div>
-                <div class="metric-card">
-                    <span class="num">~140s</span>
-                    <span class="label">end-to-end pipeline</span>
-                </div>
-                <div class="metric-card">
-                    <span class="num">4 agents</span>
-                    <span class="label">researcher · judge · checker · builder</span>
-                </div>
-                <div class="metric-card">
-                    <span class="num">5</span>
-                    <span class="label">captured sample briefs</span>
-                </div>
-            </div>
-
-            <h3>Business value the captured briefs surfaced</h3>
-            <ul>
-                <li><strong>Discontinue 4 UPSR-syllabus SKUs (RM 16,980 stuck).</strong> The agents caught the whole cluster because UPSR was abolished in 2021 — Malaysian retail context the LLM applied without being told the specific SKU names.</li>
-                <li><strong>Aging clearance window of RM 8,447</strong> on 3 SKUs dormant 96–152 days, including a discontinued exam-prep title.</li>
-                <li><strong>Pre-school-season stock-up by Nov 28 / Dec 28</strong> for Form 5 KSSM and Std 1–6 KSSR — backed by exact seasonal indices (1.59× January, 1.38× December).</li>
-                <li><strong>Highest-margin push: Modul SPM Matematik at 43.7% margin</strong>, currently doing RM 418k/year — bundle with Add Math &amp; Sciences for cross-sell.</li>
-            </ul>
-        </div>
-
-        <div class="content-section">
-            <h2>🚧 Honest Limitations (Phase 1)</h2>
-            <p>Bookshelf Phase 1 is a portfolio demonstration of the multi-agent architecture, not a production tool. These are the gaps you would close to take it to a paying SME client:</p>
-
-            <div class="limitation-box">
-                <h4>No live data pull</h4>
-                <p>Currently reads a bundled <code>dataset.xlsx</code>. To be useful daily, the Researcher would need a connector to the shop's live POS (Square, SAP-BO BS1, daily Excel export, or AlloyDB).</p>
-            </div>
-
-            <div class="limitation-box">
-                <h4>No web search for sourcing</h4>
-                <p>The brief can flag <em>"this category has a sourcing gap"</em> but cannot recommend specific products to add. Phase 3 would add a Trend Spotter agent with <code>google_search</code> for Malaysian distributor leads.</p>
-            </div>
-
-            <div class="limitation-box">
-                <h4>Slower than a chat tool</h4>
-                <p>~140 seconds per question because the pipeline runs 4 LLM calls + the pandas read. Acceptable for daily/weekly briefs, too slow for casual exploration. NotebookLM wins here.</p>
-            </div>
-
-            <div class="limitation-box">
-                <h4>Pull-only delivery</h4>
-                <p>The owner has to open the app and ask. Phase 4 would push the Monday morning brief to WhatsApp / email automatically — that's the real workflow win.</p>
-            </div>
-
-            <div class="limitation-box">
-                <h4>Single-tenant local-only deploy</h4>
-                <p>No multi-shop tenant model, no auth on the web app, no data isolation. Cloud Run deployment for Phase 1 is planned but not in scope tonight.</p>
-            </div>
-
-            <div class="limitation-box">
-                <h4>Mid-tier SKU coverage capped at the trim window</h4>
-                <p>The LLM sees top 30 + bottom 30 + all aging-stale SKUs (~71 of 385). A specific question about a mid-tier non-aging SKU may get a generic "this is a hold" answer. Phase 2 would add a <code>query_sku(name)</code> direct lookup.</p>
-            </div>
-        </div>
-
-        <div class="demo-links">
-            <a href="projects/bookshelf/demo.html" class="demo-btn">🚀 Launch Demo</a>
-            <a href="bookshelf-source.html" class="demo-btn secondary">📁 View Source Code</a>
-        </div>
-
-        <div class="bottom-nav">
-            <a href="index.html">← Back to Portfolio</a>
-            <a href="project-categories.html">View All Categories</a>
-        </div>
+  <div class="masthead">
+    <div class="mast-left">
+      <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+      <a class="logo" href="index.html">AI PROJECTS</a>
+      <nav class="mast-nav">
+        <a href="project-categories.html">Categories</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <div class="search-box">
+        <input type="text" class="search-input" id="searchInput" autocomplete="off" placeholder="Search AI projects..." aria-label="Search AI projects">
+        <span class="search-ic">&#128269;</span>
+        <div class="search-results" id="searchResults"></div>
+      </div>
     </div>
+  </div>
+  <hr class="rule-top">
+
+  <div class="crumb">
+    <a href="project-categories.html">Categories</a>
+    <span class="sep">/</span><a id="crumbCat" href="#"></a>
+    <span class="sep">/</span><span id="crumbHere"></span>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="cover-wrap"><img class="cover" id="cover" alt=""></div>
+    <div class="hero-copy">
+      <span class="rubric" id="kicker"></span>
+      <h1 id="title"></h1>
+      <p class="tagline" id="tagline"></p>
+      <div class="hero-tech" id="heroTech"></div>
+      <div class="hero-btns" id="heroBtns"></div>
+    </div>
+  </section>
+
+  <div id="body"></div>
+
+  <footer>&copy; 2026 Lee Yih Ven | AI Project Portfolio &middot; All rights reserved.</footer>
+  <div class="note">Sample Project-Showcase-E2 (TEMPLATE): project page on the index magazine system, led by the generated cover image. Sections render only when present in the PROJECT data, so simpler projects omit them. Reuse by editing only the PROJECT block at the top of the script. Deep install/deploy code lives on the matching -source.html page.</div>
+
+<script>
+  const SITE = "";
+
+  /* =================================================================
+     EDIT PER PROJECT  -  the ONLY block you change per page.
+     Copy this file, swap PROJECT, save as <slug>.html.
+     - cover     : path to the 1200x600 cover image (sits next to the page)
+     - tech      : chips under the title
+     - demoUrl / sourceUrl : buttons (relative to SITE or full https://)
+     - Any optional section can be deleted; it just won't render.
+     ================================================================= */
+  const PROJECT = {
+  "slug": "bookshelf",
+  "category": "Multi-Agent Decision Systems",
+  "categoryUrl": "category-multi-agent-systems.html",
+  "title": "Bookshelf",
+  "tagline": "A team of four AI agents that turns a Malaysian bookstore's raw sales rows into a focused, numbers-grounded stocking brief.",
+  "cover": "images/bookshelf/cover.jpg",
+  "tech": [
+    "Google ADK",
+    "A2A Protocol",
+    "Gemini 2.5 Flash",
+    "FastAPI",
+    "pandas",
+    "Pydantic"
+  ],
+  "demoLabel": "Launch Live Demo",
+  "demoUrl": "https://lyven81.github.io/ai-project/projects/bookshelf/demo.html",
+  "sourceUrl": "bookshelf-source.html",
+  "overview": {
+    "challenge": "Malaysian SME bookstore owners sit on tens of thousands of sales rows but rarely turn the data into stocking decisions. Pareto analysis, dead-stock detection, seasonal pre-stocking, and aging clearance each require hours of pivot-table work. Most owners run on intuition and miss obsolete syllabi (UPSR was abolished in 2021), dormant religious titles, and pre-school-season restocking windows.",
+    "solution": "Bookshelf is a 4-agent decision-support system where the owner asks any business question in plain Malaysian English and receives a focused brief grounded in their actual sales data. A deterministic pandas tool computes exact metrics; a Pydantic-typed Judge gates the research; a Content Builder turns the validated metrics into a 600-word actionable brief.",
+    "benefits": [
+      "<b>Ask anything:</b> any inventory question, Pareto, dead stock, seasonal timing, aging, margin ranking, answered from the owner's own data.",
+      "<b>Specific SKUs, exact RM impact:</b> the brief names products with ringgit figures, not vague guidance.",
+      "<b>Catches structural obsolescence:</b> surfaces discontinued exam syllabi the owner forgot to clear.",
+      "<b>Seasonal stock-up dates:</b> pre-school-season timing read from the actual seasonal index per subcategory.",
+      "<b>Trustworthy numbers:</b> figures come from pandas aggregation, not LLM approximation."
+    ]
+  },
+  "differentiator": {
+    "heading": "Why a Multi-Agent System Beats a Chat-on-Document Tool",
+    "intro": "Tools like Google NotebookLM let an owner upload a CSV and ask questions. They are fast, polished, and free. Bookshelf is slower (~140 seconds per question vs sub-10 seconds) and operationally heavier. The trade is intentional: chat-on-document tools hit a wall on numerical aggregation and quality validation. Bookshelf is built for decisions worth thousands of ringgit, where exact numbers and a quality gate matter more than speed.",
+    "table": {
+      "columns": [
+        "Question type",
+        "Chat-on-document tool (e.g. NotebookLM)",
+        "Bookshelf multi-agent system"
+      ],
+      "rows": [
+        [
+          "Exact aggregates (RM impact of dropping these 8 SKUs)",
+          "Approximates from chunks, often wrong by 5-20%",
+          "pandas computes exactly"
+        ],
+        [
+          "Ranked lists by computed metric (top 10 by velocity x margin)",
+          "Cannot sort the whole 100k rows in one prompt",
+          "data_tool sorts deterministically before the LLM sees it"
+        ],
+        [
+          "Quality validation before recommendations",
+          "Single LLM call, no validation",
+          "Judge agent gates the brief; loops up to 3x on fail"
+        ],
+        [
+          "Speed for casual exploration",
+          "Sub-10s response",
+          "~140s end-to-end"
+        ],
+        [
+          "Multimodal output (audio overview, mind map, quizzes)",
+          "Built-in",
+          "Not in Phase 1"
+        ]
+      ]
+    },
+    "outcomes": [
+      "<b>Live POS integration:</b> Bookshelf can hook directly to a Square / SAP-BO BS1 / Excel export and re-run nightly; NotebookLM needs a fresh upload every time.",
+      "<b>Push delivery, not pull chat:</b> Bookshelf can become a Monday WhatsApp message; NotebookLM is a tab the owner has to remember to open.",
+      "<b>Structured outputs the shop's systems consume:</b> Bookshelf can emit a CSV of discontinue SKUs straight into the POS for clearance pricing; NotebookLM emits prose only.",
+      "<b>Privacy-preserving deployment:</b> Bookshelf can run on the customer's own Cloud Run plus private database for shops that won't upload sales data to a public chat tool."
+    ]
+  },
+  "features": [
+    {
+      "e": "🗨️",
+      "n": "Single Ask-Anything Bar",
+      "d": "One text input. The owner types any inventory question, broad (<code>what should I do?</code>) or specific (<code>should I drop Naruto Vol 5?</code>). No menu navigation, no upload step."
+    },
+    {
+      "e": "📊",
+      "n": "Deterministic Data Tool",
+      "d": "pandas computes per-SKU revenue, margin, velocity, Pareto rank, last-sale date, aging class, seasonal indices, and channel breakdown. Output is JSON-serialised so the Judge can validate it byte-for-byte."
+    },
+    {
+      "e": "⚖️",
+      "n": "Quality-Gated Loop",
+      "d": "The Judge runs after the Researcher and emits <code>status=\"pass\"</code> or <code>\"fail\"</code> with structured feedback. The EscalationChecker breaks the loop on pass; on fail the Researcher reruns with the feedback. Max 3 iterations."
+    },
+    {
+      "e": "🏷️",
+      "n": "6-Class SKU Taxonomy",
+      "d": "The Content Builder classifies SKUs into push / hold / drop / restock-seasonal / discontinue / source-similar, not just good vs bad. Each action maps to a different shop-floor decision."
+    },
+    {
+      "e": "🇲🇾",
+      "n": "Malaysian Retail Context",
+      "d": "Built-in awareness of KSSR/KSSM workbook tiers, SPM/UPSR exam syllabi (UPSR abolished 2021), the Ramadan dip, the January back-to-school spike, and school-bulk vs in-store channel mix."
+    },
+    {
+      "e": "📅",
+      "n": "Aging Detection",
+      "d": "Each SKU gets an <code>aging_class</code> (fresh / slowing / stale / stuck) based on days since last sale. Aging-stale SKUs stay in the LLM context even when mid-revenue, so dormant titles surface."
+    }
+  ],
+  "aiIntegration": [
+    {
+      "e": "🔍",
+      "n": "Researcher + Deterministic Tool",
+      "d": "The Researcher calls a deterministic pandas tool: the same input always yields the same metrics dict. The LLM is just the wrapper that decides when to call it, so aggregates are computed before the model ever reasons over them."
+    },
+    {
+      "e": "⚖️",
+      "n": "Pydantic-Typed Judge",
+      "d": "The Judge emits a typed <code>JudgeVerdict</code> (status / issues / confidence / feedback) via structured-output decoding, so the orchestrator branches on the verdict with no string parsing."
+    },
+    {
+      "e": "🔁",
+      "n": "Quality Loop with Max Iterations",
+      "d": "A LoopAgent retries the Researcher to Judge to EscalationChecker chain up to 3 times until the Judge passes, then hands off to the Content Builder. The EscalationChecker is a 5-line deterministic class, not an LLM."
+    },
+    {
+      "e": "✍️",
+      "n": "Content Builder Synthesis",
+      "d": "The Content Builder reads the Researcher's JSON, the Judge's verdict, and the owner's original question, classifies SKUs into the 6-action taxonomy, and writes a focused 600-word brief that cites specific RM, %, and units/month figures."
+    }
+  ],
+  "architecture": {
+    "stacks": [
+      {
+        "label": "Frontend",
+        "items": [
+          "Vanilla HTML/JS",
+          "marked.js",
+          "Server-Sent Events",
+          "CSS (Inter font)"
+        ]
+      },
+      {
+        "label": "Backend & Agents",
+        "items": [
+          "Python 3.11+",
+          "FastAPI 0.124",
+          "uvicorn 0.40",
+          "Google ADK 1.27",
+          "A2A SDK 0.3",
+          "Gemini 2.5 Flash",
+          "Pydantic 2.x",
+          "pandas 2.x",
+          "openpyxl"
+        ]
+      },
+      {
+        "label": "Deployment (planned)",
+        "items": [
+          "Google Cloud Run",
+          "Docker (per agent)",
+          "A2A protocol over HTTP",
+          "authenticated_httpx"
+        ]
+      }
+    ],
+    "system": [
+      "<b>Web App is a thin client:</b> a FastAPI app on port 8000 speaks HTTP/SSE to the Orchestrator and does NOT import ADK, so it scales independently of the agents.",
+      "<b>Orchestrator pipeline:</b> a SequentialAgent wraps a LoopAgent (max 3 iterations of Researcher to Judge to EscalationChecker) and then the Content Builder.",
+      "<b>Each agent is its own Cloud Run service:</b> independently scaled, independently deployed, discoverable via A2A agent cards at <code>/.well-known/agent-card.json</code>.",
+      "<b>Shared session state:</b> an <code>after_agent_callback</code> writes each agent's output (research_findings, judge_feedback) into <code>session.state</code> so downstream agents read it without re-passing it.",
+      "<b>Authenticated transport:</b> on Cloud Run inter-agent calls carry Google identity tokens via <code>authenticated_httpx</code>; locally, auth is bypassed by localhost detection."
+    ]
+  },
+  "metrics": [
+    {
+      "v": "101,990",
+      "l": "Sales rows analysed"
+    },
+    {
+      "v": "385",
+      "l": "Unique SKUs"
+    },
+    {
+      "v": "RM 18.87M",
+      "l": "Revenue dataset"
+    },
+    {
+      "v": "~140s",
+      "l": "End-to-end pipeline"
+    }
+  ],
+  "businessValue": [
+    "<b>Discontinue 4 UPSR-syllabus SKUs (RM 16,980 stuck):</b> the agents caught the whole cluster because UPSR was abolished in 2021, Malaysian retail context the LLM applied without being told the SKU names.",
+    "<b>Aging clearance window of RM 8,447</b> on 3 SKUs dormant 96 to 152 days, including a discontinued exam-prep title.",
+    "<b>Pre-school-season stock-up by Nov 28 / Dec 28</b> for Form 5 KSSM and Std 1 to 6 KSSR, backed by exact seasonal indices (1.59x January, 1.38x December).",
+    "<b>Highest-margin push, Modul SPM Matematik at 43.7% margin</b>, currently doing RM 418k/year; bundle with Add Math and Sciences for cross-sell."
+  ],
+  "cta": "Want a multi-agent decision system like this built for your own sales data? Let's scope it."
+};
+  /* ===================== END EDIT BLOCK ===================== */
+
+  const pref = (u) => /^https?:|^mailto:|^tel:/.test(u || '') ? u : (SITE + (u || ''));
+  const esc = (s) => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  // allow <b>...</b> and <code>...</code> that we intentionally put in the data
+  const rich = (s) => esc(s).replace(/&lt;(\/?(?:b|code))&gt;/g, '<$1>');
+
+  // Breadcrumb + hero
+  document.title = PROJECT.title + " | AI Project Portfolio";
+  document.getElementById('crumbCat').textContent = PROJECT.category;
+  document.getElementById('crumbCat').href = pref(PROJECT.categoryUrl);
+  document.getElementById('crumbHere').textContent = PROJECT.title;
+  const cover = document.getElementById('cover');
+  cover.src = PROJECT.cover; cover.alt = PROJECT.title + " cover illustration";
+  document.getElementById('kicker').textContent = PROJECT.category;
+  document.getElementById('title').textContent = PROJECT.title;
+  document.getElementById('tagline').textContent = PROJECT.tagline;
+  document.getElementById('heroTech').innerHTML = (PROJECT.tech || []).map(t => `<span class="tech-chip">${esc(t)}</span>`).join('');
+  document.getElementById('heroBtns').innerHTML =
+    (PROJECT.demoUrl ? `<a class="btn" href="${pref(PROJECT.demoUrl)}" target="_blank" rel="noopener">${esc(PROJECT.demoLabel || 'Live Demo')}</a>` : '') +
+    (PROJECT.sourceUrl ? `<a class="btn ghost" href="${pref(PROJECT.sourceUrl)}">View Source &amp; Build</a>` : '');
+
+  // Section builders
+  const section = (tab, inner, opts={}) =>
+    `<section class="sec"><div class="${opts.noRule ? '' : 'sec-rule'}">`+
+    `<span class="tab">${esc(tab)}</span>${inner}</div></section>`;
+
+  let html = "";
+  const P = PROJECT;
+
+  // OVERVIEW
+  if (P.overview){
+    let inner = `<h2>Overview</h2>`;
+    inner += `<div class="duo">`+
+      `<div><span class="rubric">The Challenge</span><p>${rich(P.overview.challenge)}</p></div>`+
+      `<div><span class="rubric">The Solution</span><p>${rich(P.overview.solution)}</p></div>`+
+      `</div>`;
+    if (P.overview.benefits && P.overview.benefits.length){
+      inner += `<ul class="blist">${P.overview.benefits.map(b => `<li>${rich(b)}</li>`).join('')}</ul>`;
+    }
+    html += section("Overview", inner);
+  }
+
+  // DIFFERENTIATOR (+ optional table)
+  if (P.differentiator){
+    const d = P.differentiator;
+    let inner = `<h2>${esc(d.heading || 'What Makes This Different')}</h2>`;
+    if (d.intro) inner += `<p class="intro">${rich(d.intro)}</p>`;
+    if (d.table){
+      inner += `<div class="table-scroll"><table class="cmp"><thead><tr>`+
+        d.table.columns.map(c => `<th>${esc(c)}</th>`).join('')+
+        `</tr></thead><tbody>`+
+        d.table.rows.map(r => `<tr>${r.map(c => `<td>${rich(c)}</td>`).join('')}</tr>`).join('')+
+        `</tbody></table></div>`;
+    }
+    if (d.outcomes && d.outcomes.length){
+      inner += `<ul class="blist">${d.outcomes.map(o => `<li>${rich(o)}</li>`).join('')}</ul>`;
+    }
+    html += section("Why It's Different", inner);
+  }
+
+  // FEATURES
+  if (P.features && P.features.length){
+    const grid = `<div class="fgrid">${P.features.map(f =>
+      `<article class="fcard"><div class="fe">${f.e || ''}</div><h4>${esc(f.n)}</h4><p>${rich(f.d)}</p></article>`).join('')}</div>`;
+    html += section("Features", `<h2>What's Inside</h2>${grid}`);
+  }
+
+  // AI INTEGRATION
+  if (P.aiIntegration && P.aiIntegration.length){
+    const grid = `<div class="fgrid">${P.aiIntegration.map(f =>
+      `<article class="fcard"><div class="fe">${f.e || ''}</div><h4>${esc(f.n)}</h4><p>${rich(f.d)}</p></article>`).join('')}</div>`;
+    html += section("AI Integration", `<h2>How the AI Works</h2>${grid}`);
+  }
+
+  // ARCHITECTURE
+  if (P.architecture){
+    let inner = `<h2>Technical Architecture</h2>`;
+    if (P.architecture.stacks){
+      inner += `<div class="stacks">${P.architecture.stacks.map(s =>
+        `<div class="stack"><span class="rubric">${esc(s.label)}</span><div class="stack-chips">`+
+        s.items.map(i => `<span class="tech-chip">${esc(i)}</span>`).join('')+`</div></div>`).join('')}</div>`;
+    }
+    if (P.architecture.system){
+      inner += `<ul class="sys-list">${P.architecture.system.map(li => `<li>${rich(li)}</li>`).join('')}</ul>`;
+    }
+    html += section("Architecture", inner);
+  }
+
+  // METRICS
+  if (P.metrics && P.metrics.length){
+    const row = `<div class="metrics">${P.metrics.map(m =>
+      `<div class="metric"><div class="v">${esc(m.v)}</div><div class="l">${esc(m.l)}</div></div>`).join('')}</div>`;
+    html += section("By the Numbers", `<h2>Key Metrics</h2>${row}`);
+  }
+
+  // BUSINESS VALUE
+  if (P.businessValue && P.businessValue.length){
+    const list = `<ul class="blist">${P.businessValue.map(b => `<li>${rich(b)}</li>`).join('')}</ul>`;
+    html += section("Business Value", `<h2>Why It Matters</h2>${list}`);
+  }
+
+  // CTA
+  html += `<section class="sec"><div class="cta-inner">`+
+    `<div><h3>${esc(P.cta ? 'Have a similar project?' : 'Interested?')}</h3>`+
+    `<p>${esc(P.cta || "Let's talk about what you're trying to build.")}</p></div>`+
+    `<div class="cta-btns">`+
+    (P.demoUrl ? `<a class="btn" href="${pref(P.demoUrl)}" target="_blank" rel="noopener">${esc(P.demoLabel || 'Live Demo')}</a>` : '')+
+    `<a class="btn ghost" href="${SITE}contact.html">Get in Touch</a>`+
+    `</div></div></section>`;
+
+  document.getElementById('body').innerHTML = html;
+
+  // Masthead search (this project + a few site-wide; production indexes the full catalog)
+  const ITEMS = [
+    {t:PROJECT.title, c:PROJECT.category, s:PROJECT.slug},
+    {t:"Courier CS Quality Console", c:"Conversational Data Analytics", s:"courier-cs-quality-console"},
+    {t:"Voucher Analyzer", c:"Conversational Data Analytics", s:"voucher-analyzer"},
+    {t:"Property Lead Tracker", c:"Industry Specialist Advisors", s:"property-lead-tracker"},
+    {t:"Wiseman", c:"Knowledge & Reference Chatbots", s:"wiseman"},
+    {t:"Sunny Car Accessories", c:"Agentic Commerce", s:"sunny-car-accessories"},
+    {t:"Bookshelf", c:"Multi-Agent Decision Systems", s:"bookshelf"}
+  ];
+  const searchInput = document.getElementById('searchInput');
+  const searchResults = document.getElementById('searchResults');
+  function runSearch(q){
+    if(q.trim().length < 2){ searchResults.style.display='none'; return; }
+    const ql = q.toLowerCase();
+    const hits = ITEMS.filter(it => (it.t+' '+it.c).toLowerCase().includes(ql));
+    searchResults.innerHTML = hits.length ? hits.map(it =>
+      `<div class="sr-item"><div class="sr-cat">${esc(it.c)}</div>`+
+      `<a href="${SITE}${it.s}.html"><div class="sr-title">${esc(it.t)}</div></a>`+
+      `<div class="sr-links"><a href="${SITE}${it.s}.html">View Details</a></div></div>`).join('')
+      : `<div class="sr-none">No projects found. Try a different keyword.</div>`;
+    searchResults.style.display='block';
+  }
+  searchInput.addEventListener('input', e => runSearch(e.target.value));
+  document.addEventListener('click', e => { if(!e.target.closest('.search-box')) searchResults.style.display='none'; });
+
+  // Drawer
+  const drawer=document.getElementById('drawer'), overlay=document.getElementById('overlay');
+  const openMenu=()=>{ drawer.classList.add('open'); overlay.classList.add('open'); };
+  const closeMenu=()=>{ drawer.classList.remove('open'); overlay.classList.remove('open'); };
+  document.getElementById('hamburger').addEventListener('click', openMenu);
+  document.getElementById('drawerClose').addEventListener('click', closeMenu);
+  overlay.addEventListener('click', closeMenu);
+  drawer.querySelectorAll('a').forEach(a=>a.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeMenu(); searchResults.style.display='none'; }});
+</script>
 </body>
 </html>

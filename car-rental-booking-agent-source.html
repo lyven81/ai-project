@@ -1,278 +1,355 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kereta Sewa Jalan-jalan - Source Code</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #222; background-color: #ffffff; }
-        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
-        .back-nav { margin-bottom: 20px; }
-        .back-nav a { color: #007BFF; text-decoration: none; font-size: 1rem; }
-        .back-nav a:hover { text-decoration: underline; }
-        .project-header {
-            text-align: center; margin-bottom: 40px; padding: 40px 0;
-            background: linear-gradient(135deg, #0D9488, #0F766E);
-            color: white; border-radius: 10px;
-        }
-        .project-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
-        .project-header p { font-size: 1.2rem; opacity: 0.9; }
-        .badges { display: flex; justify-content: center; gap: 10px; margin: 20px 0; flex-wrap: wrap; }
-        .badge { background-color: rgba(255,255,255,0.2); color: white; padding: 5px 12px; border-radius: 15px; font-size: 0.9rem; }
-        .content-section { margin: 40px 0; padding: 30px; background-color: #f9f9f9; border-radius: 8px; border-left: 5px solid #0D9488; }
-        .content-section h2 { color: #0D9488; margin-bottom: 20px; font-size: 1.8rem; }
-        .content-section h3 { color: #333; margin: 20px 0 10px 0; font-size: 1.3rem; }
-        .highlight-box { background: linear-gradient(135deg, #CCFBF1, #99F6E4); padding: 20px; border-radius: 10px; border-left: 5px solid #0D9488; margin: 20px 0; }
-        .code-container { background-color: #1e1e1e; border-radius: 8px; padding: 20px; margin: 20px 0; overflow-x: auto; }
-        .code-header { color: #0D9488; font-weight: bold; margin-bottom: 15px; font-size: 1.1rem; border-bottom: 1px solid #333; padding-bottom: 10px; }
-        .code-block { font-family: 'Consolas','Monaco','Courier New',monospace; font-size: 14px; line-height: 1.5; color: #d4d4d4; white-space: pre; }
-        .code-comment { color: #6a9955; font-style: italic; }
-        .code-keyword { color: #569cd6; }
-        .code-string { color: #ce9178; }
-        .code-function { color: #dcdcaa; }
-        .code-number { color: #b5cea8; }
-        .demo-links { text-align: center; margin: 30px 0; }
-        .demo-btn { display: inline-block; background-color: #0D9488; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; margin: 0 10px; font-weight: bold; transition: background-color 0.3s; }
-        .demo-btn:hover { background-color: #0F766E; }
-        .demo-btn.secondary { background-color: #FF9800; }
-        .demo-btn.secondary:hover { background-color: #F57C00; }
-        @media (max-width: 768px) {
-            .project-header h1 { font-size: 2rem; }
-            .project-header p { font-size: 1rem; }
-            .demo-btn { margin: 5px; padding: 10px 20px; }
-            .container { padding: 15px; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kereta Sewa Jalan-jalan: Source | AI Project Portfolio</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root{ --ink:#222; --paper:#fff; --hair:#dddddd; --gray:#555; --accent:#B8860B; --navy:#1E3A5F; --code-bg:#fbfbf8; --cmt:#6b8190; }
+  html{ scroll-behavior:smooth; }
+  body{ background:var(--paper); color:var(--ink); font-family:Arial, Helvetica, sans-serif; line-height:1.6; overflow-x:hidden; }
+  a{ color:inherit; text-decoration:none; }
+  a:hover h2, a:hover h3, a:hover h4{ color:var(--accent); }
+  p code, li code{ font-family:"Courier New", monospace; font-size:.86em; background:#f2f3f5; padding:1px 5px; color:var(--navy); }
+
+  /* Masthead (shared) */
+  .masthead{ display:flex; align-items:center; justify-content:space-between; padding:14px 28px; max-width:1240px; margin:0 auto; gap:18px; }
+  .mast-left{ display:flex; align-items:center; gap:20px; }
+  .logo{ background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; letter-spacing:3px; font-size:.95rem; padding:8px 12px; white-space:nowrap; }
+  .mast-nav{ display:flex; gap:20px; font-family:Arial, Helvetica, sans-serif; font-size:.72rem; letter-spacing:1.4px; text-transform:uppercase; }
+  .mast-nav a:hover{ color:var(--accent); }
+  .hamburger{ display:none; flex-direction:column; gap:4px; background:none; border:none; cursor:pointer; padding:6px; }
+  .hamburger span{ width:22px; height:2px; background:#222; display:block; }
+  .rule-top{ border:none; border-top:3px solid #222; max-width:1240px; margin:0 auto; }
+
+  /* Search (shared) */
+  .search-box{ position:relative; width:200px; }
+  .search-input{ width:100%; padding:7px 30px 7px 12px; border:1px solid var(--hair); background:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; color:#222; }
+  .search-input:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(184,134,11,.15); }
+  .search-ic{ position:absolute; right:10px; top:50%; transform:translateY(-50%); color:var(--gray); font-size:.8rem; pointer-events:none; }
+  .search-results{ position:absolute; top:calc(100% + 4px); left:0; width:340px; max-width:86vw; background:#fff; border:1px solid #222; max-height:60vh; overflow-y:auto; z-index:120; display:none; }
+  .sr-item{ padding:12px 14px; border-bottom:1px solid var(--hair); }
+  .sr-item:last-child{ border-bottom:none; }
+  .sr-cat{ font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; margin-bottom:4px; color:var(--accent); }
+  .sr-title{ font-weight:700; font-size:1.02rem; color:#222; }
+  .sr-links{ font-size:.58rem; letter-spacing:.8px; text-transform:uppercase; color:var(--gray); margin-top:5px; }
+  .sr-links a:hover{ color:var(--accent); }
+  .sr-none{ padding:16px 14px; font-size:.82rem; color:var(--gray); }
+
+  /* Shared bits */
+  .tab{ display:inline-block; background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.66rem; letter-spacing:2px; text-transform:uppercase; padding:6px 12px; }
+  .rubric{ font-family:Arial, Helvetica, sans-serif; font-size:.62rem; font-weight:700; letter-spacing:1.6px; text-transform:uppercase; color:var(--accent); display:block; margin-bottom:8px; }
+  .tech-chip{ display:inline-block; border:1px solid var(--hair); padding:6px 12px; font-size:.72rem; letter-spacing:.3px; color:#333; white-space:nowrap; }
+  .tech-chip:hover{ border-color:var(--accent); color:var(--accent); }
+  .btn{ display:inline-block; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.7rem; letter-spacing:1.6px; text-transform:uppercase; padding:13px 24px; border:1px solid #222; background:#222; color:#fff; cursor:pointer; transition:.15s; }
+  .btn:hover{ background:var(--accent); border-color:var(--accent); }
+  .btn.ghost{ background:#fff; color:#222; }
+  .btn.ghost:hover{ color:var(--accent); border-color:var(--accent); background:#fff; }
+
+  /* Breadcrumb */
+  .crumb{ max-width:1240px; margin:0 auto; padding:20px 28px 0; font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--gray); }
+  .crumb a:hover{ color:var(--accent); }
+  .crumb .sep{ color:var(--hair); margin:0 8px; }
+
+  /* Header (slim cover banner + copy) */
+  .src-head{ max-width:1240px; margin:0 auto; padding:14px 28px 6px; }
+  .cover-strip{ border:1px solid var(--hair); line-height:0; background:#eef1f4; }
+  .cover-strip img{ width:100%; height:190px; object-fit:cover; object-position:center 42%; display:block; }
+  .src-head h1{ font-size:2.5rem; font-weight:900; line-height:1.04; letter-spacing:-.008em; margin-top:18px; }
+  .src-head .sub{ font-style:italic; font-size:1.08rem; color:#333; margin-top:10px; max-width:72ch; }
+  .head-tech{ display:flex; flex-wrap:wrap; gap:9px; margin-top:16px; }
+  .head-btns{ display:flex; flex-wrap:wrap; gap:12px; margin-top:18px; }
+
+  /* Section shell */
+  .sec{ max-width:1240px; margin:0 auto; padding:26px 28px; }
+  .sec-rule{ border-top:3px solid #222; padding-top:16px; }
+  .sec .tab{ margin-bottom:14px; }
+  .sec h2{ font-size:1.7rem; font-weight:900; line-height:1.06; }
+  .sec .intro{ color:#333; font-size:1.02rem; margin-top:10px; max-width:80%; }
+  .sec .body{ color:#333; font-size:1rem; margin-top:10px; max-width:80%; }
+
+  /* Code block */
+  .codeblock{ border:1px solid var(--hair); margin-top:16px; }
+  .code-bar{ display:flex; align-items:center; justify-content:space-between; gap:12px; background:var(--navy); color:#fff; padding:8px 12px; }
+  .code-bar .path{ font-family:"Courier New", monospace; font-size:.74rem; letter-spacing:.2px; opacity:.96; display:flex; align-items:center; gap:7px; min-width:0; }
+  .code-bar .path span{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .code-copy{ flex:none; background:none; border:1px solid rgba(255,255,255,.4); color:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.56rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; padding:5px 11px; cursor:pointer; transition:.15s; }
+  .code-copy:hover{ background:rgba(255,255,255,.16); }
+  .codeblock pre{ margin:0; padding:14px 16px; overflow-x:auto; background:var(--code-bg); }
+  .codeblock code{ font-family:"Courier New", monospace; font-size:.82rem; line-height:1.6; color:#1b2a3a; background:none; padding:0; white-space:pre; display:block; }
+  .codeblock code .cmt{ color:var(--cmt); font-style:italic; }
+
+  .tree .code-bar .path::before{ content:"📁"; }
+
+  /* Notes */
+  .note-block{ margin-top:22px; }
+  .note-block h3{ font-size:1.15rem; font-weight:800; }
+  .blist{ list-style:none; margin-top:12px; border-top:1px solid var(--hair); }
+  .blist li{ padding:12px 0; border-bottom:1px solid var(--hair); color:#333; font-size:.95rem; }
+  .blist li b{ color:#222; }
+
+  /* CTA */
+  .cta-inner{ display:flex; align-items:center; gap:18px; flex-wrap:wrap; border-top:3px solid #222; padding-top:18px; }
+  .cta-inner h3{ font-size:1.4rem; font-weight:900; line-height:1.08; }
+  .cta-inner p{ color:var(--gray); font-size:.95rem; margin-top:4px; }
+  .cta-btns{ margin-left:auto; display:flex; gap:12px; flex-wrap:wrap; }
+
+  footer{ background:#222; max-width:1240px; margin:30px auto 0; padding:24px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; letter-spacing:.5px; color:#fff; text-align:center; }
+  .note{ max-width:1240px; margin:14px auto 0; padding:8px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.62rem; letter-spacing:1px; color:#999; }
+
+  /* Drawer (shared) */
+  .drawer{ position:fixed; top:0; left:-300px; width:280px; height:100vh; background:#fff; z-index:200; box-shadow:2px 0 14px rgba(0,0,0,.15); transition:left .28s ease; padding:74px 26px 26px; }
+  .drawer.open{ left:0; }
+  .drawer a{ display:block; font-family:Arial, Helvetica, sans-serif; font-size:.82rem; letter-spacing:1.2px; text-transform:uppercase; padding:14px 0; border-bottom:1px solid var(--hair); }
+  .overlay{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:150; }
+  .overlay.open{ display:block; }
+  .drawer-close{ position:absolute; top:20px; right:20px; font-family:Arial, Helvetica, sans-serif; font-size:1.4rem; background:none; border:none; cursor:pointer; }
+
+  @media (max-width:900px){
+    .cta-btns{ margin-left:0; }
+    .mast-nav{ display:none; }
+    .hamburger{ display:flex; }
+    .masthead{ padding:12px 16px; }
+    .mast-left{ gap:10px; min-width:0; flex:1; }
+    .logo{ font-size:.72rem; letter-spacing:1.5px; padding:6px 8px; }
+    .search-box{ flex:1; width:auto; min-width:0; }
+    .search-results{ position:fixed; top:58px; left:12px; right:12px; width:auto; max-width:none; }
+    .src-head h1{ font-size:1.95rem; }
+    .cover-strip img{ height:150px; }
+  }
+</style>
 </head>
 <body>
-    <div class="container">
-        <nav class="back-nav">
-            <a href="car-rental-booking-agent.html">&larr; Back to Project Overview</a>
-        </nav>
 
-        <div class="project-header">
-            <h1>Kereta Sewa Jalan-jalan</h1>
-            <p>Core Source Code &amp; Agentic AI Implementation</p>
-            <div class="badges">
-                <span class="badge">Python 3.8+</span>
-                <span class="badge">FastAPI</span>
-                <span class="badge">Gemini 2.5 Flash</span>
-                <span class="badge">Code-as-Action</span>
-            </div>
-        </div>
+  <div class="overlay" id="overlay"></div>
+  <nav class="drawer" id="drawer">
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">&times;</button>
+    <a href="index.html">Home</a>
+    <a href="project-categories.html">Categories</a>
+    <a href="contact.html">Contact</a>
+    <a href="https://lyven81.github.io/data-analyst-portfolio/index.html">Data Portfolio</a>
+  </nav>
 
-        <div class="highlight-box">
-            <h3>About This Code Showcase</h3>
-            <p><strong>This code snippet shows the M5 Agentic Workflow pattern applied to car rental bookings.</strong> The LLM generates Python code that queries vehicles, checks date conflicts, computes rental cost, and inserts new bookings.</p>
-            <p>The full implementation (main.py) is under 200 lines and handles all rental flow logic through code-as-action.</p>
-        </div>
-
-        <div class="demo-links">
-            <a href="projects/car-rental-booking-agent/demo.html" class="demo-btn">Launch Live Demo</a>
-            <a href="https://github.com/lyven81/ai-project/tree/main/projects/car-rental-booking-agent" target="_blank" class="demo-btn secondary">GitHub Repository</a>
-        </div>
-
-        <div class="content-section">
-            <h2>Core: Agentic Booking Engine (main.py)</h2>
-            <p>FastAPI backend wraps Gemini 2.5 Flash to generate executable Python code for each rental request. Helper functions are injected into the execution namespace:</p>
-
-            <div class="code-container">
-                <div class="code-header">main.py &mdash; FastAPI App &amp; Code Execution</div>
-                <div class="code-block"><span class="code-keyword">from</span> fastapi <span class="code-keyword">import</span> FastAPI, HTTPException
-<span class="code-keyword">import</span> google.generativeai <span class="code-keyword">as</span> genai
-<span class="code-keyword">from</span> tinydb <span class="code-keyword">import</span> TinyDB, Query
-<span class="code-keyword">from</span> datetime <span class="code-keyword">import</span> datetime, timedelta
-
-app = FastAPI(title=<span class="code-string">"Kereta Sewa Jalan-jalan API"</span>)
-
-db = TinyDB(<span class="code-string">'kereta_sewa_bookings.json'</span>)
-vehicles_tbl = db.table(<span class="code-string">'vehicles'</span>)
-bookings_tbl = db.table(<span class="code-string">'bookings'</span>)
-
-PICKUP_LOCATIONS = [<span class="code-string">"KLIA"</span>, <span class="code-string">"KL Sentral"</span>,
-                    <span class="code-string">"Subang Airport (SZB)"</span>, <span class="code-string">"TBS"</span>]
-BOOKING_DEPOSIT = <span class="code-number">100.0</span>
-HOTEL_DELIVERY_FEE = <span class="code-number">50.0</span>
-
-<span class="code-keyword">def</span> <span class="code-function">get_daily_rate</span>(tier):
-    <span class="code-keyword">return</span> {<span class="code-string">"Economy"</span>: <span class="code-number">120</span>, <span class="code-string">"Compact"</span>: <span class="code-number">160</span>,
-            <span class="code-string">"SUV"</span>: <span class="code-number">250</span>, <span class="code-string">"MPV"</span>: <span class="code-number">220</span>,
-            <span class="code-string">"Premium"</span>: <span class="code-number">350</span>}.get(tier, <span class="code-number">150</span>)
-
-<span class="code-keyword">def</span> <span class="code-function">calculate_rental_cost</span>(tier, days, hotel_delivery=<span class="code-keyword">False</span>):
-    <span class="code-comment"># Weekly rate only applies for full-week economy/compact rentals</span>
-    weekly = {<span class="code-string">"Economy"</span>: <span class="code-number">700</span>, <span class="code-string">"Compact"</span>: <span class="code-number">950</span>}.get(tier)
-    daily = get_daily_rate(tier)
-    base = weekly <span class="code-keyword">if</span> (weekly <span class="code-keyword">and</span> days == <span class="code-number">7</span>) <span class="code-keyword">else</span> daily * days
-    total = base + BOOKING_DEPOSIT
-    <span class="code-keyword">if</span> hotel_delivery:
-        total += HOTEL_DELIVERY_FEE
-    <span class="code-keyword">return</span> {<span class="code-string">"base"</span>: base, <span class="code-string">"deposit"</span>: BOOKING_DEPOSIT,
-            <span class="code-string">"delivery"</span>: HOTEL_DELIVERY_FEE <span class="code-keyword">if</span> hotel_delivery <span class="code-keyword">else</span> <span class="code-number">0</span>,
-            <span class="code-string">"total"</span>: total}
-
-<span class="code-keyword">def</span> <span class="code-function">has_date_conflict</span>(vehicle_id, pickup_date, return_date, bookings_tbl):
-    start = datetime.strptime(pickup_date, <span class="code-string">"%Y-%m-%d"</span>)
-    end = datetime.strptime(return_date, <span class="code-string">"%Y-%m-%d"</span>)
-    existing = bookings_tbl.search(
-        (Query().vehicle_id == vehicle_id) &
-        (Query().status.one_of([<span class="code-string">"rented"</span>, <span class="code-string">"booked"</span>]))
-    )
-    <span class="code-keyword">for</span> b <span class="code-keyword">in</span> existing:
-        ex_start = datetime.strptime(b[<span class="code-string">"pickup_date"</span>], <span class="code-string">"%Y-%m-%d"</span>)
-        ex_end = datetime.strptime(b[<span class="code-string">"return_date"</span>], <span class="code-string">"%Y-%m-%d"</span>)
-        <span class="code-keyword">if</span> <span class="code-keyword">not</span> (end &lt;= ex_start <span class="code-keyword">or</span> start &gt;= ex_end):
-            <span class="code-keyword">return</span> <span class="code-keyword">True</span>
-    <span class="code-keyword">return</span> <span class="code-keyword">False</span></div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>Agentic Workflow: Code Generation Prompt</h2>
-            <p>The LLM receives a strict prompt that lists available helpers and expected output format. It writes Python code that sets <code>STATUS</code> and <code>answer_text</code> variables:</p>
-
-            <div class="code-container">
-                <div class="code-header">main.py &mdash; Gemini Prompt &amp; Code Execution</div>
-                <div class="code-block">PROMPT = <span class="code-string">"""You are Kereta Sewa Jalan-jalan car rental booking assistant.
-WRITE PYTHON CODE.
-
-Database: vehicles_tbl, bookings_tbl
-Functions: next_booking_id, get_daily_rate, calculate_rental_cost,
-           has_date_conflict, datetime, timedelta
-
-Fleet: 56 vehicles across Economy/Compact/SUV/MPV/Premium tiers
-Pricing: Economy RM120/day RM700/week | Compact RM160/day RM950/week
-         SUV RM250/day | MPV RM220/day | Premium RM350/day
-Booking deposit: RM 100 (deducted from final bill)
-Hotel delivery: RM 50 add-on
-Pickup locations (free): KLIA, KL Sentral, Subang Airport (SZB), TBS
-Required: customer_name, phone, license_no
-Booking prefix: RNT. Min 1 day, max 7 days.
-Reference: Wednesday, 8 Apr 2026
-
-Set STATUS (success|vehicle_unavailable|date_conflict|invalid_request)
-and answer_text
-Output: Python code in markdown block
-
-Request: {question}"""</span>
-
-<span class="code-keyword">def</span> <span class="code-function">execute_code</span>(code, user_request):
-    SAFE = {<span class="code-string">"Query"</span>: Query, <span class="code-string">"next_booking_id"</span>: next_booking_id,
-            <span class="code-string">"get_daily_rate"</span>: get_daily_rate,
-            <span class="code-string">"calculate_rental_cost"</span>: calculate_rental_cost,
-            <span class="code-string">"has_date_conflict"</span>: has_date_conflict,
-            <span class="code-string">"datetime"</span>: datetime, <span class="code-string">"timedelta"</span>: timedelta,
-            <span class="code-string">"user_request"</span>: user_request}
-    LOCALS = {<span class="code-string">"db"</span>: db, <span class="code-string">"vehicles_tbl"</span>: vehicles_tbl,
-              <span class="code-string">"bookings_tbl"</span>: bookings_tbl}
-    <span class="code-keyword">try</span>:
-        exec(code, SAFE, LOCALS)
-    <span class="code-keyword">except</span> Exception:
-        <span class="code-keyword">return</span> {<span class="code-string">"error"</span>: traceback.format_exc()}
-    <span class="code-keyword">return</span> {
-        <span class="code-string">"answer"</span>: LOCALS.get(<span class="code-string">"answer_text"</span>, <span class="code-string">"No response"</span>),
-        <span class="code-string">"status"</span>: LOCALS.get(<span class="code-string">"STATUS"</span>, <span class="code-string">"unknown"</span>)
-    }</div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>Example: AI-Generated Booking Code</h2>
-            <p>When a user says <em>"Book a Myvi for 3 days from KLIA. Name: Ahmad, Phone: 0123456789, License: D1234567"</em>, Gemini produces code like:</p>
-
-            <div class="code-container">
-                <div class="code-header">Example Generated Code</div>
-                <div class="code-block"><span class="code-comment"># Parse request from user_request</span>
-pickup_date = <span class="code-string">"2026-04-09"</span>
-days = <span class="code-number">3</span>
-return_date = (datetime.strptime(pickup_date, <span class="code-string">"%Y-%m-%d"</span>)
-               + timedelta(days=days)).strftime(<span class="code-string">"%Y-%m-%d"</span>)
-
-<span class="code-comment"># Find first available Myvi</span>
-candidates = vehicles_tbl.search(
-    (Query().model == <span class="code-string">"Perodua Myvi"</span>) &
-    (Query().status != <span class="code-string">"maintenance"</span>)
-)
-vehicle = <span class="code-keyword">None</span>
-<span class="code-keyword">for</span> v <span class="code-keyword">in</span> candidates:
-    <span class="code-keyword">if</span> <span class="code-keyword">not</span> has_date_conflict(v[<span class="code-string">"vehicle_id"</span>], pickup_date,
-                              return_date, bookings_tbl):
-        vehicle = v
-        <span class="code-keyword">break</span>
-
-<span class="code-keyword">if</span> vehicle <span class="code-keyword">is</span> <span class="code-keyword">None</span>:
-    STATUS = <span class="code-string">"vehicle_unavailable"</span>
-    answer_text = <span class="code-string">"No Myvi available for those dates."</span>
-<span class="code-keyword">else</span>:
-    cost = calculate_rental_cost(<span class="code-string">"Economy"</span>, days, hotel_delivery=<span class="code-keyword">False</span>)
-    bk_id = next_booking_id(bookings_tbl, <span class="code-string">"RNT"</span>)
-    bookings_tbl.insert({
-        <span class="code-string">"booking_id"</span>: bk_id,
-        <span class="code-string">"vehicle_id"</span>: vehicle[<span class="code-string">"vehicle_id"</span>],
-        <span class="code-string">"model"</span>: vehicle[<span class="code-string">"model"</span>],
-        <span class="code-string">"customer_name"</span>: <span class="code-string">"Ahmad"</span>,
-        <span class="code-string">"phone"</span>: <span class="code-string">"0123456789"</span>,
-        <span class="code-string">"license_no"</span>: <span class="code-string">"D1234567"</span>,
-        <span class="code-string">"pickup_location"</span>: <span class="code-string">"KLIA"</span>,
-        <span class="code-string">"pickup_date"</span>: pickup_date,
-        <span class="code-string">"return_date"</span>: return_date,
-        <span class="code-string">"days"</span>: days,
-        <span class="code-string">"total_amount_myr"</span>: cost[<span class="code-string">"total"</span>],
-        <span class="code-string">"status"</span>: <span class="code-string">"booked"</span>
-    })
-    STATUS = <span class="code-string">"success"</span>
-    answer_text = f<span class="code-string">"Booking {bk_id} confirmed for {vehicle['model']} "</span> \
-                  f<span class="code-string">"({pickup_date} to {return_date}). Total RM {cost['total']}."</span></div>
-            </div>
-
-            <p><strong>Key Points:</strong></p>
-            <ul style="margin: 15px 0; padding-left: 20px;">
-                <li>The LLM parsed the natural language request and extracted model, duration, location, and customer details</li>
-                <li>It searched the fleet for an available Myvi and checked date conflicts</li>
-                <li>It invoked <code>calculate_rental_cost</code> with the Economy tier</li>
-                <li>It generated a new RNT booking ID and inserted the record</li>
-                <li>All business logic emerged dynamically, not hardcoded per intent</li>
-            </ul>
-        </div>
-
-        <div class="content-section">
-            <h2>FastAPI Endpoints</h2>
-            <div class="code-container">
-                <div class="code-header">main.py &mdash; REST API Routes</div>
-                <div class="code-block"><span class="code-keyword">@app.post</span>(<span class="code-string">"/api/chat"</span>, response_model=ChatResponse)
-<span class="code-keyword">async def</span> <span class="code-function">chat</span>(request: ChatRequest):
-    content = generate_code(PROMPT.format(question=request.message))
-    result = execute_code(extract_code(content), request.message)
-    <span class="code-keyword">if</span> result[<span class="code-string">"error"</span>]:
-        <span class="code-keyword">raise</span> HTTPException(<span class="code-number">500</span>, detail=result[<span class="code-string">"error"</span>])
-    <span class="code-keyword">return</span> ChatResponse(answer=result[<span class="code-string">"answer"</span>], status=result[<span class="code-string">"status"</span>])
-
-<span class="code-keyword">@app.get</span>(<span class="code-string">"/api/vehicles"</span>)
-<span class="code-keyword">async def</span> <span class="code-function">get_vehicles</span>(status=<span class="code-keyword">None</span>, tier=<span class="code-keyword">None</span>):
-    vehicles = [v <span class="code-keyword">for</span> v <span class="code-keyword">in</span> vehicles_tbl.all()
-                <span class="code-keyword">if</span> (<span class="code-keyword">not</span> status <span class="code-keyword">or</span> v[<span class="code-string">"status"</span>] == status)
-                <span class="code-keyword">and</span> (<span class="code-keyword">not</span> tier <span class="code-keyword">or</span> v[<span class="code-string">"tier"</span>] == tier)]
-    <span class="code-keyword">return</span> {<span class="code-string">"vehicles"</span>: vehicles, <span class="code-string">"total"</span>: len(vehicles)}
-
-<span class="code-keyword">@app.get</span>(<span class="code-string">"/api/bookings"</span>)
-<span class="code-keyword">async def</span> <span class="code-function">get_bookings</span>(status=<span class="code-keyword">None</span>, date=<span class="code-keyword">None</span>):
-    bookings = [b <span class="code-keyword">for</span> b <span class="code-keyword">in</span> bookings_tbl.all()
-                <span class="code-keyword">if</span> (<span class="code-keyword">not</span> status <span class="code-keyword">or</span> b[<span class="code-string">"status"</span>] == status)
-                <span class="code-keyword">and</span> (<span class="code-keyword">not</span> date <span class="code-keyword">or</span> b[<span class="code-string">"pickup_date"</span>] == date)]
-    <span class="code-keyword">return</span> {<span class="code-string">"bookings"</span>: bookings, <span class="code-string">"total"</span>: len(bookings)}</div>
-            </div>
-        </div>
-
-        <div class="demo-links">
-            <a href="projects/car-rental-booking-agent/demo.html" class="demo-btn">Try Live Demo</a>
-            <a href="car-rental-booking-agent.html" class="demo-btn secondary">View Full Project Details</a>
-        </div>
-
-        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
-            <a href="index.html">&larr; Back to Portfolio</a> |
-            <a href="car-rental-booking-agent.html">View Project Overview</a>
-        </nav>
+  <div class="masthead">
+    <div class="mast-left">
+      <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+      <a class="logo" href="index.html">AI PROJECTS</a>
+      <nav class="mast-nav">
+        <a href="project-categories.html">Categories</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <div class="search-box">
+        <input type="text" class="search-input" id="searchInput" autocomplete="off" placeholder="Search AI projects..." aria-label="Search AI projects">
+        <span class="search-ic">&#128269;</span>
+        <div class="search-results" id="searchResults"></div>
+      </div>
     </div>
+  </div>
+  <hr class="rule-top">
+
+  <div class="crumb">
+    <a href="project-categories.html">Categories</a>
+    <span class="sep">/</span><a id="crumbCat" href="#"></a>
+    <span class="sep">/</span><a id="crumbProj" href="#"></a>
+    <span class="sep">/</span><span>Source</span>
+  </div>
+
+  <section class="src-head">
+    <div class="cover-strip" id="coverStrip" style="display:none"><img id="cover" alt=""></div>
+    <span class="rubric" id="kicker"></span>
+    <h1 id="title"></h1>
+    <p class="sub" id="subtitle"></p>
+    <div class="head-tech" id="headTech"></div>
+    <div class="head-btns" id="headBtns"></div>
+  </section>
+
+  <div id="body"></div>
+
+  <footer>&copy; 2026 Lee Yih Ven | AI Project Portfolio &middot; All rights reserved.</footer>
+  <div class="note">Sample Source-Showcase-E2 (TEMPLATE): source-code page on the index magazine system: slim cover banner, About, Project Structure, code walkthrough with copyable navy-barred code blocks, CTA. Reuse by editing only the PROJECT block at the top of the script.</div>
+
+<script>
+  const SITE = "";
+
+  /* =================================================================
+     EDIT PER PROJECT  -  the ONLY block you change per page.
+     Copy this file, swap PROJECT, save as <slug>-source.html.
+     - structure.code : the project file tree (plain text)
+     - walkthrough[]   : { heading, body, files:[{label, code}] }
+     - notes[]         : { heading, bullets:[...] }
+     Code strings can be multi-line; they render verbatim.
+     ================================================================= */
+  const PROJECT = {
+  "slug": "car-rental-booking-agent",
+  "category": "Service Agents",
+  "categoryUrl": "category-service-agents.html",
+  "title": "Kereta Sewa Jalan-jalan",
+  "subtitle": "Core Source Code & Agentic AI Implementation: the M5 Agentic Workflow pattern applied to car rental bookings.",
+  "cover": "images/car-rental-booking-agent/cover.jpeg",
+  "tech": [
+    "Python 3.8+",
+    "FastAPI",
+    "Gemini 2.5 Flash",
+    "Code-as-Action"
+  ],
+  "overviewUrl": "car-rental-booking-agent.html",
+  "demoLabel": "Launch Live Demo",
+  "demoUrl": "https://lyven81.github.io/ai-project/projects/car-rental-booking-agent/demo.html",
+  "repoUrl": "https://github.com/lyven81/ai-project/tree/main/projects/car-rental-booking-agent",
+  "about": "This code snippet shows the M5 Agentic Workflow pattern applied to car rental bookings. The LLM generates Python code that queries vehicles, checks date conflicts, computes rental cost, and inserts new bookings. The full implementation (<code>main.py</code>) is under 200 lines and handles all rental flow logic through code-as-action.",
+  "walkthrough": [
+    {
+      "heading": "Core: Agentic Booking Engine (main.py)",
+      "body": "FastAPI backend wraps Gemini 2.5 Flash to generate executable Python code for each rental request. Helper functions are injected into the execution namespace.",
+      "files": [
+        {
+          "label": "main.py: FastAPI App & Code Execution",
+          "code": "from fastapi import FastAPI, HTTPException\nimport google.generativeai as genai\nfrom tinydb import TinyDB, Query\nfrom datetime import datetime, timedelta\n\napp = FastAPI(title=\"Kereta Sewa Jalan-jalan API\")\n\ndb = TinyDB('kereta_sewa_bookings.json')\nvehicles_tbl = db.table('vehicles')\nbookings_tbl = db.table('bookings')\n\nPICKUP_LOCATIONS = [\"KLIA\", \"KL Sentral\",\n                    \"Subang Airport (SZB)\", \"TBS\"]\nBOOKING_DEPOSIT = 100.0\nHOTEL_DELIVERY_FEE = 50.0\n\ndef get_daily_rate(tier):\n    return {\"Economy\": 120, \"Compact\": 160,\n            \"SUV\": 250, \"MPV\": 220,\n            \"Premium\": 350}.get(tier, 150)\n\ndef calculate_rental_cost(tier, days, hotel_delivery=False):\n    # Weekly rate only applies for full-week economy/compact rentals\n    weekly = {\"Economy\": 700, \"Compact\": 950}.get(tier)\n    daily = get_daily_rate(tier)\n    base = weekly if (weekly and days == 7) else daily * days\n    total = base + BOOKING_DEPOSIT\n    if hotel_delivery:\n        total += HOTEL_DELIVERY_FEE\n    return {\"base\": base, \"deposit\": BOOKING_DEPOSIT,\n            \"delivery\": HOTEL_DELIVERY_FEE if hotel_delivery else 0,\n            \"total\": total}\n\ndef has_date_conflict(vehicle_id, pickup_date, return_date, bookings_tbl):\n    start = datetime.strptime(pickup_date, \"%Y-%m-%d\")\n    end = datetime.strptime(return_date, \"%Y-%m-%d\")\n    existing = bookings_tbl.search(\n        (Query().vehicle_id == vehicle_id) &\n        (Query().status.one_of([\"rented\", \"booked\"]))\n    )\n    for b in existing:\n        ex_start = datetime.strptime(b[\"pickup_date\"], \"%Y-%m-%d\")\n        ex_end = datetime.strptime(b[\"return_date\"], \"%Y-%m-%d\")\n        if not (end <= ex_start or start >= ex_end):\n            return True\n    return False"
+        }
+      ]
+    },
+    {
+      "heading": "Agentic Workflow: Code Generation Prompt",
+      "body": "The LLM receives a strict prompt that lists available helpers and expected output format. It writes Python code that sets <code>STATUS</code> and <code>answer_text</code> variables.",
+      "files": [
+        {
+          "label": "main.py: Gemini Prompt & Code Execution",
+          "code": "PROMPT = \"\"\"You are Kereta Sewa Jalan-jalan car rental booking assistant.\nWRITE PYTHON CODE.\n\nDatabase: vehicles_tbl, bookings_tbl\nFunctions: next_booking_id, get_daily_rate, calculate_rental_cost,\n           has_date_conflict, datetime, timedelta\n\nFleet: 56 vehicles across Economy/Compact/SUV/MPV/Premium tiers\nPricing: Economy RM120/day RM700/week | Compact RM160/day RM950/week\n         SUV RM250/day | MPV RM220/day | Premium RM350/day\nBooking deposit: RM 100 (deducted from final bill)\nHotel delivery: RM 50 add-on\nPickup locations (free): KLIA, KL Sentral, Subang Airport (SZB), TBS\nRequired: customer_name, phone, license_no\nBooking prefix: RNT. Min 1 day, max 7 days.\nReference: Wednesday, 8 Apr 2026\n\nSet STATUS (success|vehicle_unavailable|date_conflict|invalid_request)\nand answer_text\nOutput: Python code in markdown block\n\nRequest: {question}\"\"\"\n\ndef execute_code(code, user_request):\n    SAFE = {\"Query\": Query, \"next_booking_id\": next_booking_id,\n            \"get_daily_rate\": get_daily_rate,\n            \"calculate_rental_cost\": calculate_rental_cost,\n            \"has_date_conflict\": has_date_conflict,\n            \"datetime\": datetime, \"timedelta\": timedelta,\n            \"user_request\": user_request}\n    LOCALS = {\"db\": db, \"vehicles_tbl\": vehicles_tbl,\n              \"bookings_tbl\": bookings_tbl}\n    try:\n        exec(code, SAFE, LOCALS)\n    except Exception:\n        return {\"error\": traceback.format_exc()}\n    return {\n        \"answer\": LOCALS.get(\"answer_text\", \"No response\"),\n        \"status\": LOCALS.get(\"STATUS\", \"unknown\")\n    }"
+        }
+      ]
+    },
+    {
+      "heading": "Example: AI-Generated Booking Code",
+      "body": "When a user says \"Book a Myvi for 3 days from KLIA. Name: Ahmad, Phone: 0123456789, License: D1234567\", Gemini produces code like this. The LLM parsed the request and extracted model, duration, location, and customer details, searched the fleet for an available Myvi and checked date conflicts, invoked <code>calculate_rental_cost</code> with the Economy tier, generated a new RNT booking ID and inserted the record, all business logic emerging dynamically, not hardcoded per intent.",
+      "files": [
+        {
+          "label": "Example Generated Code",
+          "code": "# Parse request from user_request\npickup_date = \"2026-04-09\"\ndays = 3\nreturn_date = (datetime.strptime(pickup_date, \"%Y-%m-%d\")\n               + timedelta(days=days)).strftime(\"%Y-%m-%d\")\n\n# Find first available Myvi\ncandidates = vehicles_tbl.search(\n    (Query().model == \"Perodua Myvi\") &\n    (Query().status != \"maintenance\")\n)\nvehicle = None\nfor v in candidates:\n    if not has_date_conflict(v[\"vehicle_id\"], pickup_date,\n                              return_date, bookings_tbl):\n        vehicle = v\n        break\n\nif vehicle is None:\n    STATUS = \"vehicle_unavailable\"\n    answer_text = \"No Myvi available for those dates.\"\nelse:\n    cost = calculate_rental_cost(\"Economy\", days, hotel_delivery=False)\n    bk_id = next_booking_id(bookings_tbl, \"RNT\")\n    bookings_tbl.insert({\n        \"booking_id\": bk_id,\n        \"vehicle_id\": vehicle[\"vehicle_id\"],\n        \"model\": vehicle[\"model\"],\n        \"customer_name\": \"Ahmad\",\n        \"phone\": \"0123456789\",\n        \"license_no\": \"D1234567\",\n        \"pickup_location\": \"KLIA\",\n        \"pickup_date\": pickup_date,\n        \"return_date\": return_date,\n        \"days\": days,\n        \"total_amount_myr\": cost[\"total\"],\n        \"status\": \"booked\"\n    })\n    STATUS = \"success\"\n    answer_text = f\"Booking {bk_id} confirmed for {vehicle['model']} \" \\\n                  f\"({pickup_date} to {return_date}). Total RM {cost['total']}.\""
+        }
+      ]
+    },
+    {
+      "heading": "FastAPI Endpoints",
+      "body": "The REST API routes wire the chat flow together and expose read access to the fleet and bookings.",
+      "files": [
+        {
+          "label": "main.py: REST API Routes",
+          "code": "@app.post(\"/api/chat\", response_model=ChatResponse)\nasync def chat(request: ChatRequest):\n    content = generate_code(PROMPT.format(question=request.message))\n    result = execute_code(extract_code(content), request.message)\n    if result[\"error\"]:\n        raise HTTPException(500, detail=result[\"error\"])\n    return ChatResponse(answer=result[\"answer\"], status=result[\"status\"])\n\n@app.get(\"/api/vehicles\")\nasync def get_vehicles(status=None, tier=None):\n    vehicles = [v for v in vehicles_tbl.all()\n                if (not status or v[\"status\"] == status)\n                and (not tier or v[\"tier\"] == tier)]\n    return {\"vehicles\": vehicles, \"total\": len(vehicles)}\n\n@app.get(\"/api/bookings\")\nasync def get_bookings(status=None, date=None):\n    bookings = [b for b in bookings_tbl.all()\n                if (not status or b[\"status\"] == status)\n                and (not date or b[\"pickup_date\"] == date)]\n    return {\"bookings\": bookings, \"total\": len(bookings)}"
+        }
+      ]
+    }
+  ],
+  "cta": "Want an AI booking agent like this built for your own fleet or service business? Let's scope it."
+};
+  /* ===================== END EDIT BLOCK ===================== */
+
+  const pref = (u) => /^https?:|^mailto:|^tel:/.test(u || '') ? u : (SITE + (u || ''));
+  const esc = (s) => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const rich = (s) => esc(s).replace(/&lt;(\/?(?:b|code))&gt;/g, '<$1>');
+
+  // raw code store for copy buttons
+  const RAW = [];
+  function codeBlock(label, codeStr, extraClass){
+    const idx = RAW.push(codeStr) - 1;
+    const rendered = esc(codeStr).split('\n')
+      .map(line => /^\s*#/.test(line) ? `<span class="cmt">${line}</span>` : line).join('\n');
+    return `<div class="codeblock ${extraClass||''}">`+
+      `<div class="code-bar"><span class="path"><span>${esc(label)}</span></span>`+
+      `<button class="code-copy" data-idx="${idx}">Copy</button></div>`+
+      `<pre><code>${rendered}</code></pre></div>`;
+  }
+
+  // Breadcrumb + header
+  document.title = PROJECT.title + ": Source | AI Project Portfolio";
+  document.getElementById('crumbCat').textContent = PROJECT.category;
+  document.getElementById('crumbCat').href = pref(PROJECT.categoryUrl);
+  document.getElementById('crumbProj').textContent = PROJECT.title;
+  document.getElementById('crumbProj').href = pref(PROJECT.overviewUrl);
+  if (PROJECT.cover){
+    document.getElementById('coverStrip').style.display = '';
+    const c = document.getElementById('cover'); c.src = PROJECT.cover; c.alt = PROJECT.title + " cover";
+  }
+  document.getElementById('kicker').textContent = "Source Walkthrough · " + PROJECT.category;
+  document.getElementById('title').textContent = PROJECT.title;
+  document.getElementById('subtitle').textContent = PROJECT.subtitle;
+  document.getElementById('headTech').innerHTML = (PROJECT.tech||[]).map(t => `<span class="tech-chip">${esc(t)}</span>`).join('');
+  document.getElementById('headBtns').innerHTML =
+    (PROJECT.demoUrl ? `<a class="btn" href="${pref(PROJECT.demoUrl)}" target="_blank" rel="noopener">${esc(PROJECT.demoLabel||'Live Demo')}</a>` : '') +
+    (PROJECT.overviewUrl ? `<a class="btn ghost" href="${pref(PROJECT.overviewUrl)}">Project Overview</a>` : '') +
+    (PROJECT.repoUrl ? `<a class="btn ghost" href="${pref(PROJECT.repoUrl)}" target="_blank" rel="noopener">GitHub Repo</a>` : '');
+
+  const section = (tab, inner) => `<section class="sec"><div class="sec-rule"><span class="tab">${esc(tab)}</span>${inner}</div></section>`;
+  let html = "";
+  const P = PROJECT;
+
+  if (P.about){
+    html += section("About This Code", `<h2>About This Code Showcase</h2><p class="intro">${rich(P.about)}</p>`);
+  }
+  if (P.structure && P.structure.code){
+    html += section("Project Structure", `<h2>Project Structure</h2>`+
+      codeBlock(P.structure.label || 'project/', P.structure.code, 'tree'));
+  }
+  (P.walkthrough||[]).forEach(w => {
+    let inner = `<h2>${esc(w.heading)}</h2>`;
+    if (w.body) inner += `<p class="body">${rich(w.body)}</p>`;
+    (w.files||[]).forEach(f => { inner += codeBlock(f.label, f.code); });
+    html += section("Code", inner);
+  });
+  // CTA
+  html += `<section class="sec"><div class="cta-inner">`+
+    `<div><h3>Interested in the build?</h3><p>${esc(P.cta || "Let's talk.")}</p></div>`+
+    `<div class="cta-btns">`+
+    (P.demoUrl ? `<a class="btn" href="${pref(P.demoUrl)}" target="_blank" rel="noopener">${esc(P.demoLabel||'Live Demo')}</a>` : '')+
+    `<a class="btn ghost" href="${SITE}contact.html">Get in Touch</a>`+
+    `</div></div></section>`;
+
+  document.getElementById('body').innerHTML = html;
+
+  // Copy buttons
+  function copyText(text, btn){
+    const done = ()=>{ const o=btn.textContent; btn.textContent='Copied ✓'; setTimeout(()=>btn.textContent=o.includes('Copied')?'Copy':o,1400); };
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(done).catch(()=>fb(text,done)); }
+    else fb(text,done);
+  }
+  function fb(text,done){ const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(ta); done(); }
+  document.querySelectorAll('.code-copy').forEach(btn =>
+    btn.addEventListener('click', ()=> copyText(RAW[+btn.dataset.idx], btn)));
+
+  // Masthead search
+  const ITEMS = [
+    {t:PROJECT.title, c:PROJECT.category, s:PROJECT.slug},
+    {t:"Courier CS Quality Console", c:"Conversational Data Analytics", s:"courier-cs-quality-console"},
+    {t:"Voucher Analyzer", c:"Conversational Data Analytics", s:"voucher-analyzer"},
+    {t:"Wiseman", c:"Knowledge & Reference Chatbots", s:"wiseman"},
+    {t:"Sunny Car Accessories", c:"Agentic Commerce", s:"sunny-car-accessories"},
+    {t:"Bookshelf", c:"Multi-Agent Decision Systems", s:"bookshelf"}
+  ];
+  const searchInput = document.getElementById('searchInput');
+  const searchResults = document.getElementById('searchResults');
+  function runSearch(q){
+    if(q.trim().length < 2){ searchResults.style.display='none'; return; }
+    const ql = q.toLowerCase();
+    const hits = ITEMS.filter(it => (it.t+' '+it.c).toLowerCase().includes(ql));
+    searchResults.innerHTML = hits.length ? hits.map(it =>
+      `<div class="sr-item"><div class="sr-cat">${esc(it.c)}</div>`+
+      `<a href="${SITE}${it.s}.html"><div class="sr-title">${esc(it.t)}</div></a>`+
+      `<div class="sr-links"><a href="${SITE}${it.s}.html">View Details</a></div></div>`).join('')
+      : `<div class="sr-none">No projects found. Try a different keyword.</div>`;
+    searchResults.style.display='block';
+  }
+  searchInput.addEventListener('input', e => runSearch(e.target.value));
+  document.addEventListener('click', e => { if(!e.target.closest('.search-box')) searchResults.style.display='none'; });
+
+  // Drawer
+  const drawer=document.getElementById('drawer'), overlay=document.getElementById('overlay');
+  const openMenu=()=>{ drawer.classList.add('open'); overlay.classList.add('open'); };
+  const closeMenu=()=>{ drawer.classList.remove('open'); overlay.classList.remove('open'); };
+  document.getElementById('hamburger').addEventListener('click', openMenu);
+  document.getElementById('drawerClose').addEventListener('click', closeMenu);
+  overlay.addEventListener('click', closeMenu);
+  drawer.querySelectorAll('a').forEach(a=>a.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeMenu(); searchResults.style.display='none'; }});
+</script>
 </body>
 </html>

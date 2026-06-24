@@ -1,331 +1,380 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jade Star Chinese Dining 吉星饭厅 — Source Code</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #222; background-color: #ffffff; }
-        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
-        .back-nav { margin-bottom: 20px; }
-        .back-nav a { color: #007BFF; text-decoration: none; font-size: 1rem; }
-        .back-nav a:hover { text-decoration: underline; }
-        .project-header { text-align: center; margin-bottom: 40px; padding: 40px 0; background: linear-gradient(135deg, #B8860B, #8B6914); color: white; border-radius: 10px; }
-        .project-header h1 { font-size: 2.5rem; margin-bottom: 10px; }
-        .project-header p { font-size: 1.2rem; opacity: 0.9; }
-        .badges { display: flex; justify-content: center; gap: 10px; margin: 20px 0; flex-wrap: wrap; }
-        .badge { background-color: rgba(255,255,255,0.2); color: white; padding: 5px 12px; border-radius: 15px; font-size: 0.9rem; }
-        .content-section { margin: 40px 0; padding: 30px; background-color: #f9f9f9; border-radius: 8px; border-left: 5px solid #B8860B; }
-        .content-section h2 { color: #B8860B; margin-bottom: 20px; font-size: 1.8rem; }
-        .content-section h3 { color: #333; margin: 20px 0 10px 0; font-size: 1.3rem; }
-        .highlight-box { background: linear-gradient(135deg, #FFF9E6, #FFEFC1); padding: 20px; border-radius: 10px; border-left: 5px solid #B8860B; margin: 20px 0; }
-        .code-container { background-color: #1e1e1e; border-radius: 8px; padding: 20px; margin: 20px 0; overflow-x: auto; }
-        .code-header { color: #FFD580; font-weight: bold; margin-bottom: 15px; font-size: 1.1rem; border-bottom: 1px solid #333; padding-bottom: 10px; }
-        .code-block { font-family: 'Consolas', 'Monaco', 'Courier New', monospace; font-size: 14px; line-height: 1.5; color: #d4d4d4; white-space: pre-wrap; }
-        .code-comment { color: #6a9955; font-style: italic; }
-        .code-keyword { color: #569cd6; }
-        .code-string { color: #ce9178; }
-        .code-function { color: #dcdcaa; }
-        .code-number { color: #b5cea8; }
-        .code-property { color: #9cdcfe; }
-        .demo-links { text-align: center; margin: 30px 0; }
-        .demo-btn { display: inline-block; background-color: #007BFF; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; margin: 0 10px; font-weight: bold; transition: background-color 0.3s; }
-        .demo-btn:hover { background-color: #0056b3; }
-        .demo-btn.secondary { background-color: #28a745; }
-        .demo-btn.secondary:hover { background-color: #218838; }
-        @media (max-width: 768px) {
-            .project-header h1 { font-size: 2rem; }
-            .project-header p { font-size: 1rem; }
-            .demo-btn { margin: 5px; padding: 10px 20px; }
-            .container { padding: 15px; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jade Star Chinese Dining 吉星饭厅: Source | AI Project Portfolio</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root{ --ink:#222; --paper:#fff; --hair:#dddddd; --gray:#555; --accent:#B8860B; --navy:#1E3A5F; --code-bg:#fbfbf8; --cmt:#6b8190; }
+  html{ scroll-behavior:smooth; }
+  body{ background:var(--paper); color:var(--ink); font-family:Arial, Helvetica, sans-serif; line-height:1.6; overflow-x:hidden; }
+  a{ color:inherit; text-decoration:none; }
+  a:hover h2, a:hover h3, a:hover h4{ color:var(--accent); }
+  p code, li code{ font-family:"Courier New", monospace; font-size:.86em; background:#f2f3f5; padding:1px 5px; color:var(--navy); }
+
+  /* Masthead (shared) */
+  .masthead{ display:flex; align-items:center; justify-content:space-between; padding:14px 28px; max-width:1240px; margin:0 auto; gap:18px; }
+  .mast-left{ display:flex; align-items:center; gap:20px; }
+  .logo{ background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; letter-spacing:3px; font-size:.95rem; padding:8px 12px; white-space:nowrap; }
+  .mast-nav{ display:flex; gap:20px; font-family:Arial, Helvetica, sans-serif; font-size:.72rem; letter-spacing:1.4px; text-transform:uppercase; }
+  .mast-nav a:hover{ color:var(--accent); }
+  .hamburger{ display:none; flex-direction:column; gap:4px; background:none; border:none; cursor:pointer; padding:6px; }
+  .hamburger span{ width:22px; height:2px; background:#222; display:block; }
+  .rule-top{ border:none; border-top:3px solid #222; max-width:1240px; margin:0 auto; }
+
+  /* Search (shared) */
+  .search-box{ position:relative; width:200px; }
+  .search-input{ width:100%; padding:7px 30px 7px 12px; border:1px solid var(--hair); background:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; color:#222; }
+  .search-input:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(184,134,11,.15); }
+  .search-ic{ position:absolute; right:10px; top:50%; transform:translateY(-50%); color:var(--gray); font-size:.8rem; pointer-events:none; }
+  .search-results{ position:absolute; top:calc(100% + 4px); left:0; width:340px; max-width:86vw; background:#fff; border:1px solid #222; max-height:60vh; overflow-y:auto; z-index:120; display:none; }
+  .sr-item{ padding:12px 14px; border-bottom:1px solid var(--hair); }
+  .sr-item:last-child{ border-bottom:none; }
+  .sr-cat{ font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; margin-bottom:4px; color:var(--accent); }
+  .sr-title{ font-weight:700; font-size:1.02rem; color:#222; }
+  .sr-links{ font-size:.58rem; letter-spacing:.8px; text-transform:uppercase; color:var(--gray); margin-top:5px; }
+  .sr-links a:hover{ color:var(--accent); }
+  .sr-none{ padding:16px 14px; font-size:.82rem; color:var(--gray); }
+
+  /* Shared bits */
+  .tab{ display:inline-block; background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.66rem; letter-spacing:2px; text-transform:uppercase; padding:6px 12px; }
+  .rubric{ font-family:Arial, Helvetica, sans-serif; font-size:.62rem; font-weight:700; letter-spacing:1.6px; text-transform:uppercase; color:var(--accent); display:block; margin-bottom:8px; }
+  .tech-chip{ display:inline-block; border:1px solid var(--hair); padding:6px 12px; font-size:.72rem; letter-spacing:.3px; color:#333; white-space:nowrap; }
+  .tech-chip:hover{ border-color:var(--accent); color:var(--accent); }
+  .btn{ display:inline-block; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.7rem; letter-spacing:1.6px; text-transform:uppercase; padding:13px 24px; border:1px solid #222; background:#222; color:#fff; cursor:pointer; transition:.15s; }
+  .btn:hover{ background:var(--accent); border-color:var(--accent); }
+  .btn.ghost{ background:#fff; color:#222; }
+  .btn.ghost:hover{ color:var(--accent); border-color:var(--accent); background:#fff; }
+
+  /* Breadcrumb */
+  .crumb{ max-width:1240px; margin:0 auto; padding:20px 28px 0; font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--gray); }
+  .crumb a:hover{ color:var(--accent); }
+  .crumb .sep{ color:var(--hair); margin:0 8px; }
+
+  /* Header (slim cover banner + copy) */
+  .src-head{ max-width:1240px; margin:0 auto; padding:14px 28px 6px; }
+  .cover-strip{ border:1px solid var(--hair); line-height:0; background:#eef1f4; }
+  .cover-strip img{ width:100%; height:190px; object-fit:cover; object-position:center 42%; display:block; }
+  .src-head h1{ font-size:2.5rem; font-weight:900; line-height:1.04; letter-spacing:-.008em; margin-top:18px; }
+  .src-head .sub{ font-style:italic; font-size:1.08rem; color:#333; margin-top:10px; max-width:72ch; }
+  .head-tech{ display:flex; flex-wrap:wrap; gap:9px; margin-top:16px; }
+  .head-btns{ display:flex; flex-wrap:wrap; gap:12px; margin-top:18px; }
+
+  /* Section shell */
+  .sec{ max-width:1240px; margin:0 auto; padding:26px 28px; }
+  .sec-rule{ border-top:3px solid #222; padding-top:16px; }
+  .sec .tab{ margin-bottom:14px; }
+  .sec h2{ font-size:1.7rem; font-weight:900; line-height:1.06; }
+  .sec .intro{ color:#333; font-size:1.02rem; margin-top:10px; max-width:80%; }
+  .sec .body{ color:#333; font-size:1rem; margin-top:10px; max-width:80%; }
+
+  /* Code block */
+  .codeblock{ border:1px solid var(--hair); margin-top:16px; }
+  .code-bar{ display:flex; align-items:center; justify-content:space-between; gap:12px; background:var(--navy); color:#fff; padding:8px 12px; }
+  .code-bar .path{ font-family:"Courier New", monospace; font-size:.74rem; letter-spacing:.2px; opacity:.96; display:flex; align-items:center; gap:7px; min-width:0; }
+  .code-bar .path span{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .code-copy{ flex:none; background:none; border:1px solid rgba(255,255,255,.4); color:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.56rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; padding:5px 11px; cursor:pointer; transition:.15s; }
+  .code-copy:hover{ background:rgba(255,255,255,.16); }
+  .codeblock pre{ margin:0; padding:14px 16px; overflow-x:auto; background:var(--code-bg); }
+  .codeblock code{ font-family:"Courier New", monospace; font-size:.82rem; line-height:1.6; color:#1b2a3a; background:none; padding:0; white-space:pre; display:block; }
+  .codeblock code .cmt{ color:var(--cmt); font-style:italic; }
+
+  .tree .code-bar .path::before{ content:"📁"; }
+
+  /* Notes */
+  .note-block{ margin-top:22px; }
+  .note-block h3{ font-size:1.15rem; font-weight:800; }
+  .blist{ list-style:none; margin-top:12px; border-top:1px solid var(--hair); }
+  .blist li{ padding:12px 0; border-bottom:1px solid var(--hair); color:#333; font-size:.95rem; }
+  .blist li b{ color:#222; }
+
+  /* CTA */
+  .cta-inner{ display:flex; align-items:center; gap:18px; flex-wrap:wrap; border-top:3px solid #222; padding-top:18px; }
+  .cta-inner h3{ font-size:1.4rem; font-weight:900; line-height:1.08; }
+  .cta-inner p{ color:var(--gray); font-size:.95rem; margin-top:4px; }
+  .cta-btns{ margin-left:auto; display:flex; gap:12px; flex-wrap:wrap; }
+
+  footer{ background:#222; max-width:1240px; margin:30px auto 0; padding:24px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; letter-spacing:.5px; color:#fff; text-align:center; }
+  .note{ max-width:1240px; margin:14px auto 0; padding:8px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.62rem; letter-spacing:1px; color:#999; }
+
+  /* Drawer (shared) */
+  .drawer{ position:fixed; top:0; left:-300px; width:280px; height:100vh; background:#fff; z-index:200; box-shadow:2px 0 14px rgba(0,0,0,.15); transition:left .28s ease; padding:74px 26px 26px; }
+  .drawer.open{ left:0; }
+  .drawer a{ display:block; font-family:Arial, Helvetica, sans-serif; font-size:.82rem; letter-spacing:1.2px; text-transform:uppercase; padding:14px 0; border-bottom:1px solid var(--hair); }
+  .overlay{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:150; }
+  .overlay.open{ display:block; }
+  .drawer-close{ position:absolute; top:20px; right:20px; font-family:Arial, Helvetica, sans-serif; font-size:1.4rem; background:none; border:none; cursor:pointer; }
+
+  @media (max-width:900px){
+    .cta-btns{ margin-left:0; }
+    .mast-nav{ display:none; }
+    .hamburger{ display:flex; }
+    .masthead{ padding:12px 16px; }
+    .mast-left{ gap:10px; min-width:0; flex:1; }
+    .logo{ font-size:.72rem; letter-spacing:1.5px; padding:6px 8px; }
+    .search-box{ flex:1; width:auto; min-width:0; }
+    .search-results{ position:fixed; top:58px; left:12px; right:12px; width:auto; max-width:none; }
+    .src-head h1{ font-size:1.95rem; }
+    .cover-strip img{ height:150px; }
+  }
+</style>
 </head>
 <body>
-    <div class="container">
-        <nav class="back-nav">
-            <a href="ji-xing-cny-reservation.html">&larr; Back to Project Overview</a>
-        </nav>
 
-        <div class="project-header">
-            <h1>Jade Star Chinese Dining 吉星饭厅</h1>
-            <p>Source Code &amp; WebMCP Architecture</p>
-            <div class="badges">
-                <span class="badge">WebMCP (W3C)</span>
-                <span class="badge">7 Typed Tools</span>
-                <span class="badge">Per-View Scoping</span>
-                <span class="badge">Bilingual UI</span>
-                <span class="badge">Schema.org</span>
-            </div>
-        </div>
+  <div class="overlay" id="overlay"></div>
+  <nav class="drawer" id="drawer">
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">&times;</button>
+    <a href="index.html">Home</a>
+    <a href="project-categories.html">Categories</a>
+    <a href="contact.html">Contact</a>
+    <a href="https://lyven81.github.io/data-analyst-portfolio/index.html">Data Portfolio</a>
+  </nav>
 
-        <div class="highlight-box">
-            <h3>About This Code Showcase</h3>
-            <p><strong>This curated walkthrough covers the WebMCP layer in Jade Star Chinese Dining 吉星饭厅 — how the 7 reservation tools are defined, how the per-view tool surface swaps as the user moves through the booking flow, how destructive actions are gated by <code>requestUserInteraction()</code>, and how Schema.org structured data drives bilingual SEO.</strong></p>
-            <p>The entire app is one self-contained <code>index.html</code> (~2,000 lines). No backend, no build step, no LLM calls from the page itself — agents that visit pay their own LLM cost via <code>navigator.modelContext</code>.</p>
-        </div>
-
-        <div class="content-section">
-            <h2>Core: Tool Definitions (TOOLS object)</h2>
-            <p>Each tool is a typed contract — name, human-readable description, JSON inputSchema for the agent to read, and an async <code>execute()</code> handler that runs the business logic and returns structured JSON. The killer demo tool is <code>checkAvailability</code> — the CNY equivalent of Sunny Car Accessories' <code>checkFitment</code>.</p>
-
-            <div class="code-container">
-                <div class="code-header">index.html — checkAvailability (the killer demo tool)</div>
-                <div class="code-block"><span class="code-keyword">const</span> TOOLS = {
-  <span class="code-property">checkAvailability</span>: {
-    <span class="code-property">name</span>: <span class="code-string">'checkAvailability'</span>,
-    <span class="code-property">description</span>: <span class="code-string">'Check available tables for a CNY date and sitting. Returns availability by table type. Lunch sittings closed on Reunion Eve &amp; Day 1.'</span>,
-    <span class="code-property">inputSchema</span>: {
-      <span class="code-property">type</span>: <span class="code-string">'object'</span>,
-      <span class="code-property">properties</span>: {
-        <span class="code-property">date</span>:        { type: <span class="code-string">'string'</span>, format: <span class="code-string">'date'</span> },
-        <span class="code-property">sitting</span>:     { type: <span class="code-string">'string'</span>, enum: [<span class="code-string">'lunch-1'</span>,<span class="code-string">'lunch-2'</span>,<span class="code-string">'dinner-1'</span>,<span class="code-string">'dinner-2'</span>] },
-        <span class="code-property">partySize</span>:   { type: <span class="code-string">'integer'</span>, enum: [<span class="code-number">6</span>, <span class="code-number">8</span>, <span class="code-number">10</span>] },
-        <span class="code-property">seatingType</span>: { type: <span class="code-string">'string'</span>, enum: [<span class="code-string">'mainHall'</span>,<span class="code-string">'privateRoom'</span>,<span class="code-string">'any'</span>] }
-      },
-      <span class="code-property">required</span>: [<span class="code-string">'date'</span>, <span class="code-string">'sitting'</span>, <span class="code-string">'partySize'</span>]
-    },
-    <span class="code-property">execute</span>: <span class="code-keyword">async</span> ({ date, sitting, partySize, seatingType = <span class="code-string">'any'</span> }) =&gt; {
-      <span class="code-comment">// Date-window guard</span>
-      <span class="code-keyword">if</span> (date &lt; SLOT_PERIOD.start || date &gt; SLOT_PERIOD.end) {
-        <span class="code-keyword">return</span> { type: <span class="code-string">'text'</span>, text: <span class="code-string">`Reservations only 14-22 Feb 2026. Date ${date} outside window.`</span> };
-      }
-      <span class="code-comment">// Peak-day rule — Reunion Eve &amp; Day 1: dinner only</span>
-      <span class="code-keyword">if</span> (PEAK_DAYS.includes(date) &amp;&amp; sitting.startsWith(<span class="code-string">'lunch'</span>)) {
-        <span class="code-keyword">return</span> { type: <span class="code-string">'text'</span>, text: <span class="code-string">`Lunch closed on Reunion Eve &amp; Day 1. Dinner only.`</span> };
-      }
-      <span class="code-keyword">const</span> remaining = <span class="code-function">tablesRemainingForSitting</span>(date, sitting, partySize);
-      <span class="code-keyword">return</span> { type: <span class="code-string">'json'</span>, data: {
-        date, sitting, partySize,
-        <span class="code-property">tablesRemaining</span>: remaining,           <span class="code-comment">// { mainHall, privateRoom, vipRoom, total }</span>
-        <span class="code-property">compatibleSets</span>: CATALOG.filter(s =&gt; s.pax === partySize)
-      }};
-    }
-  }
-  <span class="code-comment">// 6 more tools: searchSetMenus, getSetMenuDetails, reserveTable,</span>
-  <span class="code-comment">//                getReservation, modifyReservation, cancelReservation</span>
-};</div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>Per-View Tool Scoping (the killer feature)</h2>
-            <p>WebMCP's design choice: agents see only the 2–3 tools relevant to where they currently are. Tool surface morphs on every view change. <code>provideContext()</code> is called fresh per view. Destructive tools (<code>reserveTable</code>, <code>cancelReservation</code>) live ONLY on the views where the user is in that intent — agents on the homepage cannot accidentally cancel a booking.</p>
-
-            <div class="code-container">
-                <div class="code-header">index.html — VIEW_TOOLS map + refreshWebMCPTools()</div>
-                <div class="code-block"><span class="code-comment">// Per-view tool surface — agents see only what's relevant where they are</span>
-<span class="code-keyword">const</span> VIEW_TOOLS = {
-  <span class="code-property">home</span>:           [<span class="code-string">'searchSetMenus'</span>, <span class="code-string">'getSetMenuDetails'</span>],
-  <span class="code-string">'set-detail'</span>:   [<span class="code-string">'getSetMenuDetails'</span>, <span class="code-string">'checkAvailability'</span>],
-  <span class="code-property">booking</span>:        [<span class="code-string">'checkAvailability'</span>, <span class="code-string">'reserveTable'</span>],         <span class="code-comment">// destructive lives here</span>
-  <span class="code-property">confirmation</span>:   [<span class="code-string">'getReservation'</span>],                          <span class="code-comment">// read-only follow-up</span>
-  <span class="code-property">manage</span>:         [<span class="code-string">'getReservation'</span>, <span class="code-string">'modifyReservation'</span>, <span class="code-string">'cancelReservation'</span>]
-};
-
-<span class="code-comment">// Fires on EVERY showView() transition</span>
-<span class="code-keyword">function</span> <span class="code-function">refreshWebMCPTools</span>(viewName) {
-  <span class="code-keyword">const</span> toolNames = VIEW_TOOLS[viewName] || [];
-  <span class="code-keyword">const</span> tools = toolNames.map(name =&gt; TOOLS[name]).filter(Boolean);
-  <span class="code-keyword">if</span> (APP_STATE.webmcpActive &amp;&amp; navigator.modelContext.provideContext) {
-    <span class="code-keyword">try</span> {
-      navigator.modelContext.<span class="code-function">provideContext</span>({ tools });   <span class="code-comment">// W3C WebMCP API</span>
-    } <span class="code-keyword">catch</span> (e) { console.warn(<span class="code-string">'[webmcp] provideContext failed'</span>, e); }
-  }
-  <span class="code-function">refreshInspectorPanel</span>(toolNames);   <span class="code-comment">// Update Inspector UI</span>
-}</div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>requestUserInteraction() — Human-in-the-Loop on Destructive Actions</h2>
-            <p>Three tools are destructive: <code>reserveTable</code> places a reservation + 50% deposit, <code>modifyReservation</code> changes an existing booking, <code>cancelReservation</code> deletes a booking. All three pause for explicit user confirmation via the W3C-spec <code>requestUserInteraction()</code> API — with a custom-modal polyfill for browsers without native support.</p>
-
-            <div class="code-container">
-                <div class="code-header">index.html — requestUserConfirmation with polyfill fallback</div>
-                <div class="code-block"><span class="code-keyword">async function</span> <span class="code-function">requestUserConfirmation</span>(opts) {
-  <span class="code-comment">// Try native WebMCP API first (Chrome 146+ with flags)</span>
-  <span class="code-keyword">if</span> (APP_STATE.webmcpActive &amp;&amp; navigator.modelContext.requestUserInteraction) {
-    <span class="code-keyword">try</span> {
-      <span class="code-keyword">const</span> result = <span class="code-keyword">await</span> navigator.modelContext.<span class="code-function">requestUserInteraction</span>(opts);
-      <span class="code-keyword">return</span> !!result;
-    } <span class="code-keyword">catch</span> (e) { <span class="code-comment">/* fall through to polyfill */</span> }
-  }
-  <span class="code-comment">// Custom-modal fallback for browsers without WebMCP</span>
-  <span class="code-keyword">return await</span> <span class="code-function">showCustomConfirmModal</span>(opts);
-}
-
-<span class="code-comment">// Used by reserveTable.execute(), modifyReservation, cancelReservation:</span>
-<span class="code-keyword">const</span> ok = <span class="code-keyword">await</span> <span class="code-function">requestUserConfirmation</span>({
-  <span class="code-property">title</span>: <span class="code-string">'Confirm Cancellation · 确认取消'</span>,
-  <span class="code-property">message</span>: <span class="code-string">`Cancel reservation ${ref}? ${policy} This action cannot be undone.`</span>,
-  <span class="code-property">confirmText</span>: <span class="code-string">'Cancel Booking · 取消预订'</span>,
-  <span class="code-property">cancelText</span>:  <span class="code-string">'Keep Booking · 保留预订'</span>,
-  <span class="code-property">destructive</span>: <span class="code-keyword">true</span>      <span class="code-comment">// styles confirm button red</span>
-});
-<span class="code-keyword">if</span> (!ok) <span class="code-keyword">return</span> { type: <span class="code-string">'text'</span>, text: <span class="code-string">'Cancellation declined'</span> };</div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>Mock Inventory — 480 Slots × 9 Days</h2>
-            <p>The CNY 2026 slot grid runs 14–22 February. 30 tables per restaurant, 15 bookable per sitting (50/50 booking-vs-walk-in mid-tier MY pattern), sliced by party size. Pre-filled booking density creates the demo's scarcity narrative — Reunion Eve dinner-2 is 14/15 booked (1 table left), driving urgency in the agent narrative.</p>
-
-            <div class="code-container">
-                <div class="code-header">index.html — INVENTORY generator</div>
-                <div class="code-block"><span class="code-keyword">function</span> <span class="code-function">generateInventory</span>() {
-  <span class="code-keyword">const</span> inv = {};
-  <span class="code-comment">// Per-sitting bookable allocation: 6→3, 8→4, 10→4, PRs→1 each (small/medium/large/VIP) = 15</span>
-  <span class="code-keyword">const</span> baseBookable = { <span class="code-number">6</span>: <span class="code-number">3</span>, <span class="code-number">8</span>: <span class="code-number">4</span>, <span class="code-number">10</span>: <span class="code-number">4</span>,
-                          small_pr: <span class="code-number">1</span>, medium_pr: <span class="code-number">1</span>, large_pr: <span class="code-number">1</span>, vip_pr: <span class="code-number">1</span> };
-
-  <span class="code-comment">// Demo scarcity profiles — drives the urgency narrative</span>
-  <span class="code-keyword">const</span> profiles = {
-    veryTight: { <span class="code-number">6</span>:<span class="code-number">3</span>, <span class="code-number">8</span>:<span class="code-number">3</span>, <span class="code-number">10</span>:<span class="code-number">4</span>, small_pr:<span class="code-number">1</span>, medium_pr:<span class="code-number">1</span>, large_pr:<span class="code-number">1</span>, vip_pr:<span class="code-number">1</span> },  <span class="code-comment">// 14/15</span>
-    tight:     { <span class="code-number">6</span>:<span class="code-number">2</span>, <span class="code-number">8</span>:<span class="code-number">3</span>, <span class="code-number">10</span>:<span class="code-number">3</span>, small_pr:<span class="code-number">1</span>, medium_pr:<span class="code-number">1</span>, large_pr:<span class="code-number">1</span>, vip_pr:<span class="code-number">1</span> },  <span class="code-comment">// 12/15</span>
-    busy:      { <span class="code-number">6</span>:<span class="code-number">2</span>, <span class="code-number">8</span>:<span class="code-number">3</span>, <span class="code-number">10</span>:<span class="code-number">2</span>, small_pr:<span class="code-number">0</span>, medium_pr:<span class="code-number">1</span>, large_pr:<span class="code-number">1</span>, vip_pr:<span class="code-number">0</span> },  <span class="code-comment">//  9/15</span>
-    moderate:  { <span class="code-number">6</span>:<span class="code-number">1</span>, <span class="code-number">8</span>:<span class="code-number">2</span>, <span class="code-number">10</span>:<span class="code-number">1</span>, small_pr:<span class="code-number">0</span>, medium_pr:<span class="code-number">0</span>, large_pr:<span class="code-number">1</span>, vip_pr:<span class="code-number">0</span> },  <span class="code-comment">//  5/15</span>
-    light:     { <span class="code-number">6</span>:<span class="code-number">1</span>, <span class="code-number">8</span>:<span class="code-number">1</span>, <span class="code-number">10</span>:<span class="code-number">1</span>, small_pr:<span class="code-number">0</span>, medium_pr:<span class="code-number">0</span>, large_pr:<span class="code-number">0</span>, vip_pr:<span class="code-number">0</span> }   <span class="code-comment">//  3/15</span>
-  };
-
-  ALL_DATES.forEach(d =&gt; {
-    inv[d.date] = {};
-    <span class="code-keyword">const</span> isPeak = PEAK_DAYS.includes(d.date);
-    <span class="code-comment">// Reunion Eve &amp; Day 1: dinner only — no lunch sittings</span>
-    <span class="code-keyword">const</span> sittingsForDay = isPeak
-      ? [<span class="code-string">'dinner-1'</span>, <span class="code-string">'dinner-2'</span>]
-      : [<span class="code-string">'lunch-1'</span>, <span class="code-string">'lunch-2'</span>, <span class="code-string">'dinner-1'</span>, <span class="code-string">'dinner-2'</span>];
-    sittingsForDay.forEach(s =&gt; {
-      <span class="code-keyword">const</span> profile = <span class="code-function">pickDemoProfile</span>(d.date, s);   <span class="code-comment">// Reunion Eve = veryTight</span>
-      inv[d.date][s] = { bookable: { ...baseBookable }, booked: { ...profiles[profile] } };
-    });
-  });
-  <span class="code-keyword">return</span> inv;
-}</div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>Bilingual SEO — Schema.org Structured Data</h2>
-            <p>Three JSON-LD blocks in the document <code>&lt;head&gt;</code> drive Google's rich snippets and Knowledge Graph entries. The <code>FAQPage</code> markup is paired with the visible FAQ section so the same content powers both human readers and SERP rich snippets — bilingual content captures both English and Chinese keyword searches.</p>
-
-            <div class="code-container">
-                <div class="code-header">index.html — Schema.org JSON-LD blocks</div>
-                <div class="code-block"><span class="code-comment">&lt;!-- Block 1: Restaurant + ReserveAction (drives "Reserve" button in SERP) --&gt;</span>
-&lt;script type="application/ld+json"&gt;
-{
-  <span class="code-string">"@context"</span>: <span class="code-string">"https://schema.org"</span>,
-  <span class="code-string">"@type"</span>: <span class="code-string">"Restaurant"</span>,
-  <span class="code-string">"name"</span>: <span class="code-string">"Jade Star Chinese Dining 吉星饭厅"</span>,
-  <span class="code-string">"address"</span>: {
-    <span class="code-string">"@type"</span>: <span class="code-string">"PostalAddress"</span>,
-    <span class="code-string">"streetAddress"</span>: <span class="code-string">"No. 8, Jalan Nanas"</span>,
-    <span class="code-string">"addressLocality"</span>: <span class="code-string">"Kuching"</span>,
-    <span class="code-string">"postalCode"</span>: <span class="code-string">"93400"</span>,
-    <span class="code-string">"addressRegion"</span>: <span class="code-string">"Sarawak"</span>,
-    <span class="code-string">"addressCountry"</span>: <span class="code-string">"MY"</span>
-  },
-  <span class="code-string">"servesCuisine"</span>: [<span class="code-string">"Cantonese"</span>, <span class="code-string">"Chinese"</span>],
-  <span class="code-string">"priceRange"</span>: <span class="code-string">"RM 688 - RM 1,288 per set menu"</span>,
-  <span class="code-string">"acceptsReservations"</span>: <span class="code-string">"True"</span>,
-  <span class="code-string">"potentialAction"</span>: {
-    <span class="code-string">"@type"</span>: <span class="code-string">"ReserveAction"</span>,
-    <span class="code-string">"target"</span>: <span class="code-string">"...?view=booking"</span>,
-    <span class="code-string">"result"</span>: { <span class="code-string">"@type"</span>: <span class="code-string">"FoodEstablishmentReservation"</span> }
-  }
-}
-&lt;/script&gt;
-
-<span class="code-comment">&lt;!-- Block 2: FAQPage — surfaces 15 Q&amp;As as rich snippets --&gt;</span>
-&lt;script type="application/ld+json"&gt;
-{
-  <span class="code-string">"@context"</span>: <span class="code-string">"https://schema.org"</span>,
-  <span class="code-string">"@type"</span>: <span class="code-string">"FAQPage"</span>,
-  <span class="code-string">"mainEntity"</span>: [
-    { <span class="code-string">"@type"</span>:<span class="code-string">"Question"</span>,
-      <span class="code-string">"name"</span>:<span class="code-string">"When are CNY 2026 reservations open?"</span>,
-      <span class="code-string">"acceptedAnswer"</span>:{<span class="code-string">"@type"</span>:<span class="code-string">"Answer"</span>,<span class="code-string">"text"</span>:<span class="code-string">"...1 Jan 2026 – 31 Jan 2027..."</span>}}
-    <span class="code-comment">// 14 more Q&amp;As covering deposit, dietary, halal, private rooms, etc.</span>
-  ]
-}
-&lt;/script&gt;</div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>Bilingual Course Data — CATALOG Structure</h2>
-            <p>Six set menus, each with a bilingual description, 8–10 courses (each with bilingual name + bilingual description), auspicious highlights, and dietary options. <code>privateRoomAllowed</code> + <code>exclusiveVipRoom</code> drive the booking-form seating selector.</p>
-
-            <div class="code-container">
-                <div class="code-header">index.html — CATALOG sample (10-pax Set B, the signature)</div>
-                <div class="code-block">{
-  <span class="code-property">id</span>: <span class="code-string">'10b'</span>,
-  <span class="code-property">name</span>: <span class="code-string">'吉星 Lucky Star Signature Set B'</span>,
-  <span class="code-property">nameEn</span>: <span class="code-string">'Lucky Star Signature Set B'</span>,
-  <span class="code-property">pax</span>: <span class="code-number">10</span>, <span class="code-property">price</span>: <span class="code-number">1288</span>, <span class="code-property">perPax</span>: <span class="code-number">129</span>, <span class="code-property">courses</span>: <span class="code-number">10</span>, <span class="code-property">tier</span>: <span class="code-string">'signature'</span>,
-  <span class="code-property">image</span>: <span class="code-string">'images/menus/10-pax-set-b.jpeg'</span>,
-  <span class="code-property">description</span>: <span class="code-string">'Signature flagship — Lobster yee sang · cheese-baked lobster · suckling pig · bird\'s nest finale. VIP Room INCLUDED.'</span>,
-  <span class="code-property">courseList</span>: [
-    {
-      <span class="code-property">name</span>: <span class="code-string">'龙虾鲍鱼捞生'</span>,
-      <span class="code-property">nameEn</span>: <span class="code-string">'Lobster &amp; Abalone Yee Sang'</span>,
-      <span class="code-property">desc</span>: <span class="code-string">'Sliced fresh Boston lobster and South African abalone with gold-leaf crackers. ⭐ Signature.'</span>,
-      <span class="code-property">descZh</span>: <span class="code-string">'波士顿龙虾刺身配南非鲍鱼薄片，金箔脆片，⭐ 招牌捞生。'</span>,
-      <span class="code-property">auspicious</span>: <span class="code-string">'步步高升 — rising fortune'</span>
-    }
-    <span class="code-comment">// ... 9 more courses with bilingual desc/descZh</span>
-  ],
-  <span class="code-property">auspiciousHighlights</span>: [
-    { <span class="code-property">symbol</span>: <span class="code-string">'龙虾'</span>, <span class="code-property">meaning</span>: <span class="code-string">'strength'</span> },
-    { <span class="code-property">symbol</span>: <span class="code-string">'燕窝'</span>, <span class="code-property">meaning</span>: <span class="code-string">'longevity'</span> },
-    { <span class="code-property">symbol</span>: <span class="code-string">'乳猪'</span>, <span class="code-property">meaning</span>: <span class="code-string">'peace &amp; unity'</span> }
-  ],
-  <span class="code-property">dietaryOptions</span>: [<span class="code-string">'none'</span>,<span class="code-string">'noPork'</span>,<span class="code-string">'noBeef'</span>,<span class="code-string">'pescatarian'</span>,<span class="code-string">'vegetarian'</span>,<span class="code-string">'noShellfish'</span>],
-  <span class="code-property">privateRoomAllowed</span>: <span class="code-keyword">false</span>,        <span class="code-comment">// 10b is exclusively in VIP Room</span>
-  <span class="code-property">privateRoomSurcharge</span>: <span class="code-number">0</span>,
-  <span class="code-property">exclusiveVipRoom</span>: <span class="code-keyword">true</span>           <span class="code-comment">// reserveTable rejects vipRoom for any other set</span>
-}</div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>Project Files</h2>
-            <div class="code-container">
-                <div class="code-header">projects/ji-xing-cny-reservation/</div>
-                <div class="code-block">projects/ji-xing-cny-reservation/
-  index.html             <span class="code-comment"># Main app — multi-view SPA + WebMCP layer + Inspector Panel + bilingual UI (~2,000 lines)</span>
-  README.md              <span class="code-comment"># Project description + Auto Browser test instructions</span>
-  images/
-    logo.jpeg            <span class="code-comment"># 吉 brand mark (gold on dark brown circle)</span>
-    hero.jpeg            <span class="code-comment"># CNY banquet hero banner — yee sang prosperity toss</span>
-    menus/               <span class="code-comment"># 6 set-menu hero images, AI-generated via Imagen 3</span>
-      6-pax-set-a.jpeg
-      6-pax-set-b.jpeg
-      8-pax-set-a.jpeg
-      8-pax-set-b.jpeg
-      10-pax-set-a.jpeg
-      10-pax-set-b.jpeg
-  menu/                  <span class="code-comment"># Per-set markdown reference (6 files for menu detail)</span>
-    6-pax-set-a-menu.md
-    6-pax-set-b-menu.md
-    8-pax-set-a-menu.md
-    8-pax-set-b-menu.md
-    10-pax-set-a-menu.md
-    10-pax-set-b-menu.md</div>
-            </div>
-        </div>
-
-        <div class="demo-links">
-            <a href="projects/ji-xing-cny-reservation/index.html" class="demo-btn">Try Live Demo</a>
-            <a href="ji-xing-cny-reservation.html" class="demo-btn secondary">Back to Project Overview</a>
-        </div>
-
-        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
-            <a href="ji-xing-cny-reservation.html">&larr; Project Overview</a> |
-            <a href="index.html">Portfolio Home</a> |
-            <a href="category-agentic-commerce.html">Agentic Commerce</a>
-        </nav>
+  <div class="masthead">
+    <div class="mast-left">
+      <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+      <a class="logo" href="index.html">AI PROJECTS</a>
+      <nav class="mast-nav">
+        <a href="project-categories.html">Categories</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <div class="search-box">
+        <input type="text" class="search-input" id="searchInput" autocomplete="off" placeholder="Search AI projects..." aria-label="Search AI projects">
+        <span class="search-ic">&#128269;</span>
+        <div class="search-results" id="searchResults"></div>
+      </div>
     </div>
+  </div>
+  <hr class="rule-top">
+
+  <div class="crumb">
+    <a href="project-categories.html">Categories</a>
+    <span class="sep">/</span><a id="crumbCat" href="#"></a>
+    <span class="sep">/</span><a id="crumbProj" href="#"></a>
+    <span class="sep">/</span><span>Source</span>
+  </div>
+
+  <section class="src-head">
+    <div class="cover-strip" id="coverStrip" style="display:none"><img id="cover" alt=""></div>
+    <span class="rubric" id="kicker"></span>
+    <h1 id="title"></h1>
+    <p class="sub" id="subtitle"></p>
+    <div class="head-tech" id="headTech"></div>
+    <div class="head-btns" id="headBtns"></div>
+  </section>
+
+  <div id="body"></div>
+
+  <footer>&copy; 2026 Lee Yih Ven | AI Project Portfolio &middot; All rights reserved.</footer>
+  <div class="note">Sample Source-Showcase-E2 (TEMPLATE): source-code page on the index magazine system: slim cover banner, About, Project Structure, code walkthrough with copyable navy-barred code blocks, CTA. Reuse by editing only the PROJECT block at the top of the script.</div>
+
+<script>
+  const SITE = "";
+
+  /* =================================================================
+     EDIT PER PROJECT  -  the ONLY block you change per page.
+     Copy this file, swap PROJECT, save as <slug>-source.html.
+     - structure.code : the project file tree (plain text)
+     - walkthrough[]   : { heading, body, files:[{label, code}] }
+     - notes[]         : { heading, bullets:[...] }
+     Code strings can be multi-line; they render verbatim.
+     ================================================================= */
+  const PROJECT = {
+  "slug": "ji-xing-cny-reservation",
+  "category": "Agentic Commerce",
+  "categoryUrl": "category-agentic-commerce.html",
+  "title": "Jade Star Chinese Dining 吉星饭厅",
+  "subtitle": "The WebMCP layer: how the 7 reservation tools are defined, how the per-view tool surface swaps, how destructive actions are gated, and how Schema.org drives bilingual SEO.",
+  "cover": "images/ji-xing-cny-reservation/cover.jpeg",
+  "tech": [
+    "WebMCP (W3C)",
+    "7 Typed Tools",
+    "Per-View Scoping",
+    "Bilingual UI",
+    "Schema.org"
+  ],
+  "overviewUrl": "ji-xing-cny-reservation.html",
+  "demoLabel": "Try Live Demo",
+  "demoUrl": "https://lyven81.github.io/ai-project/projects/ji-xing-cny-reservation/index.html",
+  "repoUrl": "https://github.com/lyven81/ai-project/tree/main/projects/ji-xing-cny-reservation",
+  "about": "This curated walkthrough covers the WebMCP layer in Jade Star Chinese Dining 吉星饭厅: how the 7 reservation tools are defined, how the per-view tool surface swaps as the user moves through the booking flow, how destructive actions are gated by <code>requestUserInteraction()</code>, and how Schema.org structured data drives bilingual SEO. The entire app is one self-contained <code>index.html</code> (about 2,000 lines). No backend, no build step, no LLM calls from the page itself: agents that visit pay their own LLM cost via <code>navigator.modelContext</code>.",
+  "structure": {
+    "label": "projects/ji-xing-cny-reservation/",
+    "code": "projects/ji-xing-cny-reservation/\n  index.html             # Main app — multi-view SPA + WebMCP layer + Inspector Panel + bilingual UI (~2,000 lines)\n  README.md              # Project description + Auto Browser test instructions\n  images/\n    logo.jpeg            # 吉 brand mark (gold on dark brown circle)\n    hero.jpeg            # CNY banquet hero banner — yee sang prosperity toss\n    menus/               # 6 set-menu hero images, AI-generated via Imagen 3\n      6-pax-set-a.jpeg\n      6-pax-set-b.jpeg\n      8-pax-set-a.jpeg\n      8-pax-set-b.jpeg\n      10-pax-set-a.jpeg\n      10-pax-set-b.jpeg\n  menu/                  # Per-set markdown reference (6 files for menu detail)\n    6-pax-set-a-menu.md\n    6-pax-set-b-menu.md\n    8-pax-set-a-menu.md\n    8-pax-set-b-menu.md\n    10-pax-set-a-menu.md\n    10-pax-set-b-menu.md"
+  },
+  "walkthrough": [
+    {
+      "heading": "Core: Tool Definitions (TOOLS object)",
+      "body": "Each tool is a typed contract: name, human-readable description, JSON inputSchema for the agent to read, and an async <code>execute()</code> handler that runs the business logic and returns structured JSON. The killer demo tool is <code>checkAvailability</code>, the CNY equivalent of Sunny Car Accessories' <code>checkFitment</code>.",
+      "files": [
+        {
+          "label": "index.html: checkAvailability (the killer demo tool)",
+          "code": "const TOOLS = {\n  checkAvailability: {\n    name: 'checkAvailability',\n    description: 'Check available tables for a CNY date and sitting. Returns availability by table type. Lunch sittings closed on Reunion Eve & Day 1.',\n    inputSchema: {\n      type: 'object',\n      properties: {\n        date:        { type: 'string', format: 'date' },\n        sitting:     { type: 'string', enum: ['lunch-1','lunch-2','dinner-1','dinner-2'] },\n        partySize:   { type: 'integer', enum: [6, 8, 10] },\n        seatingType: { type: 'string', enum: ['mainHall','privateRoom','any'] }\n      },\n      required: ['date', 'sitting', 'partySize']\n    },\n    execute: async ({ date, sitting, partySize, seatingType = 'any' }) => {\n      // Date-window guard\n      if (date < SLOT_PERIOD.start || date > SLOT_PERIOD.end) {\n        return { type: 'text', text: `Reservations only 14-22 Feb 2026. Date ${date} outside window.` };\n      }\n      // Peak-day rule — Reunion Eve & Day 1: dinner only\n      if (PEAK_DAYS.includes(date) && sitting.startsWith('lunch')) {\n        return { type: 'text', text: `Lunch closed on Reunion Eve & Day 1. Dinner only.` };\n      }\n      const remaining = tablesRemainingForSitting(date, sitting, partySize);\n      return { type: 'json', data: {\n        date, sitting, partySize,\n        tablesRemaining: remaining,           // { mainHall, privateRoom, vipRoom, total }\n        compatibleSets: CATALOG.filter(s => s.pax === partySize)\n      }};\n    }\n  }\n  // 6 more tools: searchSetMenus, getSetMenuDetails, reserveTable,\n  //                getReservation, modifyReservation, cancelReservation\n};"
+        }
+      ]
+    },
+    {
+      "heading": "Per-View Tool Scoping (the killer feature)",
+      "body": "WebMCP's design choice: agents see only the 2 to 3 tools relevant to where they currently are. The tool surface morphs on every view change. <code>provideContext()</code> is called fresh per view. Destructive tools (<code>reserveTable</code>, <code>cancelReservation</code>) live only on the views where the user is in that intent, so agents on the homepage cannot accidentally cancel a booking.",
+      "files": [
+        {
+          "label": "index.html: VIEW_TOOLS map + refreshWebMCPTools()",
+          "code": "// Per-view tool surface — agents see only what's relevant where they are\nconst VIEW_TOOLS = {\n  home:           ['searchSetMenus', 'getSetMenuDetails'],\n  'set-detail':   ['getSetMenuDetails', 'checkAvailability'],\n  booking:        ['checkAvailability', 'reserveTable'],         // destructive lives here\n  confirmation:   ['getReservation'],                          // read-only follow-up\n  manage:         ['getReservation', 'modifyReservation', 'cancelReservation']\n};\n\n// Fires on EVERY showView() transition\nfunction refreshWebMCPTools(viewName) {\n  const toolNames = VIEW_TOOLS[viewName] || [];\n  const tools = toolNames.map(name => TOOLS[name]).filter(Boolean);\n  if (APP_STATE.webmcpActive && navigator.modelContext.provideContext) {\n    try {\n      navigator.modelContext.provideContext({ tools });   // W3C WebMCP API\n    } catch (e) { console.warn('[webmcp] provideContext failed', e); }\n  }\n  refreshInspectorPanel(toolNames);   // Update Inspector UI\n}"
+        }
+      ]
+    },
+    {
+      "heading": "requestUserInteraction(): Human-in-the-Loop on Destructive Actions",
+      "body": "Three tools are destructive: <code>reserveTable</code> places a reservation + 50% deposit, <code>modifyReservation</code> changes an existing booking, <code>cancelReservation</code> deletes a booking. All three pause for explicit user confirmation via the W3C-spec <code>requestUserInteraction()</code> API, with a custom-modal polyfill for browsers without native support.",
+      "files": [
+        {
+          "label": "index.html: requestUserConfirmation with polyfill fallback",
+          "code": "async function requestUserConfirmation(opts) {\n  // Try native WebMCP API first (Chrome 146+ with flags)\n  if (APP_STATE.webmcpActive && navigator.modelContext.requestUserInteraction) {\n    try {\n      const result = await navigator.modelContext.requestUserInteraction(opts);\n      return !!result;\n    } catch (e) { /* fall through to polyfill */ }\n  }\n  // Custom-modal fallback for browsers without WebMCP\n  return await showCustomConfirmModal(opts);\n}\n\n// Used by reserveTable.execute(), modifyReservation, cancelReservation:\nconst ok = await requestUserConfirmation({\n  title: 'Confirm Cancellation · 确认取消',\n  message: `Cancel reservation ${ref}? ${policy} This action cannot be undone.`,\n  confirmText: 'Cancel Booking · 取消预订',\n  cancelText:  'Keep Booking · 保留预订',\n  destructive: true      // styles confirm button red\n});\nif (!ok) return { type: 'text', text: 'Cancellation declined' };"
+        }
+      ]
+    },
+    {
+      "heading": "Mock Inventory: 480 Slots x 9 Days",
+      "body": "The CNY 2026 slot grid runs 14 to 22 February. 30 tables per restaurant, 15 bookable per sitting (50/50 booking-vs-walk-in mid-tier MY pattern), sliced by party size. Pre-filled booking density creates the demo's scarcity narrative: Reunion Eve dinner-2 is 14/15 booked (1 table left), driving urgency in the agent narrative.",
+      "files": [
+        {
+          "label": "index.html: INVENTORY generator",
+          "code": "function generateInventory() {\n  const inv = {};\n  // Per-sitting bookable allocation: 6→3, 8→4, 10→4, PRs→1 each (small/medium/large/VIP) = 15\n  const baseBookable = { 6: 3, 8: 4, 10: 4,\n                          small_pr: 1, medium_pr: 1, large_pr: 1, vip_pr: 1 };\n\n  // Demo scarcity profiles — drives the urgency narrative\n  const profiles = {\n    veryTight: { 6:3, 8:3, 10:4, small_pr:1, medium_pr:1, large_pr:1, vip_pr:1 },  // 14/15\n    tight:     { 6:2, 8:3, 10:3, small_pr:1, medium_pr:1, large_pr:1, vip_pr:1 },  // 12/15\n    busy:      { 6:2, 8:3, 10:2, small_pr:0, medium_pr:1, large_pr:1, vip_pr:0 },  //  9/15\n    moderate:  { 6:1, 8:2, 10:1, small_pr:0, medium_pr:0, large_pr:1, vip_pr:0 },  //  5/15\n    light:     { 6:1, 8:1, 10:1, small_pr:0, medium_pr:0, large_pr:0, vip_pr:0 }   //  3/15\n  };\n\n  ALL_DATES.forEach(d => {\n    inv[d.date] = {};\n    const isPeak = PEAK_DAYS.includes(d.date);\n    // Reunion Eve & Day 1: dinner only — no lunch sittings\n    const sittingsForDay = isPeak\n      ? ['dinner-1', 'dinner-2']\n      : ['lunch-1', 'lunch-2', 'dinner-1', 'dinner-2'];\n    sittingsForDay.forEach(s => {\n      const profile = pickDemoProfile(d.date, s);   // Reunion Eve = veryTight\n      inv[d.date][s] = { bookable: { ...baseBookable }, booked: { ...profiles[profile] } };\n    });\n  });\n  return inv;\n}"
+        }
+      ]
+    },
+    {
+      "heading": "Bilingual SEO: Schema.org Structured Data",
+      "body": "Three JSON-LD blocks in the document <code>&lt;head&gt;</code> drive Google's rich snippets and Knowledge Graph entries. The <code>FAQPage</code> markup is paired with the visible FAQ section so the same content powers both human readers and SERP rich snippets; bilingual content captures both English and Chinese keyword searches.",
+      "files": [
+        {
+          "label": "index.html: Schema.org JSON-LD blocks",
+          "code": "<!-- Block 1: Restaurant + ReserveAction (drives \"Reserve\" button in SERP) -->\n<script type=\"application/ld+json\">\n{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"Restaurant\",\n  \"name\": \"Jade Star Chinese Dining 吉星饭厅\",\n  \"address\": {\n    \"@type\": \"PostalAddress\",\n    \"streetAddress\": \"No. 8, Jalan Nanas\",\n    \"addressLocality\": \"Kuching\",\n    \"postalCode\": \"93400\",\n    \"addressRegion\": \"Sarawak\",\n    \"addressCountry\": \"MY\"\n  },\n  \"servesCuisine\": [\"Cantonese\", \"Chinese\"],\n  \"priceRange\": \"RM 688 - RM 1,288 per set menu\",\n  \"acceptsReservations\": \"True\",\n  \"potentialAction\": {\n    \"@type\": \"ReserveAction\",\n    \"target\": \"...?view=booking\",\n    \"result\": { \"@type\": \"FoodEstablishmentReservation\" }\n  }\n}\n</script>\n\n<!-- Block 2: FAQPage — surfaces 15 Q&As as rich snippets -->\n<script type=\"application/ld+json\">\n{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"FAQPage\",\n  \"mainEntity\": [\n    { \"@type\":\"Question\",\n      \"name\":\"When are CNY 2026 reservations open?\",\n      \"acceptedAnswer\":{\"@type\":\"Answer\",\"text\":\"...1 Jan 2026 – 31 Jan 2027...\"}}\n    // 14 more Q&As covering deposit, dietary, halal, private rooms, etc.\n  ]\n}\n</script>"
+        }
+      ]
+    },
+    {
+      "heading": "Bilingual Course Data: CATALOG Structure",
+      "body": "Six set menus, each with a bilingual description, 8 to 10 courses (each with bilingual name + bilingual description), auspicious highlights, and dietary options. <code>privateRoomAllowed</code> + <code>exclusiveVipRoom</code> drive the booking-form seating selector.",
+      "files": [
+        {
+          "label": "index.html: CATALOG sample (10-pax Set B, the signature)",
+          "code": "{\n  id: '10b',\n  name: '吉星 Lucky Star Signature Set B',\n  nameEn: 'Lucky Star Signature Set B',\n  pax: 10, price: 1288, perPax: 129, courses: 10, tier: 'signature',\n  image: 'images/menus/10-pax-set-b.jpeg',\n  description: 'Signature flagship — Lobster yee sang · cheese-baked lobster · suckling pig · bird\\'s nest finale. VIP Room INCLUDED.',\n  courseList: [\n    {\n      name: '龙虾鲍鱼捞生',\n      nameEn: 'Lobster & Abalone Yee Sang',\n      desc: 'Sliced fresh Boston lobster and South African abalone with gold-leaf crackers. ⭐ Signature.',\n      descZh: '波士顿龙虾刺身配南非鲍鱼薄片，金箔脆片，⭐ 招牌捞生。',\n      auspicious: '步步高升 — rising fortune'\n    }\n    // ... 9 more courses with bilingual desc/descZh\n  ],\n  auspiciousHighlights: [\n    { symbol: '龙虾', meaning: 'strength' },\n    { symbol: '燕窝', meaning: 'longevity' },\n    { symbol: '乳猪', meaning: 'peace & unity' }\n  ],\n  dietaryOptions: ['none','noPork','noBeef','pescatarian','vegetarian','noShellfish'],\n  privateRoomAllowed: false,        // 10b is exclusively in VIP Room\n  privateRoomSurcharge: 0,\n  exclusiveVipRoom: true           // reserveTable rejects vipRoom for any other set\n}"
+        }
+      ]
+    }
+  ],
+  "cta": "Want an agent-ready, zero-cost booking page like this built for your own festival or venue? Let's scope it."
+};
+  /* ===================== END EDIT BLOCK ===================== */
+
+  const pref = (u) => /^https?:|^mailto:|^tel:/.test(u || '') ? u : (SITE + (u || ''));
+  const esc = (s) => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const rich = (s) => esc(s).replace(/&lt;(\/?(?:b|code))&gt;/g, '<$1>');
+
+  // raw code store for copy buttons
+  const RAW = [];
+  function codeBlock(label, codeStr, extraClass){
+    const idx = RAW.push(codeStr) - 1;
+    const rendered = esc(codeStr).split('\n')
+      .map(line => /^\s*#/.test(line) ? `<span class="cmt">${line}</span>` : line).join('\n');
+    return `<div class="codeblock ${extraClass||''}">`+
+      `<div class="code-bar"><span class="path"><span>${esc(label)}</span></span>`+
+      `<button class="code-copy" data-idx="${idx}">Copy</button></div>`+
+      `<pre><code>${rendered}</code></pre></div>`;
+  }
+
+  // Breadcrumb + header
+  document.title = PROJECT.title + ": Source | AI Project Portfolio";
+  document.getElementById('crumbCat').textContent = PROJECT.category;
+  document.getElementById('crumbCat').href = pref(PROJECT.categoryUrl);
+  document.getElementById('crumbProj').textContent = PROJECT.title;
+  document.getElementById('crumbProj').href = pref(PROJECT.overviewUrl);
+  if (PROJECT.cover){
+    document.getElementById('coverStrip').style.display = '';
+    const c = document.getElementById('cover'); c.src = PROJECT.cover; c.alt = PROJECT.title + " cover";
+  }
+  document.getElementById('kicker').textContent = "Source Walkthrough · " + PROJECT.category;
+  document.getElementById('title').textContent = PROJECT.title;
+  document.getElementById('subtitle').textContent = PROJECT.subtitle;
+  document.getElementById('headTech').innerHTML = (PROJECT.tech||[]).map(t => `<span class="tech-chip">${esc(t)}</span>`).join('');
+  document.getElementById('headBtns').innerHTML =
+    (PROJECT.demoUrl ? `<a class="btn" href="${pref(PROJECT.demoUrl)}" target="_blank" rel="noopener">${esc(PROJECT.demoLabel||'Live Demo')}</a>` : '') +
+    (PROJECT.overviewUrl ? `<a class="btn ghost" href="${pref(PROJECT.overviewUrl)}">Project Overview</a>` : '') +
+    (PROJECT.repoUrl ? `<a class="btn ghost" href="${pref(PROJECT.repoUrl)}" target="_blank" rel="noopener">GitHub Repo</a>` : '');
+
+  const section = (tab, inner) => `<section class="sec"><div class="sec-rule"><span class="tab">${esc(tab)}</span>${inner}</div></section>`;
+  let html = "";
+  const P = PROJECT;
+
+  if (P.about){
+    html += section("About This Code", `<h2>About This Code Showcase</h2><p class="intro">${rich(P.about)}</p>`);
+  }
+  if (P.structure && P.structure.code){
+    html += section("Project Structure", `<h2>Project Structure</h2>`+
+      codeBlock(P.structure.label || 'project/', P.structure.code, 'tree'));
+  }
+  (P.walkthrough||[]).forEach(w => {
+    let inner = `<h2>${esc(w.heading)}</h2>`;
+    if (w.body) inner += `<p class="body">${rich(w.body)}</p>`;
+    (w.files||[]).forEach(f => { inner += codeBlock(f.label, f.code); });
+    html += section("Code", inner);
+  });
+  // CTA
+  html += `<section class="sec"><div class="cta-inner">`+
+    `<div><h3>Interested in the build?</h3><p>${esc(P.cta || "Let's talk.")}</p></div>`+
+    `<div class="cta-btns">`+
+    (P.demoUrl ? `<a class="btn" href="${pref(P.demoUrl)}" target="_blank" rel="noopener">${esc(P.demoLabel||'Live Demo')}</a>` : '')+
+    `<a class="btn ghost" href="${SITE}contact.html">Get in Touch</a>`+
+    `</div></div></section>`;
+
+  document.getElementById('body').innerHTML = html;
+
+  // Copy buttons
+  function copyText(text, btn){
+    const done = ()=>{ const o=btn.textContent; btn.textContent='Copied ✓'; setTimeout(()=>btn.textContent=o.includes('Copied')?'Copy':o,1400); };
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(done).catch(()=>fb(text,done)); }
+    else fb(text,done);
+  }
+  function fb(text,done){ const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(ta); done(); }
+  document.querySelectorAll('.code-copy').forEach(btn =>
+    btn.addEventListener('click', ()=> copyText(RAW[+btn.dataset.idx], btn)));
+
+  // Masthead search
+  const ITEMS = [
+    {t:PROJECT.title, c:PROJECT.category, s:PROJECT.slug},
+    {t:"Courier CS Quality Console", c:"Conversational Data Analytics", s:"courier-cs-quality-console"},
+    {t:"Voucher Analyzer", c:"Conversational Data Analytics", s:"voucher-analyzer"},
+    {t:"Wiseman", c:"Knowledge & Reference Chatbots", s:"wiseman"},
+    {t:"Sunny Car Accessories", c:"Agentic Commerce", s:"sunny-car-accessories"},
+    {t:"Bookshelf", c:"Multi-Agent Decision Systems", s:"bookshelf"}
+  ];
+  const searchInput = document.getElementById('searchInput');
+  const searchResults = document.getElementById('searchResults');
+  function runSearch(q){
+    if(q.trim().length < 2){ searchResults.style.display='none'; return; }
+    const ql = q.toLowerCase();
+    const hits = ITEMS.filter(it => (it.t+' '+it.c).toLowerCase().includes(ql));
+    searchResults.innerHTML = hits.length ? hits.map(it =>
+      `<div class="sr-item"><div class="sr-cat">${esc(it.c)}</div>`+
+      `<a href="${SITE}${it.s}.html"><div class="sr-title">${esc(it.t)}</div></a>`+
+      `<div class="sr-links"><a href="${SITE}${it.s}.html">View Details</a></div></div>`).join('')
+      : `<div class="sr-none">No projects found. Try a different keyword.</div>`;
+    searchResults.style.display='block';
+  }
+  searchInput.addEventListener('input', e => runSearch(e.target.value));
+  document.addEventListener('click', e => { if(!e.target.closest('.search-box')) searchResults.style.display='none'; });
+
+  // Drawer
+  const drawer=document.getElementById('drawer'), overlay=document.getElementById('overlay');
+  const openMenu=()=>{ drawer.classList.add('open'); overlay.classList.add('open'); };
+  const closeMenu=()=>{ drawer.classList.remove('open'); overlay.classList.remove('open'); };
+  document.getElementById('hamburger').addEventListener('click', openMenu);
+  document.getElementById('drawerClose').addEventListener('click', closeMenu);
+  overlay.addEventListener('click', closeMenu);
+  drawer.querySelectorAll('a').forEach(a=>a.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeMenu(); searchResults.style.display='none'; }});
+</script>
 </body>
 </html>

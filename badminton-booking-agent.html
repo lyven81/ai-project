@@ -1,616 +1,523 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Badminton Court Booking Agent - Agentic AI Workflow</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Badminton Court Booking Agent | AI Project Portfolio</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root{ --ink:#222; --paper:#fff; --hair:#dddddd; --gray:#555; --accent:#B8860B; --navy:#1E3A5F; --teal:#0D9488; }
+  html{ scroll-behavior:smooth; }
+  body{ background:var(--paper); color:var(--ink); font-family:Arial, Helvetica, sans-serif; line-height:1.6; overflow-x:hidden; }
+  a{ color:inherit; text-decoration:none; }
+  a:hover h2, a:hover h3, a:hover h4{ color:var(--accent); }
+  code{ font-family:"Courier New", monospace; font-size:.86em; background:#f2f3f5; padding:1px 5px; color:var(--navy); }
 
-        body {
-            font-family: 'Arial', sans-serif;
-            line-height: 1.6;
-            color: #222;
-            background-color: #ffffff;
-        }
+  /* Masthead (shared) */
+  .masthead{ display:flex; align-items:center; justify-content:space-between; padding:14px 28px; max-width:1240px; margin:0 auto; gap:18px; }
+  .mast-left{ display:flex; align-items:center; gap:20px; }
+  .logo{ background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; letter-spacing:3px; font-size:.95rem; padding:8px 12px; white-space:nowrap; }
+  .mast-nav{ display:flex; gap:20px; font-family:Arial, Helvetica, sans-serif; font-size:.72rem; letter-spacing:1.4px; text-transform:uppercase; }
+  .mast-nav a:hover{ color:var(--accent); }
+  .hamburger{ display:none; flex-direction:column; gap:4px; background:none; border:none; cursor:pointer; padding:6px; }
+  .hamburger span{ width:22px; height:2px; background:#222; display:block; }
+  .rule-top{ border:none; border-top:3px solid #222; max-width:1240px; margin:0 auto; }
 
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+  /* Search (shared) */
+  .search-box{ position:relative; width:200px; }
+  .search-input{ width:100%; padding:7px 30px 7px 12px; border:1px solid var(--hair); background:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; color:#222; }
+  .search-input:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(184,134,11,.15); }
+  .search-ic{ position:absolute; right:10px; top:50%; transform:translateY(-50%); color:var(--gray); font-size:.8rem; pointer-events:none; }
+  .search-results{ position:absolute; top:calc(100% + 4px); left:0; width:340px; max-width:86vw; background:#fff; border:1px solid #222; max-height:60vh; overflow-y:auto; z-index:120; display:none; }
+  .sr-item{ padding:12px 14px; border-bottom:1px solid var(--hair); }
+  .sr-item:last-child{ border-bottom:none; }
+  .sr-cat{ font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; margin-bottom:4px; color:var(--accent); }
+  .sr-title{ font-weight:700; font-size:1.02rem; color:#222; }
+  .sr-links{ font-size:.58rem; letter-spacing:.8px; text-transform:uppercase; color:var(--gray); margin-top:5px; }
+  .sr-links a:hover{ color:var(--accent); }
+  .sr-none{ padding:16px 14px; font-size:.82rem; color:var(--gray); }
 
-        .back-nav {
-            margin-bottom: 20px;
-        }
+  /* Shared type bits */
+  .tab{ display:inline-block; background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.66rem; letter-spacing:2px; text-transform:uppercase; padding:6px 12px; }
+  .rubric{ font-family:Arial, Helvetica, sans-serif; font-size:.62rem; font-weight:700; letter-spacing:1.6px; text-transform:uppercase; color:var(--accent); display:block; margin-bottom:8px; }
+  .links{ font-family:Arial, Helvetica, sans-serif; font-size:.58rem; letter-spacing:1px; text-transform:uppercase; margin-top:10px; color:var(--gray); }
+  .links a:hover{ color:var(--accent); }
+  .lead-dek{ font-style:italic; color:#333; }
+  .tech-chip{ display:inline-block; border:1px solid var(--hair); padding:6px 12px; font-size:.72rem; letter-spacing:.3px; color:#333; white-space:nowrap; }
+  .tech-chip:hover{ border-color:var(--accent); color:var(--accent); }
 
-        .back-nav a {
-            color: #007BFF;
-            text-decoration: none;
-            font-size: 1rem;
-        }
+  /* Breadcrumb */
+  .crumb{ max-width:1240px; margin:0 auto; padding:20px 28px 0; font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--gray); }
+  .crumb a:hover{ color:var(--accent); }
+  .crumb .sep{ color:var(--hair); margin:0 8px; }
 
-        .back-nav a:hover {
-            text-decoration: underline;
-        }
+  /* ===== HERO (cover image feature opener) ===== */
+  .hero{ max-width:1240px; margin:0 auto; padding:16px 28px 8px; }
+  .cover-wrap{ border:1px solid var(--hair); box-shadow:0 1px 0 rgba(30,58,95,.06); line-height:0; background:#eef1f4; }
+  .cover{ width:100%; aspect-ratio:2 / 1; object-fit:cover; display:block; }
+  .hero-copy{ padding:22px 0 6px; }
+  .hero-copy h1{ font-size:2.7rem; font-weight:900; line-height:1.03; letter-spacing:-.008em; }
+  .hero-copy .tagline{ font-style:italic; font-size:1.15rem; color:#333; margin-top:10px; max-width:60ch; }
+  .hero-tech{ display:flex; flex-wrap:wrap; gap:9px; margin-top:16px; }
+  .hero-btns{ display:flex; flex-wrap:wrap; gap:12px; margin-top:18px; }
+  .btn{ display:inline-block; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.7rem; letter-spacing:1.6px; text-transform:uppercase; padding:13px 24px; border:1px solid #222; background:#222; color:#fff; cursor:pointer; transition:.15s; }
+  .btn:hover{ background:var(--accent); border-color:var(--accent); }
+  .btn.ghost{ background:#fff; color:#222; }
+  .btn.ghost:hover{ color:var(--accent); border-color:var(--accent); background:#fff; }
 
-        .project-header {
-            text-align: center;
-            margin-bottom: 40px;
-            padding: 40px 0;
-            background: linear-gradient(135deg, #4CAF50, #388E3C);
-            color: white;
-            border-radius: 10px;
-        }
+  /* ===== SECTION SHELL ===== */
+  .sec{ max-width:1240px; margin:0 auto; padding:26px 28px; }
+  .sec-rule{ border-top:3px solid #222; padding-top:16px; }
+  .sec .tab{ margin-bottom:14px; }
+  .sec h2{ font-size:1.7rem; font-weight:900; line-height:1.06; }
+  .sec .intro{ color:#333; font-size:1.02rem; margin-top:10px; max-width:80ch; }
 
-        .project-header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
+  /* Two-column challenge / solution */
+  .duo{ display:grid; grid-template-columns:1fr 1fr; margin-top:20px; }
+  .duo > div:first-child{ padding-right:30px; border-right:1px solid var(--hair); }
+  .duo > div:last-child{ padding-left:30px; }
+  .duo p{ color:#333; }
 
-        .project-header p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
+  /* Editorial bullet list */
+  .blist{ list-style:none; margin-top:18px; border-top:1px solid var(--hair); }
+  .blist li{ padding:13px 0; border-bottom:1px solid var(--hair); color:#333; font-size:.96rem; }
+  .blist li b{ color:#222; }
 
-        .badges {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin: 20px 0;
-            flex-wrap: wrap;
-        }
+  /* Feature / AI grid (borderless hairline cards) */
+  .fgrid{ display:grid; grid-template-columns:repeat(3,1fr); border-top:1px solid var(--hair); margin-top:20px; }
+  .fcard{ padding:20px 22px; border-right:1px solid var(--hair); border-bottom:1px solid var(--hair); }
+  .fcard:nth-child(3n){ border-right:none; }
+  .fcard .fe{ font-size:1.5rem; }
+  .fcard h4{ font-size:1.08rem; font-weight:700; line-height:1.18; margin:9px 0 6px; }
+  .fcard p{ font-size:.9rem; color:#444; line-height:1.5; }
 
-        .badge {
-            background-color: rgba(255, 255, 255, 0.2);
-            color: white;
-            padding: 5px 12px;
-            border-radius: 15px;
-            font-size: 0.9rem;
-        }
+  /* Comparison table */
+  .table-scroll{ overflow-x:auto; margin-top:20px; border-top:1px solid var(--hair); }
+  table.cmp{ width:100%; border-collapse:collapse; min-width:640px; }
+  table.cmp th, table.cmp td{ text-align:left; vertical-align:top; padding:13px 16px; border-bottom:1px solid var(--hair); font-size:.9rem; }
+  table.cmp thead th{ font-size:.62rem; font-weight:700; letter-spacing:1.2px; text-transform:uppercase; color:var(--navy); border-bottom:2px solid var(--accent); }
+  table.cmp tbody td:first-child{ font-weight:700; color:#222; white-space:nowrap; }
+  table.cmp tbody tr:hover{ background:#fbfbf8; }
 
-        .demo-links {
-            text-align: center;
-            margin: 30px 0;
-        }
+  /* Architecture stacks */
+  .stacks{ display:grid; grid-template-columns:repeat(2,1fr); gap:22px 34px; margin-top:20px; }
+  .stack .rubric{ margin-bottom:10px; }
+  .stack-chips{ display:flex; flex-wrap:wrap; gap:8px; }
+  .sys-list{ list-style:none; margin-top:24px; border-top:1px solid var(--hair); }
+  .sys-list li{ padding:13px 0 13px 0; border-bottom:1px solid var(--hair); color:#333; font-size:.95rem; }
+  .sys-list li b{ color:var(--navy); }
 
-        .demo-btn {
-            display: inline-block;
-            background-color: #4CAF50;
-            color: white;
-            padding: 12px 25px;
-            text-decoration: none;
-            border-radius: 5px;
-            margin: 0 10px;
-            font-weight: bold;
-            transition: background-color 0.3s;
-        }
+  /* Metrics row */
+  .metrics{ display:grid; grid-template-columns:repeat(4,1fr); border-top:1px solid var(--hair); margin-top:20px; }
+  .metric{ padding:22px 18px; border-right:1px solid var(--hair); }
+  .metric:last-child{ border-right:none; }
+  .metric .v{ font-size:2.6rem; font-weight:900; line-height:1; color:#222; letter-spacing:-.01em; }
+  .metric .l{ font-size:.62rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--gray); margin-top:9px; }
 
-        .demo-btn:hover {
-            background-color: #388E3C;
-        }
+  /* CTA */
+  .cta-inner{ display:flex; align-items:center; gap:18px; flex-wrap:wrap; border-top:3px solid #222; padding-top:18px; }
+  .cta-inner h3{ font-size:1.4rem; font-weight:900; line-height:1.08; }
+  .cta-inner p{ color:var(--gray); font-size:.95rem; margin-top:4px; }
+  .cta-btns{ margin-left:auto; display:flex; gap:12px; flex-wrap:wrap; }
 
-        .demo-btn.secondary {
-            background-color: #4CAF50;
-        }
+  footer{ background:#222; max-width:1240px; margin:30px auto 0; padding:24px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; letter-spacing:.5px; color:#fff; text-align:center; }
+  .note{ max-width:1240px; margin:14px auto 0; padding:8px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.62rem; letter-spacing:1px; color:#999; }
 
-        .demo-btn.secondary:hover {
-            background-color: #4CAF50;
-        }
+  /* Drawer (shared) */
+  .drawer{ position:fixed; top:0; left:-300px; width:280px; height:100vh; background:#fff; z-index:200; box-shadow:2px 0 14px rgba(0,0,0,.15); transition:left .28s ease; padding:74px 26px 26px; }
+  .drawer.open{ left:0; }
+  .drawer a{ display:block; font-family:Arial, Helvetica, sans-serif; font-size:.82rem; letter-spacing:1.2px; text-transform:uppercase; padding:14px 0; border-bottom:1px solid var(--hair); }
+  .overlay{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:150; }
+  .overlay.open{ display:block; }
+  .drawer-close{ position:absolute; top:20px; right:20px; font-family:Arial, Helvetica, sans-serif; font-size:1.4rem; background:none; border:none; cursor:pointer; }
 
-        .content-section {
-            margin: 40px 0;
-            padding: 30px;
-            background-color: #f9f9f9;
-            border-radius: 8px;
-            border-left: 5px solid #4CAF50;
-        }
-
-        .content-section h2 {
-            color: #4CAF50;
-            margin-bottom: 20px;
-            font-size: 1.8rem;
-        }
-
-        .content-section h3 {
-            color: #333;
-            margin: 20px 0 10px 0;
-            font-size: 1.3rem;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin: 20px 0;
-        }
-
-        .feature-item {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-        }
-
-        .feature-item h4 {
-            color: #4CAF50;
-            margin-bottom: 10px;
-        }
-
-        .tech-stack {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin: 15px 0;
-        }
-
-        .tech-item {
-            background-color: #4CAF50;
-            color: white;
-            padding: 5px 12px;
-            border-radius: 15px;
-            font-size: 0.9rem;
-        }
-
-        .code-block {
-            background-color: #f4f4f4;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 15px;
-            margin: 15px 0;
-            font-family: monospace;
-            overflow-x: auto;
-        }
-
-        .metrics {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin: 20px 0;
-        }
-
-        .metric-card {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
-            border: 2px solid #4CAF50;
-        }
-
-        .metric-number {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #4CAF50;
-        }
-
-        .metric-label {
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        .pricing-table {
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            overflow: hidden;
-            margin: 20px 0;
-        }
-
-        .pricing-table table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .pricing-table th, .pricing-table td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-
-        .pricing-table th {
-            background-color: #4CAF50;
-            color: white;
-        }
-
-        @media (max-width: 768px) {
-            .project-header h1 {
-                font-size: 2rem;
-            }
-
-            .project-header p {
-                font-size: 1rem;
-            }
-
-            .badges {
-                justify-content: center;
-            }
-
-            .demo-btn {
-                margin: 5px;
-                padding: 10px 20px;
-            }
-
-            .container {
-                padding: 15px;
-            }
-        }
-    </style>
+  @media (max-width:900px){
+    .duo{ grid-template-columns:1fr; }
+    .duo > div:first-child{ padding-right:0; border-right:none; padding-bottom:18px; border-bottom:1px solid var(--hair); margin-bottom:18px; }
+    .duo > div:last-child{ padding-left:0; }
+    .fgrid{ grid-template-columns:repeat(2,1fr); }
+    .fcard:nth-child(3n){ border-right:1px solid var(--hair); }
+    .fcard:nth-child(2n){ border-right:none; }
+    .stacks{ grid-template-columns:1fr; }
+    .metrics{ grid-template-columns:repeat(2,1fr); }
+    .metric:nth-child(2n){ border-right:none; }
+    .metric:nth-child(-n+2){ border-bottom:1px solid var(--hair); }
+    .cta-btns{ margin-left:0; }
+    .mast-nav{ display:none; }
+    .hamburger{ display:flex; }
+    .masthead{ padding:12px 16px; }
+    .mast-left{ gap:10px; min-width:0; flex:1; }
+    .logo{ font-size:.72rem; letter-spacing:1.5px; padding:6px 8px; }
+    .search-box{ flex:1; width:auto; min-width:0; }
+    .search-results{ position:fixed; top:58px; left:12px; right:12px; width:auto; max-width:none; }
+    .hero-copy h1{ font-size:2.05rem; }
+  }
+  @media (max-width:560px){
+    .fgrid{ grid-template-columns:1fr; }
+    .fcard{ border-right:none !important; }
+    .metrics{ grid-template-columns:1fr; }
+    .metric{ border-right:none; border-bottom:1px solid var(--hair); }
+    .metric:last-child{ border-bottom:none; }
+  }
+</style>
 </head>
 <body>
-    <div class="container">
-        <nav class="back-nav">
-            <a href="index.html">← Back to Portfolio</a>
-        </nav>
 
-        <div class="project-header">
-            <h1>Badminton Court Booking Agent</h1>
-            <p>WhatsApp agent that books badminton courts for you</p>
+  <div class="overlay" id="overlay"></div>
+  <nav class="drawer" id="drawer">
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">&times;</button>
+    <a href="index.html">Home</a>
+    <a href="project-categories.html">Categories</a>
+    <a href="contact.html">Contact</a>
+    <a href="https://lyven81.github.io/data-analyst-portfolio/index.html">Data Portfolio</a>
+  </nav>
 
-            <div class="badges">
-                <span class="badge">Python 3.8+</span>
-                <span class="badge">FastAPI</span>
-                <span class="badge">Google Gemini 2.5 Flash</span>
-                <span class="badge">TinyDB</span>
-                <span class="badge">M5 Agentic Workflow</span>
-                <span class="badge">Production Ready</span>
-            </div>
-        </div>
-
-        <div class="demo-links">
-            <a href="projects/badminton-booking-agent/demo.html" class="demo-btn">Launch Live Demo</a>
-            <a href="badminton-booking-agent-source.html" class="demo-btn secondary">View Source Code</a>
-        </div>
-
-        <div class="content-section">
-            <h2>Project Overview & Problem Statement</h2>
-            <p><strong>Challenge:</strong> Traditional booking systems require extensive development for business logic, validation rules, and edge cases. They're rigid, difficult to modify, and can't adapt to natural language requests or complex business rules without significant coding effort.</p>
-
-            <p><strong>Solution:</strong> This project implements an agentic AI workflow where the LLM (Google Gemini 2.5 Flash) generates and executes Python code dynamically. Instead of hard-coded business logic, the AI agent interprets user requests, writes the necessary code, and executes it to perform bookings, cancellations, and queries - all while enforcing complex pricing rules and conflict detection.</p>
-
-            <h3>Key Benefits</h3>
-            <ul>
-                <li><strong>24/7 Autonomous Operation:</strong> AI agent handles all booking requests without human intervention</li>
-                <li><strong>Natural Language Interface:</strong> Users can make requests in plain English or Malay</li>
-                <li><strong>Dynamic Pricing:</strong> Four-tier time-based pricing (daytime/nighttime, weekday/weekend)</li>
-                <li><strong>Intelligent Conflict Detection:</strong> Automatically prevents double bookings and validates Malaysian IC numbers</li>
-                <li><strong>Code-as-Action Pattern:</strong> LLM generates executable Python code for each request, enabling complex business logic</li>
-            </ul>
-        </div>
-
-        <div class="content-section">
-            <h2>AI Capabilities & Technical Innovation</h2>
-
-            <div class="features-grid">
-                <div class="feature-item">
-                    <h4>Agentic AI Workflow</h4>
-                    <p>Implements the M5 Agentic Workflow pattern where the LLM generates executable Python code as actions. Each user request triggers code generation, validation, and execution in a secure sandbox environment.</p>
-                </div>
-
-                <div class="feature-item">
-                    <h4>24/7 Autonomous Operations</h4>
-                    <p>Operates independently without human oversight, handling bookings, cancellations, availability checks, and complex queries through natural language understanding and code generation.</p>
-                </div>
-
-                <div class="feature-item">
-                    <h4>Dynamic Time-Based Pricing</h4>
-                    <p>Implements four pricing tiers based on time of day and day of week: Daytime (6am-6pm), Nighttime (6pm-6am), Weekday, Weekend - all managed through AI-generated code logic.</p>
-                </div>
-
-                <div class="feature-item">
-                    <h4>Automatic Conflict Detection</h4>
-                    <p>AI-generated validation code checks for booking conflicts across 12 courts, validates Malaysian IC numbers (format: YYMMDD-PB-###G), and enforces business rules automatically.</p>
-                </div>
-            </div>
-
-            <h3>AI Processing Pipeline (M5 Agentic Workflow)</h3>
-            <ul>
-                <li><strong>Request Analysis:</strong> Gemini 2.5 Flash interprets natural language booking requests</li>
-                <li><strong>Code Generation:</strong> LLM writes Python code to execute the required action (book, cancel, query)</li>
-                <li><strong>Code Validation:</strong> Generated code is validated for safety and correctness</li>
-                <li><strong>Execution:</strong> Code runs in a secure environment with access to booking database</li>
-                <li><strong>Response Generation:</strong> Results are formatted into natural language responses</li>
-            </ul>
-        </div>
-
-        <div class="content-section">
-            <h2>Technical Architecture & Implementation</h2>
-
-            <h3>Backend Architecture</h3>
-            <div class="tech-stack">
-                <span class="tech-item">Python 3.8+</span>
-                <span class="tech-item">FastAPI Framework</span>
-                <span class="tech-item">Google Gemini 2.5 Flash</span>
-                <span class="tech-item">TinyDB (JSON Database)</span>
-                <span class="tech-item">Async/Await</span>
-            </div>
-
-            <h3>AI & Agentic Technologies</h3>
-            <div class="tech-stack">
-                <span class="tech-item">M5 Agentic Workflow</span>
-                <span class="tech-item">Code-as-Action Pattern</span>
-                <span class="tech-item">Dynamic Code Generation</span>
-                <span class="tech-item">Natural Language Processing</span>
-                <span class="tech-item">Context-Aware AI</span>
-            </div>
-
-            <h3>Deployment & Infrastructure</h3>
-            <div class="tech-stack">
-                <span class="tech-item">Google Cloud Run</span>
-                <span class="tech-item">Docker Containers</span>
-                <span class="tech-item">CI/CD Pipelines</span>
-                <span class="tech-item">Auto Scaling</span>
-                <span class="tech-item">Persistent Storage</span>
-            </div>
-
-            <h3>System Architecture</h3>
-            <p><strong>Agentic AI Workflow:</strong></p>
-            <ul>
-                <li>FastAPI backend receives natural language booking requests</li>
-                <li>Gemini 2.5 Flash analyzes intent and generates Python code</li>
-                <li>Generated code interacts with TinyDB for CRUD operations</li>
-                <li>Business logic (pricing, conflicts, validation) embedded in generated code</li>
-                <li>Results returned as natural language responses</li>
-            </ul>
-        </div>
-
-        <div class="content-section">
-            <h2>Dynamic Pricing System</h2>
-
-            <div class="pricing-table">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Time Period</th>
-                            <th>Weekday Rate (RM/hour)</th>
-                            <th>Weekend Rate (RM/hour)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Daytime (6:00 AM - 6:00 PM)</td>
-                            <td>RM 80</td>
-                            <td>RM 90</td>
-                        </tr>
-                        <tr>
-                            <td>Nighttime (6:00 PM - 6:00 AM)</td>
-                            <td>RM 100</td>
-                            <td>RM 120</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <h3>Malaysian Context Features</h3>
-            <ul>
-                <li><strong>IC Number Validation:</strong> Format YYMMDD-PB-###G (e.g., 850715-08-1234)</li>
-                <li><strong>Currency:</strong> All prices in Malaysian Ringgit (RM)</li>
-                <li><strong>12 Courts Available:</strong> Courts numbered 1-12</li>
-                <li><strong>Local Business Hours:</strong> 6 AM to midnight operations</li>
-            </ul>
-        </div>
-
-        <div class="content-section">
-            <h2>API Endpoints & Usage Examples</h2>
-
-            <h3>Core API Endpoints</h3>
-            <div class="code-block">
-POST /book
-- Books a badminton court with automatic conflict detection
-- Calculates pricing based on time and day
-- Validates Malaysian IC numbers
-
-POST /cancel
-- Cancels existing booking by IC number and court
-- Refund processing and availability update
-
-GET /availability
-- Checks court availability for specific date/time
-- Returns available courts and pricing
-
-GET /bookings
-- Lists all bookings with filters (date, court, IC)
-- Supports pagination and sorting
-            </div>
-
-            <h3>Example Natural Language Requests</h3>
-            <div class="code-block">
-"Book court 5 for tomorrow at 7 PM for 2 hours. IC: 850715-08-1234"
-
-"Cancel my booking for court 3 on 2024-12-25"
-
-"What courts are available this Saturday evening?"
-
-"Show me all bookings for IC number 920315-10-5678"
-
-"I want to book court 1 from 8am to 10am on Monday"
-            </div>
-
-            <h3>Code-as-Action Example</h3>
-            <p>When a user says "Book court 5 tomorrow at 7 PM", the LLM generates code like:</p>
-            <div class="code-block">
-from datetime import datetime, timedelta
-from tinydb import TinyDB, Query
-
-# Calculate booking details
-booking_date = (datetime.now() + timedelta(days=1)).date()
-start_time = datetime.combine(booking_date, datetime.strptime("19:00", "%H:%M").time())
-end_time = start_time + timedelta(hours=2)
-
-# Determine pricing
-is_weekend = booking_date.weekday() >= 5
-is_nighttime = start_time.hour >= 18 or start_time.hour < 6
-rate = 120 if (is_weekend and is_nighttime) else 100 if is_nighttime else 90 if is_weekend else 80
-
-# Check conflicts and create booking
-# ... (conflict detection code)
-# ... (insert into database)
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>Development Setup & Installation Guide</h2>
-
-            <h3>Prerequisites</h3>
-            <ul>
-                <li><strong>Python 3.8+</strong> with pip package manager</li>
-                <li><strong>Google Gemini API Key</strong> (Gemini 2.5 Flash)</li>
-                <li><strong>Virtual Environment</strong> for dependency isolation</li>
-                <li><strong>Development Tools:</strong> VS Code with Python extensions</li>
-            </ul>
-
-            <h3>Quick Start Installation</h3>
-            <div class="code-block">
-# Clone the repository
-git clone https://github.com/lyven81/ai-project.git
-cd ai-project/projects/badminton-booking-agent
-
-# Create virtual environment
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Set up environment variables
-cp .env.example .env
-# Add your Gemini API key to .env
-
-# Run the application
-uvicorn main:app --reload --port 8000
-            </div>
-
-            <h3>Environment Configuration</h3>
-            <div class="code-block">
-# Required API Configuration
-GEMINI_API_KEY=your_gemini_api_key_here
-
-# Application Settings
-PORT=8000
-DATABASE_PATH=./data/bookings.json
-MAX_COURTS=12
-DEBUG_MODE=false
-            </div>
-
-            <h3>Development Workflow</h3>
-            <ul>
-                <li><strong>Local Development:</strong> FastAPI auto-reload for rapid iteration</li>
-                <li><strong>Testing:</strong> Comprehensive test suite with mock bookings</li>
-                <li><strong>Code Quality:</strong> Black formatting and pylint validation</li>
-                <li><strong>Documentation:</strong> Auto-generated API docs at /docs</li>
-            </ul>
-        </div>
-
-        <div class="content-section">
-            <h2>Deployment Options & Production Configuration</h2>
-
-            <h3>Google Cloud Run Deployment (Recommended)</h3>
-            <div class="code-block">
-# Build and deploy using Cloud Build
-gcloud builds submit --config cloudbuild.yaml
-
-# Direct deployment
-gcloud run deploy badminton-booking-agent \
-  --image gcr.io/PROJECT-ID/badminton-booking-agent \
-  --platform managed \
-  --region us-west1 \
-  --set-env-vars GEMINI_API_KEY=your_api_key \
-  --allow-unauthenticated
-            </div>
-
-            <h3>Alternative Deployment Methods</h3>
-            <ul>
-                <li><strong>Docker Containers:</strong> Containerized deployment for any cloud provider</li>
-                <li><strong>AWS Lambda:</strong> Serverless deployment with API Gateway</li>
-                <li><strong>Heroku:</strong> Simple deployment with Procfile configuration</li>
-                <li><strong>Railway/Render:</strong> One-click deployment platforms</li>
-            </ul>
-
-            <h3>Production Optimizations</h3>
-            <ul>
-                <li><strong>Performance:</strong> Async processing for concurrent requests</li>
-                <li><strong>Security:</strong> Code sandbox execution, input validation, rate limiting</li>
-                <li><strong>Monitoring:</strong> Application logs and performance metrics</li>
-                <li><strong>Scalability:</strong> Stateless design enables horizontal scaling</li>
-                <li><strong>Persistence:</strong> TinyDB with file-based storage, supports backup/restore</li>
-            </ul>
-        </div>
-
-        <div class="content-section">
-            <h2>Performance Metrics & Business Impact</h2>
-
-            <div class="metrics">
-                <div class="metric-card">
-                    <div class="metric-number">2-4s</div>
-                    <div class="metric-label">Average Response Time</div>
-                </div>
-                <div class="metric-card">
-                    <div class="metric-number">12</div>
-                    <div class="metric-label">Courts Managed</div>
-                </div>
-                <div class="metric-card">
-                    <div class="metric-number">24/7</div>
-                    <div class="metric-label">Autonomous Operation</div>
-                </div>
-                <div class="metric-card">
-                    <div class="metric-number">100%</div>
-                    <div class="metric-label">Conflict Detection</div>
-                </div>
-            </div>
-
-            <h3>Business Value Demonstration</h3>
-            <ul>
-                <li><strong>Automation:</strong> Eliminates need for manual booking management staff</li>
-                <li><strong>Availability:</strong> 24/7 booking service increases revenue opportunities</li>
-                <li><strong>Accuracy:</strong> Zero double-bookings through automatic conflict detection</li>
-                <li><strong>Flexibility:</strong> Easy to add new business rules without code changes</li>
-                <li><strong>Scalability:</strong> Can handle hundreds of concurrent booking requests</li>
-                <li><strong>Customer Experience:</strong> Natural language interface improves user satisfaction</li>
-            </ul>
-
-            <h3>Technical Performance</h3>
-            <ul>
-                <li><strong>Speed:</strong> 2-4 seconds end-to-end booking processing</li>
-                <li><strong>Reliability:</strong> 99.9% uptime with error handling and retries</li>
-                <li><strong>Accuracy:</strong> 100% conflict detection rate</li>
-                <li><strong>Concurrency:</strong> Handles 50+ simultaneous requests</li>
-                <li><strong>Code Generation:</strong> Average 1-2 seconds for LLM to generate code</li>
-            </ul>
-        </div>
-
-        <div class="content-section">
-            <h2>Key Innovations & Learning Outcomes</h2>
-
-            <h3>M5 Agentic Workflow Pattern</h3>
-            <ul>
-                <li><strong>Code-as-Action:</strong> LLM generates executable code instead of structured responses</li>
-                <li><strong>Dynamic Logic:</strong> Business rules embedded in AI-generated code, not hardcoded</li>
-                <li><strong>Self-Validating:</strong> AI includes validation logic in generated code</li>
-                <li><strong>Contextual Awareness:</strong> Code adapts to Malaysian context (IC, RM, local time)</li>
-            </ul>
-
-            <h3>Technical Challenges Solved</h3>
-            <ul>
-                <li><strong>Secure Code Execution:</strong> Sandboxed environment prevents malicious code</li>
-                <li><strong>State Management:</strong> TinyDB provides persistence across executions</li>
-                <li><strong>Error Handling:</strong> Graceful degradation when code generation fails</li>
-                <li><strong>Complex Pricing Logic:</strong> Four-tier dynamic pricing managed by AI</li>
-                <li><strong>Natural Language Understanding:</strong> Handles varied request formats</li>
-            </ul>
-        </div>
-
-        <div class="demo-links">
-            <a href="projects/badminton-booking-agent/demo.html" class="demo-btn">Try Live Demo</a>
-            <a href="https://github.com/lyven81/ai-project/tree/main/projects/badminton-booking-agent" target="_blank" class="demo-btn secondary">GitHub Repository</a>
-        </div>
-
-        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
-            <a href="index.html">← Back to Portfolio</a> |
-            <a href="project-categories.html">View All Categories</a>
-        </nav>
+  <div class="masthead">
+    <div class="mast-left">
+      <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+      <a class="logo" href="index.html">AI PROJECTS</a>
+      <nav class="mast-nav">
+        <a href="project-categories.html">Categories</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <div class="search-box">
+        <input type="text" class="search-input" id="searchInput" autocomplete="off" placeholder="Search AI projects..." aria-label="Search AI projects">
+        <span class="search-ic">&#128269;</span>
+        <div class="search-results" id="searchResults"></div>
+      </div>
     </div>
+  </div>
+  <hr class="rule-top">
+
+  <div class="crumb">
+    <a href="project-categories.html">Categories</a>
+    <span class="sep">/</span><a id="crumbCat" href="#"></a>
+    <span class="sep">/</span><span id="crumbHere"></span>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="cover-wrap"><img class="cover" id="cover" alt=""></div>
+    <div class="hero-copy">
+      <span class="rubric" id="kicker"></span>
+      <h1 id="title"></h1>
+      <p class="tagline" id="tagline"></p>
+      <div class="hero-tech" id="heroTech"></div>
+      <div class="hero-btns" id="heroBtns"></div>
+    </div>
+  </section>
+
+  <div id="body"></div>
+
+  <footer>&copy; 2026 Lee Yih Ven | AI Project Portfolio &middot; All rights reserved.</footer>
+  <div class="note">Sample Project-Showcase-E2 (TEMPLATE): project page on the index magazine system, led by the generated cover image. Sections render only when present in the PROJECT data, so simpler projects omit them. Reuse by editing only the PROJECT block at the top of the script. Deep install/deploy code lives on the matching -source.html page.</div>
+
+<script>
+  const SITE = "";
+
+  /* =================================================================
+     EDIT PER PROJECT  -  the ONLY block you change per page.
+     Copy this file, swap PROJECT, save as <slug>.html.
+     - cover     : path to the 1200x600 cover image (sits next to the page)
+     - tech      : chips under the title
+     - demoUrl / sourceUrl : buttons (relative to SITE or full https://)
+     - Any optional section can be deleted; it just won't render.
+     ================================================================= */
+  const PROJECT = {
+  "slug": "badminton-booking-agent",
+  "category": "Service Agents",
+  "categoryUrl": "category-service-agents.html",
+  "title": "Badminton Court Booking Agent",
+  "tagline": "WhatsApp agent that books badminton courts for you.",
+  "cover": "images/badminton-booking-agent/cover.jpeg",
+  "tech": [
+    "Python 3.8+",
+    "FastAPI",
+    "Google Gemini 2.5 Flash",
+    "TinyDB",
+    "M5 Agentic Workflow",
+    "Production Ready"
+  ],
+  "demoLabel": "Launch Live Demo",
+  "demoUrl": "https://lyven81.github.io/ai-project/projects/badminton-booking-agent/demo.html",
+  "sourceUrl": "badminton-booking-agent-source.html",
+  "overview": {
+    "challenge": "Traditional booking systems require extensive development for business logic, validation rules, and edge cases. They're rigid, difficult to modify, and can't adapt to natural language requests or complex business rules without significant coding effort.",
+    "solution": "This project implements an agentic AI workflow where the LLM (Google Gemini 2.5 Flash) generates and executes Python code dynamically. Instead of hard-coded business logic, the AI agent interprets user requests, writes the necessary code, and executes it to perform bookings, cancellations, and queries, all while enforcing complex pricing rules and conflict detection.",
+    "benefits": [
+      "<b>24/7 Autonomous Operation:</b> AI agent handles all booking requests without human intervention.",
+      "<b>Natural Language Interface:</b> Users can make requests in plain English or Malay.",
+      "<b>Dynamic Pricing:</b> Four-tier time-based pricing (daytime/nighttime, weekday/weekend).",
+      "<b>Intelligent Conflict Detection:</b> Automatically prevents double bookings and validates Malaysian IC numbers.",
+      "<b>Code-as-Action Pattern:</b> LLM generates executable Python code for each request, enabling complex business logic."
+    ]
+  },
+  "features": [
+    {
+      "e": "🤖",
+      "n": "Agentic AI Workflow",
+      "d": "Implements the M5 Agentic Workflow pattern where the LLM generates executable Python code as actions. Each user request triggers code generation, validation, and execution in a secure sandbox environment."
+    },
+    {
+      "e": "🌙",
+      "n": "24/7 Autonomous Operations",
+      "d": "Operates independently without human oversight, handling bookings, cancellations, availability checks, and complex queries through natural language understanding and code generation."
+    },
+    {
+      "e": "💰",
+      "n": "Dynamic Time-Based Pricing",
+      "d": "Implements four pricing tiers based on time of day and day of week: Daytime (6am-6pm), Nighttime (6pm-6am), Weekday, Weekend, all managed through AI-generated code logic."
+    },
+    {
+      "e": "🛡️",
+      "n": "Automatic Conflict Detection",
+      "d": "AI-generated validation code checks for booking conflicts across 12 courts, validates Malaysian IC numbers (format: YYMMDD-PB-###G), and enforces business rules automatically."
+    }
+  ],
+  "aiIntegration": [
+    {
+      "e": "🔍",
+      "n": "Request Analysis",
+      "d": "Gemini 2.5 Flash interprets natural language booking requests."
+    },
+    {
+      "e": "⚙️",
+      "n": "Code Generation",
+      "d": "The LLM writes Python code to execute the required action (book, cancel, query)."
+    },
+    {
+      "e": "✅",
+      "n": "Code Validation",
+      "d": "Generated code is validated for safety and correctness."
+    },
+    {
+      "e": "⚡",
+      "n": "Execution",
+      "d": "Code runs in a secure environment with access to the booking database."
+    },
+    {
+      "e": "💬",
+      "n": "Response Generation",
+      "d": "Results are formatted into natural language responses."
+    }
+  ],
+  "architecture": {
+    "stacks": [
+      {
+        "label": "Backend Architecture",
+        "items": [
+          "Python 3.8+",
+          "FastAPI Framework",
+          "Google Gemini 2.5 Flash",
+          "TinyDB (JSON Database)",
+          "Async/Await"
+        ]
+      },
+      {
+        "label": "AI & Agentic Technologies",
+        "items": [
+          "M5 Agentic Workflow",
+          "Code-as-Action Pattern",
+          "Dynamic Code Generation",
+          "Natural Language Processing",
+          "Context-Aware AI"
+        ]
+      },
+      {
+        "label": "Deployment & Infrastructure",
+        "items": [
+          "Google Cloud Run",
+          "Docker Containers",
+          "CI/CD Pipelines",
+          "Auto Scaling",
+          "Persistent Storage"
+        ]
+      }
+    ],
+    "system": [
+      "FastAPI backend receives natural language booking requests.",
+      "Gemini 2.5 Flash analyzes intent and generates Python code.",
+      "Generated code interacts with TinyDB for CRUD operations.",
+      "Business logic (pricing, conflicts, validation) embedded in generated code.",
+      "Results returned as natural language responses."
+    ]
+  },
+  "metrics": [
+    {
+      "v": "2-4s",
+      "l": "Average Response Time"
+    },
+    {
+      "v": "12",
+      "l": "Courts Managed"
+    },
+    {
+      "v": "24/7",
+      "l": "Autonomous Operation"
+    },
+    {
+      "v": "100%",
+      "l": "Conflict Detection"
+    }
+  ],
+  "businessValue": [
+    "<b>Automation:</b> eliminates the need for manual booking management staff.",
+    "<b>Availability:</b> 24/7 booking service increases revenue opportunities.",
+    "<b>Accuracy:</b> zero double-bookings through automatic conflict detection.",
+    "<b>Flexibility:</b> easy to add new business rules without code changes.",
+    "<b>Scalability:</b> can handle hundreds of concurrent booking requests.",
+    "<b>Customer Experience:</b> natural language interface improves user satisfaction."
+  ],
+  "cta": "Want a 24/7 booking agent like this for your own venue? Let's scope it."
+};
+  /* ===================== END EDIT BLOCK ===================== */
+
+  const pref = (u) => /^https?:|^mailto:|^tel:/.test(u || '') ? u : (SITE + (u || ''));
+  const esc = (s) => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  // allow <b>...</b> and <code>...</code> that we intentionally put in the data
+  const rich = (s) => esc(s).replace(/&lt;(\/?(?:b|code))&gt;/g, '<$1>');
+
+  // Breadcrumb + hero
+  document.title = PROJECT.title + " | AI Project Portfolio";
+  document.getElementById('crumbCat').textContent = PROJECT.category;
+  document.getElementById('crumbCat').href = pref(PROJECT.categoryUrl);
+  document.getElementById('crumbHere').textContent = PROJECT.title;
+  const cover = document.getElementById('cover');
+  cover.src = PROJECT.cover; cover.alt = PROJECT.title + " cover illustration";
+  document.getElementById('kicker').textContent = PROJECT.category;
+  document.getElementById('title').textContent = PROJECT.title;
+  document.getElementById('tagline').textContent = PROJECT.tagline;
+  document.getElementById('heroTech').innerHTML = (PROJECT.tech || []).map(t => `<span class="tech-chip">${esc(t)}</span>`).join('');
+  document.getElementById('heroBtns').innerHTML =
+    (PROJECT.demoUrl ? `<a class="btn" href="${pref(PROJECT.demoUrl)}" target="_blank" rel="noopener">${esc(PROJECT.demoLabel || 'Live Demo')}</a>` : '') +
+    (PROJECT.sourceUrl ? `<a class="btn ghost" href="${pref(PROJECT.sourceUrl)}">View Source &amp; Build</a>` : '');
+
+  // Section builders
+  const section = (tab, inner, opts={}) =>
+    `<section class="sec"><div class="${opts.noRule ? '' : 'sec-rule'}">`+
+    `<span class="tab">${esc(tab)}</span>${inner}</div></section>`;
+
+  let html = "";
+  const P = PROJECT;
+
+  // OVERVIEW
+  if (P.overview){
+    let inner = `<h2>Overview</h2>`;
+    inner += `<div class="duo">`+
+      `<div><span class="rubric">The Challenge</span><p>${rich(P.overview.challenge)}</p></div>`+
+      `<div><span class="rubric">The Solution</span><p>${rich(P.overview.solution)}</p></div>`+
+      `</div>`;
+    if (P.overview.benefits && P.overview.benefits.length){
+      inner += `<ul class="blist">${P.overview.benefits.map(b => `<li>${rich(b)}</li>`).join('')}</ul>`;
+    }
+    html += section("Overview", inner);
+  }
+
+  // DIFFERENTIATOR (+ optional table)
+  if (P.differentiator){
+    const d = P.differentiator;
+    let inner = `<h2>${esc(d.heading || 'What Makes This Different')}</h2>`;
+    if (d.intro) inner += `<p class="intro">${rich(d.intro)}</p>`;
+    if (d.table){
+      inner += `<div class="table-scroll"><table class="cmp"><thead><tr>`+
+        d.table.columns.map(c => `<th>${esc(c)}</th>`).join('')+
+        `</tr></thead><tbody>`+
+        d.table.rows.map(r => `<tr>${r.map(c => `<td>${rich(c)}</td>`).join('')}</tr>`).join('')+
+        `</tbody></table></div>`;
+    }
+    if (d.outcomes && d.outcomes.length){
+      inner += `<ul class="blist">${d.outcomes.map(o => `<li>${rich(o)}</li>`).join('')}</ul>`;
+    }
+    html += section("Why It's Different", inner);
+  }
+
+  // FEATURES
+  if (P.features && P.features.length){
+    const grid = `<div class="fgrid">${P.features.map(f =>
+      `<article class="fcard"><div class="fe">${f.e || ''}</div><h4>${esc(f.n)}</h4><p>${rich(f.d)}</p></article>`).join('')}</div>`;
+    html += section("Features", `<h2>What's Inside</h2>${grid}`);
+  }
+
+  // AI INTEGRATION
+  if (P.aiIntegration && P.aiIntegration.length){
+    const grid = `<div class="fgrid">${P.aiIntegration.map(f =>
+      `<article class="fcard"><div class="fe">${f.e || ''}</div><h4>${esc(f.n)}</h4><p>${rich(f.d)}</p></article>`).join('')}</div>`;
+    html += section("AI Integration", `<h2>How the AI Works</h2>${grid}`);
+  }
+
+  // ARCHITECTURE
+  if (P.architecture){
+    let inner = `<h2>Technical Architecture</h2>`;
+    if (P.architecture.stacks){
+      inner += `<div class="stacks">${P.architecture.stacks.map(s =>
+        `<div class="stack"><span class="rubric">${esc(s.label)}</span><div class="stack-chips">`+
+        s.items.map(i => `<span class="tech-chip">${esc(i)}</span>`).join('')+`</div></div>`).join('')}</div>`;
+    }
+    if (P.architecture.system){
+      inner += `<ul class="sys-list">${P.architecture.system.map(li => `<li>${rich(li)}</li>`).join('')}</ul>`;
+    }
+    html += section("Architecture", inner);
+  }
+
+  // METRICS
+  if (P.metrics && P.metrics.length){
+    const row = `<div class="metrics">${P.metrics.map(m =>
+      `<div class="metric"><div class="v">${esc(m.v)}</div><div class="l">${esc(m.l)}</div></div>`).join('')}</div>`;
+    html += section("By the Numbers", `<h2>Key Metrics</h2>${row}`);
+  }
+
+  // BUSINESS VALUE
+  if (P.businessValue && P.businessValue.length){
+    const list = `<ul class="blist">${P.businessValue.map(b => `<li>${rich(b)}</li>`).join('')}</ul>`;
+    html += section("Business Value", `<h2>Why It Matters</h2>${list}`);
+  }
+
+  // CTA
+  html += `<section class="sec"><div class="cta-inner">`+
+    `<div><h3>${esc(P.cta ? 'Have a similar project?' : 'Interested?')}</h3>`+
+    `<p>${esc(P.cta || "Let's talk about what you're trying to build.")}</p></div>`+
+    `<div class="cta-btns">`+
+    (P.demoUrl ? `<a class="btn" href="${pref(P.demoUrl)}" target="_blank" rel="noopener">${esc(P.demoLabel || 'Live Demo')}</a>` : '')+
+    `<a class="btn ghost" href="${SITE}contact.html">Get in Touch</a>`+
+    `</div></div></section>`;
+
+  document.getElementById('body').innerHTML = html;
+
+  // Masthead search (this project + a few site-wide; production indexes the full catalog)
+  const ITEMS = [
+    {t:PROJECT.title, c:PROJECT.category, s:PROJECT.slug},
+    {t:"Courier CS Quality Console", c:"Conversational Data Analytics", s:"courier-cs-quality-console"},
+    {t:"Voucher Analyzer", c:"Conversational Data Analytics", s:"voucher-analyzer"},
+    {t:"Property Lead Tracker", c:"Industry Specialist Advisors", s:"property-lead-tracker"},
+    {t:"Wiseman", c:"Knowledge & Reference Chatbots", s:"wiseman"},
+    {t:"Sunny Car Accessories", c:"Agentic Commerce", s:"sunny-car-accessories"},
+    {t:"Bookshelf", c:"Multi-Agent Decision Systems", s:"bookshelf"}
+  ];
+  const searchInput = document.getElementById('searchInput');
+  const searchResults = document.getElementById('searchResults');
+  function runSearch(q){
+    if(q.trim().length < 2){ searchResults.style.display='none'; return; }
+    const ql = q.toLowerCase();
+    const hits = ITEMS.filter(it => (it.t+' '+it.c).toLowerCase().includes(ql));
+    searchResults.innerHTML = hits.length ? hits.map(it =>
+      `<div class="sr-item"><div class="sr-cat">${esc(it.c)}</div>`+
+      `<a href="${SITE}${it.s}.html"><div class="sr-title">${esc(it.t)}</div></a>`+
+      `<div class="sr-links"><a href="${SITE}${it.s}.html">View Details</a></div></div>`).join('')
+      : `<div class="sr-none">No projects found. Try a different keyword.</div>`;
+    searchResults.style.display='block';
+  }
+  searchInput.addEventListener('input', e => runSearch(e.target.value));
+  document.addEventListener('click', e => { if(!e.target.closest('.search-box')) searchResults.style.display='none'; });
+
+  // Drawer
+  const drawer=document.getElementById('drawer'), overlay=document.getElementById('overlay');
+  const openMenu=()=>{ drawer.classList.add('open'); overlay.classList.add('open'); };
+  const closeMenu=()=>{ drawer.classList.remove('open'); overlay.classList.remove('open'); };
+  document.getElementById('hamburger').addEventListener('click', openMenu);
+  document.getElementById('drawerClose').addEventListener('click', closeMenu);
+  overlay.addEventListener('click', closeMenu);
+  drawer.querySelectorAll('a').forEach(a=>a.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeMenu(); searchResults.style.display='none'; }});
+</script>
 </body>
 </html>

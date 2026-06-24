@@ -1,496 +1,364 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Marketing Agency - Source Code</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marketing Agency: Source | AI Project Portfolio</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root{ --ink:#222; --paper:#fff; --hair:#dddddd; --gray:#555; --accent:#B8860B; --navy:#1E3A5F; --code-bg:#fbfbf8; --cmt:#6b8190; }
+  html{ scroll-behavior:smooth; }
+  body{ background:var(--paper); color:var(--ink); font-family:Arial, Helvetica, sans-serif; line-height:1.6; overflow-x:hidden; }
+  a{ color:inherit; text-decoration:none; }
+  a:hover h2, a:hover h3, a:hover h4{ color:var(--accent); }
+  p code, li code{ font-family:"Courier New", monospace; font-size:.86em; background:#f2f3f5; padding:1px 5px; color:var(--navy); }
 
-        body {
-            font-family: 'Arial', sans-serif;
-            line-height: 1.6;
-            color: #222;
-            background-color: #ffffff;
-        }
+  /* Masthead (shared) */
+  .masthead{ display:flex; align-items:center; justify-content:space-between; padding:14px 28px; max-width:1240px; margin:0 auto; gap:18px; }
+  .mast-left{ display:flex; align-items:center; gap:20px; }
+  .logo{ background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; letter-spacing:3px; font-size:.95rem; padding:8px 12px; white-space:nowrap; }
+  .mast-nav{ display:flex; gap:20px; font-family:Arial, Helvetica, sans-serif; font-size:.72rem; letter-spacing:1.4px; text-transform:uppercase; }
+  .mast-nav a:hover{ color:var(--accent); }
+  .hamburger{ display:none; flex-direction:column; gap:4px; background:none; border:none; cursor:pointer; padding:6px; }
+  .hamburger span{ width:22px; height:2px; background:#222; display:block; }
+  .rule-top{ border:none; border-top:3px solid #222; max-width:1240px; margin:0 auto; }
 
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+  /* Search (shared) */
+  .search-box{ position:relative; width:200px; }
+  .search-input{ width:100%; padding:7px 30px 7px 12px; border:1px solid var(--hair); background:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; color:#222; }
+  .search-input:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(184,134,11,.15); }
+  .search-ic{ position:absolute; right:10px; top:50%; transform:translateY(-50%); color:var(--gray); font-size:.8rem; pointer-events:none; }
+  .search-results{ position:absolute; top:calc(100% + 4px); left:0; width:340px; max-width:86vw; background:#fff; border:1px solid #222; max-height:60vh; overflow-y:auto; z-index:120; display:none; }
+  .sr-item{ padding:12px 14px; border-bottom:1px solid var(--hair); }
+  .sr-item:last-child{ border-bottom:none; }
+  .sr-cat{ font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; margin-bottom:4px; color:var(--accent); }
+  .sr-title{ font-weight:700; font-size:1.02rem; color:#222; }
+  .sr-links{ font-size:.58rem; letter-spacing:.8px; text-transform:uppercase; color:var(--gray); margin-top:5px; }
+  .sr-links a:hover{ color:var(--accent); }
+  .sr-none{ padding:16px 14px; font-size:.82rem; color:var(--gray); }
 
-        .back-nav {
-            margin-bottom: 20px;
-        }
+  /* Shared bits */
+  .tab{ display:inline-block; background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.66rem; letter-spacing:2px; text-transform:uppercase; padding:6px 12px; }
+  .rubric{ font-family:Arial, Helvetica, sans-serif; font-size:.62rem; font-weight:700; letter-spacing:1.6px; text-transform:uppercase; color:var(--accent); display:block; margin-bottom:8px; }
+  .tech-chip{ display:inline-block; border:1px solid var(--hair); padding:6px 12px; font-size:.72rem; letter-spacing:.3px; color:#333; white-space:nowrap; }
+  .tech-chip:hover{ border-color:var(--accent); color:var(--accent); }
+  .btn{ display:inline-block; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.7rem; letter-spacing:1.6px; text-transform:uppercase; padding:13px 24px; border:1px solid #222; background:#222; color:#fff; cursor:pointer; transition:.15s; }
+  .btn:hover{ background:var(--accent); border-color:var(--accent); }
+  .btn.ghost{ background:#fff; color:#222; }
+  .btn.ghost:hover{ color:var(--accent); border-color:var(--accent); background:#fff; }
 
-        .back-nav a {
-            color: #007BFF;
-            text-decoration: none;
-            font-size: 1rem;
-        }
+  /* Breadcrumb */
+  .crumb{ max-width:1240px; margin:0 auto; padding:20px 28px 0; font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--gray); }
+  .crumb a:hover{ color:var(--accent); }
+  .crumb .sep{ color:var(--hair); margin:0 8px; }
 
-        .back-nav a:hover {
-            text-decoration: underline;
-        }
+  /* Header (slim cover banner + copy) */
+  .src-head{ max-width:1240px; margin:0 auto; padding:14px 28px 6px; }
+  .cover-strip{ border:1px solid var(--hair); line-height:0; background:#eef1f4; }
+  .cover-strip img{ width:100%; height:190px; object-fit:cover; object-position:center 42%; display:block; }
+  .src-head h1{ font-size:2.5rem; font-weight:900; line-height:1.04; letter-spacing:-.008em; margin-top:18px; }
+  .src-head .sub{ font-style:italic; font-size:1.08rem; color:#333; margin-top:10px; max-width:72ch; }
+  .head-tech{ display:flex; flex-wrap:wrap; gap:9px; margin-top:16px; }
+  .head-btns{ display:flex; flex-wrap:wrap; gap:12px; margin-top:18px; }
 
-        .project-header {
-            text-align: center;
-            margin-bottom: 40px;
-            padding: 40px 0;
-            background: linear-gradient(135deg, #4CAF50, #388E3C);
-            color: white;
-            border-radius: 10px;
-        }
+  /* Section shell */
+  .sec{ max-width:1240px; margin:0 auto; padding:26px 28px; }
+  .sec-rule{ border-top:3px solid #222; padding-top:16px; }
+  .sec .tab{ margin-bottom:14px; }
+  .sec h2{ font-size:1.7rem; font-weight:900; line-height:1.06; }
+  .sec .intro{ color:#333; font-size:1.02rem; margin-top:10px; max-width:80%; }
+  .sec .body{ color:#333; font-size:1rem; margin-top:10px; max-width:80%; }
 
-        .project-header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
+  /* Code block */
+  .codeblock{ border:1px solid var(--hair); margin-top:16px; }
+  .code-bar{ display:flex; align-items:center; justify-content:space-between; gap:12px; background:var(--navy); color:#fff; padding:8px 12px; }
+  .code-bar .path{ font-family:"Courier New", monospace; font-size:.74rem; letter-spacing:.2px; opacity:.96; display:flex; align-items:center; gap:7px; min-width:0; }
+  .code-bar .path span{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .code-copy{ flex:none; background:none; border:1px solid rgba(255,255,255,.4); color:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.56rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; padding:5px 11px; cursor:pointer; transition:.15s; }
+  .code-copy:hover{ background:rgba(255,255,255,.16); }
+  .codeblock pre{ margin:0; padding:14px 16px; overflow-x:auto; background:var(--code-bg); }
+  .codeblock code{ font-family:"Courier New", monospace; font-size:.82rem; line-height:1.6; color:#1b2a3a; background:none; padding:0; white-space:pre; display:block; }
+  .codeblock code .cmt{ color:var(--cmt); font-style:italic; }
 
-        .project-header p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
+  .tree .code-bar .path::before{ content:"📁"; }
 
-        .badges {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin: 20px 0;
-            flex-wrap: wrap;
-        }
+  /* Notes */
+  .note-block{ margin-top:22px; }
+  .note-block h3{ font-size:1.15rem; font-weight:800; }
+  .blist{ list-style:none; margin-top:12px; border-top:1px solid var(--hair); }
+  .blist li{ padding:12px 0; border-bottom:1px solid var(--hair); color:#333; font-size:.95rem; }
+  .blist li b{ color:#222; }
 
-        .badge {
-            background-color: rgba(255, 255, 255, 0.2);
-            color: white;
-            padding: 5px 12px;
-            border-radius: 15px;
-            font-size: 0.9rem;
-        }
+  /* CTA */
+  .cta-inner{ display:flex; align-items:center; gap:18px; flex-wrap:wrap; border-top:3px solid #222; padding-top:18px; }
+  .cta-inner h3{ font-size:1.4rem; font-weight:900; line-height:1.08; }
+  .cta-inner p{ color:var(--gray); font-size:.95rem; margin-top:4px; }
+  .cta-btns{ margin-left:auto; display:flex; gap:12px; flex-wrap:wrap; }
 
-        .content-section {
-            margin: 40px 0;
-            padding: 30px;
-            background-color: #f9f9f9;
-            border-radius: 8px;
-            border-left: 5px solid #4CAF50;
-        }
+  footer{ background:#222; max-width:1240px; margin:30px auto 0; padding:24px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; letter-spacing:.5px; color:#fff; text-align:center; }
+  .note{ max-width:1240px; margin:14px auto 0; padding:8px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.62rem; letter-spacing:1px; color:#999; }
 
-        .content-section h2 {
-            color: #4CAF50;
-            margin-bottom: 20px;
-            font-size: 1.8rem;
-        }
+  /* Drawer (shared) */
+  .drawer{ position:fixed; top:0; left:-300px; width:280px; height:100vh; background:#fff; z-index:200; box-shadow:2px 0 14px rgba(0,0,0,.15); transition:left .28s ease; padding:74px 26px 26px; }
+  .drawer.open{ left:0; }
+  .drawer a{ display:block; font-family:Arial, Helvetica, sans-serif; font-size:.82rem; letter-spacing:1.2px; text-transform:uppercase; padding:14px 0; border-bottom:1px solid var(--hair); }
+  .overlay{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:150; }
+  .overlay.open{ display:block; }
+  .drawer-close{ position:absolute; top:20px; right:20px; font-family:Arial, Helvetica, sans-serif; font-size:1.4rem; background:none; border:none; cursor:pointer; }
 
-        .content-section h3 {
-            color: #333;
-            margin: 20px 0 10px 0;
-            font-size: 1.3rem;
-        }
-
-        .highlight-box {
-            background: linear-gradient(135deg, #f1f8e9, #dcedc8);
-            padding: 20px;
-            border-radius: 10px;
-            border-left: 5px solid #4CAF50;
-            margin: 20px 0;
-        }
-
-        .code-container {
-            background-color: #1e1e1e;
-            border-radius: 8px;
-            padding: 20px;
-            margin: 20px 0;
-            overflow-x: auto;
-        }
-
-        .code-header {
-            color: #81c784;
-            font-weight: bold;
-            margin-bottom: 15px;
-            font-size: 1.1rem;
-            border-bottom: 1px solid #333;
-            padding-bottom: 10px;
-        }
-
-        .code-block {
-            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-            font-size: 14px;
-            line-height: 1.5;
-            color: #d4d4d4;
-        }
-
-        .code-comment {
-            color: #6a9955;
-            font-style: italic;
-        }
-
-        .code-keyword {
-            color: #569cd6;
-        }
-
-        .code-string {
-            color: #ce9178;
-        }
-
-        .code-function {
-            color: #dcdcaa;
-        }
-
-        .code-number {
-            color: #b5cea8;
-        }
-
-        .code-decorator {
-            color: #d7ba7d;
-        }
-
-        .demo-links {
-            text-align: center;
-            margin: 30px 0;
-        }
-
-        .demo-btn {
-            display: inline-block;
-            background-color: #007BFF;
-            color: white;
-            padding: 12px 25px;
-            text-decoration: none;
-            border-radius: 5px;
-            margin: 0 10px;
-            font-weight: bold;
-            transition: background-color 0.3s;
-        }
-
-        .demo-btn:hover {
-            background-color: #0056b3;
-        }
-
-        .demo-btn.secondary {
-            background-color: #4CAF50;
-        }
-
-        .demo-btn.secondary:hover {
-            background-color: #388E3C;
-        }
-
-        @media (max-width: 768px) {
-            .project-header h1 {
-                font-size: 2rem;
-            }
-
-            .project-header p {
-                font-size: 1rem;
-            }
-
-            .demo-btn {
-                margin: 5px;
-                padding: 10px 20px;
-            }
-
-            .container {
-                padding: 15px;
-            }
-        }
-    </style>
+  @media (max-width:900px){
+    .cta-btns{ margin-left:0; }
+    .mast-nav{ display:none; }
+    .hamburger{ display:flex; }
+    .masthead{ padding:12px 16px; }
+    .mast-left{ gap:10px; min-width:0; flex:1; }
+    .logo{ font-size:.72rem; letter-spacing:1.5px; padding:6px 8px; }
+    .search-box{ flex:1; width:auto; min-width:0; }
+    .search-results{ position:fixed; top:58px; left:12px; right:12px; width:auto; max-width:none; }
+    .src-head h1{ font-size:1.95rem; }
+    .cover-strip img{ height:150px; }
+  }
+</style>
 </head>
 <body>
-    <div class="container">
-        <nav class="back-nav">
-            <a href="marketing-agency.html">&larr; Back to Project Overview</a>
-        </nav>
 
-        <div class="project-header">
-            <h1>Marketing Agency</h1>
-            <p>Autonomous Content Marketing System for Solo Consultancy Firms</p>
+  <div class="overlay" id="overlay"></div>
+  <nav class="drawer" id="drawer">
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">&times;</button>
+    <a href="index.html">Home</a>
+    <a href="project-categories.html">Categories</a>
+    <a href="contact.html">Contact</a>
+    <a href="https://lyven81.github.io/data-analyst-portfolio/index.html">Data Portfolio</a>
+  </nav>
 
-            <div class="badges">
-                <span class="badge">Python</span>
-                <span class="badge">FastAPI</span>
-                <span class="badge">Jinja2</span>
-                <span class="badge">httpx</span>
-                <span class="badge">Uvicorn</span>
-            </div>
-        </div>
-
-        <div class="highlight-box">
-            <h3>About This Code Showcase</h3>
-            <p><strong>This curated code walkthrough demonstrates how the Marketing Agency dashboard aggregates content drafts, lead data, publishing pipelines, and weekly reports into a single 4-tab interface for solo consultancy firms.</strong></p>
-            <p>The system reads from local file repositories, connects to a lead management API, and queries git history to surface recent activity -- all served through a FastAPI backend with Jinja2 templates.</p>
-        </div>
-
-        <div class="content-section">
-            <h2>Project File Structure</h2>
-            <div class="code-container">
-                <div class="code-header">marketing-agency/</div>
-                <div class="code-block">
-marketing-agency/
-  app.py              <span class="code-comment"># FastAPI dashboard server (4 tabs)</span>
-  config.py           <span class="code-comment"># All paths and configuration constants</span>
-  readers.py          <span class="code-comment"># Data readers for content, leads, reports, git</span>
-  requirements.txt    <span class="code-comment"># Python dependencies</span>
-  start.bat           <span class="code-comment"># Double-click launcher</span>
-  user-guide.md       <span class="code-comment"># Complete usage guide</span>
-  static/
-    style.css         <span class="code-comment"># Dashboard styles (gold/dark brand scheme)</span>
-    logo.png          <span class="code-comment"># Brand logo</span>
-  templates/
-    dashboard.html    <span class="code-comment"># 4-tab dashboard UI</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>Core: FastAPI Dashboard Server</h2>
-            <p>The main application mounts static files, configures Jinja2 templates, and serves a single dashboard endpoint that aggregates data from all four tabs -- Content, Leads, Pipeline, and Weekly Report.</p>
-
-            <div class="code-container">
-                <div class="code-header">app.py -- FastAPI App with 4-Tab Routing</div>
-                <div class="code-block">
-<span class="code-string">"""
-app.py -- Marketing Agency Dashboard
-FastAPI application with 4-tab dashboard: Leads, Content, Pipeline, Weekly Report.
-"""</span>
-
-<span class="code-keyword">from</span> fastapi <span class="code-keyword">import</span> FastAPI, Request
-<span class="code-keyword">from</span> fastapi.responses <span class="code-keyword">import</span> HTMLResponse
-<span class="code-keyword">from</span> fastapi.staticfiles <span class="code-keyword">import</span> StaticFiles
-<span class="code-keyword">from</span> fastapi.templating <span class="code-keyword">import</span> Jinja2Templates
-
-<span class="code-keyword">from</span> config <span class="code-keyword">import</span> DASHBOARD_PORT
-<span class="code-keyword">from</span> readers <span class="code-keyword">import</span> (
-    get_linkedin_drafts, get_posted_log, get_recent_blog_posts,
-    get_blog_drafts, get_publish_queue, get_publish_log,
-    get_case_study_stats, get_next_week_plan,
-    get_weekly_reports, get_leads_from_api, get_lead_stats_from_api,
-    get_recent_commits,
-)
-
-app = FastAPI(title=<span class="code-string">"Marketing Agency Dashboard"</span>)
-app.mount(<span class="code-string">"/static"</span>, StaticFiles(directory=<span class="code-string">"static"</span>), name=<span class="code-string">"static"</span>)
-templates = Jinja2Templates(directory=<span class="code-string">"templates"</span>)
-
-
-<span class="code-decorator">@app.get("/"</span>, response_class=HTMLResponse)
-<span class="code-keyword">async def</span> <span class="code-function">dashboard</span>(request: Request, tab: str = <span class="code-string">"content"</span>):
-    <span class="code-comment"># Content tab data</span>
-    linkedin_drafts = get_linkedin_drafts()
-    posted_log = get_posted_log()
-    recent_blogs = get_recent_blog_posts()
-    blog_drafts = get_blog_drafts()
-
-    <span class="code-comment"># Pipeline tab data</span>
-    publish_queue = get_publish_queue()
-    publish_log = get_publish_log()
-    case_study_stats = get_case_study_stats()
-    next_week_plan = get_next_week_plan()
-
-    <span class="code-comment"># Weekly report tab data</span>
-    weekly_reports = get_weekly_reports()
-
-    <span class="code-comment"># Leads tab data</span>
-    leads = get_leads_from_api()
-    lead_stats = get_lead_stats_from_api()
-
-    <span class="code-comment"># Recent git activity</span>
-    recent_commits = get_recent_commits()
-
-    <span class="code-comment"># Count pending LinkedIn posts (not yet posted)</span>
-    posted_files = <span class="code-keyword">set</span>()
-    <span class="code-keyword">for</span> line <span class="code-keyword">in</span> posted_log:
-        parts = line.split(<span class="code-string">"|"</span>)
-        <span class="code-keyword">if</span> <span class="code-function">len</span>(parts) &gt;= <span class="code-number">2</span>:
-            posted_files.add(parts[<span class="code-number">1</span>].strip())
-    pending_posts = [d <span class="code-keyword">for</span> d <span class="code-keyword">in</span> linkedin_drafts
-                     <span class="code-keyword">if</span> d[<span class="code-string">"filename"</span>] <span class="code-keyword">not in</span> posted_files]
-
-    <span class="code-keyword">return</span> templates.TemplateResponse(<span class="code-string">"dashboard.html"</span>, {
-        <span class="code-string">"request"</span>: request,
-        <span class="code-string">"tab"</span>: tab,
-        <span class="code-comment"># Content</span>
-        <span class="code-string">"linkedin_drafts"</span>: linkedin_drafts,
-        <span class="code-string">"pending_posts"</span>: pending_posts,
-        <span class="code-string">"posted_count"</span>: <span class="code-function">len</span>(posted_files),
-        <span class="code-string">"recent_blogs"</span>: recent_blogs,
-        <span class="code-string">"blog_drafts"</span>: blog_drafts,
-        <span class="code-comment"># Pipeline</span>
-        <span class="code-string">"publish_queue"</span>: publish_queue,
-        <span class="code-string">"publish_log"</span>: publish_log,
-        <span class="code-string">"case_study_stats"</span>: case_study_stats,
-        <span class="code-string">"next_week_plan"</span>: next_week_plan,
-        <span class="code-comment"># Weekly report</span>
-        <span class="code-string">"weekly_reports"</span>: weekly_reports,
-        <span class="code-comment"># Leads</span>
-        <span class="code-string">"leads"</span>: leads,
-        <span class="code-string">"lead_stats"</span>: lead_stats,
-        <span class="code-comment"># Activity</span>
-        <span class="code-string">"recent_commits"</span>: recent_commits,
-    })
-
-
-<span class="code-decorator">@app.get("/health"</span>)
-<span class="code-keyword">async def</span> <span class="code-function">health</span>():
-    <span class="code-keyword">return</span> {<span class="code-string">"status"</span>: <span class="code-string">"ok"</span>, <span class="code-string">"app"</span>: <span class="code-string">"Marketing Agency Dashboard"</span>}
-
-
-<span class="code-keyword">if</span> __name__ == <span class="code-string">"__main__"</span>:
-    <span class="code-keyword">import</span> uvicorn
-    uvicorn.run(<span class="code-string">"app:app"</span>, host=<span class="code-string">"0.0.0.0"</span>, port=DASHBOARD_PORT, reload=<span class="code-keyword">True</span>)
-                </div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>Configuration: Centralized Path Management</h2>
-            <p>All file paths and configuration constants live in a single module, making it easy to adapt the system for any consultancy firm's directory structure.</p>
-
-            <div class="code-container">
-                <div class="code-header">config.py -- Path Configuration</div>
-                <div class="code-block">
-<span class="code-string">"""
-config.py -- Marketing Agency Dashboard Configuration
-All paths and constants in one place.
-"""</span>
-
-<span class="code-keyword">import</span> os
-
-<span class="code-comment"># Content repository (live site)</span>
-CONTENT_REPO = r<span class="code-string">"C:\Users\Lenovo\pau-analytics-1.0"</span>
-BLOG_DIR = os.path.join(CONTENT_REPO, <span class="code-string">"blog"</span>)
-BLOG_DRAFTS_DIR = os.path.join(BLOG_DIR, <span class="code-string">"drafts"</span>)
-LINKEDIN_DRAFTS_DIR = os.path.join(BLOG_DIR, <span class="code-string">"linkedin-drafts"</span>)
-CASE_STUDY_DIR = os.path.join(CONTENT_REPO, <span class="code-string">"case-study"</span>)
-PUBLISH_QUEUE = os.path.join(CONTENT_REPO, <span class="code-string">"publish-queue.md"</span>)
-PUBLISH_LOG = os.path.join(CONTENT_REPO, <span class="code-string">"publish-log.txt"</span>)
-NEXT_WEEK_PLAN = os.path.join(CONTENT_REPO, <span class="code-string">"next-week-plan.md"</span>)
-WEEKLY_REPORTS_DIR = os.path.join(CONTENT_REPO, <span class="code-string">"reports"</span>, <span class="code-string">"weekly"</span>)
-POSTED_LOG = os.path.join(LINKEDIN_DRAFTS_DIR, <span class="code-string">"posted-log.txt"</span>)
-BLOG_INDEX = os.path.join(BLOG_DIR, <span class="code-string">"index.html"</span>)
-
-<span class="code-comment"># Web Chat Lead Manager API</span>
-LEAD_MANAGER_URL = os.getenv(<span class="code-string">"LEAD_MANAGER_URL"</span>, <span class="code-string">"http://localhost:8000"</span>)
-
-<span class="code-comment"># Dashboard server</span>
-DASHBOARD_PORT = <span class="code-number">8100</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>Data Readers: Content & Lead Aggregation</h2>
-            <p>The readers module provides specialized functions that scan local directories for content drafts and query the lead management API. Each function returns structured data ready for the Jinja2 template.</p>
-
-            <div class="code-container">
-                <div class="code-header">readers.py -- get_linkedin_drafts()</div>
-                <div class="code-block">
-<span class="code-keyword">def</span> <span class="code-function">get_linkedin_drafts</span>() -&gt; list[dict]:
-    <span class="code-string">"""Scan the LinkedIn drafts directory for .txt files,
-    classify each by post type, and return metadata + preview."""</span>
-    drafts = []
-    <span class="code-keyword">if not</span> os.path.isdir(LINKEDIN_DRAFTS_DIR):
-        <span class="code-keyword">return</span> drafts
-    <span class="code-keyword">for</span> f <span class="code-keyword">in</span> <span class="code-function">sorted</span>(glob.glob(
-            os.path.join(LINKEDIN_DRAFTS_DIR, <span class="code-string">"*.txt"</span>)), reverse=<span class="code-keyword">True</span>):
-        basename = os.path.basename(f)
-        <span class="code-keyword">if</span> basename == <span class="code-string">"posted-log.txt"</span>:
-            <span class="code-keyword">continue</span>
-        mod_time = datetime.fromtimestamp(os.path.getmtime(f))
-        content = read_file_safe(f)
-
-        <span class="code-comment"># Determine post type from filename prefix</span>
-        <span class="code-keyword">if</span> basename.startswith(<span class="code-string">"insight-"</span>):
-            post_type = <span class="code-string">"Insight Post"</span>
-        <span class="code-keyword">else</span>:
-            post_type = <span class="code-string">"Blog Teaser"</span>
-
-        drafts.append({
-            <span class="code-string">"filename"</span>: basename,
-            <span class="code-string">"post_type"</span>: post_type,
-            <span class="code-string">"date"</span>: mod_time.strftime(<span class="code-string">"%Y-%m-%d"</span>),
-            <span class="code-string">"preview"</span>: content[:<span class="code-number">200</span>].strip() <span class="code-keyword">if</span> content <span class="code-keyword">else</span> <span class="code-string">"(empty)"</span>,
-            <span class="code-string">"full_content"</span>: content.strip(),
-            <span class="code-string">"word_count"</span>: <span class="code-function">len</span>(content.split()) <span class="code-keyword">if</span> content <span class="code-keyword">else</span> <span class="code-number">0</span>,
-        })
-    <span class="code-keyword">return</span> drafts
-                </div>
-            </div>
-
-            <div class="code-container">
-                <div class="code-header">readers.py -- get_leads_from_api() & get_lead_stats_from_api()</div>
-                <div class="code-block">
-<span class="code-keyword">def</span> <span class="code-function">get_leads_from_api</span>() -&gt; list[dict]:
-    <span class="code-string">"""Fetch all leads from the Web Chat Lead Manager API.
-    Returns an empty list on timeout or connection error,
-    keeping the dashboard functional even when the API is down."""</span>
-    <span class="code-keyword">try</span>:
-        resp = httpx.get(
-            f<span class="code-string">"{LEAD_MANAGER_URL}/api/leads"</span>, timeout=<span class="code-number">2</span>
-        )
-        <span class="code-keyword">if</span> resp.status_code == <span class="code-number">200</span>:
-            <span class="code-keyword">return</span> resp.json()
-    <span class="code-keyword">except</span> Exception:
-        <span class="code-keyword">pass</span>
-    <span class="code-keyword">return</span> []
-
-
-<span class="code-keyword">def</span> <span class="code-function">get_lead_stats_from_api</span>() -&gt; dict:
-    <span class="code-string">"""Fetch aggregated lead statistics from the API.
-    Returns safe defaults so the dashboard renders correctly
-    even when the lead manager service is unavailable."""</span>
-    <span class="code-keyword">try</span>:
-        resp = httpx.get(
-            f<span class="code-string">"{LEAD_MANAGER_URL}/api/stats"</span>, timeout=<span class="code-number">2</span>
-        )
-        <span class="code-keyword">if</span> resp.status_code == <span class="code-number">200</span>:
-            <span class="code-keyword">return</span> resp.json()
-    <span class="code-keyword">except</span> Exception:
-        <span class="code-keyword">pass</span>
-    <span class="code-keyword">return</span> {
-        <span class="code-string">"total"</span>: <span class="code-number">0</span>,
-        <span class="code-string">"this_week"</span>: <span class="code-number">0</span>,
-        <span class="code-string">"needs_followup"</span>: <span class="code-number">0</span>,
-        <span class="code-string">"ch_a_week"</span>: <span class="code-number">0</span>,
-        <span class="code-string">"ch_b_week"</span>: <span class="code-number">0</span>,
-        <span class="code-string">"ch_w_week"</span>: <span class="code-number">0</span>,
-        <span class="code-string">"blog_performance"</span>: [],
-    }
-                </div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>Technical Implementation Notes</h2>
-            <h3>Key Design Decisions</h3>
-            <ul style="margin: 15px 0; padding-left: 20px;">
-                <li><strong>Single-endpoint architecture:</strong> One FastAPI route aggregates all four tabs. The <code>tab</code> query parameter controls which panel the Jinja2 template renders as active, avoiding unnecessary page reloads.</li>
-                <li><strong>Graceful API degradation:</strong> Lead reader functions catch all exceptions with a 2-second timeout and return safe defaults. The dashboard remains fully functional even when the lead manager service is offline.</li>
-                <li><strong>File-based content pipeline:</strong> LinkedIn drafts, blog posts, and publish logs are plain text files in the content repository -- no database required. This keeps the system compatible with git-based workflows.</li>
-                <li><strong>Centralized configuration:</strong> Every file path is defined once in <code>config.py</code>. Adapting the system for a different consultancy requires changing only this single file.</li>
-                <li><strong>Git activity feed:</strong> The dashboard shells out to <code>git log</code> to show recent commits, giving the operator a live view of publishing activity without leaving the dashboard.</li>
-            </ul>
-
-            <h3>Why FastAPI + Jinja2?</h3>
-            <ul style="margin: 15px 0; padding-left: 20px;">
-                <li><strong>Lightweight:</strong> No frontend build step required -- the entire dashboard is server-rendered HTML with minimal JavaScript</li>
-                <li><strong>Fast startup:</strong> Uvicorn hot-reloads on file changes, making development instant</li>
-                <li><strong>Python-native:</strong> All data readers use standard library modules (os, glob, subprocess) plus httpx for async-safe API calls</li>
-                <li><strong>One-click launch:</strong> The included <code>start.bat</code> file starts the server with a double-click on Windows</li>
-            </ul>
-        </div>
-
-        <div class="demo-links">
-            <a href="marketing-agency.html" class="demo-btn secondary">View Full Project Details</a>
-        </div>
-
-        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
-            <a href="index.html">&larr; Back to Portfolio</a> |
-            <a href="marketing-agency.html">View Project Overview</a>
-        </nav>
+  <div class="masthead">
+    <div class="mast-left">
+      <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+      <a class="logo" href="index.html">AI PROJECTS</a>
+      <nav class="mast-nav">
+        <a href="project-categories.html">Categories</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <div class="search-box">
+        <input type="text" class="search-input" id="searchInput" autocomplete="off" placeholder="Search AI projects..." aria-label="Search AI projects">
+        <span class="search-ic">&#128269;</span>
+        <div class="search-results" id="searchResults"></div>
+      </div>
     </div>
+  </div>
+  <hr class="rule-top">
+
+  <div class="crumb">
+    <a href="project-categories.html">Categories</a>
+    <span class="sep">/</span><a id="crumbCat" href="#"></a>
+    <span class="sep">/</span><a id="crumbProj" href="#"></a>
+    <span class="sep">/</span><span>Source</span>
+  </div>
+
+  <section class="src-head">
+    <div class="cover-strip" id="coverStrip" style="display:none"><img id="cover" alt=""></div>
+    <span class="rubric" id="kicker"></span>
+    <h1 id="title"></h1>
+    <p class="sub" id="subtitle"></p>
+    <div class="head-tech" id="headTech"></div>
+    <div class="head-btns" id="headBtns"></div>
+  </section>
+
+  <div id="body"></div>
+
+  <footer>&copy; 2026 Lee Yih Ven | AI Project Portfolio &middot; All rights reserved.</footer>
+  <div class="note">Sample Source-Showcase-E2 (TEMPLATE): source-code page on the index magazine system: slim cover banner, About, Project Structure, code walkthrough with copyable navy-barred code blocks, CTA. Reuse by editing only the PROJECT block at the top of the script.</div>
+
+<script>
+  const SITE = "";
+
+  /* =================================================================
+     EDIT PER PROJECT  -  the ONLY block you change per page.
+     Copy this file, swap PROJECT, save as <slug>-source.html.
+     - structure.code : the project file tree (plain text)
+     - walkthrough[]   : { heading, body, files:[{label, code}] }
+     - notes[]         : { heading, bullets:[...] }
+     Code strings can be multi-line; they render verbatim.
+     ================================================================= */
+  const PROJECT = {
+  "slug": "marketing-agency",
+  "category": "Content Automation",
+  "categoryUrl": "category-content-automation.html",
+  "title": "Marketing Agency",
+  "subtitle": "This curated code walkthrough demonstrates how the Marketing Agency dashboard aggregates content drafts, lead data, publishing pipelines, and weekly reports into a single 4-tab interface for solo consultancy firms.",
+  "cover": "images/marketing-agency/cover.jpeg",
+  "tech": [
+    "Python",
+    "FastAPI",
+    "Jinja2",
+    "httpx",
+    "Uvicorn"
+  ],
+  "overviewUrl": "marketing-agency.html",
+  "demoLabel": "Launch Demo",
+  "demoUrl": "https://lyven81.github.io/ai-project/projects/marketing-agency/demo.html",
+  "repoUrl": "https://github.com/lyven81/ai-project/tree/main/projects/marketing-agency",
+  "about": "This curated code walkthrough demonstrates how the Marketing Agency dashboard aggregates content drafts, lead data, publishing pipelines, and weekly reports into a single 4-tab interface for solo consultancy firms. The system reads from local file repositories, connects to a lead management API, and queries git history to surface recent activity, all served through a FastAPI backend with Jinja2 templates.",
+  "structure": {
+    "label": "marketing-agency/",
+    "code": "marketing-agency/\n  app.py              # FastAPI dashboard server (4 tabs)\n  config.py           # All paths and configuration constants\n  readers.py          # Data readers for content, leads, reports, git\n  requirements.txt    # Python dependencies\n  start.bat           # Double-click launcher\n  user-guide.md       # Complete usage guide\n  static/\n    style.css         # Dashboard styles (gold/dark brand scheme)\n    logo.png          # Brand logo\n  templates/\n    dashboard.html    # 4-tab dashboard UI"
+  },
+  "walkthrough": [
+    {
+      "heading": "Core: FastAPI Dashboard Server",
+      "body": "The main application mounts static files, configures Jinja2 templates, and serves a single dashboard endpoint that aggregates data from all four tabs: Content, Leads, Pipeline, and Weekly Report.",
+      "files": [
+        {
+          "label": "app.py -- FastAPI App with 4-Tab Routing",
+          "code": "\"\"\"\napp.py -- Marketing Agency Dashboard\nFastAPI application with 4-tab dashboard: Leads, Content, Pipeline, Weekly Report.\n\"\"\"\n\nfrom fastapi import FastAPI, Request\nfrom fastapi.responses import HTMLResponse\nfrom fastapi.staticfiles import StaticFiles\nfrom fastapi.templating import Jinja2Templates\n\nfrom config import DASHBOARD_PORT\nfrom readers import (\n    get_linkedin_drafts, get_posted_log, get_recent_blog_posts,\n    get_blog_drafts, get_publish_queue, get_publish_log,\n    get_case_study_stats, get_next_week_plan,\n    get_weekly_reports, get_leads_from_api, get_lead_stats_from_api,\n    get_recent_commits,\n)\n\napp = FastAPI(title=\"Marketing Agency Dashboard\")\napp.mount(\"/static\", StaticFiles(directory=\"static\"), name=\"static\")\ntemplates = Jinja2Templates(directory=\"templates\")\n\n\n@app.get(\"/\", response_class=HTMLResponse)\nasync def dashboard(request: Request, tab: str = \"content\"):\n    # Content tab data\n    linkedin_drafts = get_linkedin_drafts()\n    posted_log = get_posted_log()\n    recent_blogs = get_recent_blog_posts()\n    blog_drafts = get_blog_drafts()\n\n    # Pipeline tab data\n    publish_queue = get_publish_queue()\n    publish_log = get_publish_log()\n    case_study_stats = get_case_study_stats()\n    next_week_plan = get_next_week_plan()\n\n    # Weekly report tab data\n    weekly_reports = get_weekly_reports()\n\n    # Leads tab data\n    leads = get_leads_from_api()\n    lead_stats = get_lead_stats_from_api()\n\n    # Recent git activity\n    recent_commits = get_recent_commits()\n\n    # Count pending LinkedIn posts (not yet posted)\n    posted_files = set()\n    for line in posted_log:\n        parts = line.split(\"|\")\n        if len(parts) >= 2:\n            posted_files.add(parts[1].strip())\n    pending_posts = [d for d in linkedin_drafts\n                     if d[\"filename\"] not in posted_files]\n\n    return templates.TemplateResponse(\"dashboard.html\", {\n        \"request\": request,\n        \"tab\": tab,\n        # Content\n        \"linkedin_drafts\": linkedin_drafts,\n        \"pending_posts\": pending_posts,\n        \"posted_count\": len(posted_files),\n        \"recent_blogs\": recent_blogs,\n        \"blog_drafts\": blog_drafts,\n        # Pipeline\n        \"publish_queue\": publish_queue,\n        \"publish_log\": publish_log,\n        \"case_study_stats\": case_study_stats,\n        \"next_week_plan\": next_week_plan,\n        # Weekly report\n        \"weekly_reports\": weekly_reports,\n        # Leads\n        \"leads\": leads,\n        \"lead_stats\": lead_stats,\n        # Activity\n        \"recent_commits\": recent_commits,\n    })\n\n\n@app.get(\"/health\")\nasync def health():\n    return {\"status\": \"ok\", \"app\": \"Marketing Agency Dashboard\"}\n\n\nif __name__ == \"__main__\":\n    import uvicorn\n    uvicorn.run(\"app:app\", host=\"0.0.0.0\", port=DASHBOARD_PORT, reload=True)"
+        }
+      ]
+    },
+    {
+      "heading": "Configuration: Centralized Path Management",
+      "body": "All file paths and configuration constants live in a single module, making it easy to adapt the system for any consultancy firm's directory structure.",
+      "files": [
+        {
+          "label": "config.py -- Path Configuration",
+          "code": "\"\"\"\nconfig.py -- Marketing Agency Dashboard Configuration\nAll paths and constants in one place.\n\"\"\"\n\nimport os\n\n# Content repository (live site)\nCONTENT_REPO = r\"C:\\Users\\Lenovo\\pau-analytics-1.0\"\nBLOG_DIR = os.path.join(CONTENT_REPO, \"blog\")\nBLOG_DRAFTS_DIR = os.path.join(BLOG_DIR, \"drafts\")\nLINKEDIN_DRAFTS_DIR = os.path.join(BLOG_DIR, \"linkedin-drafts\")\nCASE_STUDY_DIR = os.path.join(CONTENT_REPO, \"case-study\")\nPUBLISH_QUEUE = os.path.join(CONTENT_REPO, \"publish-queue.md\")\nPUBLISH_LOG = os.path.join(CONTENT_REPO, \"publish-log.txt\")\nNEXT_WEEK_PLAN = os.path.join(CONTENT_REPO, \"next-week-plan.md\")\nWEEKLY_REPORTS_DIR = os.path.join(CONTENT_REPO, \"reports\", \"weekly\")\nPOSTED_LOG = os.path.join(LINKEDIN_DRAFTS_DIR, \"posted-log.txt\")\nBLOG_INDEX = os.path.join(BLOG_DIR, \"index.html\")\n\n# Web Chat Lead Manager API\nLEAD_MANAGER_URL = os.getenv(\"LEAD_MANAGER_URL\", \"http://localhost:8000\")\n\n# Dashboard server\nDASHBOARD_PORT = 8100"
+        }
+      ]
+    },
+    {
+      "heading": "Data Readers: Content & Lead Aggregation",
+      "body": "The readers module provides specialized functions that scan local directories for content drafts and query the lead management API. Each function returns structured data ready for the Jinja2 template.",
+      "files": [
+        {
+          "label": "readers.py -- get_linkedin_drafts()",
+          "code": "def get_linkedin_drafts() -> list[dict]:\n    \"\"\"Scan the LinkedIn drafts directory for .txt files,\n    classify each by post type, and return metadata + preview.\"\"\"\n    drafts = []\n    if not os.path.isdir(LINKEDIN_DRAFTS_DIR):\n        return drafts\n    for f in sorted(glob.glob(\n            os.path.join(LINKEDIN_DRAFTS_DIR, \"*.txt\")), reverse=True):\n        basename = os.path.basename(f)\n        if basename == \"posted-log.txt\":\n            continue\n        mod_time = datetime.fromtimestamp(os.path.getmtime(f))\n        content = read_file_safe(f)\n\n        # Determine post type from filename prefix\n        if basename.startswith(\"insight-\"):\n            post_type = \"Insight Post\"\n        else:\n            post_type = \"Blog Teaser\"\n\n        drafts.append({\n            \"filename\": basename,\n            \"post_type\": post_type,\n            \"date\": mod_time.strftime(\"%Y-%m-%d\"),\n            \"preview\": content[:200].strip() if content else \"(empty)\",\n            \"full_content\": content.strip(),\n            \"word_count\": len(content.split()) if content else 0,\n        })\n    return drafts"
+        },
+        {
+          "label": "readers.py -- get_leads_from_api() & get_lead_stats_from_api()",
+          "code": "def get_leads_from_api() -> list[dict]:\n    \"\"\"Fetch all leads from the Web Chat Lead Manager API.\n    Returns an empty list on timeout or connection error,\n    keeping the dashboard functional even when the API is down.\"\"\"\n    try:\n        resp = httpx.get(\n            f\"{LEAD_MANAGER_URL}/api/leads\", timeout=2\n        )\n        if resp.status_code == 200:\n            return resp.json()\n    except Exception:\n        pass\n    return []\n\n\ndef get_lead_stats_from_api() -> dict:\n    \"\"\"Fetch aggregated lead statistics from the API.\n    Returns safe defaults so the dashboard renders correctly\n    even when the lead manager service is unavailable.\"\"\"\n    try:\n        resp = httpx.get(\n            f\"{LEAD_MANAGER_URL}/api/stats\", timeout=2\n        )\n        if resp.status_code == 200:\n            return resp.json()\n    except Exception:\n        pass\n    return {\n        \"total\": 0,\n        \"this_week\": 0,\n        \"needs_followup\": 0,\n        \"ch_a_week\": 0,\n        \"ch_b_week\": 0,\n        \"ch_w_week\": 0,\n        \"blog_performance\": [],\n    }"
+        }
+      ]
+    },
+    {
+      "heading": "Technical Implementation Notes",
+      "body": "Key design decisions behind the dashboard and the rationale for a FastAPI + Jinja2 stack.",
+      "files": [
+        {
+          "label": "Key Design Decisions & Why FastAPI + Jinja2",
+          "code": "# Key Design Decisions\n# - Single-endpoint architecture: One FastAPI route aggregates all four\n#   tabs. The tab query parameter controls which panel the Jinja2 template\n#   renders as active, avoiding unnecessary page reloads.\n# - Graceful API degradation: Lead reader functions catch all exceptions\n#   with a 2-second timeout and return safe defaults. The dashboard remains\n#   fully functional even when the lead manager service is offline.\n# - File-based content pipeline: LinkedIn drafts, blog posts, and publish\n#   logs are plain text files in the content repository, no database\n#   required. This keeps the system compatible with git-based workflows.\n# - Centralized configuration: Every file path is defined once in config.py.\n#   Adapting the system for a different consultancy requires changing only\n#   this single file.\n# - Git activity feed: The dashboard shells out to git log to show recent\n#   commits, giving the operator a live view of publishing activity without\n#   leaving the dashboard.\n\n# Why FastAPI + Jinja2?\n# - Lightweight: No frontend build step required, the entire dashboard is\n#   server-rendered HTML with minimal JavaScript.\n# - Fast startup: Uvicorn hot-reloads on file changes, making development\n#   instant.\n# - Python-native: All data readers use standard library modules\n#   (os, glob, subprocess) plus httpx for async-safe API calls.\n# - One-click launch: The included start.bat file starts the server with a\n#   double-click on Windows."
+        }
+      ]
+    }
+  ],
+  "cta": "Want an autonomous content marketing system like this built for your own consultancy? Let's scope it."
+};
+  /* ===================== END EDIT BLOCK ===================== */
+
+  const pref = (u) => /^https?:|^mailto:|^tel:/.test(u || '') ? u : (SITE + (u || ''));
+  const esc = (s) => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const rich = (s) => esc(s).replace(/&lt;(\/?(?:b|code))&gt;/g, '<$1>');
+
+  // raw code store for copy buttons
+  const RAW = [];
+  function codeBlock(label, codeStr, extraClass){
+    const idx = RAW.push(codeStr) - 1;
+    const rendered = esc(codeStr).split('\n')
+      .map(line => /^\s*#/.test(line) ? `<span class="cmt">${line}</span>` : line).join('\n');
+    return `<div class="codeblock ${extraClass||''}">`+
+      `<div class="code-bar"><span class="path"><span>${esc(label)}</span></span>`+
+      `<button class="code-copy" data-idx="${idx}">Copy</button></div>`+
+      `<pre><code>${rendered}</code></pre></div>`;
+  }
+
+  // Breadcrumb + header
+  document.title = PROJECT.title + ": Source | AI Project Portfolio";
+  document.getElementById('crumbCat').textContent = PROJECT.category;
+  document.getElementById('crumbCat').href = pref(PROJECT.categoryUrl);
+  document.getElementById('crumbProj').textContent = PROJECT.title;
+  document.getElementById('crumbProj').href = pref(PROJECT.overviewUrl);
+  if (PROJECT.cover){
+    document.getElementById('coverStrip').style.display = '';
+    const c = document.getElementById('cover'); c.src = PROJECT.cover; c.alt = PROJECT.title + " cover";
+  }
+  document.getElementById('kicker').textContent = "Source Walkthrough · " + PROJECT.category;
+  document.getElementById('title').textContent = PROJECT.title;
+  document.getElementById('subtitle').textContent = PROJECT.subtitle;
+  document.getElementById('headTech').innerHTML = (PROJECT.tech||[]).map(t => `<span class="tech-chip">${esc(t)}</span>`).join('');
+  document.getElementById('headBtns').innerHTML =
+    (PROJECT.demoUrl ? `<a class="btn" href="${pref(PROJECT.demoUrl)}" target="_blank" rel="noopener">${esc(PROJECT.demoLabel||'Live Demo')}</a>` : '') +
+    (PROJECT.overviewUrl ? `<a class="btn ghost" href="${pref(PROJECT.overviewUrl)}">Project Overview</a>` : '') +
+    (PROJECT.repoUrl ? `<a class="btn ghost" href="${pref(PROJECT.repoUrl)}" target="_blank" rel="noopener">GitHub Repo</a>` : '');
+
+  const section = (tab, inner) => `<section class="sec"><div class="sec-rule"><span class="tab">${esc(tab)}</span>${inner}</div></section>`;
+  let html = "";
+  const P = PROJECT;
+
+  if (P.about){
+    html += section("About This Code", `<h2>About This Code Showcase</h2><p class="intro">${rich(P.about)}</p>`);
+  }
+  if (P.structure && P.structure.code){
+    html += section("Project Structure", `<h2>Project Structure</h2>`+
+      codeBlock(P.structure.label || 'project/', P.structure.code, 'tree'));
+  }
+  (P.walkthrough||[]).forEach(w => {
+    let inner = `<h2>${esc(w.heading)}</h2>`;
+    if (w.body) inner += `<p class="body">${rich(w.body)}</p>`;
+    (w.files||[]).forEach(f => { inner += codeBlock(f.label, f.code); });
+    html += section("Code", inner);
+  });
+  // CTA
+  html += `<section class="sec"><div class="cta-inner">`+
+    `<div><h3>Interested in the build?</h3><p>${esc(P.cta || "Let's talk.")}</p></div>`+
+    `<div class="cta-btns">`+
+    (P.demoUrl ? `<a class="btn" href="${pref(P.demoUrl)}" target="_blank" rel="noopener">${esc(P.demoLabel||'Live Demo')}</a>` : '')+
+    `<a class="btn ghost" href="${SITE}contact.html">Get in Touch</a>`+
+    `</div></div></section>`;
+
+  document.getElementById('body').innerHTML = html;
+
+  // Copy buttons
+  function copyText(text, btn){
+    const done = ()=>{ const o=btn.textContent; btn.textContent='Copied ✓'; setTimeout(()=>btn.textContent=o.includes('Copied')?'Copy':o,1400); };
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(done).catch(()=>fb(text,done)); }
+    else fb(text,done);
+  }
+  function fb(text,done){ const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(ta); done(); }
+  document.querySelectorAll('.code-copy').forEach(btn =>
+    btn.addEventListener('click', ()=> copyText(RAW[+btn.dataset.idx], btn)));
+
+  // Masthead search
+  const ITEMS = [
+    {t:PROJECT.title, c:PROJECT.category, s:PROJECT.slug},
+    {t:"Courier CS Quality Console", c:"Conversational Data Analytics", s:"courier-cs-quality-console"},
+    {t:"Voucher Analyzer", c:"Conversational Data Analytics", s:"voucher-analyzer"},
+    {t:"Wiseman", c:"Knowledge & Reference Chatbots", s:"wiseman"},
+    {t:"Sunny Car Accessories", c:"Agentic Commerce", s:"sunny-car-accessories"},
+    {t:"Bookshelf", c:"Multi-Agent Decision Systems", s:"bookshelf"}
+  ];
+  const searchInput = document.getElementById('searchInput');
+  const searchResults = document.getElementById('searchResults');
+  function runSearch(q){
+    if(q.trim().length < 2){ searchResults.style.display='none'; return; }
+    const ql = q.toLowerCase();
+    const hits = ITEMS.filter(it => (it.t+' '+it.c).toLowerCase().includes(ql));
+    searchResults.innerHTML = hits.length ? hits.map(it =>
+      `<div class="sr-item"><div class="sr-cat">${esc(it.c)}</div>`+
+      `<a href="${SITE}${it.s}.html"><div class="sr-title">${esc(it.t)}</div></a>`+
+      `<div class="sr-links"><a href="${SITE}${it.s}.html">View Details</a></div></div>`).join('')
+      : `<div class="sr-none">No projects found. Try a different keyword.</div>`;
+    searchResults.style.display='block';
+  }
+  searchInput.addEventListener('input', e => runSearch(e.target.value));
+  document.addEventListener('click', e => { if(!e.target.closest('.search-box')) searchResults.style.display='none'; });
+
+  // Drawer
+  const drawer=document.getElementById('drawer'), overlay=document.getElementById('overlay');
+  const openMenu=()=>{ drawer.classList.add('open'); overlay.classList.add('open'); };
+  const closeMenu=()=>{ drawer.classList.remove('open'); overlay.classList.remove('open'); };
+  document.getElementById('hamburger').addEventListener('click', openMenu);
+  document.getElementById('drawerClose').addEventListener('click', closeMenu);
+  overlay.addEventListener('click', closeMenu);
+  drawer.querySelectorAll('a').forEach(a=>a.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeMenu(); searchResults.style.display='none'; }});
+</script>
 </body>
 </html>

@@ -1,477 +1,395 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Course Creator - Source Code</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Course Creator: Source | AI Project Portfolio</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root{ --ink:#222; --paper:#fff; --hair:#dddddd; --gray:#555; --accent:#B8860B; --navy:#1E3A5F; --code-bg:#fbfbf8; --cmt:#6b8190; }
+  html{ scroll-behavior:smooth; }
+  body{ background:var(--paper); color:var(--ink); font-family:Arial, Helvetica, sans-serif; line-height:1.6; overflow-x:hidden; }
+  a{ color:inherit; text-decoration:none; }
+  a:hover h2, a:hover h3, a:hover h4{ color:var(--accent); }
+  p code, li code{ font-family:"Courier New", monospace; font-size:.86em; background:#f2f3f5; padding:1px 5px; color:var(--navy); }
 
-        body {
-            font-family: 'Arial', sans-serif;
-            line-height: 1.6;
-            color: #222;
-            background-color: #ffffff;
-        }
+  /* Masthead (shared) */
+  .masthead{ display:flex; align-items:center; justify-content:space-between; padding:14px 28px; max-width:1240px; margin:0 auto; gap:18px; }
+  .mast-left{ display:flex; align-items:center; gap:20px; }
+  .logo{ background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; letter-spacing:3px; font-size:.95rem; padding:8px 12px; white-space:nowrap; }
+  .mast-nav{ display:flex; gap:20px; font-family:Arial, Helvetica, sans-serif; font-size:.72rem; letter-spacing:1.4px; text-transform:uppercase; }
+  .mast-nav a:hover{ color:var(--accent); }
+  .hamburger{ display:none; flex-direction:column; gap:4px; background:none; border:none; cursor:pointer; padding:6px; }
+  .hamburger span{ width:22px; height:2px; background:#222; display:block; }
+  .rule-top{ border:none; border-top:3px solid #222; max-width:1240px; margin:0 auto; }
 
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+  /* Search (shared) */
+  .search-box{ position:relative; width:200px; }
+  .search-input{ width:100%; padding:7px 30px 7px 12px; border:1px solid var(--hair); background:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; color:#222; }
+  .search-input:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(184,134,11,.15); }
+  .search-ic{ position:absolute; right:10px; top:50%; transform:translateY(-50%); color:var(--gray); font-size:.8rem; pointer-events:none; }
+  .search-results{ position:absolute; top:calc(100% + 4px); left:0; width:340px; max-width:86vw; background:#fff; border:1px solid #222; max-height:60vh; overflow-y:auto; z-index:120; display:none; }
+  .sr-item{ padding:12px 14px; border-bottom:1px solid var(--hair); }
+  .sr-item:last-child{ border-bottom:none; }
+  .sr-cat{ font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; margin-bottom:4px; color:var(--accent); }
+  .sr-title{ font-weight:700; font-size:1.02rem; color:#222; }
+  .sr-links{ font-size:.58rem; letter-spacing:.8px; text-transform:uppercase; color:var(--gray); margin-top:5px; }
+  .sr-links a:hover{ color:var(--accent); }
+  .sr-none{ padding:16px 14px; font-size:.82rem; color:var(--gray); }
 
-        .back-nav {
-            margin-bottom: 20px;
-        }
+  /* Shared bits */
+  .tab{ display:inline-block; background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.66rem; letter-spacing:2px; text-transform:uppercase; padding:6px 12px; }
+  .rubric{ font-family:Arial, Helvetica, sans-serif; font-size:.62rem; font-weight:700; letter-spacing:1.6px; text-transform:uppercase; color:var(--accent); display:block; margin-bottom:8px; }
+  .tech-chip{ display:inline-block; border:1px solid var(--hair); padding:6px 12px; font-size:.72rem; letter-spacing:.3px; color:#333; white-space:nowrap; }
+  .tech-chip:hover{ border-color:var(--accent); color:var(--accent); }
+  .btn{ display:inline-block; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.7rem; letter-spacing:1.6px; text-transform:uppercase; padding:13px 24px; border:1px solid #222; background:#222; color:#fff; cursor:pointer; transition:.15s; }
+  .btn:hover{ background:var(--accent); border-color:var(--accent); }
+  .btn.ghost{ background:#fff; color:#222; }
+  .btn.ghost:hover{ color:var(--accent); border-color:var(--accent); background:#fff; }
 
-        .back-nav a {
-            color: #007BFF;
-            text-decoration: none;
-            font-size: 1rem;
-        }
+  /* Breadcrumb */
+  .crumb{ max-width:1240px; margin:0 auto; padding:20px 28px 0; font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--gray); }
+  .crumb a:hover{ color:var(--accent); }
+  .crumb .sep{ color:var(--hair); margin:0 8px; }
 
-        .back-nav a:hover {
-            text-decoration: underline;
-        }
+  /* Header (slim cover banner + copy) */
+  .src-head{ max-width:1240px; margin:0 auto; padding:14px 28px 6px; }
+  .cover-strip{ border:1px solid var(--hair); line-height:0; background:#eef1f4; }
+  .cover-strip img{ width:100%; height:190px; object-fit:cover; object-position:center 42%; display:block; }
+  .src-head h1{ font-size:2.5rem; font-weight:900; line-height:1.04; letter-spacing:-.008em; margin-top:18px; }
+  .src-head .sub{ font-style:italic; font-size:1.08rem; color:#333; margin-top:10px; max-width:72ch; }
+  .head-tech{ display:flex; flex-wrap:wrap; gap:9px; margin-top:16px; }
+  .head-btns{ display:flex; flex-wrap:wrap; gap:12px; margin-top:18px; }
 
-        .project-header {
-            text-align: center;
-            margin-bottom: 40px;
-            padding: 40px 0;
-            background: linear-gradient(135deg, #4299E1, #2B6CB0);
-            color: white;
-            border-radius: 10px;
-        }
+  /* Section shell */
+  .sec{ max-width:1240px; margin:0 auto; padding:26px 28px; }
+  .sec-rule{ border-top:3px solid #222; padding-top:16px; }
+  .sec .tab{ margin-bottom:14px; }
+  .sec h2{ font-size:1.7rem; font-weight:900; line-height:1.06; }
+  .sec .intro{ color:#333; font-size:1.02rem; margin-top:10px; max-width:80%; }
+  .sec .body{ color:#333; font-size:1rem; margin-top:10px; max-width:80%; }
 
-        .project-header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
+  /* Code block */
+  .codeblock{ border:1px solid var(--hair); margin-top:16px; }
+  .code-bar{ display:flex; align-items:center; justify-content:space-between; gap:12px; background:var(--navy); color:#fff; padding:8px 12px; }
+  .code-bar .path{ font-family:"Courier New", monospace; font-size:.74rem; letter-spacing:.2px; opacity:.96; display:flex; align-items:center; gap:7px; min-width:0; }
+  .code-bar .path span{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .code-copy{ flex:none; background:none; border:1px solid rgba(255,255,255,.4); color:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.56rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; padding:5px 11px; cursor:pointer; transition:.15s; }
+  .code-copy:hover{ background:rgba(255,255,255,.16); }
+  .codeblock pre{ margin:0; padding:14px 16px; overflow-x:auto; background:var(--code-bg); }
+  .codeblock code{ font-family:"Courier New", monospace; font-size:.82rem; line-height:1.6; color:#1b2a3a; background:none; padding:0; white-space:pre; display:block; }
+  .codeblock code .cmt{ color:var(--cmt); font-style:italic; }
 
-        .project-header p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
+  .tree .code-bar .path::before{ content:"📁"; }
 
-        .badges {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin: 20px 0;
-            flex-wrap: wrap;
-        }
+  /* Notes */
+  .note-block{ margin-top:22px; }
+  .note-block h3{ font-size:1.15rem; font-weight:800; }
+  .blist{ list-style:none; margin-top:12px; border-top:1px solid var(--hair); }
+  .blist li{ padding:12px 0; border-bottom:1px solid var(--hair); color:#333; font-size:.95rem; }
+  .blist li b{ color:#222; }
 
-        .badge {
-            background-color: rgba(255, 255, 255, 0.2);
-            color: white;
-            padding: 5px 12px;
-            border-radius: 15px;
-            font-size: 0.9rem;
-        }
+  /* CTA */
+  .cta-inner{ display:flex; align-items:center; gap:18px; flex-wrap:wrap; border-top:3px solid #222; padding-top:18px; }
+  .cta-inner h3{ font-size:1.4rem; font-weight:900; line-height:1.08; }
+  .cta-inner p{ color:var(--gray); font-size:.95rem; margin-top:4px; }
+  .cta-btns{ margin-left:auto; display:flex; gap:12px; flex-wrap:wrap; }
 
-        .content-section {
-            margin: 40px 0;
-            padding: 30px;
-            background-color: #f9f9f9;
-            border-radius: 8px;
-            border-left: 5px solid #4299E1;
-        }
+  footer{ background:#222; max-width:1240px; margin:30px auto 0; padding:24px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; letter-spacing:.5px; color:#fff; text-align:center; }
+  .note{ max-width:1240px; margin:14px auto 0; padding:8px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.62rem; letter-spacing:1px; color:#999; }
 
-        .content-section h2 {
-            color: #2B6CB0;
-            margin-bottom: 20px;
-            font-size: 1.8rem;
-        }
+  /* Drawer (shared) */
+  .drawer{ position:fixed; top:0; left:-300px; width:280px; height:100vh; background:#fff; z-index:200; box-shadow:2px 0 14px rgba(0,0,0,.15); transition:left .28s ease; padding:74px 26px 26px; }
+  .drawer.open{ left:0; }
+  .drawer a{ display:block; font-family:Arial, Helvetica, sans-serif; font-size:.82rem; letter-spacing:1.2px; text-transform:uppercase; padding:14px 0; border-bottom:1px solid var(--hair); }
+  .overlay{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:150; }
+  .overlay.open{ display:block; }
+  .drawer-close{ position:absolute; top:20px; right:20px; font-family:Arial, Helvetica, sans-serif; font-size:1.4rem; background:none; border:none; cursor:pointer; }
 
-        .content-section h3 {
-            color: #333;
-            margin: 20px 0 10px 0;
-            font-size: 1.3rem;
-        }
-
-        .highlight-box {
-            background: linear-gradient(135deg, #EFF6FF, #DBEAFE);
-            padding: 20px;
-            border-radius: 10px;
-            border-left: 5px solid #4299E1;
-            margin: 20px 0;
-        }
-
-        .code-container {
-            background-color: #1e1e1e;
-            border-radius: 8px;
-            padding: 20px;
-            margin: 20px 0;
-            overflow-x: auto;
-        }
-
-        .code-header {
-            color: #4299E1;
-            font-weight: bold;
-            margin-bottom: 15px;
-            font-size: 1.1rem;
-            border-bottom: 1px solid #333;
-            padding-bottom: 10px;
-        }
-
-        .code-block {
-            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-            font-size: 14px;
-            line-height: 1.5;
-            color: #d4d4d4;
-            white-space: pre;
-        }
-
-        .code-comment { color: #6a9955; font-style: italic; }
-        .code-keyword { color: #569cd6; }
-        .code-string { color: #ce9178; }
-        .code-function { color: #dcdcaa; }
-        .code-number { color: #b5cea8; }
-        .code-class { color: #4ec9b0; }
-        .code-decorator { color: #c586c0; }
-
-        .demo-links {
-            text-align: center;
-            margin: 30px 0;
-        }
-
-        .demo-btn {
-            display: inline-block;
-            background-color: #007BFF;
-            color: white;
-            padding: 12px 25px;
-            text-decoration: none;
-            border-radius: 5px;
-            margin: 0 10px;
-            font-weight: bold;
-            transition: background-color 0.3s;
-        }
-
-        .demo-btn:hover { background-color: #0056b3; }
-
-        .demo-btn.secondary { background-color: #2B6CB0; }
-        .demo-btn.secondary:hover { background-color: #1E4E8C; }
-
-        .file-tree {
-            background-color: #f4f4f4;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 15px;
-            margin: 15px 0;
-            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-            font-size: 0.9rem;
-            white-space: pre;
-            color: #333;
-        }
-
-        @media (max-width: 768px) {
-            .project-header h1 { font-size: 2rem; }
-            .project-header p { font-size: 1rem; }
-            .demo-btn { margin: 5px; padding: 10px 20px; }
-            .container { padding: 15px; }
-        }
-    </style>
+  @media (max-width:900px){
+    .cta-btns{ margin-left:0; }
+    .mast-nav{ display:none; }
+    .hamburger{ display:flex; }
+    .masthead{ padding:12px 16px; }
+    .mast-left{ gap:10px; min-width:0; flex:1; }
+    .logo{ font-size:.72rem; letter-spacing:1.5px; padding:6px 8px; }
+    .search-box{ flex:1; width:auto; min-width:0; }
+    .search-results{ position:fixed; top:58px; left:12px; right:12px; width:auto; max-width:none; }
+    .src-head h1{ font-size:1.95rem; }
+    .cover-strip img{ height:150px; }
+  }
+</style>
 </head>
 <body>
-    <div class="container">
-        <nav class="back-nav">
-            <a href="course-creator.html">← Back to Project Overview</a>
-        </nav>
 
-        <div class="project-header">
-            <h1>🤝 Course Creator</h1>
-            <p>Quality content built by a coordinated AI agent team</p>
+  <div class="overlay" id="overlay"></div>
+  <nav class="drawer" id="drawer">
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">&times;</button>
+    <a href="index.html">Home</a>
+    <a href="project-categories.html">Categories</a>
+    <a href="contact.html">Contact</a>
+    <a href="https://lyven81.github.io/data-analyst-portfolio/index.html">Data Portfolio</a>
+  </nav>
 
-            <div class="badges">
-                <span class="badge">Google ADK</span>
-                <span class="badge">A2A Protocol</span>
-                <span class="badge">Gemini 2.5 Pro</span>
-                <span class="badge">Python</span>
-                <span class="badge">Cloud Run</span>
-            </div>
-        </div>
-
-        <div class="highlight-box">
-            <h3>🔍 About This Code Showcase</h3>
-            <p><strong>This page walks through the five files that define the multi-agent pipeline:</strong> the four agents (Researcher, Judge, Content Builder, Orchestrator) and the shared authenticated HTTP client that lets them call each other securely on Cloud Run.</p>
-            <p>The pattern is reusable — swap the agent prompts and you have a generic <em>gather → validate → build → deliver</em> system. Deployment scripts and Dockerfiles are in the GitHub repo.</p>
-        </div>
-
-        <div class="content-section">
-            <h2>📁 Project Structure</h2>
-            <div class="file-tree">course-creator/
-├── agents/
-│   ├── researcher/         # Researcher agent — Google Search
-│   │   ├── agent.py
-│   │   ├── adk_app.py
-│   │   └── Dockerfile
-│   ├── judge/              # Judge agent — Pydantic-structured verdict
-│   │   ├── agent.py
-│   │   └── Dockerfile
-│   ├── content_builder/    # Content Builder — synthesises the course
-│   │   ├── agent.py
-│   │   └── Dockerfile
-│   └── orchestrator/       # Orchestrator — wires the others together
-│       ├── agent.py
-│       └── Dockerfile
-├── app/                    # FastAPI web frontend (5th Cloud Run service)
-│   ├── main.py
-│   ├── frontend/
-│   └── Dockerfile
-├── shared/                 # Files symlinked into every agent
-│   ├── a2a_utils.py
-│   ├── adk_app.py
-│   └── authenticated_httpx.py
-├── deploy.sh               # One-shot deploy of all 5 Cloud Run services
-├── run_local.sh            # Start all agents + app locally on ports 8000–8004
-└── pyproject.toml</div>
-        </div>
-
-        <div class="content-section">
-            <h2>🔍 Researcher Agent — Google Search Tool</h2>
-            <p>The Researcher is the simplest of the four. It is a standard ADK <code>Agent</code> with one tool: <code>google_search</code>. Its only job is to gather web information and produce a clear summary that the Judge will then evaluate.</p>
-
-            <div class="code-container">
-                <div class="code-header">📄 agents/researcher/agent.py</div>
-                <div class="code-block">
-<span class="code-keyword">from</span> google.adk.agents <span class="code-keyword">import</span> Agent
-<span class="code-keyword">from</span> google.adk.tools.google_search_tool <span class="code-keyword">import</span> google_search
-
-
-MODEL = <span class="code-string">"gemini-2.5-pro"</span>
-
-researcher = <span class="code-function">Agent</span>(
-    name=<span class="code-string">"researcher"</span>,
-    model=MODEL,
-    description=<span class="code-string">"Gathers information on a topic using Google Search."</span>,
-    instruction=<span class="code-string">"""
-    You are an expert researcher. Your goal is to find comprehensive and
-    accurate information on the user's topic.
-    Use the `google_search` tool to find relevant information.
-    Summarize your findings clearly.
-    If you receive feedback that your research is insufficient,
-    use the feedback to refine your next search.
-    """</span>,
-    tools=[google_search],
-)
-
-root_agent = researcher
-</div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>⚖️ Judge Agent — Pydantic-Structured Verdict</h2>
-            <p>The Judge is the quality gate. Instead of returning free-form prose, it returns a <code>JudgeFeedback</code> Pydantic schema with a <code>status</code> field set to either <strong>pass</strong> or <strong>fail</strong>. This deterministic shape is what lets the Orchestrator branch the loop without any text parsing.</p>
-
-            <div class="code-container">
-                <div class="code-header">📄 agents/judge/agent.py</div>
-                <div class="code-block">
-<span class="code-keyword">from</span> typing <span class="code-keyword">import</span> Literal
-<span class="code-keyword">from</span> google.adk.agents <span class="code-keyword">import</span> Agent
-<span class="code-keyword">from</span> pydantic <span class="code-keyword">import</span> BaseModel, Field
-
-MODEL = <span class="code-string">"gemini-2.5-pro"</span>
-
-<span class="code-comment"># 1. Structured output schema — the Orchestrator depends on this exact shape</span>
-<span class="code-keyword">class</span> <span class="code-class">JudgeFeedback</span>(BaseModel):
-    <span class="code-string">"""Structured feedback from the Judge agent."""</span>
-    status: Literal[<span class="code-string">"pass"</span>, <span class="code-string">"fail"</span>] = <span class="code-function">Field</span>(
-        description=<span class="code-string">"Whether the research is sufficient ('pass') or needs more work ('fail')."</span>
-    )
-    feedback: str = <span class="code-function">Field</span>(
-        description=<span class="code-string">"Detailed feedback on what is missing. If 'pass', a brief confirmation."</span>
-    )
-
-<span class="code-comment"># 2. The agent itself — note the strict editor instruction and disallow_transfer flags</span>
-judge = <span class="code-function">Agent</span>(
-    name=<span class="code-string">"judge"</span>,
-    model=MODEL,
-    description=<span class="code-string">"Evaluates research findings for completeness and accuracy."</span>,
-    instruction=<span class="code-string">"""
-    You are a strict editor.
-    Evaluate the 'research_findings' against the user's original request.
-    If the findings are missing key info, return status='fail'.
-    If they are comprehensive, return status='pass'.
-    """</span>,
-    output_schema=JudgeFeedback,
-    <span class="code-comment"># Disallow delegation — this agent only emits the schema</span>
-    disallow_transfer_to_parent=<span class="code-keyword">True</span>,
-    disallow_transfer_to_peers=<span class="code-keyword">True</span>,
-)
-
-root_agent = judge
-</div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>🎯 Orchestrator — A2A Composition with LoopAgent</h2>
-            <p>This is the heart of the system. The Orchestrator does not run the other agents in-process — it calls them as remote services using <code>RemoteA2aAgent</code>. It then composes them with <code>LoopAgent</code> (research + judge cycle) and <code>SequentialAgent</code> (loop → content builder).</p>
-
-            <div class="code-container">
-                <div class="code-header">📄 agents/orchestrator/agent.py — Remote agent connections</div>
-                <div class="code-block">
-<span class="code-keyword">import</span> os
-<span class="code-keyword">from</span> google.adk.agents <span class="code-keyword">import</span> BaseAgent, LoopAgent, SequentialAgent
-<span class="code-keyword">from</span> google.adk.agents.remote_a2a_agent <span class="code-keyword">import</span> RemoteA2aAgent
-<span class="code-keyword">from</span> authenticated_httpx <span class="code-keyword">import</span> create_authenticated_client
-
-<span class="code-comment"># Each remote agent is just a URL — A2A handles the rest</span>
-researcher_url = os.environ.get(
-    <span class="code-string">"RESEARCHER_AGENT_CARD_URL"</span>,
-    <span class="code-string">"http://localhost:8001/a2a/agent/.well-known/agent-card.json"</span>,
-)
-researcher = <span class="code-function">RemoteA2aAgent</span>(
-    name=<span class="code-string">"researcher"</span>,
-    agent_card=researcher_url,
-    description=<span class="code-string">"Gathers information using Google Search."</span>,
-    after_agent_callback=<span class="code-function">create_save_output_callback</span>(<span class="code-string">"research_findings"</span>),
-    httpx_client=<span class="code-function">create_authenticated_client</span>(researcher_url),
-)
-
-judge_url = os.environ.get(<span class="code-string">"JUDGE_AGENT_CARD_URL"</span>, <span class="code-string">"http://localhost:8002/a2a/agent/.well-known/agent-card.json"</span>)
-judge = <span class="code-function">RemoteA2aAgent</span>(
-    name=<span class="code-string">"judge"</span>,
-    agent_card=judge_url,
-    description=<span class="code-string">"Evaluates research."</span>,
-    after_agent_callback=<span class="code-function">create_save_output_callback</span>(<span class="code-string">"judge_feedback"</span>),
-    httpx_client=<span class="code-function">create_authenticated_client</span>(judge_url),
-)
-
-content_builder_url = os.environ.get(<span class="code-string">"CONTENT_BUILDER_AGENT_CARD_URL"</span>, <span class="code-string">"http://localhost:8003/a2a/agent/.well-known/agent-card.json"</span>)
-content_builder = <span class="code-function">RemoteA2aAgent</span>(
-    name=<span class="code-string">"content_builder"</span>,
-    agent_card=content_builder_url,
-    description=<span class="code-string">"Builds the course."</span>,
-    httpx_client=<span class="code-function">create_authenticated_client</span>(content_builder_url),
-)
-</div>
-            </div>
-
-            <div class="code-container">
-                <div class="code-header">📄 agents/orchestrator/agent.py — Custom EscalationChecker</div>
-                <div class="code-block">
-<span class="code-comment"># Custom BaseAgent — reads the Judge's verdict, decides whether to break the loop</span>
-<span class="code-keyword">class</span> <span class="code-class">EscalationChecker</span>(BaseAgent):
-    <span class="code-string">"""Checks the judge's feedback and escalates (breaks the loop) if it passed."""</span>
-
-    <span class="code-keyword">async def</span> <span class="code-function">_run_async_impl</span>(self, ctx: InvocationContext):
-        feedback = ctx.session.state.<span class="code-function">get</span>(<span class="code-string">"judge_feedback"</span>)
-
-        is_pass = <span class="code-keyword">False</span>
-        <span class="code-keyword">if</span> isinstance(feedback, dict) <span class="code-keyword">and</span> feedback.<span class="code-function">get</span>(<span class="code-string">"status"</span>) == <span class="code-string">"pass"</span>:
-            is_pass = <span class="code-keyword">True</span>
-
-        <span class="code-keyword">if</span> is_pass:
-            <span class="code-comment"># escalate=True tells the parent LoopAgent to STOP looping</span>
-            <span class="code-keyword">yield</span> <span class="code-function">Event</span>(author=self.name, actions=<span class="code-function">EventActions</span>(escalate=<span class="code-keyword">True</span>))
-        <span class="code-keyword">else</span>:
-            <span class="code-comment"># Continue — LoopAgent will run another iteration</span>
-            <span class="code-keyword">yield</span> <span class="code-function">Event</span>(author=self.name)
-
-escalation_checker = <span class="code-function">EscalationChecker</span>(name=<span class="code-string">"escalation_checker"</span>)
-</div>
-            </div>
-
-            <div class="code-container">
-                <div class="code-header">📄 agents/orchestrator/agent.py — Pipeline composition</div>
-                <div class="code-block">
-<span class="code-comment"># LoopAgent runs Researcher → Judge → EscalationChecker repeatedly</span>
-<span class="code-comment"># until the EscalationChecker yields escalate=True, OR max_iterations is hit</span>
-research_loop = <span class="code-function">LoopAgent</span>(
-    name=<span class="code-string">"research_loop"</span>,
-    description=<span class="code-string">"Iteratively researches and judges until quality standards are met."</span>,
-    sub_agents=[researcher, judge, escalation_checker],
-    max_iterations=<span class="code-number">3</span>,
-)
-
-<span class="code-comment"># SequentialAgent runs the research loop, then hands off to the Content Builder</span>
-root_agent = <span class="code-function">SequentialAgent</span>(
-    name=<span class="code-string">"course_creation_pipeline"</span>,
-    description=<span class="code-string">"A pipeline that researches a topic and then builds a course from it."</span>,
-    sub_agents=[research_loop, content_builder],
-)
-</div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>🔐 Service-to-Service Auth — authenticated_httpx</h2>
-            <p>This is what makes the A2A architecture safe in production. Every HTTP call between agents on Cloud Run carries a Google identity token. The receiving service rejects calls that aren't signed by an authorised service account.</p>
-
-            <div class="code-container">
-                <div class="code-header">📄 shared/authenticated_httpx.py</div>
-                <div class="code-block">
-<span class="code-keyword">def</span> <span class="code-function">create_authenticated_client</span>(remote_service_url: str, timeout: float = <span class="code-number">600.0</span>):
-    <span class="code-string">"""httpx.AsyncClient that signs each request with a Google identity token.
-       In Cloud Run: token comes from the Compute Metadata server.
-       Locally: token comes from the gcloud CLI.
-    """</span>
-
-    <span class="code-keyword">class</span> <span class="code-class">_IdentityTokenAuth</span>(httpx.Auth):
-        <span class="code-keyword">def</span> <span class="code-function">__init__</span>(self, remote_service_url: str):
-            parsed_url = <span class="code-function">urlparse</span>(remote_service_url)
-            self.root_url = f<span class="code-string">"{parsed_url.scheme}://{parsed_url.netloc}"</span>
-            self.session = <span class="code-keyword">None</span>
-
-        <span class="code-keyword">def</span> <span class="code-function">auth_flow</span>(self, request):
-            <span class="code-keyword">if</span> self.session:
-                id_token = self.session.credentials.token
-            <span class="code-keyword">else</span>:
-                <span class="code-comment"># In Cloud Run — fetch from metadata server</span>
-                credentials = <span class="code-function">fetch_id_token_credentials</span>(audience=self.root_url)
-                credentials.<span class="code-function">refresh</span>(<span class="code-function">Request</span>())
-                self.session = <span class="code-function">AuthorizedSession</span>(credentials)
-                id_token = self.session.credentials.token
-
-            <span class="code-keyword">if</span> id_token:
-                request.headers[<span class="code-string">"Authorization"</span>] = f<span class="code-string">"Bearer {id_token}"</span>
-            <span class="code-keyword">yield</span> request
-
-    <span class="code-keyword">return</span> httpx.<span class="code-function">AsyncClient</span>(auth=<span class="code-function">_IdentityTokenAuth</span>(remote_service_url), follow_redirects=<span class="code-keyword">True</span>, timeout=timeout)
-</div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <h2>⚙️ Technical Implementation Notes</h2>
-            <h3>Why a LoopAgent + EscalationChecker?</h3>
-            <ul style="margin: 15px 0; padding-left: 20px;">
-                <li><strong>Deterministic loop control:</strong> The Judge's Pydantic schema means the EscalationChecker reads <code>feedback["status"] == "pass"</code> with no text parsing</li>
-                <li><strong>Hard stop at 3 iterations:</strong> Even if the Judge always says "fail", the loop terminates — protects against runaway costs</li>
-                <li><strong>State-based handoff:</strong> Each agent writes its output to <code>ctx.session.state</code> via an <code>after_agent_callback</code> so the next agent in the chain can read it</li>
-            </ul>
-
-            <h3>Why RemoteA2aAgent instead of in-process imports?</h3>
-            <ul style="margin: 15px 0; padding-left: 20px;">
-                <li><strong>Independent deployment:</strong> Each agent has its own Dockerfile, its own Cloud Run revision, its own scaling policy</li>
-                <li><strong>Service discovery:</strong> An <code>agent-card.json</code> at <code>/.well-known/</code> exposes capability metadata — the Orchestrator uses it to introspect the remote agent</li>
-                <li><strong>Language-agnostic boundary:</strong> Today every agent is Python, but the A2A protocol is JSON-RPC over HTTP — any of these agents could be rewritten in Go or TypeScript without changing the others</li>
-                <li><strong>Auth at the network boundary:</strong> Every call is signed and verified, not just trusted because it's "in the same script"</li>
-            </ul>
-
-            <h3>Why Vertex AI instead of API keys?</h3>
-            <ul style="margin: 15px 0; padding-left: 20px;">
-                <li><strong>No key rotation:</strong> Each Cloud Run service has its own service account; Vertex auth piggybacks on Google IAM</li>
-                <li><strong>Audit trail:</strong> Every Gemini call is logged against a service account, not a shared API key</li>
-                <li><strong>Project-level cost attribution:</strong> Token spend shows up in the same GCP billing line as everything else, with per-service breakdown</li>
-            </ul>
-        </div>
-
-        <div class="demo-links">
-            <a href="https://course-creator-662370080553.us-west1.run.app/" target="_blank" class="demo-btn">🚀 Try Live Demo</a>
-            <a href="course-creator.html" class="demo-btn secondary">📖 View Full Project Details</a>
-        </div>
-
-        <nav class="back-nav" style="text-align: center; margin-top: 40px;">
-            <a href="index.html">← Back to Portfolio</a> |
-            <a href="course-creator.html">View Project Overview</a>
-        </nav>
+  <div class="masthead">
+    <div class="mast-left">
+      <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+      <a class="logo" href="index.html">AI PROJECTS</a>
+      <nav class="mast-nav">
+        <a href="project-categories.html">Categories</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <div class="search-box">
+        <input type="text" class="search-input" id="searchInput" autocomplete="off" placeholder="Search AI projects..." aria-label="Search AI projects">
+        <span class="search-ic">&#128269;</span>
+        <div class="search-results" id="searchResults"></div>
+      </div>
     </div>
+  </div>
+  <hr class="rule-top">
+
+  <div class="crumb">
+    <a href="project-categories.html">Categories</a>
+    <span class="sep">/</span><a id="crumbCat" href="#"></a>
+    <span class="sep">/</span><a id="crumbProj" href="#"></a>
+    <span class="sep">/</span><span>Source</span>
+  </div>
+
+  <section class="src-head">
+    <div class="cover-strip" id="coverStrip" style="display:none"><img id="cover" alt=""></div>
+    <span class="rubric" id="kicker"></span>
+    <h1 id="title"></h1>
+    <p class="sub" id="subtitle"></p>
+    <div class="head-tech" id="headTech"></div>
+    <div class="head-btns" id="headBtns"></div>
+  </section>
+
+  <div id="body"></div>
+
+  <footer>&copy; 2026 Lee Yih Ven | AI Project Portfolio &middot; All rights reserved.</footer>
+  <div class="note">Sample Source-Showcase-E2 (TEMPLATE): source-code page on the index magazine system: slim cover banner, About, Project Structure, code walkthrough with copyable navy-barred code blocks, CTA. Reuse by editing only the PROJECT block at the top of the script.</div>
+
+<script>
+  const SITE = "";
+
+  /* =================================================================
+     EDIT PER PROJECT  -  the ONLY block you change per page.
+     Copy this file, swap PROJECT, save as <slug>-source.html.
+     - structure.code : the project file tree (plain text)
+     - walkthrough[]   : { heading, body, files:[{label, code}] }
+     - notes[]         : { heading, bullets:[...] }
+     Code strings can be multi-line; they render verbatim.
+     ================================================================= */
+  const PROJECT = {
+  "slug": "course-creator",
+  "category": "Content Automation",
+  "categoryUrl": "category-content-automation.html",
+  "title": "Course Creator",
+  "subtitle": "A walk through the five files that define the multi-agent pipeline, the four agents and the shared authenticated client that lets them call each other securely on Cloud Run.",
+  "cover": "images/course-creator/cover.jpeg",
+  "tech": [
+    "Google ADK",
+    "A2A Protocol",
+    "Gemini 2.5 Pro",
+    "Python",
+    "Cloud Run"
+  ],
+  "overviewUrl": "course-creator.html",
+  "demoLabel": "Try Live Demo",
+  "demoUrl": "https://course-creator-662370080553.us-west1.run.app/",
+  "repoUrl": "https://github.com/lyven81",
+  "about": "This page walks through the code behind the multi-agent pipeline: the four agents (Researcher, Judge, Content Builder, Orchestrator) and the shared authenticated HTTP client. The pattern is reusable, swap the agent prompts and you have a generic gather, validate, build, deliver system. Deployment scripts and Dockerfiles live in the GitHub repo.",
+  "structure": {
+    "label": "course-creator/",
+    "code": "course-creator/\n├── agents/\n│   ├── researcher/          # Researcher agent — Google Search\n│   │   ├── agent.py\n│   │   ├── adk_app.py\n│   │   └── Dockerfile\n│   ├── judge/               # Judge agent — Pydantic-structured verdict\n│   │   ├── agent.py\n│   │   └── Dockerfile\n│   ├── content_builder/     # Content Builder — synthesises the course\n│   │   ├── agent.py\n│   │   └── Dockerfile\n│   └── orchestrator/        # Orchestrator — wires the others together\n│       ├── agent.py\n│       └── Dockerfile\n├── app/                     # FastAPI web frontend (5th Cloud Run service)\n│   ├── main.py\n│   ├── frontend/\n│   └── Dockerfile\n├── shared/                  # Symlinked into every agent\n│   ├── a2a_utils.py\n│   ├── adk_app.py\n│   └── authenticated_httpx.py\n├── deploy.sh                # One-shot deploy of all 5 Cloud Run services\n├── run_local.sh             # Start all agents + app locally (ports 8000-8004)\n└── pyproject.toml"
+  },
+  "walkthrough": [
+    {
+      "heading": "Researcher Agent: Google Search",
+      "body": "The Researcher is the simplest of the four: a standard ADK <code>Agent</code> with one tool, <code>google_search</code>. Its only job is to gather web information and produce a clear summary the Judge can evaluate.",
+      "files": [
+        {
+          "label": "agents/researcher/agent.py",
+          "code": "from google.adk.agents import Agent\nfrom google.adk.tools.google_search_tool import google_search\n\nMODEL = \"gemini-2.5-pro\"\n\nresearcher = Agent(\n    name=\"researcher\",\n    model=MODEL,\n    description=\"Gathers information on a topic using Google Search.\",\n    instruction=\"\"\"\n    You are an expert researcher. Your goal is to find comprehensive and\n    accurate information on the user's topic.\n    Use the `google_search` tool to find relevant information.\n    Summarize your findings clearly.\n    If you receive feedback that your research is insufficient,\n    use the feedback to refine your next search.\n    \"\"\",\n    tools=[google_search],\n)\n\nroot_agent = researcher"
+        }
+      ]
+    },
+    {
+      "heading": "Judge Agent: Pydantic Verdict",
+      "body": "The Judge is the quality gate. Instead of free-form prose it returns a <code>JudgeFeedback</code> Pydantic schema with <code>status</code> set to <b>pass</b> or <b>fail</b>. That deterministic shape lets the Orchestrator branch the loop without parsing any text.",
+      "files": [
+        {
+          "label": "agents/judge/agent.py",
+          "code": "from typing import Literal\nfrom google.adk.agents import Agent\nfrom pydantic import BaseModel, Field\n\nMODEL = \"gemini-2.5-pro\"\n\n# Structured output schema — the Orchestrator depends on this exact shape\nclass JudgeFeedback(BaseModel):\n    \"\"\"Structured feedback from the Judge agent.\"\"\"\n    status: Literal[\"pass\", \"fail\"] = Field(\n        description=\"Whether the research is sufficient ('pass') or needs work ('fail').\"\n    )\n    feedback: str = Field(\n        description=\"What is missing. If 'pass', a brief confirmation.\"\n    )\n\n# The agent itself — strict editor, with delegation disabled\njudge = Agent(\n    name=\"judge\",\n    model=MODEL,\n    description=\"Evaluates research findings for completeness and accuracy.\",\n    instruction=\"\"\"\n    You are a strict editor.\n    Evaluate the 'research_findings' against the user's original request.\n    If the findings are missing key info, return status='fail'.\n    If they are comprehensive, return status='pass'.\n    \"\"\",\n    output_schema=JudgeFeedback,\n    disallow_transfer_to_parent=True,\n    disallow_transfer_to_peers=True,\n)\n\nroot_agent = judge"
+        }
+      ]
+    },
+    {
+      "heading": "Orchestrator: A2A Composition",
+      "body": "The heart of the system. The Orchestrator does not run the other agents in-process, it calls them as remote services with <code>RemoteA2aAgent</code>, then composes them with a <code>LoopAgent</code> (research and judge cycle) and a <code>SequentialAgent</code> (loop, then content builder).",
+      "files": [
+        {
+          "label": "agents/orchestrator/agent.py: remote connections",
+          "code": "import os\nfrom google.adk.agents import BaseAgent, LoopAgent, SequentialAgent\nfrom google.adk.agents.remote_a2a_agent import RemoteA2aAgent\nfrom authenticated_httpx import create_authenticated_client\n\n# Each remote agent is just a URL — A2A handles the rest\nresearcher_url = os.environ.get(\n    \"RESEARCHER_AGENT_CARD_URL\",\n    \"http://localhost:8001/a2a/agent/.well-known/agent-card.json\",\n)\nresearcher = RemoteA2aAgent(\n    name=\"researcher\",\n    agent_card=researcher_url,\n    description=\"Gathers information using Google Search.\",\n    after_agent_callback=create_save_output_callback(\"research_findings\"),\n    httpx_client=create_authenticated_client(researcher_url),\n)\n\njudge_url = os.environ.get(\n    \"JUDGE_AGENT_CARD_URL\",\n    \"http://localhost:8002/a2a/agent/.well-known/agent-card.json\",\n)\njudge = RemoteA2aAgent(\n    name=\"judge\",\n    agent_card=judge_url,\n    description=\"Evaluates research.\",\n    after_agent_callback=create_save_output_callback(\"judge_feedback\"),\n    httpx_client=create_authenticated_client(judge_url),\n)\n\ncontent_builder_url = os.environ.get(\n    \"CONTENT_BUILDER_AGENT_CARD_URL\",\n    \"http://localhost:8003/a2a/agent/.well-known/agent-card.json\",\n)\ncontent_builder = RemoteA2aAgent(\n    name=\"content_builder\",\n    agent_card=content_builder_url,\n    description=\"Builds the course.\",\n    httpx_client=create_authenticated_client(content_builder_url),\n)"
+        },
+        {
+          "label": "agents/orchestrator/agent.py: EscalationChecker",
+          "code": "# Custom BaseAgent — reads the Judge's verdict, decides whether to break the loop\nclass EscalationChecker(BaseAgent):\n    \"\"\"Escalates (breaks the loop) when the Judge passes the research.\"\"\"\n    async def _run_async_impl(self, ctx: InvocationContext):\n        feedback = ctx.session.state.get(\"judge_feedback\")\n\n        is_pass = False\n        if isinstance(feedback, dict) and feedback.get(\"status\") == \"pass\":\n            is_pass = True\n\n        if is_pass:\n            # escalate=True tells the parent LoopAgent to STOP looping\n            yield Event(author=self.name, actions=EventActions(escalate=True))\n        else:\n            # Continue — LoopAgent will run another iteration\n            yield Event(author=self.name)\n\nescalation_checker = EscalationChecker(name=\"escalation_checker\")"
+        },
+        {
+          "label": "agents/orchestrator/agent.py: pipeline composition",
+          "code": "# LoopAgent runs Researcher -> Judge -> EscalationChecker repeatedly\n# until the EscalationChecker escalates, OR max_iterations is hit\nresearch_loop = LoopAgent(\n    name=\"research_loop\",\n    description=\"Researches and judges until quality standards are met.\",\n    sub_agents=[researcher, judge, escalation_checker],\n    max_iterations=3,\n)\n\n# SequentialAgent runs the research loop, then hands off to the Content Builder\nroot_agent = SequentialAgent(\n    name=\"course_creation_pipeline\",\n    description=\"Researches a topic and then builds a course from it.\",\n    sub_agents=[research_loop, content_builder],\n)"
+        }
+      ]
+    },
+    {
+      "heading": "Service-to-Service Auth: authenticated_httpx",
+      "body": "What makes the A2A architecture safe in production: every call between agents on Cloud Run carries a Google identity token, and the receiving service rejects anything not signed by an authorised service account.",
+      "files": [
+        {
+          "label": "shared/authenticated_httpx.py",
+          "code": "def create_authenticated_client(remote_service_url: str, timeout: float = 600.0):\n    \"\"\"httpx.AsyncClient that signs each request with a Google identity token.\n    In Cloud Run: token comes from the Compute Metadata server.\n    Locally: token comes from the gcloud CLI.\n    \"\"\"\n    class _IdentityTokenAuth(httpx.Auth):\n        def __init__(self, remote_service_url: str):\n            parsed = urlparse(remote_service_url)\n            self.root_url = f\"{parsed.scheme}://{parsed.netloc}\"\n            self.session = None\n\n        def auth_flow(self, request):\n            if self.session:\n                id_token = self.session.credentials.token\n            else:\n                # In Cloud Run — fetch from the metadata server\n                credentials = fetch_id_token_credentials(audience=self.root_url)\n                credentials.refresh(Request())\n                self.session = AuthorizedSession(credentials)\n                id_token = self.session.credentials.token\n\n            if id_token:\n                request.headers[\"Authorization\"] = f\"Bearer {id_token}\"\n            yield request\n\n    return httpx.AsyncClient(\n        auth=_IdentityTokenAuth(remote_service_url),\n        follow_redirects=True,\n        timeout=timeout,\n    )"
+        }
+      ]
+    }
+  ],
+  "notes": [
+    {
+      "heading": "Why a LoopAgent + EscalationChecker?",
+      "bullets": [
+        "<b>Deterministic loop control:</b> the Judge's Pydantic schema lets the EscalationChecker read <code>feedback['status'] == 'pass'</code> with no text parsing.",
+        "<b>Hard stop at 3 iterations:</b> even if the Judge always fails, the loop terminates, protecting against runaway cost.",
+        "<b>State-based handoff:</b> each agent writes its output to <code>ctx.session.state</code> via an <code>after_agent_callback</code> so the next agent can read it."
+      ]
+    },
+    {
+      "heading": "Why RemoteA2aAgent instead of in-process imports?",
+      "bullets": [
+        "<b>Independent deployment:</b> each agent has its own Dockerfile, Cloud Run revision, and scaling policy.",
+        "<b>Service discovery:</b> an <code>agent-card.json</code> at <code>/.well-known/</code> exposes capability metadata for the Orchestrator to introspect.",
+        "<b>Language-agnostic boundary:</b> A2A is JSON-RPC over HTTP, so any agent could be rewritten in Go or TypeScript without touching the others.",
+        "<b>Auth at the network boundary:</b> every call is signed and verified, not trusted just for being in the same script."
+      ]
+    },
+    {
+      "heading": "Why Vertex AI instead of API keys?",
+      "bullets": [
+        "<b>No key rotation:</b> each Cloud Run service has its own service account; Vertex auth rides on Google IAM.",
+        "<b>Audit trail:</b> every Gemini call is logged against a service account, not a shared key.",
+        "<b>Project-level cost attribution:</b> token spend lands in the same GCP billing line, with a per-service breakdown."
+      ]
+    }
+  ],
+  "cta": "Want a production multi-agent system like this built for your own workflow? Let's scope it."
+};
+  /* ===================== END EDIT BLOCK ===================== */
+
+  const pref = (u) => /^https?:|^mailto:|^tel:/.test(u || '') ? u : (SITE + (u || ''));
+  const esc = (s) => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const rich = (s) => esc(s).replace(/&lt;(\/?(?:b|code))&gt;/g, '<$1>');
+
+  // raw code store for copy buttons
+  const RAW = [];
+  function codeBlock(label, codeStr, extraClass){
+    const idx = RAW.push(codeStr) - 1;
+    const rendered = esc(codeStr).split('\n')
+      .map(line => /^\s*#/.test(line) ? `<span class="cmt">${line}</span>` : line).join('\n');
+    return `<div class="codeblock ${extraClass||''}">`+
+      `<div class="code-bar"><span class="path"><span>${esc(label)}</span></span>`+
+      `<button class="code-copy" data-idx="${idx}">Copy</button></div>`+
+      `<pre><code>${rendered}</code></pre></div>`;
+  }
+
+  // Breadcrumb + header
+  document.title = PROJECT.title + ": Source | AI Project Portfolio";
+  document.getElementById('crumbCat').textContent = PROJECT.category;
+  document.getElementById('crumbCat').href = pref(PROJECT.categoryUrl);
+  document.getElementById('crumbProj').textContent = PROJECT.title;
+  document.getElementById('crumbProj').href = pref(PROJECT.overviewUrl);
+  if (PROJECT.cover){
+    document.getElementById('coverStrip').style.display = '';
+    const c = document.getElementById('cover'); c.src = PROJECT.cover; c.alt = PROJECT.title + " cover";
+  }
+  document.getElementById('kicker').textContent = "Source Walkthrough · " + PROJECT.category;
+  document.getElementById('title').textContent = PROJECT.title;
+  document.getElementById('subtitle').textContent = PROJECT.subtitle;
+  document.getElementById('headTech').innerHTML = (PROJECT.tech||[]).map(t => `<span class="tech-chip">${esc(t)}</span>`).join('');
+  document.getElementById('headBtns').innerHTML =
+    (PROJECT.demoUrl ? `<a class="btn" href="${pref(PROJECT.demoUrl)}" target="_blank" rel="noopener">${esc(PROJECT.demoLabel||'Live Demo')}</a>` : '') +
+    (PROJECT.overviewUrl ? `<a class="btn ghost" href="${pref(PROJECT.overviewUrl)}">Project Overview</a>` : '') +
+    (PROJECT.repoUrl ? `<a class="btn ghost" href="${pref(PROJECT.repoUrl)}" target="_blank" rel="noopener">GitHub Repo</a>` : '');
+
+  const section = (tab, inner) => `<section class="sec"><div class="sec-rule"><span class="tab">${esc(tab)}</span>${inner}</div></section>`;
+  let html = "";
+  const P = PROJECT;
+
+  if (P.about){
+    html += section("About This Code", `<h2>About This Code Showcase</h2><p class="intro">${rich(P.about)}</p>`);
+  }
+  if (P.structure && P.structure.code){
+    html += section("Project Structure", `<h2>Project Structure</h2>`+
+      codeBlock(P.structure.label || 'project/', P.structure.code, 'tree'));
+  }
+  (P.walkthrough||[]).forEach(w => {
+    let inner = `<h2>${esc(w.heading)}</h2>`;
+    if (w.body) inner += `<p class="body">${rich(w.body)}</p>`;
+    (w.files||[]).forEach(f => { inner += codeBlock(f.label, f.code); });
+    html += section("Code", inner);
+  });
+  // CTA
+  html += `<section class="sec"><div class="cta-inner">`+
+    `<div><h3>Interested in the build?</h3><p>${esc(P.cta || "Let's talk.")}</p></div>`+
+    `<div class="cta-btns">`+
+    (P.demoUrl ? `<a class="btn" href="${pref(P.demoUrl)}" target="_blank" rel="noopener">${esc(P.demoLabel||'Live Demo')}</a>` : '')+
+    `<a class="btn ghost" href="${SITE}contact.html">Get in Touch</a>`+
+    `</div></div></section>`;
+
+  document.getElementById('body').innerHTML = html;
+
+  // Copy buttons
+  function copyText(text, btn){
+    const done = ()=>{ const o=btn.textContent; btn.textContent='Copied ✓'; setTimeout(()=>btn.textContent=o.includes('Copied')?'Copy':o,1400); };
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(done).catch(()=>fb(text,done)); }
+    else fb(text,done);
+  }
+  function fb(text,done){ const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(ta); done(); }
+  document.querySelectorAll('.code-copy').forEach(btn =>
+    btn.addEventListener('click', ()=> copyText(RAW[+btn.dataset.idx], btn)));
+
+  // Masthead search
+  const ITEMS = [
+    {t:PROJECT.title, c:PROJECT.category, s:PROJECT.slug},
+    {t:"Courier CS Quality Console", c:"Conversational Data Analytics", s:"courier-cs-quality-console"},
+    {t:"Voucher Analyzer", c:"Conversational Data Analytics", s:"voucher-analyzer"},
+    {t:"Wiseman", c:"Knowledge & Reference Chatbots", s:"wiseman"},
+    {t:"Sunny Car Accessories", c:"Agentic Commerce", s:"sunny-car-accessories"},
+    {t:"Bookshelf", c:"Multi-Agent Decision Systems", s:"bookshelf"}
+  ];
+  const searchInput = document.getElementById('searchInput');
+  const searchResults = document.getElementById('searchResults');
+  function runSearch(q){
+    if(q.trim().length < 2){ searchResults.style.display='none'; return; }
+    const ql = q.toLowerCase();
+    const hits = ITEMS.filter(it => (it.t+' '+it.c).toLowerCase().includes(ql));
+    searchResults.innerHTML = hits.length ? hits.map(it =>
+      `<div class="sr-item"><div class="sr-cat">${esc(it.c)}</div>`+
+      `<a href="${SITE}${it.s}.html"><div class="sr-title">${esc(it.t)}</div></a>`+
+      `<div class="sr-links"><a href="${SITE}${it.s}.html">View Details</a></div></div>`).join('')
+      : `<div class="sr-none">No projects found. Try a different keyword.</div>`;
+    searchResults.style.display='block';
+  }
+  searchInput.addEventListener('input', e => runSearch(e.target.value));
+  document.addEventListener('click', e => { if(!e.target.closest('.search-box')) searchResults.style.display='none'; });
+
+  // Drawer
+  const drawer=document.getElementById('drawer'), overlay=document.getElementById('overlay');
+  const openMenu=()=>{ drawer.classList.add('open'); overlay.classList.add('open'); };
+  const closeMenu=()=>{ drawer.classList.remove('open'); overlay.classList.remove('open'); };
+  document.getElementById('hamburger').addEventListener('click', openMenu);
+  document.getElementById('drawerClose').addEventListener('click', closeMenu);
+  overlay.addEventListener('click', closeMenu);
+  drawer.querySelectorAll('a').forEach(a=>a.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeMenu(); searchResults.style.display='none'; }});
+</script>
 </body>
 </html>
