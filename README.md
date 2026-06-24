@@ -581,3 +581,22 @@ cd projects/<project-name>
 ---
 
 ⭐ **Interested in AI solutions for your business? Let's collaborate.** ⭐
+
+---
+
+## Maintainer Notes
+
+### Local `.env` files (do not commit)
+Two projects keep a local `.env` for running their full Python server on this machine only:
+
+| File | Variables | Used by |
+|---|---|---|
+| `bright-path-tuition/.env` | `GOOGLE_API_KEY`, `PORT` | local FastAPI server (`bright-path-tuition/main.py`) |
+| `projects/bahai-chinese-translation-workbench/.env` | `ANTHROPIC_API_KEY` | local server (`projects/bahai-chinese-translation-workbench/app.py`) |
+
+Findings (2026-06-24): both are **untracked** and were **never committed** to git history; neither key value appears in any tracked file (no leak, no rotation needed). The **published demo links are static GitHub Pages pages** (`demo.html`) and do **not** read these `.env` files, so the demos run regardless. These files are kept locally by choice and are not deleted.
+
+Action for the future: they are **not** yet covered by `.gitignore`, so never run `git add -A` / `git add .` in this repo. Stage files by name. (Adding a `.env` rule to `.gitignore` is the clean fix when ready.)
+
+### Project subheading rule (one line, <=10 words, identical everywhere)
+Each project has ONE subheading: clear, direct, simple everyday language describing what the project does, **10 words maximum**. The SAME text must appear in all four places: the showcase hero (`PROJECT.tagline`), the homepage `items[].dek`, the `project-categories.html` `CATS[].projects[].desc`, and the dedicated `category-*.html` `CATEGORY.projects[].desc`. No emojis, no em-dashes, no filler. **Drop the redundant word "AI"** (the whole portfolio is AI); keep "agent"/"multi-agent" (architecture) and keep "AI" only when load-bearing (e.g. the agent is the customer in agentic commerce). Enforced by `ai-project-publish`.
