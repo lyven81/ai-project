@@ -398,11 +398,15 @@
       var h=a.getAttribute('href')||''; var m=h.match(/([a-z0-9-]+).html(?:$|[?#])/i);
       if(!m) return; var slug=m[1];
       if(slug==='index'||slug==='contact'||slug==='project-categories'||slug.indexOf('category-')===0) return;
-      var ext=(slug==='plumber-whatsapp-agent'||slug==='bookshelf')?'jpg':'jpeg';
-      var src='images/'+slug+'/cover.'+ext;
-      var img=new Image();
-      img.onload=function(){ a.style.backgroundImage="url('"+src+"')"; a.style.backgroundSize="cover"; a.style.backgroundPosition="center"; a.textContent=''; };
-      img.src=src;
+      var exts=['jpeg','jpg','png'];
+      (function tryNext(i){
+        if(i>=exts.length) return; // no cover found, keep the emoji
+        var src='images/'+slug+'/cover.'+exts[i];
+        var img=new Image();
+        img.onload=function(){ a.style.backgroundImage="url('"+src+"')"; a.style.backgroundSize="cover"; a.style.backgroundPosition="center"; a.textContent=''; };
+        img.onerror=function(){ tryNext(i+1); };
+        img.src=src;
+      })(0);
     });
   }
   if(document.readyState!=='loading') setTimeout(run,0); else document.addEventListener('DOMContentLoaded',run);
