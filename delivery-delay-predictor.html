@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Voucher Analyzer | AI Project Portfolio</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root{ --ink:#222; --paper:#fff; --hair:#dddddd; --gray:#555; --accent:#B8860B; --navy:#1E3A5F; --teal:#0D9488; }
+  html{ scroll-behavior:smooth; }
+  body{ background:var(--paper); color:var(--ink); font-family:Arial, Helvetica, sans-serif; line-height:1.6; overflow-x:hidden; }
+  a{ color:inherit; text-decoration:none; }
+  a:hover h2, a:hover h3, a:hover h4{ color:var(--accent); }
+  code{ font-family:"Courier New", monospace; font-size:.86em; background:#f2f3f5; padding:1px 5px; color:var(--navy); }
+
+  /* Masthead (shared) */
+  .masthead{ display:flex; align-items:center; justify-content:space-between; padding:14px 28px; max-width:1240px; margin:0 auto; gap:18px; }
+  .mast-left{ display:flex; align-items:center; gap:20px; }
+  .logo{ background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; letter-spacing:3px; font-size:.95rem; padding:8px 12px; white-space:nowrap; }
+  .mast-nav{ display:flex; gap:20px; font-family:Arial, Helvetica, sans-serif; font-size:.72rem; letter-spacing:1.4px; text-transform:uppercase; }
+  .mast-nav a:hover{ color:var(--accent); }
+  .hamburger{ display:none; flex-direction:column; gap:4px; background:none; border:none; cursor:pointer; padding:6px; }
+  .hamburger span{ width:22px; height:2px; background:#222; display:block; }
+  .rule-top{ border:none; border-top:3px solid #222; max-width:1240px; margin:0 auto; }
+
+  /* Search (shared) */
+  .search-box{ position:relative; width:200px; }
+  .search-input{ width:100%; padding:7px 30px 7px 12px; border:1px solid var(--hair); background:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; color:#222; }
+  .search-input:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(184,134,11,.15); }
+  .search-ic{ position:absolute; right:10px; top:50%; transform:translateY(-50%); color:var(--gray); font-size:.8rem; pointer-events:none; }
+  .search-results{ position:absolute; top:calc(100% + 4px); left:0; width:340px; max-width:86vw; background:#fff; border:1px solid #222; max-height:60vh; overflow-y:auto; z-index:120; display:none; }
+  .sr-item{ padding:12px 14px; border-bottom:1px solid var(--hair); }
+  .sr-item:last-child{ border-bottom:none; }
+  .sr-cat{ font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; margin-bottom:4px; color:var(--accent); }
+  .sr-title{ font-weight:700; font-size:1.02rem; color:#222; }
+  .sr-links{ font-size:.58rem; letter-spacing:.8px; text-transform:uppercase; color:var(--gray); margin-top:5px; }
+  .sr-links a:hover{ color:var(--accent); }
+  .sr-none{ padding:16px 14px; font-size:.82rem; color:var(--gray); }
+
+  /* Shared type bits */
+  .tab{ display:inline-block; background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.66rem; letter-spacing:2px; text-transform:uppercase; padding:6px 12px; }
+  .rubric{ font-family:Arial, Helvetica, sans-serif; font-size:.62rem; font-weight:700; letter-spacing:1.6px; text-transform:uppercase; color:var(--accent); display:block; margin-bottom:8px; }
+  .links{ font-family:Arial, Helvetica, sans-serif; font-size:.58rem; letter-spacing:1px; text-transform:uppercase; margin-top:10px; color:var(--gray); }
+  .links a:hover{ color:var(--accent); }
+  .lead-dek{ font-style:italic; color:#333; }
+  .tech-chip{ display:inline-block; border:1px solid var(--hair); padding:6px 12px; font-size:.72rem; letter-spacing:.3px; color:#333; white-space:nowrap; }
+  .tech-chip:hover{ border-color:var(--accent); color:var(--accent); }
+
+  /* Breadcrumb */
+  .crumb{ max-width:1240px; margin:0 auto; padding:20px 28px 0; font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--gray); }
+  .crumb a:hover{ color:var(--accent); }
+  .crumb .sep{ color:var(--hair); margin:0 8px; }
+
+  /* ===== HERO (cover image feature opener) ===== */
+  .hero{ max-width:1240px; margin:0 auto; padding:16px 28px 8px; }
+  .cover-wrap{ border:1px solid var(--hair); box-shadow:0 1px 0 rgba(30,58,95,.06); line-height:0; background:#eef1f4; }
+  .cover{ width:100%; aspect-ratio:2 / 1; object-fit:cover; display:block; }
+  .hero-copy{ padding:22px 0 6px; }
+  .hero-copy h1{ font-size:2.7rem; font-weight:900; line-height:1.03; letter-spacing:-.008em; }
+  .hero-copy .tagline{ font-style:italic; font-size:1.15rem; color:#333; margin-top:10px; max-width:60ch; }
+  .hero-tech{ display:flex; flex-wrap:wrap; gap:9px; margin-top:16px; }
+  .hero-btns{ display:flex; flex-wrap:wrap; gap:12px; margin-top:18px; }
+  .btn{ display:inline-block; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.7rem; letter-spacing:1.6px; text-transform:uppercase; padding:13px 24px; border:1px solid #222; background:#222; color:#fff; cursor:pointer; transition:.15s; }
+  .btn:hover{ background:var(--accent); border-color:var(--accent); }
+  .btn.ghost{ background:#fff; color:#222; }
+  .btn.ghost:hover{ color:var(--accent); border-color:var(--accent); background:#fff; }
+
+  /* ===== SECTION SHELL ===== */
+  .sec{ max-width:1240px; margin:0 auto; padding:26px 28px; }
+  .sec-rule{ border-top:3px solid #222; padding-top:16px; }
+  .sec .tab{ margin-bottom:14px; }
+  .sec h2{ font-size:1.7rem; font-weight:900; line-height:1.06; }
+  .sec .intro{ color:#333; font-size:1.02rem; margin-top:10px; max-width:80ch; }
+
+  /* Two-column challenge / solution */
+  .duo{ display:grid; grid-template-columns:1fr 1fr; margin-top:20px; }
+  .duo > div:first-child{ padding-right:30px; border-right:1px solid var(--hair); }
+  .duo > div:last-child{ padding-left:30px; }
+  .duo p{ color:#333; }
+
+  /* Editorial bullet list */
+  .blist{ list-style:none; margin-top:18px; border-top:1px solid var(--hair); }
+  .blist li{ padding:13px 0; border-bottom:1px solid var(--hair); color:#333; font-size:.96rem; }
+  .blist li b{ color:#222; }
+
+  /* Feature / AI grid (borderless hairline cards) */
+  .fgrid{ display:grid; grid-template-columns:repeat(3,1fr); border-top:1px solid var(--hair); margin-top:20px; }
+  .fcard{ padding:20px 22px; border-right:1px solid var(--hair); border-bottom:1px solid var(--hair); }
+  .fcard:nth-child(3n){ border-right:none; }
+  .fcard .fe{ font-size:1.5rem; }
+  .fcard h4{ font-size:1.08rem; font-weight:700; line-height:1.18; margin:9px 0 6px; }
+  .fcard p{ font-size:.9rem; color:#444; line-height:1.5; }
+
+  /* Comparison table */
+  .table-scroll{ overflow-x:auto; margin-top:20px; border-top:1px solid var(--hair); }
+  table.cmp{ width:100%; border-collapse:collapse; min-width:640px; }
+  table.cmp th, table.cmp td{ text-align:left; vertical-align:top; padding:13px 16px; border-bottom:1px solid var(--hair); font-size:.9rem; }
+  table.cmp thead th{ font-size:.62rem; font-weight:700; letter-spacing:1.2px; text-transform:uppercase; color:var(--navy); border-bottom:2px solid var(--accent); }
+  table.cmp tbody td:first-child{ font-weight:700; color:#222; white-space:nowrap; }
+  table.cmp tbody tr:hover{ background:#fbfbf8; }
+
+  /* Architecture stacks */
+  .stacks{ display:grid; grid-template-columns:repeat(2,1fr); gap:22px 34px; margin-top:20px; }
+  .stack .rubric{ margin-bottom:10px; }
+  .stack-chips{ display:flex; flex-wrap:wrap; gap:8px; }
+  .sys-list{ list-style:none; margin-top:24px; border-top:1px solid var(--hair); }
+  .sys-list li{ padding:13px 0 13px 0; border-bottom:1px solid var(--hair); color:#333; font-size:.95rem; }
+  .sys-list li b{ color:var(--navy); }
+
+  /* Metrics row */
+  .metrics{ display:grid; grid-template-columns:repeat(4,1fr); border-top:1px solid var(--hair); margin-top:20px; }
+  .metric{ padding:22px 18px; border-right:1px solid var(--hair); }
+  .metric:last-child{ border-right:none; }
+  .metric .v{ font-size:2.6rem; font-weight:900; line-height:1; color:#222; letter-spacing:-.01em; }
+  .metric .l{ font-size:.62rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--gray); margin-top:9px; }
+
+  /* CTA */
+  .cta-inner{ display:flex; align-items:center; gap:18px; flex-wrap:wrap; border-top:3px solid #222; padding-top:18px; }
+  .cta-inner h3{ font-size:1.4rem; font-weight:900; line-height:1.08; }
+  .cta-inner p{ color:var(--gray); font-size:.95rem; margin-top:4px; }
+  .cta-btns{ margin-left:auto; display:flex; gap:12px; flex-wrap:wrap; }
+
+  footer{ background:#222; max-width:1240px; margin:30px auto 0; padding:24px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; letter-spacing:.5px; color:#fff; text-align:center; }
+  .note{ max-width:1240px; margin:14px auto 0; padding:8px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.62rem; letter-spacing:1px; color:#999; }
+
+  /* Drawer (shared) */
+  .drawer{ position:fixed; top:0; left:-300px; width:280px; height:100vh; background:#fff; z-index:200; box-shadow:2px 0 14px rgba(0,0,0,.15); transition:left .28s ease; padding:74px 26px 26px; }
+  .drawer.open{ left:0; }
+  .drawer a{ display:block; font-family:Arial, Helvetica, sans-serif; font-size:.82rem; letter-spacing:1.2px; text-transform:uppercase; padding:14px 0; border-bottom:1px solid var(--hair); }
+  .overlay{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:150; }
+  .overlay.open{ display:block; }
+  .drawer-close{ position:absolute; top:20px; right:20px; font-family:Arial, Helvetica, sans-serif; font-size:1.4rem; background:none; border:none; cursor:pointer; }
+
+  @media (max-width:900px){
+    .duo{ grid-template-columns:1fr; }
+    .duo > div:first-child{ padding-right:0; border-right:none; padding-bottom:18px; border-bottom:1px solid var(--hair); margin-bottom:18px; }
+    .duo > div:last-child{ padding-left:0; }
+    .fgrid{ grid-template-columns:repeat(2,1fr); }
+    .fcard:nth-child(3n){ border-right:1px solid var(--hair); }
+    .fcard:nth-child(2n){ border-right:none; }
+    .stacks{ grid-template-columns:1fr; }
+    .metrics{ grid-template-columns:repeat(2,1fr); }
+    .metric:nth-child(2n){ border-right:none; }
+    .metric:nth-child(-n+2){ border-bottom:1px solid var(--hair); }
+    .cta-btns{ margin-left:0; }
+    .mast-nav{ display:none; }
+    .hamburger{ display:flex; }
+    .masthead{ padding:12px 16px; }
+    .mast-left{ gap:10px; min-width:0; flex:1; }
+    .logo{ font-size:.72rem; letter-spacing:1.5px; padding:6px 8px; }
+    .search-box{ flex:1; width:auto; min-width:0; }
+    .search-results{ position:fixed; top:58px; left:12px; right:12px; width:auto; max-width:none; }
+    .hero-copy h1{ font-size:2.05rem; }
+  }
+  @media (max-width:560px){
+    .fgrid{ grid-template-columns:1fr; }
+    .fcard{ border-right:none !important; }
+    .metrics{ grid-template-columns:1fr; }
+    .metric{ border-right:none; border-bottom:1px solid var(--hair); }
+    .metric:last-child{ border-bottom:none; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="overlay" id="overlay"></div>
+  <nav class="drawer" id="drawer">
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">&times;</button>
+    <a href="index.html">Home</a>
+    <a href="project-categories.html">Categories</a>
+    <a href="contact.html">Contact</a>
+    <a href="https://lyven81.github.io/data-analyst-portfolio/index.html">Data Portfolio</a>
+  </nav>
+
+  <div class="masthead">
+    <div class="mast-left">
+      <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+      <a class="logo" href="index.html">AI PROJECTS</a>
+      <nav class="mast-nav">
+        <a href="project-categories.html">Categories</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <div class="search-box">
+        <input type="text" class="search-input" id="searchInput" autocomplete="off" placeholder="Search AI projects..." aria-label="Search AI projects">
+        <span class="search-ic">&#128269;</span>
+        <div class="search-results" id="searchResults"></div>
+      </div>
+    </div>
+  </div>
+  <hr class="rule-top">
+
+  <div class="crumb">
+    <a href="project-categories.html">Categories</a>
+    <span class="sep">/</span><a id="crumbCat" href="#"></a>
+    <span class="sep">/</span><span id="crumbHere"></span>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="cover-wrap"><img class="cover" id="cover" alt=""></div>
+    <div class="hero-copy">
+      <span class="rubric" id="kicker"></span>
+      <h1 id="title"></h1>
+      <p class="tagline" id="tagline"></p>
+      <div class="hero-tech" id="heroTech"></div>
+      <div class="hero-btns" id="heroBtns"></div>
+    </div>
+  </section>
+
+  <div id="body"></div>
+
+  <footer>&copy; 2026 Lee Yih Ven | AI Project Portfolio &middot; All rights reserved.</footer>
+  <div class="note">Sample Project-Showcase-E2 (TEMPLATE): project page on the index magazine system, led by the generated cover image. Sections render only when present in the PROJECT data, so simpler projects omit them. Reuse by editing only the PROJECT block at the top of the script. Deep install/deploy code lives on the matching -source.html page.</div>
+
+<script>
+  const SITE = "";
+
+  /* =================================================================
+     EDIT PER PROJECT  -  the ONLY block you change per page.
+     Copy this file, swap PROJECT, save as <slug>.html.
+     - cover     : path to the 1200x600 cover image (sits next to the page)
+     - tech      : chips under the title
+     - demoUrl / sourceUrl : buttons (relative to SITE or full https://)
+     - Any optional section can be deleted; it just won't render.
+     ================================================================= */
+  const PROJECT = {
+  "slug": "delivery-delay-predictor",
+  "category": "Conversational Data Analytics",
+  "categoryUrl": "category-conversational-analytics.html",
+  "title": "Delivery Delay Predictor",
+  "tagline": "Predicts late e-commerce deliveries before orders ship.",
+  "cover": "images/delivery-delay-predictor/cover.jpeg",
+  "tech": [
+    "BigQuery",
+    "XGBoost",
+    "SHAP",
+    "Gemini 2.5 Flash",
+    "Vertex AI",
+    "FastAPI",
+    "Cloud Run",
+    "Chart.js"
+  ],
+  "demoLabel": "Launch App",
+  "demoUrl": "https://delivery-delay-predictor-522143897885.asia-southeast1.run.app",
+  "sourceUrl": "delivery-delay-predictor-source.html",
+  "overview": {
+    "challenge": "E-commerce fulfillment teams usually find out an order ran late only after the customer complains or asks for a refund. Standard dashboards report deliveries that already happened, so by the time a late order shows up the failure is locked in and the refund cost is already spent.",
+    "solution": "Delivery Delay Predictor scores every open order's risk of arriving late before it ships, names the top reason each at-risk order is flagged, and uses Gemini to turn the numbers into plain-language recommendations and to answer free-text questions about the operational data. The whole app runs live behind a public URL on Cloud Run.",
+    "benefits": [
+      "<b>Act before dispatch:</b> each open order gets a risk score from signals known before it ships, so teams intervene while they still can.",
+      "<b>Reason, not just a score:</b> SHAP names the top driver behind every flagged order, from tight delivery windows to high daily volume.",
+      "<b>Plain-language guidance:</b> Gemini reads the live metrics and returns three specific recommendations plus answers to typed questions.",
+      "<b>Find the real bottleneck:</b> delay hours split across warehouse handling, dispatch, and courier transit instead of one blended number.",
+      "<b>Courier and zone truth:</b> on-time rates by courier and delay hotspots by zone surface who and where is costing the most.",
+      "<b>Score your own orders:</b> upload an orders CSV and the model returns risk scores in the browser, with a sample file provided."
+    ]
+  },
+  "differentiator": {
+    "heading": "What Makes This Different",
+    "intro": "Most delivery dashboards only report completed and late orders after the fact. This one predicts which open orders will run late before dispatch, trained only on signals known before the order ships, then explains each prediction and lets a manager ask the data questions in plain language.",
+    "outcomes": [
+      "<b>Leakage-safe by design:</b> the model drops 17 outcome columns and trains on 13 pre-delivery features, so it predicts rather than peeks.",
+      "<b>Explainable per order:</b> SHAP attaches the top risk driver to every alert, so the list reads as reasons, not a black box.",
+      "<b>Cost-aware architecture:</b> XGBoost is served inside the Cloud Run container with no always-on prediction endpoint, keeping running cost near zero.",
+      "<b>Live, not a mockup:</b> the dashboard loads real scored data on open and calls Gemini for genuine recommendations and Q&A."
+    ]
+  },
+  "features": [
+    {
+      "e": "🎯",
+      "n": "Delivery Risk Scoring",
+      "d": "Every open order gets a 0 to 100 delay-risk score computed before dispatch from order, courier, zone, and volume signals only."
+    },
+    {
+      "e": "🚨",
+      "n": "Priority Alert List",
+      "d": "The highest-risk orders ranked, each with its top risk driver and a recommended action so teams know what to do before the order ships."
+    },
+    {
+      "e": "🚚",
+      "n": "Courier Performance",
+      "d": "On-time rates compared across every courier, so the weakest carrier for time-critical orders is obvious at a glance."
+    },
+    {
+      "e": "📍",
+      "n": "Delivery Zone Analysis",
+      "d": "Delay rates by zone surface the outstation hotspots that consistently run late and need buffer time."
+    },
+    {
+      "e": "🧭",
+      "n": "Bottleneck Detection",
+      "d": "Total delay hours split across warehouse handling, dispatch, and courier transit, pointing to the real cause instead of a blended figure."
+    },
+    {
+      "e": "📤",
+      "n": "Score New Orders",
+      "d": "Upload an orders CSV and the model scores it live in the browser. A downloadable sample file lets anyone try it with no dataset of their own."
+    }
+  ],
+  "aiIntegration": [
+    {
+      "e": "🌲",
+      "n": "XGBoost Risk Model",
+      "d": "A gradient-boosted classifier trained on 2,409 orders with class-imbalance weighting estimates the probability each order is delivered late. This prediction is the core of the app."
+    },
+    {
+      "e": "🔎",
+      "n": "SHAP Explanations",
+      "d": "A SHAP tree explainer attaches the single biggest risk driver to each order, turning a raw score into a reason a manager can act on."
+    },
+    {
+      "e": "💬",
+      "n": "Gemini Recommendations & Q&A",
+      "d": "Gemini 2.5 Flash on Vertex AI reads the live KPIs and returns three specific recommendations, and answers free-text questions grounded only in those metrics."
+    },
+    {
+      "e": "🛟",
+      "n": "Graceful Offline Fallback",
+      "d": "When no Gemini credentials are present the app serves data-driven recommendations from the metrics, so the demo never breaks."
+    }
+  ],
+  "architecture": {
+    "stacks": [
+      {
+        "label": "Frontend & App",
+        "items": [
+          "HTML",
+          "CSS",
+          "Vanilla JS",
+          "Chart.js",
+          "FastAPI"
+        ]
+      },
+      {
+        "label": "Data & Model",
+        "items": [
+          "BigQuery",
+          "Python",
+          "pandas",
+          "XGBoost",
+          "SHAP"
+        ]
+      },
+      {
+        "label": "AI & Deployment",
+        "items": [
+          "Gemini 2.5 Flash",
+          "Vertex AI",
+          "Cloud Run",
+          "Docker"
+        ]
+      }
+    ],
+    "system": [
+      "<b>Data layer:</b> cleaned orders are loaded into BigQuery (<code>delivery_delay.orders</code>), which the deployed app queries for KPIs, with a local CSV fallback for offline runs.",
+      "<b>Leakage-safe model:</b> <code>prepare_and_train.py</code> drops the outcome columns, engineers 13 pre-delivery features, trains XGBoost, and saves <code>model.pkl</code> plus SHAP drivers.",
+      "<b>Served in the container:</b> the model is bundled inside the FastAPI app on Cloud Run, so scoring runs with no separate, always-on prediction endpoint.",
+      "<b>Intelligence layer:</b> Gemini on Vertex AI converts the live metrics into recommendations and answers, called server-side so no key ever reaches the browser."
+    ]
+  },
+  "metrics": [
+    {
+      "v": "2,409",
+      "l": "Orders scored before dispatch"
+    },
+    {
+      "v": "0.776",
+      "l": "Model ROC-AUC"
+    },
+    {
+      "v": "0.487",
+      "l": "PR-AUC (~4x base rate)"
+    },
+    {
+      "v": "RM 30.5K",
+      "l": "Refund exposure surfaced"
+    }
+  ],
+  "businessValue": [
+    "<b>Prevents failed deliveries:</b> flags at-risk orders before they ship, so teams act early instead of reacting to complaints and refunds.",
+    "<b>Targets the fix:</b> shows whether delay comes from the warehouse, dispatch, or the courier, so effort lands where it pays.",
+    "<b>Protects margin:</b> surfaces the refund cost hidden inside late orders and the couriers and zones that drive it.",
+    "<b>Cost-safe delivery:</b> demonstrates a full Google Cloud stack (BigQuery, Vertex AI, Cloud Run) that scales without an always-on model endpoint."
+  ],
+  "cta": "Want a predictive operations tool like this for your own delivery data? Let's scope it."
+};
+  /* ===================== END EDIT BLOCK ===================== */
+
+  const pref = (u) => /^https?:|^mailto:|^tel:/.test(u || '') ? u : (SITE + (u || ''));
+  const esc = (s) => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  // allow <b>...</b> and <code>...</code> that we intentionally put in the data
+  const rich = (s) => esc(s).replace(/&lt;(\/?(?:b|code))&gt;/g, '<$1>');
+
+  // Breadcrumb + hero
+  document.title = PROJECT.title + " | AI Project Portfolio";
+  document.getElementById('crumbCat').textContent = PROJECT.category;
+  document.getElementById('crumbCat').href = pref(PROJECT.categoryUrl);
+  document.getElementById('crumbHere').textContent = PROJECT.title;
+  const cover = document.getElementById('cover');
+  cover.src = PROJECT.cover; cover.alt = PROJECT.title + " cover illustration";
+  document.getElementById('kicker').textContent = PROJECT.category;
+  document.getElementById('title').textContent = PROJECT.title;
+  document.getElementById('tagline').textContent = PROJECT.tagline;
+  document.getElementById('heroTech').innerHTML = (PROJECT.tech || []).map(t => `<span class="tech-chip">${esc(t)}</span>`).join('');
+  document.getElementById('heroBtns').innerHTML =
+    (PROJECT.demoUrl ? `<a class="btn" href="${pref(PROJECT.demoUrl)}" target="_blank" rel="noopener">${esc(PROJECT.demoLabel || 'Live Demo')}</a>` : '') +
+    (PROJECT.sourceUrl ? `<a class="btn ghost" href="${pref(PROJECT.sourceUrl)}">View Source &amp; Build</a>` : '');
+
+  // Section builders
+  const section = (tab, inner, opts={}) =>
+    `<section class="sec"><div class="${opts.noRule ? '' : 'sec-rule'}">`+
+    `<span class="tab">${esc(tab)}</span>${inner}</div></section>`;
+
+  let html = "";
+  const P = PROJECT;
+
+  // OVERVIEW
+  if (P.overview){
+    let inner = `<h2>Overview</h2>`;
+    inner += `<div class="duo">`+
+      `<div><span class="rubric">The Challenge</span><p>${rich(P.overview.challenge)}</p></div>`+
+      `<div><span class="rubric">The Solution</span><p>${rich(P.overview.solution)}</p></div>`+
+      `</div>`;
+    if (P.overview.benefits && P.overview.benefits.length){
+      inner += `<ul class="blist">${P.overview.benefits.map(b => `<li>${rich(b)}</li>`).join('')}</ul>`;
+    }
+    html += section("Overview", inner);
+  }
+
+  // DIFFERENTIATOR (+ optional table)
+  if (P.differentiator){
+    const d = P.differentiator;
+    let inner = `<h2>${esc(d.heading || 'What Makes This Different')}</h2>`;
+    if (d.intro) inner += `<p class="intro">${rich(d.intro)}</p>`;
+    if (d.table){
+      inner += `<div class="table-scroll"><table class="cmp"><thead><tr>`+
+        d.table.columns.map(c => `<th>${esc(c)}</th>`).join('')+
+        `</tr></thead><tbody>`+
+        d.table.rows.map(r => `<tr>${r.map(c => `<td>${rich(c)}</td>`).join('')}</tr>`).join('')+
+        `</tbody></table></div>`;
+    }
+    if (d.outcomes && d.outcomes.length){
+      inner += `<ul class="blist">${d.outcomes.map(o => `<li>${rich(o)}</li>`).join('')}</ul>`;
+    }
+    html += section("Why It's Different", inner);
+  }
+
+  // FEATURES
+  if (P.features && P.features.length){
+    const grid = `<div class="fgrid">${P.features.map(f =>
+      `<article class="fcard"><div class="fe">${f.e || ''}</div><h4>${esc(f.n)}</h4><p>${rich(f.d)}</p></article>`).join('')}</div>`;
+    html += section("Features", `<h2>What's Inside</h2>${grid}`);
+  }
+
+  // AI INTEGRATION
+  if (P.aiIntegration && P.aiIntegration.length){
+    const grid = `<div class="fgrid">${P.aiIntegration.map(f =>
+      `<article class="fcard"><div class="fe">${f.e || ''}</div><h4>${esc(f.n)}</h4><p>${rich(f.d)}</p></article>`).join('')}</div>`;
+    html += section("AI Integration", `<h2>How the AI Works</h2>${grid}`);
+  }
+
+  // ARCHITECTURE
+  if (P.architecture){
+    let inner = `<h2>Technical Architecture</h2>`;
+    if (P.architecture.stacks){
+      inner += `<div class="stacks">${P.architecture.stacks.map(s =>
+        `<div class="stack"><span class="rubric">${esc(s.label)}</span><div class="stack-chips">`+
+        s.items.map(i => `<span class="tech-chip">${esc(i)}</span>`).join('')+`</div></div>`).join('')}</div>`;
+    }
+    if (P.architecture.system){
+      inner += `<ul class="sys-list">${P.architecture.system.map(li => `<li>${rich(li)}</li>`).join('')}</ul>`;
+    }
+    html += section("Architecture", inner);
+  }
+
+  // METRICS
+  if (P.metrics && P.metrics.length){
+    const row = `<div class="metrics">${P.metrics.map(m =>
+      `<div class="metric"><div class="v">${esc(m.v)}</div><div class="l">${esc(m.l)}</div></div>`).join('')}</div>`;
+    html += section("By the Numbers", `<h2>Key Metrics</h2>${row}`);
+  }
+
+  // BUSINESS VALUE
+  if (P.businessValue && P.businessValue.length){
+    const list = `<ul class="blist">${P.businessValue.map(b => `<li>${rich(b)}</li>`).join('')}</ul>`;
+    html += section("Business Value", `<h2>Why It Matters</h2>${list}`);
+  }
+
+  // CTA
+  html += `<section class="sec"><div class="cta-inner">`+
+    `<div><h3>${esc(P.cta ? 'Have a similar project?' : 'Interested?')}</h3>`+
+    `<p>${esc(P.cta || "Let's talk about what you're trying to build.")}</p></div>`+
+    `<div class="cta-btns">`+
+    (P.demoUrl ? `<a class="btn" href="${pref(P.demoUrl)}" target="_blank" rel="noopener">${esc(P.demoLabel || 'Live Demo')}</a>` : '')+
+    `<a class="btn ghost" href="${SITE}contact.html">Get in Touch</a>`+
+    `</div></div></section>`;
+
+  document.getElementById('body').innerHTML = html;
+
+  // Masthead search (this project + a few site-wide; production indexes the full catalog)
+  const ITEMS = [
+    {t:PROJECT.title, c:PROJECT.category, s:PROJECT.slug},
+    {t:"Courier CS Quality Console", c:"Conversational Data Analytics", s:"courier-cs-quality-console"},
+    {t:"Voucher Analyzer", c:"Conversational Data Analytics", s:"voucher-analyzer"},
+    {t:"Property Lead Tracker", c:"Industry Specialist Advisors", s:"property-lead-tracker"},
+    {t:"Wiseman", c:"Knowledge & Reference Chatbots", s:"wiseman"},
+    {t:"Sunny Car Accessories", c:"Agentic Commerce", s:"sunny-car-accessories"},
+    {t:"Bookshelf", c:"Multi-Agent Decision Systems", s:"bookshelf"}
+  ];
+  const searchInput = document.getElementById('searchInput');
+  const searchResults = document.getElementById('searchResults');
+  function runSearch(q){
+    if(q.trim().length < 2){ searchResults.style.display='none'; return; }
+    const ql = q.toLowerCase();
+    const hits = ITEMS.filter(it => (it.t+' '+it.c).toLowerCase().includes(ql));
+    searchResults.innerHTML = hits.length ? hits.map(it =>
+      `<div class="sr-item"><div class="sr-cat">${esc(it.c)}</div>`+
+      `<a href="${SITE}${it.s}.html"><div class="sr-title">${esc(it.t)}</div></a>`+
+      `<div class="sr-links"><a href="${SITE}${it.s}.html">View Details</a></div></div>`).join('')
+      : `<div class="sr-none">No projects found. Try a different keyword.</div>`;
+    searchResults.style.display='block';
+  }
+  searchInput.addEventListener('input', e => runSearch(e.target.value));
+  document.addEventListener('click', e => { if(!e.target.closest('.search-box')) searchResults.style.display='none'; });
+
+  // Drawer
+  const drawer=document.getElementById('drawer'), overlay=document.getElementById('overlay');
+  const openMenu=()=>{ drawer.classList.add('open'); overlay.classList.add('open'); };
+  const closeMenu=()=>{ drawer.classList.remove('open'); overlay.classList.remove('open'); };
+  document.getElementById('hamburger').addEventListener('click', openMenu);
+  document.getElementById('drawerClose').addEventListener('click', closeMenu);
+  overlay.addEventListener('click', closeMenu);
+  drawer.querySelectorAll('a').forEach(a=>a.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeMenu(); searchResults.style.display='none'; }});
+</script>
+</body>
+</html>
