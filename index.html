@@ -21,6 +21,7 @@
 
   /* Masthead */
   .masthead{ display:flex; align-items:center; justify-content:space-between; padding:14px 28px; max-width:1240px; margin:0 auto; gap:18px; }
+  .topbar{ position:sticky; top:0; z-index:120; background:var(--paper); box-shadow:0 1px 6px rgba(0,0,0,.06); }
   .mast-left{ display:flex; align-items:center; gap:20px; }
   .logo{ background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; letter-spacing:3px; font-size:.95rem; padding:8px 12px; white-space:nowrap; }
   .mast-nav{ display:flex; gap:20px; font-family:Arial, Helvetica, sans-serif; font-size:.72rem; letter-spacing:1.4px; text-transform:uppercase; }
@@ -168,10 +169,11 @@
     <a href="https://lyven81.github.io/data-analyst-portfolio/index.html">Data Portfolio</a>
   </nav>
 
+  <div class="topbar">
   <div class="masthead">
     <div class="mast-left">
       <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
-      <a class="logo" href="index.html">AI PROJECTS</a>
+      <a class="logo" href="index.html">AI BUILDS LAB</a>
       <nav class="mast-nav">
         <a href="project-categories.html">Categories</a>
         <a href="contact.html">Contact</a>
@@ -185,6 +187,7 @@
     </div>
   </div>
   <hr class="rule-top">
+  </div>
 
   <!-- ===== UPPER BODY: 2 / 1 / 2 ===== -->
   <div class="wrap">
@@ -361,13 +364,93 @@
     `<a href="${SITE}${it.s}.html"><h3>${it.t}</h3></a>`+
     `<p class="lead-dek">${it.dek}</p>`+linkRow(it)+`</article>`).join('');
 
+  const SEARCH = [
+    {t:"AI Avatar Hairstyle Generator", c:"", s:"ai-avatar-hairstyle-generator"},
+    {t:"AI Background Changer", c:"", s:"ai-background-changer"},
+    {t:"AI Coloring Book for Kids", c:"", s:"ai-coloring-book-for-kids"},
+    {t:"AI Expression Generator", c:"", s:"ai-expression-generator"},
+    {t:"AI Group Photo Generator", c:"", s:"ai-group-photo-generator"},
+    {t:"AI Profile Picture Stylist", c:"", s:"ai-profile-picture-stylist"},
+    {t:"AI Recipe Generator", c:"", s:"ai-recipe-generator"},
+    {t:"AI Storybook Generator", c:"", s:"ai-storybook-generator"},
+    {t:"Back-to-School Campaign", c:"Content Automation", s:"back-to-school-campaign"},
+    {t:"Badminton Court Booking Agent", c:"Service Agents", s:"badminton-booking-agent"},
+    {t:"Bahai Chinese Translation Workbench", c:"Document & Productivity Tools", s:"bahai-chinese-translation-workbench"},
+    {t:"Banana Lab", c:"Content Automation", s:"banana-lab"},
+    {t:"Bookshelf", c:"Multi-Agent Decision Systems", s:"bookshelf"},
+    {t:"Borrower Risk Evaluator", c:"Industry Specialist Advisors", s:"borrower-risk-evaluator"},
+    {t:"Bright Path Tuition Centre", c:"Industry Specialist Advisors", s:"bright-path-tuition"},
+    {t:"Business Intelligence Agent", c:"", s:"business-intelligent-agent"},
+    {t:"Chinese Traditional Calendar (\u4e2d\u534e\u4f20\u7edf\u65e5\u5386)", c:"", s:"chinese-traditional-calendar"},
+    {t:"Claude PDF Summarizer", c:"Document & Productivity Tools", s:"ai-pdf-summarizer"},
+    {t:"Coloring Book Generator", c:"", s:"coloring-book-generator"},
+    {t:"Courier CS Quality Console", c:"Conversational Data Analytics", s:"courier-cs-quality-console"},
+    {t:"Course Creator", c:"", s:"course-creator"},
+    {t:"Customer Segmentation and Market Agent", c:"", s:"customer-segmentation-agent"},
+    {t:"Data Consulting Business Analysis Agent", c:"Multi-Agent Decision Systems", s:"data-consulting-agent"},
+    {t:"Delivery Delay Predictor", c:"Conversational Data Analytics", s:"delivery-delay-predictor"},
+    {t:"Ecommerce Analyst", c:"Conversational Data Analytics", s:"ecommerce-analyst"},
+    {t:"Expense Tracker AI", c:"", s:"expense-tracker-ai"},
+    {t:"Football Assistant Coach", c:"Industry Specialist Advisors", s:"football-assistant-coach"},
+    {t:"Gemini Image Editor", c:"", s:"gemini-image-editor"},
+    {t:"Good Company", c:"Industry Specialist Advisors", s:"good-company"},
+    {t:"Hire Gardener", c:"Service Agents", s:"hire-gardener"},
+    {t:"Hoo Tim Analytics Agent", c:"Conversational Data Analytics", s:"hoo-tim-analytics-agent"},
+    {t:"Jade Star Chinese Dining \u5409\u661f\u996d\u5385", c:"Agentic Commerce", s:"ji-xing-cny-reservation"},
+    {t:"Kereta Sewa Jalan-jalan", c:"Service Agents", s:"car-rental-booking-agent"},
+    {t:"Klinik Dr Fang Front-Desk Assistant", c:"Conversational Data Analytics", s:"klinik-dr-fang"},
+    {t:"Kopitiam Digital Waiter", c:"Document & Productivity Tools", s:"kopitiam-digital-waiter"},
+    {t:"Leadership Team", c:"Multi-Agent Decision Systems", s:"leadership-team"},
+    {t:"Lee Yih Ven", c:"", s:"index-1"},
+    {t:"Long View (Crucix)", c:"Industry Specialist Advisors", s:"long-view"},
+    {t:"Lucy, Bloom House Concierge", c:"Service Agents", s:"bloom-house-concierge"},
+    {t:"Market Research Agent", c:"Conversational Data Analytics", s:"market-research-agent"},
+    {t:"Marketing Agency", c:"Content Automation", s:"marketing-agency"},
+    {t:"Master Wong (\u738b\u5e08\u7236)", c:"", s:"master-wong"},
+    {t:"Mentor", c:"Industry Specialist Advisors", s:"mentor"},
+    {t:"Motor Claim Triage and QC Evaluator", c:"Industry Specialist Advisors", s:"motor-claim-evaluator"},
+    {t:"MyPropLex", c:"Industry Specialist Advisors", s:"myproplex"},
+    {t:"Nine Year Plan 2022\u20132031", c:"", s:"nine-year-plan"},
+    {t:"North Star Learning Center", c:"Industry Specialist Advisors", s:"north-star-learning-center"},
+    {t:"PDF-to-Audio Reader", c:"", s:"pdf-to-audio-reader"},
+    {t:"Plumber WhatsApp Agent", c:"Service Agents", s:"plumber-whatsapp-agent"},
+    {t:"Polaroid Moments Generator", c:"", s:"polaroid-moments-generator"},
+    {t:"Polaroid Moments Generator 3", c:"", s:"polaroid-moments-generator-3"},
+    {t:"Pose Perfect AI", c:"", s:"pose-perfect-ai"},
+    {t:"Professional Astrology Consultant (\u5c08\u696d\u661f\u5ea7\u9867\u554f)", c:"", s:"horoscope-chatbot"},
+    {t:"Professional Feng Shui Consultant (\u5c08\u696d\u98a8\u6c34\u9867\u554f)", c:"", s:"fengshui-chatbot"},
+    {t:"Project Categories", c:"", s:"project-categories-1"},
+    {t:"Property Lead Tracker", c:"Industry Specialist Advisors", s:"property-lead-tracker"},
+    {t:"Public Sentiment Collection Agent", c:"Multi-Agent Decision Systems", s:"public-sentiment-agent"},
+    {t:"Sales Dashboard Agent", c:"", s:"sales-dashboard-agent"},
+    {t:"Sarawak Laksa", c:"", s:"sarawak-laksa"},
+    {t:"Science Learning Materials Builder", c:"", s:"science-learning-materials-builder"},
+    {t:"Seasonal Pricing Console", c:"Conversational Data Analytics", s:"seasonal-pricing-console"},
+    {t:"Skyread", c:"Knowledge & Reference Chatbots", s:"skyread"},
+    {t:"Social Media Marketer", c:"Multi-Agent Decision Systems", s:"social-media-marketer"},
+    {t:"Soon Heng Air-Cond Service", c:"Service Agents", s:"soon-heng-aircon-agent"},
+    {t:"Stock Analysis Agent", c:"Multi-Agent Decision Systems", s:"stock-analysis-agent"},
+    {t:"Stock Manager", c:"Multi-Agent Decision Systems", s:"stock-manager"},
+    {t:"Sundry Shop Assistant", c:"Conversational Data Analytics", s:"sundry-shop-assistant"},
+    {t:"Sunny Car Accessories", c:"Agentic Commerce", s:"sunny-car-accessories"},
+    {t:"Tarot Guru", c:"Knowledge & Reference Chatbots", s:"tarot-guru"},
+    {t:"Thematic Outline Puzzles", c:"", s:"thematic-outline-puzzles"},
+    {t:"Time Series Analysis Agent", c:"", s:"time-series-analysis-agent"},
+    {t:"TrendMate", c:"Industry Specialist Advisors", s:"trendmate"},
+    {t:"Unusual Coloring Book", c:"", s:"unusual-coloring-book"},
+    {t:"Virtual Try-On Studio", c:"", s:"virtual-try-on-studio"},
+    {t:"Voucher Analyzer", c:"Conversational Data Analytics", s:"voucher-analyzer"},
+    {t:"Wee Auto Car Care", c:"Service Agents", s:"wee-auto-car-care"},
+    {t:"Wiseman \u00b7 \u667a\u8005", c:"Knowledge & Reference Chatbots", s:"wiseman"},
+    {t:"\u5df4\u54c8\u4f0a\u4e2d\u6587\u7ffb\u8bd1\u5de5\u4f5c\u53f0", c:"", s:"bahai-chinese-translation-workbench-zh"},
+  ];
   // SEARCH (over the 9 featured; production would index the full AI-project catalog)
   const searchInput = document.getElementById('searchInput');
   const searchResults = document.getElementById('searchResults');
   function runSearch(q){
     if(q.trim().length < 2){ searchResults.style.display='none'; return; }
     const ql = q.toLowerCase();
-    const hits = items.filter(it => (it.t+' '+it.c+' '+it.dek).toLowerCase().includes(ql));
+    const hits = SEARCH.filter(it => (it.t+' '+it.c).toLowerCase().includes(ql));
     searchResults.innerHTML = hits.length ? hits.map(it =>
       `<div class="sr-item">`+
       `<div class="sr-cat">${it.c}</div>`+
