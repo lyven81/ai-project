@@ -17,6 +17,72 @@ This repo contains **55 completed AI applications**, each with a working demo (l
 
 **Live site:** [lyven81.github.io/ai-project](https://lyven81.github.io/ai-project/)
 
+## All Projects (newest first)
+
+An index of every published AI project, **newest first**. The date is when the project was **deployed** (from the per-project "Deployed" field below).
+
+**Total published AI projects: 55**
+
+| # | Date deployed | AI project | Page |
+|---|---|---|---|
+| 55 | 2026-07-07 | Delivery Delay Predictor | [demo](https://delivery-delay-predictor-522143897885.asia-southeast1.run.app) |
+| 54 | 2026-06-19 | Courier CS Quality Console | [demo](https://lyven81.github.io/ai-project/projects/courier-cs-quality-console/demo.html) |
+| 53 | 2026-06-18 | Seasonal Pricing Console | [demo](https://lyven81.github.io/ai-project/projects/seasonal-pricing-console/demo.html) |
+| 52 | 2026-06-17 | Voucher Analyzer | [demo](https://lyven81.github.io/ai-project/projects/voucher-analyzer/demo.html) |
+| 51 | 2026-06-11 | Property Lead Tracker | [demo](https://lyven81.github.io/ai-project/projects/property-lead-tracker/ui-1-internal-dashboard.html) |
+| 50 | 2026-06-10 | Motor Claim Triage and QC Evaluator | [demo](https://lyven81.github.io/ai-project/projects/motor-claim-evaluator/demo.html) |
+| 49 | 2026-06-09 | Borrower Risk Evaluator | [demo](https://lyven81.github.io/ai-project/projects/borrower-risk-evaluator/demo.html) |
+| 48 | 2026-06-06 | Market Research Agent | [demo](https://market-research-agent-522143897885.asia-southeast1.run.app) |
+| 47 | 2026-06-04 | Lucy — Bloom House Concierge | [demo](https://lyven81.github.io/ai-project/projects/bloom-house-concierge/index.html) |
+| 46 | 2026-06-01 | Klinik Dr Fang Front-Desk Assistant | [demo](https://lyven81.github.io/ai-project/projects/klinik-dr-fang/demo.html) |
+| 45 | 2026-05-16 | North Star Learning Center | [demo](https://north-star-learning-center-522143897885.asia-southeast1.run.app) |
+| 44 | 2026-05-06 | Bookshelf | [demo](https://lyven81.github.io/ai-project/projects/bookshelf/demo.html) |
+| 43 | 2026-05-03 | Jade Star Chinese Dining 吉星饭厅 — CNY Reservation | [demo](https://lyven81.github.io/ai-project/projects/ji-xing-cny-reservation/index.html) |
+| 42 | 2026-04-30 | Sunny Car Accessories | [demo](https://lyven81.github.io/ai-project/projects/sunny-car-accessories/index.html) |
+| 41 | 2026-04-27 | Course Creator | [demo](https://course-creator-662370080553.us-west1.run.app/) |
+| 40 | 2026-04-17 | Plumber WhatsApp Agent | [demo](https://lyven81.github.io/ai-project/projects/plumber-whatsapp-agent/demo.html) |
+| 39 | 2026-04-16 | Sundry Shop Assistant | [demo](https://sundry-shop-assistant-522143897885.asia-southeast1.run.app) |
+| 38 | 2026-04-16 | Back-to-School | [demo](https://lyven81.github.io/ai-project/projects/back-to-school-campaign/demo.html) |
+| 37 | 2026-04-15 | Wee Auto Car Care | [demo](https://lyven81.github.io/ai-project/projects/wee-auto-car-care/demo.html) |
+| 36 | 2026-04-15 | Hoo Tim Analytics Agent | [demo](https://lyven81.github.io/ai-project/projects/hoo-tim-analytics-agent/demo.html) |
+| 35 | 2026-04-15 | Ecommerce Analyst | [demo](https://lyven81.github.io/ai-project/projects/ecommerce-analyst/demo.html) |
+| 34 | 2026-04-13 | Bahai Chinese Translation Workbench | [demo](https://lyven81.github.io/ai-project/projects/bahai-chinese-translation-workbench/demo.html) |
+| 33 | 2026-04-10 | Bright Path Tuition Centre | [demo](https://lyven81.github.io/ai-project/bright-path-tuition/demo.html) |
+| 32 | 2026-04-09 | Leadership Team | [demo](https://lyven81.github.io/ai-project/projects/leadership-team/demo.html) |
+| 31 | 2026-04-08 | Kereta Sewa Jalan-jalan | [demo](https://lyven81.github.io/ai-project/projects/car-rental-booking-agent/demo.html) |
+| 30 | 2026-04-08 | Soon Heng Air-Cond Service | [demo](https://lyven81.github.io/ai-project/projects/soon-heng-aircon-agent/demo.html) |
+| 29 | 2026-04-07 | Mentor | [demo](https://lyven81.github.io/ai-project/projects/mentor/demo.html) |
+| 28 | 2026-04-06 | Good Company | [demo](https://lyven81.github.io/ai-project/projects/good-company/demo.html) |
+| 27 | 2026-04-03 | Stock Manager | [demo](https://lyven81.github.io/ai-project/projects/stock-manager/demo.html) |
+| 26 | 2026-03-30 | Marketing Agency | [demo](https://lyven81.github.io/ai-project/projects/marketing-agency/demo.html) |
+| 25 | 2026-03-26 | Banana Lab | [demo](https://lyven81.github.io/ai-project/projects/banana-lab/demo.html) |
+| 24 | 2026-03-25 | Social Media Marketer | [demo](https://lyven81.github.io/ai-project/projects/social-media-marketer/demo.html) |
+| 23 | 2026-03-25 | Unusual Coloring Book | [demo](https://lyven81.github.io/ai-project/projects/unusual-coloring-book/demo.html) |
+| 22 | 2026-03-25 | Football Assistant Coach | [demo](https://lyven81.github.io/ai-project/projects/football-assistant-coach/demo.html) |
+| 21 | 2026-03-25 | Nine Year Plan 2022–2031 | [demo](https://lyven81.github.io/ai-project/projects/nine-year-plan/index.html) |
+| 20 | 2026-03-25 | Sarawak Laksa | [demo](https://lyven81.github.io/ai-project/projects/sarawak-laksa/index.html) |
+| 19 | 2026-03-24 | Long View · Crucix | [demo](https://lyven81.github.io/ai-project/projects/long-view/demo.html) |
+| 18 | 2026-03-24 | Wiseman · 智者 | [demo](https://lyven81.github.io/ai-project/projects/wiseman/demo.html) |
+| 17 | 2026-03-24 | Tarot Guru | [demo](https://lyven81.github.io/ai-project/projects/tarot-guru/demo.html) |
+| 16 | 2026-03-24 | Master Wong · 王师父 | [demo](https://lyven81.github.io/ai-project/projects/master-wong/demo.html) |
+| 15 | 2026-03-23 | TrendMate | [demo](https://lyven81.github.io/ai-project/projects/trendmate/demo.html) |
+| 14 | 2026-03-23 | MyPropLex | [demo](https://lyven81.github.io/ai-project/projects/myproplex/demo.html) |
+| 13 | 2026-03-17 | Hire Gardener | [demo](https://lyven81.github.io/ai-project/projects/hire-gardener/demo.html) |
+| 12 | 2026-03-11 | Skyread | [demo](https://lyven81.github.io/ai-project/projects/skyread/demo.html) |
+| 11 | 2026-03-08 | Kopitiam Digital Waiter | [demo](https://kopitiam-digital-waiter-169218045868.us-west1.run.app/) |
+| 10 | 2025-11-24 | Badminton Court Booking Agent | [demo](https://lyven81.github.io/ai-project/projects/badminton-booking-agent/demo.html) |
+| 9 | 2025-10-24 | Stock Analysis Agent | [demo](https://lyven81.github.io/ai-project/projects/stock-analysis-agent/demo.html) |
+| 8 | 2025-10-24 | Public Sentiment Collection Agent | [demo](https://lyven81.github.io/ai-project/projects/public-sentiment-collection-agent/demo.html) |
+| 7 | 2025-10-24 | Data Consulting Business Analysis Agent | [demo](https://lyven81.github.io/ai-project/projects/data-consulting-business-analyst/demo.html) |
+| 6 | 2025-10-24 | Science Learning Materials Builder | [demo](https://lyven81.github.io/ai-project/apps/science-builder.html) |
+| 5 | 2025-09-19 | Expense Tracker AI | [demo](https://expense-tracker-ai-169218045868.us-west1.run.app/) |
+| 4 | 2025-09-14 | PDF-to-Audio Reader | [demo](https://pdf-to-audio-reader-169218045868.us-west1.run.app/) |
+| 3 | 2025-09-12 | Chinese Traditional Calendar · 中華傳統日曆 | [demo](https://lyven81.github.io/ai-project/projects/chinese-calender/demo.html) |
+| 2 | 2025-09-12 | Professional Feng Shui Consultant · 專業風水顧問 | [demo](https://lyven81.github.io/ai-project/projects/fengshui-chatbot/demo.html) |
+| 1 | 2025-09-12 | Claude PDF Summarizer | [demo](https://summarizer-218391175125.asia-southeast1.run.app/) |
+
+---
+
 ## Projects by Category
 
 The 8 categories below match the [live category pages](https://lyven81.github.io/ai-project/project-categories.html) on the site. Each entry shows: **what it does**, **how it's built**, and **what problem it solves** — in simple language.
