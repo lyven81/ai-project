@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Voucher Analyzer: Source | AI Project Portfolio</title>
+<title>Delivery Delay Predictor: Source | AI Project Portfolio</title>
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
   :root{ --ink:#222; --paper:#fff; --hair:#dddddd; --gray:#555; --accent:#B8860B; --navy:#1E3A5F; --code-bg:#fbfbf8; --cmt:#6b8190; }
@@ -188,10 +188,11 @@
   "category": "Conversational Data Analytics",
   "categoryUrl": "category-conversational-analytics.html",
   "title": "Delivery Delay Predictor",
-  "subtitle": "The leakage-safe XGBoost model, the SHAP driver per order, and the Gemini layer with an offline fallback, the three excerpts at the heart of the app.",
+  "subtitle": "The Vertex-tuned, calibrated XGBoost model, the SHAP driver per order, and the verified Gemini layer, the excerpts at the heart of the refined app.",
   "cover": "images/delivery-delay-predictor/cover.jpeg",
   "tech": [
     "BigQuery",
+    "Vertex AI",
     "XGBoost",
     "SHAP",
     "Gemini 2.5 Flash",
@@ -202,19 +203,19 @@
   "demoLabel": "Launch App",
   "demoUrl": "https://delivery-delay-predictor-522143897885.asia-southeast1.run.app",
   "repoUrl": "https://github.com/lyven81/ai-project/tree/main/projects/delivery-delay-predictor",
-  "about": "These three excerpts are the heart of the app: a leakage-safe XGBoost model that trains only on what is known before an order ships, a SHAP step that attaches the top risk driver to every order, and a Gemini layer that turns the live metrics into recommendations with a data-driven fallback when no credentials are present. Data-prep and dashboard plumbing are omitted for clarity. The guiding idea throughout: the model sees only pre-dispatch signals, so each score is a genuine prediction rather than a readout of an outcome that already happened.",
+  "about": "These excerpts are the heart of the refined app: a leakage-safe XGBoost model tuned and calibrated on Vertex AI so each score is trustworthy, a SHAP step that attaches the top risk driver to every order, and a Gemini layer whose recommendations are checked by an evaluation before they are shown. The model trains only on pre-dispatch signals, so each score is a genuine prediction, and the app reads live from BigQuery. Data-prep and dashboard plumbing are omitted for clarity.",
   "structure": {
     "label": "projects/delivery-delay-predictor/",
-    "code": "projects/delivery-delay-predictor/\n  main.py                 FastAPI backend: dashboard, KPIs, scoring, Gemini\n  index.html              dashboard front-end (Chart.js)\n  prepare_and_train.py    data prep + XGBoost training + SHAP\n  Dockerfile              container build for Cloud Run\n  requirements.txt        Python dependencies\n  model.pkl               trained XGBoost model + feature metadata\n  app_data.csv            scored data the app serves\n  sample_new_orders.csv   sample file for the upload feature\n  scored_orders.csv       model output: risk + key driver per order\n  kpis.json               precomputed operational KPIs\n  metrics.json            model evaluation metrics\n  global_importance.json  SHAP global feature importance\n  README.md"
+    "code": "projects/delivery-delay-predictor/\n  main.py                 FastAPI backend: /api/data, /api/model, Gemini, scoring\n  index.html              two-tab front-end: Operations + Model Performance (Chart.js)\n  train_on_vertex.py      Vertex AI training: tune + calibrate + score\n  eval_recs.py            recommendation-quality evaluation (LLM-as-judge)\n  Dockerfile              Python 3.12 container for Cloud Run\n  requirements.txt        Python dependencies (pinned)\n  model.pkl               Vertex-tuned, calibrated model + feature metadata\n  metrics.json            held-out validation metrics (v1 vs tuned)\n  eval_report.json        recommendation evaluation results\n  app_data.csv            fallback data + dropdown options\n  sample_new_orders.csv   sample file for the upload feature\n  README.md"
   },
   "walkthrough": [
     {
-      "heading": "The Model: Leakage-Safe Features, Imbalance-Weighted XGBoost",
-      "body": "The core skill is predicting a late delivery before the order ships. The feature set is deliberately restricted to signals known at order time (zone, courier, service, requested window, daily volume); the 17 outcome columns are dropped so the model cannot peek at what actually happened. A stratified split and a class weight handle the 12 percent late rate.",
+      "heading": "The Model: Tuned and Calibrated on Vertex AI",
+      "body": "The refinement runs training as a Vertex AI job: a randomized hyperparameter search over leakage-safe, pre-dispatch features, then isotonic calibration so an 80 percent score really means about 80 percent. The tuned model beats the earlier prototype on both precision (38 to 49 percent) and recall (42 to 50 percent). Features stay restricted to what is known before dispatch, so each score is a genuine prediction.",
       "files": [
         {
-          "label": "prepare_and_train.py: pre-dispatch features + weighted XGBoost",
-          "code": "# leakage-safe feature set (known BEFORE dispatch)\nCAT = [\"DeliveryZone\", \"Courier\", \"DeliveryService\", \"Occasion\", \"ProductCategory\", \"FreshFlowers\"]\nNUM = [\"LeadTimeDays\", \"OrderValue\", \"ZoneStandardDays\", \"DailyOrderVolume\",\n       \"order_weekday\", \"order_hour\", \"requested_slack_hours\", \"HardDateOccasion_int\"]\n\nX = pd.concat([pd.get_dummies(df[CAT], prefix=CAT), df[NUM]], axis=1)\ny = df[\"IsLate\"]\n\n# stratified split + class-imbalance weight for the ~12% positive rate\nXtr, Xte, ytr, yte = train_test_split(X, y, test_size=0.25, stratify=y, random_state=42)\nspw = float((ytr == 0).sum() / (ytr == 1).sum())      # scale_pos_weight ~7.3\n\nmodel = XGBClassifier(\n    n_estimators=350, max_depth=4, learning_rate=0.07,\n    subsample=0.9, colsample_bytree=0.9, min_child_weight=2,\n    scale_pos_weight=spw, eval_metric=\"aucpr\", random_state=42,\n)\nmodel.fit(Xtr, ytr)"
+          "label": "train_on_vertex.py: randomized search + isotonic calibration",
+          "code": "# leakage-safe, pre-dispatch features only\nX = pd.concat([pd.get_dummies(df[CAT], prefix=CAT), df[NUM]], axis=1)\nXtr, Xte, ytr, yte = train_test_split(X, y, test_size=0.25, stratify=y, random_state=42)\nspw = float((ytr == 0).sum() / (ytr == 1).sum())     # ~7.3 for the 12% late rate\n\n# tune on Vertex AI: randomized search over XGBoost, scored by PR-AUC\nsearch = RandomizedSearchCV(\n    XGBClassifier(scale_pos_weight=spw, eval_metric=\"aucpr\", random_state=42),\n    param_grid, n_iter=20, scoring=\"average_precision\",\n    cv=StratifiedKFold(3, shuffle=True, random_state=42), random_state=42)\nsearch.fit(Xtr, ytr)\n\n# calibrate so the probability is trustworthy (an 80% means ~80%)\ncal = CalibratedClassifierCV(search.best_estimator_, method=\"isotonic\", cv=5)\ncal.fit(Xtr, ytr)"
         }
       ]
     },
@@ -244,9 +245,10 @@
       "heading": "Why This Design",
       "bullets": [
         "<b>Predict, do not peek:</b> the 17 outcome columns are dropped and the model trains on 13 pre-dispatch features, so each score is a real prediction.",
+        "<b>Tuned and calibrated on Vertex AI:</b> a randomized search plus isotonic calibration makes the score trustworthy and beats the prototype on both precision and recall.",
         "<b>Explainable per order:</b> SHAP attaches a reason to every alert, so the list is actionable rather than a bare score.",
-        "<b>Cost-safe serving:</b> the model is bundled inside the Cloud Run container, so there is no separate, always-on prediction endpoint to pay for.",
-        "<b>Resilient demo:</b> the offline recommendation fallback means the app runs and shows guidance even with no Gemini credentials."
+        "<b>Verified recommendations:</b> every Gemini suggestion is scored by an evaluation (89% pass, 94% grounded) before it reaches the manager.",
+        "<b>Live and cost-safe:</b> the app reads live from BigQuery and the model is bundled in the Cloud Run container, so there is no always-on prediction endpoint to pay for."
       ]
     }
   ],

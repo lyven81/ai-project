@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Voucher Analyzer | AI Project Portfolio</title>
+<title>Delivery Delay Predictor | AI Project Portfolio</title>
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
   :root{ --ink:#222; --paper:#fff; --hair:#dddddd; --gray:#555; --accent:#B8860B; --navy:#1E3A5F; --teal:#0D9488; }
@@ -265,7 +265,8 @@
       "<b>Leakage-safe by design:</b> the model drops 17 outcome columns and trains on 13 pre-delivery features, so it predicts rather than peeks.",
       "<b>Explainable per order:</b> SHAP attaches the top risk driver to every alert, so the list reads as reasons, not a black box.",
       "<b>Cost-aware architecture:</b> XGBoost is served inside the Cloud Run container with no always-on prediction endpoint, keeping running cost near zero.",
-      "<b>Live, not a mockup:</b> the dashboard loads real scored data on open and calls Gemini for genuine recommendations and Q&A."
+      "<b>Live, not a mockup:</b> the dashboard loads real scored data live from BigQuery and calls Gemini for genuine recommendations and Q&A, and a Model Performance tab shows the validated metrics behind every score.",
+      "<b>Proven against the earlier version:</b> the refined model is tuned and calibrated on Vertex AI and beats the prototype on precision (38 to 49%) and recall (42 to 50%), with every recommendation scored by an evaluation before it is shown."
     ]
   },
   "features": [
@@ -298,13 +299,18 @@
       "e": "📤",
       "n": "Score New Orders",
       "d": "Upload an orders CSV and the model scores it live in the browser. A downloadable sample file lets anyone try it with no dataset of their own."
+    },
+    {
+      "e": "📊",
+      "n": "Model Performance Tab",
+      "d": "A second tab proves the model on held-out data, precision, recall, and calibration versus the earlier version, plus the recommendation quality score."
     }
   ],
   "aiIntegration": [
     {
       "e": "🌲",
       "n": "XGBoost Risk Model",
-      "d": "A gradient-boosted classifier trained on 2,409 orders with class-imbalance weighting estimates the probability each order is delivered late. This prediction is the core of the app."
+      "d": "A gradient-boosted classifier tuned and calibrated on Vertex AI estimates a trustworthy probability that each order is delivered late. A Model Performance tab proves it beats the earlier prototype on precision (38 to 49%) and recall (42 to 50%)."
     },
     {
       "e": "🔎",
@@ -314,7 +320,7 @@
     {
       "e": "💬",
       "n": "Gemini Recommendations & Q&A",
-      "d": "Gemini 2.5 Flash on Vertex AI reads the live KPIs and returns three specific recommendations, and answers free-text questions grounded only in those metrics."
+      "d": "Gemini 2.5 Flash on Vertex AI reads the live KPIs and returns three specific recommendations, and answers free-text questions grounded only in those metrics. An evaluation scores every recommendation for accuracy and usefulness before it is shown (89% pass, 94% grounded)."
     },
     {
       "e": "🛟",
