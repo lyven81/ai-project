@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>好吃厨房 Tasty Kitchen · Knowledge Assistant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F2F4F1; --shell:#E4E9E3; --card:#FFFFFF; --ink:#14261E;
+  --pandan:#2E6B4F; --chilli:#B8332A; --soy:#66756D;
+  --line:#D5DCD4; --line-soft:#EDF1EC;
+  --display:'Archivo','Noto Sans SC',system-ui,sans-serif;
+  --body:'Instrument Sans','Noto Sans SC',system-ui,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{font-family:var(--body);background:var(--shell);color:var(--ink);line-height:1.55}
+button{font-family:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--pandan);outline-offset:2px}
+.skip{position:absolute;left:-9999px}
+.skip:focus{left:8px;top:8px;z-index:99;background:#fff;padding:8px 14px;border-radius:6px}
+
+.topbar{background:var(--ink);color:#EDF1EC;padding:14px 20px;display:flex;flex-wrap:wrap;
+  align-items:center;gap:16px;justify-content:space-between;position:sticky;top:0;z-index:20}
+.brand{display:flex;align-items:baseline;gap:10px}
+.brand .zh{font-family:var(--display);font-weight:800;font-size:1.25rem;white-space:nowrap}
+.brand .en{font-family:var(--mono);font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;color:#9FB3A6}
+.surface-switch{display:flex;border:1px solid #3A4C43;border-radius:999px;overflow:hidden}
+.surface-switch button{background:transparent;border:none;color:#9FB3A6;font-size:.78rem;font-weight:600;padding:7px 16px}
+.surface-switch button[aria-pressed="true"]{background:#EDF1EC;color:var(--ink)}
+
+.wrap{max-width:1240px;margin:0 auto;padding:22px 20px 60px}
+.surface{display:none} .surface.on{display:block}
+
+/* ---------------- customer ---------------- */
+.stage{display:grid;grid-template-columns:minmax(0,310px) minmax(0,1fr);gap:18px;align-items:start}
+@media (max-width:880px){.stage{grid-template-columns:1fr}}
+.qcol{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;
+  display:flex;flex-direction:column;height:min(76vh,760px)}
+.qcol-head{padding:14px 16px 11px;border-bottom:1px solid var(--line);flex:none}
+.qcol-head h2{font-family:var(--display);font-size:.98rem;font-weight:800}
+.qcol-head p{font-size:.76rem;color:var(--soy);margin-top:2px}
+.qsearch{margin-top:10px;display:flex;align-items:center;background:var(--paper);
+  border:1px solid var(--line);border-radius:999px;padding:6px 12px}
+.qsearch input{flex:1;border:none;background:transparent;font-family:inherit;font-size:.84rem;color:var(--ink)}
+.qsearch input:focus{outline:none}
+.qlist{flex:1;overflow-y:auto;padding:4px 0 10px}
+.qgroup{font-family:var(--mono);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--soy);padding:12px 16px 5px;position:sticky;top:0;background:var(--card)}
+.qitem{display:block;width:100%;text-align:left;background:transparent;border:none;
+  padding:8px 16px;font-size:.86rem;line-height:1.35;color:var(--ink);border-left:3px solid transparent}
+.qitem:hover{background:var(--line-soft)}
+.qitem.asked{color:var(--soy);border-left-color:var(--line)}
+.qitem.active{background:#F1F7F3;border-left-color:var(--pandan);font-weight:600}
+.qitem .qn{font-family:var(--mono);font-size:.68rem;color:var(--soy);margin-right:7px}
+
+.chat{background:var(--paper);border:1px solid var(--line);border-radius:14px;display:flex;
+  flex-direction:column;height:min(76vh,760px);overflow:hidden}
+.chat-head{background:var(--card);border-bottom:1px solid var(--line);padding:12px 16px;
+  display:flex;align-items:center;gap:11px;flex:none}
+.avatar{width:36px;height:36px;border-radius:50%;flex:none;background:var(--pandan);color:#fff;
+  display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:.9rem}
+.chat-head .nm{font-family:var(--display);font-weight:800;font-size:.98rem;line-height:1.2}
+.chat-head .st{font-size:.73rem;color:var(--soy);display:flex;align-items:center;gap:6px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--pandan)}
+.thread{flex:1;overflow-y:auto;padding:18px 16px 6px;scroll-behavior:smooth}
+.daymark{text-align:center;font-family:var(--mono);font-size:.62rem;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--soy);margin-bottom:16px}
+.msg{display:flex;gap:9px;margin-bottom:15px;align-items:flex-start;animation:pop .26s ease-out}
+@keyframes pop{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.msg.me{justify-content:flex-end}
+.msg .mini{width:25px;height:25px;border-radius:50%;flex:none;margin-top:5px;background:var(--pandan);
+  color:#fff;display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:.6rem}
+.msg.me .mini{display:none}
+.stack{max-width:82%;min-width:0}
+.bubble{padding:11px 14px;border-radius:16px;font-size:.94rem;background:var(--card);
+  border:1px solid var(--line);border-bottom-left-radius:5px;overflow-wrap:break-word}
+.msg.me .bubble{background:var(--ink);color:#EDF1EC;border-color:var(--ink);
+  border-bottom-right-radius:5px;border-bottom-left-radius:16px}
+.stamp-time{font-family:var(--mono);font-size:.6rem;color:var(--soy);margin-top:4px;padding:0 3px}
+.msg.me .stamp-time{text-align:right}
+.typing{display:flex;gap:4px;padding:13px 15px}
+.typing i{width:6px;height:6px;border-radius:50%;background:var(--soy);animation:blink 1.2s infinite}
+.typing i:nth-child(2){animation-delay:.18s} .typing i:nth-child(3){animation-delay:.36s}
+@keyframes blink{0%,60%,100%{opacity:.28}30%{opacity:.9}}
+.composer{flex:none;padding:11px 16px 14px;display:flex;gap:9px;align-items:center}
+.composer .field{flex:1;background:var(--card);border:1px solid var(--line);border-radius:999px;
+  padding:9px 15px;display:flex;align-items:center}
+.composer input{flex:1;border:none;background:transparent;font-family:inherit;font-size:.92rem;color:var(--ink)}
+.composer input:focus{outline:none}
+.composer .send{background:var(--pandan);color:#fff;border:none;border-radius:50%;width:40px;height:40px;flex:none}
+.composer .send:disabled{background:var(--line);color:var(--soy);cursor:default}
+
+/* ---------------- under the hood ---------------- */
+.intro{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:22px 24px;margin-bottom:22px}
+.intro h1{font-family:var(--display);font-size:1.3rem;font-weight:800;margin-bottom:8px}
+.intro p{color:var(--soy);font-size:.95rem;max-width:76ch}
+.intro p+p{margin-top:9px}
+.intro strong{color:var(--ink);font-weight:600}
+
+.evgroup{font-family:var(--mono);font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--soy);margin:26px 0 10px}
+.ev{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px 20px;margin-bottom:12px}
+.ev-q{display:flex;gap:11px;align-items:baseline;margin-bottom:13px}
+.ev-q .n{font-family:var(--mono);font-size:.72rem;color:var(--soy);flex:none}
+.ev-q .txt{font-family:var(--display);font-weight:700;font-size:1.02rem}
+.lbl{font-family:var(--mono);font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:var(--soy);margin-bottom:5px}
+.reply{background:#F1F7F3;border:1px solid #CFE3D7;border-radius:8px;padding:12px 14px;font-size:.97rem}
+.srcbox{margin-top:15px}
+.srchead{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+.srchead .doc{font-family:var(--display);font-weight:700;font-size:.9rem}
+.srchead .ms{font-family:var(--mono);font-size:.72rem;color:var(--pandan)}
+.quote{border-left:3px solid var(--line);padding:9px 0 9px 14px;font-size:.9rem;color:#3B4A42}
+.readfull{margin-top:9px;background:transparent;border:1px solid var(--line);border-radius:999px;
+  font-size:.76rem;padding:6px 13px;color:var(--ink)}
+.readfull:hover{border-color:var(--pandan);color:var(--pandan)}
+.rec{width:100%;border-collapse:collapse;font-size:.87rem;margin-top:4px}
+.rec td{padding:6px 0;border-bottom:1px solid var(--line-soft)}
+.rec td.f{color:var(--soy);width:52%}
+.rec td.v{font-family:var(--mono);font-size:.83rem;text-align:right}
+.govern{font-size:.83rem;color:var(--soy);margin-top:12px;line-height:1.5}
+.govern code{font-family:var(--mono);font-size:.78rem;background:var(--paper);
+  border:1px solid var(--line);border-radius:4px;padding:1px 5px;color:var(--pandan)}
+.prov{background:var(--paper);border:1px solid var(--line);border-left:3px solid var(--pandan);
+  border-radius:0 8px 8px 0;padding:13px 16px;margin-top:16px;font-size:.86rem;color:var(--soy)}
+.prov strong{color:var(--ink);font-weight:600}
+.warm{margin-top:16px;border-top:1px solid var(--line-soft);padding-top:13px}
+.wrow{display:flex;align-items:center;gap:10px;padding:5px 0;font-size:.88rem}
+.wrow .mk{width:17px;height:17px;border-radius:50%;display:grid;place-items:center;
+  font-size:.64rem;color:#fff;flex:none}
+.wrow.y .mk{background:var(--pandan)} .wrow.n .mk{background:var(--chilli)}
+.wrow .v{margin-left:auto;font-family:var(--mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase}
+.wrow.y .v{color:var(--pandan)} .wrow.n .v{color:var(--chilli)}
+.wrow.n .t{color:var(--chilli)}
+
+.modal{position:fixed;inset:0;background:rgba(20,38,30,.55);display:none;z-index:50;padding:24px}
+.modal.on{display:grid;place-items:center}
+.modal-box{background:var(--card);border-radius:12px;max-width:780px;width:100%;max-height:86vh;
+  display:flex;flex-direction:column;overflow:hidden}
+.modal-head{padding:16px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px}
+.modal-head h3{font-family:var(--display);font-size:1.02rem;font-weight:700;flex:1}
+.modal-head button{background:var(--ink);color:#fff;border:none;border-radius:999px;font-size:.78rem;padding:6px 14px}
+.modal-body{overflow-y:auto;padding:20px;white-space:pre-wrap;font-size:.88rem;line-height:1.65;color:#3B4A42}
+.foot{text-align:center;font-size:.75rem;color:var(--soy);padding:26px 20px 0}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<div class="topbar">
+  <div class="brand">
+    <span class="zh">好吃厨房</span>
+    <span class="en">Tasty Kitchen · Knowledge Assistant</span>
+  </div>
+  <div class="surface-switch" role="group" aria-label="Choose surface">
+    <button id="btn-cust" aria-pressed="true" onclick="setSurface('cust')">Customer chat</button>
+    <button id="btn-own" aria-pressed="false" onclick="setSurface('own')">Under the hood<span
+      id="hoodmark" style="display:none;width:7px;height:7px;border-radius:50%;background:#4CC38A;margin-left:8px"></span></button>
+  </div>
+</div>
+
+<div class="wrap" id="main">
+
+<section id="s-cust" class="surface on" aria-label="Customer chat">
+  <div class="stage">
+    <aside class="qcol" aria-label="Questions you can ask">
+      <div class="qcol-head">
+        <h2>Ask about</h2>
+        <p><span id="qtotal">0</span> questions the kitchen has answers for</p>
+        <div class="qsearch">
+          <label for="qfilter" class="skip">Filter questions</label>
+          <input id="qfilter" type="text" placeholder="Filter questions" autocomplete="off">
+        </div>
+      </div>
+      <div class="qlist" id="qlist"></div>
+    </aside>
+
+    <div class="chat">
+      <div class="chat-head">
+        <div class="avatar" aria-hidden="true">好</div>
+        <div style="flex:1;min-width:0">
+          <div class="nm">好吃厨房 Tasty Kitchen</div>
+          <div class="st"><span class="dot" aria-hidden="true"></span>Usually replies instantly</div>
+        </div>
+      </div>
+      <div class="thread" id="thread" aria-live="polite" aria-label="Conversation"></div>
+      <div class="composer">
+        <div class="field">
+          <label for="q" class="skip">Your message</label>
+          <input id="q" type="text" placeholder="Pick a question on the left, or type one" autocomplete="off">
+        </div>
+        <button class="send" id="send" aria-label="Send">↑</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="s-own" class="surface" aria-label="Under the hood">
+  <div class="intro">
+    <h1>Where this answer came from</h1>
+    <p>Ask a question on the customer chat and this page shows the workings behind that one reply:
+       the passage in the kitchen's own document it came from, how long the assistant took to find
+       that document, and how the reply reads.</p>
+    <p><strong>One question at a time, on purpose.</strong> Read the reply, read the document line
+       beside it, open the full document if you want, and decide for yourself whether the reply is
+       honest. The assistant answers <strong id="setsize">29</strong> questions in total, taken from
+       the ones customers actually ask the kitchen on WhatsApp.</p>
+    <div class="prov">
+      <strong>What is measured here, and what is not.</strong> The searching is real: the timing on
+      every card was measured when this page was built, by running the actual search against the
+      kitchen&rsquo;s documents and records. The wording of each reply is the kitchen&rsquo;s own,
+      written and approved by hand rather than composed by the model on this run, so that a customer
+      never receives a sentence nobody has read. What the page shows you is whether each approved
+      reply is backed by the document beside it.
+    </div>
+  </div>
+  <div id="cards"></div>
+</section>
+
+<p class="foot" id="foot"></p>
+</div>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3 id="modal-title"></h3>
+      <button onclick="closeDoc()">Close</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<script>
+const BUNDLE = /*__FROZEN_DATA__*/null;
+const QS = BUNDLE.questions;
+let LOG = [], current = null, busy = false, clock = 11 * 60 + 42;
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function stampNow(){
+  const h = Math.floor(clock / 60), m = clock % 60; clock += 1;
+  const ap = h >= 12 ? 'pm' : 'am', hh = h > 12 ? h - 12 : h;
+  return hh + ':' + String(m).padStart(2, '0') + ' ' + ap;
+}
+
+/* ---------- customer ---------- */
+function renderQList(filter){
+  const f = (filter || '').trim().toLowerCase();
+  const shown = QS.filter(q => !f || q.question.toLowerCase().includes(f) || q.group.toLowerCase().includes(f));
+  let h = '', group = null;
+  shown.forEach(q => {
+    if(q.group !== group){ group = q.group; h += '<div class="qgroup">' + esc(group) + '</div>'; }
+    const asked = LOG.includes(q.id);
+    h += '<button class="qitem' + (asked ? ' asked' : '') + '" onclick="ask(\'' + q.id + '\')">' +
+      '<span class="qn">' + String(q.n).padStart(2, '0') + '</span>' + esc(q.question) + '</button>';
+  });
+  document.getElementById('qlist').innerHTML = h || '<div class="qgroup">No question matches that</div>';
+  document.getElementById('qtotal').textContent = QS.length;
+}
+
+function addMsg(who, inner){
+  const th = document.getElementById('thread');
+  const row = document.createElement('div');
+  row.className = 'msg ' + who;
+  row.innerHTML = (who === 'bot' ? '<span class="mini" aria-hidden="true">好</span>' : '') +
+    '<div class="stack"><div class="bubble">' + inner + '</div>' +
+    '<div class="stamp-time">' + stampNow() + '</div></div>';
+  th.appendChild(row);
+  th.scrollTop = th.scrollHeight;
+}
+
+function ask(id){
+  if(busy) return;
+  const q = QS.find(x => x.id === id);
+  if(!q) return;
+  document.getElementById('q').value = '';
+  addMsg('me', esc(q.question));
+  busy = true;
+  document.getElementById('send').disabled = true;
+  const th = document.getElementById('thread');
+  const typing = document.createElement('div');
+  typing.className = 'msg bot';
+  typing.innerHTML = '<span class="mini" aria-hidden="true">好</span><div class="stack">' +
+    '<div class="bubble typing" aria-label="Typing"><i></i><i></i><i></i></div></div>';
+  th.appendChild(typing); th.scrollTop = th.scrollHeight;
+  setTimeout(() => {
+    typing.remove();
+    addMsg('bot', esc(q.answer));
+    if(!LOG.includes(q.id)) LOG.push(q.id);
+    current = q.id;                       // the hood follows the chat
+    busy = false;
+    document.getElementById('send').disabled = false;
+    renderQList(document.getElementById('qfilter').value);
+    renderCards();
+    document.getElementById('hoodmark').style.display = 'inline-block';
+  }, 700);
+}
+
+function freeText(text){
+  text = (text || '').trim();
+  if(!text || busy) return;
+  const hit = QS.find(q => q.question.toLowerCase() === text.toLowerCase()) ||
+              QS.find(q => q.question.toLowerCase().includes(text.toLowerCase().slice(0, 14)));
+  if(hit) return ask(hit.id);
+  document.getElementById('q').value = '';
+  addMsg('me', esc(text));
+  setTimeout(() => addMsg('bot',
+    'This demo answers the ' + QS.length + ' questions listed on the left, so it works with no key and ' +
+    'no server. Yours is not one of them yet. Pick any question from the list to see a real answer.'), 450);
+}
+document.getElementById('send').onclick = () => freeText(document.getElementById('q').value);
+document.getElementById('q').addEventListener('keydown', e => { if(e.key === 'Enter') freeText(e.target.value); });
+document.getElementById('qfilter').addEventListener('input', e => renderQList(e.target.value));
+
+function docSource(q){
+  return '<div class="srcbox"><div class="lbl">Where it comes from</div>' +
+    '<div class="srchead"><span class="doc">' + esc(q.doc_title) + '</span>' +
+    '<span class="ms">found in ' + (q.ms / 1000).toFixed(2) + ' seconds</span></div>' +
+    '<div class="quote">' + esc(q.quote) + '</div>' +
+    '<button class="readfull" onclick="openDoc(\'' + q.doc_id + '\')">Read the full document</button></div>';
+}
+
+function recordSource(q){
+  return '<div class="srcbox"><div class="lbl">Where it comes from</div>' +
+    '<div class="srchead"><span class="doc">' + esc(q.customer) + '&rsquo;s subscription record</span>' +
+    '<span class="ms">read in ' + q.ms.toFixed(1) + ' milliseconds</span></div>' +
+    '<table class="rec">' + q.record.map(f =>
+      '<tr><td class="f">' + esc(f.field) + '</td><td class="v">' + esc(f.value) + '</td></tr>').join('') +
+    '</table>' +
+    '<p class="govern">No document contains this answer, because it is different for every ' +
+    'customer. It comes from the kitchen&rsquo;s own subscription records, read with one of six ' +
+    'approved questions: <code>' + esc(q.tool) + '</code>. The assistant chooses which of the six ' +
+    'to ask. It cannot write its own, cannot see how the records are stored, and cannot reach ' +
+    'another customer&rsquo;s record.</p></div>';
+}
+
+/* ---------- under the hood: the question just asked ---------- */
+function renderCards(){
+  const box = document.getElementById('cards');
+  document.getElementById('setsize').textContent = QS.length;
+
+  const q = QS.find(x => x.id === current);
+  if(!q){
+    box.innerHTML = '<div class="ev" style="text-align:center;padding:38px 24px;color:var(--soy)">' +
+      '<div style="font-family:var(--display);font-weight:700;font-size:1.05rem;color:var(--ink);margin-bottom:7px">' +
+      'Nothing to show yet</div>' +
+      'Pick a question on the customer chat and its workings appear here.' +
+      '<div><button class="readfull" style="margin-top:16px" onclick="setSurface(\'cust\')">' +
+      'Go to the customer chat</button></div></div>';
+    return;
+  }
+
+  let h = '<div class="evgroup">' + esc(q.group) + '</div>' +
+      '<article class="ev">' +
+      '<div class="ev-q"><span class="n">' + String(q.n).padStart(2, '0') + '</span>' +
+      '<span class="txt">' + esc(q.question) + '</span></div>' +
+
+      '<div class="lbl">What the customer is told</div>' +
+      '<div class="reply">' + esc(q.answer) + '</div>' +
+
+      (q.kind === 'record' ? recordSource(q) : docSource(q)) +
+
+      '<div class="warm"><div class="lbl">How the reply reads</div>' +
+      q.checks.map(c =>
+        '<div class="wrow ' + (c.pass ? 'y' : 'n') + '">' +
+        '<span class="mk" aria-hidden="true">' + (c.pass ? '✓' : '✕') + '</span>' +
+        '<span class="t">' + esc(c.label) + '</span>' +
+        '<span class="v">' + (c.pass ? 'yes' : 'no') + '</span></div>').join('') +
+      '</div>' +
+      '<button class="readfull" style="margin-top:16px" onclick="setSurface(\'cust\')">' +
+      'Back to the chat, ask another</button>' +
+      '</article>';
+  box.innerHTML = h;
+}
+
+function openDoc(id){
+  document.getElementById('modal-title').textContent = BUNDLE.doc_titles[id] || id;
+  document.getElementById('modal-body').textContent = BUNDLE.documents[id] || 'Document not bundled.';
+  document.getElementById('modal').classList.add('on');
+  document.getElementById('modal-body').scrollTop = 0;
+}
+function closeDoc(){ document.getElementById('modal').classList.remove('on'); }
+document.getElementById('modal').addEventListener('click', e => { if(e.target.id === 'modal') closeDoc(); });
+document.addEventListener('keydown', e => { if(e.key === 'Escape') closeDoc(); });
+
+/* ---------- nav ---------- */
+function setSurface(which){
+  document.getElementById('s-cust').classList.toggle('on', which === 'cust');
+  document.getElementById('s-own').classList.toggle('on', which === 'own');
+  document.getElementById('btn-cust').setAttribute('aria-pressed', which === 'cust');
+  document.getElementById('btn-own').setAttribute('aria-pressed', which === 'own');
+  window.scrollTo({top: 0});
+}
+
+/* ---------- boot ---------- */
+document.getElementById('thread').innerHTML = '<div class="daymark">Today</div>';
+addMsg('bot', 'Hi, this is the Tasty Kitchen assistant. Pick any question from the list on the left and I will answer it.');
+renderQList('');
+renderCards();
+const docQs = QS.filter(q => q.kind !== 'record');
+const recQs = QS.filter(q => q.kind === 'record');
+const t = docQs.map(q => q.ms).sort((a, b) => a - b);
+document.getElementById('foot').textContent =
+  QS.length + ' questions · ' + docQs.length + ' answered from the kitchen’s documents, found in ' +
+  (t[0] / 1000).toFixed(2) + 's to ' + (t[t.length - 1] / 1000).toFixed(2) + 's · ' +
+  recQs.length + ' answered from the subscription records, read in about a millisecond · © 2026';
+</script>
+</body>
+</html>

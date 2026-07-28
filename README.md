@@ -2,7 +2,7 @@
 
 [![Portfolio Website](https://img.shields.io/badge/Portfolio-Live-green?logo=vercel)](https://lyven81.github.io/ai-project/)
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-black?logo=github)](https://github.com/lyven81/ai-project)
-[![Projects](https://img.shields.io/badge/Projects-55-blue)](#projects-by-category)
+[![Projects](https://img.shields.io/badge/Projects-56-blue)](#projects-by-category)
 [![AI Powered](https://img.shields.io/badge/AI-Powered-orange?logo=tensorflow)](https://github.com/lyven81/ai-project)
 
 **55 production AI apps across 8 business categories** — each one solves a real, named pain point with a working demo you can click and try today.
@@ -21,10 +21,11 @@ This repo contains **55 completed AI applications**, each with a working demo (l
 
 An index of every published AI project, **newest first**. The date is when the project was **deployed** (from the per-project "Deployed" field below).
 
-**Total published AI projects: 55**
+**Total published AI projects: 56**
 
 | # | Date deployed | AI project | Page |
 |---|---|---|---|
+| 56 | 2026-07-28 | Catering Knowledge Assistant | [demo](https://lyven81.github.io/ai-project/projects/catering-knowledge-assistant/demo.html) |
 | 55 | 2026-07-07 | Delivery Delay Predictor | [demo](https://delivery-delay-predictor-522143897885.asia-southeast1.run.app) |
 | 54 | 2026-06-19 | Courier CS Quality Console | [demo](https://lyven81.github.io/ai-project/projects/courier-cs-quality-console/demo.html) |
 | 53 | 2026-06-18 | Seasonal Pricing Console | [demo](https://lyven81.github.io/ai-project/projects/seasonal-pricing-console/demo.html) |
@@ -94,7 +95,7 @@ The 8 categories below match the [live category pages](https://lyven81.github.io
 | 3 | [Conversational Data Analytics](#3-conversational-data-analytics-9-projects) | 9 | SME owners with data, no analyst |
 | 4 | [Content Automation](#4-content-automation-6-projects) | 6 | Solo consultants, creators, educators |
 | 5 | [Industry Specialist Advisors](#5-industry-specialist-advisors-11-projects) | 11 | Vertical experts (legal, finance, education, retail, property) |
-| 6 | [Knowledge & Reference Chatbots](#6-knowledge--reference-chatbots-8-projects) | 8 | Consumers seeking guidance in plain language |
+| 6 | [Knowledge & Reference Chatbots](#6-knowledge--reference-chatbots-9-projects) | 9 | Consumers seeking guidance in plain language |
 | 7 | [Document & Productivity Tools](#7-document--productivity-tools-5-projects) | 5 | Knowledge workers, accessibility users |
 | 8 | [Agentic Commerce](#8-agentic-commerce-2-projects) | 2 | Storefronts ready for AI shopping agents |
 
@@ -412,9 +413,16 @@ The 8 categories below match the [live category pages](https://lyven81.github.io
 
 ---
 
-### 6. Knowledge & Reference Chatbots (8 projects)
+### 6. Knowledge & Reference Chatbots (9 projects)
 
 **Who it's for:** Consumers seeking personalised guidance in plain language — daily horoscopes, I Ching, tarot, feng shui, traditional calendar, cultural reference.
+
+#### Catering Knowledge Assistant
+- **What it does:** Meal delivery assistant that shows every answer's source
+- **How it's built:** Qdrant vector store with Gemini embeddings, a local cross-encoder reranker, and six fixed SQLite queries for the subscription records. Ships as one static page with no backend and no API key.
+- **Problem solved:** A home kitchen delivering 35 meals a day answers the same forty questions every week from memory, because the rules sit across menu images, a verbal subscription arrangement and ad hoc holiday notices. The helper who takes the phone knows the food but not the terms. This answers both, and shows the document behind every reply.
+- **Demo:** [Try it](https://lyven81.github.io/ai-project/projects/catering-knowledge-assistant/demo.html)
+- **Deployed:** 2026-07-28
 
 #### Skyread
 - **What it does:** Daily horoscope that explains why, not just what. Bilingual EN/ZH with real planetary movement insights.

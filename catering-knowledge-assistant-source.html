@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catering Knowledge Assistant: Source | AI Project Portfolio</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root{ --ink:#222; --paper:#fff; --hair:#dddddd; --gray:#555; --accent:#B8860B; --navy:#1E3A5F; --code-bg:#fbfbf8; --cmt:#6b8190; }
+  html{ scroll-behavior:smooth; }
+  body{ background:var(--paper); color:var(--ink); font-family:Arial, Helvetica, sans-serif; line-height:1.6; overflow-x:hidden; }
+  a{ color:inherit; text-decoration:none; }
+  a:hover h2, a:hover h3, a:hover h4{ color:var(--accent); }
+  p code, li code{ font-family:"Courier New", monospace; font-size:.86em; background:#f2f3f5; padding:1px 5px; color:var(--navy); }
+
+  /* Masthead (shared) */
+  .masthead{ display:flex; align-items:center; justify-content:space-between; padding:14px 28px; max-width:1240px; margin:0 auto; gap:18px; }
+  .topbar{ position:sticky; top:0; z-index:120; background:#fff; box-shadow:0 1px 6px rgba(0,0,0,.06); }
+  .mast-left{ display:flex; align-items:center; gap:20px; }
+  .logo{ background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; letter-spacing:3px; font-size:.95rem; padding:8px 12px; white-space:nowrap; }
+  .mast-nav{ display:flex; gap:20px; font-family:Arial, Helvetica, sans-serif; font-size:.72rem; letter-spacing:1.4px; text-transform:uppercase; }
+  .mast-nav a:hover{ color:var(--accent); }
+  .hamburger{ display:none; flex-direction:column; gap:4px; background:none; border:none; cursor:pointer; padding:6px; }
+  .hamburger span{ width:22px; height:2px; background:#222; display:block; }
+  .rule-top{ border:none; border-top:3px solid #222; max-width:1240px; margin:0 auto; }
+
+  /* Search (shared) */
+  .search-box{ position:relative; width:200px; }
+  .search-input{ width:100%; padding:7px 30px 7px 12px; border:1px solid var(--hair); background:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; color:#222; }
+  .search-input:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(184,134,11,.15); }
+  .search-ic{ position:absolute; right:10px; top:50%; transform:translateY(-50%); color:var(--gray); font-size:.8rem; pointer-events:none; }
+  .search-results{ position:absolute; top:calc(100% + 4px); left:0; width:340px; max-width:86vw; background:#fff; border:1px solid #222; max-height:60vh; overflow-y:auto; z-index:120; display:none; }
+  .sr-item{ padding:12px 14px; border-bottom:1px solid var(--hair); }
+  .sr-item:last-child{ border-bottom:none; }
+  .sr-cat{ font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; margin-bottom:4px; color:var(--accent); }
+  .sr-title{ font-weight:700; font-size:1.02rem; color:#222; }
+  .sr-links{ font-size:.58rem; letter-spacing:.8px; text-transform:uppercase; color:var(--gray); margin-top:5px; }
+  .sr-links a:hover{ color:var(--accent); }
+  .sr-none{ padding:16px 14px; font-size:.82rem; color:var(--gray); }
+
+  /* Shared bits */
+  .tab{ display:inline-block; background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.66rem; letter-spacing:2px; text-transform:uppercase; padding:6px 12px; }
+  .rubric{ font-family:Arial, Helvetica, sans-serif; font-size:.62rem; font-weight:700; letter-spacing:1.6px; text-transform:uppercase; color:var(--accent); display:block; margin-bottom:8px; }
+  .tech-chip{ display:inline-block; border:1px solid var(--hair); padding:6px 12px; font-size:.72rem; letter-spacing:.3px; color:#333; white-space:nowrap; }
+  .tech-chip:hover{ border-color:var(--accent); color:var(--accent); }
+  .btn{ display:inline-block; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.7rem; letter-spacing:1.6px; text-transform:uppercase; padding:13px 24px; border:1px solid #222; background:#222; color:#fff; cursor:pointer; transition:.15s; }
+  .btn:hover{ background:var(--accent); border-color:var(--accent); }
+  .btn.ghost{ background:#fff; color:#222; }
+  .btn.ghost:hover{ color:var(--accent); border-color:var(--accent); background:#fff; }
+
+  /* Breadcrumb */
+  .crumb{ max-width:1240px; margin:0 auto; padding:20px 28px 0; font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--gray); }
+  .crumb a:hover{ color:var(--accent); }
+  .crumb .sep{ color:var(--hair); margin:0 8px; }
+
+  /* Header (slim cover banner + copy) */
+  .src-head{ max-width:1240px; margin:0 auto; padding:14px 28px 6px; }
+  .cover-strip{ border:1px solid var(--hair); line-height:0; background:#eef1f4; }
+  .cover-strip img{ width:100%; height:190px; object-fit:cover; object-position:center 42%; display:block; }
+  .src-head h1{ font-size:2.5rem; font-weight:900; line-height:1.04; letter-spacing:-.008em; margin-top:18px; }
+  .src-head .sub{ font-style:italic; font-size:1.08rem; color:#333; margin-top:10px; max-width:72ch; }
+  .head-tech{ display:flex; flex-wrap:wrap; gap:9px; margin-top:16px; }
+  .head-btns{ display:flex; flex-wrap:wrap; gap:12px; margin-top:18px; }
+
+  /* Section shell */
+  .sec{ max-width:1240px; margin:0 auto; padding:26px 28px; }
+  .sec-rule{ border-top:3px solid #222; padding-top:16px; }
+  .sec .tab{ margin-bottom:14px; }
+  .sec h2{ font-size:1.7rem; font-weight:900; line-height:1.06; }
+  .sec .intro{ color:#333; font-size:1.02rem; margin-top:10px; max-width:80%; }
+  .sec .body{ color:#333; font-size:1rem; margin-top:10px; max-width:80%; }
+
+  /* Code block */
+  .codeblock{ border:1px solid var(--hair); margin-top:16px; }
+  .code-bar{ display:flex; align-items:center; justify-content:space-between; gap:12px; background:var(--navy); color:#fff; padding:8px 12px; }
+  .code-bar .path{ font-family:"Courier New", monospace; font-size:.74rem; letter-spacing:.2px; opacity:.96; display:flex; align-items:center; gap:7px; min-width:0; }
+  .code-bar .path span{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .code-copy{ flex:none; background:none; border:1px solid rgba(255,255,255,.4); color:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.56rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; padding:5px 11px; cursor:pointer; transition:.15s; }
+  .code-copy:hover{ background:rgba(255,255,255,.16); }
+  .codeblock pre{ margin:0; padding:14px 16px; overflow-x:auto; background:var(--code-bg); }
+  .codeblock code{ font-family:"Courier New", monospace; font-size:.82rem; line-height:1.6; color:#1b2a3a; background:none; padding:0; white-space:pre; display:block; }
+  .codeblock code .cmt{ color:var(--cmt); font-style:italic; }
+
+  .tree .code-bar .path::before{ content:"📁"; }
+
+  /* Notes */
+  .note-block{ margin-top:22px; }
+  .note-block h3{ font-size:1.15rem; font-weight:800; }
+  .blist{ list-style:none; margin-top:12px; border-top:1px solid var(--hair); }
+  .blist li{ padding:12px 0; border-bottom:1px solid var(--hair); color:#333; font-size:.95rem; }
+  .blist li b{ color:#222; }
+
+  /* CTA */
+  .cta-inner{ display:flex; align-items:center; gap:18px; flex-wrap:wrap; border-top:3px solid #222; padding-top:18px; }
+  .cta-inner h3{ font-size:1.4rem; font-weight:900; line-height:1.08; }
+  .cta-inner p{ color:var(--gray); font-size:.95rem; margin-top:4px; }
+  .cta-btns{ margin-left:auto; display:flex; gap:12px; flex-wrap:wrap; }
+
+  footer{ background:#222; max-width:1240px; margin:30px auto 0; padding:24px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; letter-spacing:.5px; color:#fff; text-align:center; }
+  .note{ max-width:1240px; margin:14px auto 0; padding:8px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.62rem; letter-spacing:1px; color:#999; }
+
+  /* Drawer (shared) */
+  .drawer{ position:fixed; top:0; left:-300px; width:280px; height:100vh; background:#fff; z-index:200; box-shadow:2px 0 14px rgba(0,0,0,.15); transition:left .28s ease; padding:74px 26px 26px; }
+  .drawer.open{ left:0; }
+  .drawer a{ display:block; font-family:Arial, Helvetica, sans-serif; font-size:.82rem; letter-spacing:1.2px; text-transform:uppercase; padding:14px 0; border-bottom:1px solid var(--hair); }
+  .overlay{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:150; }
+  .overlay.open{ display:block; }
+  .drawer-close{ position:absolute; top:20px; right:20px; font-family:Arial, Helvetica, sans-serif; font-size:1.4rem; background:none; border:none; cursor:pointer; }
+
+  @media (max-width:900px){
+    .cta-btns{ margin-left:0; }
+    .mast-nav{ display:none; }
+    .hamburger{ display:flex; }
+    .masthead{ padding:12px 16px; }
+    .mast-left{ gap:10px; min-width:0; flex:1; }
+    .logo{ font-size:.72rem; letter-spacing:1.5px; padding:6px 8px; }
+    .search-box{ flex:1; width:auto; min-width:0; }
+    .search-results{ position:fixed; top:58px; left:12px; right:12px; width:auto; max-width:none; }
+    .src-head h1{ font-size:1.95rem; }
+    .cover-strip img{ height:150px; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="overlay" id="overlay"></div>
+  <nav class="drawer" id="drawer">
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">&times;</button>
+    <a href="index.html">Home</a>
+    <a href="project-categories.html">Categories</a>
+    <a href="contact.html">Contact</a>
+    <a href="https://lyven81.github.io/data-analyst-portfolio/index.html">Data Portfolio</a>
+  </nav>
+
+  <div class="topbar">
+  <div class="masthead">
+    <div class="mast-left">
+      <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+      <a class="logo" href="index.html">AI BUILDS LAB</a>
+      <nav class="mast-nav">
+        <a href="project-categories.html">Categories</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <div class="search-box">
+        <input type="text" class="search-input" id="searchInput" autocomplete="off" placeholder="Search AI projects..." aria-label="Search AI projects">
+        <span class="search-ic">&#128269;</span>
+        <div class="search-results" id="searchResults"></div>
+      </div>
+    </div>
+  </div>
+  <hr class="rule-top">
+  </div>
+
+  <div class="crumb">
+    <a href="project-categories.html">Categories</a>
+    <span class="sep">/</span><a id="crumbCat" href="#"></a>
+    <span class="sep">/</span><a id="crumbProj" href="#"></a>
+    <span class="sep">/</span><span>Source</span>
+  </div>
+
+  <section class="src-head">
+    <div class="cover-strip" id="coverStrip" style="display:none"><img id="cover" alt=""></div>
+    <span class="rubric" id="kicker"></span>
+    <h1 id="title"></h1>
+    <p class="sub" id="subtitle"></p>
+    <div class="head-tech" id="headTech"></div>
+    <div class="head-btns" id="headBtns"></div>
+  </section>
+
+  <div id="body"></div>
+
+  <footer>&copy; 2026 Lee Yih Ven | AI Project Portfolio &middot; All rights reserved.</footer>
+  <div class="note">Sample Source-Showcase-E2 (TEMPLATE): source-code page on the index magazine system: slim cover banner, About, Project Structure, code walkthrough with copyable navy-barred code blocks, CTA. Reuse by editing only the PROJECT block at the top of the script.</div>
+
+<script>
+  const SITE = "";
+
+  /* =================================================================
+     EDIT PER PROJECT  -  the ONLY block you change per page.
+     Copy this file, swap PROJECT, save as <slug>-source.html.
+     - structure.code : the project file tree (plain text)
+     - walkthrough[]   : { heading, body, files:[{label, code}] }
+     - notes[]         : { heading, bullets:[...] }
+     Code strings can be multi-line; they render verbatim.
+     ================================================================= */
+  const PROJECT = {
+  "slug": "catering-knowledge-assistant",
+  "category": "Knowledge & Reference Chatbots",
+  "categoryUrl": "category-knowledge-chatbots.html",
+  "title": "Catering Knowledge Assistant",
+  "subtitle": "Chunking by document type, the relevance floor, the governed record queries, and the build step that freezes measured results into the page.",
+  "cover": "images/catering-knowledge-assistant/cover.jpeg",
+  "tech": [
+    "Python",
+    "Qdrant",
+    "sentence-transformers",
+    "SQLite",
+    "Static HTML"
+  ],
+  "overviewUrl": "catering-knowledge-assistant.html",
+  "demoLabel": "Try Live Demo",
+  "demoUrl": "https://lyven81.github.io/ai-project/projects/catering-knowledge-assistant/demo.html",
+  "repoUrl": "https://github.com/lyven81/ai-project/tree/main/projects/catering-knowledge-assistant",
+  "about": "Four excerpts carry this project: how the documents are cut up, how a passage is judged relevant enough to answer from, how the subscription records are reached without letting the model near the database, and how every published number is measured rather than typed. The generation layer and the dataset plumbing are omitted for clarity. The idea running through all four: the page shows what the pipeline actually produced, so a claim on screen cannot drift from the code that made it.",
+  "structure": {
+    "label": "projects/catering-knowledge-assistant/",
+    "code": "projects/catering-knowledge-assistant/\n  demo.html            the app (self-contained, bundle inlined)\n  page_template.html   the page, with a placeholder for the bundle\n  bundle.json          what the page renders, written by build_bundle.py\n  build_bundle.py      runs real retrieval per question, times it, checks the reply\n  build_page.py        injects bundle.json into the template to make demo.html\n  build_database.py    generates the operational database, deterministically\n  chunks.json          128 passages, chunked per document type\n  tasty_kitchen.db     60 customers, 20 subscription cycles\n  system-prompt.txt    how the assistant is instructed\n  corpus/              11 source documents with frontmatter metadata\n  rag/\n    chunker.py         ingest and chunk, one strategy per document type\n    index.py           embed and build the Qdrant collection\n    retriever.py       vector search, cross-encoder rerank, relevance floor\n    tools.py           six fixed parameterised database queries\n    assistant.py       router, grounded generation, citations, refusal\n    evaluate.py        retrieval and end to end evaluation\n    eval_set.json      48 labelled questions"
+  },
+  "walkthrough": [
+    {
+      "heading": "Cutting the documents up, one strategy per type",
+      "body": "A single splitter does not fit eleven documents of five different shapes. A menu split on a fixed window orphans a dish from its date and price, which makes the answer uncitable. So menus are cut one chunk per meal, with the week context prepended to every chunk. The FAQ is cut one chunk per question and answer pair, and policies one chunk per section, which is the natural unit of a rule.",
+      "files": [
+        {
+          "label": "rag/chunker.py: one chunk per meal, week context kept",
+          "code": "def chunk_menu(post, meta):\n    \"\"\"One chunk per meal. The week context is prepended to every chunk.\"\"\"\n    body = post.content\n    preamble, pairs = _split_on(r\"^###\\s+(.*)$\", body)\n    # Keep the week summary line, it answers \"show all fish this week\".\n    summary = \"\\n\".join(\n        ln for ln in preamble.splitlines()\n        if ln.strip().startswith((\"Service dates\", \"Rotation position\", \"Week summary\"))\n    )\n    chunks = []\n    for i, (heading, block) in enumerate(pairs):\n        text = (f\"{meta['title']}, rotation week {meta.get('rotation_week')}.\\n\"\n                f\"{summary}\\n\\n### {heading}\\n{block}\")\n        chunks.append((f\"{meta['doc_id']}#meal{i:02d}\", heading, text))"
+        }
+      ]
+    },
+    {
+      "heading": "Deciding when nothing is good enough to answer from",
+      "body": "Vector search alone returns the nearest passages whether or not any of them answers the question. A local cross-encoder rescores the candidates by reading the question and the passage together, and a floor decides what counts as relevant. Below it, the assistant has nothing to ground an answer on and says so instead of composing one. The cross-encoder runs on the CPU, so this second pass costs nothing per question.",
+      "files": [
+        {
+          "label": "rag/retriever.py: search, rerank, then drop what is too weak",
+          "code": "def retrieve(query, k_vector=TOP_K_VECTOR, k_final=TOP_K_RERANK, qfilter=None):\n    \"\"\"Full retrieval: search, rerank, drop anything below the relevance floor.\"\"\"\n    candidates = search(query, k=k_vector, qfilter=qfilter)\n    ranked = rerank(query, candidates, k=k_final)\n    return [h for h in ranked if h.rerank_score >= MIN_RERANK_SCORE]"
+        }
+      ]
+    },
+    {
+      "heading": "Reaching the records without handing over the database",
+      "body": "A subscriber's meal balance is arithmetic over records, not a passage in a document, and vector similarity answers it badly. It routes instead to six fixed parameterised queries. The model chooses which of the six to ask and supplies the customer name. It never writes SQL, never sees the schema, and an unknown tool name raises rather than falling through.",
+      "files": [
+        {
+          "label": "rag/tools.py: a fixed query, and the guard on the tool call",
+          "code": "def get_meals_remaining(customer: str) -> dict:\n    \"\"\"Meals delivered and remaining for a monthly subscriber.\"\"\"\n    with _conn() as c:\n        cur = c.cursor()\n        r = _find_customer(cur, customer)\n        s = cur.execute(\n            \"SELECT * FROM subscriptions WHERE customer_id=?\",\n            (r[\"customer_id\"],)).fetchone()\n        return {\"tool\": \"get_meals_remaining\", \"name\": r[\"name\"],\n                \"plan_type\": \"monthly\", \"service\": s[\"service\"],\n                \"meals_purchased\": s[\"meals_purchased\"],\n                \"meals_delivered\": s[\"meals_delivered\"],\n                \"meals_remaining\": s[\"meals_remaining\"],\n                \"cycle_end_date\": s[\"cycle_end_date\"],\n                \"status\": s[\"status\"], \"as_of\": SIM_TODAY.isoformat()}\n\n\ndef call_tool(name, args):\n    if name not in TOOLS:\n        raise KeyError(f\"Unknown tool '{name}'\")\n    return TOOLS[name](**args)"
+        }
+      ]
+    },
+    {
+      "heading": "Measuring the reply, then freezing what was measured",
+      "body": "Two things are checked for every question at build time. The retrieval is run for real and timed, so the speed shown on each card is a measurement rather than an estimate. The reply is then read by a set of plain-language rules: does it speak to the customer, is it short, does it avoid sending anyone off to read a document, and if it refuses, does it explain why. A rule that fails is displayed on the page rather than hidden.",
+      "files": [
+        {
+          "label": "build_bundle.py: the quality rules, written in code, no model involved",
+          "code": "def warmth_checks(answer):\n    declines = bool(DECLINE.search(answer))\n    checks = [\n        {\"label\": \"Speaks to you directly, the way a person would\",\n         \"pass\": bool(SPEAKS.search(answer))},\n        {\"label\": \"Reads as a sentence, not a one-word verdict\",\n         \"pass\": re.sub(r\"[^a-z]\", \"\", answer.lower()) not in (\"no\", \"yes\")},\n        {\"label\": \"Short enough to read at a glance\",\n         \"pass\": len(sentences(answer)) <= 2},\n        {\"label\": \"Answers you here, without sending you off to read a document\",\n         \"pass\": not bool(REDIRECT.search(answer))},\n    ]\n    if declines:\n        checks.append({\n            \"label\": \"Gives a reason or a way forward, not just a no\",\n            \"pass\": bool(REASON_OR_WAY_FORWARD.search(answer)),\n        })\n    return declines, checks"
+        },
+        {
+          "label": "build_bundle.py: run the real search, time it, record the result",
+          "code": "    for i, r in enumerate(rows, 1):\n        doc = r[\"source_chunk\"].split(\"#\")[0]\n        r[\"quote\"] = quote_from(chunks[r[\"source_chunk\"]][\"text\"])\n\n        t0 = time.perf_counter()\n        hits = retrieve(r[\"question\"])\n        r[\"ms\"] = int((time.perf_counter() - t0) * 1000)\n        r[\"found\"] = doc in [h.doc_id for h in hits]\n\n        r[\"declines\"], r[\"checks\"] = warmth_checks(r[\"answer\"])"
+        }
+      ]
+    }
+  ],
+  "notes": [
+    {
+      "heading": "What is measured, and what is not",
+      "bullets": [
+        "The retrieval, the timings and the quality checks are all real, produced by running the pipeline when the page was built.",
+        "The wording of each reply is the kitchen's approved copy, written and reviewed by hand rather than composed by the model on the published run. The page states this.",
+        "End to end answer quality is not yet scored. The free tier caps generation at 20 requests per day per model, and the labelled set needs more than that, so the project reports retrieval results and makes no generation claim."
+      ]
+    },
+    {
+      "heading": "Choices worth defending",
+      "bullets": [
+        "Chunk per meal, not per page, because a dish separated from its date and price cannot be cited.",
+        "A local cross-encoder rather than an API reranker, so the second ranking pass costs nothing per question.",
+        "Fixed queries rather than generated SQL, so a wrong answer can never become a wrong write or a leaked record.",
+        "Results frozen at build time, so the page cannot show a number the pipeline no longer produces."
+      ]
+    }
+  ],
+  "cta": "Want a grounded assistant over your own documents and records? Let's scope it."
+};
+  /* ===================== END EDIT BLOCK ===================== */
+
+  const pref = (u) => /^https?:|^mailto:|^tel:/.test(u || '') ? u : (SITE + (u || ''));
+  const esc = (s) => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const rich = (s) => esc(s).replace(/&lt;(\/?(?:b|code))&gt;/g, '<$1>');
+
+  // raw code store for copy buttons
+  const RAW = [];
+  function codeBlock(label, codeStr, extraClass){
+    const idx = RAW.push(codeStr) - 1;
+    const rendered = esc(codeStr).split('\n')
+      .map(line => /^\s*#/.test(line) ? `<span class="cmt">${line}</span>` : line).join('\n');
+    return `<div class="codeblock ${extraClass||''}">`+
+      `<div class="code-bar"><span class="path"><span>${esc(label)}</span></span>`+
+      `<button class="code-copy" data-idx="${idx}">Copy</button></div>`+
+      `<pre><code>${rendered}</code></pre></div>`;
+  }
+
+  // Breadcrumb + header
+  document.title = PROJECT.title + ": Source | AI Project Portfolio";
+  document.getElementById('crumbCat').textContent = PROJECT.category;
+  document.getElementById('crumbCat').href = pref(PROJECT.categoryUrl);
+  document.getElementById('crumbProj').textContent = PROJECT.title;
+  document.getElementById('crumbProj').href = pref(PROJECT.overviewUrl);
+  if (PROJECT.cover){
+    document.getElementById('coverStrip').style.display = '';
+    const c = document.getElementById('cover'); c.src = PROJECT.cover; c.alt = PROJECT.title + " cover";
+  }
+  document.getElementById('kicker').textContent = "Source Walkthrough · " + PROJECT.category;
+  document.getElementById('title').textContent = PROJECT.title;
+  document.getElementById('subtitle').textContent = PROJECT.subtitle;
+  document.getElementById('headTech').innerHTML = (PROJECT.tech||[]).map(t => `<span class="tech-chip">${esc(t)}</span>`).join('');
+  document.getElementById('headBtns').innerHTML =
+    (PROJECT.demoUrl ? `<a class="btn" href="${pref(PROJECT.demoUrl)}" target="_blank" rel="noopener">${esc(PROJECT.demoLabel||'Live Demo')}</a>` : '') +
+    (PROJECT.overviewUrl ? `<a class="btn ghost" href="${pref(PROJECT.overviewUrl)}">Project Overview</a>` : '') +
+    (PROJECT.repoUrl ? `<a class="btn ghost" href="${pref(PROJECT.repoUrl)}" target="_blank" rel="noopener">GitHub Repo</a>` : '');
+
+  const section = (tab, inner) => `<section class="sec"><div class="sec-rule"><span class="tab">${esc(tab)}</span>${inner}</div></section>`;
+  let html = "";
+  const P = PROJECT;
+
+  if (P.about){
+    html += section("About This Code", `<h2>About This Code Showcase</h2><p class="intro">${rich(P.about)}</p>`);
+  }
+  if (P.structure && P.structure.code){
+    html += section("Project Structure", `<h2>Project Structure</h2>`+
+      codeBlock(P.structure.label || 'project/', P.structure.code, 'tree'));
+  }
+  (P.walkthrough||[]).forEach(w => {
+    let inner = `<h2>${esc(w.heading)}</h2>`;
+    if (w.body) inner += `<p class="body">${rich(w.body)}</p>`;
+    (w.files||[]).forEach(f => { inner += codeBlock(f.label, f.code); });
+    html += section("Code", inner);
+  });
+  // CTA
+  html += `<section class="sec"><div class="cta-inner">`+
+    `<div><h3>Interested in the build?</h3><p>${esc(P.cta || "Let's talk.")}</p></div>`+
+    `<div class="cta-btns">`+
+    (P.demoUrl ? `<a class="btn" href="${pref(P.demoUrl)}" target="_blank" rel="noopener">${esc(P.demoLabel||'Live Demo')}</a>` : '')+
+    `<a class="btn ghost" href="${SITE}contact.html">Get in Touch</a>`+
+    `</div></div></section>`;
+
+  document.getElementById('body').innerHTML = html;
+
+  // Copy buttons
+  function copyText(text, btn){
+    const done = ()=>{ const o=btn.textContent; btn.textContent='Copied ✓'; setTimeout(()=>btn.textContent=o.includes('Copied')?'Copy':o,1400); };
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(done).catch(()=>fb(text,done)); }
+    else fb(text,done);
+  }
+  function fb(text,done){ const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(ta); done(); }
+  document.querySelectorAll('.code-copy').forEach(btn =>
+    btn.addEventListener('click', ()=> copyText(RAW[+btn.dataset.idx], btn)));
+
+  // Masthead search
+  const ITEMS = [
+    {t:PROJECT.title, c:PROJECT.category, s:PROJECT.slug},
+    {t:"Courier CS Quality Console", c:"Conversational Data Analytics", s:"courier-cs-quality-console"},
+    {t:"Voucher Analyzer", c:"Conversational Data Analytics", s:"voucher-analyzer"},
+    {t:"Wiseman", c:"Knowledge & Reference Chatbots", s:"wiseman"},
+    {t:"Sunny Car Accessories", c:"Agentic Commerce", s:"sunny-car-accessories"},
+    {t:"Bookshelf", c:"Multi-Agent Decision Systems", s:"bookshelf"}
+  ];
+  const searchInput = document.getElementById('searchInput');
+  const searchResults = document.getElementById('searchResults');
+  function runSearch(q){
+    if(q.trim().length < 2){ searchResults.style.display='none'; return; }
+    const ql = q.toLowerCase();
+    const hits = ITEMS.filter(it => (it.t+' '+it.c).toLowerCase().includes(ql));
+    searchResults.innerHTML = hits.length ? hits.map(it =>
+      `<div class="sr-item"><div class="sr-cat">${esc(it.c)}</div>`+
+      `<a href="${SITE}${it.s}.html"><div class="sr-title">${esc(it.t)}</div></a>`+
+      `<div class="sr-links"><a href="${SITE}${it.s}.html">View Details</a></div></div>`).join('')
+      : `<div class="sr-none">No projects found. Try a different keyword.</div>`;
+    searchResults.style.display='block';
+  }
+  searchInput.addEventListener('input', e => runSearch(e.target.value));
+  document.addEventListener('click', e => { if(!e.target.closest('.search-box')) searchResults.style.display='none'; });
+
+  // Drawer
+  const drawer=document.getElementById('drawer'), overlay=document.getElementById('overlay');
+  const openMenu=()=>{ drawer.classList.add('open'); overlay.classList.add('open'); };
+  const closeMenu=()=>{ drawer.classList.remove('open'); overlay.classList.remove('open'); };
+  document.getElementById('hamburger').addEventListener('click', openMenu);
+  document.getElementById('drawerClose').addEventListener('click', closeMenu);
+  overlay.addEventListener('click', closeMenu);
+  drawer.querySelectorAll('a').forEach(a=>a.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeMenu(); searchResults.style.display='none'; }});
+</script>
+</body>
+</html>
