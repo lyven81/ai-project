@@ -336,7 +336,7 @@ The 8 categories below match the [live category pages](https://lyven81.github.io
 #### Fire Claim Examiner
 - **What it does:** Tells claims examiners which clause governs and what to pay.
 - **How it's built:** A Qdrant vector index over clause-level embeddings with a cross-encoder rerank, then a precedence layer that ranks by legal authority rather than similarity. A Python rule engine runs a six-gate chain, and a deterministic calculator with no model in its path computes the payable.
-- **Problem solved:** A claims examiner has to know which of two contradicting clauses governs, whether the facts satisfy that clause's own conditions, and what to pay. Reasoning that stops at the peril approves claims that fail on a condition, and misses endorsements that are held but not satisfied.
+- **Problem solved:** A claims examiner has to know which of two competing clauses governs, whether the facts satisfy that clause's own conditions, and what to pay. Reasoning that stops at the peril approves claims that fail on a condition, and misses endorsements that are held but not satisfied.
 - **Demo:** [Try it](https://lyven81.github.io/ai-project/projects/fire-claim-examiner/demo.html)
 - **Deployed:** 2026-07-29
 

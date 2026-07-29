@@ -38,10 +38,13 @@ python eval/run_retrieval_eval.py   # retrieval 4/4, overrides 2/2 both ways
 
 The retrieval harness needs `qdrant-client` and `sentence-transformers`.
 
-## Why it is not plain RAG
+## How it decides
 
-An insurance corpus contradicts itself by design: an endorsement exists to
-displace the clause it is written against. Similarity ranking returns the
-exclusion and the extension side by side, both maximally relevant, with no notion
-that one governs the other. The precedence layer is the point, and the calculator
-never has a model in its path.
+A policy is layered: a base wording, and the endorsements on the customer's
+schedule that vary it. Retrieval indexes the policy as clause-level passages
+carrying their authority, peril and excess formula, and a precedence stage
+orders what it finds by which clause takes priority for that customer.
+
+Six checks then run in a fixed order and the engine reports the first one that
+stops the claim. The amount is computed by the calculator, which has no model
+anywhere in its path.

@@ -28,7 +28,7 @@ What goes wrong is that the reasoning stops at the peril. A burst pipe with the 
 
 ## What Makes It Different
 
-Every alternative tells an examiner what the policy says; this tells them which of two contradicting clauses governs, whether the facts of this claim satisfy that clause's own conditions, and what to pay, to the ringgit, with the working shown.
+Every alternative tells an examiner what the policy says; this tells them which of two competing clauses governs, whether the facts of this claim satisfy that clause's own conditions, and what to pay, to the ringgit, with the working shown.
 
 ## Tech Stack
 

@@ -208,7 +208,7 @@ def main():
             {"axis": 3, "label": "Override applied, both ways", "value": retrieval["axis3"],
              "measures": "Whether a held endorsement ranks ABOVE the base clause it displaces, and is withdrawn from the override tier when it is NOT held.",
              "scored": "Tested in both directions on the two claims where an endorsement displaces a Condition 6 exclusion. An engine that always ranks the endorsement first passes the first half and fails the second.",
-             "why": "This is the moat. Similarity ranking returns the exclusion and the endorsement side by side, both highly relevant, with no notion that one governs the other. Caveat: the base clause is bundled inside the decision node, so the standalone Condition 6 chunk sits outside the pool; the load-bearing half of this test is the withdrawal when not held.",
+             "why": "A policy is layered: a base wording, and the endorsements on the customer's schedule that vary it. Both are a close match for the same question, so this axis checks that the one in force is the one ranked first, and that it stops being ranked first when the customer does not hold it. Caveat: the base clause is bundled inside the decision node, so the standalone Condition 6 chunk sits outside the pool; the load-bearing half of this test is the withdrawal when not held.",
              "field": None},
         ])
 

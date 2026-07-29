@@ -28,7 +28,7 @@ What goes wrong is that the reasoning stops at the peril. A burst pipe with the 
 
 **Upgrades existing**
 
-Delta: authority precedence over contradicting clauses, condition testing against the facts of a specific claim, and a deterministic figure at the end. NotebookLM tells an examiner what the policy says; it does not tell them which of two contradicting clauses governs, whether the circumstances satisfy that clause's own conditions, or what to pay.
+Delta: authority precedence over competing clauses, condition testing against the facts of a specific claim, and a deterministic figure at the end. NotebookLM tells an examiner what the policy says; it does not tell them which of two competing clauses governs, whether the circumstances satisfy that clause's own conditions, or what to pay.
 
 ## Type and Readiness Fit (Type C, Career Path Builder)
 
@@ -39,7 +39,7 @@ Delta: authority precedence over contradicting clauses, condition testing agains
 | 5 Vector Databases | 4 | 5 | 1 | 0 |
 | 12 Production AI | 6 | 9 | 2 | 2 |
 
-The Jul-26 scorecards predate the Catering Knowledge Assistant (28 Jul), so RAG and Vector Databases are already higher than shown in the live 90-day window. The case for this build is not that RAG is untouched; it is that this is a different class of RAG. Catering was retrieval over eleven cooperating documents where the right answer is the most relevant passage. This corpus contradicts itself by design, because endorsements exist to override base clauses, and similarity ranking is structurally wrong on it.
+The Jul-26 scorecards predate the Catering Knowledge Assistant (28 Jul), so RAG and Vector Databases are already higher than shown in the live 90-day window. The case for this build is not that RAG is untouched; it is that this is a different class of RAG. Catering was retrieval over eleven cooperating documents where the right answer is the most relevant passage. This corpus is layered by design, because endorsements are written to vary base clauses, and similarity ranking alone cannot say which is in force.
 
 ## Moat Check (Gate 1: PASS)
 

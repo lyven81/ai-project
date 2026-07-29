@@ -8,11 +8,11 @@ Three stages, and the third is the one that matters:
     3. PRECEDENCE  candidates are re-ordered by LEGAL AUTHORITY
 
 Stages 1 and 2 are ordinary RAG and any document assistant has them. Stage 3
-is the reason this build exists. An insurance corpus contradicts itself by
-design: an endorsement is written precisely to displace the base clause it sits
-against. Similarity ranking returns Condition 6(b) ("Typhoon, hurricane... or
-other atmospheric disturbance" excluded) and FP503 (storm covered) side by
-side, both highly relevant, with no notion that one governs the other.
+is the reason this build exists. A policy is layered: a base wording, and the
+endorsements on the schedule that vary it. Similarity ranking returns Condition
+6(b) ("Typhoon, hurricane... or other atmospheric disturbance" excluded) and
+FP503 (storm covered) side by side, both highly relevant, with no notion of
+which is in force.
 
 Authority is not a score to be blended. A held, engaged endorsement outranks
 the exclusion it displaces however the cosine falls, so precedence is applied
