@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fire Claim Examiner: Source | AI Project Portfolio</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root{ --ink:#222; --paper:#fff; --hair:#dddddd; --gray:#555; --accent:#B8860B; --navy:#1E3A5F; --code-bg:#fbfbf8; --cmt:#6b8190; }
+  html{ scroll-behavior:smooth; }
+  body{ background:var(--paper); color:var(--ink); font-family:Arial, Helvetica, sans-serif; line-height:1.6; overflow-x:hidden; }
+  a{ color:inherit; text-decoration:none; }
+  a:hover h2, a:hover h3, a:hover h4{ color:var(--accent); }
+  p code, li code{ font-family:"Courier New", monospace; font-size:.86em; background:#f2f3f5; padding:1px 5px; color:var(--navy); }
+
+  /* Masthead (shared) */
+  .masthead{ display:flex; align-items:center; justify-content:space-between; padding:14px 28px; max-width:1240px; margin:0 auto; gap:18px; }
+  .topbar{ position:sticky; top:0; z-index:120; background:#fff; box-shadow:0 1px 6px rgba(0,0,0,.06); }
+  .mast-left{ display:flex; align-items:center; gap:20px; }
+  .logo{ background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; letter-spacing:3px; font-size:.95rem; padding:8px 12px; white-space:nowrap; }
+  .mast-nav{ display:flex; gap:20px; font-family:Arial, Helvetica, sans-serif; font-size:.72rem; letter-spacing:1.4px; text-transform:uppercase; }
+  .mast-nav a:hover{ color:var(--accent); }
+  .hamburger{ display:none; flex-direction:column; gap:4px; background:none; border:none; cursor:pointer; padding:6px; }
+  .hamburger span{ width:22px; height:2px; background:#222; display:block; }
+  .rule-top{ border:none; border-top:3px solid #222; max-width:1240px; margin:0 auto; }
+
+  /* Search (shared) */
+  .search-box{ position:relative; width:200px; }
+  .search-input{ width:100%; padding:7px 30px 7px 12px; border:1px solid var(--hair); background:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; color:#222; }
+  .search-input:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(184,134,11,.15); }
+  .search-ic{ position:absolute; right:10px; top:50%; transform:translateY(-50%); color:var(--gray); font-size:.8rem; pointer-events:none; }
+  .search-results{ position:absolute; top:calc(100% + 4px); left:0; width:340px; max-width:86vw; background:#fff; border:1px solid #222; max-height:60vh; overflow-y:auto; z-index:120; display:none; }
+  .sr-item{ padding:12px 14px; border-bottom:1px solid var(--hair); }
+  .sr-item:last-child{ border-bottom:none; }
+  .sr-cat{ font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; margin-bottom:4px; color:var(--accent); }
+  .sr-title{ font-weight:700; font-size:1.02rem; color:#222; }
+  .sr-links{ font-size:.58rem; letter-spacing:.8px; text-transform:uppercase; color:var(--gray); margin-top:5px; }
+  .sr-links a:hover{ color:var(--accent); }
+  .sr-none{ padding:16px 14px; font-size:.82rem; color:var(--gray); }
+
+  /* Shared bits */
+  .tab{ display:inline-block; background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.66rem; letter-spacing:2px; text-transform:uppercase; padding:6px 12px; }
+  .rubric{ font-family:Arial, Helvetica, sans-serif; font-size:.62rem; font-weight:700; letter-spacing:1.6px; text-transform:uppercase; color:var(--accent); display:block; margin-bottom:8px; }
+  .tech-chip{ display:inline-block; border:1px solid var(--hair); padding:6px 12px; font-size:.72rem; letter-spacing:.3px; color:#333; white-space:nowrap; }
+  .tech-chip:hover{ border-color:var(--accent); color:var(--accent); }
+  .btn{ display:inline-block; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.7rem; letter-spacing:1.6px; text-transform:uppercase; padding:13px 24px; border:1px solid #222; background:#222; color:#fff; cursor:pointer; transition:.15s; }
+  .btn:hover{ background:var(--accent); border-color:var(--accent); }
+  .btn.ghost{ background:#fff; color:#222; }
+  .btn.ghost:hover{ color:var(--accent); border-color:var(--accent); background:#fff; }
+
+  /* Breadcrumb */
+  .crumb{ max-width:1240px; margin:0 auto; padding:20px 28px 0; font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--gray); }
+  .crumb a:hover{ color:var(--accent); }
+  .crumb .sep{ color:var(--hair); margin:0 8px; }
+
+  /* Header (slim cover banner + copy) */
+  .src-head{ max-width:1240px; margin:0 auto; padding:14px 28px 6px; }
+  .cover-strip{ border:1px solid var(--hair); line-height:0; background:#eef1f4; }
+  .cover-strip img{ width:100%; height:190px; object-fit:cover; object-position:center 42%; display:block; }
+  .src-head h1{ font-size:2.5rem; font-weight:900; line-height:1.04; letter-spacing:-.008em; margin-top:18px; }
+  .src-head .sub{ font-style:italic; font-size:1.08rem; color:#333; margin-top:10px; max-width:72ch; }
+  .head-tech{ display:flex; flex-wrap:wrap; gap:9px; margin-top:16px; }
+  .head-btns{ display:flex; flex-wrap:wrap; gap:12px; margin-top:18px; }
+
+  /* Section shell */
+  .sec{ max-width:1240px; margin:0 auto; padding:26px 28px; }
+  .sec-rule{ border-top:3px solid #222; padding-top:16px; }
+  .sec .tab{ margin-bottom:14px; }
+  .sec h2{ font-size:1.7rem; font-weight:900; line-height:1.06; }
+  .sec .intro{ color:#333; font-size:1.02rem; margin-top:10px; max-width:80%; }
+  .sec .body{ color:#333; font-size:1rem; margin-top:10px; max-width:80%; }
+
+  /* Code block */
+  .codeblock{ border:1px solid var(--hair); margin-top:16px; }
+  .code-bar{ display:flex; align-items:center; justify-content:space-between; gap:12px; background:var(--navy); color:#fff; padding:8px 12px; }
+  .code-bar .path{ font-family:"Courier New", monospace; font-size:.74rem; letter-spacing:.2px; opacity:.96; display:flex; align-items:center; gap:7px; min-width:0; }
+  .code-bar .path span{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .code-copy{ flex:none; background:none; border:1px solid rgba(255,255,255,.4); color:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.56rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; padding:5px 11px; cursor:pointer; transition:.15s; }
+  .code-copy:hover{ background:rgba(255,255,255,.16); }
+  .codeblock pre{ margin:0; padding:14px 16px; overflow-x:auto; background:var(--code-bg); }
+  .codeblock code{ font-family:"Courier New", monospace; font-size:.82rem; line-height:1.6; color:#1b2a3a; background:none; padding:0; white-space:pre; display:block; }
+  .codeblock code .cmt{ color:var(--cmt); font-style:italic; }
+
+  .tree .code-bar .path::before{ content:"📁"; }
+
+  /* Notes */
+  .note-block{ margin-top:22px; }
+  .note-block h3{ font-size:1.15rem; font-weight:800; }
+  .blist{ list-style:none; margin-top:12px; border-top:1px solid var(--hair); }
+  .blist li{ padding:12px 0; border-bottom:1px solid var(--hair); color:#333; font-size:.95rem; }
+  .blist li b{ color:#222; }
+
+  /* CTA */
+  .cta-inner{ display:flex; align-items:center; gap:18px; flex-wrap:wrap; border-top:3px solid #222; padding-top:18px; }
+  .cta-inner h3{ font-size:1.4rem; font-weight:900; line-height:1.08; }
+  .cta-inner p{ color:var(--gray); font-size:.95rem; margin-top:4px; }
+  .cta-btns{ margin-left:auto; display:flex; gap:12px; flex-wrap:wrap; }
+
+  footer{ background:#222; max-width:1240px; margin:30px auto 0; padding:24px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; letter-spacing:.5px; color:#fff; text-align:center; }
+  .note{ max-width:1240px; margin:14px auto 0; padding:8px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.62rem; letter-spacing:1px; color:#999; }
+
+  /* Drawer (shared) */
+  .drawer{ position:fixed; top:0; left:-300px; width:280px; height:100vh; background:#fff; z-index:200; box-shadow:2px 0 14px rgba(0,0,0,.15); transition:left .28s ease; padding:74px 26px 26px; }
+  .drawer.open{ left:0; }
+  .drawer a{ display:block; font-family:Arial, Helvetica, sans-serif; font-size:.82rem; letter-spacing:1.2px; text-transform:uppercase; padding:14px 0; border-bottom:1px solid var(--hair); }
+  .overlay{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:150; }
+  .overlay.open{ display:block; }
+  .drawer-close{ position:absolute; top:20px; right:20px; font-family:Arial, Helvetica, sans-serif; font-size:1.4rem; background:none; border:none; cursor:pointer; }
+
+  @media (max-width:900px){
+    .cta-btns{ margin-left:0; }
+    .mast-nav{ display:none; }
+    .hamburger{ display:flex; }
+    .masthead{ padding:12px 16px; }
+    .mast-left{ gap:10px; min-width:0; flex:1; }
+    .logo{ font-size:.72rem; letter-spacing:1.5px; padding:6px 8px; }
+    .search-box{ flex:1; width:auto; min-width:0; }
+    .search-results{ position:fixed; top:58px; left:12px; right:12px; width:auto; max-width:none; }
+    .src-head h1{ font-size:1.95rem; }
+    .cover-strip img{ height:150px; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="overlay" id="overlay"></div>
+  <nav class="drawer" id="drawer">
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">&times;</button>
+    <a href="index.html">Home</a>
+    <a href="project-categories.html">Categories</a>
+    <a href="contact.html">Contact</a>
+    <a href="https://lyven81.github.io/data-analyst-portfolio/index.html">Data Portfolio</a>
+  </nav>
+
+  <div class="topbar">
+  <div class="masthead">
+    <div class="mast-left">
+      <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+      <a class="logo" href="index.html">AI BUILDS LAB</a>
+      <nav class="mast-nav">
+        <a href="project-categories.html">Categories</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <div class="search-box">
+        <input type="text" class="search-input" id="searchInput" autocomplete="off" placeholder="Search AI projects..." aria-label="Search AI projects">
+        <span class="search-ic">&#128269;</span>
+        <div class="search-results" id="searchResults"></div>
+      </div>
+    </div>
+  </div>
+  <hr class="rule-top">
+  </div>
+
+  <div class="crumb">
+    <a href="project-categories.html">Categories</a>
+    <span class="sep">/</span><a id="crumbCat" href="#"></a>
+    <span class="sep">/</span><a id="crumbProj" href="#"></a>
+    <span class="sep">/</span><span>Source</span>
+  </div>
+
+  <section class="src-head">
+    <div class="cover-strip" id="coverStrip" style="display:none"><img id="cover" alt=""></div>
+    <span class="rubric" id="kicker"></span>
+    <h1 id="title"></h1>
+    <p class="sub" id="subtitle"></p>
+    <div class="head-tech" id="headTech"></div>
+    <div class="head-btns" id="headBtns"></div>
+  </section>
+
+  <div id="body"></div>
+
+  <footer>&copy; 2026 Lee Yih Ven | AI Project Portfolio &middot; All rights reserved.</footer>
+  <div class="note">Sample Source-Showcase-E2 (TEMPLATE): source-code page on the index magazine system: slim cover banner, About, Project Structure, code walkthrough with copyable navy-barred code blocks, CTA. Reuse by editing only the PROJECT block at the top of the script.</div>
+
+<script>
+  const SITE = "";
+
+  /* =================================================================
+     EDIT PER PROJECT  -  the ONLY block you change per page.
+     Copy this file, swap PROJECT, save as <slug>-source.html.
+     - structure.code : the project file tree (plain text)
+     - walkthrough[]   : { heading, body, files:[{label, code}] }
+     - notes[]         : { heading, bullets:[...] }
+     Code strings can be multi-line; they render verbatim.
+     ================================================================= */
+  const PROJECT = {
+  "slug": "fire-claim-examiner",
+  "category": "Industry Specialist Advisors",
+  "categoryUrl": "category-industry-advisors.html",
+  "title": "Fire Claim Examiner",
+  "subtitle": "Tells claims examiners which clause governs and what to pay",
+  "cover": "images/fire-claim-examiner/cover.jpeg",
+  "tech": [
+    "Qdrant (vector)",
+    "Sentence-Transformers",
+    "Cross-encoder rerank",
+    "Python rule engine",
+    "Static HTML / JS",
+    "No API key"
+  ],
+  "overviewUrl": "fire-claim-examiner.html",
+  "demoLabel": "Launch Live Demo",
+  "demoUrl": "https://lyven81.github.io/ai-project/projects/fire-claim-examiner/demo.html",
+  "repoUrl": "https://github.com/lyven81/ai-project/tree/main/projects/fire-claim-examiner",
+  "about": "The build is split into three layers and the language model is confined to exactly one of them. It reads the claim narrative and answers narrow factual questions. A rule engine applies the policy to those facts. Pure Python computes every number. That split is what makes the output reproducible, and it is why the arithmetic can be trusted on a claim file.",
+  "structure": {
+    "label": "projects/fire-claim-examiner/",
+    "code": "fire-claim-examiner/\n  demo.html                  the app, built on frozen gate-proven results\n  answer-key.html            the held-out key, readable\n  engine/\n    claim_parser.py          claim record  ->  structured claim\n    calculator.py            deterministic payable, no model in the path\n    adjudicator.py           facts, rules, and the six-gate chain\n    retrieval.py             vector, rerank, precedence\n  eval/\n    run_eval.py              outcomes and figures against the key\n    run_retrieval_eval.py    retrieval and override ordering\n  build/\n    chunk_policy.py          decision-node chunker\n    clause_library.py        clause wording by anchor text\n    freeze_results.py        freeze proven output for the UI\n    build_ui.py              inline everything into one file\n  data/\n    chunks.json              116 chunks with authority metadata\n    clause_library.json      23 clause passages, quoted verbatim\n    ground_truth.json        the held-out key\n  claim case/                six neutral claim records"
+  },
+  "walkthrough": [
+    {
+      "heading": "1. Precedence is data, not inference",
+      "body": "An insurance corpus contradicts itself on purpose. An endorsement exists to displace the clause it is written against, so the exclusion and the extension are both maximally relevant to the same question and similarity cannot separate them. The override edges are therefore written into the corpus as explicit metadata rather than worked out at query time.",
+      "files": [
+        {
+          "label": "build/chunk_policy.py",
+          "code": "# Base exclusions each endorsement is written to displace. This is the\n# precedence edge: without it the retriever has no way to know that FP504\n# beats Condition 6(b) rather than merely sitting near it.\nOVERRIDES = {\n    \"FP502\": \"Condition 6(a)\",\n    \"FP503\": \"Condition 6(b)\",\n    \"FP504\": \"Condition 6(b)\",\n    \"FP509\": \"Condition 8(i)\",\n    \"FP511A\": \"Condition 5(1)(b)\",\n    \"FP511B\": \"Condition 5(1)(b)\",\n    \"FP512A\": \"Condition 6(d)\",\n    \"FP512B\": \"Condition 6(d)\",\n    \"FP505A\": \"Condition 8(h)\",\n    \"FP505B\": \"Condition 8(h)\",\n    \"FP505C\": \"Condition 8(h)\",\n    \"FP505D\": \"Condition 8(h)\",\n}"
+        }
+      ]
+    },
+    {
+      "heading": "2. A chunk answers one question completely",
+      "body": "Chunking by page splits a clause from its own excess and its own special conditions, which is exactly what makes similarity retrieval return the wrong governing text. A decision node bundles the base position, the override, the triggers and the formula. The first version truncated the node at a character count and silently dropped an exclusion worth RM 5,450, which is the same page-chunking mistake wearing a different hat.",
+      "files": [
+        {
+          "label": "build/chunk_policy.py",
+          "code": "            # NEVER truncate. A decision node exists to be the single unit that\n            # answers the coverage question, so cutting it at a character count\n            # reintroduces the page-chunking bug it was built to avoid: the\n            # first pass lost FP503 Special Condition 4(a), the exclusion that\n            # removes RM5,450 from a claim whose payable must be exact.\n            \"text\": (\n                f\"COVERAGE DECISION: {end_c['peril'].replace('_', ' ')}\\n\\n\"\n                f\"BASE POSITION [{base}, primary]:\\n{base_c['text']}\\n\\n\"\n                f\"OVERRIDE [{code} {end_c['title']}, override]:\\n{end_c['text']}\\n\\n\"\n                f\"PRECEDENCE: where {code} is held and its conditions are \"\n                f\"satisfied, it displaces {base}. Where {code} is not held, \"\n                f\"{base} stands and the loss is not covered. Holding {code} is \"\n                f\"not the same as satisfying it: its own exclusions and special \"\n                f\"conditions must be tested against the facts of the claim.\"\n            ),"
+        }
+      ]
+    },
+    {
+      "heading": "3. Authority is an ordering, never a weight",
+      "body": "Precedence is applied after the cross-encoder, and it is not blended into the relevance score. An endorsement that is not on the Schedule is demoted out of the override tier, because it cannot displace anything it was never bought to displace. The on-topic gate matters just as much: an early version promoted on authority across the whole corpus and ranked flood and earthquake above storm on a storm query.",
+      "files": [
+        {
+          "label": "engine/retrieval.py",
+          "code": "        # stage 3: precedence, applied ONLY among clauses in contention\n        peril = peril or self.infer_peril(query)\n\n        for c in cands:\n            eff, note = c[\"authority\"], \"\"\n\n            # Is this clause even about the question asked? A clause tagged to\n            # a different peril is not competing; promoting it on authority\n            # ranked flood and earthquake above storm on a storm query.\n            on_topic = (c[\"peril\"] is None) or (peril is None) or (c[\"peril\"] == peril)\n            c[\"on_topic\"] = on_topic\n\n            if c[\"type\"] == \"coverage_decision\":\n                # Carries both the base position and the override plus the rule\n                # for choosing between them, so it answers either way.\n                note = (f\"{c['code']} held: override applies\" if c[\"code\"] in held\n                        else f\"{c['code']} not held: {c['overrides']} stands\")\n            elif eff == \"override\" and c[\"code\"] and c[\"code\"] not in held:\n                eff, note = \"informational\", \"not held: cannot override\"\n\n            c[\"effective_authority\"] = eff\n            c[\"authority_note\"] = note\n            # off-topic clauses are ranked on relevance alone, never promoted\n            c[\"authority_rank\"] = AUTHORITY_RANK[eff] if on_topic else 9\n            c[\"tier_bias\"] = 0 if (on_topic and c[\"type\"] == \"coverage_decision\") else 1\n\n        cands.sort(key=lambda c: (not c[\"on_topic\"], c[\"authority_rank\"],\n                                  c[\"tier_bias\"], -c[\"rerank_score\"]))\n        return cands[:k]"
+        }
+      ]
+    },
+    {
+      "heading": "4. The determination is the first gate that fails",
+      "body": "Every claim runs the same ordered chain. Order is load-bearing and not cosmetic: a gate placed later cannot undo a wrong answer produced by one placed earlier. Checking the peril before the period approves a well-evidenced fire that expired eighteen months earlier. Checking the endorsement before the notice pays a flood that failed a condition precedent.",
+      "files": [
+        {
+          "label": "engine/adjudicator.py",
+          "code": "# THE COVERAGE CHAIN. Order is the whole point, and it is the basis on which\n# every claim is approved or rejected: the determination is always the FIRST\n# gate that fails. A gate placed later cannot undo a wrong answer produced by\n# one placed earlier, and reordering any two of these flips the outcome on at\n# least one of the six claims:\n#\n#   period before peril      claim 1 is a covered fire, 18 months out of period\n#   peril before quantum     claim 4 would otherwise be priced, though a fire\n#                            policy never covers burglary at any figure\n#   notice before endorsement  claim 5 holds FP504 and the flood is squarely\n#                            within it, yet Condition 12 defeats it\n#   held before satisfied    claim 2 holds exactly the right endorsement and\n#                            still fails on that endorsement's own exclusion\nCOVERAGE_CHAIN = [\n    (\"Period of insurance\", \"Did the loss occur inside the period? Nothing else is asked until this passes.\"),\n    (\"Peril insured\", \"Is the reported peril within the insuring clause, or brought in by an endorsement?\"),\n    (\"Conditions precedent\", \"Condition 12 notice. A condition precedent defeats an otherwise covered peril.\"),\n    (\"Endorsement held\", \"Is the endorsement that answers this peril on the Schedule?\"),\n    (\"Endorsement satisfied\", \"Holding it is not satisfying it. Its own exclusions and special conditions are tested against the facts.\"),\n    (\"Item admitted\", \"Each item claimed is tested separately; some fall out while the claim itself stands.\"),"
+        }
+      ]
+    },
+    {
+      "heading": "5. No model touches the arithmetic",
+      "body": "A figure an examiner puts on a claim file cannot come from a token sampler. The order of operations is fixed and it is not negotiable: exclusions, then condition of average per schedule item, then the excess per endorsement group. Reversing the first two gives RM 70,875 on one item instead of RM 57,000.",
+      "files": [
+        {
+          "label": "engine/calculator.py",
+          "code": "\"\"\"\nFire Claim Examiner: the deterministic calculator.\n\nNO LANGUAGE MODEL TOUCHES THIS FILE. A figure an examiner puts on a claim file\ncannot come from a token sampler. The model decides which rule applies; this\ncomputes the number, in a fixed order, and prints its working.\n\nOrder of operations, and it is not negotiable:\n\n    1. Exclusions          remove items the policy does not admit at all\n    2. Condition of average applied PER SCHEDULE ITEM, never to the claim as a\n                           whole (Condition 20: \"Every item, if more than one,\n                           of the Policy shall be separately subject to this\n                           Condition\")\n    3. Excess              applied per endorsement group, after average\n                           (\"as ascertained after the application of any\n                           condition of average\")\n\nReversing steps 1 and 2 overstates the payable: on the bakery claim it gives\nRM 70,875 on Item 2 instead of RM 57,000.\n\"\"\""
+        }
+      ]
+    },
+    {
+      "heading": "6. Graded before anything was drawn",
+      "body": "The evaluation set was written before the engine, and no screen was built until the engine hit it. The gate failed at 4 of 6 on its first run and caught two false determinations that reading the code would not have surfaced: the claim narrative is hard-wrapped, so phrases spanning a newline never matched. Outcome and figure are scored as separate axes, because a right verdict with a wrong number is not a pass.",
+      "files": [
+        {
+          "label": "eval/run_eval.py",
+          "code": "        d_ok = got.verdict == exp[\"determination\"]\n        det_ok += d_ok\n\n        p_ok = abs(got.payable - exp[\"payable\"]) < 0.01\n        if exp[\"determination\"] == \"APPROVE\":\n            pay_total += 1\n            pay_ok += p_ok\n\n        f_ok = got.governing_clause == exp[\"governing_clause\"]\n        first_ok += f_ok\n\n        c_ok = bool(got.citations or got.grounds)\n        cite_ok += c_ok\n\n        for bad in exp.get(\"must_not_cite\", []):\n            if bad in got.citations:\n                forbidden.append((claim[\"claim_no\"], bad))"
+        }
+      ]
+    }
+  ],
+  "notes": [
+    {
+      "heading": "What the gates measure",
+      "bullets": [
+        "Determinations 6 of 6 against a key the deciding code path never opens.",
+        "Both payables exact to the ringgit, RM 49,950 and RM 130,700, with no tolerance.",
+        "Governing clause ranked first 6 of 6, scored separately from the outcome.",
+        "Retrieval finds the governing clause 4 of 4, every one at rank 1.",
+        "Override ordering tested BOTH ways, held and not held, and it must flip. A one-way test is passed trivially by hard-coding."
+      ]
+    },
+    {
+      "heading": "What is not measured yet",
+      "bullets": [
+        "Refusal when the policy is silent, and routing of record questions out to the claims system. Both need the language layer; the probes are written and held in the key, unscored.",
+        "The base clause is bundled inside the decision node, so the standalone Condition 6 chunk sits outside the retrieval pool. The load-bearing half of the override test is the withdrawal when not held.",
+        "Fact extraction is pattern-based, tuned to how these six narratives are written. Live claim entry was deliberately not built, because a pattern extractor on an arbitrary narrative returns a confident wrong answer rather than no answer."
+      ]
+    },
+    {
+      "heading": "Reproducing the scores",
+      "bullets": [
+        "python eval/run_eval.py runs offline with no key and no network.",
+        "python eval/run_retrieval_eval.py needs qdrant-client and sentence-transformers.",
+        "The chunker needs the source policy PDF, a third-party document that is not redistributed here. data/chunks.json is the built output, so both harnesses run without it."
+      ]
+    }
+  ],
+  "cta": "Have a document set that contradicts itself by design? Let us scope the same treatment for it."
+};
+  /* ===================== END EDIT BLOCK ===================== */
+
+  const pref = (u) => /^https?:|^mailto:|^tel:/.test(u || '') ? u : (SITE + (u || ''));
+  const esc = (s) => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const rich = (s) => esc(s).replace(/&lt;(\/?(?:b|code))&gt;/g, '<$1>');
+
+  // raw code store for copy buttons
+  const RAW = [];
+  function codeBlock(label, codeStr, extraClass){
+    const idx = RAW.push(codeStr) - 1;
+    const rendered = esc(codeStr).split('\n')
+      .map(line => /^\s*#/.test(line) ? `<span class="cmt">${line}</span>` : line).join('\n');
+    return `<div class="codeblock ${extraClass||''}">`+
+      `<div class="code-bar"><span class="path"><span>${esc(label)}</span></span>`+
+      `<button class="code-copy" data-idx="${idx}">Copy</button></div>`+
+      `<pre><code>${rendered}</code></pre></div>`;
+  }
+
+  // Breadcrumb + header
+  document.title = PROJECT.title + ": Source | AI Project Portfolio";
+  document.getElementById('crumbCat').textContent = PROJECT.category;
+  document.getElementById('crumbCat').href = pref(PROJECT.categoryUrl);
+  document.getElementById('crumbProj').textContent = PROJECT.title;
+  document.getElementById('crumbProj').href = pref(PROJECT.overviewUrl);
+  if (PROJECT.cover){
+    document.getElementById('coverStrip').style.display = '';
+    const c = document.getElementById('cover'); c.src = PROJECT.cover; c.alt = PROJECT.title + " cover";
+  }
+  document.getElementById('kicker').textContent = "Source Walkthrough · " + PROJECT.category;
+  document.getElementById('title').textContent = PROJECT.title;
+  document.getElementById('subtitle').textContent = PROJECT.subtitle;
+  document.getElementById('headTech').innerHTML = (PROJECT.tech||[]).map(t => `<span class="tech-chip">${esc(t)}</span>`).join('');
+  document.getElementById('headBtns').innerHTML =
+    (PROJECT.demoUrl ? `<a class="btn" href="${pref(PROJECT.demoUrl)}" target="_blank" rel="noopener">${esc(PROJECT.demoLabel||'Live Demo')}</a>` : '') +
+    (PROJECT.overviewUrl ? `<a class="btn ghost" href="${pref(PROJECT.overviewUrl)}">Project Overview</a>` : '') +
+    (PROJECT.repoUrl ? `<a class="btn ghost" href="${pref(PROJECT.repoUrl)}" target="_blank" rel="noopener">GitHub Repo</a>` : '');
+
+  const section = (tab, inner) => `<section class="sec"><div class="sec-rule"><span class="tab">${esc(tab)}</span>${inner}</div></section>`;
+  let html = "";
+  const P = PROJECT;
+
+  if (P.about){
+    html += section("About This Code", `<h2>About This Code Showcase</h2><p class="intro">${rich(P.about)}</p>`);
+  }
+  if (P.structure && P.structure.code){
+    html += section("Project Structure", `<h2>Project Structure</h2>`+
+      codeBlock(P.structure.label || 'project/', P.structure.code, 'tree'));
+  }
+  (P.walkthrough||[]).forEach(w => {
+    let inner = `<h2>${esc(w.heading)}</h2>`;
+    if (w.body) inner += `<p class="body">${rich(w.body)}</p>`;
+    (w.files||[]).forEach(f => { inner += codeBlock(f.label, f.code); });
+    html += section("Code", inner);
+  });
+  // CTA
+  html += `<section class="sec"><div class="cta-inner">`+
+    `<div><h3>Interested in the build?</h3><p>${esc(P.cta || "Let's talk.")}</p></div>`+
+    `<div class="cta-btns">`+
+    (P.demoUrl ? `<a class="btn" href="${pref(P.demoUrl)}" target="_blank" rel="noopener">${esc(P.demoLabel||'Live Demo')}</a>` : '')+
+    `<a class="btn ghost" href="${SITE}contact.html">Get in Touch</a>`+
+    `</div></div></section>`;
+
+  document.getElementById('body').innerHTML = html;
+
+  // Copy buttons
+  function copyText(text, btn){
+    const done = ()=>{ const o=btn.textContent; btn.textContent='Copied ✓'; setTimeout(()=>btn.textContent=o.includes('Copied')?'Copy':o,1400); };
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(done).catch(()=>fb(text,done)); }
+    else fb(text,done);
+  }
+  function fb(text,done){ const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(ta); done(); }
+  document.querySelectorAll('.code-copy').forEach(btn =>
+    btn.addEventListener('click', ()=> copyText(RAW[+btn.dataset.idx], btn)));
+
+  // Masthead search
+  const ITEMS = [
+    {t:PROJECT.title, c:PROJECT.category, s:PROJECT.slug},
+    {t:"Courier CS Quality Console", c:"Conversational Data Analytics", s:"courier-cs-quality-console"},
+    {t:"Voucher Analyzer", c:"Conversational Data Analytics", s:"voucher-analyzer"},
+    {t:"Wiseman", c:"Knowledge & Reference Chatbots", s:"wiseman"},
+    {t:"Sunny Car Accessories", c:"Agentic Commerce", s:"sunny-car-accessories"},
+    {t:"Bookshelf", c:"Multi-Agent Decision Systems", s:"bookshelf"}
+  ];
+  const searchInput = document.getElementById('searchInput');
+  const searchResults = document.getElementById('searchResults');
+  function runSearch(q){
+    if(q.trim().length < 2){ searchResults.style.display='none'; return; }
+    const ql = q.toLowerCase();
+    const hits = ITEMS.filter(it => (it.t+' '+it.c).toLowerCase().includes(ql));
+    searchResults.innerHTML = hits.length ? hits.map(it =>
+      `<div class="sr-item"><div class="sr-cat">${esc(it.c)}</div>`+
+      `<a href="${SITE}${it.s}.html"><div class="sr-title">${esc(it.t)}</div></a>`+
+      `<div class="sr-links"><a href="${SITE}${it.s}.html">View Details</a></div></div>`).join('')
+      : `<div class="sr-none">No projects found. Try a different keyword.</div>`;
+    searchResults.style.display='block';
+  }
+  searchInput.addEventListener('input', e => runSearch(e.target.value));
+  document.addEventListener('click', e => { if(!e.target.closest('.search-box')) searchResults.style.display='none'; });
+
+  // Drawer
+  const drawer=document.getElementById('drawer'), overlay=document.getElementById('overlay');
+  const openMenu=()=>{ drawer.classList.add('open'); overlay.classList.add('open'); };
+  const closeMenu=()=>{ drawer.classList.remove('open'); overlay.classList.remove('open'); };
+  document.getElementById('hamburger').addEventListener('click', openMenu);
+  document.getElementById('drawerClose').addEventListener('click', closeMenu);
+  overlay.addEventListener('click', closeMenu);
+  drawer.querySelectorAll('a').forEach(a=>a.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeMenu(); searchResults.style.display='none'; }});
+</script>
+</body>
+</html>

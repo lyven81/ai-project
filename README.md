@@ -2,10 +2,10 @@
 
 [![Portfolio Website](https://img.shields.io/badge/Portfolio-Live-green?logo=vercel)](https://lyven81.github.io/ai-project/)
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-black?logo=github)](https://github.com/lyven81/ai-project)
-[![Projects](https://img.shields.io/badge/Projects-56-blue)](#projects-by-category)
+[![Projects](https://img.shields.io/badge/Projects-57-blue)](#projects-by-category)
 [![AI Powered](https://img.shields.io/badge/AI-Powered-orange?logo=tensorflow)](https://github.com/lyven81/ai-project)
 
-**55 production AI apps across 8 business categories** — each one solves a real, named pain point with a working demo you can click and try today.
+**56 production AI apps across 8 business categories** — each one solves a real, named pain point with a working demo you can click and try today.
 
 <div align="center">
 <img width="1200" height="400" alt="AI Portfolio Banner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
@@ -13,7 +13,7 @@
 
 ## 🌟 Portfolio Overview
 
-This repo contains **55 completed AI applications**, each with a working demo (live cloud URL or local `demo.html`). Projects are organized by **business use case** — so a reader can scan the list, find the category that matches their work, and immediately see which problems AI can solve there.
+This repo contains **56 completed AI applications**, each with a working demo (live cloud URL or local `demo.html`). Projects are organized by **business use case** — so a reader can scan the list, find the category that matches their work, and immediately see which problems AI can solve there.
 
 **Live site:** [lyven81.github.io/ai-project](https://lyven81.github.io/ai-project/)
 
@@ -21,10 +21,11 @@ This repo contains **55 completed AI applications**, each with a working demo (l
 
 An index of every published AI project, **newest first**. The date is when the project was **deployed** (from the per-project "Deployed" field below).
 
-**Total published AI projects: 56**
+**Total published AI projects: 57**
 
 | # | Date deployed | AI project | Page |
 |---|---|---|---|
+| 57 | 2026-07-29 | Fire Claim Examiner | [demo](https://lyven81.github.io/ai-project/projects/fire-claim-examiner/demo.html) |
 | 56 | 2026-07-28 | Catering Knowledge Assistant | [demo](https://lyven81.github.io/ai-project/projects/catering-knowledge-assistant/demo.html) |
 | 55 | 2026-07-07 | Delivery Delay Predictor | [demo](https://delivery-delay-predictor-522143897885.asia-southeast1.run.app) |
 | 54 | 2026-06-19 | Courier CS Quality Console | [demo](https://lyven81.github.io/ai-project/projects/courier-cs-quality-console/demo.html) |
@@ -330,7 +331,14 @@ The 8 categories below match the [live category pages](https://lyven81.github.io
 
 ---
 
-### 5. Industry Specialist Advisors (11 projects)
+### 5. Industry Specialist Advisors (12 projects)
+
+#### Fire Claim Examiner
+- **What it does:** Tells claims examiners which clause governs and what to pay.
+- **How it's built:** A Qdrant vector index over clause-level embeddings with a cross-encoder rerank, then a precedence layer that ranks by legal authority rather than similarity. A Python rule engine runs a six-gate chain, and a deterministic calculator with no model in its path computes the payable.
+- **Problem solved:** A claims examiner has to know which of two contradicting clauses governs, whether the facts satisfy that clause's own conditions, and what to pay. Reasoning that stops at the peril approves claims that fail on a condition, and misses endorsements that are held but not satisfied.
+- **Demo:** [Try it](https://lyven81.github.io/ai-project/projects/fire-claim-examiner/demo.html)
+- **Deployed:** 2026-07-29
 
 **Who it's for:** Vertical experts and operators who need an AI advisor that knows the rules and language of one specific industry — education, law, sports, finance, retail.
 
