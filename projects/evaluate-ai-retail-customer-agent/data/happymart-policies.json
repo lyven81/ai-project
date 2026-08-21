@@ -1,0 +1,82 @@
+{
+  "meta": {
+    "store": "HappyMart",
+    "version": "1.0",
+    "date": "2026-08-21",
+    "purpose": "The closed policy set. This is the only source of truth the answering assistant is given, and the only ground a response may be checked against. Nothing outside this file is store policy.",
+    "scope_note": "Three clauses are deliberately bounded and state nothing beyond their bound: P4 (address change), P9 (clothing exchange) and P10 (cancellation). Questions that fall past those bounds are marked in_scope 'partial' in the dataset. A correct answer states what the policy covers and does not assert what it does not."
+  },
+  "policies": [
+    {
+      "id": "P1",
+      "area": "delivery",
+      "rule": "Standard delivery is RM5 per order.",
+      "hard_values": ["RM5"]
+    },
+    {
+      "id": "P2",
+      "area": "delivery",
+      "rule": "Orders are delivered within 3 to 5 working days.",
+      "hard_values": ["3", "5", "working days"]
+    },
+    {
+      "id": "P3",
+      "area": "delivery",
+      "rule": "Delivery is free on orders above RM100. An order totalling exactly RM100 is not above RM100 and pays the standard RM5 delivery fee.",
+      "hard_values": ["RM100", "RM5"]
+    },
+    {
+      "id": "P4",
+      "area": "delivery",
+      "rule": "A delivery address can be changed before the order is dispatched.",
+      "bounded": true,
+      "states_nothing_about": "What happens to an address change request after the order has been dispatched."
+    },
+    {
+      "id": "P5",
+      "area": "returns",
+      "rule": "Items can be returned within 14 days of delivery.",
+      "hard_values": ["14"]
+    },
+    {
+      "id": "P6",
+      "area": "returns",
+      "rule": "Returned items must be unused and in their original packaging.",
+      "bounded": true,
+      "states_nothing_about": "Any further condition such as tags attached, receipts, proof of purchase, or the outer shipping box."
+    },
+    {
+      "id": "P7",
+      "area": "returns",
+      "rule": "Sale items cannot be returned."
+    },
+    {
+      "id": "P8",
+      "area": "refunds",
+      "rule": "Approved refunds are processed within 5 to 7 working days.",
+      "hard_values": ["5", "7", "working days"]
+    },
+    {
+      "id": "P9",
+      "area": "exchanges",
+      "rule": "Clothing can be exchanged for a different size, subject to stock availability.",
+      "bounded": true,
+      "states_nothing_about": "Any time limit on exchanges. The policy sets no exchange window."
+    },
+    {
+      "id": "P10",
+      "area": "cancellation",
+      "rule": "An order can be cancelled before it is dispatched.",
+      "bounded": true,
+      "states_nothing_about": "What happens to a cancellation request after the order has been dispatched."
+    },
+    {
+      "id": "P11",
+      "area": "damaged_or_wrong",
+      "rule": "For a damaged or wrong item, contact customer service within 48 hours of delivery.",
+      "hard_values": ["48 hours"],
+      "bounded": true,
+      "states_nothing_about": "Any evidence the customer must supply, such as photographs, an order number, or the original packaging."
+    }
+  ]
+}

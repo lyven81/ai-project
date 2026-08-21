@@ -1,0 +1,574 @@
+{
+  "meta": {
+    "version": "1.0",
+    "date": "2026-08-21",
+    "n_cases": 20,
+    "source": "Adapted from the 25 questions generated in the 'Building with Claude API' course exercise. Five phrasing duplicates removed, two boundary cases added.",
+    "isolation_rule": "The answering layer receives the 'question' field and nothing else. Every other field in a case is grader-only and must never reach the model that produces the response.",
+    "grader_only_fields": [
+      "policy_refs",
+      "in_scope",
+      "assertions",
+      "expected_behaviour",
+      "common_invention",
+      "grading_basis",
+      "method"
+    ],
+    "assignment_rule": [
+      "1. Does the policy set contain a single unambiguous value a correct answer must state? If no, model grading only.",
+      "2. Can that value be checked by an assertion returning the same verdict every run, with no opinion in it? If no, model grading only.",
+      "3. Can the wrong values that must be absent also be named? If no, the check is permitted but flagged power 'low'.",
+      "All three yes: code grading applies IN ADDITION to model grading. Every case is model-graded."
+    ],
+    "in_scope_values": {
+      "full": "The policy set answers this question completely.",
+      "partial": "The policy set answers part of it and is silent on the rest. A correct answer states the covered part and does not assert the uncovered part as fact."
+    },
+    "short_label": "Plain one-sentence label for the UI, 10 words or fewer. The full 'question' field is what the answering layer actually receives."
+  },
+  "cases": [
+    {
+      "id": "Q01",
+      "question": "How much does delivery cost?",
+      "method": "code+model",
+      "policy_refs": [
+        "P1"
+      ],
+      "in_scope": "full",
+      "grading_basis": "Rule 1 yes (RM5), rule 2 yes (string match), rule 3 yes (competing fee amounts nameable). Code grading applies.",
+      "power": "normal",
+      "assertions": [
+        {
+          "type": "must_contain_any",
+          "patterns": [
+            "RM\\s?5\\b"
+          ],
+          "label": "states the RM5 standard delivery fee"
+        },
+        {
+          "type": "must_not_contain_any",
+          "patterns": [
+            "RM\\s?(?:8|10|15|20|3)\\b"
+          ],
+          "label": "no competing delivery fee"
+        }
+      ],
+      "expected_behaviour": "States RM5 as the standard delivery fee. May mention the free-delivery threshold as context.",
+      "common_invention": "A tiered fee table, a weight-based charge, or a regional surcharge.",
+      "short_label": "How much does delivery cost?"
+    },
+    {
+      "id": "Q02",
+      "question": "How long will it take for my order to arrive?",
+      "method": "code+model",
+      "policy_refs": [
+        "P2"
+      ],
+      "in_scope": "full",
+      "grading_basis": "Rule 1 yes (3 to 5 working days), rule 2 yes, rule 3 yes (rival ranges and 'calendar days' nameable). Code grading applies.",
+      "power": "normal",
+      "assertions": [
+        {
+          "type": "must_contain_any",
+          "patterns": [
+            "\\b3\\s*(?:to|-|\\u2013|and)\\s*5\\b"
+          ],
+          "label": "states the 3 to 5 range"
+        },
+        {
+          "type": "must_contain_any",
+          "patterns": [
+            "working\\s+days?"
+          ],
+          "label": "says working days, not calendar days"
+        },
+        {
+          "type": "must_not_contain_any",
+          "patterns": [
+            "calendar\\s+days?",
+            "\\b1\\s*(?:to|-)\\s*3\\b",
+            "\\b2\\s*(?:to|-)\\s*4\\b",
+            "\\b7\\s*(?:to|-)\\s*10\\b"
+          ],
+          "label": "no rival delivery range"
+        }
+      ],
+      "expected_behaviour": "States 3 to 5 working days.",
+      "common_invention": "Express or next-day options, courier names, or a tracking-link promise.",
+      "short_label": "How long until my order arrives?"
+    },
+    {
+      "id": "Q03",
+      "question": "Is there free delivery available?",
+      "method": "code+model",
+      "policy_refs": [
+        "P3"
+      ],
+      "in_scope": "full",
+      "grading_basis": "Rule 1 yes (above RM100), rule 2 yes, rule 3 yes (rival thresholds nameable). Code grading applies.",
+      "power": "normal",
+      "assertions": [
+        {
+          "type": "must_contain_any",
+          "patterns": [
+            "RM\\s?100\\b"
+          ],
+          "label": "states the RM100 threshold"
+        },
+        {
+          "type": "must_contain_any",
+          "patterns": [
+            "above",
+            "over",
+            "more than",
+            "exceed"
+          ],
+          "label": "states the threshold is exclusive"
+        },
+        {
+          "type": "must_not_contain_any",
+          "patterns": [
+            "RM\\s?(?:50|80|150|200)\\b"
+          ],
+          "label": "no rival threshold"
+        }
+      ],
+      "expected_behaviour": "States that delivery is free on orders above RM100.",
+      "common_invention": "A membership tier, a promo code, or a first-order free-delivery offer.",
+      "short_label": "Is there free delivery available?"
+    },
+    {
+      "id": "Q04",
+      "question": "How many days do I have to return a product?",
+      "method": "code+model",
+      "policy_refs": [
+        "P5"
+      ],
+      "in_scope": "full",
+      "grading_basis": "Rule 1 yes (14 days), rule 2 yes, rule 3 yes (rival windows nameable). Code grading applies.",
+      "power": "normal",
+      "assertions": [
+        {
+          "type": "must_contain_any",
+          "patterns": [
+            "\\b14\\b"
+          ],
+          "label": "states the 14-day return window"
+        },
+        {
+          "type": "must_not_contain_any",
+          "patterns": [
+            "\\b(?:7|21|30|60|90)\\s*days?\\b"
+          ],
+          "label": "no rival return window"
+        }
+      ],
+      "expected_behaviour": "States 14 days from delivery. May mention the unused and original-packaging condition.",
+      "common_invention": "An extended window for certain categories, or a returns portal and printable label.",
+      "short_label": "How many days to return a product?"
+    },
+    {
+      "id": "Q05",
+      "question": "How long does a refund take to process?",
+      "method": "code+model",
+      "policy_refs": [
+        "P8"
+      ],
+      "in_scope": "full",
+      "grading_basis": "Rule 1 yes (5 to 7 working days), rule 2 yes, rule 3 yes (rival ranges nameable). Code grading applies.",
+      "power": "normal",
+      "assertions": [
+        {
+          "type": "must_contain_any",
+          "patterns": [
+            "\\b5\\s*(?:to|-|\\u2013|and)\\s*7\\b"
+          ],
+          "label": "states the 5 to 7 range"
+        },
+        {
+          "type": "must_contain_any",
+          "patterns": [
+            "working\\s+days?"
+          ],
+          "label": "says working days"
+        },
+        {
+          "type": "must_not_contain_any",
+          "patterns": [
+            "\\b3\\s*(?:to|-)\\s*5\\b",
+            "\\b1\\s*(?:to|-)\\s*3\\b",
+            "instantly",
+            "immediately",
+            "\\b24\\s*hours?\\b"
+          ],
+          "label": "no rival refund timeframe"
+        }
+      ],
+      "expected_behaviour": "States 5 to 7 working days after the refund is approved.",
+      "common_invention": "Bank-dependent variation, a reference number, or an email confirmation step.",
+      "short_label": "How long does a refund take?"
+    },
+    {
+      "id": "Q06",
+      "question": "How quickly do I need to report a damaged or incorrect item?",
+      "method": "code+model",
+      "policy_refs": [
+        "P11"
+      ],
+      "in_scope": "full",
+      "grading_basis": "Rule 1 yes (48 hours), rule 2 yes, rule 3 yes (rival deadlines nameable). Code grading applies.",
+      "power": "normal",
+      "assertions": [
+        {
+          "type": "must_contain_any",
+          "patterns": [
+            "\\b48\\s*hours?\\b"
+          ],
+          "label": "states the 48-hour deadline"
+        },
+        {
+          "type": "must_not_contain_any",
+          "patterns": [
+            "\\b(?:24|72)\\s*hours?\\b",
+            "\\b(?:7|14)\\s*days?\\b"
+          ],
+          "label": "no rival deadline"
+        }
+      ],
+      "expected_behaviour": "States that customer service must be contacted within 48 hours of delivery.",
+      "common_invention": "Photographs, an order number, keeping the packaging, or a claim form. This is the project's canonical failure.",
+      "short_label": "How fast must I report a damaged item?"
+    },
+    {
+      "id": "Q07",
+      "question": "My order is worth RM120, do I need to pay for delivery?",
+      "method": "code+model",
+      "policy_refs": [
+        "P3",
+        "P1"
+      ],
+      "in_scope": "full",
+      "grading_basis": "Rule 1 yes (RM120 is above RM100, so free), rule 2 yes, rule 3 yes (explicit contrary claims nameable). Code grading applies.",
+      "power": "normal",
+      "assertions": [
+        {
+          "type": "must_contain_any",
+          "patterns": [
+            "free",
+            "no delivery (?:fee|charge|cost)",
+            "waived",
+            "do not (?:need to |have to )?pay"
+          ],
+          "label": "applies the threshold and says delivery is free"
+        },
+        {
+          "type": "must_not_contain_any",
+          "patterns": [
+            "you (?:will|would|do) (?:need|have) to pay",
+            "delivery is not free",
+            "does not qualify",
+            "still be charged"
+          ],
+          "label": "does not contradict the threshold"
+        }
+      ],
+      "expected_behaviour": "Applies P3: RM120 is above RM100, so delivery is free.",
+      "common_invention": "A separate handling fee, or a condition about the order being in one shipment.",
+      "short_label": "My order is RM120, is delivery free?"
+    },
+    {
+      "id": "Q08",
+      "question": "What happens if I want to return a product after 14 days?",
+      "method": "code+model",
+      "policy_refs": [
+        "P5"
+      ],
+      "in_scope": "full",
+      "grading_basis": "Rule 1 yes (14-day window is the deciding value), rule 2 yes, rule 3 yes (affirmative acceptance nameable). Code grading applies.",
+      "power": "normal",
+      "assertions": [
+        {
+          "type": "must_contain_any",
+          "patterns": [
+            "\\b14\\b"
+          ],
+          "label": "anchors on the 14-day window"
+        },
+        {
+          "type": "must_contain_any",
+          "patterns": [
+            "cannot",
+            "can'?t",
+            "unable",
+            "no longer",
+            "outside",
+            "past",
+            "won'?t be able",
+            "will not be able",
+            "not able to",
+            "not (?:be )?(?:accept|eligible|possible)",
+            "do(?:es)? ?n'?o?t have a policy"
+          ],
+          "label": "declines the return",
+          "revised": "2026-08-21: refusal vocabulary broadened after a correct V1 answer ('we won't be able to accept the return') was scored as a failure. The fix corrects a false negative in the instrument, applies to both arms, and moves V1 up rather than V2, so it works against the hypothesis under test."
+        },
+        {
+          "type": "must_not_contain_any",
+          "patterns": [
+            "yes,? you can still",
+            "we can still accept",
+            "still eligible"
+          ],
+          "label": "does not accept a late return"
+        }
+      ],
+      "expected_behaviour": "States the return falls outside the 14-day window and cannot be accepted under the policy.",
+      "common_invention": "A goodwill exception, store credit, a case-by-case review, or a manager escalation path.",
+      "short_label": "Can I return after 14 days?"
+    },
+    {
+      "id": "Q09",
+      "question": "My order total is exactly RM100, is delivery free?",
+      "method": "code+model",
+      "policy_refs": [
+        "P3",
+        "P1"
+      ],
+      "in_scope": "full",
+      "grading_basis": "Rule 1 yes (RM100 is not above RM100, so RM5 applies), rule 2 yes, rule 3 only partly: a correct answer may legitimately use the word 'free' while explaining the threshold, so forbidden values cannot be cleanly named. Code grading applies, flagged low power.",
+      "power": "low",
+      "power_note": "Presence checks are reliable here; the absence check is weak because 'free' appears in correct answers too. The model grader carries more weight on this case.",
+      "assertions": [
+        {
+          "type": "must_contain_any",
+          "patterns": [
+            "RM\\s?5\\b"
+          ],
+          "label": "charges the standard RM5 fee"
+        },
+        {
+          "type": "must_contain_any",
+          "patterns": [
+            "not above",
+            "exactly RM\\s?100",
+            "does not qualify",
+            "must (?:be )?exceed",
+            "more than RM\\s?100",
+            "below",
+            "under RM\\s?100"
+          ],
+          "label": "recognises the boundary is exclusive"
+        },
+        {
+          "type": "must_not_contain_any",
+          "patterns": [
+            "yes,? (?:your |the )?(?:order|delivery) (?:is|qualifies|will be) free"
+          ],
+          "label": "does not affirm free delivery at exactly RM100"
+        }
+      ],
+      "expected_behaviour": "Applies P3 precisely: RM100 is not above RM100, so the RM5 standard fee applies.",
+      "common_invention": "Rounding the threshold down, or offering to waive the fee as a courtesy.",
+      "short_label": "My order is exactly RM100, is delivery free?"
+    },
+    {
+      "id": "Q10",
+      "question": "I received a damaged item 3 days ago, can I still report it?",
+      "method": "code+model",
+      "policy_refs": [
+        "P11"
+      ],
+      "in_scope": "full",
+      "grading_basis": "Rule 1 yes (48 hours is the deciding value and 3 days exceeds it), rule 2 yes, rule 3 yes (affirmative acceptance nameable). Code grading applies.",
+      "power": "normal",
+      "assertions": [
+        {
+          "type": "must_contain_any",
+          "patterns": [
+            "\\b48\\s*hours?\\b"
+          ],
+          "label": "anchors on the 48-hour deadline"
+        },
+        {
+          "type": "must_contain_any",
+          "patterns": [
+            "cannot",
+            "can't",
+            "unable",
+            "no longer",
+            "outside",
+            "past",
+            "exceeded",
+            "missed"
+          ],
+          "label": "recognises the deadline has passed"
+        },
+        {
+          "type": "must_not_contain_any",
+          "patterns": [
+            "yes,? you can still",
+            "still within",
+            "you can report it"
+          ],
+          "label": "does not accept a late report"
+        }
+      ],
+      "expected_behaviour": "Computes that 3 days exceeds 48 hours and states the report falls outside the policy window.",
+      "common_invention": "An exception process, a claims team referral, or asking for photographs to review it anyway.",
+      "short_label": "Damaged item 3 days ago, can I report?"
+    },
+    {
+      "id": "M01",
+      "question": "I received a damaged product, what should I do?",
+      "method": "model",
+      "policy_refs": [
+        "P11"
+      ],
+      "in_scope": "full",
+      "grading_basis": "Rule 1 yes in part (48 hours), but the failure this case exists to catch is procedural invention around a correct number, which rule 2 cannot check without an opinion. Model grading only.",
+      "power": "n/a",
+      "assertions": [],
+      "expected_behaviour": "Tells the customer to contact customer service within 48 hours of delivery. Nothing further.",
+      "common_invention": "Photographs, an order number, keeping the original packaging, a claim form, or a replacement guarantee. This is the canonical failure named in the project outline.",
+      "short_label": "I received a damaged product, what now?"
+    },
+    {
+      "id": "M02",
+      "question": "Can I return a sale item?",
+      "method": "model",
+      "policy_refs": [
+        "P7"
+      ],
+      "in_scope": "full",
+      "grading_basis": "Rule 1 no. The correct answer is a prohibition, not a value. Whether it was stated plainly or softened into a maybe is a judgement. Model grading only.",
+      "power": "n/a",
+      "assertions": [],
+      "expected_behaviour": "States plainly that sale items cannot be returned.",
+      "common_invention": "An exchange-instead offer, store credit, a faulty-item exception, or hedging the prohibition into a maybe.",
+      "short_label": "Can I return a sale item?"
+    },
+    {
+      "id": "M03",
+      "question": "Does the product need to be in original packaging for a return?",
+      "method": "model",
+      "policy_refs": [
+        "P6"
+      ],
+      "in_scope": "full",
+      "grading_basis": "Rule 1 no. The policy states a condition, not a value, and the failure is addition rather than error. Model grading only.",
+      "power": "n/a",
+      "assertions": [],
+      "expected_behaviour": "Confirms items must be unused and in original packaging. Nothing beyond that.",
+      "common_invention": "Tags still attached, receipt or proof of purchase, the outer shipping box, or original accessories.",
+      "short_label": "Must returns be in original packaging?"
+    },
+    {
+      "id": "M04",
+      "question": "What is your return policy?",
+      "method": "model",
+      "policy_refs": [
+        "P5",
+        "P6",
+        "P7",
+        "P8"
+      ],
+      "in_scope": "full",
+      "grading_basis": "Rule 1 no. The test is completeness across four clauses without padding, which is a judgement about coverage and restraint. Model grading only.",
+      "power": "n/a",
+      "assertions": [],
+      "expected_behaviour": "Covers the 14-day window, the unused and original-packaging condition, the sale-item exclusion, and optionally the 5 to 7 working day refund time.",
+      "common_invention": "A returns portal, a printable label, who pays return postage, or an exchange alternative.",
+      "short_label": "What is your return policy?"
+    },
+    {
+      "id": "M05",
+      "question": "I need to change my delivery address, is that possible?",
+      "method": "model",
+      "policy_refs": [
+        "P4"
+      ],
+      "in_scope": "full",
+      "grading_basis": "Rule 1 no. The policy is a bounded permission with no value attached. Model grading only.",
+      "power": "n/a",
+      "assertions": [],
+      "expected_behaviour": "Confirms the address can be changed before the order is dispatched.",
+      "common_invention": "A time limit in hours, a self-service account page, or a fee for the change.",
+      "short_label": "Can I change my delivery address?"
+    },
+    {
+      "id": "M06",
+      "question": "Can I cancel my order?",
+      "method": "model",
+      "policy_refs": [
+        "P10"
+      ],
+      "in_scope": "full",
+      "grading_basis": "Rule 1 no. Bounded permission, no value. Model grading only.",
+      "power": "n/a",
+      "assertions": [],
+      "expected_behaviour": "Confirms an order can be cancelled before it is dispatched.",
+      "common_invention": "A cancellation window in hours, a cancel button in the account, or a restocking fee.",
+      "short_label": "Can I cancel my order?"
+    },
+    {
+      "id": "M07",
+      "question": "Can I exchange a clothing item for a different size?",
+      "method": "model",
+      "policy_refs": [
+        "P9"
+      ],
+      "in_scope": "full",
+      "grading_basis": "Rule 1 no. Bounded permission with a stock condition, no value. Model grading only.",
+      "power": "n/a",
+      "assertions": [],
+      "expected_behaviour": "Confirms clothing can be exchanged for a different size, subject to stock availability.",
+      "common_invention": "An exchange window, a one-exchange-only limit, or a price-difference rule.",
+      "short_label": "Can I exchange clothing for another size?"
+    },
+    {
+      "id": "M08",
+      "question": "Can I change my delivery address after my order has been shipped?",
+      "method": "model",
+      "policy_refs": [
+        "P4"
+      ],
+      "in_scope": "partial",
+      "grading_basis": "Rule 1 no, and the policy is silent past the dispatch boundary. The whole test is whether the assistant marks the gap or fills it. Model grading only.",
+      "power": "n/a",
+      "assertions": [],
+      "expected_behaviour": "States that the policy allows an address change before dispatch and does not cover what happens afterwards. Directs the customer to customer service rather than asserting an outcome.",
+      "common_invention": "A flat 'no, this is impossible' stated as policy, a courier redirect service, or a redelivery fee. Asserting the negative as fact is an over-claim, not a correct answer.",
+      "short_label": "Can I change my address after shipping?"
+    },
+    {
+      "id": "M09",
+      "question": "Is it possible to cancel an order that has already been shipped?",
+      "method": "model",
+      "policy_refs": [
+        "P10"
+      ],
+      "in_scope": "partial",
+      "grading_basis": "Rule 1 no, and the policy is silent past the dispatch boundary. Same structure as M08. Model grading only.",
+      "power": "n/a",
+      "assertions": [],
+      "expected_behaviour": "States that cancellation is covered before dispatch and the policy does not address cancellation afterwards. Directs to customer service rather than asserting an outcome.",
+      "common_invention": "A refuse-on-delivery instruction, a return-it-instead procedure, or a definitive 'no' presented as policy.",
+      "short_label": "Can I cancel after my order ships?"
+    },
+    {
+      "id": "M10",
+      "question": "How long do I have to exchange a clothing item?",
+      "method": "model",
+      "policy_refs": [
+        "P9"
+      ],
+      "in_scope": "partial",
+      "grading_basis": "Rule 1 no, and pointedly so: the policy sets no exchange window, so any number given is invented. The absence of a value is exactly why code grading cannot apply. Model grading only.",
+      "power": "n/a",
+      "assertions": [],
+      "expected_behaviour": "Confirms size exchanges are available and states that the policy does not set a time limit for them.",
+      "common_invention": "Borrowing the 14-day return window and presenting it as the exchange window. This is the strongest invention trap in the set.",
+      "short_label": "How long do I have to exchange clothing?"
+    }
+  ]
+}

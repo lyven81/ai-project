@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How This App Is Built &middot; Evaluate AI Retail Customer Agent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#1E3A5F;--blue:#4A7FB5;--soft:#EAF1F8;--line:#CBDDEF;--ink:#22303C;--muted:#5C6B78;--bg:#F7F9FB;
+ --seed:#7A5B33;--seedbg:#F3ECE0;--grow:#2E7D5B;--growbg:#E3F1EA;--test:#6A4E8C;--testbg:#EEE8F5;--harvest:#B5532A;--harvestbg:#F6E7DE;
+ --done:#2E7D5B;--donebg:#E3F1EA;--part:#B5832A;--partbg:#F8EFD9;--pend:#5C6B78;--pendbg:#ECF0F3;--gate:#B03B2E;--gatebg:#FBE7E3;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Manrope",system-ui,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:900px;margin:0 auto;padding:60px 26px 90px}
+.eyebrow{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--blue);font-weight:700;margin:0 0 12px}
+h1{font-family:"Fraunces",Georgia,serif;font-weight:600;color:var(--navy);font-size:2.6rem;line-height:1.08;margin:0 0 8px;letter-spacing:-.01em}
+.tagline{font-size:1.1rem;color:var(--muted);margin:0;font-weight:500}
+.rule{height:3px;width:60px;background:var(--blue);border-radius:2px;margin:24px 0 0}
+p{margin:11px 0}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 0}
+.chip{font-size:.76rem;font-weight:600;background:#fff;border:1px solid var(--line);border-radius:20px;padding:5px 13px;color:var(--muted)}
+.chip b{color:var(--navy)}
+.decision{background:var(--navy);color:#fff;border-radius:12px;padding:18px 22px;margin:26px 0 0}
+.decision .dlbl{font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:#BFD3E8;font-weight:700;margin:0 0 4px}
+.decision p{margin:0;font-family:"Fraunces",Georgia,serif;font-size:1.15rem;line-height:1.35}
+.progress{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 20px;margin:26px 0 0}
+.progress h4{margin:0 0 10px;font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.ptrack{display:flex;gap:6px;flex-wrap:wrap}
+.pcell{flex:1;min-width:72px;border-radius:8px;padding:9px 6px;text-align:center;font-size:.72rem;font-weight:700;border:1px solid var(--line)}
+.pcell small{display:block;font-weight:600;font-size:.64rem;opacity:.8;margin-top:2px}
+.pc-done{background:var(--donebg);border-color:#C3E2D1;color:var(--done)}
+.pc-part{background:var(--partbg);border-color:#EBD9AC;color:var(--part)}
+.pc-pend{background:var(--pendbg);border-color:#D8DFE4;color:var(--pend)}
+.layers{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px 22px;margin:26px 0 0}
+.layers h4{margin:0 0 4px;font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.lrow{display:flex;align-items:flex-start;gap:12px;padding:9px 0;border-top:1px solid var(--line)}
+.lrow:first-of-type{border-top:none}
+.lnum{flex:none;width:24px;height:24px;border-radius:6px;background:var(--soft);color:var(--navy);font-weight:700;font-size:.78rem;display:flex;align-items:center;justify-content:center}
+.lrow div{font-size:.93rem}
+.lrow b{color:var(--navy)}
+.phase{border-radius:14px;padding:4px 26px 22px;margin:34px 0;border:1px solid var(--line)}
+.phase.seed{background:var(--seedbg);border-color:#E2D4BC}
+.phase.grow{background:var(--growbg);border-color:#C3E2D1}
+.phase.test{background:var(--testbg);border-color:#D6C9E6}
+.phase.harvest{background:var(--harvestbg);border-color:#EAD2C0}
+.ph-label{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:5px 12px;border-radius:0 0 10px 10px;color:#fff}
+.seed .ph-label{background:var(--seed)} .grow .ph-label{background:var(--grow)}
+.test .ph-label{background:var(--test)} .harvest .ph-label{background:var(--harvest)}
+h2{font-family:"Fraunces",Georgia,serif;font-weight:600;color:var(--navy);font-size:1.42rem;margin:16px 0 2px}
+.step{background:#fff;border:1px solid var(--line);border-radius:11px;padding:16px 20px;margin:14px 0}
+.step.gate{border-color:#E8BFB7;box-shadow:0 0 0 3px rgba(176,59,46,.07)}
+.step h3{margin:0 0 6px;color:var(--navy);font-size:1.04rem;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.step .num{color:var(--blue);font-weight:700}
+.status{font-size:.66rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 9px;border-radius:20px;margin-left:auto}
+.s-done{background:var(--donebg);color:var(--done)} .s-part{background:var(--partbg);color:var(--part)}
+.s-pend{background:var(--pendbg);color:var(--pend)} .s-gate{background:var(--gatebg);color:var(--gate)}
+.lbl{font-size:.74rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin:12px 0 2px}
+.tmpl{font-size:.92rem;color:var(--navy);background:var(--soft);border-radius:8px;padding:10px 14px;margin-top:8px}
+.result{font-size:.9rem;background:#FCFDFE;border:1px dashed var(--line);border-radius:8px;padding:9px 13px;margin-top:8px;color:var(--muted)}
+.result b{color:var(--navy)}
+code{background:var(--soft);border-radius:5px;padding:1px 6px;font-size:.86em;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--navy)}
+table{width:100%;border-collapse:collapse;margin:10px 0 2px;font-size:.88rem}
+th,td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.tblwrap{overflow-x:auto}
+.flow{background:var(--navy);color:#fff;border-radius:12px;padding:20px 24px;margin:30px 0;font-size:1rem;text-align:center;font-family:"Fraunces",Georgia,serif}
+.flow b{color:#BFD3E8}
+.foot{margin-top:50px;padding-top:22px;border-top:1px solid var(--line);color:var(--muted);font-size:.9rem}
+@media(max-width:560px){h1{font-size:2rem} .wrap{padding:40px 16px 60px} .status{margin-left:0}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="eyebrow">AI Project &middot; Build Workflow</p>
+  <h1>Evaluate AI Retail Customer Agent</h1>
+  <p class="tagline">Measuring whether a shop's AI assistant stays inside the shop's own policies, and proving a rewrite actually helped.</p>
+  <div class="rule"></div>
+
+  <div class="meta">
+    <span class="chip"><b>Type</b> C &middot; Career Path Builder</span>
+    <span class="chip"><b>Slug</b> evaluate-ai-retail-customer-agent</span>
+    <span class="chip"><b>Started</b> 21 Aug 2026</span>
+    <span class="chip"><b>Lifts</b> Evaluation 11 &middot; Prompt Eng 3 &middot; LLM APIs 4</span>
+  </div>
+
+  <div class="decision">
+    <p class="dlbl">The recurring decision this settles</p>
+    <p>Which assistant responses can go to a customer unreviewed, and is version B safe to ship over version A?</p>
+  </div>
+
+  <p>The build runs foundation-up. Each layer only starts once the one below it is standing, so at every point there is something whole and load-bearing. One thing differs from a normal analytics build: here the brain is a <b>grader</b>, so the thing proven first is the grader itself, not a forecast. A score from an unproven judge is decoration.</p>
+
+  <div class="layers">
+    <h4>The four layers, and where bias can enter</h4>
+    <div class="lrow"><span class="lnum">1</span><div><b>Policy set.</b> Eleven store rules, frozen and hashed. The only source of truth either side of the experiment is allowed to use.</div></div>
+    <div class="lrow"><span class="lnum">2</span><div><b>Answering layer.</b> Prompt version plus one customer question, in. One response, out. This layer must never see the answer key.</div></div>
+    <div class="lrow"><span class="lnum">3</span><div><b>Grading layer.</b> One response in, verdicts out. Two graders, different jobs. This layer must never see which prompt version produced the response.</div></div>
+    <div class="lrow"><span class="lnum">4</span><div><b>Comparison layer.</b> V1 aggregate against V2 aggregate, with everything except the prompt held still.</div></div>
+  </div>
+
+  <div class="progress">
+    <h4>Progress tracker</h4>
+    <div class="ptrack">
+      <div class="pcell pc-done">1 Data<small>done</small></div>
+      <div class="pcell pc-done">2 Truth<small>done</small></div>
+      <div class="pcell pc-done">3 Isolate<small>done</small></div>
+      <div class="pcell pc-done">4 Brain<small>done</small></div>
+      <div class="pcell pc-done">5 Prove<small>done</small></div>
+      <div class="pcell pc-done">6 Baseline<small>done</small></div>
+      <div class="pcell pc-done">7 V2<small>done</small></div>
+      <div class="pcell pc-done">8 Compare<small>done</small></div>
+      <div class="pcell pc-done">9 UI<small>done</small></div>
+      <div class="pcell pc-pend">10 Publish<small>pending</small></div>
+    </div>
+  </div>
+
+  <div class="phase seed"><span class="ph-label">&#127793; Plant the seeds &middot; the roots</span>
+    <h2>The policies, the questions, and the known truth</h2>
+
+    <div class="step">
+      <h3><span class="num">1</span> Data layer: policies and questions <span class="status s-done">Done</span></h3>
+      <p>Two files, both fixed before anything runs. <code>happymart-policies.json</code> holds the eleven store rules as structured records rather than a paragraph, so a check can point at the exact clause an answer was supposed to use. <code>dataset.json</code> holds twenty customer questions across delivery, returns, refunds, exchanges, cancellations, and damaged or wrong items.</p>
+      <div class="lbl">Inherited from the course exercise</div>
+      <div class="result">Twenty-five retail questions already exist and twenty carry forward after removing phrasing duplicates. Two repairs on import: the file is double-encoded, so it needs <code>json.loads</code> twice, and the policy set does not yet exist in any machine-readable form. <b>Carried over: questions. To build: policies.</b></div>
+      <div class="lbl">Open decision</div>
+      <div class="result">Three clauses are bare in the source outline: delivery-address changes, clothing size exchanges, and order cancellation. Each is a bullet with no window, cut-off, or condition. Writing the policy file means deciding how far each one goes, and deliberately leaving some questions outside it.</div>
+      <div class="lbl">Template lesson</div>
+      <div class="tmpl">Design the data and its known truth first. A controlled, closed policy set is what turns "the assistant made this up" into a checkable statement instead of an opinion.</div>
+    </div>
+
+    <div class="step">
+      <h3><span class="num">2</span> The known truth: expected facts, and a seeded violation set <span class="status s-done">Done</span></h3>
+      <p>Each case gains <code>expected_facts</code>, <code>forbidden</code>, <code>in_scope</code>, and a one-line <code>grading_basis</code> recording why it was assigned its method. Then the piece the course exercise has no equivalent of: a small hand-written set of answers with <b>planted faults of a known kind</b>, sitting alongside known-clean controls.</p>
+      <div class="tblwrap"><table>
+        <tr><th>Planted fault</th><th>Example</th></tr>
+        <tr><td>Invented requirement</td><td>Correct 48-hour window, then demands photographs and an order number</td></tr>
+        <tr><td>Wrong fact</td><td>States delivery as RM8, or refunds in 2 to 3 days</td></tr>
+        <tr><td>Out-of-policy promise</td><td>Offers to waive the delivery fee</td></tr>
+        <tr><td>Silent on scope</td><td>Answers confidently on something the policies do not cover</td></tr>
+        <tr><td>Clean control</td><td>Accurate, grounded, nothing added</td></tr>
+      </table></div>
+      <div class="lbl">Template lesson</div>
+      <div class="tmpl">When the brain is a judge, the known truth is not the right answer to the question. It is a set of answers whose faults you already know, so the judge can be marked.</div>
+    </div>
+  </div>
+
+  <div class="phase grow"><span class="ph-label">&#127795; Grow the tree &middot; the trunk</span>
+    <h2>Isolation first, then the two graders</h2>
+
+    <div class="step">
+      <h3><span class="num">3</span> Isolate the layers so the score means something <span class="status s-done">Done</span></h3>
+      <p>The answering layer must not be hinted at what the grader will check, and the grading layer must not know which version it is judging. Six leak paths, each closed structurally rather than by remembering to be careful.</p>
+      <div class="tblwrap"><table>
+        <tr><th>Leak path</th><th>How it rigs the result</th><th>Control</th></tr>
+        <tr><td>V2 written using facts from the answer key</td><td>Score rises because you taught to the test</td><td>V2 carries behaviour rules only. No number, no fact, no case-specific guidance</td></tr>
+        <tr><td>Grader sees the version label</td><td>The judge favours the one labelled improved</td><td>Strip labels and shuffle before grading. The grader sees an anonymous string</td></tr>
+        <tr><td>Truth fields reach the answering model</td><td>The assistant is told what to say</td><td><code>run_prompt(question, prompt_version)</code> takes strings, never the case object</td></tr>
+        <tr><td>One model both answers and grades</td><td>Self-preference bias</td><td>Claude and Gemini both grade. Agreement reported, not averaged away</td></tr>
+        <tr><td>Policy file differs between runs</td><td>Two things moved, so the delta means nothing</td><td>One frozen file, hashed, the hash logged into both result files</td></tr>
+        <tr><td>Temperature 1.0 when answering</td><td>A small gap is plausibly run-to-run variance</td><td>Low temperature on answers, or N runs per case with the spread reported</td></tr>
+      </table></div>
+      <div class="lbl">The portability test for V2</div>
+      <div class="result">Swap HappyMart for a different retailer with different policies. If V2 is still a sensible prompt, it holds behaviour rules only and is clean. If it breaks, it has the answer key baked into it and the improvement it produces is not real.</div>
+      <div class="lbl">Template lesson</div>
+      <div class="tmpl">Close leaks with function signatures and file structure, not with discipline. A rule you have to remember at three in the morning is a rule that fails.</div>
+    </div>
+
+    <div class="step">
+      <h3><span class="num">4</span> The brain: model grader plus deterministic checks <span class="status s-done">Done</span></h3>
+      <p>Two graders answering different questions, kept apart on purpose. The <b>model grader</b> reads the response against the policy set and returns structured JSON on accuracy, relevance, grounding, and helpfulness, listing the specific unsupported claims rather than summarising them. It runs through <b>both Claude and Gemini</b> on every response, and disagreement is recorded rather than averaged away.</p>
+      <p>The <b>deterministic checks</b> are plain Python on values with one unambiguous right answer: RM5 delivery, 5 to 7 working days for a refund, 48 hours to report damage, the RM100 free-delivery threshold, the 14-day return window. No model involved, same verdict every run.</p>
+      <div class="lbl">The assignment rule, applied to every case in order</div>
+      <div class="result">
+        <b>1.</b> Does the policy set contain a single unambiguous value a correct answer must state? No, then model grading only.<br>
+        <b>2.</b> Can that value be checked by an assertion returning the same verdict every run, with no opinion in it? No, then model grading only.<br>
+        <b>3.</b> Can the wrong values that must be absent also be named? No, then the check confirms presence but cannot catch error, so it is permitted and flagged low power.<br>
+        All three yes, and code grading applies <b>in addition</b>. Ten of the twenty cases carry an assertion. All twenty are model-graded.
+      </div>
+      <div class="lbl">Ported from the exercise</div>
+      <div class="result">The pipeline shape carries over: <code>run_prompt</code>, <code>run_test_case</code>, <code>run_eval</code>, <code>grade_by_model</code>. The exercise versions target AWS code tasks and validate syntax with <code>ast.parse</code>, so the shape ports but the substance is rewritten. <b>Carried over: structure. To build: retail graders.</b></div>
+      <div class="lbl">Template lesson</div>
+      <div class="tmpl">Code grading is an addition, never a replacement. An answer can pass all three fact checks and still be inventing procedure around them, which is exactly the failure this project exists to catch.</div>
+    </div>
+
+    <div class="step gate">
+      <h3><span class="num">5</span> Prove the brain: does the grader catch a planted fault? <span class="status s-done">Passed</span></h3>
+      <p>Run both graders over the seeded set from step 2, where every fault is already known. Report catch rate on the planted faults, false-alarm rate on the clean controls, and how often the two judges agree. Nothing downstream is built until this passes, because if the grader waves through an invented photograph requirement then every score after it is noise wearing a decimal point.</p>
+      <div class="lbl">First run, 21 Aug 2026</div>
+      <div class="result">
+        Claude grader: <b>10 of 10</b> planted faults caught, <b>0 of 5</b> clean controls falsely flagged, and <b>15 of 15</b> agreement with itself on a repeat pass. Gemini agreed on every case where both judges returned a verdict.<br>
+        The deterministic checks matched the known truth on <b>7 of 8</b> applicable cases. The single mismatch is the most useful result in the set: on S15 the response states the 48-hour rule correctly, recognises the deadline has passed, and then grants an exception, demands photographs, and invents an escalation path. All three assertions pass. Both model graders catch it. That is the case for keeping two graders, shown rather than asserted.
+      </div>
+      <div class="lbl">Reproduced, 21 Aug 2026</div>
+      <div class="result">Re-run cleanly on a topped-up key: <b>10 of 10</b> caught, <b>0 of 5</b> false alarms, <b>0</b> errors, <b>15 of 15</b> self-consistent. Identical to the first run. A preflight check now aborts before spending anything, and results files are archived rather than overwritten, so a degraded run can no longer replace a clean one. The Gemini arm is pending its daily quota reset and can be added without re-answering, because grading reads a frozen response file.</div>
+      <div class="lbl">Template lesson</div>
+      <div class="tmpl">Prove the brain before you give it a face. If time runs out here, the hardest and most defensible part is still done: a judge with a measured catch rate is worth more than a finished dashboard built on an unmeasured one.</div>
+    </div>
+  </div>
+
+  <div class="phase test"><span class="ph-label">&#129514; The experiment &middot; baseline, change, re-measure</span>
+    <h2>Proving the rewrite actually helped</h2>
+
+    <div class="step">
+      <h3><span class="num">6</span> Baseline: Prompt V1 across all 20 cases <span class="status s-done">Done</span></h3>
+      <p>V1 is deliberately plain: the policies, then the customer question, nothing more. It is not meant to be good, it is meant to be the line everything later is measured from. All twenty cases run at temperature 0, and results freeze into <code>results/responses.json</code> alongside the policy-file hash.</p>
+      <div class="lbl">Result</div>
+      <div class="result">Claude flagged <b>11 of 20</b> V1 responses as carrying at least one unsupported claim, <b>30</b> claims in total, average score <b>7.75</b>. Gemini independently flagged <b>10 of 20</b>, <b>18</b> claims, average <b>8.25</b>. The deterministic checks passed <b>9 of 10</b>.</div>
+      <div class="lbl">One instrument fix, recorded rather than quietly applied</div>
+      <div class="result">A correct V1 answer that declined a late return with "we won't be able to accept the return" was scored as a failure, because the refusal vocabulary in the Q08 assertion did not contain that phrasing. The pattern list was broadened and the frozen responses re-scored. The fix corrects a false negative in the instrument, applies to both arms, and moves <b>V1</b> up rather than V2, so it works against the hypothesis under test. The revision is stamped in the case itself.</div>
+      <div class="lbl">Template lesson</div>
+      <div class="tmpl">Do not tune the baseline. A flattered baseline makes every later improvement look smaller than it is, and an honest one costs nothing to produce.</div>
+    </div>
+
+    <div class="step">
+      <h3><span class="num">7</span> V2: read the failures, change one thing, hold the rest still <span class="status s-done">Done</span></h3>
+      <p>V2 adds four behaviour rules: use only what is in the policies, do not invent procedure, answer the question that was asked, and say plainly when the policies do not cover it. Everything else stays frozen: same policy file and hash, same twenty questions, same grader, same rubric, same temperature 0.</p>
+      <div class="lbl">Pre-registered, not fitted</div>
+      <div class="result">V2 was written from the failure pattern described in the source outline, <b>before</b> this run's V1 results were seen. It names no number, no fact, and no case. Swap HappyMart for a different retailer with different policies and V2 is still a sensible prompt, which is the portability test from step 3. A prompt written after seeing the failures it is measured against is fitted to the test; this one is not.</div>
+      <div class="lbl">Template lesson</div>
+      <div class="tmpl">One change at a time, everything else nailed down. A comparison where two things moved gives you a number and tells you nothing about what caused it.</div>
+    </div>
+
+    <div class="step">
+      <h3><span class="num">8</span> Compare, and lead with the count <span class="status s-done">Done</span></h3>
+      <p>The headline is the <b>number of responses containing an unsupported claim</b>, V1 against V2, across all twenty cases. The average grader score is reported underneath as support. A count of grounding violations is something a reader can check and argue with; a fraction of a point on a self-authored ten-point scale is not.</p>
+      <div class="tblwrap"><table>
+        <tr><th></th><th>Prompt V1</th><th>Prompt V2</th><th>Change</th></tr>
+        <tr><td><b>Responses with an unsupported claim</b>, Claude judge</td><td>11 of 20</td><td>5 of 20</td><td>6 fewer</td></tr>
+        <tr><td><b>Responses with an unsupported claim</b>, Gemini judge</td><td>10 of 20</td><td>5 of 20</td><td>5 fewer</td></tr>
+        <tr><td>Total unsupported claims, Claude</td><td>30</td><td>9</td><td>21 fewer</td></tr>
+        <tr><td>Total unsupported claims, Gemini</td><td>18</td><td>5</td><td>13 fewer</td></tr>
+        <tr><td>Deterministic fact checks passed</td><td>9 of 10</td><td>9 of 10</td><td>no change</td></tr>
+        <tr><td>Average grader score (supporting)</td><td>7.75 / 8.25</td><td>8.85 / 9.1</td><td>Claude / Gemini</td></tr>
+      </table></div>
+      <div class="lbl">Two judges, arrived at separately</div>
+      <div class="result">The judges were never shown which prompt produced a response, and they agree on <b>35 of 40</b> of them, or 88 per cent. Working independently they land on 11 and 10 flagged in V1 and on <b>exactly 5 each</b> in V2. The size of the gain still depends on which judge you ask, which is why the count is reported per judge rather than pooled into one number.</div>
+      <div class="lbl">The row that matters most is the one that did not move</div>
+      <div class="result">The deterministic checks scored <b>9 of 10 in both arms</b>. Measured on critical business facts alone, V2 is indistinguishable from V1. Measured on grounding, both judges see roughly half the flagged responses cleared. An evaluation built on fact checks alone would have reported this rewrite as no improvement at all. That is the case for two kinds of grader, and it is now a measurement rather than an assertion.</div>
+      <div class="lbl">What V2 fixed, and what it did not</div>
+      <div class="result">Both judges clear M01, M03, M05 and M07. Neither judge finds a new problem V2 created, apart from Gemini on Q08. Of the responses V2 still carries claims on, <b>most share one pattern</b>: the reply points the customer to customer service, and the policy set never authorises customer service as a general channel, mentioning it only in the damaged-or-wrong clause. So V2 is marked down for obeying an instruction V2 itself gives, over a gap in the policy set. The exception is Q10, a real uncorrected failure: the assistant opens with "Yes, you can still report it" on a report already outside the 48-hour window.</div>
+      <div class="lbl">Template lesson</div>
+      <div class="tmpl">Lead with the figure that survives a sceptical reader. Put the soft score underneath, where it supports the claim instead of carrying it.</div>
+    </div>
+  </div>
+
+  <div class="phase harvest"><span class="ph-label">&#127823; Harvest the tree &middot; surfacing the value</span>
+    <h2>The console, then publishing</h2>
+
+    <div class="step">
+      <h3><span class="num">9</span> UI shell: the results console <span class="status s-done">Done</span></h3>
+      <p>Four tabs over the frozen results files: the V1 against V2 verdict, a per-question comparison, the grading rules, and the grader's own catch rate from step 5. Self-contained, results injected inline, runs by double-click with no key and no backend.</p>
+      <div class="lbl">Built by a generator, not by hand</div>
+      <div class="result"><code>src/build_ui.py</code> reads <code>results/</code> and <code>data/</code> and emits the page, so every figure on the console traces to a measured file and none is typed in. Re-run it after any re-grade and the console updates itself. A page whose numbers are hand-copied drifts from its own evidence the first time anything is re-run.</div>
+      <div class="lbl">Reading the cases</div>
+      <div class="result">A question is chosen from a dropdown grouped by outcome, rather than twenty cards on one page. Each group numbers from 1, so "Judges split 2" is the second split case and not a number carried over from the group above it. The card shows the governing policy clause as a full-width band, then the V1 and V2 answers side by side, then the specific claims each judge named. The policy sits above the two answers rather than beside them because it is the yardstick both are measured against, not a third opinion.</div>
+      <div class="lbl">One instrument fix, approved and applied</div>
+      <div class="result">The first grading pass flagged three otherwise-correct V1 answers for naming the store, because the grader was given the eleven rules but never told the store's name while the answering prompt names it in its opening line. The store identity was added to the <b>grader context only</b>. The answering prompt is byte-identical, so the frozen responses stay valid and the policy hash is unchanged. The fix is symmetric across arms and judges, and it removes flags from V1 rather than V2, so it lowers the measured improvement. The gate was re-validated under the new context before anything was re-graded, and still returned 10 of 10 caught, 0 of 5 false alarms, 15 of 15 self-consistent.</div>
+      <div class="lbl">Template lesson</div>
+      <div class="tmpl">Build the face on a frozen results file, never on live compute, so the screen cannot quietly contradict the numbers that were proven.</div>
+    </div>
+
+    <div class="step">
+      <h3><span class="num">10</span> Publish <span class="status s-pend">Pending</span></h3>
+      <p>Cover image at 1200 x 600 via <code>cover-image-prompts.html</code>, then out through the <code>ai-project-publish</code> skill to <code>lyven81/ai-project</code>. The page is framed as an evaluation and reliability project. The assistant is the thing being measured here, not the thing being sold.</p>
+      <div class="lbl">Template lesson</div>
+      <div class="tmpl">Name the project after the decision it settles. A reader who wants to know whether an assistant is safe to ship should recognise the page as theirs from the title alone.</div>
+    </div>
+  </div>
+
+  <div class="flow">Build order: <b>policies and questions &rarr; known truth &rarr; isolate the layers &rarr; graders &rarr; prove the graders &rarr; baseline &rarr; V2 &rarr; compare &rarr; console</b></div>
+
+  <div class="foot">
+    <p><b>What makes this one different from the usual tree.</b> In an analytics build the brain estimates something and the recovery check asks whether the estimate landed on a truth baked into the data. Here the brain is a judge, so the check has to be aimed at the judge: plant faults you already know about and see whether it finds them. Everything downstream inherits that catch rate, so it is the first real number the project produces and the one the rest leans on.</p>
+    <p><b>Where the credibility actually sits.</b> Two places, and neither is the headline figure. First, the answering layer never sees the answer key and the grading layer never sees the version label, so the comparison is between two prompts rather than between one prompt and a hint. Second, the reason each case was assigned its grading method travels with the case in the data, so the split can be checked rather than taken on trust.</p>
+    <p>&copy; 2026 &middot; Evaluate AI Retail Customer Agent &middot; build workflow</p>
+  </div>
+</div>
+</body>
+</html>

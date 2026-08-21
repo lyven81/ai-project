@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Evaluate AI Retail Customer Agent: Source | AI Project Portfolio</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root{ --ink:#222; --paper:#fff; --hair:#dddddd; --gray:#555; --accent:#B8860B; --navy:#1E3A5F; --code-bg:#fbfbf8; --cmt:#6b8190; }
+  html{ scroll-behavior:smooth; }
+  body{ background:var(--paper); color:var(--ink); font-family:Arial, Helvetica, sans-serif; line-height:1.6; overflow-x:hidden; }
+  a{ color:inherit; text-decoration:none; }
+  a:hover h2, a:hover h3, a:hover h4{ color:var(--accent); }
+  p code, li code{ font-family:"Courier New", monospace; font-size:.86em; background:#f2f3f5; padding:1px 5px; color:var(--navy); }
+
+  /* Masthead (shared) */
+  .masthead{ display:flex; align-items:center; justify-content:space-between; padding:14px 28px; max-width:1240px; margin:0 auto; gap:18px; }
+  .topbar{ position:sticky; top:0; z-index:120; background:#fff; box-shadow:0 1px 6px rgba(0,0,0,.06); }
+  .mast-left{ display:flex; align-items:center; gap:20px; }
+  .logo{ background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; letter-spacing:3px; font-size:.95rem; padding:8px 12px; white-space:nowrap; }
+  .mast-nav{ display:flex; gap:20px; font-family:Arial, Helvetica, sans-serif; font-size:.72rem; letter-spacing:1.4px; text-transform:uppercase; }
+  .mast-nav a:hover{ color:var(--accent); }
+  .hamburger{ display:none; flex-direction:column; gap:4px; background:none; border:none; cursor:pointer; padding:6px; }
+  .hamburger span{ width:22px; height:2px; background:#222; display:block; }
+  .rule-top{ border:none; border-top:3px solid #222; max-width:1240px; margin:0 auto; }
+
+  /* Search (shared) */
+  .search-box{ position:relative; width:200px; }
+  .search-input{ width:100%; padding:7px 30px 7px 12px; border:1px solid var(--hair); background:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; color:#222; }
+  .search-input:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(184,134,11,.15); }
+  .search-ic{ position:absolute; right:10px; top:50%; transform:translateY(-50%); color:var(--gray); font-size:.8rem; pointer-events:none; }
+  .search-results{ position:absolute; top:calc(100% + 4px); left:0; width:340px; max-width:86vw; background:#fff; border:1px solid #222; max-height:60vh; overflow-y:auto; z-index:120; display:none; }
+  .sr-item{ padding:12px 14px; border-bottom:1px solid var(--hair); }
+  .sr-item:last-child{ border-bottom:none; }
+  .sr-cat{ font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; margin-bottom:4px; color:var(--accent); }
+  .sr-title{ font-weight:700; font-size:1.02rem; color:#222; }
+  .sr-links{ font-size:.58rem; letter-spacing:.8px; text-transform:uppercase; color:var(--gray); margin-top:5px; }
+  .sr-links a:hover{ color:var(--accent); }
+  .sr-none{ padding:16px 14px; font-size:.82rem; color:var(--gray); }
+
+  /* Shared bits */
+  .tab{ display:inline-block; background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.66rem; letter-spacing:2px; text-transform:uppercase; padding:6px 12px; }
+  .rubric{ font-family:Arial, Helvetica, sans-serif; font-size:.62rem; font-weight:700; letter-spacing:1.6px; text-transform:uppercase; color:var(--accent); display:block; margin-bottom:8px; }
+  .tech-chip{ display:inline-block; border:1px solid var(--hair); padding:6px 12px; font-size:.72rem; letter-spacing:.3px; color:#333; white-space:nowrap; }
+  .tech-chip:hover{ border-color:var(--accent); color:var(--accent); }
+  .btn{ display:inline-block; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.7rem; letter-spacing:1.6px; text-transform:uppercase; padding:13px 24px; border:1px solid #222; background:#222; color:#fff; cursor:pointer; transition:.15s; }
+  .btn:hover{ background:var(--accent); border-color:var(--accent); }
+  .btn.ghost{ background:#fff; color:#222; }
+  .btn.ghost:hover{ color:var(--accent); border-color:var(--accent); background:#fff; }
+
+  /* Breadcrumb */
+  .crumb{ max-width:1240px; margin:0 auto; padding:20px 28px 0; font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--gray); }
+  .crumb a:hover{ color:var(--accent); }
+  .crumb .sep{ color:var(--hair); margin:0 8px; }
+
+  /* Header (slim cover banner + copy) */
+  .src-head{ max-width:1240px; margin:0 auto; padding:14px 28px 6px; }
+  .cover-strip{ border:1px solid var(--hair); line-height:0; background:#eef1f4; }
+  .cover-strip img{ width:100%; height:190px; object-fit:cover; object-position:center 42%; display:block; }
+  .src-head h1{ font-size:2.5rem; font-weight:900; line-height:1.04; letter-spacing:-.008em; margin-top:18px; }
+  .src-head .sub{ font-style:italic; font-size:1.08rem; color:#333; margin-top:10px; max-width:72ch; }
+  .head-tech{ display:flex; flex-wrap:wrap; gap:9px; margin-top:16px; }
+  .head-btns{ display:flex; flex-wrap:wrap; gap:12px; margin-top:18px; }
+
+  /* Section shell */
+  .sec{ max-width:1240px; margin:0 auto; padding:26px 28px; }
+  .sec-rule{ border-top:3px solid #222; padding-top:16px; }
+  .sec .tab{ margin-bottom:14px; }
+  .sec h2{ font-size:1.7rem; font-weight:900; line-height:1.06; }
+  .sec .intro{ color:#333; font-size:1.02rem; margin-top:10px; max-width:80%; }
+  .sec .body{ color:#333; font-size:1rem; margin-top:10px; max-width:80%; }
+
+  /* Code block */
+  .codeblock{ border:1px solid var(--hair); margin-top:16px; }
+  .code-bar{ display:flex; align-items:center; justify-content:space-between; gap:12px; background:var(--navy); color:#fff; padding:8px 12px; }
+  .code-bar .path{ font-family:"Courier New", monospace; font-size:.74rem; letter-spacing:.2px; opacity:.96; display:flex; align-items:center; gap:7px; min-width:0; }
+  .code-bar .path span{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .code-copy{ flex:none; background:none; border:1px solid rgba(255,255,255,.4); color:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.56rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; padding:5px 11px; cursor:pointer; transition:.15s; }
+  .code-copy:hover{ background:rgba(255,255,255,.16); }
+  .codeblock pre{ margin:0; padding:14px 16px; overflow-x:auto; background:var(--code-bg); }
+  .codeblock code{ font-family:"Courier New", monospace; font-size:.82rem; line-height:1.6; color:#1b2a3a; background:none; padding:0; white-space:pre; display:block; }
+  .codeblock code .cmt{ color:var(--cmt); font-style:italic; }
+
+  .tree .code-bar .path::before{ content:"📁"; }
+
+  /* Notes */
+  .note-block{ margin-top:22px; }
+  .note-block h3{ font-size:1.15rem; font-weight:800; }
+  .blist{ list-style:none; margin-top:12px; border-top:1px solid var(--hair); }
+  .blist li{ padding:12px 0; border-bottom:1px solid var(--hair); color:#333; font-size:.95rem; }
+  .blist li b{ color:#222; }
+
+  /* CTA */
+  .cta-inner{ display:flex; align-items:center; gap:18px; flex-wrap:wrap; border-top:3px solid #222; padding-top:18px; }
+  .cta-inner h3{ font-size:1.4rem; font-weight:900; line-height:1.08; }
+  .cta-inner p{ color:var(--gray); font-size:.95rem; margin-top:4px; }
+  .cta-btns{ margin-left:auto; display:flex; gap:12px; flex-wrap:wrap; }
+
+  footer{ background:#222; max-width:1240px; margin:30px auto 0; padding:24px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; letter-spacing:.5px; color:#fff; text-align:center; }
+  .note{ max-width:1240px; margin:14px auto 0; padding:8px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.62rem; letter-spacing:1px; color:#999; }
+
+  /* Drawer (shared) */
+  .drawer{ position:fixed; top:0; left:-300px; width:280px; height:100vh; background:#fff; z-index:200; box-shadow:2px 0 14px rgba(0,0,0,.15); transition:left .28s ease; padding:74px 26px 26px; }
+  .drawer.open{ left:0; }
+  .drawer a{ display:block; font-family:Arial, Helvetica, sans-serif; font-size:.82rem; letter-spacing:1.2px; text-transform:uppercase; padding:14px 0; border-bottom:1px solid var(--hair); }
+  .overlay{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:150; }
+  .overlay.open{ display:block; }
+  .drawer-close{ position:absolute; top:20px; right:20px; font-family:Arial, Helvetica, sans-serif; font-size:1.4rem; background:none; border:none; cursor:pointer; }
+
+  @media (max-width:900px){
+    .cta-btns{ margin-left:0; }
+    .mast-nav{ display:none; }
+    .hamburger{ display:flex; }
+    .masthead{ padding:12px 16px; }
+    .mast-left{ gap:10px; min-width:0; flex:1; }
+    .logo{ font-size:.72rem; letter-spacing:1.5px; padding:6px 8px; }
+    .search-box{ flex:1; width:auto; min-width:0; }
+    .search-results{ position:fixed; top:58px; left:12px; right:12px; width:auto; max-width:none; }
+    .src-head h1{ font-size:1.95rem; }
+    .cover-strip img{ height:150px; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="overlay" id="overlay"></div>
+  <nav class="drawer" id="drawer">
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">&times;</button>
+    <a href="index.html">Home</a>
+    <a href="project-categories.html">Categories</a>
+    <a href="contact.html">Contact</a>
+    <a href="https://lyven81.github.io/data-analyst-portfolio/index.html">Data Portfolio</a>
+  </nav>
+
+  <div class="topbar">
+  <div class="masthead">
+    <div class="mast-left">
+      <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+      <a class="logo" href="index.html">AI BUILDS LAB</a>
+      <nav class="mast-nav">
+        <a href="project-categories.html">Categories</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <div class="search-box">
+        <input type="text" class="search-input" id="searchInput" autocomplete="off" placeholder="Search AI projects..." aria-label="Search AI projects">
+        <span class="search-ic">&#128269;</span>
+        <div class="search-results" id="searchResults"></div>
+      </div>
+    </div>
+  </div>
+  <hr class="rule-top">
+  </div>
+
+  <div class="crumb">
+    <a href="project-categories.html">Categories</a>
+    <span class="sep">/</span><a id="crumbCat" href="#"></a>
+    <span class="sep">/</span><a id="crumbProj" href="#"></a>
+    <span class="sep">/</span><span>Source</span>
+  </div>
+
+  <section class="src-head">
+    <div class="cover-strip" id="coverStrip" style="display:none"><img id="cover" alt=""></div>
+    <span class="rubric" id="kicker"></span>
+    <h1 id="title"></h1>
+    <p class="sub" id="subtitle"></p>
+    <div class="head-tech" id="headTech"></div>
+    <div class="head-btns" id="headBtns"></div>
+  </section>
+
+  <div id="body"></div>
+
+  <footer>&copy; 2026 Lee Yih Ven | AI Project Portfolio &middot; All rights reserved.</footer>
+  <div class="note">Sample Source-Showcase-E2 (TEMPLATE): source-code page on the index magazine system: slim cover banner, About, Project Structure, code walkthrough with copyable navy-barred code blocks, CTA. Reuse by editing only the PROJECT block at the top of the script.</div>
+
+<script>
+  const SITE = "";
+
+  /* =================================================================
+     EDIT PER PROJECT  -  the ONLY block you change per page.
+     Copy this file, swap PROJECT, save as <slug>-source.html.
+     - structure.code : the project file tree (plain text)
+     - walkthrough[]   : { heading, body, files:[{label, code}] }
+     - notes[]         : { heading, bullets:[...] }
+     Code strings can be multi-line; they render verbatim.
+     ================================================================= */
+  const PROJECT = {
+  "slug": "evaluate-ai-retail-customer-agent",
+  "category": "Multi-Agent Decision Systems",
+  "categoryUrl": "category-multi-agent-systems.html",
+  "title": "Evaluate AI Retail Customer Agent",
+  "subtitle": "Layer isolation, the two graders, and the gate that marks the judge before any result counts.",
+  "cover": "images/evaluate-ai-retail-customer-agent/cover.jpeg",
+  "tech": [
+    "Python",
+    "Claude Opus 5",
+    "Gemini 2.5 Flash",
+    "Structured JSON",
+    "Deterministic assertions"
+  ],
+  "overviewUrl": "evaluate-ai-retail-customer-agent.html",
+  "demoLabel": "Try Live Demo",
+  "demoUrl": "https://lyven81.github.io/ai-project/projects/evaluate-ai-retail-customer-agent/demo.html",
+  "repoUrl": "https://github.com/lyven81/ai-project/tree/main/projects/evaluate-ai-retail-customer-agent",
+  "about": "Four excerpts carry the project: the function signatures that keep the answer key away from the answering model, the two graders that answer different questions, and the gate that marks the judge against known faults before any result about the assistant is believed. The idea running through all of it is that a score from an unproven judge is decoration, so the grader is the first thing measured.",
+  "structure": {
+    "label": "projects/evaluate-ai-retail-customer-agent/",
+    "code": "projects/evaluate-ai-retail-customer-agent/\n  demo.html                  the results console (self-contained, results inlined)\n  how-this-app-is-built.html the build workflow, foundation up\n  data/\n    happymart-policies.json  11 store rules, the only source of truth\n    dataset.json             20 questions, expected facts, grading basis\n    seeded-answers.json      15 answers with known faults, to mark the graders\n  prompts/\n    prompt_v1.txt            baseline, policies plus question\n    prompt_v2.txt            behaviour rules only, pre-registered\n  results/\n    responses.json           40 frozen responses plus both judges' verdicts\n    comparison.json          V1 against V2, per judge\n    grader_proof.json        the gate: catch rate, false alarms, self-consistency\n  src/\n    config.py                keys, models, the hash-pinned policy set\n    pipeline.py              answering layer and both graders\n    prove_grader.py          the hard gate\n    run_experiment.py        answer, grade, report\n    build_ui.py              generates demo.html from the results files"
+  },
+  "walkthrough": [
+    {
+      "heading": "Isolation Enforced by the Function Signature",
+      "body": "The answering model must not be hinted at what the grader will check, and the judge must not know which prompt produced a response. Both rules are enforced by what the functions accept rather than by remembering to be careful. run_prompt takes the question string, so a test case carrying expected facts and assertions physically cannot reach it. model_grade takes the response text, so there is no version label to favour.",
+      "files": [
+        {
+          "label": "src/pipeline.py: the answering layer takes strings, never a case",
+          "code": "def run_prompt(question: str, version: str) -> str:\n    \"\"\"Answer one customer question. Sees the question and the policies. Nothing else.\"\"\"\n    assert isinstance(question, str), \"run_prompt takes the question string, never a case object\"\n    assert version in (\"v1\", \"v2\")\n\n    import anthropic\n\n    client = anthropic.Anthropic(api_key=config.anthropic_key())\n    prompt = config.prompt_template(version).format(\n        policies=config.policies_text(), question=question\n    )\n    for attempt in range(3):\n        try:\n            r = client.messages.create(\n                model=config.ANSWER_MODEL,\n                max_tokens=1000,\n                temperature=config.ANSWER_TEMPERATURE,\n                messages=[{\"role\": \"user\", \"content\": prompt}],\n            )\n            return \"\".join(b.text for b in r.content if b.type == \"text\").strip()\n        except Exception:\n            if attempt == 2:\n                raise\n            time.sleep(2 * (attempt + 1))"
+        }
+      ]
+    },
+    {
+      "heading": "Two Graders Answering Different Questions",
+      "body": "The model grader reads a response against the policy set and names each unsupported claim separately. It runs through Claude and Gemini, and disagreement is recorded rather than averaged away. The deterministic grader is plain Python over named patterns: it confirms the required value is present and the wrong ones are absent, returning the same verdict on every run. Code grading is an addition, never a replacement, so all twenty questions are model-graded and ten also carry assertions.",
+      "files": [
+        {
+          "label": "src/pipeline.py: deterministic checks, no model and no opinion",
+          "code": "def code_grade(response: str, case: dict):\n    \"\"\"Run the case's assertions. No model, no opinion, same verdict every run.\"\"\"\n    if not case.get(\"assertions\"):\n        return None\n    checks = []\n    for a in case[\"assertions\"]:\n        hits = [p for p in a[\"patterns\"] if re.search(p, response, re.IGNORECASE)]\n        if a[\"type\"] == \"must_contain_any\":\n            ok = bool(hits)\n        elif a[\"type\"] == \"must_not_contain_any\":\n            ok = not hits\n        elif a[\"type\"] == \"must_contain_all\":\n            ok = len(hits) == len(a[\"patterns\"])\n        else:\n            raise ValueError(f\"unknown assertion type {a['type']}\")\n        checks.append({\"label\": a[\"label\"], \"type\": a[\"type\"], \"passed\": ok, \"matched\": hits})\n    return {\"passed\": all(c[\"passed\"] for c in checks),\n            \"power\": case.get(\"power\"), \"checks\": checks}"
+        }
+      ]
+    },
+    {
+      "heading": "The Gate: Marking the Judge Before Trusting It",
+      "body": "In an ordinary analytics build the recovery check tests an estimator against a truth baked into the data. Here the brain is a judge, so the check has to be aimed at the judge. Fifteen answers are hand-written with faults known in advance, ten carrying a planted fault of a stated kind and five clean controls, and the graders are scored on them. Rows where a call errored are excluded from the denominator rather than counted as a miss, so a rate limit is never charged to a judge's accuracy.",
+      "files": [
+        {
+          "label": "src/prove_grader.py: catch rate, false alarms, errors kept separate",
+          "code": "    def rate(provider, want_truth):\n        \"\"\"Only rows where the grader actually returned a verdict.\n\n        A call that errored has no verdict. Counting it as 'did not flag' would\n        charge a rate limit to the judge's accuracy, so it is excluded from the\n        denominator and reported separately as an error.\n        \"\"\"\n        sub = [r for r in rows if r[\"truth_has_violation\"] is want_truth\n               and r[provider].get(\"has_violation\") is not None]\n        return len([r for r in sub if r[provider][\"has_violation\"] is True]), len(sub)"
+        }
+      ]
+    },
+    {
+      "heading": "Holding Everything Still Except the Prompt",
+      "body": "A comparison where two things moved gives a number and explains nothing. The policy file is hashed and the hash written into every results file, so two runs made against different policies cannot be compared by accident. Responses are generated once at temperature 0 and frozen, which also means a second judge can be added later without changing what was judged. Before grading, the pool is shuffled and version labels are dropped.",
+      "files": [
+        {
+          "label": "src/run_experiment.py: blind grading over the frozen pool",
+          "code": "def stage_grade(provider):\n    prov_key = \"anthropic\" if provider == \"claude\" else \"gemini\"\n    if not config.preflight((prov_key,)):\n        print(f\"Aborting: {provider} unavailable. Nothing written.\")\n        return 2\n\n    path = config.RESULTS / RESPONSES\n    if not path.exists():\n        print(f\"No results/{RESPONSES}. Run `python run_experiment.py answer` first.\")\n        return 2\n    doc = json.load(io.open(path, encoding=\"utf-8\"))\n    records = doc[\"records\"]\n\n    # Blind: strip version, shuffle the pool, grade text only.\n    pool = list(records)\n    random.Random(SHUFFLE_SEED).shuffle(pool)\n\n    def work(item):\n        i, p = item\n        return (i, pipeline.model_grade(p[\"response\"], p[\"question\"], provider))\n\n    print(f\"Grading {len(pool)} responses with {provider} (blind, shuffled)...\")\n    with ThreadPoolExecutor(max_workers=6) as ex:\n        out = list(ex.map(work, list(enumerate(pool))))\n\n    for i, g in out:\n        pool[i][provider] = g"
+        }
+      ]
+    }
+  ],
+  "notes": [
+    {
+      "heading": "What the results actually say",
+      "bullets": [
+        "Claude flagged 11 of 20 V1 responses as carrying an unsupported claim and 5 of 20 under V2. Gemini, judging blind and independently, flagged 10 and 5.",
+        "The two judges agree on 35 of 40 responses, or 88 percent.",
+        "The deterministic fact checks passed 9 of 10 in both arms, so measured on critical facts alone the rewrite is indistinguishable from the baseline.",
+        "The gate returned 10 of 10 planted faults caught, 0 false alarms on 5 clean controls, and the same verdict on all 15 rows of a repeat pass."
+      ]
+    },
+    {
+      "heading": "Where the deterministic checks are blind",
+      "bullets": [
+        "One seeded answer states the 48-hour rule correctly, works out that the deadline has passed, and declines. Every assertion passes.",
+        "It then grants an exception it has no authority for, asks for photographs, and invents an escalation path. Both model judges caught it.",
+        "That single case is why both graders are kept, and why the fact checks are reported beside the grounding count rather than instead of it."
+      ]
+    },
+    {
+      "heading": "Reading it honestly",
+      "bullets": [
+        "Most of the responses V2 still carries claims on share one pattern: the reply points the customer to customer service, and the policy set names customer service only in the damaged-or-wrong clause.",
+        "That is the evaluation catching a gap in the specification rather than a fault in the model, and it has not been patched and re-run.",
+        "Prompt V2 was written before this run's baseline results were seen, and it names no fact, number, or question, so it is not fitted to the cases it is scored on."
+      ]
+    }
+  ],
+  "cta": "Want this evaluation harness pointed at your own assistant and policies? Let's scope it."
+};
+  /* ===================== END EDIT BLOCK ===================== */
+
+  const pref = (u) => /^https?:|^mailto:|^tel:/.test(u || '') ? u : (SITE + (u || ''));
+  const esc = (s) => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const rich = (s) => esc(s).replace(/&lt;(\/?(?:b|code))&gt;/g, '<$1>');
+
+  // raw code store for copy buttons
+  const RAW = [];
+  function codeBlock(label, codeStr, extraClass){
+    const idx = RAW.push(codeStr) - 1;
+    const rendered = esc(codeStr).split('\n')
+      .map(line => /^\s*#/.test(line) ? `<span class="cmt">${line}</span>` : line).join('\n');
+    return `<div class="codeblock ${extraClass||''}">`+
+      `<div class="code-bar"><span class="path"><span>${esc(label)}</span></span>`+
+      `<button class="code-copy" data-idx="${idx}">Copy</button></div>`+
+      `<pre><code>${rendered}</code></pre></div>`;
+  }
+
+  // Breadcrumb + header
+  document.title = PROJECT.title + ": Source | AI Project Portfolio";
+  document.getElementById('crumbCat').textContent = PROJECT.category;
+  document.getElementById('crumbCat').href = pref(PROJECT.categoryUrl);
+  document.getElementById('crumbProj').textContent = PROJECT.title;
+  document.getElementById('crumbProj').href = pref(PROJECT.overviewUrl);
+  if (PROJECT.cover){
+    document.getElementById('coverStrip').style.display = '';
+    const c = document.getElementById('cover'); c.src = PROJECT.cover; c.alt = PROJECT.title + " cover";
+  }
+  document.getElementById('kicker').textContent = "Source Walkthrough · " + PROJECT.category;
+  document.getElementById('title').textContent = PROJECT.title;
+  document.getElementById('subtitle').textContent = PROJECT.subtitle;
+  document.getElementById('headTech').innerHTML = (PROJECT.tech||[]).map(t => `<span class="tech-chip">${esc(t)}</span>`).join('');
+  document.getElementById('headBtns').innerHTML =
+    (PROJECT.demoUrl ? `<a class="btn" href="${pref(PROJECT.demoUrl)}" target="_blank" rel="noopener">${esc(PROJECT.demoLabel||'Live Demo')}</a>` : '') +
+    (PROJECT.overviewUrl ? `<a class="btn ghost" href="${pref(PROJECT.overviewUrl)}">Project Overview</a>` : '') +
+    (PROJECT.repoUrl ? `<a class="btn ghost" href="${pref(PROJECT.repoUrl)}" target="_blank" rel="noopener">GitHub Repo</a>` : '');
+
+  const section = (tab, inner) => `<section class="sec"><div class="sec-rule"><span class="tab">${esc(tab)}</span>${inner}</div></section>`;
+  let html = "";
+  const P = PROJECT;
+
+  if (P.about){
+    html += section("About This Code", `<h2>About This Code Showcase</h2><p class="intro">${rich(P.about)}</p>`);
+  }
+  if (P.structure && P.structure.code){
+    html += section("Project Structure", `<h2>Project Structure</h2>`+
+      codeBlock(P.structure.label || 'project/', P.structure.code, 'tree'));
+  }
+  (P.walkthrough||[]).forEach(w => {
+    let inner = `<h2>${esc(w.heading)}</h2>`;
+    if (w.body) inner += `<p class="body">${rich(w.body)}</p>`;
+    (w.files||[]).forEach(f => { inner += codeBlock(f.label, f.code); });
+    html += section("Code", inner);
+  });
+  // CTA
+  html += `<section class="sec"><div class="cta-inner">`+
+    `<div><h3>Interested in the build?</h3><p>${esc(P.cta || "Let's talk.")}</p></div>`+
+    `<div class="cta-btns">`+
+    (P.demoUrl ? `<a class="btn" href="${pref(P.demoUrl)}" target="_blank" rel="noopener">${esc(P.demoLabel||'Live Demo')}</a>` : '')+
+    `<a class="btn ghost" href="${SITE}contact.html">Get in Touch</a>`+
+    `</div></div></section>`;
+
+  document.getElementById('body').innerHTML = html;
+
+  // Copy buttons
+  function copyText(text, btn){
+    const done = ()=>{ const o=btn.textContent; btn.textContent='Copied ✓'; setTimeout(()=>btn.textContent=o.includes('Copied')?'Copy':o,1400); };
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(done).catch(()=>fb(text,done)); }
+    else fb(text,done);
+  }
+  function fb(text,done){ const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(ta); done(); }
+  document.querySelectorAll('.code-copy').forEach(btn =>
+    btn.addEventListener('click', ()=> copyText(RAW[+btn.dataset.idx], btn)));
+
+  // Masthead search
+  const ITEMS = [
+    {t:PROJECT.title, c:PROJECT.category, s:PROJECT.slug},
+    {t:"Courier CS Quality Console", c:"Conversational Data Analytics", s:"courier-cs-quality-console"},
+    {t:"Voucher Analyzer", c:"Conversational Data Analytics", s:"voucher-analyzer"},
+    {t:"Wiseman", c:"Knowledge & Reference Chatbots", s:"wiseman"},
+    {t:"Sunny Car Accessories", c:"Agentic Commerce", s:"sunny-car-accessories"},
+    {t:"Bookshelf", c:"Multi-Agent Decision Systems", s:"bookshelf"}
+  ];
+  const searchInput = document.getElementById('searchInput');
+  const searchResults = document.getElementById('searchResults');
+  function runSearch(q){
+    if(q.trim().length < 2){ searchResults.style.display='none'; return; }
+    const ql = q.toLowerCase();
+    const hits = ITEMS.filter(it => (it.t+' '+it.c).toLowerCase().includes(ql));
+    searchResults.innerHTML = hits.length ? hits.map(it =>
+      `<div class="sr-item"><div class="sr-cat">${esc(it.c)}</div>`+
+      `<a href="${SITE}${it.s}.html"><div class="sr-title">${esc(it.t)}</div></a>`+
+      `<div class="sr-links"><a href="${SITE}${it.s}.html">View Details</a></div></div>`).join('')
+      : `<div class="sr-none">No projects found. Try a different keyword.</div>`;
+    searchResults.style.display='block';
+  }
+  searchInput.addEventListener('input', e => runSearch(e.target.value));
+  document.addEventListener('click', e => { if(!e.target.closest('.search-box')) searchResults.style.display='none'; });
+
+  // Drawer
+  const drawer=document.getElementById('drawer'), overlay=document.getElementById('overlay');
+  const openMenu=()=>{ drawer.classList.add('open'); overlay.classList.add('open'); };
+  const closeMenu=()=>{ drawer.classList.remove('open'); overlay.classList.remove('open'); };
+  document.getElementById('hamburger').addEventListener('click', openMenu);
+  document.getElementById('drawerClose').addEventListener('click', closeMenu);
+  overlay.addEventListener('click', closeMenu);
+  drawer.querySelectorAll('a').forEach(a=>a.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeMenu(); searchResults.style.display='none'; }});
+</script>
+</body>
+</html>

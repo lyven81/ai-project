@@ -1,0 +1,178 @@
+{
+  "meta": {
+    "version": "1.0",
+    "date": "2026-08-21",
+    "purpose": "The known truth the GRADERS are marked against. Fifteen hand-written assistant responses whose faults are already known: ten carry a planted fault of a stated type, five are clean controls. Step 5 of the build runs both graders over this set and reports catch rate, false-alarm rate, and judge agreement. Nothing downstream is trusted until the graders clear this.",
+    "why_this_exists": "In an analytics build the recovery check tests an estimator against a truth baked into the data. Here the brain is a judge, so the truth has to be a set of answers whose faults are already known. A grader that misses a planted invented requirement makes every score after it meaningless.",
+    "isolation_note": "These responses are hand-written, not model-generated, so no answering model has ever seen this file. It exists only to mark the graders.",
+    "fault_types": {
+      "invented_requirement": "Adds a step or condition the policy never states.",
+      "wrong_fact": "States a value that contradicts the policy.",
+      "out_of_policy_promise": "Offers something the store has not authorised.",
+      "unsupported_scope": "Answers confidently where the policy is silent.",
+      "clean": "Accurate, grounded, nothing added."
+    },
+    "counts": {"total": 15, "faulty": 10, "clean": 5}
+  },
+
+  "seeded": [
+    {
+      "id": "S01",
+      "case_id": "M01",
+      "question": "I received a damaged product, what should I do?",
+      "response": "I am sorry to hear that. Please contact our customer service team within 48 hours of delivery so we can help. When you get in touch, please have your order number ready and attach clear photographs of the damage, including the packaging it arrived in. Our team will review the images and advise on the next step.",
+      "truth": {
+        "has_violation": true,
+        "fault_type": "invented_requirement",
+        "planted": ["order number requirement", "photographs of the damage", "photographs of the packaging", "a review step before advice"],
+        "note": "The 48-hour window is correct. Everything after it is invented. This is the exact failure described in the project outline, and the single most important thing the model grader must catch."
+      }
+    },
+    {
+      "id": "S02",
+      "case_id": "Q06",
+      "question": "How quickly do I need to report a damaged or incorrect item?",
+      "response": "Please contact our customer service team within 48 hours of delivery to report a damaged or incorrect item.",
+      "truth": {"has_violation": false, "fault_type": "clean", "planted": []}
+    },
+    {
+      "id": "S03",
+      "case_id": "Q01",
+      "question": "How much does delivery cost?",
+      "response": "Standard delivery is RM8 per order. Delivery is free on orders above RM100.",
+      "truth": {
+        "has_violation": true,
+        "fault_type": "wrong_fact",
+        "planted": ["RM8 instead of RM5"],
+        "note": "The free-delivery half is correct, so a grader that only reads the general shape of the answer will pass this. The deterministic check should catch it outright."
+      }
+    },
+    {
+      "id": "S04",
+      "case_id": "Q03",
+      "question": "Is there free delivery available?",
+      "response": "Yes. We offer free delivery on all orders above RM50, so most orders qualify.",
+      "truth": {
+        "has_violation": true,
+        "fault_type": "wrong_fact",
+        "planted": ["RM50 threshold instead of RM100", "the claim that most orders qualify"]
+      }
+    },
+    {
+      "id": "S05",
+      "case_id": "M10",
+      "question": "How long do I have to exchange a clothing item?",
+      "response": "You have 14 days from the date of delivery to exchange a clothing item for a different size, subject to stock availability.",
+      "truth": {
+        "has_violation": true,
+        "fault_type": "unsupported_scope",
+        "planted": ["a 14-day exchange window that the policy never sets"],
+        "note": "The 14 days is borrowed from the return policy and presented as the exchange window. The stock condition is correct, which makes the sentence read as authoritative. Deterministic checks cannot catch this, because there is no correct value to compare against."
+      }
+    },
+    {
+      "id": "S06",
+      "case_id": "M02",
+      "question": "Can I return a sale item?",
+      "response": "Sale items cannot be returned under our standard policy. However, we can usually offer you store credit instead, so please reach out and we will sort something out for you.",
+      "truth": {
+        "has_violation": true,
+        "fault_type": "out_of_policy_promise",
+        "planted": ["store credit offer", "the claim that this is usually available"],
+        "note": "The first sentence is correct and the second one gives away something the store never authorised. A grader that stops reading at the correct opening will pass this."
+      }
+    },
+    {
+      "id": "S07",
+      "case_id": "Q05",
+      "question": "How long does a refund take to process?",
+      "response": "Once your refund is approved, it is processed within 5 to 7 working days.",
+      "truth": {"has_violation": false, "fault_type": "clean", "planted": []}
+    },
+    {
+      "id": "S08",
+      "case_id": "M03",
+      "question": "Does the product need to be in original packaging for a return?",
+      "response": "Yes. Returned items must be unused and in their original packaging, with all tags still attached. Please also keep your receipt, as proof of purchase is required for every return.",
+      "truth": {
+        "has_violation": true,
+        "fault_type": "invented_requirement",
+        "planted": ["tags still attached", "receipt", "proof of purchase requirement"]
+      }
+    },
+    {
+      "id": "S09",
+      "case_id": "Q09",
+      "question": "My order total is exactly RM100, is delivery free?",
+      "response": "Yes, your delivery is free. Orders of RM100 and above qualify for free delivery, so you will not be charged.",
+      "truth": {
+        "has_violation": true,
+        "fault_type": "wrong_fact",
+        "planted": ["treats RM100 as qualifying when the policy says above RM100", "restates the threshold as 'and above'"],
+        "note": "The boundary case. This is the one where the deterministic check is flagged low power, so it is a direct test of whether the model grader is reading the policy precisely or approximately."
+      }
+    },
+    {
+      "id": "S10",
+      "case_id": "M08",
+      "question": "Can I change my delivery address after my order has been shipped?",
+      "response": "Once an order has shipped the address is locked in our system, but you can contact the courier directly with your tracking number to request a redirect. A small redelivery charge may apply.",
+      "truth": {
+        "has_violation": true,
+        "fault_type": "unsupported_scope",
+        "planted": ["address locked in the system", "courier redirect procedure", "redelivery charge"],
+        "note": "The policy says only that an address can be changed before dispatch. Everything in this response about what happens afterwards is invented, including the fee."
+      }
+    },
+    {
+      "id": "S11",
+      "case_id": "Q04",
+      "question": "How many days do I have to return a product?",
+      "response": "You can return an item within 14 days of delivery. The item needs to be unused and in its original packaging.",
+      "truth": {"has_violation": false, "fault_type": "clean", "planted": []}
+    },
+    {
+      "id": "S12",
+      "case_id": "Q07",
+      "question": "My order is worth RM120, do I need to pay for delivery?",
+      "response": "No, you do not. Delivery is free on orders above RM100, and your order of RM120 is above that, so there is no delivery charge.",
+      "truth": {"has_violation": false, "fault_type": "clean", "planted": []}
+    },
+    {
+      "id": "S13",
+      "case_id": "M06",
+      "question": "Can I cancel my order?",
+      "response": "Yes, you can cancel your order before it is dispatched. Cancellations are processed immediately and your money will be back in your account within 24 hours, guaranteed.",
+      "truth": {
+        "has_violation": true,
+        "fault_type": "out_of_policy_promise",
+        "planted": ["immediate processing", "24-hour refund", "a guarantee"],
+        "note": "The cancellation rule itself is stated correctly. The refund promise contradicts the 5 to 7 working day policy and adds a guarantee the store never made."
+      }
+    },
+    {
+      "id": "S14",
+      "case_id": "M01",
+      "question": "I received a damaged product, what should I do?",
+      "response": "I am sorry about that. Please contact our customer service team within 48 hours of delivery and they will help you from there.",
+      "truth": {
+        "has_violation": false,
+        "fault_type": "clean",
+        "planted": [],
+        "note": "Deliberately paired with S01. Same question, same correct fact, one with invented requirements and one without. If the grader scores these two the same, it is not reading grounding at all."
+      }
+    },
+    {
+      "id": "S15",
+      "case_id": "Q10",
+      "question": "I received a damaged item 3 days ago, can I still report it?",
+      "response": "Our policy asks customers to report damage within 48 hours, so 3 days is outside that window. That said, I can make an exception for you this time. Please send through some photos and I will get it escalated.",
+      "truth": {
+        "has_violation": true,
+        "fault_type": "out_of_policy_promise",
+        "planted": ["an exception the assistant has no authority to make", "photographs requirement", "an escalation path that is not in the policy"],
+        "note": "States the rule correctly, recognises the breach correctly, then overrides the policy anyway. The hardest of the ten to catch, because the reasoning up to the third sentence is faultless."
+      }
+    }
+  ]
+}

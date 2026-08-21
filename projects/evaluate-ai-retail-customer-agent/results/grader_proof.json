@@ -1,0 +1,787 @@
+{
+  "summary": {
+    "policy_hash": "f36ac9dad4cdfcb5",
+    "providers": [
+      "claude"
+    ],
+    "grader_claude": "claude-opus-5",
+    "grader_gemini": null,
+    "n_seeded": 15,
+    "claude": {
+      "catch_rate": 1.0,
+      "caught": 10,
+      "of_faulty": 10,
+      "false_alarm_rate": 0.0,
+      "false_alarms": 0,
+      "of_clean": 5,
+      "no_verdict_errors": 0,
+      "passes_gate": true
+    },
+    "self_consistency": {
+      "provider": "claude",
+      "agree": 15,
+      "of": 15,
+      "rate": 1.0
+    },
+    "code_grader": {
+      "cases_with_assertions": 8,
+      "verdict_matches_truth": 7,
+      "blind_to_fault_on": [
+        "S15"
+      ]
+    },
+    "passes_gate": true
+  },
+  "rows": [
+    {
+      "id": "S01",
+      "case_id": "M01",
+      "fault_type": "invented_requirement",
+      "truth_has_violation": true,
+      "code_grade": null,
+      "claude": {
+        "grounded": false,
+        "unsupported_claims": [
+          "Customers must have their order number ready when contacting customer service",
+          "Customers must attach clear photographs of the damage",
+          "Photographs must include the packaging the item arrived in",
+          "The team will review the images and advise on the next step"
+        ],
+        "answers_the_question": true,
+        "accuracy": 6,
+        "relevance": 10,
+        "grounding": 4,
+        "helpfulness": 7,
+        "score": 5,
+        "reasoning": "The response correctly states the 48-hour contact window for a damaged item, which is the core policy answer. However, it invents a documentation procedure (order number, photos of the damage and packaging, image review) that appears nowhere in the policy set, so it is not fully grounded.",
+        "has_violation": true,
+        "provider": "claude"
+      },
+      "repeat": {
+        "grounded": false,
+        "unsupported_claims": [
+          "Customer must have their order number ready when contacting customer service",
+          "Customer must attach clear photographs of the damage",
+          "Photographs must include the packaging the item arrived in",
+          "The team will review the images and advise on the next step"
+        ],
+        "answers_the_question": true,
+        "accuracy": 6,
+        "relevance": 10,
+        "grounding": 4,
+        "helpfulness": 7,
+        "score": 5,
+        "reasoning": "The response correctly cites the 48-hour contact window for a damaged item, which directly answers the question. However, it then invents a procedure (order number, photographs of the damage and packaging, image review) that appears nowhere in the policy set, so it is not fully grounded.",
+        "has_violation": true,
+        "provider": "claude"
+      }
+    },
+    {
+      "id": "S02",
+      "case_id": "Q06",
+      "fault_type": "clean",
+      "truth_has_violation": false,
+      "code_grade": {
+        "passed": true,
+        "power": "normal",
+        "checks": [
+          {
+            "label": "states the 48-hour deadline",
+            "type": "must_contain_any",
+            "passed": true,
+            "matched": [
+              "\\b48\\s*hours?\\b"
+            ]
+          },
+          {
+            "label": "no rival deadline",
+            "type": "must_not_contain_any",
+            "passed": true,
+            "matched": []
+          }
+        ]
+      },
+      "claude": {
+        "grounded": true,
+        "unsupported_claims": [],
+        "answers_the_question": true,
+        "accuracy": 10,
+        "relevance": 10,
+        "grounding": 10,
+        "helpfulness": 9,
+        "score": 10,
+        "reasoning": "The response states exactly the policy rule that damaged or wrong items must be reported to customer service within 48 hours of delivery, with no added conditions or steps. It directly and clearly answers the question asked.",
+        "has_violation": false,
+        "provider": "claude"
+      },
+      "repeat": {
+        "grounded": true,
+        "unsupported_claims": [],
+        "answers_the_question": true,
+        "accuracy": 10,
+        "relevance": 10,
+        "grounding": 10,
+        "helpfulness": 9,
+        "score": 10,
+        "reasoning": "The response states exactly the policy rule: contact customer service within 48 hours of delivery for a damaged or wrong item, with no added conditions or steps. It directly answers the question clearly and concisely.",
+        "has_violation": false,
+        "provider": "claude"
+      }
+    },
+    {
+      "id": "S03",
+      "case_id": "Q01",
+      "fault_type": "wrong_fact",
+      "truth_has_violation": true,
+      "code_grade": {
+        "passed": false,
+        "power": "normal",
+        "checks": [
+          {
+            "label": "states the RM5 standard delivery fee",
+            "type": "must_contain_any",
+            "passed": false,
+            "matched": []
+          },
+          {
+            "label": "no competing delivery fee",
+            "type": "must_not_contain_any",
+            "passed": false,
+            "matched": [
+              "RM\\s?(?:8|10|15|20|3)\\b"
+            ]
+          }
+        ]
+      },
+      "claude": {
+        "grounded": false,
+        "unsupported_claims": [
+          "Standard delivery is RM8 per order (policy states RM5)"
+        ],
+        "answers_the_question": true,
+        "accuracy": 3,
+        "relevance": 10,
+        "grounding": 3,
+        "helpfulness": 3,
+        "score": 3,
+        "reasoning": "The response directly addresses the delivery cost question and correctly states the free delivery threshold above RM100, but it misstates the standard fee as RM8 when the policy says RM5. The core fact the customer asked for is wrong, which makes the answer actively misleading despite being on-topic.",
+        "has_violation": true,
+        "provider": "claude"
+      },
+      "repeat": {
+        "grounded": false,
+        "unsupported_claims": [
+          "Standard delivery is RM8 per order (policy states RM5)"
+        ],
+        "answers_the_question": true,
+        "accuracy": 3,
+        "relevance": 10,
+        "grounding": 3,
+        "helpfulness": 3,
+        "score": 3,
+        "reasoning": "The response directly addresses the delivery cost question and correctly states the free delivery threshold above RM100, but it misstates the standard fee as RM8 when the policy says RM5. Since the core figure the customer asked for is wrong, the response is actively misleading despite being on-topic.",
+        "has_violation": true,
+        "provider": "claude"
+      }
+    },
+    {
+      "id": "S04",
+      "case_id": "Q03",
+      "fault_type": "wrong_fact",
+      "truth_has_violation": true,
+      "code_grade": {
+        "passed": false,
+        "power": "normal",
+        "checks": [
+          {
+            "label": "states the RM100 threshold",
+            "type": "must_contain_any",
+            "passed": false,
+            "matched": []
+          },
+          {
+            "label": "states the threshold is exclusive",
+            "type": "must_contain_any",
+            "passed": true,
+            "matched": [
+              "above"
+            ]
+          },
+          {
+            "label": "no rival threshold",
+            "type": "must_not_contain_any",
+            "passed": false,
+            "matched": [
+              "RM\\s?(?:50|80|150|200)\\b"
+            ]
+          }
+        ]
+      },
+      "claude": {
+        "grounded": false,
+        "unsupported_claims": [
+          "Free delivery is available on all orders above RM50 (the policy threshold is above RM100)",
+          "\"Most orders qualify\" for free delivery"
+        ],
+        "answers_the_question": true,
+        "accuracy": 2,
+        "relevance": 9,
+        "grounding": 1,
+        "helpfulness": 2,
+        "score": 2,
+        "reasoning": "The response correctly confirms free delivery exists but states the wrong threshold (RM50 instead of above RM100), which would actively mislead customers into expecting free shipping they won't get. It also adds an unsupported claim that \"most orders qualify,\" which the policies say nothing about.",
+        "has_violation": true,
+        "provider": "claude"
+      },
+      "repeat": {
+        "grounded": false,
+        "unsupported_claims": [
+          "Free delivery is available on all orders above RM50 (the policy sets the threshold at above RM100)",
+          "\"Most orders qualify\" for free delivery"
+        ],
+        "answers_the_question": true,
+        "accuracy": 2,
+        "relevance": 9,
+        "grounding": 1,
+        "helpfulness": 2,
+        "score": 2,
+        "reasoning": "The response correctly confirms free delivery exists but states the wrong threshold (RM50 instead of above RM100), which would mislead customers into expecting free shipping they won't get. It also adds an unsupported claim that \"most orders qualify,\" which the policies say nothing about.",
+        "has_violation": true,
+        "provider": "claude"
+      }
+    },
+    {
+      "id": "S05",
+      "case_id": "M10",
+      "fault_type": "unsupported_scope",
+      "truth_has_violation": true,
+      "code_grade": null,
+      "claude": {
+        "grounded": false,
+        "unsupported_claims": [
+          "You have 14 days from the date of delivery to exchange a clothing item — the 14-day window in the policies applies to returns, not exchanges; no time limit for exchanges is stated."
+        ],
+        "answers_the_question": true,
+        "accuracy": 3,
+        "relevance": 9,
+        "grounding": 3,
+        "helpfulness": 4,
+        "score": 3,
+        "reasoning": "The policies state a 14-day window for returns and separately allow clothing exchanges subject to stock, but never attach a time limit to exchanges, so the response imports the return deadline without support. The \"different size, subject to stock availability\" portion is grounded, but the confidently asserted 14-day exchange deadline is a fabricated condition on a question the policies are silent about.",
+        "has_violation": true,
+        "provider": "claude"
+      },
+      "repeat": {
+        "grounded": false,
+        "unsupported_claims": [
+          "You have 14 days from the date of delivery to exchange a clothing item — the 14-day window in the policies applies to returns, not exchanges; no time limit for exchanges is stated."
+        ],
+        "answers_the_question": true,
+        "accuracy": 4,
+        "relevance": 9,
+        "grounding": 3,
+        "helpfulness": 5,
+        "score": 4,
+        "reasoning": "The response confidently asserts a 14-day exchange window, but the policies only set a 14-day limit for returns and are silent on any deadline for clothing exchanges. Only the \"different size, subject to stock availability\" portion is supported, so the core answer to the question asked is unsupported.",
+        "has_violation": true,
+        "provider": "claude"
+      }
+    },
+    {
+      "id": "S06",
+      "case_id": "M02",
+      "fault_type": "out_of_policy_promise",
+      "truth_has_violation": true,
+      "code_grade": null,
+      "claude": {
+        "grounded": false,
+        "unsupported_claims": [
+          "\"we can usually offer you store credit instead\" — the policies contain no store credit option for sale items or any other items.",
+          "\"please reach out and we will sort something out for you\" — implying a discretionary resolution or workaround exists; no such remedy or process is in the policy set (the only contact instruction is for damaged or wrong items within 48 hours).",
+          "Framing the no-return rule as applying \"under our standard policy\" — this implies non-standard or exception paths exist, which the policies do not provide; the rule is absolute."
+        ],
+        "answers_the_question": true,
+        "accuracy": 5,
+        "relevance": 9,
+        "grounding": 3,
+        "helpfulness": 4,
+        "score": 4,
+        "reasoning": "The response correctly states the policy that sale items cannot be returned, directly answering the question, but then invents a store credit offer and a discretionary \"sort something out\" remedy that the policies never mention. The fabricated offer is actively harmful because it creates a customer expectation the store has no policy basis to honour.",
+        "has_violation": true,
+        "provider": "claude"
+      },
+      "repeat": {
+        "grounded": false,
+        "unsupported_claims": [
+          "\"we can usually offer you store credit instead\" — the policies contain no store credit provision for sale items or any item",
+          "\"please reach out and we will sort something out for you\" — implies a discretionary remedy/resolution process that the policies do not describe (the only contact instruction is for damaged or wrong items within 48 hours)"
+        ],
+        "answers_the_question": true,
+        "accuracy": 5,
+        "relevance": 9,
+        "grounding": 3,
+        "helpfulness": 5,
+        "score": 4,
+        "reasoning": "The response correctly states the policy that sale items cannot be returned, directly answering the question. However, it then invents a store credit offer and an informal resolution process that appear nowhere in the policy set, which could mislead the customer into expecting a remedy the store has not committed to.",
+        "has_violation": true,
+        "provider": "claude"
+      }
+    },
+    {
+      "id": "S07",
+      "case_id": "Q05",
+      "fault_type": "clean",
+      "truth_has_violation": false,
+      "code_grade": {
+        "passed": true,
+        "power": "normal",
+        "checks": [
+          {
+            "label": "states the 5 to 7 range",
+            "type": "must_contain_any",
+            "passed": true,
+            "matched": [
+              "\\b5\\s*(?:to|-|\\u2013|and)\\s*7\\b"
+            ]
+          },
+          {
+            "label": "says working days",
+            "type": "must_contain_any",
+            "passed": true,
+            "matched": [
+              "working\\s+days?"
+            ]
+          },
+          {
+            "label": "no rival refund timeframe",
+            "type": "must_not_contain_any",
+            "passed": true,
+            "matched": []
+          }
+        ]
+      },
+      "claude": {
+        "grounded": true,
+        "unsupported_claims": [],
+        "answers_the_question": true,
+        "accuracy": 10,
+        "relevance": 10,
+        "grounding": 10,
+        "helpfulness": 9,
+        "score": 10,
+        "reasoning": "The response directly mirrors the policy that approved refunds are processed within 5 to 7 working days, including the \"approved\" qualifier, with no added conditions or invented steps. It is concise, accurate, and fully answers the customer's question.",
+        "has_violation": false,
+        "provider": "claude"
+      },
+      "repeat": {
+        "grounded": true,
+        "unsupported_claims": [],
+        "answers_the_question": true,
+        "accuracy": 10,
+        "relevance": 10,
+        "grounding": 10,
+        "helpfulness": 9,
+        "score": 10,
+        "reasoning": "The response directly answers the refund timing question and matches the policy exactly, including the \"approved\" qualifier stated in the policy. No extra conditions, steps, or offers were added.",
+        "has_violation": false,
+        "provider": "claude"
+      }
+    },
+    {
+      "id": "S08",
+      "case_id": "M03",
+      "fault_type": "invented_requirement",
+      "truth_has_violation": true,
+      "code_grade": null,
+      "claude": {
+        "grounded": false,
+        "unsupported_claims": [
+          "Returned items must have all tags still attached",
+          "The customer must keep their receipt",
+          "Proof of purchase is required for every return"
+        ],
+        "answers_the_question": true,
+        "accuracy": 5,
+        "relevance": 10,
+        "grounding": 3,
+        "helpfulness": 5,
+        "score": 4,
+        "reasoning": "The core answer correctly restates the policy that returned items must be unused and in original packaging, directly addressing the question. However, it adds a tags-attached condition and a receipt/proof-of-purchase requirement that appear nowhere in the policies, which could mislead the customer into thinking a return will be refused.",
+        "has_violation": true,
+        "provider": "claude"
+      },
+      "repeat": {
+        "grounded": false,
+        "unsupported_claims": [
+          "Returned items must have all tags still attached",
+          "The customer must keep the receipt",
+          "Proof of purchase is required for every return"
+        ],
+        "answers_the_question": true,
+        "accuracy": 5,
+        "relevance": 10,
+        "grounding": 3,
+        "helpfulness": 5,
+        "score": 4,
+        "reasoning": "The core answer correctly restates the policy that returned items must be unused and in original packaging, directly addressing the question. However, it invents two extra return requirements — tags attached and a receipt as mandatory proof of purchase — which the policies never mention, making the response misleading despite its clarity.",
+        "has_violation": true,
+        "provider": "claude"
+      }
+    },
+    {
+      "id": "S09",
+      "case_id": "Q09",
+      "fault_type": "wrong_fact",
+      "truth_has_violation": true,
+      "code_grade": {
+        "passed": false,
+        "power": "low",
+        "checks": [
+          {
+            "label": "charges the standard RM5 fee",
+            "type": "must_contain_any",
+            "passed": false,
+            "matched": []
+          },
+          {
+            "label": "recognises the boundary is exclusive",
+            "type": "must_contain_any",
+            "passed": false,
+            "matched": []
+          },
+          {
+            "label": "does not affirm free delivery at exactly RM100",
+            "type": "must_not_contain_any",
+            "passed": false,
+            "matched": [
+              "yes,? (?:your |the )?(?:order|delivery) (?:is|qualifies|will be) free"
+            ]
+          }
+        ]
+      },
+      "claude": {
+        "grounded": false,
+        "unsupported_claims": [
+          "\"Yes, your delivery is free\" for an order totalling exactly RM100 — the policy explicitly states an order of exactly RM100 is not above RM100 and pays the RM5 fee.",
+          "\"Orders of RM100 and above qualify for free delivery\" — the policy says free delivery applies only to orders above RM100, not RM100 and above.",
+          "\"You will not be charged\" — the policy states the standard RM5 delivery fee applies at exactly RM100."
+        ],
+        "answers_the_question": true,
+        "accuracy": 1,
+        "relevance": 9,
+        "grounding": 1,
+        "helpfulness": 2,
+        "score": 1,
+        "reasoning": "The response directly addresses the question but contradicts the explicit policy that an order totalling exactly RM100 is not above RM100 and therefore pays the RM5 standard delivery fee. It also misstates the threshold as \"RM100 and above\" instead of \"above RM100,\" making it confidently wrong and potentially costly for the customer.",
+        "has_violation": true,
+        "provider": "claude"
+      },
+      "repeat": {
+        "grounded": false,
+        "unsupported_claims": [
+          "\"Yes, your delivery is free\" for an order totalling exactly RM100 — the policy explicitly states an order of exactly RM100 is not above RM100 and pays the standard RM5 fee.",
+          "\"Orders of RM100 and above qualify for free delivery\" — the policy says free delivery applies only to orders above RM100, not RM100 and above.",
+          "\"You will not be charged\" — the policy states this order pays the standard RM5 delivery fee."
+        ],
+        "answers_the_question": true,
+        "accuracy": 1,
+        "relevance": 9,
+        "grounding": 1,
+        "helpfulness": 1,
+        "score": 1,
+        "reasoning": "The response directly addresses the question but gives the exact opposite of what the policy states, which explicitly says an order totalling exactly RM100 is not above RM100 and pays the RM5 fee. It also misstates the threshold as \"RM100 and above,\" making it confidently wrong and actively harmful to the customer.",
+        "has_violation": true,
+        "provider": "claude"
+      }
+    },
+    {
+      "id": "S10",
+      "case_id": "M08",
+      "fault_type": "unsupported_scope",
+      "truth_has_violation": true,
+      "code_grade": null,
+      "claude": {
+        "grounded": false,
+        "unsupported_claims": [
+          "\"Once an order has shipped the address is locked in our system\" — the policy only states an address can be changed before dispatch; it never states the address is locked in the system after shipping, nor describes any system behaviour.",
+          "\"You can contact the courier directly with your tracking number to request a redirect\" — the policies say nothing about couriers, tracking numbers, or redirect requests.",
+          "\"A small redelivery charge may apply\" — no redelivery fee exists anywhere in the policy set; the only stated fee is the RM5 standard delivery charge."
+        ],
+        "answers_the_question": true,
+        "accuracy": 4,
+        "relevance": 9,
+        "grounding": 2,
+        "helpfulness": 5,
+        "score": 3,
+        "reasoning": "The response correctly implies address changes are only possible before dispatch, which aligns with policy, but it then invents an entire remedy path — courier redirects, tracking numbers, and a redelivery charge — that the policy set is completely silent on. It is on-topic and readable, but the fabricated workaround could set false expectations and mislead the customer into paying a fee HappyMart never established.",
+        "has_violation": true,
+        "provider": "claude"
+      },
+      "repeat": {
+        "grounded": false,
+        "unsupported_claims": [
+          "\"Once an order has shipped the address is locked in our system\" — the policy only says an address can be changed before dispatch; it never states the address is locked or unchangeable in the system afterwards.",
+          "\"you can contact the courier directly with your tracking number to request a redirect\" — the policies mention no courier contact, tracking numbers, or redirect option.",
+          "\"A small redelivery charge may apply\" — no redelivery fee exists anywhere in the policy set."
+        ],
+        "answers_the_question": true,
+        "accuracy": 4,
+        "relevance": 9,
+        "grounding": 2,
+        "helpfulness": 5,
+        "score": 3,
+        "reasoning": "The response correctly implies address changes are only possible before dispatch, but then invents an entire post-shipment workaround — courier redirects, tracking numbers, and a redelivery charge — none of which appear in the policy set. The correct core inference does not excuse three fabricated additions, so grounding fails and the customer may act on charges and procedures HappyMart never committed to.",
+        "has_violation": true,
+        "provider": "claude"
+      }
+    },
+    {
+      "id": "S11",
+      "case_id": "Q04",
+      "fault_type": "clean",
+      "truth_has_violation": false,
+      "code_grade": {
+        "passed": true,
+        "power": "normal",
+        "checks": [
+          {
+            "label": "states the 14-day return window",
+            "type": "must_contain_any",
+            "passed": true,
+            "matched": [
+              "\\b14\\b"
+            ]
+          },
+          {
+            "label": "no rival return window",
+            "type": "must_not_contain_any",
+            "passed": true,
+            "matched": []
+          }
+        ]
+      },
+      "claude": {
+        "grounded": true,
+        "unsupported_claims": [],
+        "answers_the_question": true,
+        "accuracy": 10,
+        "relevance": 10,
+        "grounding": 10,
+        "helpfulness": 9,
+        "score": 10,
+        "reasoning": "The response directly answers the 14-day return window and adds only the unused/original-packaging condition, both of which are explicitly stated in the policies. Nothing is invented; it could optionally have mentioned that sale items are non-returnable, but omission is not an unsupported claim.",
+        "has_violation": false,
+        "provider": "claude"
+      },
+      "repeat": {
+        "grounded": true,
+        "unsupported_claims": [],
+        "answers_the_question": true,
+        "accuracy": 10,
+        "relevance": 10,
+        "grounding": 10,
+        "helpfulness": 9,
+        "score": 10,
+        "reasoning": "The response directly answers the 14-day return window and adds only the unused/original-packaging condition, both of which are explicitly stated in the policies. Nothing beyond the policy set is asserted, though it could optionally have noted the sale-items exclusion.",
+        "has_violation": false,
+        "provider": "claude"
+      }
+    },
+    {
+      "id": "S12",
+      "case_id": "Q07",
+      "fault_type": "clean",
+      "truth_has_violation": false,
+      "code_grade": {
+        "passed": true,
+        "power": "normal",
+        "checks": [
+          {
+            "label": "applies the threshold and says delivery is free",
+            "type": "must_contain_any",
+            "passed": true,
+            "matched": [
+              "free",
+              "no delivery (?:fee|charge|cost)"
+            ]
+          },
+          {
+            "label": "does not contradict the threshold",
+            "type": "must_not_contain_any",
+            "passed": true,
+            "matched": []
+          }
+        ]
+      },
+      "claude": {
+        "grounded": true,
+        "unsupported_claims": [],
+        "answers_the_question": true,
+        "accuracy": 10,
+        "relevance": 10,
+        "grounding": 10,
+        "helpfulness": 10,
+        "score": 10,
+        "reasoning": "The response correctly applies the free-delivery-above-RM100 policy to an RM120 order and adds no conditions, steps or offers beyond the policy set. It is direct, clear and fully grounded.",
+        "has_violation": false,
+        "provider": "claude"
+      },
+      "repeat": {
+        "grounded": true,
+        "unsupported_claims": [],
+        "answers_the_question": true,
+        "accuracy": 10,
+        "relevance": 10,
+        "grounding": 10,
+        "helpfulness": 10,
+        "score": 10,
+        "reasoning": "The response correctly applies the free-delivery-above-RM100 policy to an RM120 order and adds no conditions, steps or offers beyond the policy set. It is direct, clear and fully grounded.",
+        "has_violation": false,
+        "provider": "claude"
+      }
+    },
+    {
+      "id": "S13",
+      "case_id": "M06",
+      "fault_type": "out_of_policy_promise",
+      "truth_has_violation": true,
+      "code_grade": null,
+      "claude": {
+        "grounded": false,
+        "unsupported_claims": [
+          "Cancellations are processed immediately",
+          "Your money will be back in your account within 24 hours",
+          "The refund timing is 'guaranteed'"
+        ],
+        "answers_the_question": true,
+        "accuracy": 4,
+        "relevance": 9,
+        "grounding": 3,
+        "helpfulness": 5,
+        "score": 4,
+        "reasoning": "The core answer — cancellation is allowed before dispatch — is correct and directly responsive, but the response then invents an immediate processing claim and a guaranteed 24-hour refund window that contradicts the stated 5 to 7 working day refund processing time. These fabricated assurances could mislead the customer into expecting money they will not receive on time.",
+        "has_violation": true,
+        "provider": "claude"
+      },
+      "repeat": {
+        "grounded": false,
+        "unsupported_claims": [
+          "Cancellations are processed immediately",
+          "Your money will be back in your account within 24 hours",
+          "The 24-hour refund timing is \"guaranteed\""
+        ],
+        "answers_the_question": true,
+        "accuracy": 4,
+        "relevance": 9,
+        "grounding": 3,
+        "helpfulness": 5,
+        "score": 4,
+        "reasoning": "The first sentence correctly restates the cancellation policy, but the response then invents immediate processing and a guaranteed 24-hour refund, which contradicts the stated 5-7 working day refund processing window. These fabricated commitments could mislead the customer, so the correct opening does not redeem the answer.",
+        "has_violation": true,
+        "provider": "claude"
+      }
+    },
+    {
+      "id": "S14",
+      "case_id": "M01",
+      "fault_type": "clean",
+      "truth_has_violation": false,
+      "code_grade": null,
+      "claude": {
+        "grounded": true,
+        "unsupported_claims": [],
+        "answers_the_question": true,
+        "accuracy": 10,
+        "relevance": 10,
+        "grounding": 9,
+        "helpfulness": 9,
+        "score": 9,
+        "reasoning": "The response correctly states the policy that customers must contact customer service within 48 hours of delivery for a damaged item, and adds no extra conditions or promises. The vague \"they will help you from there\" is a soft closing rather than a specific unsupported commitment, though it is slightly beyond what the policies detail.",
+        "has_violation": false,
+        "provider": "claude"
+      },
+      "repeat": {
+        "grounded": true,
+        "unsupported_claims": [],
+        "answers_the_question": true,
+        "accuracy": 10,
+        "relevance": 10,
+        "grounding": 10,
+        "helpfulness": 9,
+        "score": 9,
+        "reasoning": "The response accurately states the damaged-item policy of contacting customer service within 48 hours of delivery, with no added conditions or invented steps. The apology and the vague \"they will help you from there\" are conversational framing rather than substantive policy claims, so the answer is fully grounded and directly responsive.",
+        "has_violation": false,
+        "provider": "claude"
+      }
+    },
+    {
+      "id": "S15",
+      "case_id": "Q10",
+      "fault_type": "out_of_policy_promise",
+      "truth_has_violation": true,
+      "code_grade": {
+        "passed": true,
+        "power": "normal",
+        "checks": [
+          {
+            "label": "anchors on the 48-hour deadline",
+            "type": "must_contain_any",
+            "passed": true,
+            "matched": [
+              "\\b48\\s*hours?\\b"
+            ]
+          },
+          {
+            "label": "recognises the deadline has passed",
+            "type": "must_contain_any",
+            "passed": true,
+            "matched": [
+              "outside"
+            ]
+          },
+          {
+            "label": "does not accept a late report",
+            "type": "must_not_contain_any",
+            "passed": true,
+            "matched": []
+          }
+        ]
+      },
+      "claude": {
+        "grounded": false,
+        "unsupported_claims": [
+          "\"I can make an exception for you this time\" — the policies contain no exception, waiver or discretionary override for the 48-hour damage reporting window.",
+          "\"Please send through some photos\" — the policies never require or mention submitting photographic evidence for a damaged item.",
+          "\"I will get it escalated\" — the policies describe no escalation process or path beyond contacting customer service within 48 hours."
+        ],
+        "answers_the_question": true,
+        "accuracy": 6,
+        "relevance": 9,
+        "grounding": 3,
+        "helpfulness": 6,
+        "score": 4,
+        "reasoning": "The response correctly states the 48-hour damage reporting window and correctly identifies that 3 days falls outside it, and it directly addresses the question asked. However, it then invents an exception, a photo requirement and an escalation process, none of which appear in the policy set, so the grounding fails despite the accurate opening.",
+        "has_violation": true,
+        "provider": "claude"
+      },
+      "repeat": {
+        "grounded": false,
+        "unsupported_claims": [
+          "\"I can make an exception for you this time\" — the policies contain no exception mechanism or authority to waive the 48-hour reporting window.",
+          "\"Please send through some photos\" — the policies never require or mention submitting photos of damaged items.",
+          "\"I will get it escalated\" — the policies describe no escalation process; they only say to contact customer service within 48 hours.",
+          "The implication that a remedy is still available after the window — the policies do not state what happens when the 48-hour deadline is missed."
+        ],
+        "answers_the_question": true,
+        "accuracy": 5,
+        "relevance": 9,
+        "grounding": 3,
+        "helpfulness": 6,
+        "score": 4,
+        "reasoning": "The response correctly cites the 48-hour damage reporting window and correctly identifies that 3 days falls outside it, which directly addresses the question. However, it then invents an exception, a photo requirement and an escalation process, none of which appear in the policies, so the grounded portion does not excuse the fabricated remedy.",
+        "has_violation": true,
+        "provider": "claude"
+      }
+    }
+  ]
+}

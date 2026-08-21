@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Evaluate AI Retail Customer Agent | AI Project Portfolio</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root{ --ink:#222; --paper:#fff; --hair:#dddddd; --gray:#555; --accent:#B8860B; --navy:#1E3A5F; --teal:#0D9488; }
+  html{ scroll-behavior:smooth; }
+  body{ background:var(--paper); color:var(--ink); font-family:Arial, Helvetica, sans-serif; line-height:1.6; overflow-x:hidden; }
+  a{ color:inherit; text-decoration:none; }
+  a:hover h2, a:hover h3, a:hover h4{ color:var(--accent); }
+  code{ font-family:"Courier New", monospace; font-size:.86em; background:#f2f3f5; padding:1px 5px; color:var(--navy); }
+
+  /* Masthead (shared) */
+  .masthead{ display:flex; align-items:center; justify-content:space-between; padding:14px 28px; max-width:1240px; margin:0 auto; gap:18px; }
+  .topbar{ position:sticky; top:0; z-index:120; background:#fff; box-shadow:0 1px 6px rgba(0,0,0,.06); }
+  .mast-left{ display:flex; align-items:center; gap:20px; }
+  .logo{ background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; letter-spacing:3px; font-size:.95rem; padding:8px 12px; white-space:nowrap; }
+  .mast-nav{ display:flex; gap:20px; font-family:Arial, Helvetica, sans-serif; font-size:.72rem; letter-spacing:1.4px; text-transform:uppercase; }
+  .mast-nav a:hover{ color:var(--accent); }
+  .hamburger{ display:none; flex-direction:column; gap:4px; background:none; border:none; cursor:pointer; padding:6px; }
+  .hamburger span{ width:22px; height:2px; background:#222; display:block; }
+  .rule-top{ border:none; border-top:3px solid #222; max-width:1240px; margin:0 auto; }
+
+  /* Search (shared) */
+  .search-box{ position:relative; width:200px; }
+  .search-input{ width:100%; padding:7px 30px 7px 12px; border:1px solid var(--hair); background:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; color:#222; }
+  .search-input:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(184,134,11,.15); }
+  .search-ic{ position:absolute; right:10px; top:50%; transform:translateY(-50%); color:var(--gray); font-size:.8rem; pointer-events:none; }
+  .search-results{ position:absolute; top:calc(100% + 4px); left:0; width:340px; max-width:86vw; background:#fff; border:1px solid #222; max-height:60vh; overflow-y:auto; z-index:120; display:none; }
+  .sr-item{ padding:12px 14px; border-bottom:1px solid var(--hair); }
+  .sr-item:last-child{ border-bottom:none; }
+  .sr-cat{ font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; margin-bottom:4px; color:var(--accent); }
+  .sr-title{ font-weight:700; font-size:1.02rem; color:#222; }
+  .sr-links{ font-size:.58rem; letter-spacing:.8px; text-transform:uppercase; color:var(--gray); margin-top:5px; }
+  .sr-links a:hover{ color:var(--accent); }
+  .sr-none{ padding:16px 14px; font-size:.82rem; color:var(--gray); }
+
+  /* Shared type bits */
+  .tab{ display:inline-block; background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.66rem; letter-spacing:2px; text-transform:uppercase; padding:6px 12px; }
+  .rubric{ font-family:Arial, Helvetica, sans-serif; font-size:.62rem; font-weight:700; letter-spacing:1.6px; text-transform:uppercase; color:var(--accent); display:block; margin-bottom:8px; }
+  .links{ font-family:Arial, Helvetica, sans-serif; font-size:.58rem; letter-spacing:1px; text-transform:uppercase; margin-top:10px; color:var(--gray); }
+  .links a:hover{ color:var(--accent); }
+  .lead-dek{ font-style:italic; color:#333; }
+  .tech-chip{ display:inline-block; border:1px solid var(--hair); padding:6px 12px; font-size:.72rem; letter-spacing:.3px; color:#333; white-space:nowrap; }
+  .tech-chip:hover{ border-color:var(--accent); color:var(--accent); }
+
+  /* Breadcrumb */
+  .crumb{ max-width:1240px; margin:0 auto; padding:20px 28px 0; font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--gray); }
+  .crumb a:hover{ color:var(--accent); }
+  .crumb .sep{ color:var(--hair); margin:0 8px; }
+
+  /* ===== HERO (cover image feature opener) ===== */
+  .hero{ max-width:1240px; margin:0 auto; padding:16px 28px 8px; }
+  .cover-wrap{ border:1px solid var(--hair); box-shadow:0 1px 0 rgba(30,58,95,.06); line-height:0; background:#eef1f4; }
+  .cover{ width:100%; aspect-ratio:2 / 1; object-fit:cover; display:block; }
+  .hero-copy{ padding:22px 0 6px; }
+  .hero-copy h1{ font-size:2.7rem; font-weight:900; line-height:1.03; letter-spacing:-.008em; }
+  .hero-copy .tagline{ font-style:italic; font-size:1.15rem; color:#333; margin-top:10px; max-width:60ch; }
+  .hero-tech{ display:flex; flex-wrap:wrap; gap:9px; margin-top:16px; }
+  .hero-btns{ display:flex; flex-wrap:wrap; gap:12px; margin-top:18px; }
+  .btn{ display:inline-block; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.7rem; letter-spacing:1.6px; text-transform:uppercase; padding:13px 24px; border:1px solid #222; background:#222; color:#fff; cursor:pointer; transition:.15s; }
+  .btn:hover{ background:var(--accent); border-color:var(--accent); }
+  .btn.ghost{ background:#fff; color:#222; }
+  .btn.ghost:hover{ color:var(--accent); border-color:var(--accent); background:#fff; }
+
+  /* ===== SECTION SHELL ===== */
+  .sec{ max-width:1240px; margin:0 auto; padding:26px 28px; }
+  .sec-rule{ border-top:3px solid #222; padding-top:16px; }
+  .sec .tab{ margin-bottom:14px; }
+  .sec h2{ font-size:1.7rem; font-weight:900; line-height:1.06; }
+  .sec .intro{ color:#333; font-size:1.02rem; margin-top:10px; max-width:80ch; }
+
+  /* Two-column challenge / solution */
+  .duo{ display:grid; grid-template-columns:1fr 1fr; margin-top:20px; }
+  .duo > div:first-child{ padding-right:30px; border-right:1px solid var(--hair); }
+  .duo > div:last-child{ padding-left:30px; }
+  .duo p{ color:#333; }
+
+  /* Editorial bullet list */
+  .blist{ list-style:none; margin-top:18px; border-top:1px solid var(--hair); }
+  .blist li{ padding:13px 0; border-bottom:1px solid var(--hair); color:#333; font-size:.96rem; }
+  .blist li b{ color:#222; }
+
+  /* Feature / AI grid (borderless hairline cards) */
+  .fgrid{ display:grid; grid-template-columns:repeat(3,1fr); border-top:1px solid var(--hair); margin-top:20px; }
+  .fcard{ padding:20px 22px; border-right:1px solid var(--hair); border-bottom:1px solid var(--hair); }
+  .fcard:nth-child(3n){ border-right:none; }
+  .fcard .fe{ font-size:1.5rem; }
+  .fcard h4{ font-size:1.08rem; font-weight:700; line-height:1.18; margin:9px 0 6px; }
+  .fcard p{ font-size:.9rem; color:#444; line-height:1.5; }
+
+  /* Comparison table */
+  .table-scroll{ overflow-x:auto; margin-top:20px; border-top:1px solid var(--hair); }
+  table.cmp{ width:100%; border-collapse:collapse; min-width:640px; }
+  table.cmp th, table.cmp td{ text-align:left; vertical-align:top; padding:13px 16px; border-bottom:1px solid var(--hair); font-size:.9rem; }
+  table.cmp thead th{ font-size:.62rem; font-weight:700; letter-spacing:1.2px; text-transform:uppercase; color:var(--navy); border-bottom:2px solid var(--accent); }
+  table.cmp tbody td:first-child{ font-weight:700; color:#222; white-space:nowrap; }
+  table.cmp tbody tr:hover{ background:#fbfbf8; }
+
+  /* Architecture stacks */
+  .stacks{ display:grid; grid-template-columns:repeat(2,1fr); gap:22px 34px; margin-top:20px; }
+  .stack .rubric{ margin-bottom:10px; }
+  .stack-chips{ display:flex; flex-wrap:wrap; gap:8px; }
+  .sys-list{ list-style:none; margin-top:24px; border-top:1px solid var(--hair); }
+  .sys-list li{ padding:13px 0 13px 0; border-bottom:1px solid var(--hair); color:#333; font-size:.95rem; }
+  .sys-list li b{ color:var(--navy); }
+
+  /* Metrics row */
+  .metrics{ display:grid; grid-template-columns:repeat(4,1fr); border-top:1px solid var(--hair); margin-top:20px; }
+  .metric{ padding:22px 18px; border-right:1px solid var(--hair); }
+  .metric:last-child{ border-right:none; }
+  .metric .v{ font-size:2.6rem; font-weight:900; line-height:1; color:#222; letter-spacing:-.01em; }
+  .metric .l{ font-size:.62rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--gray); margin-top:9px; }
+
+  /* CTA */
+  .cta-inner{ display:flex; align-items:center; gap:18px; flex-wrap:wrap; border-top:3px solid #222; padding-top:18px; }
+  .cta-inner h3{ font-size:1.4rem; font-weight:900; line-height:1.08; }
+  .cta-inner p{ color:var(--gray); font-size:.95rem; margin-top:4px; }
+  .cta-btns{ margin-left:auto; display:flex; gap:12px; flex-wrap:wrap; }
+
+  footer{ background:#222; max-width:1240px; margin:30px auto 0; padding:24px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; letter-spacing:.5px; color:#fff; text-align:center; }
+  .note{ max-width:1240px; margin:14px auto 0; padding:8px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.62rem; letter-spacing:1px; color:#999; }
+
+  /* Drawer (shared) */
+  .drawer{ position:fixed; top:0; left:-300px; width:280px; height:100vh; background:#fff; z-index:200; box-shadow:2px 0 14px rgba(0,0,0,.15); transition:left .28s ease; padding:74px 26px 26px; }
+  .drawer.open{ left:0; }
+  .drawer a{ display:block; font-family:Arial, Helvetica, sans-serif; font-size:.82rem; letter-spacing:1.2px; text-transform:uppercase; padding:14px 0; border-bottom:1px solid var(--hair); }
+  .overlay{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:150; }
+  .overlay.open{ display:block; }
+  .drawer-close{ position:absolute; top:20px; right:20px; font-family:Arial, Helvetica, sans-serif; font-size:1.4rem; background:none; border:none; cursor:pointer; }
+
+  @media (max-width:900px){
+    .duo{ grid-template-columns:1fr; }
+    .duo > div:first-child{ padding-right:0; border-right:none; padding-bottom:18px; border-bottom:1px solid var(--hair); margin-bottom:18px; }
+    .duo > div:last-child{ padding-left:0; }
+    .fgrid{ grid-template-columns:repeat(2,1fr); }
+    .fcard:nth-child(3n){ border-right:1px solid var(--hair); }
+    .fcard:nth-child(2n){ border-right:none; }
+    .stacks{ grid-template-columns:1fr; }
+    .metrics{ grid-template-columns:repeat(2,1fr); }
+    .metric:nth-child(2n){ border-right:none; }
+    .metric:nth-child(-n+2){ border-bottom:1px solid var(--hair); }
+    .cta-btns{ margin-left:0; }
+    .mast-nav{ display:none; }
+    .hamburger{ display:flex; }
+    .masthead{ padding:12px 16px; }
+    .mast-left{ gap:10px; min-width:0; flex:1; }
+    .logo{ font-size:.72rem; letter-spacing:1.5px; padding:6px 8px; }
+    .search-box{ flex:1; width:auto; min-width:0; }
+    .search-results{ position:fixed; top:58px; left:12px; right:12px; width:auto; max-width:none; }
+    .hero-copy h1{ font-size:2.05rem; }
+  }
+  @media (max-width:560px){
+    .fgrid{ grid-template-columns:1fr; }
+    .fcard{ border-right:none !important; }
+    .metrics{ grid-template-columns:1fr; }
+    .metric{ border-right:none; border-bottom:1px solid var(--hair); }
+    .metric:last-child{ border-bottom:none; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="overlay" id="overlay"></div>
+  <nav class="drawer" id="drawer">
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">&times;</button>
+    <a href="index.html">Home</a>
+    <a href="project-categories.html">Categories</a>
+    <a href="contact.html">Contact</a>
+    <a href="https://lyven81.github.io/data-analyst-portfolio/index.html">Data Portfolio</a>
+  </nav>
+
+  <div class="topbar">
+  <div class="masthead">
+    <div class="mast-left">
+      <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+      <a class="logo" href="index.html">AI BUILDS LAB</a>
+      <nav class="mast-nav">
+        <a href="project-categories.html">Categories</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <div class="search-box">
+        <input type="text" class="search-input" id="searchInput" autocomplete="off" placeholder="Search AI projects..." aria-label="Search AI projects">
+        <span class="search-ic">&#128269;</span>
+        <div class="search-results" id="searchResults"></div>
+      </div>
+    </div>
+  </div>
+  <hr class="rule-top">
+  </div>
+
+  <div class="crumb">
+    <a href="project-categories.html">Categories</a>
+    <span class="sep">/</span><a id="crumbCat" href="#"></a>
+    <span class="sep">/</span><span id="crumbHere"></span>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="cover-wrap"><img class="cover" id="cover" alt=""></div>
+    <div class="hero-copy">
+      <span class="rubric" id="kicker"></span>
+      <h1 id="title"></h1>
+      <p class="tagline" id="tagline"></p>
+      <div class="hero-tech" id="heroTech"></div>
+      <div class="hero-btns" id="heroBtns"></div>
+    </div>
+  </section>
+
+  <div id="body"></div>
+
+  <footer>&copy; 2026 Lee Yih Ven | AI Project Portfolio &middot; All rights reserved.</footer>
+  <div class="note">Sample Project-Showcase-E2 (TEMPLATE): project page on the index magazine system, led by the generated cover image. Sections render only when present in the PROJECT data, so simpler projects omit them. Reuse by editing only the PROJECT block at the top of the script. Deep install/deploy code lives on the matching -source.html page.</div>
+
+<script>
+  const SITE = "";
+
+  /* =================================================================
+     EDIT PER PROJECT  -  the ONLY block you change per page.
+     Copy this file, swap PROJECT, save as <slug>.html.
+     - cover     : path to the 1200x600 cover image (sits next to the page)
+     - tech      : chips under the title
+     - demoUrl / sourceUrl : buttons (relative to SITE or full https://)
+     - Any optional section can be deleted; it just won't render.
+     ================================================================= */
+  const PROJECT = {
+  "slug": "evaluate-ai-retail-customer-agent",
+  "category": "Multi-Agent Decision Systems",
+  "categoryUrl": "category-multi-agent-systems.html",
+  "title": "Evaluate AI Retail Customer Agent",
+  "tagline": "Measuring and improving how retail AI serves customers",
+  "cover": "images/evaluate-ai-retail-customer-agent/cover.jpeg",
+  "tech": [
+    "Claude Opus 5",
+    "Claude Haiku 4.5",
+    "Gemini 2.5 Flash",
+    "Python",
+    "Static HTML / JS",
+    "No API key"
+  ],
+  "demoLabel": "Live Demo",
+  "demoUrl": "https://lyven81.github.io/ai-project/projects/evaluate-ai-retail-customer-agent/demo.html",
+  "sourceUrl": "evaluate-ai-retail-customer-agent-source.html",
+  "overview": {
+    "challenge": "A retailer puts an AI assistant on the front line with its own delivery, return and refund policies loaded in. The assistant states the real 48-hour damage-reporting window and then adds requirements the shop never set, such as photographs and an order number, so customers are told to do things that are not policy. Reading five transcripts each morning cannot catch this, because the answers are fluent and mostly right, which is what makes a small sample a poor test.",
+    "solution": "This pipeline runs twenty customer questions through the assistant, grades every answer against the shop's eleven written policies, and reports which responses contain a claim the policies do not support. It then runs the identical evaluation against a second prompt, so the effect of a rewrite is measured rather than assumed. The graders themselves are marked first, against a set of answers whose faults are known in advance.",
+    "benefits": [
+      "<b>Grounding, measured:</b> every answer is checked against the eleven written policies, and each unsupported claim is named individually instead of collapsed into a score.",
+      "<b>Two independent judges:</b> Claude and Gemini grade every response blind to which prompt produced it, and their agreement is reported beside the result.",
+      "<b>Facts checked in code:</b> ten questions turn on a value with one right answer, so RM5, 5 to 7 working days and 48 hours are verified in Python with the same verdict every run.",
+      "<b>The instrument is proven first:</b> the graders are marked against fifteen answers with known faults, catching 10 of 10 planted faults with no false alarms on the five clean controls.",
+      "<b>A controlled comparison:</b> the policy file is hash-pinned and the questions, model, temperature, judges and rubric are all held still, so the prompt is the only thing that moves.",
+      "<b>A decision at the end:</b> the console reports which responses are safe to send unreviewed and which need a person to look."
+    ]
+  },
+  "differentiator": {
+    "heading": "What Makes This Different",
+    "intro": "The hard part of evaluating an assistant is trusting the evaluation. This project treats the grader as the thing that has to be proven: a set of answers with deliberately planted faults is written first, the graders are scored against it, and only then is any result about the assistant believed.",
+    "outcomes": [
+      "<b>A judge with a known catch rate:</b> 10 of 10 planted faults found, 0 false alarms on 5 clean controls, and the same verdict on every row of a repeat pass.",
+      "<b>Two graders answering different questions:</b> a model judge for grounding and Python assertions for facts, kept apart so each is read for what it can actually tell you.",
+      "<b>Blind grading:</b> version labels are stripped and the response pool is shuffled before judging, so a judge cannot favour the one called improved.",
+      "<b>A pre-registered rewrite:</b> Prompt V2 carries behaviour rules only, no fact and no number, written before the baseline results were seen."
+    ]
+  },
+  "features": [
+    {
+      "e": "📋",
+      "n": "Closed Policy Set",
+      "d": "Eleven store rules held in one hash-pinned file as the single source of truth. Every answer is judged against these and nothing else."
+    },
+    {
+      "e": "⚖️",
+      "n": "Two-Judge Model Grading",
+      "d": "Claude and Gemini each grade every response for accuracy, relevance, grounding and helpfulness, returning the specific unsupported claims rather than a summary."
+    },
+    {
+      "e": "✅",
+      "n": "Deterministic Fact Checks",
+      "d": "Ten questions carry Python assertions on values with one right answer, so a wrong delivery fee or refund window is caught identically on every run."
+    },
+    {
+      "e": "🧪",
+      "n": "Seeded Fault Set",
+      "d": "Fifteen hand-written answers, ten carrying a planted fault of a stated kind and five clean controls, used to mark the graders before any result is trusted."
+    },
+    {
+      "e": "🔬",
+      "n": "Controlled Prompt Experiment",
+      "d": "The same twenty questions run against two prompts with every other condition held still, so the measured change belongs to the prompt."
+    },
+    {
+      "e": "📖",
+      "n": "Results Console",
+      "d": "A dropdown walks question by question, showing the governing policy clause above both answers and the claims each judge named against them."
+    }
+  ],
+  "aiIntegration": [
+    {
+      "e": "🧑‍⚖️",
+      "n": "Model as Judge",
+      "d": "A model grader returns structured JSON naming each claim the policies do not support, so the output is a list you can check rather than a number you have to trust."
+    },
+    {
+      "e": "🤝",
+      "n": "Cross-Provider Agreement",
+      "d": "Running one rubric through two providers turns a single judge's opinion into a measurable agreement rate, here 88 percent across 40 responses."
+    },
+    {
+      "e": "🚧",
+      "n": "Layer Isolation",
+      "d": "The answering layer receives the question and the policies only, and the judges never see which prompt version produced a response."
+    },
+    {
+      "e": "📐",
+      "n": "Grader Calibration",
+      "d": "The graders are scored against known faults before use, so every number downstream inherits a measured catch rate instead of an assumption."
+    }
+  ],
+  "architecture": {
+    "stacks": [
+      {
+        "label": "Answering Layer",
+        "items": [
+          "Claude Haiku 4.5",
+          "Temperature 0",
+          "Python",
+          "Prompt V1 and V2"
+        ]
+      },
+      {
+        "label": "Grading Layer",
+        "items": [
+          "Claude Opus 5",
+          "Gemini 2.5 Flash",
+          "Structured JSON output",
+          "Python assertions"
+        ]
+      },
+      {
+        "label": "Console & Deployment",
+        "items": [
+          "Static HTML / JS",
+          "Generated from frozen results",
+          "GitHub Pages",
+          "No API key"
+        ]
+      }
+    ],
+    "system": [
+      "<b>Answer once, grade many times:</b> the forty responses are generated at temperature 0 and frozen to a file, so a second judge can be added later without changing what was judged.",
+      "<b>Isolation by signature:</b> the answering function takes the question string and never a test case, so the answer key structurally cannot reach it.",
+      "<b>Hash-pinned policies:</b> the policy file hash is written into every results file, so two runs made against different policies can never be compared by accident.",
+      "<b>Generated console:</b> the page is emitted by a build script that reads the results files, so no figure shown on it is typed by hand."
+    ]
+  },
+  "metrics": [
+    {
+      "v": "10/10",
+      "l": "Planted faults the grader caught"
+    },
+    {
+      "v": "88%",
+      "l": "Agreement between the two judges"
+    },
+    {
+      "v": "11 to 5",
+      "l": "Responses with an unsupported claim, V1 to V2"
+    },
+    {
+      "v": "9/10",
+      "l": "Fact checks passed, unchanged by the rewrite"
+    }
+  ],
+  "businessValue": [
+    "<b>A release decision, not a feeling:</b> tells an operations lead which answers can go to a customer unreviewed and which need a person.",
+    "<b>Change verified, not assumed:</b> a prompt rewrite is measured under held conditions instead of judged by reading a handful of transcripts.",
+    "<b>Catches invented policy:</b> surfaces answers that sound right while adding requirements the shop never set, which is what turns into disputes later.",
+    "<b>Portable method:</b> the harness is not specific to this shop. Swap the policy file and the questions and the same evaluation runs."
+  ],
+  "cta": "Want this evaluation harness pointed at your own assistant and policies? Let's scope it."
+};
+  /* ===================== END EDIT BLOCK ===================== */
+
+  const pref = (u) => /^https?:|^mailto:|^tel:/.test(u || '') ? u : (SITE + (u || ''));
+  const esc = (s) => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  // allow <b>...</b> and <code>...</code> that we intentionally put in the data
+  const rich = (s) => esc(s).replace(/&lt;(\/?(?:b|code))&gt;/g, '<$1>');
+
+  // Breadcrumb + hero
+  document.title = PROJECT.title + " | AI Project Portfolio";
+  document.getElementById('crumbCat').textContent = PROJECT.category;
+  document.getElementById('crumbCat').href = pref(PROJECT.categoryUrl);
+  document.getElementById('crumbHere').textContent = PROJECT.title;
+  const cover = document.getElementById('cover');
+  cover.src = PROJECT.cover; cover.alt = PROJECT.title + " cover illustration";
+  document.getElementById('kicker').textContent = PROJECT.category;
+  document.getElementById('title').textContent = PROJECT.title;
+  document.getElementById('tagline').textContent = PROJECT.tagline;
+  document.getElementById('heroTech').innerHTML = (PROJECT.tech || []).map(t => `<span class="tech-chip">${esc(t)}</span>`).join('');
+  document.getElementById('heroBtns').innerHTML =
+    (PROJECT.demoUrl ? `<a class="btn" href="${pref(PROJECT.demoUrl)}" target="_blank" rel="noopener">${esc(PROJECT.demoLabel || 'Live Demo')}</a>` : '') +
+    (PROJECT.sourceUrl ? `<a class="btn ghost" href="${pref(PROJECT.sourceUrl)}">View Source &amp; Build</a>` : '');
+
+  // Section builders
+  const section = (tab, inner, opts={}) =>
+    `<section class="sec"><div class="${opts.noRule ? '' : 'sec-rule'}">`+
+    `<span class="tab">${esc(tab)}</span>${inner}</div></section>`;
+
+  let html = "";
+  const P = PROJECT;
+
+  // OVERVIEW
+  if (P.overview){
+    let inner = `<h2>Overview</h2>`;
+    inner += `<div class="duo">`+
+      `<div><span class="rubric">The Challenge</span><p>${rich(P.overview.challenge)}</p></div>`+
+      `<div><span class="rubric">The Solution</span><p>${rich(P.overview.solution)}</p></div>`+
+      `</div>`;
+    if (P.overview.benefits && P.overview.benefits.length){
+      inner += `<ul class="blist">${P.overview.benefits.map(b => `<li>${rich(b)}</li>`).join('')}</ul>`;
+    }
+    html += section("Overview", inner);
+  }
+
+  // DIFFERENTIATOR (+ optional table)
+  if (P.differentiator){
+    const d = P.differentiator;
+    let inner = `<h2>${esc(d.heading || 'What Makes This Different')}</h2>`;
+    if (d.intro) inner += `<p class="intro">${rich(d.intro)}</p>`;
+    if (d.table){
+      inner += `<div class="table-scroll"><table class="cmp"><thead><tr>`+
+        d.table.columns.map(c => `<th>${esc(c)}</th>`).join('')+
+        `</tr></thead><tbody>`+
+        d.table.rows.map(r => `<tr>${r.map(c => `<td>${rich(c)}</td>`).join('')}</tr>`).join('')+
+        `</tbody></table></div>`;
+    }
+    if (d.outcomes && d.outcomes.length){
+      inner += `<ul class="blist">${d.outcomes.map(o => `<li>${rich(o)}</li>`).join('')}</ul>`;
+    }
+    html += section("Why It's Different", inner);
+  }
+
+  // FEATURES
+  if (P.features && P.features.length){
+    const grid = `<div class="fgrid">${P.features.map(f =>
+      `<article class="fcard"><div class="fe">${f.e || ''}</div><h4>${esc(f.n)}</h4><p>${rich(f.d)}</p></article>`).join('')}</div>`;
+    html += section("Features", `<h2>What's Inside</h2>${grid}`);
+  }
+
+  // AI INTEGRATION
+  if (P.aiIntegration && P.aiIntegration.length){
+    const grid = `<div class="fgrid">${P.aiIntegration.map(f =>
+      `<article class="fcard"><div class="fe">${f.e || ''}</div><h4>${esc(f.n)}</h4><p>${rich(f.d)}</p></article>`).join('')}</div>`;
+    html += section("AI Integration", `<h2>How the AI Works</h2>${grid}`);
+  }
+
+  // ARCHITECTURE
+  if (P.architecture){
+    let inner = `<h2>Technical Architecture</h2>`;
+    if (P.architecture.stacks){
+      inner += `<div class="stacks">${P.architecture.stacks.map(s =>
+        `<div class="stack"><span class="rubric">${esc(s.label)}</span><div class="stack-chips">`+
+        s.items.map(i => `<span class="tech-chip">${esc(i)}</span>`).join('')+`</div></div>`).join('')}</div>`;
+    }
+    if (P.architecture.system){
+      inner += `<ul class="sys-list">${P.architecture.system.map(li => `<li>${rich(li)}</li>`).join('')}</ul>`;
+    }
+    html += section("Architecture", inner);
+  }
+
+  // METRICS
+  if (P.metrics && P.metrics.length){
+    const row = `<div class="metrics">${P.metrics.map(m =>
+      `<div class="metric"><div class="v">${esc(m.v)}</div><div class="l">${esc(m.l)}</div></div>`).join('')}</div>`;
+    html += section("By the Numbers", `<h2>Key Metrics</h2>${row}`);
+  }
+
+  // BUSINESS VALUE
+  if (P.businessValue && P.businessValue.length){
+    const list = `<ul class="blist">${P.businessValue.map(b => `<li>${rich(b)}</li>`).join('')}</ul>`;
+    html += section("Business Value", `<h2>Why It Matters</h2>${list}`);
+  }
+
+  // CTA
+  html += `<section class="sec"><div class="cta-inner">`+
+    `<div><h3>${esc(P.cta ? 'Have a similar project?' : 'Interested?')}</h3>`+
+    `<p>${esc(P.cta || "Let's talk about what you're trying to build.")}</p></div>`+
+    `<div class="cta-btns">`+
+    (P.demoUrl ? `<a class="btn" href="${pref(P.demoUrl)}" target="_blank" rel="noopener">${esc(P.demoLabel || 'Live Demo')}</a>` : '')+
+    `<a class="btn ghost" href="${SITE}contact.html">Get in Touch</a>`+
+    `</div></div></section>`;
+
+  document.getElementById('body').innerHTML = html;
+
+  // Masthead search (this project + a few site-wide; production indexes the full catalog)
+  const ITEMS = [
+    {t:PROJECT.title, c:PROJECT.category, s:PROJECT.slug},
+    {t:"Courier CS Quality Console", c:"Conversational Data Analytics", s:"courier-cs-quality-console"},
+    {t:"Voucher Analyzer", c:"Conversational Data Analytics", s:"voucher-analyzer"},
+    {t:"Property Lead Tracker", c:"Industry Specialist Advisors", s:"property-lead-tracker"},
+    {t:"Wiseman", c:"Knowledge & Reference Chatbots", s:"wiseman"},
+    {t:"Sunny Car Accessories", c:"Agentic Commerce", s:"sunny-car-accessories"},
+    {t:"Bookshelf", c:"Multi-Agent Decision Systems", s:"bookshelf"}
+  ];
+  const searchInput = document.getElementById('searchInput');
+  const searchResults = document.getElementById('searchResults');
+  function runSearch(q){
+    if(q.trim().length < 2){ searchResults.style.display='none'; return; }
+    const ql = q.toLowerCase();
+    const hits = ITEMS.filter(it => (it.t+' '+it.c).toLowerCase().includes(ql));
+    searchResults.innerHTML = hits.length ? hits.map(it =>
+      `<div class="sr-item"><div class="sr-cat">${esc(it.c)}</div>`+
+      `<a href="${SITE}${it.s}.html"><div class="sr-title">${esc(it.t)}</div></a>`+
+      `<div class="sr-links"><a href="${SITE}${it.s}.html">View Details</a></div></div>`).join('')
+      : `<div class="sr-none">No projects found. Try a different keyword.</div>`;
+    searchResults.style.display='block';
+  }
+  searchInput.addEventListener('input', e => runSearch(e.target.value));
+  document.addEventListener('click', e => { if(!e.target.closest('.search-box')) searchResults.style.display='none'; });
+
+  // Drawer
+  const drawer=document.getElementById('drawer'), overlay=document.getElementById('overlay');
+  const openMenu=()=>{ drawer.classList.add('open'); overlay.classList.add('open'); };
+  const closeMenu=()=>{ drawer.classList.remove('open'); overlay.classList.remove('open'); };
+  document.getElementById('hamburger').addEventListener('click', openMenu);
+  document.getElementById('drawerClose').addEventListener('click', closeMenu);
+  overlay.addEventListener('click', closeMenu);
+  drawer.querySelectorAll('a').forEach(a=>a.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeMenu(); searchResults.style.display='none'; }});
+</script>
+</body>
+</html>

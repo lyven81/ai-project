@@ -2,7 +2,7 @@
 
 [![Portfolio Website](https://img.shields.io/badge/Portfolio-Live-green?logo=vercel)](https://lyven81.github.io/ai-project/)
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-black?logo=github)](https://github.com/lyven81/ai-project)
-[![Projects](https://img.shields.io/badge/Projects-57-blue)](#projects-by-category)
+[![Projects](https://img.shields.io/badge/Projects-58-blue)](#projects-by-category)
 [![AI Powered](https://img.shields.io/badge/AI-Powered-orange?logo=tensorflow)](https://github.com/lyven81/ai-project)
 
 **56 production AI apps across 8 business categories** — each one solves a real, named pain point with a working demo you can click and try today.
@@ -21,10 +21,11 @@ This repo contains **56 completed AI applications**, each with a working demo (l
 
 An index of every published AI project, **newest first**. The date is when the project was **deployed** (from the per-project "Deployed" field below).
 
-**Total published AI projects: 57**
+**Total published AI projects: 58**
 
 | # | Date deployed | AI project | Page |
 |---|---|---|---|
+| 58 | 2026-08-21 | Evaluate AI Retail Customer Agent | [demo](https://lyven81.github.io/ai-project/projects/evaluate-ai-retail-customer-agent/demo.html) |
 | 57 | 2026-07-29 | Fire Claim Examiner | [demo](https://lyven81.github.io/ai-project/projects/fire-claim-examiner/demo.html) |
 | 56 | 2026-07-28 | Catering Knowledge Assistant | [demo](https://lyven81.github.io/ai-project/projects/catering-knowledge-assistant/demo.html) |
 | 55 | 2026-07-07 | Delivery Delay Predictor | [demo](https://delivery-delay-predictor-522143897885.asia-southeast1.run.app) |
@@ -92,7 +93,7 @@ The 8 categories below match the [live category pages](https://lyven81.github.io
 | # | Category | Count | Audience |
 |---|---|---|---|
 | 1 | [Service Agents](#1-service-agents-7-projects) | 7 | Solo operators, micro-SMEs running on WhatsApp |
-| 2 | [Multi-Agent Decision Systems](#2-multi-agent-decision-systems-7-projects) | 7 | Owners needing research → verdict pipelines |
+| 2 | [Multi-Agent Decision Systems](#2-multi-agent-decision-systems-8-projects) | 8 | Owners needing research → verdict pipelines |
 | 3 | [Conversational Data Analytics](#3-conversational-data-analytics-9-projects) | 9 | SME owners with data, no analyst |
 | 4 | [Content Automation](#4-content-automation-6-projects) | 6 | Solo consultants, creators, educators |
 | 5 | [Industry Specialist Advisors](#5-industry-specialist-advisors-11-projects) | 11 | Vertical experts (legal, finance, education, retail, property) |
@@ -159,9 +160,16 @@ The 8 categories below match the [live category pages](https://lyven81.github.io
 
 ---
 
-### 2. Multi-Agent Decision Systems (7 projects)
+### 2. Multi-Agent Decision Systems (8 projects)
 
 **Who it's for:** Owners and analysts who need a multi-step research → judge → verdict pipeline that they can't run manually inside a deadline.
+
+#### Evaluate AI Retail Customer Agent
+- **What it does:** Measuring and improving how retail AI serves customers
+- **How it's built:** Python pipeline that answers 20 retail questions with Claude Haiku 4.5 at temperature 0, then grades every answer twice, once by Claude Opus 5 and once by Gemini 2.5 Flash, both blind to which prompt produced it. Ten questions also carry deterministic Python assertions. The results console is a static page generated from the frozen result files.
+- **Problem solved:** An operations lead at an online retailer cannot tell whether the assistant is inventing policy, because the answers are fluent and mostly right, so reading a few transcripts proves nothing. This measures grounding against the shop's own written policies and shows whether a prompt rewrite actually helped.
+- **Demo:** [Try it](https://lyven81.github.io/ai-project/projects/evaluate-ai-retail-customer-agent/demo.html)
+- **Deployed:** 2026-08-21
 
 #### Bookshelf
 - **What it does:** Multi-agent inventory planner for Malaysian bookstores. Pandas data tool + Pydantic Judge + Markdown briefs.

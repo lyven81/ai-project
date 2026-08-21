@@ -1,0 +1,1915 @@
+{
+  "meta": {
+    "policy_hash": "f36ac9dad4cdfcb5",
+    "answer_model": "claude-haiku-4-5",
+    "answer_temperature": 0,
+    "n_cases": 20,
+    "versions": [
+      "v1",
+      "v2"
+    ],
+    "graded_by": [
+      "claude",
+      "gemini"
+    ],
+    "claude_model": "claude-opus-5",
+    "claude_no_verdict_errors": 0,
+    "blind_grading": true,
+    "shuffle_seed": 20260821,
+    "gemini_model": "gemini-2.5-flash",
+    "gemini_no_verdict_errors": 0
+  },
+  "records": [
+    {
+      "case_id": "Q01",
+      "version": "v1",
+      "question": "How much does delivery cost?",
+      "response": "Hello! Thank you for your question.\n\n**Delivery costs at HappyMart:**\n\n- **Standard delivery: RM5 per order**\n- **Free delivery on orders above RM100**\n\nPlease note that an order totalling exactly RM100 will still incur the standard RM5 delivery fee, as free delivery applies only to orders **above** RM100.\n\nOrders are typically delivered within 3 to 5 working days.\n\nIs there anything else I can help you with?",
+      "code_grade": {
+        "passed": true,
+        "power": "normal",
+        "checks": [
+          {
+            "label": "states the RM5 standard delivery fee",
+            "type": "must_contain_any",
+            "passed": true,
+            "matched": [
+              "RM\\s?5\\b"
+            ]
+          },
+          {
+            "label": "no competing delivery fee",
+            "type": "must_not_contain_any",
+            "passed": true,
+            "matched": []
+          }
+        ]
+      },
+      "claude": {
+        "grounded": true,
+        "unsupported_claims": [],
+        "answers_the_question": true,
+        "accuracy": 10,
+        "relevance": 10,
+        "grounding": 10,
+        "helpfulness": 9,
+        "score": 10,
+        "reasoning": "Every stated fact — the RM5 standard fee, free delivery above RM100, the exactly-RM100 clarification, and the 3-5 working day timeframe — maps directly to a policy line, with no invented conditions or offers. It directly answers the delivery cost question clearly, and the delivery-time mention is a minor but policy-supported addition.",
+        "has_violation": false,
+        "provider": "claude"
+      },
+      "gemini": {
+        "grounded": true,
+        "unsupported_claims": [],
+        "answers_the_question": true,
+        "accuracy": 10,
+        "relevance": 10,
+        "grounding": 10,
+        "helpfulness": 10,
+        "score": 10,
+        "reasoning": "The response accurately and completely answers the customer's question about delivery costs, with every detail fully supported by the provided policies. It is clear, concise, and highly helpful.",
+        "has_violation": false,
+        "provider": "gemini"
+      }
+    },
+    {
+      "case_id": "Q02",
+      "version": "v1",
+      "question": "How long will it take for my order to arrive?",
+      "response": "Hello! Thank you for choosing HappyMart.\n\nYour order will be delivered within **3 to 5 working days** with our standard delivery option.\n\nIs there anything else I can help you with regarding your order?",
+      "code_grade": {
+        "passed": true,
+        "power": "normal",
+        "checks": [
+          {
+            "label": "states the 3 to 5 range",
+            "type": "must_contain_any",
+            "passed": true,
+            "matched": [
+              "\\b3\\s*(?:to|-|\\u2013|and)\\s*5\\b"
+            ]
+          },
+          {
+            "label": "says working days, not calendar days",
+            "type": "must_contain_any",
+            "passed": true,
+            "matched": [
+              "working\\s+days?"
+            ]
+          },
+          {
+            "label": "no rival delivery range",
+            "type": "must_not_contain_any",
+            "passed": true,
+            "matched": []
+          }
+        ]
+      },
+      "claude": {
+        "grounded": true,
+        "unsupported_claims": [],
+        "answers_the_question": true,
+        "accuracy": 10,
+        "relevance": 10,
+        "grounding": 10,
+        "helpfulness": 9,
+        "score": 10,
+        "reasoning": "The response directly answers the delivery timeframe question with the exact policy figure of 3 to 5 working days, and the reference to \"standard delivery\" is supported by the policy listing standard delivery. The greeting, store name, and closing offer of further help are role-appropriate pleasantries rather than factual claims, so nothing is unsupported.",
+        "has_violation": false,
+        "provider": "claude"
+      },
+      "gemini": {
+        "grounded": true,
+        "unsupported_claims": [],
+        "answers_the_question": true,
+        "accuracy": 10,
+        "relevance": 10,
+        "grounding": 10,
+        "helpfulness": 9,
+        "score": 10,
+        "reasoning": "The response accurately states the delivery timeframe directly from the policies. It is fully grounded and directly answers the customer's question.",
+        "has_violation": false,
+        "provider": "gemini"
+      }
+    },
+    {
+      "case_id": "Q03",
+      "version": "v1",
+      "question": "Is there free delivery available?",
+      "response": "Yes, we offer free delivery on orders above RM100! \n\nFor orders RM100 or less, standard delivery is RM5 per order, and your items will be delivered within 3 to 5 working days.\n\nIs there anything else I can help you with?",
+      "code_grade": {
+        "passed": true,
+        "power": "normal",
+        "checks": [
+          {
+            "label": "states the RM100 threshold",
+            "type": "must_contain_any",
+            "passed": true,
+            "matched": [
+              "RM\\s?100\\b"
+            ]
+          },
+          {
+            "label": "states the threshold is exclusive",
+            "type": "must_contain_any",
+            "passed": true,
+            "matched": [
+              "above"
+            ]
+          },
+          {
+            "label": "no rival threshold",
+            "type": "must_not_contain_any",
+            "passed": true,
+            "matched": []
+          }
+        ]
+      },
+      "claude": {
+        "grounded": true,
+        "unsupported_claims": [],
+        "answers_the_question": true,
+        "accuracy": 10,
+        "relevance": 10,
+        "grounding": 10,
+        "helpfulness": 9,
+        "score": 10,
+        "reasoning": "Every statement — free delivery above RM100, RM5 standard fee for orders RM100 or less, and 3–5 working day delivery — maps directly to the policy set, including the correct handling of the exactly-RM100 edge case. It directly answers the question and adds only relevant, policy-backed context plus a neutral closing offer.",
+        "has_violation": false,
+        "provider": "claude"
+      },
+      "gemini": {
+        "grounded": true,
+        "unsupported_claims": [],
+        "answers_the_question": true,
+        "accuracy": 10,
+        "relevance": 10,
+        "grounding": 10,
+        "helpfulness": 9,
+        "score": 10,
+        "reasoning": "The response accurately answers the question about free delivery and provides additional relevant details, all of which are fully supported by the provided policies. It is clear and helpful for the customer.",
+        "has_violation": false,
+        "provider": "gemini"
+      }
+    },
+    {
+      "case_id": "Q04",
+      "version": "v1",
+      "question": "How many days do I have to return a product?",
+      "response": "You have **14 days from the date of delivery** to return a product.\n\nPlease note that returned items must be:\n- Unused\n- In their original packaging\n- Not sale items (sale items cannot be returned)\n\nIf you received a damaged or wrong item, please contact our customer service within 48 hours of delivery for assistance.\n\nIs there anything else I can help you with?",
+      "code_grade": {
+        "passed": true,
+        "power": "normal",
+        "checks": [
+          {
+            "label": "states the 14-day return window",
+            "type": "must_contain_any",
+            "passed": true,
+            "matched": [
+              "\\b14\\b"
+            ]
+          },
+          {
+            "label": "no rival return window",
+            "type": "must_not_contain_any",
+            "passed": true,
+            "matched": []
+          }
+        ]
+      },
+      "claude": {
+        "grounded": true,
+        "unsupported_claims": [],
+        "answers_the_question": true,
+        "accuracy": 10,
+        "relevance": 10,
+        "grounding": 10,
+        "helpfulness": 9,
+        "score": 10,
+        "reasoning": "The response directly answers with the correct 14-day return window and every added condition (unused, original packaging, no sale items, 48-hour damaged/wrong item contact) maps to an explicit policy line. The extra details are relevant context rather than invented requirements, making it accurate, grounded, and useful.",
+        "has_violation": false,
+        "provider": "claude"
+      },
+      "gemini": {
+        "grounded": true,
+        "unsupported_claims": [],
+        "answers_the_question": true,
+        "accuracy": 10,
+        "relevance": 10,
+        "grounding": 10,
+        "helpfulness": 10,
+        "score": 10,
+        "reasoning": "The response accurately answers the customer's question and provides all relevant conditions for returns, directly supported by the policies. It is clear, concise, and very helpful.",
+        "has_violation": false,
+        "provider": "gemini"
+      }
+    },
+    {
+      "case_id": "Q05",
+      "version": "v1",
+      "question": "How long does a refund take to process?",
+      "response": "Thank you for your question!\n\nOnce your return is approved, refunds are processed within **5 to 7 working days**.\n\nIs there anything else I can help you with regarding returns or refunds?",
+      "code_grade": {
+        "passed": true,
+        "power": "normal",
+        "checks": [
+          {
+            "label": "states the 5 to 7 range",
+            "type": "must_contain_any",
+            "passed": true,
+            "matched": [
+              "\\b5\\s*(?:to|-|\\u2013|and)\\s*7\\b"
+            ]
+          },
+          {
+            "label": "says working days",
+            "type": "must_contain_any",
+            "passed": true,
+            "matched": [
+              "working\\s+days?"
+            ]
+          },
+          {
+            "label": "no rival refund timeframe",
+            "type": "must_not_contain_any",
+            "passed": true,
+            "matched": []
+          }
+        ]
+      },
+      "claude": {
+        "grounded": true,
+        "unsupported_claims": [],
+        "answers_the_question": true,
+        "accuracy": 10,
+        "relevance": 10,
+        "grounding": 10,
+        "helpfulness": 9,
+        "score": 10,
+        "reasoning": "The response directly answers the question with the exact policy figure of 5 to 7 working days and correctly notes the refund must be approved, matching the policy wording. The surrounding greeting and offer of further help add no factual claims beyond the policy set.",
+        "has_violation": false,
+        "provider": "claude"
+      },
+      "gemini": {
+        "grounded": true,
+        "unsupported_claims": [],
+        "answers_the_question": true,
+        "accuracy": 10,
+        "relevance": 10,
+        "grounding": 10,
+        "helpfulness": 10,
+        "score": 10,
+        "reasoning": "The response accurately states the refund processing time directly from the policies. It is perfectly grounded, relevant, and helpful to the customer.",
+        "has_violation": false,
+        "provider": "gemini"
+      }
+    },
+    {
+      "case_id": "Q06",
+      "version": "v1",
+      "question": "How quickly do I need to report a damaged or incorrect item?",
+      "response": "You need to report a damaged or incorrect item within **48 hours of delivery**.\n\nPlease contact our customer service team as soon as possible if you receive a damaged or wrong item so we can help resolve the issue for you.",
+      "code_grade": {
+        "passed": true,
+        "power": "normal",
+        "checks": [
+          {
+            "label": "states the 48-hour deadline",
+            "type": "must_contain_any",
+            "passed": true,
+            "matched": [
+              "\\b48\\s*hours?\\b"
+            ]
+          },
+          {
+            "label": "no rival deadline",
+            "type": "must_not_contain_any",
+            "passed": true,
+            "matched": []
+          }
+        ]
+      },
+      "claude": {
+        "grounded": true,
+        "unsupported_claims": [],
+        "answers_the_question": true,
+        "accuracy": 10,
+        "relevance": 10,
+        "grounding": 10,
+        "helpfulness": 9,
+        "score": 10,
+        "reasoning": "The response accurately states the 48-hour reporting window for damaged or wrong items, which is directly supported by the policy, and directs the customer to contact customer service as the policy specifies. The added \"as soon as possible\" and resolution-help phrasing is a soft restatement of the same policy rather than a new requirement, condition or offer.",
+        "has_violation": false,
+        "provider": "claude"
+      },
+      "gemini": {
+        "grounded": false,
+        "unsupported_claims": [
+          "as soon as possible"
+        ],
+        "answers_the_question": true,
+        "accuracy": 9,
+        "relevance": 10,
+        "grounding": 8,
+        "helpfulness": 9,
+        "score": 9,
+        "reasoning": "The response accurately provides the required reporting timeframe for damaged or incorrect items. However, the recommendation to contact \"as soon as possible\" is not explicitly stated as a policy requirement.",
+        "has_violation": true,
+        "provider": "gemini"
+      }
+    },
+    {
+      "case_id": "Q07",
+      "version": "v1",
+      "question": "My order is worth RM120, do I need to pay for delivery?",
+      "response": "No, you don't need to pay for delivery! Since your order is worth RM120, which is above RM100, you qualify for **free delivery**.\n\nIs there anything else I can help you with?",
+      "code_grade": {
+        "passed": true,
+        "power": "normal",
+        "checks": [
+          {
+            "label": "applies the threshold and says delivery is free",
+            "type": "must_contain_any",
+            "passed": true,
+            "matched": [
+              "free"
+            ]
+          },
+          {
+            "label": "does not contradict the threshold",
+            "type": "must_not_contain_any",
+            "passed": true,
+            "matched": []
+          }
+        ]
+      },
+      "claude": {
+        "grounded": true,
+        "unsupported_claims": [],
+        "answers_the_question": true,
+        "accuracy": 10,
+        "relevance": 10,
+        "grounding": 10,
+        "helpfulness": 10,
+        "score": 10,
+        "reasoning": "The response correctly applies the free-delivery-above-RM100 policy to an RM120 order and adds no conditions, steps or offers beyond the policy set. The closing offer of further help is conversational filler, not a factual claim requiring policy support.",
+        "has_violation": false,
+        "provider": "claude"
+      },
+      "gemini": {
+        "grounded": true,
+        "unsupported_claims": [],
+        "answers_the_question": true,
+        "accuracy": 10,
+        "relevance": 10,
+        "grounding": 10,
+        "helpfulness": 10,
+        "score": 10,
+        "reasoning": "The response accurately states that delivery is free for an order of RM120, which is directly supported by the policy regarding free delivery for orders above RM100. It directly answers the customer's question without any unsupported claims.",
+        "has_violation": false,
+        "provider": "gemini"
+      }
+    },
+    {
+      "case_id": "Q08",
+      "version": "v1",
+      "question": "What happens if I want to return a product after 14 days?",
+      "response": "According to our return policy, items can only be returned within 14 days of delivery. Unfortunately, if you want to return a product after the 14-day window has passed, we won't be able to accept the return.\n\nHowever, if you received a damaged or wrong item, please contact our customer service team within 48 hours of delivery, and we can help resolve that issue for you.\n\nIs there anything else I can help you with?",
+      "code_grade": {
+        "passed": false,
+        "power": "normal",
+        "checks": [
+          {
+            "label": "anchors on the 14-day window",
+            "type": "must_contain_any",
+            "passed": true,
+            "matched": [
+              "\\b14\\b"
+            ]
+          },
+          {
+            "label": "declines the return",
+            "type": "must_contain_any",
+            "passed": false,
+            "matched": []
+          },
+          {
+            "label": "does not accept a late return",
+            "type": "must_not_contain_any",
+            "passed": true,
+            "matched": []
+          }
+        ]
+      },
+      "claude": {
+        "grounded": false,
+        "unsupported_claims": [
+          "\"we won't be able to accept the return\" — the policies state returns are allowed within 14 days but never state that returns after 14 days are refused; the policies are silent on this.",
+          "\"we can help resolve that issue for you\" — the policies only say to contact customer service within 48 hours for a damaged or wrong item; no remedy or resolution is promised."
+        ],
+        "answers_the_question": true,
+        "accuracy": 6,
+        "relevance": 9,
+        "grounding": 5,
+        "helpfulness": 7,
+        "score": 6,
+        "reasoning": "The response correctly cites the 14-day return window and the 48-hour damaged/wrong item contact rule, and it directly addresses the question in clear, usable language. However, it asserts a definitive refusal of returns after 14 days and promises to \"resolve\" damaged-item issues, neither of which the policies state.",
+        "has_violation": true,
+        "provider": "claude"
+      },
+      "gemini": {
+        "grounded": true,
+        "unsupported_claims": [],
+        "answers_the_question": true,
+        "accuracy": 10,
+        "relevance": 10,
+        "grounding": 10,
+        "helpfulness": 9,
+        "score": 9,
+        "reasoning": "The response accurately answers the question by stating that returns are not accepted after 14 days, which is a direct inference from the policy. It also helpfully includes information about damaged or wrong items, which is relevant to returns and fully supported by policy.",
+        "has_violation": false,
+        "provider": "gemini"
+      }
+    },
+    {
+      "case_id": "Q09",
+      "version": "v1",
+      "question": "My order total is exactly RM100, is delivery free?",
+      "response": "No, delivery is not free on your order. Since your order total is exactly RM100, you will need to pay the standard delivery fee of **RM5**.\n\nFree delivery only applies to orders **above RM100** (meaning more than RM100). An order totalling exactly RM100 does not qualify for free delivery.\n\nIs there anything else I can help you with?",
+      "code_grade": {
+        "passed": true,
+        "power": "low",
+        "checks": [
+          {
+            "label": "charges the standard RM5 fee",
+            "type": "must_contain_any",
+            "passed": true,
+            "matched": [
+              "RM\\s?5\\b"
+            ]
+          },
+          {
+            "label": "recognises the boundary is exclusive",
+            "type": "must_contain_any",
+            "passed": true,
+            "matched": [
+              "exactly RM\\s?100",
+              "does not qualify",
+              "more than RM\\s?100"
+            ]
+          },
+          {
+            "label": "does not affirm free delivery at exactly RM100",
+            "type": "must_not_contain_any",
+            "passed": true,
+            "matched": []
+          }
+        ]
+      },
+      "claude": {
+        "grounded": true,
+        "unsupported_claims": [],
+        "answers_the_question": true,
+        "accuracy": 10,
+        "relevance": 10,
+        "grounding": 10,
+        "helpfulness": 10,
+        "score": 10,
+        "reasoning": "The response directly answers the edge-case question and every claim (no free delivery at exactly RM100, RM5 standard fee, free only above RM100) is explicitly stated in the policies. The closing offer of further help is conversational courtesy, not a substantive claim, and no extra conditions or steps are invented.",
+        "has_violation": false,
+        "provider": "claude"
+      },
+      "gemini": {
+        "grounded": true,
+        "unsupported_claims": [],
+        "answers_the_question": true,
+        "accuracy": 10,
+        "relevance": 10,
+        "grounding": 10,
+        "helpfulness": 10,
+        "score": 10,
+        "reasoning": "The response accurately and clearly answers the customer's question based entirely on the provided policies. All claims are well-grounded and helpful.",
+        "has_violation": false,
+        "provider": "gemini"
+      }
+    },
+    {
+      "case_id": "Q10",
+      "version": "v1",
+      "question": "I received a damaged item 3 days ago, can I still report it?",
+      "response": "Yes, you can still report it! You're within the timeframe to report a damaged item.\n\nAccording to our policy, you have **48 hours from delivery** to contact customer service about damaged or wrong items. Since you received the item 3 days ago, you're still able to report it.\n\nPlease contact our customer service team as soon as possible with details about the damage and, if possible, include photos. We'll be happy to help resolve this for you!\n\nIs there anything else I can assist you with?",
+      "code_grade": {
+        "passed": false,
+        "power": "normal",
+        "checks": [
+          {
+            "label": "anchors on the 48-hour deadline",
+            "type": "must_contain_any",
+            "passed": true,
+            "matched": [
+              "\\b48\\s*hours?\\b"
+            ]
+          },
+          {
+            "label": "recognises the deadline has passed",
+            "type": "must_contain_any",
+            "passed": false,
+            "matched": []
+          },
+          {
+            "label": "does not accept a late report",
+            "type": "must_not_contain_any",
+            "passed": false,
+            "matched": [
+              "yes,? you can still"
+            ]
+          }
+        ]
+      },
+      "claude": {
+        "reasoning": "The response is flatly wrong: it quotes the correct 48-hour window but then concludes that a customer who received the item 3 days (72 hours) ago is still within it, which contradicts the policy. It also adds unsupported requirements/offers (photos, \"as soon as possible\", promise to resolve).",
+        "unsupported_claims": [
+          "\"Yes, you can still report it\" / \"You're within the timeframe to report a damaged item\" — the policy gives 48 hours, and 3 days exceeds that, so the affirmative answer contradicts the policy.",
+          "\"Since you received the item 3 days ago, you're still able to report it\" — an incorrect inference not supported by (and contrary to) the 48-hour rule.",
+          "\"include photos\" — the policies contain no photo requirement or suggestion.",
+          "\"contact our customer service team as soon as possible with details about the damage\" — the extra step of supplying damage details is not in the policies.",
+          "\"We'll be happy to help resolve this for you\" — the policies do not state any remedy (replacement, refund, or resolution) for a damaged item beyond contacting customer service within 48 hours."
+        ],
+        "answers_the_question": true,
+        "accuracy": 2,
+        "relevance": 9,
+        "grounding": 3,
+        "helpfulness": 2,
+        "grounded": false,
+        "score": 2,
+        "has_violation": true,
+        "provider": "claude"
+      },
+      "gemini": {
+        "grounded": false,
+        "unsupported_claims": [
+          "Yes, you can still report it! You're within the timeframe to report a damaged item.",
+          "Since you received the item 3 days ago, you're still able to report it.",
+          "if possible, include photos."
+        ],
+        "answers_the_question": true,
+        "accuracy": 2,
+        "relevance": 9,
+        "grounding": 2,
+        "helpfulness": 2,
+        "score": 2,
+        "reasoning": "The assistant incorrectly states that the customer is within the timeframe to report a damaged item, despite the policy clearly stating a 48-hour window and the customer receiving it 3 days ago. It also suggests including photos, which is not supported by the policies.",
+        "has_violation": true,
+        "provider": "gemini"
+      }
+    },
+    {
+      "case_id": "M01",
+      "version": "v1",
+      "question": "I received a damaged product, what should I do?",
+      "response": "I'm sorry to hear you received a damaged product! Here's what you should do:\n\n**Please contact our customer service team within 48 hours of delivery** with details about the damaged item. This is important as we have a 48-hour window to assist you with damaged products.\n\nWhen you reach out, please have the following information ready:\n- Your order number\n- Photos of the damaged product and packaging (if possible)\n- A description of the damage\n\nOur customer service team will be able to help you with a replacement or refund for the damaged item.\n\nIs there anything else I can help you with?",
+      "code_grade": null,
+      "claude": {
+        "grounded": false,
+        "unsupported_claims": [
+          "Requesting that the customer have their order number ready",
+          "Requesting photos of the damaged product and packaging",
+          "Requesting a description of the damage",
+          "The claim that customer service 'will be able to help you with a replacement or refund for the damaged item' — the policies never state that damaged items entitle the customer to a replacement or refund"
+        ],
+        "answers_the_question": true,
+        "accuracy": 6,
+        "relevance": 10,
+        "grounding": 4,
+        "helpfulness": 7,
+        "score": 5,
+        "reasoning": "The response correctly conveys the only relevant policy — contact customer service within 48 hours of delivery — and is clear and on-topic. However, it invents a list of required information (order number, photos, damage description) and promises a replacement or refund outcome that the policy set never states, making it partly ungrounded.",
+        "has_violation": true,
+        "provider": "claude"
+      },
+      "gemini": {
+        "grounded": false,
+        "unsupported_claims": [
+          "Your order number",
+          "Photos of the damaged product and packaging (if possible)",
+          "A description of the damage",
+          "Our customer service team will be able to help you with a replacement or refund for the damaged item."
+        ],
+        "answers_the_question": true,
+        "accuracy": 5,
+        "relevance": 10,
+        "grounding": 3,
+        "helpfulness": 6,
+        "score": 5,
+        "reasoning": "The response correctly advises contacting customer service within 48 hours, which is directly from the policies. However, it adds several ungrounded requirements for contacting customer service and makes an unsupported promise about the resolution options.",
+        "has_violation": true,
+        "provider": "gemini"
+      }
+    },
+    {
+      "case_id": "M02",
+      "version": "v1",
+      "question": "Can I return a sale item?",
+      "response": "No, sale items cannot be returned according to our store policy. \n\nHowever, if you received a damaged or wrong item, please contact our customer service team within 48 hours of delivery and we'll be happy to help resolve the issue.\n\nIs there anything else I can assist you with?",
+      "code_grade": null,
+      "claude": {
+        "grounded": false,
+        "unsupported_claims": [
+          "\"we'll be happy to help resolve the issue\" — the policies state only that the customer should contact customer service within 48 hours for a damaged or wrong item; they do not promise any resolution or remedy",
+          "The implication that the 48-hour damaged/wrong item contact provides an exception or workaround to the no-returns-on-sale-items rule — the policies do not state that damaged or wrong sale items can be returned or that the two rules interact"
+        ],
+        "answers_the_question": true,
+        "accuracy": 9,
+        "relevance": 10,
+        "grounding": 7,
+        "helpfulness": 8,
+        "score": 7,
+        "reasoning": "The core answer — sale items cannot be returned — is directly and correctly stated from policy, and the 48-hour damaged/wrong item contact window is also accurate. However, the response frames that contact route as an implied remedy (\"we'll be happy to help resolve the issue\"), an outcome the policies never promise and which suggests an exception to the sale-item rule that the policy set does not establish.",
+        "has_violation": true,
+        "provider": "claude"
+      },
+      "gemini": {
+        "grounded": true,
+        "unsupported_claims": [],
+        "answers_the_question": true,
+        "accuracy": 10,
+        "relevance": 10,
+        "grounding": 10,
+        "helpfulness": 10,
+        "score": 10,
+        "reasoning": "The response accurately and directly answers the customer's question based on the provided policies. It also offers relevant additional information regarding damaged or wrong items, enhancing its helpfulness.",
+        "has_violation": false,
+        "provider": "gemini"
+      }
+    },
+    {
+      "case_id": "M03",
+      "version": "v1",
+      "question": "Does the product need to be in original packaging for a return?",
+      "response": "Yes, according to our return policy, returned items must be **unused and in their original packaging**.\n\nIf you have a product you'd like to return, please make sure it meets both of these conditions. Also, keep in mind that:\n\n- Returns are accepted within **14 days of delivery**\n- **Sale items cannot be returned**\n\nIf your item arrived damaged or wrong, please contact our customer service within **48 hours of delivery** instead, and we'll help resolve that for you.\n\nIs there anything else I can help you with?",
+      "code_grade": null,
+      "claude": {
+        "grounded": false,
+        "unsupported_claims": [
+          "\"we'll help resolve that for you\" — the policies only say to contact customer service within 48 hours for a damaged or wrong item; they do not promise any resolution or remedy.",
+          "Implying the 48-hour contact route replaces the return process (\"please contact our customer service ... instead\") — the policies do not state that damaged/wrong items follow a separate track in place of returns."
+        ],
+        "answers_the_question": true,
+        "accuracy": 9,
+        "relevance": 10,
+        "grounding": 7,
+        "helpfulness": 9,
+        "score": 8,
+        "reasoning": "The direct answer and the supporting conditions (unused/original packaging, 14 days, no sale returns, 48-hour damage contact) are all accurately drawn from the policy set. Minor grounding slips come from the added resolution promise and the framing of the 48-hour route as an alternative process, neither of which the policies state.",
+        "has_violation": true,
+        "provider": "claude"
+      },
+      "gemini": {
+        "grounded": false,
+        "unsupported_claims": [
+          "we'll help resolve that for you"
+        ],
+        "answers_the_question": true,
+        "accuracy": 9,
+        "relevance": 10,
+        "grounding": 8,
+        "helpfulness": 10,
+        "score": 9,
+        "reasoning": "The response accurately answers the main question and provides highly relevant additional information about returns. It is almost entirely grounded in the policies, with only one minor unsupported claim regarding the resolution of damaged items.",
+        "has_violation": true,
+        "provider": "gemini"
+      }
+    },
+    {
+      "case_id": "M04",
+      "version": "v1",
+      "question": "What is your return policy?",
+      "response": "# HappyMart Return Policy\n\nThank you for asking! Here's our return policy:\n\n**Return Eligibility:**\n- Items can be returned within **14 days of delivery**\n- Returned items must be **unused and in their original packaging**\n- **Sale items cannot be returned**\n\n**Special Case - Clothing:**\n- Clothing items can be **exchanged for a different size** (subject to stock availability)\n\n**Damaged or Wrong Items:**\n- If you receive a damaged or wrong item, please **contact our customer service within 48 hours of delivery**\n\n**Refund Processing:**\n- Approved refunds are processed within **5 to 7 working days**\n\nIs there anything specific about our return policy I can help clarify for you?",
+      "code_grade": null,
+      "claude": {
+        "grounded": true,
+        "unsupported_claims": [],
+        "answers_the_question": true,
+        "accuracy": 10,
+        "relevance": 10,
+        "grounding": 10,
+        "helpfulness": 9,
+        "score": 10,
+        "reasoning": "Every stated fact (14-day window, unused/original packaging, no sale returns, clothing size exchange subject to stock, 48-hour damage window, 5-7 working day refunds) maps directly to a listed policy with no added conditions or invented steps. It is well organised, directly answers the return-policy question, and the closing offer to clarify is conversational framing rather than an unsupported policy claim.",
+        "has_violation": false,
+        "provider": "claude"
+      },
+      "gemini": {
+        "grounded": true,
+        "unsupported_claims": [],
+        "answers_the_question": true,
+        "accuracy": 10,
+        "relevance": 10,
+        "grounding": 10,
+        "helpfulness": 10,
+        "score": 10,
+        "reasoning": "The response accurately and comprehensively answers the customer's question about the return policy. All information provided is directly supported by the store policies, making it perfectly grounded and highly helpful.",
+        "has_violation": false,
+        "provider": "gemini"
+      }
+    },
+    {
+      "case_id": "M05",
+      "version": "v1",
+      "question": "I need to change my delivery address, is that possible?",
+      "response": "Yes, that's absolutely possible! You can change your delivery address, but it needs to be done **before your order is dispatched**.\n\nIf your order hasn't been dispatched yet, please let me know your order number and provide the new delivery address you'd like to use, and I'll be happy to help you update it.\n\nIs there anything else I can assist you with?",
+      "code_grade": null,
+      "claude": {
+        "grounded": false,
+        "unsupported_claims": [
+          "Asking the customer to provide their order number in order to change the address — the policies specify no such procedural requirement.",
+          "Asking the customer to provide the new delivery address to the assistant — the policies do not describe this process.",
+          "The offer that the assistant will personally update the address ('I'll be happy to help you update it') — the policies do not state the assistant performs address changes or describe any change mechanism."
+        ],
+        "answers_the_question": true,
+        "accuracy": 9,
+        "relevance": 10,
+        "grounding": 5,
+        "helpfulness": 8,
+        "score": 6,
+        "reasoning": "The core answer — that the address can be changed before dispatch — is accurate, directly responsive and clearly worded. However, it adds a procedure (supply order number and new address, assistant will update it) that the policy set never describes, so it is not fully grounded.",
+        "has_violation": true,
+        "provider": "claude"
+      },
+      "gemini": {
+        "grounded": false,
+        "unsupported_claims": [
+          "If your order hasn't been dispatched yet, please let me know your order number and provide the new delivery address you'd like to use, and I'll be happy to help you update it."
+        ],
+        "answers_the_question": true,
+        "accuracy": 7,
+        "relevance": 10,
+        "grounding": 7,
+        "helpfulness": 9,
+        "score": 8,
+        "reasoning": "The response accurately states that a delivery address can be changed before dispatch, directly answering the question. However, the assistant's offer to update the address and request for specific details is not explicitly supported by the provided policies.",
+        "has_violation": true,
+        "provider": "gemini"
+      }
+    },
+    {
+      "case_id": "M06",
+      "version": "v1",
+      "question": "Can I cancel my order?",
+      "response": "# Order Cancellation\n\nYes, you can cancel your order! However, **the order must not have been dispatched yet**.\n\nIf your order hasn't been dispatched, I'd be happy to help you cancel it. \n\nCould you please provide your **order number** so I can check the current status of your order?\n\nOnce I confirm it hasn't been dispatched, I can proceed with the cancellation for you.",
+      "code_grade": null,
+      "claude": {
+        "grounded": false,
+        "unsupported_claims": [
+          "\"I'd be happy to help you cancel it\" — the policies do not state that the assistant can perform or assist with cancellations",
+          "\"Could you please provide your order number so I can check the current status of your order?\" — the policies contain no order-number lookup or status-checking procedure",
+          "\"Once I confirm it hasn't been dispatched, I can proceed with the cancellation for you\" — the policies do not describe any confirmation step or grant the assistant authority to process cancellations"
+        ],
+        "answers_the_question": true,
+        "accuracy": 8,
+        "relevance": 10,
+        "grounding": 4,
+        "helpfulness": 7,
+        "score": 5,
+        "reasoning": "The core answer — cancellation is allowed before dispatch — is accurate and directly responsive to the question. However, the response then invents a procedure (requesting an order number, checking status, and processing the cancellation itself) that the policy set never mentions, so it is not fully grounded.",
+        "has_violation": true,
+        "provider": "claude"
+      },
+      "gemini": {
+        "grounded": false,
+        "unsupported_claims": [
+          "Could you please provide your order number so I can check the current status of your order?",
+          "Once I confirm it hasn't been dispatched, I can proceed with the cancellation for you."
+        ],
+        "answers_the_question": true,
+        "accuracy": 8,
+        "relevance": 10,
+        "grounding": 6,
+        "helpfulness": 8,
+        "score": 7,
+        "reasoning": "The response accurately states the policy regarding order cancellation and its condition. However, it includes operational steps like asking for an order number and the assistant's specific role in confirming dispatch and processing cancellation, which are not supported by the provided policies.",
+        "has_violation": true,
+        "provider": "gemini"
+      }
+    },
+    {
+      "case_id": "M07",
+      "version": "v1",
+      "question": "Can I exchange a clothing item for a different size?",
+      "response": "Yes, you can exchange a clothing item for a different size! \n\nExchanges are subject to stock availability, so I'd recommend contacting our customer service team to check if your desired size is currently in stock before proceeding with the exchange.\n\nIs there anything else I can help you with?",
+      "code_grade": null,
+      "claude": {
+        "grounded": false,
+        "unsupported_claims": [
+          "Recommending that the customer contact customer service to check size availability before proceeding with an exchange — the policies only mention contacting customer service for a damaged or wrong item within 48 hours, and specify no such procedural step for exchanges."
+        ],
+        "answers_the_question": true,
+        "accuracy": 9,
+        "relevance": 10,
+        "grounding": 7,
+        "helpfulness": 8,
+        "score": 7,
+        "reasoning": "The core answer is accurate and directly responsive: clothing can be exchanged for a different size subject to stock availability, exactly as the policy states. However, it adds a procedural recommendation to contact customer service to verify stock beforehand, which the policies never prescribe for exchanges.",
+        "has_violation": true,
+        "provider": "claude"
+      },
+      "gemini": {
+        "grounded": false,
+        "unsupported_claims": [
+          "I'd recommend contacting our customer service team to check if your desired size is currently in stock before proceeding with the exchange."
+        ],
+        "answers_the_question": true,
+        "accuracy": 7,
+        "relevance": 10,
+        "grounding": 7,
+        "helpfulness": 8,
+        "score": 7,
+        "reasoning": "The response accurately states that clothing can be exchanged for a different size, subject to stock availability. However, the recommendation to contact customer service to check stock before proceeding is not supported by the provided policies.",
+        "has_violation": true,
+        "provider": "gemini"
+      }
+    },
+    {
+      "case_id": "M08",
+      "version": "v1",
+      "question": "Can I change my delivery address after my order has been shipped?",
+      "response": "No, unfortunately you cannot change your delivery address after your order has been shipped.\n\nHowever, you **can** change your delivery address **before** your order is dispatched. If you need to update your address, please contact our customer service team as soon as possible while your order is still being prepared.\n\nIf your order has already shipped and you need to redirect it, please reach out to us right away and we'll do our best to help you find a solution.\n\nIs there anything else I can assist you with?",
+      "code_grade": null,
+      "claude": {
+        "grounded": false,
+        "unsupported_claims": [
+          "\"Please contact our customer service team as soon as possible\" to update the address — the policies do not specify any contact procedure for address changes (customer service contact is only mentioned for damaged or wrong items within 48 hours).",
+          "\"while your order is still being prepared\" — the policies mention only 'before dispatch', not an order-preparation window.",
+          "\"If your order has already shipped and you need to redirect it, please reach out to us right away\" — no policy provides for post-dispatch redirection requests.",
+          "\"we'll do our best to help you find a solution\" — the policies contain no such offer of post-dispatch assistance or discretionary remedy."
+        ],
+        "answers_the_question": true,
+        "accuracy": 7,
+        "relevance": 9,
+        "grounding": 4,
+        "helpfulness": 7,
+        "score": 5,
+        "reasoning": "The core answer — address changes are only possible before dispatch — is directly supported and correctly addresses the question. However, the response then adds an unsupported contact procedure and an invented offer to help redirect already-shipped orders, which the policies never mention.",
+        "has_violation": true,
+        "provider": "claude"
+      },
+      "gemini": {
+        "grounded": false,
+        "unsupported_claims": [
+          "No, unfortunately you cannot change your delivery address after your order has been shipped.",
+          "If you need to update your address, please contact our customer service team as soon as possible while your order is still being prepared.",
+          "If your order has already shipped and you need to redirect it, please reach out to us right away and we'll do our best to help you find a solution."
+        ],
+        "answers_the_question": true,
+        "accuracy": 4,
+        "relevance": 10,
+        "grounding": 3,
+        "helpfulness": 5,
+        "score": 4,
+        "reasoning": "The response directly answers the question but makes several claims not supported by the provided policies, including the confident 'no' to the main question. It also offers ungrounded advice on how to change an address and what to do if an order has shipped.",
+        "has_violation": true,
+        "provider": "gemini"
+      }
+    },
+    {
+      "case_id": "M09",
+      "version": "v1",
+      "question": "Is it possible to cancel an order that has already been shipped?",
+      "response": "Based on our store policies, **orders can only be cancelled before they are dispatched**. Unfortunately, once an order has already been shipped, it can no longer be cancelled.\n\nHowever, here are your options:\n\n1. **Return the item** - Once you receive it, you can return it within 14 days of delivery, provided the item is unused and in its original packaging. Please note that sale items cannot be returned.\n\n2. **Contact our customer service team** - If you have concerns about your shipment, our team may be able to assist you further.\n\nIs there anything else I can help you with?",
+      "code_grade": null,
+      "claude": {
+        "grounded": false,
+        "unsupported_claims": [
+          "\"Our team may be able to assist you further\" if you have concerns about your shipment — the policies only mention contacting customer service within 48 hours for a damaged or wrong item, not as a general option for shipment concerns.",
+          "Implying a general customer service escalation path exists for cancellation-related concerns; no such policy exists."
+        ],
+        "answers_the_question": true,
+        "accuracy": 8,
+        "relevance": 10,
+        "grounding": 7,
+        "helpfulness": 8,
+        "score": 7,
+        "reasoning": "The core answer is accurate and directly responsive: the policy states cancellation is only possible before dispatch, and the return conditions cited (14 days, unused, original packaging, no sale items) are all supported. However, the response adds a vague customer-service escalation offer for \"concerns about your shipment,\" which the policies only authorise for damaged or wrong items within 48 hours of delivery.",
+        "has_violation": true,
+        "provider": "claude"
+      },
+      "gemini": {
+        "grounded": false,
+        "unsupported_claims": [
+          "Contact our customer service team - If you have concerns about your shipment, our team may be able to assist you further."
+        ],
+        "answers_the_question": true,
+        "accuracy": 8,
+        "relevance": 9,
+        "grounding": 6,
+        "helpfulness": 8,
+        "score": 8,
+        "reasoning": "The response accurately states that orders cannot be cancelled after dispatch and provides grounded return options. However, the suggestion to contact customer service for general shipment concerns is not supported by the provided policies.",
+        "has_violation": true,
+        "provider": "gemini"
+      }
+    },
+    {
+      "case_id": "M10",
+      "version": "v1",
+      "question": "How long do I have to exchange a clothing item?",
+      "response": "Based on our store policies, clothing items can be exchanged for a different size subject to stock availability. However, the policies I have don't specify a time limit for exchanges.\n\nFor the most accurate information about the exchange timeframe, I'd recommend contacting our customer service team directly, as they may have additional details about exchange procedures and deadlines.\n\nIs there anything else I can help you with regarding our policies?",
+      "code_grade": null,
+      "claude": {
+        "grounded": false,
+        "unsupported_claims": [
+          "Suggests contacting customer service for exchange timeframe information - the policies only mention contacting customer service for damaged or wrong items within 48 hours, not as a general channel for exchange questions",
+          "Claims customer service 'may have additional details about exchange procedures and deadlines' - the policies do not state that any additional exchange details or deadlines exist anywhere"
+        ],
+        "answers_the_question": true,
+        "accuracy": 9,
+        "relevance": 9,
+        "grounding": 6,
+        "helpfulness": 8,
+        "score": 7,
+        "reasoning": "The response correctly restates the exchange policy and appropriately admits the policies are silent on an exchange time limit, which is the right handling of a gap. It loses points for inventing a referral to customer service and speculating that they hold additional exchange deadlines, neither of which the policy set supports.",
+        "has_violation": true,
+        "provider": "claude"
+      },
+      "gemini": {
+        "grounded": false,
+        "unsupported_claims": [
+          "I'd recommend contacting our customer service team directly, as they may have additional details about exchange procedures and deadlines."
+        ],
+        "answers_the_question": true,
+        "accuracy": 8,
+        "relevance": 10,
+        "grounding": 7,
+        "helpfulness": 7,
+        "score": 7,
+        "reasoning": "The response correctly states that clothing can be exchanged for a different size and that the policies do not specify a time limit for exchanges. However, it makes an unsupported claim by suggesting customer service may have additional details about exchange procedures and deadlines not found in the provided policies.",
+        "has_violation": true,
+        "provider": "gemini"
+      }
+    },
+    {
+      "case_id": "Q01",
+      "version": "v2",
+      "question": "How much does delivery cost?",
+      "response": "Standard delivery costs RM5 per order. However, delivery is free on orders above RM100.",
+      "code_grade": {
+        "passed": true,
+        "power": "normal",
+        "checks": [
+          {
+            "label": "states the RM5 standard delivery fee",
+            "type": "must_contain_any",
+            "passed": true,
+            "matched": [
+              "RM\\s?5\\b"
+            ]
+          },
+          {
+            "label": "no competing delivery fee",
+            "type": "must_not_contain_any",
+            "passed": true,
+            "matched": []
+          }
+        ]
+      },
+      "claude": {
+        "grounded": true,
+        "unsupported_claims": [],
+        "answers_the_question": true,
+        "accuracy": 10,
+        "relevance": 10,
+        "grounding": 10,
+        "helpfulness": 9,
+        "score": 10,
+        "reasoning": "Both statements—the RM5 standard delivery fee and free delivery above RM100—map directly to the policy set with no added conditions. It directly and clearly answers the delivery cost question.",
+        "has_violation": false,
+        "provider": "claude"
+      },
+      "gemini": {
+        "grounded": true,
+        "unsupported_claims": [],
+        "answers_the_question": true,
+        "accuracy": 10,
+        "relevance": 10,
+        "grounding": 10,
+        "helpfulness": 10,
+        "score": 10,
+        "reasoning": "The response accurately and completely answers the customer's question about delivery costs. All information provided is directly supported by the store policies.",
+        "has_violation": false,
+        "provider": "gemini"
+      }
+    },
+    {
+      "case_id": "Q02",
+      "version": "v2",
+      "question": "How long will it take for my order to arrive?",
+      "response": "Your order will be delivered within 3 to 5 working days.",
+      "code_grade": {
+        "passed": true,
+        "power": "normal",
+        "checks": [
+          {
+            "label": "states the 3 to 5 range",
+            "type": "must_contain_any",
+            "passed": true,
+            "matched": [
+              "\\b3\\s*(?:to|-|\\u2013|and)\\s*5\\b"
+            ]
+          },
+          {
+            "label": "says working days, not calendar days",
+            "type": "must_contain_any",
+            "passed": true,
+            "matched": [
+              "working\\s+days?"
+            ]
+          },
+          {
+            "label": "no rival delivery range",
+            "type": "must_not_contain_any",
+            "passed": true,
+            "matched": []
+          }
+        ]
+      },
+      "claude": {
+        "grounded": true,
+        "unsupported_claims": [],
+        "answers_the_question": true,
+        "accuracy": 10,
+        "relevance": 10,
+        "grounding": 10,
+        "helpfulness": 9,
+        "score": 10,
+        "reasoning": "The response directly answers the delivery timeframe question with the exact policy figure of 3 to 5 working days and adds no extra conditions or claims. It is concise, accurate, and fully grounded.",
+        "has_violation": false,
+        "provider": "claude"
+      },
+      "gemini": {
+        "grounded": true,
+        "unsupported_claims": [],
+        "answers_the_question": true,
+        "accuracy": 10,
+        "relevance": 10,
+        "grounding": 10,
+        "helpfulness": 10,
+        "score": 10,
+        "reasoning": "The response directly and accurately answers the customer's question based on the provided policies. All information is fully supported and relevant.",
+        "has_violation": false,
+        "provider": "gemini"
+      }
+    },
+    {
+      "case_id": "Q03",
+      "version": "v2",
+      "question": "Is there free delivery available?",
+      "response": "Yes, free delivery is available on orders above RM100. For orders of RM100 or less, standard delivery is RM5 per order.",
+      "code_grade": {
+        "passed": true,
+        "power": "normal",
+        "checks": [
+          {
+            "label": "states the RM100 threshold",
+            "type": "must_contain_any",
+            "passed": true,
+            "matched": [
+              "RM\\s?100\\b"
+            ]
+          },
+          {
+            "label": "states the threshold is exclusive",
+            "type": "must_contain_any",
+            "passed": true,
+            "matched": [
+              "above"
+            ]
+          },
+          {
+            "label": "no rival threshold",
+            "type": "must_not_contain_any",
+            "passed": true,
+            "matched": []
+          }
+        ]
+      },
+      "claude": {
+        "grounded": true,
+        "unsupported_claims": [],
+        "answers_the_question": true,
+        "accuracy": 10,
+        "relevance": 10,
+        "grounding": 10,
+        "helpfulness": 9,
+        "score": 10,
+        "reasoning": "The response correctly states free delivery applies to orders above RM100 and RM5 otherwise, both directly supported by policy, including the correct handling of the exactly-RM100 edge case. It answers the question directly with no added conditions or invented details.",
+        "has_violation": false,
+        "provider": "claude"
+      },
+      "gemini": {
+        "grounded": true,
+        "unsupported_claims": [],
+        "answers_the_question": true,
+        "accuracy": 10,
+        "relevance": 10,
+        "grounding": 10,
+        "helpfulness": 10,
+        "score": 10,
+        "reasoning": "The response accurately and completely answers the customer's question about free delivery. All information provided is directly supported by the store policies.",
+        "has_violation": false,
+        "provider": "gemini"
+      }
+    },
+    {
+      "case_id": "Q04",
+      "version": "v2",
+      "question": "How many days do I have to return a product?",
+      "response": "You have 14 days from delivery to return a product.",
+      "code_grade": {
+        "passed": true,
+        "power": "normal",
+        "checks": [
+          {
+            "label": "states the 14-day return window",
+            "type": "must_contain_any",
+            "passed": true,
+            "matched": [
+              "\\b14\\b"
+            ]
+          },
+          {
+            "label": "no rival return window",
+            "type": "must_not_contain_any",
+            "passed": true,
+            "matched": []
+          }
+        ]
+      },
+      "claude": {
+        "grounded": true,
+        "unsupported_claims": [],
+        "answers_the_question": true,
+        "accuracy": 10,
+        "relevance": 10,
+        "grounding": 10,
+        "helpfulness": 9,
+        "score": 10,
+        "reasoning": "The response directly answers the question with the exact 14-day return window stated in the policies and adds nothing beyond it. It is concise, accurate, and fully grounded, though it could optionally have noted the unused/original-packaging and sale-item conditions.",
+        "has_violation": false,
+        "provider": "claude"
+      },
+      "gemini": {
+        "grounded": true,
+        "unsupported_claims": [],
+        "answers_the_question": true,
+        "accuracy": 10,
+        "relevance": 10,
+        "grounding": 10,
+        "helpfulness": 10,
+        "score": 10,
+        "reasoning": "The response accurately and directly answers the customer's question based on the provided policies. All claims are fully supported by the store policies.",
+        "has_violation": false,
+        "provider": "gemini"
+      }
+    },
+    {
+      "case_id": "Q05",
+      "version": "v2",
+      "question": "How long does a refund take to process?",
+      "response": "Approved refunds are processed within 5 to 7 working days.",
+      "code_grade": {
+        "passed": true,
+        "power": "normal",
+        "checks": [
+          {
+            "label": "states the 5 to 7 range",
+            "type": "must_contain_any",
+            "passed": true,
+            "matched": [
+              "\\b5\\s*(?:to|-|\\u2013|and)\\s*7\\b"
+            ]
+          },
+          {
+            "label": "says working days",
+            "type": "must_contain_any",
+            "passed": true,
+            "matched": [
+              "working\\s+days?"
+            ]
+          },
+          {
+            "label": "no rival refund timeframe",
+            "type": "must_not_contain_any",
+            "passed": true,
+            "matched": []
+          }
+        ]
+      },
+      "claude": {
+        "grounded": true,
+        "unsupported_claims": [],
+        "answers_the_question": true,
+        "accuracy": 10,
+        "relevance": 10,
+        "grounding": 10,
+        "helpfulness": 9,
+        "score": 10,
+        "reasoning": "The response states the refund processing time exactly as written in the policy, with no added conditions or steps. It directly answers the question and is clear, though it adds no extra guidance beyond the verbatim policy.",
+        "has_violation": false,
+        "provider": "claude"
+      },
+      "gemini": {
+        "grounded": true,
+        "unsupported_claims": [],
+        "answers_the_question": true,
+        "accuracy": 10,
+        "relevance": 10,
+        "grounding": 10,
+        "helpfulness": 10,
+        "score": 10,
+        "reasoning": "The response directly and accurately answers the customer's question using information explicitly stated in the store policies. All claims are fully grounded and relevant.",
+        "has_violation": false,
+        "provider": "gemini"
+      }
+    },
+    {
+      "case_id": "Q06",
+      "version": "v2",
+      "question": "How quickly do I need to report a damaged or incorrect item?",
+      "response": "You need to contact customer service within 48 hours of delivery to report a damaged or wrong item.",
+      "code_grade": {
+        "passed": true,
+        "power": "normal",
+        "checks": [
+          {
+            "label": "states the 48-hour deadline",
+            "type": "must_contain_any",
+            "passed": true,
+            "matched": [
+              "\\b48\\s*hours?\\b"
+            ]
+          },
+          {
+            "label": "no rival deadline",
+            "type": "must_not_contain_any",
+            "passed": true,
+            "matched": []
+          }
+        ]
+      },
+      "claude": {
+        "grounded": true,
+        "unsupported_claims": [],
+        "answers_the_question": true,
+        "accuracy": 10,
+        "relevance": 10,
+        "grounding": 10,
+        "helpfulness": 9,
+        "score": 10,
+        "reasoning": "The response restates the policy exactly: contact customer service within 48 hours of delivery for a damaged or wrong item, with no added conditions or steps. It directly answers the question clearly and is fully grounded.",
+        "has_violation": false,
+        "provider": "claude"
+      },
+      "gemini": {
+        "grounded": true,
+        "unsupported_claims": [],
+        "answers_the_question": true,
+        "accuracy": 10,
+        "relevance": 10,
+        "grounding": 10,
+        "helpfulness": 10,
+        "score": 10,
+        "reasoning": "The response directly and accurately answers the customer's question based on the provided policy. Every claim in the response is fully supported by the store policies.",
+        "has_violation": false,
+        "provider": "gemini"
+      }
+    },
+    {
+      "case_id": "Q07",
+      "version": "v2",
+      "question": "My order is worth RM120, do I need to pay for delivery?",
+      "response": "No, you don't need to pay for delivery. Orders above RM100 qualify for free delivery.",
+      "code_grade": {
+        "passed": true,
+        "power": "normal",
+        "checks": [
+          {
+            "label": "applies the threshold and says delivery is free",
+            "type": "must_contain_any",
+            "passed": true,
+            "matched": [
+              "free"
+            ]
+          },
+          {
+            "label": "does not contradict the threshold",
+            "type": "must_not_contain_any",
+            "passed": true,
+            "matched": []
+          }
+        ]
+      },
+      "claude": {
+        "grounded": true,
+        "unsupported_claims": [],
+        "answers_the_question": true,
+        "accuracy": 10,
+        "relevance": 10,
+        "grounding": 10,
+        "helpfulness": 9,
+        "score": 10,
+        "reasoning": "The response correctly applies the free-delivery-above-RM100 policy to an RM120 order and adds no conditions, steps or offers beyond the policy set. It directly answers the question and cites the governing rule clearly.",
+        "has_violation": false,
+        "provider": "claude"
+      },
+      "gemini": {
+        "grounded": true,
+        "unsupported_claims": [],
+        "answers_the_question": true,
+        "accuracy": 10,
+        "relevance": 10,
+        "grounding": 10,
+        "helpfulness": 10,
+        "score": 10,
+        "reasoning": "The response accurately answers the customer's question based on the provided policies. All claims are directly supported by the store's delivery policy.",
+        "has_violation": false,
+        "provider": "gemini"
+      }
+    },
+    {
+      "case_id": "Q08",
+      "version": "v2",
+      "question": "What happens if I want to return a product after 14 days?",
+      "response": "According to our policy, items can only be returned within 14 days of delivery. We don't have a policy covering returns after that period.\n\nFor situations outside our standard return window, please contact our customer service team for assistance.",
+      "code_grade": {
+        "passed": true,
+        "power": "normal",
+        "checks": [
+          {
+            "label": "anchors on the 14-day window",
+            "type": "must_contain_any",
+            "passed": true,
+            "matched": [
+              "\\b14\\b"
+            ]
+          },
+          {
+            "label": "declines the return",
+            "type": "must_contain_any",
+            "passed": true,
+            "matched": [
+              "outside"
+            ]
+          },
+          {
+            "label": "does not accept a late return",
+            "type": "must_not_contain_any",
+            "passed": true,
+            "matched": []
+          }
+        ]
+      },
+      "claude": {
+        "grounded": false,
+        "unsupported_claims": [
+          "\"For situations outside our standard return window, please contact our customer service team for assistance\" — the policies only direct customers to contact customer service within 48 hours for a damaged or wrong item; they contain no contact route or assistance pathway for late returns.",
+          "The implication that customer service can help or offer some remedy for a return past 14 days — the policies do not provide for any such assistance or exception."
+        ],
+        "answers_the_question": true,
+        "accuracy": 9,
+        "relevance": 9,
+        "grounding": 6,
+        "helpfulness": 7,
+        "score": 6,
+        "reasoning": "The response correctly states the 14-day return window and appropriately acknowledges that the policies are silent on returns after that period, which is the right handling. However, it then adds an unsupported escalation path by inviting the customer to contact customer service for out-of-window returns, a route the policies only provide for damaged or wrong items within 48 hours.",
+        "has_violation": true,
+        "provider": "claude"
+      },
+      "gemini": {
+        "grounded": false,
+        "unsupported_claims": [
+          "For situations outside our standard return window, please contact our customer service team for assistance."
+        ],
+        "answers_the_question": true,
+        "accuracy": 7,
+        "relevance": 9,
+        "grounding": 6,
+        "helpfulness": 6,
+        "score": 6,
+        "reasoning": "The response correctly states the return policy and acknowledges the lack of policy for returns after 14 days. However, it makes an unsupported claim by suggesting contacting customer service for assistance in such situations.",
+        "has_violation": true,
+        "provider": "gemini"
+      }
+    },
+    {
+      "case_id": "Q09",
+      "version": "v2",
+      "question": "My order total is exactly RM100, is delivery free?",
+      "response": "No, delivery is not free. Since your order totals exactly RM100, you pay the standard delivery fee of RM5. Free delivery applies only to orders **above** RM100.",
+      "code_grade": {
+        "passed": true,
+        "power": "low",
+        "checks": [
+          {
+            "label": "charges the standard RM5 fee",
+            "type": "must_contain_any",
+            "passed": true,
+            "matched": [
+              "RM\\s?5\\b"
+            ]
+          },
+          {
+            "label": "recognises the boundary is exclusive",
+            "type": "must_contain_any",
+            "passed": true,
+            "matched": [
+              "exactly RM\\s?100"
+            ]
+          },
+          {
+            "label": "does not affirm free delivery at exactly RM100",
+            "type": "must_not_contain_any",
+            "passed": true,
+            "matched": []
+          }
+        ]
+      },
+      "claude": {
+        "grounded": true,
+        "unsupported_claims": [],
+        "answers_the_question": true,
+        "accuracy": 10,
+        "relevance": 10,
+        "grounding": 10,
+        "helpfulness": 10,
+        "score": 10,
+        "reasoning": "The response directly answers the edge-case question and every claim (RM5 standard fee, free delivery only above RM100, exactly RM100 not qualifying) is explicitly stated in the policy set. It adds no extra conditions or offers, and is concise and clear.",
+        "has_violation": false,
+        "provider": "claude"
+      },
+      "gemini": {
+        "grounded": true,
+        "unsupported_claims": [],
+        "answers_the_question": true,
+        "accuracy": 10,
+        "relevance": 10,
+        "grounding": 10,
+        "helpfulness": 10,
+        "score": 10,
+        "reasoning": "The response accurately states that delivery is not free for an RM100 order and correctly explains why, directly referencing the policy. All claims are fully supported by the provided store policies.",
+        "has_violation": false,
+        "provider": "gemini"
+      }
+    },
+    {
+      "case_id": "Q10",
+      "version": "v2",
+      "question": "I received a damaged item 3 days ago, can I still report it?",
+      "response": "Yes, you can still report it. According to our policy, you have 48 hours from delivery to contact customer service about a damaged item, and you received it 3 days ago. However, you're now outside that 48-hour window.\n\nPlease contact our customer service team right away to explain your situation. They may be able to help you even though the deadline has passed.",
+      "code_grade": {
+        "passed": false,
+        "power": "normal",
+        "checks": [
+          {
+            "label": "anchors on the 48-hour deadline",
+            "type": "must_contain_any",
+            "passed": true,
+            "matched": [
+              "\\b48\\s*hours?\\b"
+            ]
+          },
+          {
+            "label": "recognises the deadline has passed",
+            "type": "must_contain_any",
+            "passed": true,
+            "matched": [
+              "outside"
+            ]
+          },
+          {
+            "label": "does not accept a late report",
+            "type": "must_not_contain_any",
+            "passed": false,
+            "matched": [
+              "yes,? you can still"
+            ]
+          }
+        ]
+      },
+      "claude": {
+        "reasoning": "The response is internally contradictory: it opens with \"Yes, you can still report it\" while correctly noting the 48-hour window has passed, and it invents a possible discretionary exception (\"they may be able to help you even though the deadline has passed\") that the policies never mention. The 48-hour rule itself is accurately cited, but the leading affirmative answer and the speculative goodwill offer are unsupported and confusing.",
+        "unsupported_claims": [
+          "\"Yes, you can still report it\" — the policies set a 48-hour window and say nothing about reporting being allowed after it lapses.",
+          "\"They may be able to help you even though the deadline has passed\" — the policies contain no discretionary exception or late-report handling.",
+          "\"Please contact our customer service team right away to explain your situation\" — the policies direct contact within 48 hours; no instruction or process exists for explaining a late situation.",
+          "Implying an outcome may still be available after the window — the policies state no remedy for damaged items reported after 48 hours."
+        ],
+        "answers_the_question": true,
+        "accuracy": 4,
+        "relevance": 9,
+        "grounding": 3,
+        "helpfulness": 4,
+        "score": 4,
+        "grounded": false,
+        "has_violation": true,
+        "provider": "claude"
+      },
+      "gemini": {
+        "grounded": false,
+        "unsupported_claims": [
+          "They may be able to help you even though the deadline has passed."
+        ],
+        "answers_the_question": true,
+        "accuracy": 7,
+        "relevance": 9,
+        "grounding": 6,
+        "helpfulness": 7,
+        "score": 7,
+        "reasoning": "The response accurately states the 48-hour policy for damaged items and correctly identifies that the customer is outside this window. However, it makes an unsupported claim that customer service *may* still be able to help, as the policies are silent on actions after the deadline.",
+        "has_violation": true,
+        "provider": "gemini"
+      }
+    },
+    {
+      "case_id": "M01",
+      "version": "v2",
+      "question": "I received a damaged product, what should I do?",
+      "response": "Please contact our customer service team within 48 hours of delivery to report the damaged product.",
+      "code_grade": null,
+      "claude": {
+        "grounded": true,
+        "unsupported_claims": [],
+        "answers_the_question": true,
+        "accuracy": 10,
+        "relevance": 10,
+        "grounding": 10,
+        "helpfulness": 9,
+        "score": 9,
+        "reasoning": "The response directly mirrors the policy that a damaged item must be reported to customer service within 48 hours of delivery, adding no extra steps, conditions, or offers. It is fully grounded and useful, though slightly terse in that it does not mention what happens after contact (which the policies also do not specify).",
+        "has_violation": false,
+        "provider": "claude"
+      },
+      "gemini": {
+        "grounded": true,
+        "unsupported_claims": [],
+        "answers_the_question": true,
+        "accuracy": 10,
+        "relevance": 10,
+        "grounding": 10,
+        "helpfulness": 10,
+        "score": 10,
+        "reasoning": "The response accurately and directly answers the customer's question based entirely on the provided policies. It is clear, concise, and actionable, making it highly helpful.",
+        "has_violation": false,
+        "provider": "gemini"
+      }
+    },
+    {
+      "case_id": "M02",
+      "version": "v2",
+      "question": "Can I return a sale item?",
+      "response": "No, sale items cannot be returned according to our policy.\n\nIf you received a damaged or wrong item, please contact customer service within 48 hours of delivery.",
+      "code_grade": null,
+      "claude": {
+        "grounded": true,
+        "unsupported_claims": [],
+        "answers_the_question": true,
+        "accuracy": 10,
+        "relevance": 10,
+        "grounding": 10,
+        "helpfulness": 9,
+        "score": 9,
+        "reasoning": "The response directly and correctly answers that sale items cannot be returned, matching the policy verbatim in substance. The added note about damaged or wrong items is also directly supported by the 48-hour contact policy, so nothing is unsupported.",
+        "has_violation": false,
+        "provider": "claude"
+      },
+      "gemini": {
+        "grounded": true,
+        "unsupported_claims": [],
+        "answers_the_question": true,
+        "accuracy": 10,
+        "relevance": 8,
+        "grounding": 10,
+        "helpfulness": 9,
+        "score": 9,
+        "reasoning": "The response accurately answers the customer's question about returning sale items, directly referencing policy. It also provides accurate, policy-backed information regarding damaged or wrong items, which is a helpful addition.",
+        "has_violation": false,
+        "provider": "gemini"
+      }
+    },
+    {
+      "case_id": "M03",
+      "version": "v2",
+      "question": "Does the product need to be in original packaging for a return?",
+      "response": "Yes, according to our return policy, returned items must be unused and in their original packaging.",
+      "code_grade": null,
+      "claude": {
+        "grounded": true,
+        "unsupported_claims": [],
+        "answers_the_question": true,
+        "accuracy": 10,
+        "relevance": 10,
+        "grounding": 10,
+        "helpfulness": 9,
+        "score": 10,
+        "reasoning": "The response directly answers the question with a verbatim restatement of the policy that returned items must be unused and in original packaging, adding no extra conditions or offers. It is accurate, fully grounded, and clear, though it could optionally have mentioned the 14-day window.",
+        "has_violation": false,
+        "provider": "claude"
+      },
+      "gemini": {
+        "grounded": true,
+        "unsupported_claims": [],
+        "answers_the_question": true,
+        "accuracy": 10,
+        "relevance": 10,
+        "grounding": 10,
+        "helpfulness": 10,
+        "score": 10,
+        "reasoning": "The response directly and accurately answers the customer's question by quoting the relevant policy. All claims made are fully supported by the provided store policies.",
+        "has_violation": false,
+        "provider": "gemini"
+      }
+    },
+    {
+      "case_id": "M04",
+      "version": "v2",
+      "question": "What is your return policy?",
+      "response": "Here's our return policy:\n\n- Items can be returned within 14 days of delivery\n- Returned items must be unused and in their original packaging\n- Sale items cannot be returned\n- Approved refunds are processed within 5 to 7 working days\n- Clothing can be exchanged for a different size, subject to stock availability\n\nFor damaged or wrong items, contact customer service within 48 hours of delivery.",
+      "code_grade": null,
+      "claude": {
+        "grounded": true,
+        "unsupported_claims": [],
+        "answers_the_question": true,
+        "accuracy": 10,
+        "relevance": 10,
+        "grounding": 10,
+        "helpfulness": 9,
+        "score": 10,
+        "reasoning": "Every statement in the response maps directly to a listed policy on returns, refunds, exchanges, and damaged/wrong items, with no added conditions or invented steps. It fully and clearly answers the return policy question in an organised, customer-usable format.",
+        "has_violation": false,
+        "provider": "claude"
+      },
+      "gemini": {
+        "grounded": true,
+        "unsupported_claims": [],
+        "answers_the_question": true,
+        "accuracy": 10,
+        "relevance": 10,
+        "grounding": 10,
+        "helpfulness": 10,
+        "score": 10,
+        "reasoning": "The response accurately and comprehensively details the return policy, with every claim directly supported by the provided store policies. It is highly relevant and helpful for the customer's question.",
+        "has_violation": false,
+        "provider": "gemini"
+      }
+    },
+    {
+      "case_id": "M05",
+      "version": "v2",
+      "question": "I need to change my delivery address, is that possible?",
+      "response": "Yes, you can change your delivery address, but only before your order is dispatched.",
+      "code_grade": null,
+      "claude": {
+        "grounded": true,
+        "unsupported_claims": [],
+        "answers_the_question": true,
+        "accuracy": 10,
+        "relevance": 10,
+        "grounding": 10,
+        "helpfulness": 9,
+        "score": 10,
+        "reasoning": "The response directly answers the question and mirrors the policy exactly: an address can be changed before dispatch, with no added conditions, steps, or offers. It is concise, clear, and fully grounded, losing only a trivial point on helpfulness for not mentioning how to request the change (which the policies do not specify anyway).",
+        "has_violation": false,
+        "provider": "claude"
+      },
+      "gemini": {
+        "grounded": true,
+        "unsupported_claims": [],
+        "answers_the_question": true,
+        "accuracy": 10,
+        "relevance": 10,
+        "grounding": 10,
+        "helpfulness": 10,
+        "score": 10,
+        "reasoning": "The response accurately states that a delivery address can be changed before dispatch, which is directly supported by the store policies. It is clear, concise, and directly answers the customer's question.",
+        "has_violation": false,
+        "provider": "gemini"
+      }
+    },
+    {
+      "case_id": "M06",
+      "version": "v2",
+      "question": "Can I cancel my order?",
+      "response": "Yes, you can cancel your order, but only before it is dispatched.\n\nIf your order hasn't been dispatched yet, please contact customer service to proceed with the cancellation.",
+      "code_grade": null,
+      "claude": {
+        "grounded": false,
+        "unsupported_claims": [
+          "\"Please contact customer service to proceed with the cancellation\" — the policies state an order can be cancelled before dispatch but never specify contacting customer service as the cancellation procedure (customer service contact is only mentioned for damaged or wrong items)."
+        ],
+        "answers_the_question": true,
+        "accuracy": 8,
+        "relevance": 10,
+        "grounding": 6,
+        "helpfulness": 8,
+        "score": 6,
+        "reasoning": "The core answer — cancellation is allowed before dispatch — is exactly correct and directly responsive. However, it adds a procedural step (contacting customer service to cancel) that the policies never state, making the response partly ungrounded.",
+        "has_violation": true,
+        "provider": "claude"
+      },
+      "gemini": {
+        "grounded": false,
+        "unsupported_claims": [
+          "contact customer service to proceed with the cancellation"
+        ],
+        "answers_the_question": true,
+        "accuracy": 8,
+        "relevance": 10,
+        "grounding": 6,
+        "helpfulness": 9,
+        "score": 7,
+        "reasoning": "The response correctly states that orders can be cancelled before dispatch, which is policy-compliant. However, the instruction to contact customer service for cancellation is not explicitly supported by the provided policies.",
+        "has_violation": true,
+        "provider": "gemini"
+      }
+    },
+    {
+      "case_id": "M07",
+      "version": "v2",
+      "question": "Can I exchange a clothing item for a different size?",
+      "response": "Yes, clothing can be exchanged for a different size, subject to stock availability.",
+      "code_grade": null,
+      "claude": {
+        "grounded": true,
+        "unsupported_claims": [],
+        "answers_the_question": true,
+        "accuracy": 10,
+        "relevance": 10,
+        "grounding": 10,
+        "helpfulness": 9,
+        "score": 10,
+        "reasoning": "The response directly answers the question and mirrors the policy exactly, including the stock availability condition, with no added requirements or invented steps. It is concise and clear, though it could optionally note the 14-day window, which is not required.",
+        "has_violation": false,
+        "provider": "claude"
+      },
+      "gemini": {
+        "grounded": true,
+        "unsupported_claims": [],
+        "answers_the_question": true,
+        "accuracy": 10,
+        "relevance": 10,
+        "grounding": 10,
+        "helpfulness": 10,
+        "score": 10,
+        "reasoning": "The response directly and accurately answers the customer's question based on the provided policies. All claims made are fully supported by the store policies.",
+        "has_violation": false,
+        "provider": "gemini"
+      }
+    },
+    {
+      "case_id": "M08",
+      "version": "v2",
+      "question": "Can I change my delivery address after my order has been shipped?",
+      "response": "No. According to our policy, a delivery address can only be changed before the order is dispatched. Once your order has been shipped, the address cannot be changed.\n\nIf you need further assistance, please contact our customer service team.",
+      "code_grade": null,
+      "claude": {
+        "grounded": false,
+        "unsupported_claims": [
+          "\"If you need further assistance, please contact our customer service team.\" — the policies only mention contacting customer service within 48 hours for a damaged or wrong item, not as a general assistance channel for address changes."
+        ],
+        "answers_the_question": true,
+        "accuracy": 9,
+        "relevance": 10,
+        "grounding": 7,
+        "helpfulness": 9,
+        "score": 8,
+        "reasoning": "The core answer correctly restates the policy that an address can only be changed before dispatch, directly and clearly answering the question. It loses points only for the tacked-on general invitation to contact customer service, which the policy set does not provide for this situation.",
+        "has_violation": true,
+        "provider": "claude"
+      },
+      "gemini": {
+        "grounded": true,
+        "unsupported_claims": [],
+        "answers_the_question": true,
+        "accuracy": 10,
+        "relevance": 10,
+        "grounding": 10,
+        "helpfulness": 9,
+        "score": 9,
+        "reasoning": "The response accurately states the policy regarding delivery address changes and directly answers the customer's question. All claims are fully supported by the provided policies.",
+        "has_violation": false,
+        "provider": "gemini"
+      }
+    },
+    {
+      "case_id": "M09",
+      "version": "v2",
+      "question": "Is it possible to cancel an order that has already been shipped?",
+      "response": "According to our policy, an order can be cancelled before it is dispatched. Once your order has already been shipped, I'm unable to help based on our standard policies.\n\nPlease contact our customer service team for assistance with your shipped order.",
+      "code_grade": null,
+      "claude": {
+        "grounded": false,
+        "unsupported_claims": [
+          "\"Please contact our customer service team for assistance with your shipped order\" — the policies only mention contacting customer service within 48 hours for a damaged or wrong item, not as a route for cancelling a shipped order."
+        ],
+        "answers_the_question": true,
+        "accuracy": 8,
+        "relevance": 9,
+        "grounding": 6,
+        "helpfulness": 7,
+        "score": 6,
+        "reasoning": "The response correctly cites the policy that cancellation is only possible before dispatch and appropriately notes it cannot help once shipped, which answers the question directly. However, it adds an unsupported referral step directing the customer to customer service for a shipped-order cancellation, which the policies never provide for.",
+        "has_violation": true,
+        "provider": "claude"
+      },
+      "gemini": {
+        "grounded": false,
+        "unsupported_claims": [
+          "Please contact our customer service team for assistance with your shipped order."
+        ],
+        "answers_the_question": true,
+        "accuracy": 9,
+        "relevance": 10,
+        "grounding": 7,
+        "helpfulness": 8,
+        "score": 8,
+        "reasoning": "The response accurately states the policy regarding order cancellation before dispatch and correctly infers that standard policies do not cover cancellation after dispatch. However, the suggestion to contact customer service for a shipped order is not supported by the provided policies.",
+        "has_violation": true,
+        "provider": "gemini"
+      }
+    },
+    {
+      "case_id": "M10",
+      "version": "v2",
+      "question": "How long do I have to exchange a clothing item?",
+      "response": "The policies don't specify a time limit for exchanging clothing items. For details on how long you have to request an exchange, please contact our customer service team.",
+      "code_grade": null,
+      "claude": {
+        "grounded": true,
+        "unsupported_claims": [],
+        "answers_the_question": true,
+        "accuracy": 10,
+        "relevance": 9,
+        "grounding": 10,
+        "helpfulness": 8,
+        "score": 9,
+        "reasoning": "The policies state clothing can be exchanged for a different size subject to stock but give no exchange time limit, so correctly acknowledging the gap and referring to customer service is accurate and fully grounded. It could have been slightly more helpful by mentioning the stock-availability condition or the related 14-day return window as context, but nothing stated is unsupported.",
+        "has_violation": false,
+        "provider": "claude"
+      },
+      "gemini": {
+        "grounded": false,
+        "unsupported_claims": [
+          "For details on how long you have to request an exchange, please contact our customer service team."
+        ],
+        "answers_the_question": true,
+        "accuracy": 6,
+        "relevance": 9,
+        "grounding": 5,
+        "helpfulness": 6,
+        "score": 6,
+        "reasoning": "The response correctly states that the policies do not specify a time limit for exchanging clothing items. However, it then provides unsupported advice to contact customer service for details that are not mentioned in the policies.",
+        "has_violation": true,
+        "provider": "gemini"
+      }
+    }
+  ]
+}
