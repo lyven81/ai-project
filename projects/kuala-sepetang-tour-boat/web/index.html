@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Daily Trip Operations &middot; Kuala Sepetang Tour Boat</title>
+<style>
+:root{
+  --blue:#00a8e8; --blue-dk:#0077b6; --ink:#10212e; --muted:#5f7385; --line:#d7e6f0;
+  --bg:#eef7fc; --card:#fff; --tile:#f5fafd;
+  --good:#0f9d76; --good-bg:#e4f5ef; --good-line:#a9e0cd;
+  --marg:#c07d0e; --marg-bg:#fdf3e1; --marg-line:#f0d6a2;
+  --poor:#cf4436; --poor-bg:#fdeae7; --poor-line:#f2bdb4;
+  --full:#7a5bb5; --full-bg:#f0eaf9;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Segoe UI",-apple-system,BlinkMacSystemFont,Roboto,Helvetica,Arial,sans-serif;
+  line-height:1.55;-webkit-font-smoothing:antialiased}
+.container{display:grid;grid-template-columns:minmax(0,1fr) 390px;gap:22px;
+  align-items:start;max-width:1540px;margin:0 auto;padding:24px}
+
+/* ---------- day header ---------- */
+.daybar{background:var(--card);border-radius:14px;padding:18px 22px;margin-bottom:18px;
+  border:1px solid var(--line);box-shadow:0 1px 3px rgba(16,33,46,.05)}
+.daybar-top{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start;justify-content:space-between}
+h1{margin:0;font-size:1.6rem;font-weight:700;letter-spacing:-.01em}
+.today-note{font-size:.82rem;color:var(--muted);margin:2px 0 0}
+select{padding:9px 12px;border:1px solid var(--line);border-radius:9px;background:#fff;
+  font:inherit;font-size:.9rem;font-weight:600;color:var(--blue-dk);cursor:pointer}
+select:focus{outline:2px solid var(--blue);outline-offset:1px}
+.summary{margin:12px 0 0;font-size:.92rem}
+.sunline{font-size:.82rem;color:var(--muted);margin:4px 0 0}
+.conf{display:flex;flex-wrap:wrap;gap:10px;align-items:baseline;margin:13px 0 0;
+  padding:11px 14px;border-radius:10px;background:#f4fafe;border:1px solid var(--line)}
+.conf-tier{font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
+  padding:3px 10px;border-radius:20px;background:var(--blue);color:#fff}
+.conf-txt{font-size:.85rem;color:var(--muted);flex:1;min-width:220px}
+.conf-txt b{color:var(--ink)}
+
+/* ---------- cards ---------- */
+.trips-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.trip-card{background:var(--card);border-radius:14px;border:1px solid var(--line);
+  border-top:4px solid var(--line);box-shadow:0 1px 3px rgba(16,33,46,.05);
+  display:flex;flex-direction:column;overflow:hidden}
+.trip-card.good{border-top-color:var(--good)}
+.trip-card.marginal{border-top-color:var(--marg)}
+.trip-card.poor{border-top-color:var(--poor)}
+
+/* header: the condition pill is the dominant element */
+.card-head{display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:15px 18px 14px}
+.trip-time{font-size:1.72rem;font-weight:700;color:var(--blue-dk);line-height:1}
+.trip-dur{font-size:.72rem;letter-spacing:.05em;text-transform:uppercase;
+  color:var(--muted);font-weight:600;margin-top:3px}
+.cond{font-size:.82rem;font-weight:800;letter-spacing:.03em;
+  padding:9px 16px;border-radius:10px;white-space:nowrap;border:1px solid transparent;text-align:center}
+.cond.good{background:var(--good-bg);color:var(--good);border-color:var(--good-line)}
+.cond.marginal{background:var(--marg-bg);color:var(--marg);border-color:var(--marg-line)}
+.cond.poor{background:var(--poor-bg);color:var(--poor);border-color:var(--poor-line)}
+
+/* occupancy: one compact row, not the hero */
+.occ-row{display:flex;align-items:center;gap:11px;padding:11px 18px;
+  border-top:1px solid #eaf1f6;border-bottom:1px solid #eaf1f6;background:#fbfdfe}
+.ring{flex:none;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;
+  background:conic-gradient(var(--rc) var(--deg), #e3ecf3 0)}
+.ring i{width:27px;height:27px;border-radius:50%;background:#fbfdfe;display:grid;place-items:center;
+  font-size:.62rem;font-weight:800;color:var(--ink);font-style:normal}
+.occ-main{flex:1;min-width:0}
+.occ-seats{font-size:.95rem;font-weight:700;line-height:1.2}
+.occ-who{font-size:.78rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.badge{flex:none;font-size:.68rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;
+  padding:4px 10px;border-radius:20px}
+.b-open{background:var(--good-bg);color:var(--good)}
+.b-full{background:var(--full-bg);color:var(--full)}
+.b-tight{background:var(--marg-bg);color:var(--marg)}
+
+/* the 2x2 metric tiles */
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:13px 18px 0}
+.tile{background:var(--tile);border:1px solid var(--line);border-radius:10px;
+  padding:10px 12px;text-align:center}
+.tile.flag{background:var(--marg-bg);border-color:var(--marg-line)}
+.tile.stop{background:var(--poor-bg);border-color:var(--poor-line)}
+.tval{font-size:1.34rem;font-weight:700;color:var(--ink);line-height:1.15;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tunit{font-size:.72rem;font-weight:600;color:var(--muted);margin-left:2px}
+.tile.flag .tval,.tile.flag .tunit{color:var(--marg)}
+.tile.stop .tval,.tile.stop .tunit{color:var(--poor)}
+.tlab{font-size:.64rem;font-weight:800;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--muted);margin-top:2px}
+
+/* rain strip */
+.strip-wrap{padding:14px 18px 0}
+.strip-lab{display:flex;justify-content:space-between;align-items:baseline;
+  font-size:.64rem;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.strip-lab span{font-weight:700;letter-spacing:0;text-transform:none;font-size:.76rem;color:var(--ink)}
+.strip{display:flex;gap:3px;margin-top:6px;height:30px}
+.bk{flex:1;border-radius:4px;background:#e9f1f7;position:relative;overflow:hidden}
+.bk i{position:absolute;left:0;right:0;bottom:0;display:block;background:#4c9ecd}
+.bk.heavy i{background:#1c6ea8}
+.strip-ticks{display:flex;justify-content:space-between;font-size:.68rem;color:var(--muted);margin-top:3px}
+.strip-flat{margin-top:6px;height:30px;border-radius:7px;display:flex;align-items:center;
+  justify-content:center;font-size:.78rem;font-weight:700;color:var(--muted);
+  background:repeating-linear-gradient(45deg,#eaf2f8,#eaf2f8 7px,#e0ebf3 7px,#e0ebf3 14px)}
+.shape-line{font-size:.86rem;padding:8px 18px 0;line-height:1.45}
+
+/* the plan, on the face of the card */
+.plan{margin:13px 18px 0;padding:11px 13px;border-radius:10px;font-size:.85rem;line-height:1.45}
+.plan.run{background:#f4fafe;border:1px solid var(--line);color:var(--muted)}
+.plan.run b{color:var(--ink)}
+.plan.move{background:var(--poor-bg);border:1px solid var(--poor-line)}
+.plan-lab{font-size:.63rem;font-weight:800;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--poor);display:block;margin-bottom:2px}
+.plan.run .plan-lab{color:var(--muted)}
+.plan.move b{color:var(--poor)}
+
+/* collapsed secondary material */
+.more{margin-top:auto}
+.more-btn{width:100%;background:none;border:none;border-top:1px solid #eaf1f6;
+  padding:11px 18px;margin-top:14px;font:inherit;font-size:.79rem;font-weight:700;
+  color:var(--blue-dk);cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+.more-btn:hover{background:#f7fbfe}
+.more-btn:focus-visible{outline:2px solid var(--blue);outline-offset:-2px}
+.more-btn .chev{transition:transform .18s}
+.more-btn[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.more-body{display:none;padding:0 18px 15px;font-size:.83rem;color:var(--muted);line-height:1.5}
+.more-body.open{display:block}
+.more-body p{margin:7px 0 0}
+.more-body b{color:var(--ink)}
+
+/* ---------- side panel ---------- */
+.side{background:var(--card);border-radius:14px;border:1px solid var(--line);
+  box-shadow:0 1px 3px rgba(16,33,46,.05);display:flex;flex-direction:column;
+  position:sticky;top:24px;height:calc(100vh - 48px);min-height:520px;overflow:hidden}
+.tabs{display:flex;border-bottom:1px solid var(--line);flex:none}
+.tab{flex:1;padding:14px 8px;background:none;border:none;font:inherit;font-size:.84rem;
+  font-weight:700;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent}
+.tab[aria-selected="true"]{color:var(--blue-dk);border-bottom-color:var(--blue);background:#f7fcff}
+.tab:focus-visible{outline:2px solid var(--blue);outline-offset:-3px}
+.pane{display:none;flex:1;min-height:0;flex-direction:column}
+.pane.on{display:flex}
+
+.thread{flex:1;overflow-y:auto;padding:16px 16px 8px;display:flex;flex-direction:column;gap:11px}
+.msg{max-width:88%;padding:10px 13px;border-radius:12px;font-size:.87rem;line-height:1.5}
+.msg.bot{background:#f2f8fc;border:1px solid var(--line);border-bottom-left-radius:4px;align-self:flex-start}
+.msg.user{background:var(--blue);color:#fff;border-bottom-right-radius:4px;align-self:flex-end}
+.toolchip{align-self:flex-start;font-size:.7rem;font-weight:700;color:var(--blue-dk);
+  background:#e6f4fc;border:1px solid #b9dff3;border-radius:20px;padding:3px 10px;
+  font-family:ui-monospace,Menlo,Consolas,monospace}
+.composer{flex:none;display:flex;gap:8px;padding:12px 14px;border-top:1px solid var(--line);background:#fbfdff}
+.composer input{flex:1;min-width:0;padding:10px 13px;border:1px solid var(--line);
+  border-radius:9px;font:inherit;font-size:.88rem}
+.composer input:focus{outline:2px solid var(--blue);outline-offset:1px}
+.composer button{padding:10px 18px;border:none;border-radius:9px;background:var(--blue);
+  color:#fff;font:inherit;font-weight:700;font-size:.88rem;cursor:pointer}
+.composer button:hover{background:var(--blue-dk)}
+
+.reply-body{flex:1;overflow-y:auto;padding:16px}
+.reply-head{font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:800;margin-bottom:8px}
+.reply-file{font-size:.76rem;color:var(--blue-dk);font-family:ui-monospace,Menlo,Consolas,monospace;
+  background:#f2f8fc;border:1px solid var(--line);border-radius:7px;padding:4px 9px;display:inline-block;margin-bottom:12px}
+.wa{background:#dcf8c6;border-radius:12px;border-bottom-right-radius:4px;padding:13px 15px;
+  font-size:.88rem;line-height:1.55;white-space:pre-wrap;color:#1b2b20}
+.reply-actions{display:flex;gap:8px;margin-top:13px}
+.rbtn{flex:1;padding:10px;border:1px solid var(--line);border-radius:9px;background:#fff;
+  font:inherit;font-size:.84rem;font-weight:700;color:var(--blue-dk);cursor:pointer}
+.rbtn:hover{background:#f2f8fc}
+.reply-note{font-size:.79rem;color:var(--muted);margin-top:13px;line-height:1.5}
+
+/* under the hood */
+.hood{flex:1;min-width:0;overflow-y:auto;overflow-x:hidden;padding:16px}
+.hood h4{margin:0 0 3px;font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.hood h4.spaced{margin-top:22px}
+.hood .lead{font-size:.83rem;color:var(--muted);margin:0 0 11px;line-height:1.5}
+.hood code{background:#eef4f9;border-radius:4px;padding:1px 5px;
+  font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.86em;color:var(--blue-dk)}
+.loop{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fbfdff}
+.lstep{display:flex;gap:10px;padding:9px 12px;border-top:1px solid var(--line);font-size:.82rem;line-height:1.45}
+.lstep:first-child{border-top:none}
+.lstep .ln{flex:none;width:20px;height:20px;border-radius:6px;background:var(--blue);color:#fff;
+  font-size:.7rem;font-weight:800;display:flex;align-items:center;justify-content:center;margin-top:2px}
+.lstep .ln.rep{background:var(--marg)}
+.lstep b{color:var(--ink)}
+.round{margin-top:12px}
+.rhead{font-size:.68rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--blue-dk);background:#e6f4fc;border:1px solid #b9dff3;border-radius:20px;
+  padding:3px 11px;display:inline-block;margin-bottom:7px}
+.mcard{border:1px solid var(--line);border-radius:10px;background:#fff;margin-bottom:7px;overflow:hidden}
+.role{font-size:.66rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+  padding:6px 12px;border-bottom:1px solid var(--line)}
+.role.user{background:#eef7fc;color:var(--blue-dk)}
+.role.asst{background:#f4f2fb;color:var(--full)}
+.role.tool{background:#f2faf6;color:var(--good)}
+.block{padding:8px 12px;border-top:1px dashed #e7eef4;font-size:.8rem;line-height:1.5}
+.block:first-of-type{border-top:none}
+.btype{font-size:.64rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;
+  padding:2px 7px;border-radius:5px;margin-right:7px;font-family:ui-monospace,Menlo,Consolas,monospace}
+.bt-text{background:#eef4f9;color:var(--muted)}
+.bt-use{background:#f0eaf9;color:var(--full)}
+.bt-res{background:#e4f5ef;color:var(--good)}
+.bjson{display:block;margin-top:5px;background:#f7fafd;border:1px solid var(--line);
+  border-radius:6px;padding:7px 9px;font-family:ui-monospace,Menlo,Consolas,monospace;
+  font-size:.73rem;color:#33506a;white-space:pre-wrap;word-break:break-word;line-height:1.5}
+.bid{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.71rem;color:var(--muted)}
+.stopline{padding:7px 12px;background:#fbfdff;border-top:1px solid var(--line);
+  font-size:.74rem;font-family:ui-monospace,Menlo,Consolas,monospace}
+.stopline b{color:var(--ink)}
+.stopline.go{color:var(--full)} .stopline.stop{color:var(--good)}
+.hoodtbl{width:100%;table-layout:fixed;border-collapse:collapse;font-size:.78rem;margin-top:8px}
+.hoodtbl th,.hoodtbl td{text-align:left;padding:7px 9px;border-bottom:1px solid var(--line);
+  vertical-align:top;word-break:break-word}
+.hoodtbl th{font-size:.64rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.hoodtbl td:first-child{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.71rem;color:var(--blue-dk)}
+.hoodtbl col.c1{width:38%} .hoodtbl col.c2{width:22%}
+.rule-item{font-size:.81rem;line-height:1.5;padding:8px 0;border-top:1px solid var(--line);color:var(--muted)}
+.rule-item:first-of-type{border-top:none}
+.rule-item b{color:var(--ink)}
+
+.disclaimer{grid-column:1 / -1;font-size:.8rem;color:var(--muted);background:#fff;
+  border:1px dashed var(--line);border-radius:10px;padding:12px 16px;line-height:1.5}
+.disclaimer b{color:var(--ink)}
+
+@media(max-width:1180px){
+  .container{grid-template-columns:1fr}
+  .side{position:static;height:auto;min-height:0}
+  .thread{max-height:340px}
+}
+@media(max-width:720px){
+  .container{padding:14px;gap:14px}
+  .trips-grid{grid-template-columns:1fr}
+  h1{font-size:1.32rem}
+  .daybar-top{flex-direction:column}
+  .trip-time{font-size:1.5rem}
+  .tval{font-size:1.22rem}
+}
+/* ---------- live states ---------- */
+.state{background:var(--card);border:1px solid var(--line);border-radius:13px;
+  padding:26px 22px;text-align:center;color:var(--muted);font-size:.92rem;grid-column:1 / -1}
+.state b{color:var(--ink);display:block;margin-bottom:4px;font-size:1rem}
+.state.bad{background:var(--poor-bg);border-color:var(--poor-line);color:var(--poor)}
+.skeleton{background:var(--card);border:1px solid var(--line);border-radius:14px;height:430px;
+  position:relative;overflow:hidden}
+.skeleton::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.65),transparent);
+  animation:sweep 1.25s infinite}
+@keyframes sweep{to{transform:translateX(100%)}}
+.hazard{margin:13px 18px 0;padding:11px 13px;border-radius:10px;font-size:.85rem;line-height:1.45;
+  background:var(--poor-bg);border:1px solid var(--poor-line);color:var(--poor);font-weight:600}
+.keybar{border-top:1px solid var(--line);background:#fbfdff;flex:none}
+.keybar summary{padding:10px 14px;font-size:.8rem;font-weight:700;color:var(--muted);cursor:pointer;list-style:none}
+.keybar summary::-webkit-details-marker{display:none}
+.keybar summary b{color:var(--ink)}
+.keystate{font-size:.66rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;
+  padding:2px 8px;border-radius:20px;margin-left:6px}
+.keystate.on{background:var(--good-bg);color:var(--good)}
+.keystate.off{background:var(--pendbg,#ecf0f3);color:var(--muted)}
+.keyrow{display:flex;gap:8px;padding:0 14px 10px}
+.keyrow input{flex:1;min-width:0;padding:9px 12px;border:1px solid var(--line);border-radius:9px;font:inherit;font-size:.85rem}
+.keybar p{padding:0 14px 10px;margin:0;font-size:.76rem;color:var(--muted);line-height:1.5}
+.hood .empty{font-size:.83rem;color:var(--muted);line-height:1.5;background:#fbfdff;
+  border:1px dashed var(--line);border-radius:9px;padding:12px 14px;margin-top:10px}
+.thinking{align-self:flex-start;font-size:.8rem;color:var(--muted);font-style:italic}
+.daynav{display:flex;gap:6px;flex-wrap:wrap;margin:13px 0 0}
+.dbtn{border:1px solid var(--line);background:#fff;border-radius:9px;padding:7px 11px;
+  font:inherit;font-size:.78rem;font-weight:700;color:var(--muted);cursor:pointer;text-align:center;line-height:1.25}
+.dbtn small{display:block;font-weight:600;font-size:.68rem;opacity:.8}
+.dbtn[aria-pressed="true"]{background:var(--blue);border-color:var(--blue);color:#fff}
+.dbtn:focus-visible{outline:2px solid var(--blue);outline-offset:1px}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div>
+    <div class="daybar">
+      <div class="daybar-top">
+        <div>
+          <h1 id="dayTitle">Daily Trip Operations</h1>
+          <p class="today-note" id="todayNote">Reading the forecast…</p>
+        </div>
+        <select id="daySel" aria-label="Which day to show"></select>
+      </div>
+      <p class="summary" id="summary"></p>
+      <p class="sunline" id="sunline"></p>
+      <div class="conf" id="confBox" hidden>
+        <span class="conf-tier" id="confTier"></span>
+        <span class="conf-txt" id="confTxt"></span>
+      </div>
+      <div class="daynav" id="dayNav"></div>
+    </div>
+
+    <div class="trips-grid" id="grid">
+      <div class="skeleton"></div><div class="skeleton"></div>
+      <div class="skeleton"></div><div class="skeleton"></div>
+    </div>
+  </div>
+
+  <div class="side">
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" aria-selected="true"  data-pane="chat">Assistant</button>
+      <button class="tab" role="tab" aria-selected="false" data-pane="reply">Reply to send</button>
+      <button class="tab" role="tab" aria-selected="false" data-pane="hood">Under the hood</button>
+    </div>
+
+    <div class="pane on" id="pane-chat">
+      <div class="thread" id="thread">
+        <div class="msg bot">Ask about a departure, a date, or a booking. I read the live forecast and your booking list before answering, and I draft the message you send the customer. Ask away, no setup needed.</div>
+      </div>
+      <div class="composer">
+        <input id="q" type="text" placeholder="Ask about a departure, a date, or a booking" aria-label="Message the assistant">
+        <button id="send" type="button">Send</button>
+      </div>
+      <details class="keybar" id="keybar">
+        <summary><b>Use your own Anthropic key</b> <span class="keystate off" id="keystate">optional</span></summary>
+        <div class="keyrow">
+          <input id="apikey" type="password" placeholder="sk-ant-..." aria-label="Anthropic API key" autocomplete="off">
+          <button class="rbtn" id="savekey" type="button" style="flex:0 0 auto">Save</button>
+        </div>
+        <p>Optional. The assistant already runs without one. If you paste your own key it is used instead, so your questions spend your tokens rather than mine. It is kept in this browser and sent with each question, never stored on the server, never written to a log and never shown in an error message. Clear it by saving an empty box.</p>
+      </details>
+    </div>
+
+    <div class="pane" id="pane-reply">
+      <div class="reply-body" id="replyBody">
+        <div class="reply-head">Drafted for the operator to send</div>
+        <p class="reply-note">Ask the assistant what to tell a customer and the drafted message appears here, saved and ready to copy.</p>
+      </div>
+    </div>
+
+    <div class="pane" id="pane-hood">
+      <div class="hood">
+        <h4>The loop</h4>
+        <p class="lead">One question can need several tools before there is an answer. The loop keeps going until the model stops asking.</p>
+        <div class="loop">
+          <div class="lstep"><span class="ln">1</span><div>Send the whole message list, with every tool schema attached.</div></div>
+          <div class="lstep"><span class="ln">2</span><div>The reply comes back as <b>a list of blocks</b>, not one string. Usually a <code>text</code> block saying what it is doing, then one <code>tool_use</code> block per tool it wants.</div></div>
+          <div class="lstep"><span class="ln">3</span><div>Append that <b>entire</b> content list to history, <code>tool_use</code> blocks included. Drop them and the next call breaks.</div></div>
+          <div class="lstep"><span class="ln">4</span><div>Run every requested tool. Send one <code>tool_result</code> back per request, with <code>tool_use_id</code> matched to the block that asked. A tool that throws returns a result with <code>is_error</code>, never an exception.</div></div>
+          <div class="lstep"><span class="ln rep">5</span><div>Repeat while <code>stop_reason == "tool_use"</code>. Anything else means the answer is ready.</div></div>
+        </div>
+
+        <h4 class="spaced">This conversation, block by block</h4>
+        <p class="lead">Filled in live as you ask. Every tool call below actually ran.</p>
+        <div id="trace"><div class="empty">Nothing yet. Ask the assistant something on the first tab and the exchange appears here as it crosses the wire.</div></div>
+
+        <h4 class="spaced">What sits behind the loop</h4>
+        <table class="hoodtbl">
+          <colgroup><col class="c1"><col class="c2"><col></colgroup>
+          <tr><th>Tool</th><th>Built by</th><th>What it is for</th></tr>
+          <tr><td>get_current_datetime</td><td>us</td><td>What day it is now, and the date of each day ahead. Without it "this Sunday" is a guess, and every answer built on that guess inherits it.</td></tr>
+          <tr><td>get_boat_conditions</td><td>us</td><td>Conditions at this jetty, at whatever grain is asked: one departure, one day, or a run of days. The only source of weather.</td></tr>
+          <tr><td>web_search</td><td>Anthropic, server side</td><td>What weather cannot answer: public holidays, school breaks, advisories, closures, what else is worth seeing.</td></tr>
+          <tr><td>str_replace_based_edit_tool</td><td>schema theirs, code ours</td><td>Turns the findings into the message the operator sends, and keeps it as a file.</td></tr>
+        </table>
+
+        <h4 class="spaced">Three rules that keep it honest</h4>
+        <div class="rule-item"><b>Every id gets an answer.</b> The model can ask for several tools in one message. Each <code>tool_use</code> needs its own <code>tool_result</code> with the id matched, even when the results come back in a different order.</div>
+        <div class="rule-item"><b>Errors travel as results.</b> A failed tool returns <code>is_error: true</code> with a message written for the model to read, so it can correct itself and try again. An exception would end the turn instead.</div>
+        <div class="rule-item"><b>The caveat rides with the data.</b> The disclaimer is inside every tool result, not only in the system prompt, so it reaches the answer even after a long chain of calls.</div>
+      </div>
+    </div>
+  </div>
+
+  <p class="disclaimer" id="disclaimer"><b>Decision support.</b> Conditions are reported against the operator's own thresholds. This is not a statement that a departure is safe. The operator on the water owns the go or no-go call. Tide is not included.</p>
+</div>
+<script>
+/* ---------------------------------------------------------------------------
+   Live front end.
+
+   One request brings the whole week. Switching day is then local, because the
+   seven days are already in hand: a board that refetched on every click would
+   spend seven times the quota to show data it already had.
+--------------------------------------------------------------------------- */
+
+const DAYS_AHEAD = 7;
+let BOARD = null;
+let dayIndex = 0;
+let history = [];
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s == null ? "" : s)
+  .replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+const WORD = { good:"Good", marginal:"Marginal", poor:"Not workable" };
+const RING = { good:"#0f9d76", marginal:"#c07d0e", poor:"#cf4436" };
+const T = { gustMarginal:32, gustPoor:50, rainPoor:3.0, probPoor:70,
+            visPoorKm:1.5, visWatchKm:3.0 };
+
+function session(){
+  let s = localStorage.getItem("ks_session");
+  if (!s){ s = "s" + Math.random().toString(36).slice(2, 10); localStorage.setItem("ks_session", s); }
+  return s;
+}
+function getKey(){ try { return localStorage.getItem("ks_key") || ""; } catch(e){ return ""; } }
+
+function dayName(iso){
+  const d = new Date(iso + "T00:00");
+  return d.toLocaleString("en-GB", { weekday:"long" });
+}
+function shortDay(iso){
+  const d = new Date(iso + "T00:00");
+  return d.toLocaleString("en-GB", { weekday:"short", day:"numeric" });
+}
+
+/* ---------------------------------------------------------------- cards --- */
+
+function tile(value, unit, label, level){
+  const cls = level === 2 ? "tile stop" : level === 1 ? "tile flag" : "tile";
+  return `<div class="${cls}"><div class="tval">${value}<span class="tunit">${unit}</span></div>
+          <div class="tlab">${label}</div></div>`;
+}
+
+/* Drawn only where the record supports it. Past tomorrow the forecast cannot
+   place rain inside a two-hour window, so the strip says wet or dry and draws
+   nothing it cannot stand behind. */
+function strip(s){
+  const buckets = s.buckets || [];
+  if (!s.shape_reliable || !buckets.length){
+    const wet = s.mmph > 0 || s.prob >= 60;
+    return `<div class="strip-wrap">
+      <div class="strip-lab">Rain through the window <span>timing not shown at this range</span></div>
+      <div class="strip-flat">${wet ? "Rain expected" : "No rain expected"}</div></div>`;
+  }
+  const total = buckets.reduce((a,b) => a + b, 0);
+  const peak = Math.max(0.4, ...buckets);
+  const bars = buckets.map(v => {
+    const h = v <= 0 ? 0 : Math.max(20, Math.round((v / peak) * 100));
+    return `<div class="bk${v >= 0.25 ? " heavy" : ""}"><i style="height:${h}%"></i></div>`;
+  }).join("");
+  return `<div class="strip-wrap">
+    <div class="strip-lab">Rain through the window <span>${total > 0 ? total.toFixed(1) + " mm" : "dry"}</span></div>
+    <div class="strip">${bars}</div>
+    <div class="strip-ticks"><span>${s.start}</span><span>${s.end}</span></div></div>`;
+}
+
+/* The plan comes from the server planner, not from arithmetic done here. It
+   has already reserved seats across the window and refuses any departure
+   without room for the whole party. */
+function planBlock(s){
+  if (s.rating === "poor"){
+    const booked = (s.parties || []).filter(p => p.plan);
+    if (!booked.length){
+      return `<div class="plan move"><span class="plan-lab">Not workable</span>
+        Nobody is booked, so there is nothing to move. Keep it closed unless the forecast turns.</div>`;
+    }
+    return booked.map(p => {
+      const pl = p.plan;
+      if (pl.action === "move"){
+        const m = pl.move_to;
+        const when = m.same_day ? "today" : dayName(m.date);
+        return `<div class="plan move"><span class="plan-lab">Move all ${p.size} to</span>
+          <b>${esc(m.label.slice(0,5))} ${esc(when)}</b>, ${esc(m.rating)}.
+          ${m.free_after} seats free after, the whole party goes together.</div>`;
+      }
+      if (pl.action === "split"){
+        const legs = pl.split.map(l => `${l.take} on ${dayName(l.date)} ${l.label.slice(0,5)}`).join(", ");
+        return `<div class="plan move"><span class="plan-lab">${esc(p.party ? p.party.name : p.name)}, no single departure fits</span>
+          <b>They cannot all travel together.</b> Splitting works: ${esc(legs)}. Offer it, do not book it.</div>`;
+      }
+      return `<div class="plan move"><span class="plan-lab">Nothing in the window</span>${esc(pl.says)}</div>`;
+    }).join("");
+  }
+  if (s.shape !== "dry" && s.contingency){
+    return `<div class="plan run"><span class="plan-lab">If you run it</span>${esc(s.contingency)}</div>`;
+  }
+  return "";
+}
+
+function card(s){
+  const free = s.cap - s.seats;
+  const pct = s.cap ? Math.round((s.seats / s.cap) * 100) : 0;
+  const badge = free <= 0 ? `<span class="badge b-full">Full</span>`
+              : free <= 3 ? `<span class="badge b-tight">${free} left</span>`
+                          : `<span class="badge b-open">Open</span>`;
+
+  const gustLvl = s.gust >= T.gustPoor ? 2 : s.gust >= T.gustMarginal ? 1 : 0;
+  const rainLvl = s.mmph >= T.rainPoor ? 2 : s.mmph > 0 ? 1 : 0;
+  const probLvl = s.prob >= T.probPoor ? 1 : 0;
+  const visLvl  = s.vis <= T.visPoorKm ? 2 : s.vis < T.visWatchKm ? 1 : 0;
+
+  const who = (s.parties || []).map(p => `${p.name} (${p.size})`).join(", ") || "no bookings yet";
+
+  const haz = s.hazard && s.hazard.stop
+    ? `<div class="hazard">${esc((s.hazard.reasons || []).join(" "))}</div>` : "";
+
+  const secondary = [];
+  if (s.approach && s.approach !== "clear either side of the window")
+    secondary.push(`<p><b>Either side:</b> ${esc(s.approach)}</p>`);
+  (s.hazard && s.hazard.watch || []).forEach(w => secondary.push(`<p><b>Watch:</b> ${esc(w)}</p>`));
+  if (s.shape_caveat) secondary.push(`<p><b>At this range:</b> ${esc(s.shape_caveat)}</p>`);
+  if (s.rating === "poor" && s.contingency)
+    secondary.push(`<p><b>If you run it anyway:</b> ${esc(s.contingency)}</p>`);
+  if (s.acts && s.acts.length)
+    secondary.push(`<p><b>Carries:</b> ${esc(s.acts.map(a => a.n).join(", "))}</p>`);
+
+  const more = secondary.length ? `<div class="more">
+      <button class="more-btn" type="button" aria-expanded="false">
+        <span>More detail</span><span class="chev">&#9662;</span></button>
+      <div class="more-body">${secondary.join("")}</div></div>` : "";
+
+  return `<div class="trip-card ${s.rating}">
+    <div class="card-head">
+      <div>
+        <div class="trip-time">${esc(s.start)}</div>
+        <div class="trip-dur">to ${esc(s.end)} &middot; 2 hour tour</div>
+      </div>
+      <span class="cond ${s.rating}">${WORD[s.rating] || s.rating}</span>
+    </div>
+    <div class="occ-row">
+      <div class="ring" style="--deg:${pct * 3.6}deg;--rc:${RING[s.rating]}"><i>${pct}%</i></div>
+      <div class="occ-main">
+        <div class="occ-seats">${s.seats} of ${s.cap} seats</div>
+        <div class="occ-who">${esc(who)}</div>
+      </div>
+      ${badge}
+    </div>
+    <div class="tiles">
+      ${tile(Math.round(s.gust), " km/h", "Gusts", gustLvl)}
+      ${tile((s.mmph || 0).toFixed(2).replace(/\.?0+$/, "") || "0", " mm/h", "Rain", rainLvl)}
+      ${tile(s.prob, "%", "Rain chance", probLvl)}
+      ${tile((s.vis || 0).toFixed(1), " km", "Visibility", visLvl)}
+    </div>
+    ${strip(s)}
+    <p class="shape-line">${esc(s.detail)}</p>
+    ${haz}
+    ${planBlock(s)}
+    ${more}
+  </div>`;
+}
+
+/* ---------------------------------------------------------------- render -- */
+
+function render(){
+  if (!BOARD) return;
+  const d = BOARD.days[dayIndex];
+  const dt = new Date(d.date + "T00:00");
+
+  $("dayTitle").textContent =
+    `${dt.toLocaleString("en-GB", { weekday:"long" })} ${dt.getDate()} ` +
+    dt.toLocaleString("en-GB", { month:"long", year:"numeric" });
+  $("todayNote").textContent =
+    d.lead === 0 ? "Today, read live from Open-Meteo"
+                 : `${d.lead} day${d.lead > 1 ? "s" : ""} ahead, read live from Open-Meteo`;
+  $("summary").textContent = d.summary;
+  $("sunline").textContent = `Sunrise ${d.sunrise} · Sunset ${d.sunset}`;
+
+  $("confBox").hidden = false;
+  $("confTier").textContent = d.conf.tier;
+  $("confTxt").innerHTML =
+    `What this range gives you: ${esc(d.conf.usable)}. <b>${esc(d.conf.booking)}.</b>`;
+
+  $("grid").innerHTML = d.slots.map(card).join("");
+
+  $("dayNav").innerHTML = BOARD.days.map((x, i) => {
+    const label = i === 0 ? "Today" : i === 1 ? "Tomorrow" : shortDay(x.date);
+    const bad = x.slots.filter(s => s.rating === "poor").length;
+    return `<button class="dbtn" type="button" data-i="${i}" aria-pressed="${i === dayIndex}">
+      ${label}<small>${6 - bad}/6 workable</small></button>`;
+  }).join("");
+  document.querySelectorAll(".dbtn").forEach(b => b.addEventListener("click", () => {
+    dayIndex = Number(b.dataset.i); $("daySel").value = String(dayIndex); render();
+  }));
+
+  $("daySel").innerHTML = BOARD.days.map((x, i) => {
+    const label = i === 0 ? "Today" : i === 1 ? "Tomorrow"
+      : new Date(x.date + "T00:00").toLocaleString("en-GB", { weekday:"long", day:"numeric", month:"short" });
+    return `<option value="${i}"${i === dayIndex ? " selected" : ""}>${label}</option>`;
+  }).join("");
+
+  document.querySelectorAll(".more-btn").forEach(b => b.addEventListener("click", () => {
+    const open = b.getAttribute("aria-expanded") === "true";
+    b.setAttribute("aria-expanded", String(!open));
+    b.nextElementSibling.classList.toggle("open", !open);
+  }));
+}
+
+async function loadBoard(){
+  try {
+    const r = await fetch(`/api/board?days=${DAYS_AHEAD}`);
+    if (!r.ok) throw new Error((await r.json()).detail || r.statusText);
+    BOARD = await r.json();
+    render();
+  } catch (e){
+    $("grid").innerHTML = `<div class="state bad"><b>Cannot reach the forecast</b>${esc(e.message || e)}</div>`;
+    $("todayNote").textContent = "";
+  }
+}
+
+/* ------------------------------------------------------------------ chat -- */
+
+const trace = { rounds: [], open: null };
+
+function renderTrace(){
+  if (!trace.rounds.length) return;
+  $("trace").innerHTML = trace.rounds.map((r, i) => `
+    <div class="round">
+      <span class="rhead">Round ${i + 1}</span>
+      ${r.blocks.map(b => b).join("")}
+    </div>`).join("");
+}
+
+function userCard(text){
+  return `<div class="mcard"><div class="role user">user</div>
+    <div class="block"><span class="btype bt-text">text</span>${esc(text)}</div></div>`;
+}
+function toolCard(name, input){
+  return `<div class="mcard"><div class="role asst">assistant</div>
+    <div class="block"><span class="btype bt-use">tool_use</span>
+      <code class="bjson">"name": "${esc(name)}",
+"input": ${esc(JSON.stringify(input, null, 1))}</code></div>
+    <div class="stopline go"><b>stop_reason</b>: "tool_use" &rarr; run the tool, loop again</div></div>`;
+}
+function resultCard(detail, isError){
+  return `<div class="mcard"><div class="role tool">user &middot; tool results</div>
+    <div class="block"><span class="btype ${isError ? "bt-err" : "bt-res"}">tool_result</span>
+      <span class="bid">is_error ${isError}</span>
+      <code class="bjson">${esc(detail)}</code></div></div>`;
+}
+function finalCard(text, stop){
+  return `<div class="mcard"><div class="role asst">assistant</div>
+    <div class="block"><span class="btype bt-text">text</span>${esc(text.slice(0, 400))}${text.length > 400 ? "…" : ""}</div>
+    <div class="stopline stop"><b>stop_reason</b>: "${esc(stop)}" &rarr; loop exits</div></div>`;
+}
+
+async function ask(){
+  const box = $("q");
+  const text = box.value.trim();
+  if (!text) return;
+  box.value = "";
+  box.disabled = true; $("send").disabled = true;
+
+  const thread = $("thread");
+  thread.insertAdjacentHTML("beforeend", `<div class="msg user">${esc(text)}</div>`);
+  const out = document.createElement("div");
+  out.className = "msg bot";
+  out.innerHTML = '<span class="thinking">Reading the forecast…</span>';
+  thread.appendChild(out);
+  thread.scrollTop = thread.scrollHeight;
+
+  history.push({ role:"user", content:text });
+  trace.rounds.push({ blocks: [userCard(text)] });
+  renderTrace();
+
+  let body = "", chips = "";
+  const paint = () => {
+    out.innerHTML = chips + esc(body).split("\n").join("<br>").replace(/\*\*(.+?)\*\*/g, "<b>$1</b>");
+    thread.scrollTop = thread.scrollHeight;
+  };
+
+  try {
+    const res = await fetch("/api/chat", {
+      method:"POST", headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify({ messages: history, api_key: getKey(), session: session() })
+    });
+    const reader = res.body.getReader(), dec = new TextDecoder();
+    let buf = "";
+    while (true){
+      const { value, done } = await reader.read();
+      if (done) break;
+      buf += dec.decode(value, { stream:true });
+      const parts = buf.split("\n\n"); buf = parts.pop();
+      for (const p of parts){
+        const line = p.trim();
+        if (!line.startsWith("data: ")) continue;
+        let ev; try { ev = JSON.parse(line.slice(6)); } catch(e){ continue; }
+
+        if (ev.type === "text"){ body += ev.text; }
+        else if (ev.type === "tool"){
+          chips += `<span class="toolchip">${esc(ev.name)}</span>`;
+        }
+        else if (ev.type === "tool_input"){
+          trace.rounds[trace.rounds.length - 1].blocks.push(toolCard(ev.name, ev.input));
+          renderTrace();
+        }
+        else if (ev.type === "tool_error"){
+          chips += `<span class="toolchip" style="color:var(--poor);background:var(--poor-bg);border-color:var(--poor-line)">retrying</span>`;
+          trace.rounds[trace.rounds.length - 1].blocks.push(resultCard(ev.detail, true));
+          renderTrace();
+        }
+        else if (ev.type === "needs_key"){ body += ev.detail; $("keybar").open = true; }
+        else if (ev.type === "error"){ body += " Something went wrong: " + ev.detail; }
+        else if (ev.type === "done"){
+          trace.rounds[trace.rounds.length - 1].blocks.push(finalCard(body, ev.stop_reason));
+          renderTrace();
+        }
+        paint();
+      }
+    }
+    if (body) history.push({ role:"assistant", content:body });
+    loadReplies();
+  } catch(e){
+    out.innerHTML = "Could not reach the assistant. " + esc(String(e));
+  } finally {
+    box.disabled = false; $("send").disabled = false; box.focus();
+  }
+}
+
+/* ----------------------------------------------------------------- reply -- */
+
+async function loadReplies(){
+  try {
+    const r = await fetch("/api/replies?session=" + encodeURIComponent(session()));
+    const j = await r.json();
+    const el = $("replyBody");
+    if (!j.latest){
+      el.innerHTML = `<div class="reply-head">Drafted for the operator to send</div>
+        <p class="reply-note">Ask the assistant what to tell a customer and the drafted message appears here, saved and ready to copy.</p>`;
+      return;
+    }
+    el.innerHTML = `<div class="reply-head">Drafted for the operator to send</div>
+      <div class="reply-file">${esc(j.latest.file)}</div>
+      <div class="wa" id="waText">${esc(j.latest.content)}</div>
+      <div class="reply-actions">
+        <button class="rbtn" type="button" id="copyReply">Copy message</button>
+      </div>
+      <p class="reply-note">The assistant drafts. You send. Nothing here goes out on its own, and the message never tells the customer a trip is safe.${
+        j.count > 1 ? ` ${j.count - 1} earlier draft${j.count > 2 ? "s" : ""} kept.` : ""}</p>`;
+    $("copyReply").addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(j.latest.content);
+        $("copyReply").textContent = "Copied";
+        setTimeout(() => { $("copyReply").textContent = "Copy message"; }, 1600);
+      } catch(e){ $("copyReply").textContent = "Select and copy"; }
+    });
+  } catch(e){ /* the panel simply stays as it was */ }
+}
+
+/* ------------------------------------------------------------------ wire -- */
+
+document.querySelectorAll(".tab").forEach(t => {
+  t.addEventListener("click", () => {
+    document.querySelectorAll(".tab").forEach(x => x.setAttribute("aria-selected", String(x === t)));
+    document.querySelectorAll(".pane").forEach(p => p.classList.remove("on"));
+    $("pane-" + t.dataset.pane).classList.add("on");
+  });
+});
+
+$("daySel").addEventListener("change", e => { dayIndex = Number(e.target.value); render(); });
+$("send").addEventListener("click", ask);
+$("q").addEventListener("keydown", e => { if (e.key === "Enter") ask(); });
+
+(function keyBar(){
+  const state = $("keystate"), input = $("apikey");
+  const paint = () => {
+    const on = !!getKey();
+    state.textContent = on ? "yours" : "optional";
+    state.className = "keystate " + (on ? "on" : "off");
+  };
+  $("savekey").addEventListener("click", () => {
+    const v = input.value.trim();
+    try { v ? localStorage.setItem("ks_key", v) : localStorage.removeItem("ks_key"); } catch(e){}
+    input.value = ""; paint(); $("keybar").open = false;
+  });
+  paint();
+})();
+
+loadBoard();
+loadReplies();
+</script>
+</body>
+</html>

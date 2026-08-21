@@ -1,0 +1,68 @@
+{
+  "run_at": "2026-08-21T22:41:42",
+  "window": {
+    "start": "2026-04-16",
+    "end": "2026-08-14",
+    "days": 121
+  },
+  "planted": {
+    "passed": 16,
+    "total": 16,
+    "failures": []
+  },
+  "monotonicity": {
+    "passed": 7,
+    "total": 7,
+    "failures": []
+  },
+  "properties": {
+    "passed": 726,
+    "total": 726,
+    "violations": []
+  },
+  "reachability": {
+    "patterns_enumerated": 4,
+    "reachable_at_hourly": [
+      "arrives",
+      "clears",
+      "dry",
+      "throughout"
+    ],
+    "unreachable_at_hourly": [
+      "intermittent"
+    ],
+    "proof": "All 2^2 hourly patterns walked. Shapes not listed cannot arise at this resolution by construction, not by absence of weather."
+  },
+  "distribution": {
+    "slot_days": 726,
+    "shapes": {
+      "dry": 310,
+      "throughout": 255,
+      "arrives": 85,
+      "clears": 76
+    },
+    "shape_pct": {
+      "dry": 42.7,
+      "throughout": 35.1,
+      "arrives": 11.7,
+      "clears": 10.5
+    },
+    "ratings": {
+      "good": 309,
+      "marginal": 377,
+      "poor": 40
+    },
+    "rating_pct": {
+      "good": 42.6,
+      "marginal": 51.9,
+      "poor": 5.5
+    },
+    "all_five_shapes_seen": false,
+    "missing_shapes": [
+      "intermittent"
+    ]
+  },
+  "five_shapes_covered_by_planted_cases": true,
+  "gate": "PASS",
+  "note": "Archive data is hourly, so real-data windows carry 2 buckets and only four of the five shapes can arise. The live forecast carries 8 buckets per slot, where all five are reachable and the planted cases prove it. One consequence to watch: at hourly resolution a light drizzle in both hours reads as 'throughout', which is why that share looks high here and would fall at 15-minute resolution."
+}

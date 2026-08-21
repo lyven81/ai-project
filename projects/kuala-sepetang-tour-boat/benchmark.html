@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Benchmark &middot; Kuala Sepetang Tour Boat</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#1E3A5F;--blue:#4A7FB5;--soft:#EAF1F8;--line:#CBDDEF;--ink:#22303C;--muted:#5C6B78;--bg:#F7F9FB;
+ --done:#2E7D5B;--donebg:#E3F1EA;--part:#B5832A;--partbg:#F8EFD9;--pend:#5C6B78;--pendbg:#ECF0F3;--gate:#B03B2E;--gatebg:#FBE7E3;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Manrope",system-ui,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:960px;margin:0 auto;padding:60px 26px 90px}
+.eyebrow{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--blue);font-weight:700;margin:0 0 12px}
+h1{font-family:"Fraunces",Georgia,serif;font-weight:600;color:var(--navy);font-size:2.6rem;line-height:1.08;margin:0 0 8px;letter-spacing:-.01em}
+.tagline{font-size:1.1rem;color:var(--muted);margin:0;font-weight:500}
+.rule{height:3px;width:60px;background:var(--blue);border-radius:2px;margin:24px 0 0}
+p{margin:11px 0}
+h2{font-family:"Fraunces",Georgia,serif;font-weight:600;color:var(--navy);font-size:1.42rem;margin:38px 0 2px}
+h3{margin:0 0 6px;color:var(--navy);font-size:1.04rem}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 0}
+.chip{font-size:.76rem;font-weight:600;background:#fff;border:1px solid var(--line);border-radius:20px;padding:5px 13px;color:var(--muted)}
+.chip b{color:var(--navy)}
+.decision{background:var(--navy);color:#fff;border-radius:12px;padding:18px 22px;margin:26px 0 0}
+.decision .dlbl{font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:#BFD3E8;font-weight:700;margin:0 0 4px}
+.decision p{margin:0;font-family:"Fraunces",Georgia,serif;font-size:1.15rem;line-height:1.35}
+.card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px 22px;margin:18px 0}
+.lbl{font-size:.74rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin:14px 0 2px}
+.tblwrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;margin:10px 0 2px;font-size:.88rem}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+tbody tr:hover{background:#FCFDFE}
+.n{text-align:center;font-weight:700;color:var(--blue);width:32px}
+.wt{text-align:center;font-weight:700;color:var(--navy);white-space:nowrap}
+.crit{font-weight:700;color:var(--navy);min-width:150px}
+code{background:var(--soft);border-radius:5px;padding:1px 6px;font-size:.86em;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--navy)}
+input[type=number]{width:60px;padding:6px;border:1px solid var(--line);border-radius:7px;font:inherit;font-size:.88rem;font-weight:700;text-align:center;color:var(--navy);background:#fff}
+input[type=number]:focus{outline:2px solid var(--blue);outline-offset:1px}
+.scorebar{background:var(--navy);color:#fff;border-radius:12px;padding:20px 24px;margin:26px 0;display:flex;flex-wrap:wrap;gap:30px;align-items:center}
+.sb{display:flex;flex-direction:column;gap:2px}
+.sb .k{font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:#BFD3E8;font-weight:700}
+.sb .v{font-family:"Fraunces",Georgia,serif;font-size:2.2rem;line-height:1}
+.sb .band{font-size:.9rem;color:#BFD3E8}
+.turn{background:#fff;border:1px solid var(--line);border-radius:11px;padding:16px 20px;margin:12px 0}
+.turn .q{font-family:"Fraunces",Georgia,serif;font-size:1.06rem;color:var(--navy);margin:0 0 8px}
+.probe{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 0}
+.tag{font-size:.68rem;font-weight:700;background:var(--soft);border-radius:20px;padding:3px 10px;color:var(--navy)}
+.pass{font-size:.9rem;background:#FCFDFE;border:1px dashed var(--line);border-radius:8px;padding:9px 13px;margin-top:8px;color:var(--muted)}
+.pass b{color:var(--navy)}
+.bands{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 0}
+.band-cell{flex:1;min-width:150px;border-radius:9px;padding:11px 13px;border:1px solid var(--line);background:#fff}
+.band-cell b{display:block;font-family:"Fraunces",Georgia,serif;color:var(--navy);font-size:1.1rem}
+.band-cell small{color:var(--muted);font-size:.8rem;line-height:1.4;display:block;margin-top:2px}
+.b-prod{background:var(--donebg);border-color:#C3E2D1}
+.b-strong{background:var(--partbg);border-color:#EBD9AC}
+.b-poc{background:var(--pendbg);border-color:#D8DFE4}
+.b-demo{background:var(--gatebg);border-color:#E8BFB7}
+.foot{margin-top:50px;padding-top:22px;border-top:1px solid var(--line);color:var(--muted);font-size:.9rem}
+@media(max-width:560px){h1{font-size:2rem} .wrap{padding:40px 16px 60px} .sb .v{font-size:1.7rem}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <p class="eyebrow">AI Project &middot; Acceptance Benchmark</p>
+  <h1>Kuala Sepetang Tour Boat</h1>
+  <p class="tagline">The instrument the assistant gets measured with. Ten weighted criteria, one canonical conversation.</p>
+  <div class="rule"></div>
+
+  <div class="meta">
+    <span class="chip"><b>Source</b> project outline</span>
+    <span class="chip"><b>Total</b> 100 points</span>
+    <span class="chip"><b>Target</b> 90 or above</span>
+    <span class="chip"><b>Turns</b> 4, run in order</span>
+  </div>
+
+  <div class="decision">
+    <p class="dlbl">What is actually being measured</p>
+    <p>Not whether three tools execute. Whether one conversation completes: understand the request, retain context, retrieve live conditions, search when necessary, turn findings into a useful customer response, communicate uncertainty, and leave the safety call with the operator.</p>
+  </div>
+
+  <div class="scorebar">
+    <div class="sb"><span class="k">Score</span><span class="v" id="total">&hellip;</span><span class="band" id="band">Enter scores below</span></div>
+    <div class="sb"><span class="k">Scored so far</span><span class="v" id="counted">0 / 10</span><span class="band" id="ofpts">of 100 points</span></div>
+  </div>
+
+  <h2>The scorecard</h2>
+  <p>Score each criterion out of its own weight. The total updates live and names the band. Nothing is saved, so record the result in the build log once the run is done.</p>
+
+  <div class="card">
+  <div class="tblwrap">
+  <table>
+    <thead>
+      <tr><th class="n">#</th><th>Criterion</th><th class="wt">Weight</th><th>What 100% achievement looks like</th><th class="wt">Score</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="n">1</td><td class="crit">Live data accuracy</td><td class="wt">18</td>
+        <td>Custom tool successfully retrieves genuine current or forecast data from its source, with correct location, date and time.</td>
+        <td><input type="number" min="0" max="18" step="0.5" data-max="18" aria-label="Score, criterion 1"></td>
+      </tr>
+      <tr>
+        <td class="n">2</td><td class="crit">Correct tool selection</td><td class="wt">14</td>
+        <td>The assistant understands when to use web search, text editing or live conditions, instead of calling tools unnecessarily.</td>
+        <td><input type="number" min="0" max="14" step="0.5" data-max="14" aria-label="Score, criterion 2"></td>
+      </tr>
+      <tr>
+        <td class="n">3</td><td class="crit">Safety decision support</td><td class="wt">14</td>
+        <td>Rain, storm and wind are presented clearly, without the assistant falsely guaranteeing that boating is safe.</td>
+        <td><input type="number" min="0" max="14" step="0.5" data-max="14" aria-label="Score, criterion 3"></td>
+      </tr>
+      <tr>
+        <td class="n">4</td><td class="crit">Multi-turn context</td><td class="wt">12</td>
+        <td>Remembers details such as date, time, number of guests and tour discussed across subsequent messages.</td>
+        <td><input type="number" min="0" max="12" step="0.5" data-max="12" aria-label="Score, criterion 4"></td>
+      </tr>
+      <tr>
+        <td class="n">5</td><td class="crit">Booking forecast usefulness</td><td class="wt">10</td>
+        <td>Retrieves conditions for requested future dates within the supported forecast window and communicates uncertainty.</td>
+        <td><input type="number" min="0" max="10" step="0.5" data-max="10" aria-label="Score, criterion 5"></td>
+      </tr>
+      <tr>
+        <td class="n">6</td><td class="crit">Tool integration</td><td class="wt">9</td>
+        <td>Results from multiple tools combine into one coherent answer rather than appearing as disconnected outputs.</td>
+        <td><input type="number" min="0" max="9" step="0.5" data-max="9" aria-label="Score, criterion 6"></td>
+      </tr>
+      <tr>
+        <td class="n">7</td><td class="crit">Customer response quality</td><td class="wt">7</td>
+        <td>Converts technical and live information into simple, friendly language a tourist can understand.</td>
+        <td><input type="number" min="0" max="7" step="0.5" data-max="7" aria-label="Score, criterion 7"></td>
+      </tr>
+      <tr>
+        <td class="n">8</td><td class="crit">Failure handling</td><td class="wt">6</td>
+        <td>Handles API failure, missing data, unsupported dates or uncertain forecasts without inventing information.</td>
+        <td><input type="number" min="0" max="6" step="0.5" data-max="6" aria-label="Score, criterion 8"></td>
+      </tr>
+      <tr>
+        <td class="n">9</td><td class="crit">Operator usefulness</td><td class="wt">6</td>
+        <td>Reduces repetitive checking and gives the operator useful information for booking and trip planning.</td>
+        <td><input type="number" min="0" max="6" step="0.5" data-max="6" aria-label="Score, criterion 9"></td>
+      </tr>
+      <tr>
+        <td class="n">10</td><td class="crit">Speed and usability</td><td class="wt">4</td>
+        <td>Conversation and tool calls are reasonably fast, simple and require minimal manual steps.</td>
+        <td><input type="number" min="0" max="4" step="0.5" data-max="4" aria-label="Score, criterion 10"></td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr><td></td><td class="crit">Total</td><td class="wt">100</td><td id="footBand"></td><td class="wt" id="footTotal">&hellip;</td></tr>
+    </tfoot>
+  </table>
+  </div>
+  </div>
+
+  <h2>How to read the final score</h2>
+  <div class="bands">
+    <div class="band-cell b-prod"><b>90 to 100</b><small>Production-quality prototype. The application genuinely helps a tour operator perform real work.</small></div>
+    <div class="band-cell b-strong"><b>75 to 89</b><small>Strong working prototype. Core workflow works reliably, but there are still gaps before operational use.</small></div>
+    <div class="band-cell b-poc"><b>60 to 74</b><small>Functional proof of concept. Demonstrates multi-turn conversation and tool calling, but reliability or integration remains limited.</small></div>
+    <div class="band-cell b-demo"><b>Below 60</b><small>Technical demo. Individual pieces work, but it does not yet solve the business problem end to end.</small></div>
+  </div>
+
+  <h2>The test script</h2>
+  <p>Run these four turns as one continuous conversation, in order, in a fresh session. Turn 1 is the outline's own canonical benchmark. The other three exist because turn 1 alone cannot exercise web search, the editor, or the failure path.</p>
+
+  <div class="turn">
+    <p class="q">1. &ldquo;A family of five wants a mangrove tour this Sunday around 4 PM. Is that a good time? What should I tell them?&rdquo;</p>
+    <div class="probe"><span class="tag">1 Live data</span><span class="tag">2 Tool selection</span><span class="tag">3 Safety</span><span class="tag">7 Customer response</span></div>
+    <div class="pass"><b>Pass conditions.</b> The date resolves to the correct upcoming Sunday, stated out loud so it can be checked. 16:00 maps to a real departure rather than being answered as though it were one. The reply names a decision and quotes real numbers, never says safe, and ends with something the operator could actually send to the family.</div>
+  </div>
+
+  <div class="turn">
+    <p class="q">2. &ldquo;They also asked whether Sunday is a public holiday in Perak and if anything else is worth seeing near the jetty.&rdquo;</p>
+    <div class="probe"><span class="tag">2 Tool selection</span><span class="tag">4 Multi-turn</span><span class="tag">10 Speed</span></div>
+    <div class="pass"><b>Pass conditions.</b> Web search fires, and the weather tools do not. The search carries the correct year. &ldquo;Sunday&rdquo; resolves from turn 1 without being restated. A holiday claim is sourced, not recalled from memory.</div>
+  </div>
+
+  <div class="turn">
+    <p class="q">3. &ldquo;Good. Now write me the actual WhatsApp message I should send them, and save it so I don't lose it.&rdquo;</p>
+    <div class="probe"><span class="tag">6 Tool integration</span><span class="tag">7 Customer response</span><span class="tag">4 Multi-turn</span></div>
+    <div class="pass"><b>Pass conditions.</b> The text editor writes a file. The message carries the recommended slot, the reason, the uncertainty and the attractions, drawn from all three tools rather than one. Plain language a tourist reads without effort: no jargon, no ratings vocabulary, no thresholds.</div>
+  </div>
+
+  <div class="turn">
+    <p class="q">4. &ldquo;One more. Same family wants to come back on 25 December this year. Can I promise them the 5 PM?&rdquo;</p>
+    <div class="probe"><span class="tag">8 Failure handling</span><span class="tag">5 Booking forecast</span><span class="tag">3 Safety</span></div>
+    <div class="pass"><b>Pass conditions.</b> Refused as beyond the forecast window, with the window stated. Nothing invented about December conditions beyond what is honestly seasonal. No promise offered on the operator's behalf.</div>
+  </div>
+
+  <div class="card">
+    <h3>Two checks that sit outside the conversation</h3>
+    <div class="lbl">Date integrity</div>
+    <div>Ask the assistant what today's date is before anything else, and confirm it against the machine clock. Then request a departure for a date already past, and confirm the answer is refused or clearly labelled as history. Weather that has already happened must never come back as a forecast, and a date the assistant guessed wrong must fail loudly rather than return something plausible.</div>
+    <div class="lbl">Tool count</div>
+    <div>Count the schemas passed to the model. The outline specifies three tools: live conditions, web search and text edit. A current date and time tool is a fourth by necessity, because the model does not reckon dates forward reliably on its own. Beyond those four, every added tool that also touches weather is a criterion 2 risk and has to earn its place.</div>
+  </div>
+
+  <div class="foot">
+    <p><b>Why the benchmark is a document and not a script.</b> Six of the ten criteria are judgements a test runner cannot make: whether a reply is friendly enough for a tourist, whether uncertainty was communicated or merely mentioned, whether a refusal was honest. The four turns above are fixed so that two runs are comparable, and the pass conditions are written down so the judgement is made against something rather than from memory.</p>
+    <p><b>One rule for scoring.</b> A criterion is scored on what the assistant did in the run, not on what the code is capable of. A working text editor that goes unused when the operator asks for a message to send has not earned the customer-response points.</p>
+    <p>&copy; 2026 &middot; Kuala Sepetang Tour Boat &middot; acceptance benchmark</p>
+  </div>
+</div>
+
+<script>
+(function(){
+  var inputs = Array.prototype.slice.call(document.querySelectorAll('input[type=number]'));
+  var total = document.getElementById('total');
+  var band  = document.getElementById('band');
+  var counted = document.getElementById('counted');
+  var ofpts = document.getElementById('ofpts');
+  var foot  = document.getElementById('footTotal');
+  var footBand = document.getElementById('footBand');
+
+  function bandFor(s){
+    if (s >= 90) return 'Production-quality prototype';
+    if (s >= 75) return 'Strong working prototype';
+    if (s >= 60) return 'Functional proof of concept';
+    return 'Technical demo';
+  }
+
+  function recalc(){
+    var n = 0, sum = 0, weight = 0;
+    inputs.forEach(function(el){
+      var max = parseFloat(el.getAttribute('data-max'));
+      var v = parseFloat(el.value);
+      if (isNaN(el.value === '' ? NaN : v)) return;
+      if (v > max) { v = max; el.value = max; }
+      if (v < 0)   { v = 0;   el.value = 0; }
+      n += 1; sum += v; weight += max;
+    });
+
+    counted.textContent = n + ' / 10';
+    ofpts.textContent = 'of ' + weight + ' points';
+
+    if (n === 0){
+      total.textContent = '…'; foot.textContent = '…';
+      band.textContent = 'Enter scores below'; footBand.textContent = '';
+      return;
+    }
+    var rounded = Math.round(sum * 10) / 10;
+    total.textContent = rounded;
+    foot.textContent = rounded;
+    if (n < inputs.length){
+      band.textContent = 'Partial, ' + (inputs.length - n) + ' still to score';
+      footBand.textContent = '';
+    } else {
+      band.textContent = bandFor(rounded);
+      footBand.textContent = bandFor(rounded);
+    }
+  }
+
+  inputs.forEach(function(el){
+    el.addEventListener('input', recalc);
+    el.addEventListener('change', recalc);
+  });
+  recalc();
+})();
+</script>
+</body>
+</html>

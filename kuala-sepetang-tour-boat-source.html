@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kuala Sepetang Tour Boat: Source | AI Project Portfolio</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root{ --ink:#222; --paper:#fff; --hair:#dddddd; --gray:#555; --accent:#B8860B; --navy:#1E3A5F; --code-bg:#fbfbf8; --cmt:#6b8190; }
+  html{ scroll-behavior:smooth; }
+  body{ background:var(--paper); color:var(--ink); font-family:Arial, Helvetica, sans-serif; line-height:1.6; overflow-x:hidden; }
+  a{ color:inherit; text-decoration:none; }
+  a:hover h2, a:hover h3, a:hover h4{ color:var(--accent); }
+  p code, li code{ font-family:"Courier New", monospace; font-size:.86em; background:#f2f3f5; padding:1px 5px; color:var(--navy); }
+
+  /* Masthead (shared) */
+  .masthead{ display:flex; align-items:center; justify-content:space-between; padding:14px 28px; max-width:1240px; margin:0 auto; gap:18px; }
+  .topbar{ position:sticky; top:0; z-index:120; background:#fff; box-shadow:0 1px 6px rgba(0,0,0,.06); }
+  .mast-left{ display:flex; align-items:center; gap:20px; }
+  .logo{ background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; letter-spacing:3px; font-size:.95rem; padding:8px 12px; white-space:nowrap; }
+  .mast-nav{ display:flex; gap:20px; font-family:Arial, Helvetica, sans-serif; font-size:.72rem; letter-spacing:1.4px; text-transform:uppercase; }
+  .mast-nav a:hover{ color:var(--accent); }
+  .hamburger{ display:none; flex-direction:column; gap:4px; background:none; border:none; cursor:pointer; padding:6px; }
+  .hamburger span{ width:22px; height:2px; background:#222; display:block; }
+  .rule-top{ border:none; border-top:3px solid #222; max-width:1240px; margin:0 auto; }
+
+  /* Search (shared) */
+  .search-box{ position:relative; width:200px; }
+  .search-input{ width:100%; padding:7px 30px 7px 12px; border:1px solid var(--hair); background:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; color:#222; }
+  .search-input:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(184,134,11,.15); }
+  .search-ic{ position:absolute; right:10px; top:50%; transform:translateY(-50%); color:var(--gray); font-size:.8rem; pointer-events:none; }
+  .search-results{ position:absolute; top:calc(100% + 4px); left:0; width:340px; max-width:86vw; background:#fff; border:1px solid #222; max-height:60vh; overflow-y:auto; z-index:120; display:none; }
+  .sr-item{ padding:12px 14px; border-bottom:1px solid var(--hair); }
+  .sr-item:last-child{ border-bottom:none; }
+  .sr-cat{ font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; margin-bottom:4px; color:var(--accent); }
+  .sr-title{ font-weight:700; font-size:1.02rem; color:#222; }
+  .sr-links{ font-size:.58rem; letter-spacing:.8px; text-transform:uppercase; color:var(--gray); margin-top:5px; }
+  .sr-links a:hover{ color:var(--accent); }
+  .sr-none{ padding:16px 14px; font-size:.82rem; color:var(--gray); }
+
+  /* Shared bits */
+  .tab{ display:inline-block; background:#222; color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.66rem; letter-spacing:2px; text-transform:uppercase; padding:6px 12px; }
+  .rubric{ font-family:Arial, Helvetica, sans-serif; font-size:.62rem; font-weight:700; letter-spacing:1.6px; text-transform:uppercase; color:var(--accent); display:block; margin-bottom:8px; }
+  .tech-chip{ display:inline-block; border:1px solid var(--hair); padding:6px 12px; font-size:.72rem; letter-spacing:.3px; color:#333; white-space:nowrap; }
+  .tech-chip:hover{ border-color:var(--accent); color:var(--accent); }
+  .btn{ display:inline-block; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:.7rem; letter-spacing:1.6px; text-transform:uppercase; padding:13px 24px; border:1px solid #222; background:#222; color:#fff; cursor:pointer; transition:.15s; }
+  .btn:hover{ background:var(--accent); border-color:var(--accent); }
+  .btn.ghost{ background:#fff; color:#222; }
+  .btn.ghost:hover{ color:var(--accent); border-color:var(--accent); background:#fff; }
+
+  /* Breadcrumb */
+  .crumb{ max-width:1240px; margin:0 auto; padding:20px 28px 0; font-size:.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--gray); }
+  .crumb a:hover{ color:var(--accent); }
+  .crumb .sep{ color:var(--hair); margin:0 8px; }
+
+  /* Header (slim cover banner + copy) */
+  .src-head{ max-width:1240px; margin:0 auto; padding:14px 28px 6px; }
+  .cover-strip{ border:1px solid var(--hair); line-height:0; background:#eef1f4; }
+  .cover-strip img{ width:100%; height:190px; object-fit:cover; object-position:center 42%; display:block; }
+  .src-head h1{ font-size:2.5rem; font-weight:900; line-height:1.04; letter-spacing:-.008em; margin-top:18px; }
+  .src-head .sub{ font-style:italic; font-size:1.08rem; color:#333; margin-top:10px; max-width:72ch; }
+  .head-tech{ display:flex; flex-wrap:wrap; gap:9px; margin-top:16px; }
+  .head-btns{ display:flex; flex-wrap:wrap; gap:12px; margin-top:18px; }
+
+  /* Section shell */
+  .sec{ max-width:1240px; margin:0 auto; padding:26px 28px; }
+  .sec-rule{ border-top:3px solid #222; padding-top:16px; }
+  .sec .tab{ margin-bottom:14px; }
+  .sec h2{ font-size:1.7rem; font-weight:900; line-height:1.06; }
+  .sec .intro{ color:#333; font-size:1.02rem; margin-top:10px; max-width:80%; }
+  .sec .body{ color:#333; font-size:1rem; margin-top:10px; max-width:80%; }
+
+  /* Code block */
+  .codeblock{ border:1px solid var(--hair); margin-top:16px; }
+  .code-bar{ display:flex; align-items:center; justify-content:space-between; gap:12px; background:var(--navy); color:#fff; padding:8px 12px; }
+  .code-bar .path{ font-family:"Courier New", monospace; font-size:.74rem; letter-spacing:.2px; opacity:.96; display:flex; align-items:center; gap:7px; min-width:0; }
+  .code-bar .path span{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .code-copy{ flex:none; background:none; border:1px solid rgba(255,255,255,.4); color:#fff; font-family:Arial, Helvetica, sans-serif; font-size:.56rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; padding:5px 11px; cursor:pointer; transition:.15s; }
+  .code-copy:hover{ background:rgba(255,255,255,.16); }
+  .codeblock pre{ margin:0; padding:14px 16px; overflow-x:auto; background:var(--code-bg); }
+  .codeblock code{ font-family:"Courier New", monospace; font-size:.82rem; line-height:1.6; color:#1b2a3a; background:none; padding:0; white-space:pre; display:block; }
+  .codeblock code .cmt{ color:var(--cmt); font-style:italic; }
+
+  .tree .code-bar .path::before{ content:"📁"; }
+
+  /* Notes */
+  .note-block{ margin-top:22px; }
+  .note-block h3{ font-size:1.15rem; font-weight:800; }
+  .blist{ list-style:none; margin-top:12px; border-top:1px solid var(--hair); }
+  .blist li{ padding:12px 0; border-bottom:1px solid var(--hair); color:#333; font-size:.95rem; }
+  .blist li b{ color:#222; }
+
+  /* CTA */
+  .cta-inner{ display:flex; align-items:center; gap:18px; flex-wrap:wrap; border-top:3px solid #222; padding-top:18px; }
+  .cta-inner h3{ font-size:1.4rem; font-weight:900; line-height:1.08; }
+  .cta-inner p{ color:var(--gray); font-size:.95rem; margin-top:4px; }
+  .cta-btns{ margin-left:auto; display:flex; gap:12px; flex-wrap:wrap; }
+
+  footer{ background:#222; max-width:1240px; margin:30px auto 0; padding:24px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.8rem; letter-spacing:.5px; color:#fff; text-align:center; }
+  .note{ max-width:1240px; margin:14px auto 0; padding:8px 28px; font-family:Arial, Helvetica, sans-serif; font-size:.62rem; letter-spacing:1px; color:#999; }
+
+  /* Drawer (shared) */
+  .drawer{ position:fixed; top:0; left:-300px; width:280px; height:100vh; background:#fff; z-index:200; box-shadow:2px 0 14px rgba(0,0,0,.15); transition:left .28s ease; padding:74px 26px 26px; }
+  .drawer.open{ left:0; }
+  .drawer a{ display:block; font-family:Arial, Helvetica, sans-serif; font-size:.82rem; letter-spacing:1.2px; text-transform:uppercase; padding:14px 0; border-bottom:1px solid var(--hair); }
+  .overlay{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:150; }
+  .overlay.open{ display:block; }
+  .drawer-close{ position:absolute; top:20px; right:20px; font-family:Arial, Helvetica, sans-serif; font-size:1.4rem; background:none; border:none; cursor:pointer; }
+
+  @media (max-width:900px){
+    .cta-btns{ margin-left:0; }
+    .mast-nav{ display:none; }
+    .hamburger{ display:flex; }
+    .masthead{ padding:12px 16px; }
+    .mast-left{ gap:10px; min-width:0; flex:1; }
+    .logo{ font-size:.72rem; letter-spacing:1.5px; padding:6px 8px; }
+    .search-box{ flex:1; width:auto; min-width:0; }
+    .search-results{ position:fixed; top:58px; left:12px; right:12px; width:auto; max-width:none; }
+    .src-head h1{ font-size:1.95rem; }
+    .cover-strip img{ height:150px; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="overlay" id="overlay"></div>
+  <nav class="drawer" id="drawer">
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">&times;</button>
+    <a href="index.html">Home</a>
+    <a href="project-categories.html">Categories</a>
+    <a href="contact.html">Contact</a>
+    <a href="https://lyven81.github.io/data-analyst-portfolio/index.html">Data Portfolio</a>
+  </nav>
+
+  <div class="topbar">
+  <div class="masthead">
+    <div class="mast-left">
+      <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+      <a class="logo" href="index.html">AI BUILDS LAB</a>
+      <nav class="mast-nav">
+        <a href="project-categories.html">Categories</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <div class="search-box">
+        <input type="text" class="search-input" id="searchInput" autocomplete="off" placeholder="Search AI projects..." aria-label="Search AI projects">
+        <span class="search-ic">&#128269;</span>
+        <div class="search-results" id="searchResults"></div>
+      </div>
+    </div>
+  </div>
+  <hr class="rule-top">
+  </div>
+
+  <div class="crumb">
+    <a href="project-categories.html">Categories</a>
+    <span class="sep">/</span><a id="crumbCat" href="#"></a>
+    <span class="sep">/</span><a id="crumbProj" href="#"></a>
+    <span class="sep">/</span><span>Source</span>
+  </div>
+
+  <section class="src-head">
+    <div class="cover-strip" id="coverStrip" style="display:none"><img id="cover" alt=""></div>
+    <span class="rubric" id="kicker"></span>
+    <h1 id="title"></h1>
+    <p class="sub" id="subtitle"></p>
+    <div class="head-tech" id="headTech"></div>
+    <div class="head-btns" id="headBtns"></div>
+  </section>
+
+  <div id="body"></div>
+
+  <footer>&copy; 2026 Lee Yih Ven | AI Project Portfolio &middot; All rights reserved.</footer>
+  <div class="note">Sample Source-Showcase-E2 (TEMPLATE): source-code page on the index magazine system: slim cover banner, About, Project Structure, code walkthrough with copyable navy-barred code blocks, CTA. Reuse by editing only the PROJECT block at the top of the script.</div>
+
+<script>
+  const SITE = "";
+
+  /* =================================================================
+     EDIT PER PROJECT  -  the ONLY block you change per page.
+     Copy this file, swap PROJECT, save as <slug>-source.html.
+     - structure.code : the project file tree (plain text)
+     - walkthrough[]   : { heading, body, files:[{label, code}] }
+     - notes[]         : { heading, bullets:[...] }
+     Code strings can be multi-line; they render verbatim.
+     ================================================================= */
+  const PROJECT = {
+  "slug": "kuala-sepetang-tour-boat",
+  "category": "Industry Specialist Advisors",
+  "categoryUrl": "category-industry-advisors.html",
+  "title": "Kuala Sepetang Tour Boat",
+  "subtitle": "Weather-driven departure planner for a one-boat tour operator",
+  "cover": "images/kuala-sepetang-tour-boat/cover.jpeg",
+  "tech": [
+    "Claude Sonnet 4.5",
+    "Multi-turn tool loop",
+    "FastAPI",
+    "Open-Meteo",
+    "Cloud Run",
+    "Vanilla JS"
+  ],
+  "overviewUrl": "kuala-sepetang-tour-boat.html",
+  "demoLabel": "Launch App",
+  "demoUrl": "https://kuala-sepetang-tour-boat-522143897885.asia-southeast1.run.app",
+  "repoUrl": "https://github.com/lyven81/ai-project/tree/main/projects/kuala-sepetang-tour-boat",
+  "about": "Four tools, one streaming loop, and a deterministic engine underneath that calls no model at all. The interesting code is not the chat: it is the classifier that reads a two-hour window against the operator's own thresholds, and the guards that stop a wrong date returning real weather.",
+  "structure": {
+    "label": "Project structure",
+    "code": "kuala-sepetang-tour-boat/\n├── src/\n│   ├── config.py        thresholds, departures, activities. The operator's file.\n│   ├── forecast.py      Open-Meteo client. One call per range, cached, split per date.\n│   ├── brain.py         the classifier: rain shape, hazard, rating, confidence.\n│   ├── combined.py      the evening run, scored as two halves.\n│   ├── rebooking.py     seat-reserving planner: who moves where, nobody displaced.\n│   ├── tools.py         the four tool schemas and the router.\n│   ├── editor.py        the text editor half Claude does not ship.\n│   ├── agent.py         the multi-turn loop, streamed.\n│   ├── app.py           FastAPI: board, replies, chat over server-sent events.\n│   ├── eval_stage_a.py  classifier gate: planted shapes, invariants, real archive.\n│   └── eval_stage_b.py  forecast skill by lead time, measured not assumed.\n├── web/index.html       the board, the assistant, the drafted reply.\n├── data/bookings.json   sample bookings standing in for a booking system.\n├── results/             the gate output the page is allowed to cite.\n├── Dockerfile           python:3.12-slim, no build step.\n└── DEPLOY.md            Cloud Run commands, secrets, and the two limits that bite."
+  },
+  "walkthrough": [
+    {
+      "heading": "The Loop: Keep Going Until It Stops Asking",
+      "body": "One question can need several tools before there is an answer. The loop sends the message list with every schema attached, appends the entire content list back into history including the tool_use blocks, runs whatever was asked for, returns one result per request with the ids matched, and goes round again while stop_reason is still tool_use. Streaming adds one wrinkle: streamed blocks are not reusable as they arrive, so they are rebuilt into plain dicts before they re-enter history.",
+      "files": [
+        {
+          "label": "agent.py: the multi-turn loop, streamed",
+          "code": "    for _ in range(MAX_ROUNDS):\n        with client.messages.stream(\n            model=model, max_tokens=2000, system=system_prompt(),\n            messages=messages, tools=T.ALL_SCHEMAS,\n        ) as stream:\n            for chunk in stream:\n                if chunk.type == \"text\":\n                    yield {\"type\": \"text\", \"text\": chunk.text}\n                elif chunk.type == \"content_block_start\":\n                    cb = chunk.content_block\n                    if cb.type in (\"tool_use\", \"server_tool_use\"):\n                        yield {\"type\": \"tool\", \"name\": cb.name}\n            final = stream.get_final_message()\n\n            # What it actually asked for, not just which tool. A name alone\n            # cannot tell you whether it looked up the right date.\n            for b in final.content:\n                if b.type in (\"tool_use\", \"server_tool_use\"):\n                    yield {\"type\": \"tool_input\", \"name\": b.name, \"input\": b.input}\n\n        messages.append({\"role\": \"assistant\", \"content\": _rebuild(final)})\n\n        if final.stop_reason != \"tool_use\":\n            yield {\"type\": \"done\", \"stop_reason\": final.stop_reason}\n            return\n\n        requests = [b for b in messages[-1][\"content\"] if b[\"type\"] == \"tool_use\"]\n        results = run_tools(requests, session)\n        for r in results:\n            if r[\"is_error\"]:\n                yield {\"type\": \"tool_error\", \"detail\": r[\"content\"][:180]}\n        messages.append({\"role\": \"user\", \"content\": results})\n\n    yield {\"type\": \"done\", \"stop_reason\": \"max_rounds\","
+        }
+      ]
+    },
+    {
+      "heading": "Errors Travel as Results, Not Exceptions",
+      "body": "A tool that throws must not end the turn. Each failure comes back as a tool_result with is_error set and a message written for the model to read, so it can correct itself and try again. That is why a refused file path costs a retry rather than a dead conversation.",
+      "files": [
+        {
+          "label": "agent.py: one result per request, ids matched",
+          "code": "def run_tools(blocks: list[dict], session: str = \"demo\") -> list[dict]:\n    \"\"\"One tool_result per tool_use block. Errors come back as results with\n    is_error set, never as exceptions, so the model can correct itself.\"\"\"\n    out = []\n    for b in blocks:\n        try:\n            result = T.run_tool(b[\"name\"], b[\"input\"], session)\n            out.append({\n                \"type\": \"tool_result\", \"tool_use_id\": b[\"id\"],\n                \"content\": json.dumps(result, default=str), \"is_error\": False,\n            })\n        except Exception as exc:                       # noqa: BLE001\n            out.append({\n                \"type\": \"tool_result\", \"tool_use_id\": b[\"id\"],\n                \"content\": f\"Error: {exc}\", \"is_error\": True,\n            })\n    return out"
+        }
+      ]
+    },
+    {
+      "heading": "One Weather Tool That Reads Its Own Grain",
+      "body": "An earlier version had four overlapping weather tools, which meant the model had to choose correctly between them before it could be right about anything. They are now one. A date and a time gives one departure, a bare date gives the day, a date and an end_date gives the outlook. The functions behind it did not change; they simply stopped being choices.",
+      "files": [
+        {
+          "label": "tools.py: the grain comes from the arguments",
+          "code": "def get_boat_conditions(date: str, time: str | None = None,\n                        end_date: str | None = None,\n                        exposure: str = \"sheltered\") -> dict:\n    \"\"\"\n    Conditions on the water at Kuala Sepetang, at whatever grain was asked for.\n\n    One departure, one day, or a run of days. The arguments decide, so the\n    caller never has to choose between four similar tools and get it wrong.\n    \"\"\"\n    start = F.parse_date(date)\n\n    # ---- a run of days: can we take a booking at all ----------------------\n    if end_date:\n        out = get_outlook(date, end_date)\n        out[\"grain\"] = \"outlook\"\n        return out\n\n    # ---- one departure ----------------------------------------------------\n    if time:\n        slot, note = _departure_for(time)\n        v = get_slot_forecast(start.isoformat(), slot[\"id\"], exposure)\n        v[\"grain\"] = \"departure\"\n        v[\"asked_for\"] = time\n        v[\"departure\"] = slot[\"label\"]\n        if note:\n            v[\"time_resolved\"] = note\n        if v[\"rating\"] == \"poor\":\n            v[\"relocation\"] = _relocation_for(start, slot[\"id\"])\n        return v\n\n    # ---- the whole day ----------------------------------------------------\n    c = compare_slots(start.isoformat())"
+        }
+      ]
+    },
+    {
+      "heading": "The Classifier: Where the Rain Sits, Not How Much",
+      "body": "Averaging a two-hour window throws away the part the operator needs, so the buckets are read in order instead. The asymmetry is the point: rain at the start is cheap, because the boat is at the jetty and a short delay fixes it, while rain at the end is expensive, because the return leg is furthest from cover. Nothing in this file calls a model, so the same forecast returns the same verdict every time.",
+      "files": [
+        {
+          "label": "brain.py: five shapes, read in order",
+          "code": "def classify_shape(window: dict) -> dict:\n    \"\"\"\n    Which of five shapes the window takes.\n\n    Averaging a two-hour window throws away the part the operator needs, so\n    the buckets are read in order instead.\n    \"\"\"\n    rain = [r or 0.0 for r in (window.get(\"rain\") or window.get(\"precipitation\") or [])]\n    n = len(rain)\n    if n == 0:\n        return {\"shape\": \"dry\", \"wet_buckets\": 0, \"total_buckets\": 0,\n                \"total_mm\": 0.0, \"detail\": \"No precipitation data for this window.\"}\n\n    wet = [r >= C.WET_BUCKET_MM for r in rain]\n    n_wet = sum(wet)\n    total_mm = round(sum(rain), 2)\n    times = window.get(\"time\") or []\n\n    def clock(i):\n        return times[i][11:16] if i < len(times) else \"?\"\n\n    if n_wet == 0:\n        shape, detail = \"dry\", \"Dry through the whole window.\"\n    elif n_wet >= C.THROUGHOUT_SHARE * n:\n        shape = \"throughout\"\n        detail = f\"Wet in {n_wet} of {n} buckets, end to end.\"\n    else:\n        half = n // 2\n        first, second = sum(wet[:half]), sum(wet[half:])\n        if first and not second:\n            shape = \"clears\"\n            last_wet = max(i for i, w in enumerate(wet) if w)\n            detail = f\"Wet at the start, drying from about {clock(last_wet + 1)}.\"\n        elif second and not first:\n            shape = \"arrives\"\n            first_wet = min(i for i, w in enumerate(wet) if w)\n            detail = (f\"Dry at the start, rain from about {clock(first_wet)}, \"\n                      f\"which lands on the return leg.\")\n        else:\n            shape = \"intermittent\"\n            detail = f\"Showers on and off, {n_wet} of {n} buckets wet.\"\n\n    return {\n        \"shape\": shape,"
+        }
+      ]
+    },
+    {
+      "heading": "A Past Date Cannot Pass as a Forecast",
+      "body": "The archive and the forecast return identical shapes, which is convenient for the measurement code and dangerous everywhere else. A date the model guessed wrong lands in the archive and comes back as real weather, at zero days lead, labelled firm. That happened, and it is why a past date is now an error by default, with today's date carried in the message so the caller can correct its own arithmetic.",
+      "files": [
+        {
+          "label": "forecast.py: refuse, and say what day it is",
+          "code": "    if lead < 0:\n        if not allow_past:\n            today = date.today()\n            raise ForecastError(\n                f\"{target.isoformat()} ({target.strftime('%A')}) is {abs(lead)} \"\n                f\"day{'s' if abs(lead) != 1 else ''} in the past. Weather for a past \"\n                f\"date is what happened, not a forecast, so it cannot answer a \"\n                f\"question about whether a departure should run. \"\n                f\"Today is {today.isoformat()} ({today.strftime('%A')}). \"\n                f\"If you meant an upcoming date, call get_current_datetime and work \"\n                f\"it out from there rather than from memory.\"\n            )\n        return _get_archive(target)\n    return _get_forecast(target)"
+        }
+      ]
+    }
+  ],
+  "notes": [
+    {
+      "heading": "Why This Design",
+      "bullets": [
+        "<b>The brain calls no model:</b> given the same forecast it returns the same verdict every run, against thresholds in a file the operator can open and correct. A chat model eyeballing a forecast gives a different answer every time and no basis anyone can show a customer.",
+        "<b>Measured, then built around:</b> forecast skill was scored across 558 past departures before the UI was designed. Wet or dry is forecastable to about five days; where the rain falls inside two hours is not forecastable past tomorrow, so the rain strip is drawn for today and tomorrow only.",
+        "<b>The caveat rides with the data:</b> the disclaimer sits inside every tool result rather than only in the system prompt, so it survives a long chain of calls and reaches the answer.",
+        "<b>A party moves together or not at all:</b> the planner skips any departure without room for the whole group and looks into the next day rather than proposing a split, because naming a slot that seats nine of twelve is a problem restated, not a plan."
+      ]
+    },
+    {
+      "heading": "Things That Bit, and What They Cost",
+      "bullets": [
+        "<b>The date was the biggest defect in the build.</b> Asked about \"this Sunday\", the assistant answered for a date two years gone, read the archive, and reported it as a firm forecast. The fix was the tool the course builds first and this project had skipped.",
+        "<b>Seven sequential calls for a seven-day board</b> cost sixteen seconds on a cold cache, which on Cloud Run with min-instances 0 is every time an instance wakes. Open-Meteo serves a range in one response; the same board now takes about four seconds and one sixth of the quota.",
+        "<b>The built-in editor schema promises the model an absolute path</b> while this tool confines writes to one folder, so every drafted reply wasted a call on a refused write to /tmp. The editor now reduces a path to its file name, keeps it in the folder and says so, with confinement unchanged.",
+        "<b>Cloud Run has an ephemeral filesystem.</b> The forecast cache and the drafted replies do not survive an instance recycling. For a demo that is fine; for an operator it wants a bucket mount or Firestore, and the README says so rather than hiding it."
+      ]
+    }
+  ],
+  "cta": "Want an assistant that reads live data against your own operating rules and ends in a decision? Let's scope it."
+};
+  /* ===================== END EDIT BLOCK ===================== */
+
+  const pref = (u) => /^https?:|^mailto:|^tel:/.test(u || '') ? u : (SITE + (u || ''));
+  const esc = (s) => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const rich = (s) => esc(s).replace(/&lt;(\/?(?:b|code))&gt;/g, '<$1>');
+
+  // raw code store for copy buttons
+  const RAW = [];
+  function codeBlock(label, codeStr, extraClass){
+    const idx = RAW.push(codeStr) - 1;
+    const rendered = esc(codeStr).split('\n')
+      .map(line => /^\s*#/.test(line) ? `<span class="cmt">${line}</span>` : line).join('\n');
+    return `<div class="codeblock ${extraClass||''}">`+
+      `<div class="code-bar"><span class="path"><span>${esc(label)}</span></span>`+
+      `<button class="code-copy" data-idx="${idx}">Copy</button></div>`+
+      `<pre><code>${rendered}</code></pre></div>`;
+  }
+
+  // Breadcrumb + header
+  document.title = PROJECT.title + ": Source | AI Project Portfolio";
+  document.getElementById('crumbCat').textContent = PROJECT.category;
+  document.getElementById('crumbCat').href = pref(PROJECT.categoryUrl);
+  document.getElementById('crumbProj').textContent = PROJECT.title;
+  document.getElementById('crumbProj').href = pref(PROJECT.overviewUrl);
+  if (PROJECT.cover){
+    document.getElementById('coverStrip').style.display = '';
+    const c = document.getElementById('cover'); c.src = PROJECT.cover; c.alt = PROJECT.title + " cover";
+  }
+  document.getElementById('kicker').textContent = "Source Walkthrough · " + PROJECT.category;
+  document.getElementById('title').textContent = PROJECT.title;
+  document.getElementById('subtitle').textContent = PROJECT.subtitle;
+  document.getElementById('headTech').innerHTML = (PROJECT.tech||[]).map(t => `<span class="tech-chip">${esc(t)}</span>`).join('');
+  document.getElementById('headBtns').innerHTML =
+    (PROJECT.demoUrl ? `<a class="btn" href="${pref(PROJECT.demoUrl)}" target="_blank" rel="noopener">${esc(PROJECT.demoLabel||'Live Demo')}</a>` : '') +
+    (PROJECT.overviewUrl ? `<a class="btn ghost" href="${pref(PROJECT.overviewUrl)}">Project Overview</a>` : '') +
+    (PROJECT.repoUrl ? `<a class="btn ghost" href="${pref(PROJECT.repoUrl)}" target="_blank" rel="noopener">GitHub Repo</a>` : '');
+
+  const section = (tab, inner) => `<section class="sec"><div class="sec-rule"><span class="tab">${esc(tab)}</span>${inner}</div></section>`;
+  let html = "";
+  const P = PROJECT;
+
+  if (P.about){
+    html += section("About This Code", `<h2>About This Code Showcase</h2><p class="intro">${rich(P.about)}</p>`);
+  }
+  if (P.structure && P.structure.code){
+    html += section("Project Structure", `<h2>Project Structure</h2>`+
+      codeBlock(P.structure.label || 'project/', P.structure.code, 'tree'));
+  }
+  (P.walkthrough||[]).forEach(w => {
+    let inner = `<h2>${esc(w.heading)}</h2>`;
+    if (w.body) inner += `<p class="body">${rich(w.body)}</p>`;
+    (w.files||[]).forEach(f => { inner += codeBlock(f.label, f.code); });
+    html += section("Code", inner);
+  });
+  // CTA
+  html += `<section class="sec"><div class="cta-inner">`+
+    `<div><h3>Interested in the build?</h3><p>${esc(P.cta || "Let's talk.")}</p></div>`+
+    `<div class="cta-btns">`+
+    (P.demoUrl ? `<a class="btn" href="${pref(P.demoUrl)}" target="_blank" rel="noopener">${esc(P.demoLabel||'Live Demo')}</a>` : '')+
+    `<a class="btn ghost" href="${SITE}contact.html">Get in Touch</a>`+
+    `</div></div></section>`;
+
+  document.getElementById('body').innerHTML = html;
+
+  // Copy buttons
+  function copyText(text, btn){
+    const done = ()=>{ const o=btn.textContent; btn.textContent='Copied ✓'; setTimeout(()=>btn.textContent=o.includes('Copied')?'Copy':o,1400); };
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(done).catch(()=>fb(text,done)); }
+    else fb(text,done);
+  }
+  function fb(text,done){ const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(ta); done(); }
+  document.querySelectorAll('.code-copy').forEach(btn =>
+    btn.addEventListener('click', ()=> copyText(RAW[+btn.dataset.idx], btn)));
+
+  // Masthead search
+  const ITEMS = [
+    {t:PROJECT.title, c:PROJECT.category, s:PROJECT.slug},
+    {t:"Courier CS Quality Console", c:"Conversational Data Analytics", s:"courier-cs-quality-console"},
+    {t:"Voucher Analyzer", c:"Conversational Data Analytics", s:"voucher-analyzer"},
+    {t:"Wiseman", c:"Knowledge & Reference Chatbots", s:"wiseman"},
+    {t:"Sunny Car Accessories", c:"Agentic Commerce", s:"sunny-car-accessories"},
+    {t:"Bookshelf", c:"Multi-Agent Decision Systems", s:"bookshelf"}
+  ];
+  const searchInput = document.getElementById('searchInput');
+  const searchResults = document.getElementById('searchResults');
+  function runSearch(q){
+    if(q.trim().length < 2){ searchResults.style.display='none'; return; }
+    const ql = q.toLowerCase();
+    const hits = ITEMS.filter(it => (it.t+' '+it.c).toLowerCase().includes(ql));
+    searchResults.innerHTML = hits.length ? hits.map(it =>
+      `<div class="sr-item"><div class="sr-cat">${esc(it.c)}</div>`+
+      `<a href="${SITE}${it.s}.html"><div class="sr-title">${esc(it.t)}</div></a>`+
+      `<div class="sr-links"><a href="${SITE}${it.s}.html">View Details</a></div></div>`).join('')
+      : `<div class="sr-none">No projects found. Try a different keyword.</div>`;
+    searchResults.style.display='block';
+  }
+  searchInput.addEventListener('input', e => runSearch(e.target.value));
+  document.addEventListener('click', e => { if(!e.target.closest('.search-box')) searchResults.style.display='none'; });
+
+  // Drawer
+  const drawer=document.getElementById('drawer'), overlay=document.getElementById('overlay');
+  const openMenu=()=>{ drawer.classList.add('open'); overlay.classList.add('open'); };
+  const closeMenu=()=>{ drawer.classList.remove('open'); overlay.classList.remove('open'); };
+  document.getElementById('hamburger').addEventListener('click', openMenu);
+  document.getElementById('drawerClose').addEventListener('click', closeMenu);
+  overlay.addEventListener('click', closeMenu);
+  drawer.querySelectorAll('a').forEach(a=>a.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeMenu(); searchResults.style.display='none'; }});
+</script>
+</body>
+</html>

@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How This App Is Built &middot; Kuala Sepetang Tour Boat</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#1E3A5F;--blue:#4A7FB5;--soft:#EAF1F8;--line:#CBDDEF;--ink:#22303C;--muted:#5C6B78;--bg:#F7F9FB;
+ --seed:#7A5B33;--seedbg:#F3ECE0;--grow:#2E7D5B;--growbg:#E3F1EA;--test:#6A4E8C;--testbg:#EEE8F5;--harvest:#B5532A;--harvestbg:#F6E7DE;
+ --done:#2E7D5B;--donebg:#E3F1EA;--part:#B5832A;--partbg:#F8EFD9;--pend:#5C6B78;--pendbg:#ECF0F3;--gate:#B03B2E;--gatebg:#FBE7E3;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Manrope",system-ui,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:900px;margin:0 auto;padding:60px 26px 90px}
+.eyebrow{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--blue);font-weight:700;margin:0 0 12px}
+h1{font-family:"Fraunces",Georgia,serif;font-weight:600;color:var(--navy);font-size:2.6rem;line-height:1.08;margin:0 0 8px;letter-spacing:-.01em}
+.tagline{font-size:1.1rem;color:var(--muted);margin:0;font-weight:500}
+.rule{height:3px;width:60px;background:var(--blue);border-radius:2px;margin:24px 0 0}
+p{margin:11px 0}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 0}
+.chip{font-size:.76rem;font-weight:600;background:#fff;border:1px solid var(--line);border-radius:20px;padding:5px 13px;color:var(--muted)}
+.chip b{color:var(--navy)}
+.decision{background:var(--navy);color:#fff;border-radius:12px;padding:18px 22px;margin:26px 0 0}
+.decision .dlbl{font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:#BFD3E8;font-weight:700;margin:0 0 4px}
+.decision p{margin:0;font-family:"Fraunces",Georgia,serif;font-size:1.15rem;line-height:1.35}
+.progress{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 20px;margin:26px 0 0}
+.progress h4{margin:0 0 10px;font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.ptrack{display:flex;gap:6px;flex-wrap:wrap}
+.pcell{flex:1;min-width:72px;border-radius:8px;padding:9px 6px;text-align:center;font-size:.72rem;font-weight:700;border:1px solid var(--line)}
+.pcell small{display:block;font-weight:600;font-size:.64rem;opacity:.8;margin-top:2px}
+.pc-done{background:var(--donebg);border-color:#C3E2D1;color:var(--done)}
+.pc-part{background:var(--partbg);border-color:#EBD9AC;color:var(--part)}
+.pc-pend{background:var(--pendbg);border-color:#D8DFE4;color:var(--pend)}
+.layers{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px 22px;margin:26px 0 0}
+.layers h4{margin:0 0 4px;font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.lrow{display:flex;align-items:flex-start;gap:12px;padding:9px 0;border-top:1px solid var(--line)}
+.lrow:first-of-type{border-top:none}
+.lnum{flex:none;width:24px;height:24px;border-radius:6px;background:var(--soft);color:var(--navy);font-weight:700;font-size:.78rem;display:flex;align-items:center;justify-content:center}
+.lrow div{font-size:.93rem}
+.lrow b{color:var(--navy)}
+.phase{border-radius:14px;padding:4px 26px 22px;margin:34px 0;border:1px solid var(--line)}
+.phase.seed{background:var(--seedbg);border-color:#E2D4BC}
+.phase.grow{background:var(--growbg);border-color:#C3E2D1}
+.phase.test{background:var(--testbg);border-color:#D6C9E6}
+.phase.harvest{background:var(--harvestbg);border-color:#EAD2C0}
+.ph-label{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:5px 12px;border-radius:0 0 10px 10px;color:#fff}
+.seed .ph-label{background:var(--seed)} .grow .ph-label{background:var(--grow)}
+.test .ph-label{background:var(--test)} .harvest .ph-label{background:var(--harvest)}
+h2{font-family:"Fraunces",Georgia,serif;font-weight:600;color:var(--navy);font-size:1.42rem;margin:16px 0 2px}
+.step{background:#fff;border:1px solid var(--line);border-radius:11px;padding:16px 20px;margin:14px 0}
+.step.gate{border-color:#E8BFB7;box-shadow:0 0 0 3px rgba(176,59,46,.07)}
+.step h3{margin:0 0 6px;color:var(--navy);font-size:1.04rem;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.step .num{color:var(--blue);font-weight:700}
+.status{font-size:.66rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 9px;border-radius:20px;margin-left:auto}
+.s-done{background:var(--donebg);color:var(--done)} .s-part{background:var(--partbg);color:var(--part)}
+.s-pend{background:var(--pendbg);color:var(--pend)} .s-gate{background:var(--gatebg);color:var(--gate)}
+.lbl{font-size:.74rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin:12px 0 2px}
+.tmpl{font-size:.92rem;color:var(--navy);background:var(--soft);border-radius:8px;padding:10px 14px;margin-top:8px}
+.result{font-size:.9rem;background:#FCFDFE;border:1px dashed var(--line);border-radius:8px;padding:9px 13px;margin-top:8px;color:var(--muted)}
+.result b{color:var(--navy)}
+code{background:var(--soft);border-radius:5px;padding:1px 6px;font-size:.86em;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--navy)}
+table{width:100%;border-collapse:collapse;margin:10px 0 2px;font-size:.88rem}
+th,td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.tblwrap{overflow-x:auto}
+.flow{background:var(--navy);color:#fff;border-radius:12px;padding:20px 24px;margin:30px 0;font-size:1rem;text-align:center;font-family:"Fraunces",Georgia,serif}
+.flow b{color:#BFD3E8}
+.foot{margin-top:50px;padding-top:22px;border-top:1px solid var(--line);color:var(--muted);font-size:.9rem}
+@media(max-width:560px){h1{font-size:2rem} .wrap{padding:40px 16px 60px} .status{margin-left:0}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <p class="eyebrow">AI Project &middot; Build Workflow</p>
+  <h1>Kuala Sepetang Tour Boat</h1>
+  <p class="tagline">Planning six fixed departures a day on one boat, when the weather decides how many of them run.</p>
+  <div class="rule"></div>
+
+  <div class="meta">
+    <span class="chip"><b>Type C</b> &middot; Career Path Builder</span>
+    <span class="chip"><b>Slug</b> kuala-sepetang-tour-boat</span>
+    <span class="chip"><b>Started</b> 21 Aug 2026</span>
+    <span class="chip"><b>Lifts</b> LLM APIs 4 &middot; Prompt Eng 3 &middot; Agents 7</span>
+  </div>
+
+  <div class="decision">
+    <p class="dlbl">The recurring decision this settles</p>
+    <p>Which of today's six departures do we run, which do we move, and how far ahead can we promise a slot to a customer?</p>
+  </div>
+
+  <p>One boat, six fixed two-hour departures at 09:00, 11:00, 13:00, 15:00, 17:00 and 19:00. With a single hull there is no rescheduling around a bad slot: a slot lost is a fare lost, and a slot run badly is twelve wet passengers a long way from the jetty. The operator already makes this call every morning off a phone weather app that reports the day rather than the window.</p>
+
+  <p>The build runs foundation-up. Each layer stands before the next one starts, so at every point there is something whole and load-bearing. One thing differs from a normal analytics build: the brain here is a <b>classifier over a two-hour window</b>, not a forecast. The forecast is bought in. What the project actually produces is a repeatable reading of that forecast against the operator's own thresholds, so the first thing proven is the classifier, not the weather.</p>
+
+  <div class="layers">
+    <h4>The four layers</h4>
+    <div class="lrow"><span class="lnum">1</span><div><b>Forecast layer.</b> One cached Open-Meteo call per date, timezone-pinned to Asia/Kuala_Lumpur. Hourly precipitation probability, rain, gusts, cloud, visibility, weather code and is_day, plus daily sunrise and sunset. No key, no account.</div></div>
+    <div class="lrow"><span class="lnum">2</span><div><b>Rules layer.</b> The operator's thresholds, the twelve activities with their windows, and the list of sheltered stops. One editable config file. This is the known truth and it belongs to the operator, not the model.</div></div>
+    <div class="lrow"><span class="lnum">3</span><div><b>Decision layer.</b> Per slot: rain shape, hazard versus comfort, activity fit, and a confidence tier set by lead time. Deterministic. Same forecast in, same verdict out.</div></div>
+    <div class="lrow"><span class="lnum">4</span><div><b>Conversation layer.</b> Multi-turn chat over four tools: live boat conditions, web search, a text editor that drafts the reply the operator sends, and the current date and time the other three depend on.</div></div>
+  </div>
+
+  <div class="progress">
+    <h4>Progress tracker &middot; updated at every phase boundary</h4>
+    <div class="result" style="margin:0 0 12px"><b>Last updated</b> 22 Aug 2026, 03:20 &middot; <b>Phase closed</b> Benchmark run, 95 of 100, production-quality band &middot; <b>Next</b> the founder deciding whether to deploy, and one reliability gap on criterion 7.</div>
+    <div class="ptrack">
+      <div class="pcell pc-done">1 Scope<small>done</small></div>
+      <div class="pcell pc-done">2 Design<small>done</small></div>
+      <div class="pcell pc-done">3 Forecast<small>done</small></div>
+      <div class="pcell pc-done">4 Rules<small>done</small></div>
+      <div class="pcell pc-done">5 Brain<small>done</small></div>
+      <div class="pcell pc-done">6 Prove<small>PASS</small></div>
+      <div class="pcell pc-done">7 Horizon<small>MEASURED</small></div>
+      <div class="pcell pc-done">8 Tools<small>done</small></div>
+      <div class="pcell pc-done">9 Loop<small>done</small></div>
+      <div class="pcell pc-done">10 UI<small>LIVE</small></div>
+      <div class="pcell pc-done">11 Publish<small>PACKAGED</small></div>
+      <div class="pcell pc-done">12 Benchmark<small>WRITTEN</small></div>
+      <div class="pcell pc-done">13 Screen<small>LOCKED</small></div>
+      <div class="pcell pc-done">14 Date<small>GATE PASS</small></div>
+      <div class="pcell pc-done">15 Reply<small>done</small></div>
+      <div class="pcell pc-done">16 Trim<small>7 to 4</small></div>
+      <div class="pcell pc-done">17 Wire<small>LIVE</small></div>
+      <div class="pcell pc-done">18 Measure<small>95 / 100</small></div>
+    </div>
+  </div>
+
+  <!-- ============ SEED ============ -->
+  <div class="phase seed">
+    <span class="ph-label">&#127793; Plant the seeds &middot; the roots</span>
+    <h2>The forecast, and the rules it gets read against</h2>
+
+    <div class="step">
+      <h3><span class="num">1</span> Forecast layer: one cached call per date <span class="status s-done">Done</span></h3>
+      <div>A thin Open-Meteo client. One request per date, cached, serving every downstream function so a busy conversation does not make twenty calls. Free tier, no API key, no card.</div>
+      <div class="lbl">Verify before writing the tool description</div>
+      <div class="result"><b>Timezone.</b> Open-Meteo defaults to GMT. Pass <code>timezone=Asia/Kuala_Lumpur</code> or every hour is eight out and nothing looks broken. <b>Resolution.</b> <code>minutely_15</code> coverage is strongest over Europe and North America; confirm what is available at 4.84N 100.63E before promising fine-grained rain shape. <b>Variables.</b> Confirm <code>visibility</code> and <code>cape</code> exist for the model selected here rather than assuming.</div>
+      <div class="lbl">Template lesson</div>
+      <div class="tmpl">Check what the API actually returns at your coordinates before you write the schema. A tool description that promises a field the endpoint does not carry produces a failure the model cannot recover from.</div>
+    </div>
+
+    <div class="step">
+      <h3><span class="num">2</span> Rules layer: thresholds, activities, shelter <span class="status s-done">Done</span></h3>
+      <div>Three tables in one editable config. They are the operator's judgment written down, not safety standards, and they are wrong until the operator corrects them. Keeping them in the tool rather than the prompt is what makes the verdict repeatable and inspectable.</div>
+      <div class="tblwrap">
+      <table>
+        <tr><th>Table</th><th>Holds</th><th>Why it lives here</th></tr>
+        <tr><td>Thresholds</td><td>Gust, rain and probability bands for Good / Marginal / Poor, split for open water and sheltered river</td><td>Same numbers every run, and one place to change them</td></tr>
+        <tr><td>Activities</td><td>Twelve activities with their windows and dominant factor. Four windows derive from sunset</td><td>Sunset cruise, firefly and stargazing move through the year</td></tr>
+        <tr><td>Shelter</td><td>Stops with cover, what can be done there, distance from the jetty</td><td>Local knowledge the model cannot infer</td></tr>
+      </table>
+      </div>
+      <div class="lbl">Open decision</div>
+      <div class="result">Starting thresholds are placeholders: <b>Poor</b> at 70 percent probability or 2mm in the hour or gusts 40 km/h open water and 50 km/h sheltered; <b>Marginal</b> at 40 to 69 percent or gusts 25 to 39. Stargazing needs cloud at or below 30 percent and moon at or below 40 percent. Sunset cruise peaks at 20 to 70 percent cloud rather than at zero. Every one of these needs the operator's correction before the app is worth trusting.</div>
+      <div class="lbl">Template lesson</div>
+      <div class="tmpl">When the rules belong to the customer, put them in a file the customer can open. A threshold buried in scoring code is a threshold nobody will ever fix.</div>
+    </div>
+  </div>
+
+  <!-- ============ GROW ============ -->
+  <div class="phase grow">
+    <span class="ph-label">&#127795; Grow the tree &middot; the trunk</span>
+    <h2>The brain: reading a two-hour window</h2>
+
+    <div class="step">
+      <h3><span class="num">3</span> Rain shape inside the slot <span class="status s-done">Done</span></h3>
+      <div>The core idea of the build. A two-hour trip is not one weather condition, and averaging the window throws away the part the operator needs. Classify the shape instead.</div>
+      <div class="tblwrap">
+      <table>
+        <tr><th>Shape</th><th>Meaning</th><th>Operational read</th></tr>
+        <tr><td>Dry</td><td>both halves clear</td><td>run it</td></tr>
+        <tr><td>Clears</td><td>wet first half, dry second</td><td>delay 20 to 30 minutes, run the full trip</td></tr>
+        <tr><td>Arrives</td><td>dry first half, wet second</td><td>the expensive one, see below</td></tr>
+        <tr><td>Throughout</td><td>wet both halves</td><td>candidate to move</td></tr>
+        <tr><td>Intermittent</td><td>showers on and off</td><td>route via shelter, keep open stretches short</td></tr>
+      </table>
+      </div>
+      <div class="lbl">Why the shape matters more than the total</div>
+      <div class="result"><b>Rain at the start is cheap.</b> You are at the jetty. You delay, or you turn back after ten minutes. <b>Rain at the end is expensive.</b> Twelve people are at Kuala Sangga and the return leg is the exposed part. So <b>arrives</b> rates worse than <b>clears</b> even at identical millimetres. The hour before and the hour after the slot get read too: rain at 08:00 means a choppy, muddy river at 09:00.</div>
+      <div class="lbl">Template lesson</div>
+      <div class="tmpl">Ask what the number is for before you aggregate it. The average of a window is the wrong summary when the decision turns on where in the window the trouble sits.</div>
+    </div>
+
+    <div class="step">
+      <h3><span class="num">4</span> Hazard and comfort, kept apart <span class="status s-done">Done</span></h3>
+      <div>Two different questions that a single rating would blur. <b>Hazard</b> is thunderstorm and squall: WMO codes 95, 96 and 99, plus gusts over threshold. Lightning on open water is the actual danger, not water falling on people. <b>Comfort</b> is steady rain and whether the trip is worth running for the passengers.</div>
+      <div class="result">Hazard is reported as a stop, never as a score. Comfort is reported as a rating with the driver named. The system says <b>conditions against your thresholds</b>. It never says safe: the operator on the water owns that call, and the tool cannot see the sky.</div>
+      <div class="lbl">Template lesson</div>
+      <div class="tmpl">When two kinds of risk have different consequences, give them different outputs. A single blended score lets a serious flag hide inside a middling number.</div>
+    </div>
+
+    <div class="step">
+      <h3><span class="num">5</span> Slot comparison and contingency <span class="status s-done">Done</span></h3>
+      <div>Rating one slot answers half the question. The operator wants to know where the booking should go instead. <code>compare_slots(date)</code> rates all six, ranks them, and for any poor slot names the nearest better one along with what that does to the boat rotation.</div>
+      <div class="result">Contingency comes from the shelter table, matched to the rain shape: <b>clears</b> means delay or run the sheltered leg first; <b>arrives</b> means shorten the outbound or turn at the near point; <b>intermittent</b> means route via cover; <b>throughout</b> means offer the alternative slot. The options are the operator's; the matching is the tool's.</div>
+    </div>
+  </div>
+
+  <!-- ============ TEST ============ -->
+  <div class="phase test">
+    <span class="ph-label">&#128300; Test the fruit &middot; before anyone eats it</span>
+    <h2>Prove the classifier, and measure the horizon</h2>
+
+    <div class="step gate">
+      <h3><span class="num">6</span> Prove the brain before any Claude code exists <span class="status s-done">Gate PASS</span></h3>
+      <div>The hard gate. Run the classifier over a set of past dates whose outcome is known and check that it calls them the way the operator would have. Nothing above this line involves a language model, so a failure here is a failure of the rules, which is exactly what should be fixed first.</div>
+      <div class="result"><b>The test set.</b> Open-Meteo keeps an archive of what actually happened, so real past days can be scored without waiting for weather. Pick days that are obviously dry, obviously wet, and awkward: the ones that cleared at 10:00, the ones that broke at 16:00. The awkward ones are the whole point. <b>If the classifier cannot separate clears from arrives on a day the operator remembers, the app is not ready for a chat interface.</b></div>
+      <div class="lbl">Template lesson</div>
+      <div class="tmpl">Prove the brain against a known truth before you build a face for it. If the project stops here, the hardest and most valuable part is already done.</div>
+    </div>
+
+    <div class="step">
+      <h3><span class="num">7</span> The horizon question, answered with evidence <span class="status s-done">Measured</span></h3>
+      <div>How far ahead can a slot be promised? This decides whether the operator takes advance bookings or only walk-ins, so it is a business rule, not a technical footnote. Open-Meteo will hand over sixteen days; most of that is not decision-grade, and tropical convective rain is the hardest thing in forecasting to time.</div>
+      <div class="tblwrap">
+      <table>
+        <tr><th>Lead time</th><th>What is usable</th><th>Booking policy</th></tr>
+        <tr><td>Today and tomorrow</td><td>hourly timing, rain shape within a slot</td><td>commit to specific slots</td></tr>
+        <tr><td>2 to 3 days</td><td>day shape, roughly which half of the day</td><td>take it, flag the slot provisional</td></tr>
+        <tr><td>4 to 7 days</td><td>wet day or dry day, nothing finer</td><td>take it with a reschedule clause, do not quote a slot</td></tr>
+        <tr><td>8 to 16 days</td><td>seasonal pattern only</td><td>climatology, not forecast</td></tr>
+      </table>
+      </div>
+      <div class="lbl">The step that makes this defensible</div>
+      <div class="result"><b>These tiers are no longer an estimate.</b> Measured 21 Aug 2026 across 93 dates and 558 departures: Open-Meteo archives <b>past forecast runs</b> alongside what actually happened, so the question can be answered for this exact location: how often did the five-day-ahead forecast get the day right, and how often did the one-day-ahead forecast get the slot right? The result changed the product. <b>Whether a departure gets rain is forecastable</b> out to about five days: skill over guesswork 0.41 at one day, 0.26 at three, 0.21 at five, 0.04 at seven. <b>Where in the two hours the rain falls is not</b>: 0.04 at one day and negative at three, five and seven, meaning worse than always guessing the commonest shape. So the rain strip is shown for today and tomorrow only, and past that the app says rain expected or no rain expected and states plainly that it cannot place it. The tiers stopped being a rule of thumb and became this jetty's own record. Every tool output carries its confidence tier, so a wrong answer at long lead is labelled as such before anyone books on it.</div>
+      <div class="lbl">Template lesson</div>
+      <div class="tmpl">When a system's usefulness decays with distance, publish the decay. A forecast with no confidence attached invites the customer to trust day twelve as much as day one.</div>
+    </div>
+  </div>
+
+  <!-- ============ HARVEST ============ -->
+  <div class="phase harvest">
+    <span class="ph-label">&#127822; Harvest &middot; the conversation</span>
+    <h2>Four tools, one loop, one file that keeps changing</h2>
+
+    <div class="step">
+      <h3><span class="num">8</span> The tool set, and the hardest writing in the build <span class="status s-done">Done</span></h3>
+      <div>Four custom functions over the cached forecast, plus two tools that come from elsewhere.</div>
+      <div class="tblwrap">
+      <table>
+        <tr><th>Tool</th><th>Answers</th><th>Built by</th></tr>
+        <tr><td><code>get_slot_forecast</code></td><td>is this slot workable, and what shape is the rain</td><td>us</td></tr>
+        <tr><td><code>compare_slots</code></td><td>should we move them, and to when</td><td>us</td></tr>
+        <tr><td><code>get_nowcast</code></td><td>it is raining now, do we continue</td><td>us</td></tr>
+        <tr><td><code>get_outlook</code></td><td>can we take a booking for next Saturday</td><td>us</td></tr>
+        <tr><td>Web search</td><td>holidays, school breaks, advisories, jetty closures</td><td>server-side, schema only</td></tr>
+        <tr><td>Text editor</td><td>create and edit the schedule file</td><td>schema built in, implementation ours</td></tr>
+      </table>
+      </div>
+      <div class="result"><b>The routing problem.</b> Four of the six tools touch weather, so the descriptions have to draw hard boundaries or the model picks the wrong one. The likeliest failure is web search fetching a forecast instead of the tool being called at all. The fix is in the descriptions: the weather tools are named as the only forecast source, and web search is described strictly for what it alone can supply.</div>
+      <div class="lbl">Template lesson</div>
+      <div class="tmpl">Tool descriptions are prompt engineering. When several tools overlap, the boundary between them has to be written explicitly or the router guesses.</div>
+    </div>
+
+    <div class="step">
+      <h3><span class="num">9</span> The multi-turn loop, with streaming <span class="status s-done">Done</span></h3>
+      <div>The loop from the course: send the message list with the schemas, append the whole content list including tool_use blocks, run every requested tool, return one tool_result per request with matching ids, repeat until <code>stop_reason</code> is no longer <code>tool_use</code>. Errors come back as results with <code>is_error</code> set rather than crashing, so the model can correct a bad date and try again.</div>
+      <div class="result"><b>Streaming is required, not optional.</b> A chat interface means the assistant message has to be rebuilt into plain dicts before it goes back into history, because streamed blocks are not reusable as they arrive. <b>Text editor implementation</b> carries path confinement to a base directory and a backup on every write, which is what makes undo possible when an edit goes to the wrong row.</div>
+    </div>
+
+    <div class="step">
+      <h3><span class="num">10</span> The schedule file, which is the point <span class="status s-done">Done</span></h3>
+      <div>Not a report written once at the end. A working timetable the conversation edits row by row, which is what makes replace and undo earn their place. Six rows, one per slot, with party size, activity, status and a watch-out note.</div>
+      <div class="result">A morning conversation runs: plan tomorrow, check a group of twelve at 15:00, compare against 11:00, move them, update the file, then check tonight's firefly slot and update the evening briefing. Six turns, five tool calls, one file rewritten three times. That sequence is the demo.</div>
+    </div>
+
+    <div class="step">
+      <h3><span class="num">11</span> Deploy and publish <span class="status s-done">Packaged</span></h3>
+      <div>Cloud Run, with the forecast cache, retries and error handling that turn a demo into something an operator could actually run at a jetty. Then the portfolio page, the cover image, and the cross-page updates.</div>
+      <div class="lbl">Template lesson</div>
+      <div class="tmpl">Name the project after the decision it settles. An operator who wants to know whether to run the 15:00 should recognise the page as theirs from the title alone.</div>
+    </div>
+  </div>
+
+  <!-- ============ MEASURE ============ -->
+  <div class="phase test">
+    <span class="ph-label">&#128207; Measure against the brief</span>
+    <h2>An acceptance benchmark, and the six things it asks for</h2>
+
+    <div class="step">
+      <h3><span class="num">12</span> The benchmark, written down before it is used <span class="status s-done">Done</span></h3>
+      <div>Ten weighted criteria from the project outline, scored in <code>benchmark.html</code>. Six of the ten are judgements a test runner cannot make, so the instrument is a document with a fixed four-turn script and written pass conditions, not a script that returns a number.</div>
+      <div class="lbl">The rule that makes two runs comparable</div>
+      <div class="tmpl">A criterion is scored on what the assistant did in the run, not on what the code is capable of. A working text editor that goes unused when the operator asks for a message to send has not earned the customer-response points.</div>
+    </div>
+
+    <div class="step">
+      <h3><span class="num">13</span> The screen redesigned around the decision <span class="status s-done">Done</span></h3>
+      <div>Two layouts compared, then two revisions. The card grid was kept over the table for one structural reason: the table gave its second column to a statistics panel and left the assistant nowhere to live, and the assistant is the product.</div>
+      <div class="lbl">Three corrections the comparison forced</div>
+      <div class="result"><b>1. The word safe came off the screen.</b> Both drafts shipped a green <code>&#10003; Safe</code> badge on a departure, which is the one claim the positioning forbids and criterion 3 scores 14 points against. Ratings now read Good, Marginal, Not workable. <b>2. Occupancy stopped being the hero.</b> A 100px donut with the seat percentage was the largest thing on every card, and occupancy does not decide whether the boat sails. It is now a 38px ring in a single row. <b>3. Metric tiles replaced running text</b>, in km/h rather than knots, and they tint from the operator's own thresholds, so a breach is visible without reading the number. The visibility flag was tightened from 5 km to 3 km after it fired on 4.2 km against a threshold the operator set at 1.5.</div>
+      <div class="lbl">The rule the founder added, and what it changed</div>
+      <div class="result"><b>A party moves together or not at all.</b> The screen had been naming the nearest workable departure and then reporting that the group did not fit in it, which is a problem restated rather than a plan. The search now skips any departure that cannot seat the whole party and walks outward in time, carrying into the next day rather than proposing a split. <b>On live data that is the difference between an answer and a shrug:</b> the twelve booked on the 15:00 have no departure left on the day that seats all twelve, so the plan reads move all 12 to 09:00 tomorrow, and the drafted customer message says the same thing. Three surfaces had to change together, the card, the assistant thread and the reply draft, because two of them were still offering a split.</div>
+      <div class="lbl">Also on the screen now</div>
+      <div class="tmpl">The confidence tier for the chosen day, the rain strip drawn only where the record supports it, a Reply to send tab holding the drafted message, and an Under the hood tab showing the multi-turn loop block by block: <code>tool_use</code> out, <code>tool_result</code> back with the id matched, <code>stop_reason</code> deciding whether the loop runs again.</div>
+    </div>
+
+    <div class="step gate">
+      <h3><span class="num">14</span> The assistant knows what day it is <span class="status s-done">Gate PASS</span></h3>
+      <div>Three pieces, built together because any one alone leaves the hole open. <b>1.</b> <code>get_current_datetime</code>, the tool lecture note 03 builds first. It returns the date, weekday and time at the jetty, and an <code>upcoming</code> map naming the next eight days, so "this Sunday" becomes a lookup rather than a calculation. <b>2.</b> Today's date and weekday stamped on the system prompt, built per request rather than at import, because a server can stay up for days and a date baked in at startup goes quietly wrong at midnight. <b>3.</b> <code>get_day()</code> now refuses a past date instead of serving the archive, and the payload carries <code>is_history</code> so observation can never be mistaken for forecast.</div>
+      <div class="lbl">Why this is a gate and not a nicety</div>
+      <div class="result">Measured on the canonical turn before the fix: <b>&ldquo;this Sunday&rdquo; resolved to a date two years gone</b>. The archive answered, the payload came back labelled <code>firm</code> at zero days lead, and nothing in the reply could reveal it. Lecture note 02 names this as problem one before any other tool is built: the model may know the date, but it does not reckon forward reliably. <b>Live data accuracy carries 18 points and this is the whole of it.</b></div>
+      <div class="lbl">Re-run on the same turn</div>
+      <div class="result"><b>PASS on both halves.</b> The assistant now calls <code>get_current_datetime</code> first, resolves the date to <b>2026-08-23</b> and opens its reply with &ldquo;This Sunday is 23 August 2026&rdquo;, which is the benchmark's pass condition: state the date so the operator can catch it. It then maps 4 PM to the 15:00 departure, reports marginal with the numbers, and carries the two-day timing caveat. <b>The second half was probed separately</b> with a question about last Tuesday: it resolved 19 August, recognised it as history, and said it does not have what happened rather than reaching for the archive. <b>Nothing downstream broke:</b> the Stage A classifier gate re-ran clean, 16/16 planted, 7/7 monotonicity, 726/726 invariants, and the board endpoint still serves.</div>
+    </div>
+
+    <div class="step">
+      <h3><span class="num">15</span> The reply the operator actually sends <span class="status s-done">Done</span></h3>
+      <div>The tool did not change. What it is pointed at did. The working directory now holds the messages the operator sends rather than an internal schedule table, and the system prompt makes drafting the default rather than something the operator has to ask for twice. <code>/api/schedule/{date}</code> became <code>/api/replies</code>, and the panel that used to render a generated schedule now says how to get a draft instead of inventing one.</div>
+      <div class="lbl">The distinction worth holding</div>
+      <div class="tmpl">An internal schedule file and a message a tourist can read are different products. Both are useful. Only one of them is what was asked for.</div>
+      <div class="lbl">The instruction that does the work</div>
+      <div class="tmpl">The draft is written to the CUSTOMER, not the operator. Different reader, different language. &ldquo;Showers on and off with a gusty wind&rdquo; is what a tourist can use. &ldquo;0.25 mm/h, gusts 30 km/h, marginal&rdquo; is the same fact aimed at the wrong person.</div>
+      <div class="lbl">Verified on the canonical turn, with nothing else asked for</div>
+      <div class="result"><b>The operator asked only &ldquo;what should I tell them?&rdquo; and got a sendable message.</b> It resolved Sunday to 23 August, read the departure, then wrote and saved <code>reply_2026-08-23_family_of_five.md</code> without being asked a second time. <b>The draft carries no operator vocabulary at all:</b> no rating, no millimetres, no gust figure, no CAPE, no confidence tier. It says showers on and off with a gusty breeze, suggests light rain jackets, promises to check again closer to the time, and signs off as the boat. <b>A guard fired and the model recovered from it unaided:</b> the first attempt tried to write to <code>/tmp</code>, path confinement refused it, and the error message named the correct form, so the retry landed inside the reply folder. That is the note 03 pattern working: an error written for the model to read is an error it can correct.</div>
+    </div>
+
+    <div class="step">
+      <h3><span class="num">16</span> The tool set trimmed back to the brief <span class="status s-done">Done</span></h3>
+      <div>Four schemas: <code>get_current_datetime</code>, <code>get_boat_conditions</code>, web search, text edit. The four weather tools became one that reads its own grain from the arguments: a date and a time for one departure, a date alone for the day, a date and an end_date for the outlook.</div>
+      <div class="lbl">The plan this step started with was wrong, and the check caught it</div>
+      <div class="result">The original plan was to delete <code>rebooking.py</code>, <code>combined.py</code> and <code>moon.py</code>. Reading them first showed that two of the three are load-bearing. <b><code>rebooking.py</code> is where occupancy comes from</b>, so deleting it would have taken out the booking data the founder had just decided to keep, and its <code>candidates_for</code> already refuses any departure without room for the whole party, which is the founder's own relocation rule already implemented. <b><code>combined.py</code> holds up the 19:00</b>: bypassing it returns zero activities for that departure, which fails the fits check for every evening party and sends the firefly run, the reliable earner, to cancel and refund. <code>moon.py</code> is genuinely note-only and could go, but it is 77 lines of local arithmetic feeding a detail a firefly customer actually wants, so removing it saves nothing worth having. <b>The real fault was a conflation:</b> criterion 2 counts the schemas the model chooses between, not the modules on disk. Nothing was deleted. The choices were.</div>
+      <div class="lbl">Two decisions taken away from the model</div>
+      <div class="result"><b>The reallocation window.</b> It used to be an argument, and the prompt carried a paragraph begging for a wide one because a one-day range forced splits that three days avoided. The lookahead is now fixed in code and that paragraph is deleted. <b>Slot resolution.</b> &ldquo;Around 4 PM&rdquo; is not a departure. The tool now takes the time the customer actually said, resolves it, and returns a line naming the real departure, which the assistant is told to quote instead. Both were prompt patches for things code should guarantee.</div>
+      <div class="lbl">Verified live on four tools</div>
+      <div class="result">Turn one: date resolved, <code>get_boat_conditions</code> called once with <code>time: "4pm"</code>, and the reply opened by saying 4 PM falls inside the 15:00 departure. Turn two, a full departure going bad: one call, and the relocation came back inside it, moving all twelve to the next day rather than splitting them. <b>The assistant no longer picks between weather tools, no longer maps a clock time to a slot id, and no longer chooses a search window.</b> Seven schemas to four, and the four are the brief's own list.</div>
+    </div>
+
+    <div class="step">
+      <h3><span class="num">17</span> The screen wired to the engine <span class="status s-done">Live</span></h3>
+      <div>The page renders from a single <code>DAY</code> constant shaped exactly like one day of <code>/api/board</code>, so wiring is a swap from constant to fetch rather than a rewrite. The day selector, currently drawing seven labelled options, starts requesting them. The chat panel posts to <code>/api/chat</code> and reads the server-sent event stream, so tool chips appear as each tool fires instead of after the answer lands.</div>
+      <div class="lbl">Why this sits after the trim and not before it</div>
+      <div class="result">The board payload changes when the tool set is cut back: the weather tools consolidate and the relocation search moves server side where it can see the next day's seats rather than a hardcoded hint. Wiring first would mean wiring twice.</div>
+      <div class="lbl">A claim made here was wrong, and checking it turned into the work</div>
+      <div class="result">This step used to say the whole-party search could not be served because <code>/api/board</code> returned one day at a time. <b>It never did.</b> The endpoint has always taken <code>?days=</code>, defaulting to 5 and capped at 10, and the reallocation planner has always run across the whole window. Asking the question surfaced the real problem instead. <b>A week cost sixteen seconds on a cold cache</b>, because the board fetched one date per HTTP call, seven calls in sequence, and on Cloud Run with min-instances 0 the cache is cold every time an instance wakes.</div>
+      <div class="lbl">One request for the week</div>
+      <div class="result">Open-Meteo serves a date range in a single response, so <code>get_days()</code> now fetches the span in one call, splits it into the per-date payloads everything downstream already expects, and writes all of them to the cache. <b>Proven identical before it was trusted:</b> all seven dates from the range split match a per-date fetch exactly, hourly and 15-minute series included. <b>Cold time for a seven-day board fell from 16.1s to a median of 4.3s</b>, most of what is left being one round trip; the spread runs 1.2s to 10s with the network, so the honest figure is a band, not a number. Warm is 0.10s. The same fix applies to the outlook grain and the relocation lookahead, which walked the same loop. <b>Criterion 10 scores speed directly, and the board is the first thing a visitor sees.</b></div>
+      <div class="lbl">What seven days is actually for</div>
+      <div class="result">The forecast supports it and the confidence model already degrades correctly across it: firm, firm, indicative, indicative, provisional, provisional, pattern, with rain timing shown for today and tomorrow only. <b>But the stronger case is the passengers, not the weather.</b> Run across the full week the planner reports 4 parties and 35 passengers affected, <b>35 kept and 0 refunded</b>. Narrower windows refund people. A wide window is what lets a whole party stay together, which is the founder's own rule from the screen.</div>
+      <div class="lbl">Done when</div>
+      <div class="tmpl">The page opens with no hardcoded weather in it, the day selector moves the board, and the assistant answers in the panel against live tools.</div>
+      <div class="lbl">All three met</div>
+      <div class="result"><b>The board.</b> One request brings the week, and switching day is then local, because refetching on every click would spend seven times the quota to show data already in hand. A day strip across the top carries a workable count per day, so the operator sees which days are worth selling before opening one. <b>The plan on each card is the server planner's</b>, not arithmetic repeated in the browser: it has already reserved seats across the window, so the 13:00 reads move all 2 to 09:00 today and the full 15:00 reads move all 12 to 13:00 Saturday, the whole party together. <b>The reply tab</b> reads the drafted message off <code>/api/replies</code> and copies it to the clipboard. <b>Under the hood fills in live</b>, one round per exchange, tool_use with its real arguments, tool_result with is_error, and the stop_reason that decides whether the loop runs again.</div>
+      <div class="lbl">How it was checked</div>
+      <div class="result">The chat was driven through the running server rather than the browser, so the key never entered the page or the transcript: the stream returned 4 tool events, 4 tool_input, 8 text, 1 tool_error and a clean <code>end_turn</code>, calling get_current_datetime, then get_boat_conditions, then the editor twice, the first attempt refused for writing outside the reply folder and the retry landing correctly. The browser was then pointed at that session and rendered the drafted message it had produced. <b>Phone width carries zero horizontal overflow</b> and drops to a single column.</div>
+    </div>
+
+    <div class="step gate">
+      <h3><span class="num">18</span> Run the benchmark and record the number <span class="status s-done">95 / 100</span></h3>
+      <div>The four-turn script run end to end in a fresh session, scored against the written pass conditions, plus the two checks that sit outside the conversation: date integrity and tool count.</div>
+      <div class="lbl">Target</div>
+      <div class="tmpl">90 or above, the production-quality band, where the outline says the application genuinely helps a tour operator perform real work.</div>
+      <div class="lbl">Result, four turns in one session</div>
+      <div class="result"><b>95 of 100.</b> Eight tool calls across four turns: date, conditions, four searches, the editor, conditions again. One tool error, and it was the intended one, December refused as beyond the horizon. <b>Full marks on live data accuracy (18), safety (14), multi-turn context (12), booking forecast (10), tool integration (9), failure handling (6) and operator usefulness (6).</b> Turn 1 resolved the date and said it, resolved 4 PM to the 15:00 departure and said that too. Turn 2 fired web search four times and no weather tool. Turn 4 named the window, named the date the forecast reaches, invented nothing about December, and separated taking a booking from promising one.</div>
+      <div class="lbl">Where the five points went, and it is the same fault as the first measurement</div>
+      <div class="result"><b>Customer response quality, 5 of 7.</b> The benchmark's own pass condition for turn 1 is that the answer ends with something the operator could actually send. Asked &ldquo;what should I tell them?&rdquo;, the assistant gave an operator-voice answer and then <b>asked permission to draft</b> rather than drafting. The message it wrote on turn 3 is excellent, plain language with no ratings, no millimetres and no gust figures, but it took a second request to get it. <b>This is not a fixed fault, it is a variable one:</b> the same prompt drafted unprompted on two earlier runs and asked on this one, so step 15 raised the odds without settling them. An instruction the model follows most of the time is not the same as a guarantee, and the honest record is the run that happened. <b>The other two points:</b> correct tool selection loses one for four searches where two would do, and speed loses one for the same reason.</div>
+      <div class="lbl">What the path fix bought, measured</div>
+      <div class="result">Every earlier run wasted a call writing to <code>/tmp</code> before retrying. <b>Zero path errors in this run</b>, and turn 1 fell from 37.5s to 16.4s. The cause was a genuine mismatch rather than a model error: the built-in editor schema promises an absolute path, this tool gives one folder. The editor now reduces a path to its file name, keeps it in the folder and says so in the result. Confinement is unchanged, and a traversal attempt still lands inside the folder rather than escaping it.</div>
+    </div>
+  </div>
+
+  <div class="flow">Build order: <b>forecast &rarr; rules &rarr; rain shape &rarr; hazard split &rarr; compare slots &rarr; prove the classifier &rarr; measure the horizon &rarr; tools &rarr; loop &rarr; schedule file &rarr; deploy</b></div>
+
+  <div class="step">
+    <h3><span class="num">&#9202;</span> Build log <span class="status s-part">Live</span></h3>
+    <div>One row per closed phase. Appended as each phase completes, so the tracker shows where the build actually stands rather than where it was planned to be.</div>
+    <div class="tblwrap">
+    <table>
+      <tr><th>Date</th><th>Phase closed</th><th>Result</th></tr>
+      <tr><td>21 Aug 2026</td><td>Gate 0 &middot; Type</td><td>Type C, Career Path Builder. Targets LLM APIs 4 (crit 9, at 2) via streaming plus a second provider.</td></tr>
+      <tr><td>21 Aug 2026</td><td>Gate 1 &middot; Moat</td><td>PASS on determinism, write-back and persistent state. Guardrail: if it collapses to asking a model about the weather, the gate has failed mid-build.</td></tr>
+      <tr><td>21 Aug 2026</td><td>Step 1 &middot; Scope</td><td>Approved. Persona is a single-boat operator, six fixed departures. Verdict: upgrades existing. Slug <code>kuala-sepetang-tour-boat</code>. Honest gap: does nothing for RAG 6 or Vector 5, the two heaviest.</td></tr>
+      <tr><td>21 Aug 2026</td><td>Step 2 &middot; Problem statement</td><td>Written. Data source, operator-owned config, out-of-scope list and positioning line all fixed in <code>problem-statement.md</code>.</td></tr>
+      <tr><td>21 Aug 2026</td><td>Step 3 &middot; Design</td><td>Locked. Name kept as <b>Kuala Sepetang Tour Boat</b>. Four custom tools, FastAPI on Cloud Run, three-panel UI.</td></tr>
+      <tr><td>21 Aug 2026</td><td>Forecast layer</td><td>Built and verified live at 4.84N 100.63E. <b>Finding: <code>minutely_15</code> IS available here</b>, so a two-hour slot gets 8 buckets, not 2. <code>visibility</code> and <code>cape</code> both present. Timezone confirmed UTC+8. Archive and historical-forecast endpoints both return data.</td></tr>
+      <tr><td>21 Aug 2026</td><td>Rules layer</td><td>Thresholds, twelve activities and five shelter stops written to <code>config.py</code>, all flagged as placeholders for the operator to correct. Two corrections already needed: firefly window moved to sunset+30 to +150, and the activity overlap floor set to 45 minutes.</td></tr>
+      <tr><td>21 Aug 2026</td><td>Brain</td><td>Rain shape, hazard-versus-comfort split, slot rating, nearest-better-slot and activity fit all working. <b>One design fault caught and fixed:</b> rain probability alone was pushing dry slots to poor, because tropical forecasts routinely pair a 96 percent chance with zero accumulation. Probability can now only confirm rain already in the window.</td></tr>
+      <tr><td>21 Aug 2026</td><td>UI proposals</td><td>Three compared at phone and desktop width. Proposal 1 shows one slot at a time, which cannot answer "move them where". Proposal 2 is a horizontal strip that cuts off the sixth slot and says "safe to run", which breaks the locked positioning. Proposal 3 built: all six visible, rain-shape strip, five-day dropdown, confidence tier, chat and schedule file.</td></tr>
+      <tr><td>21 Aug 2026</td><td>Reallocation planner</td><td><b>Founder found a real gap:</b> the app named a better slot without checking whether the passengers fit in it. New <code>rebooking.py</code> assigns affected parties under three hard rules: never displace an existing booking, never exceed twelve seats, respect what was booked. Hardest-to-place party goes first. <b>Second rule bug caught:</b> a sunset cruise was being offered the 19:00 departure; anchor rule added so an anchored activity needs its moment inside the departure.</td></tr>
+      <tr><td>21 Aug 2026</td><td>Prove &middot; Stage A2</td><td><b>GATE PASS.</b> 7 harm properties clean across 30 departures, 27 parties, 197 passengers: capacity, no displacement, target workable, activity fits, valid actions, cancel is last resort, seats reconcile. Result on the live week: 26 passengers affected, 15 kept, 11 refunded. Saved to <code>results/stage-a2-rebooking.json</code>.</td></tr>
+      <tr><td>21 Aug 2026</td><td>Prove &middot; Stage A</td><td><b>GATE PASS.</b> 16/16 planted shapes, 7/7 monotonicity, 726/726 slot-days clean on 8 invariants across 121 real days. Shape spread on real weather: dry 42.7, throughout 35.1, arrives 11.7, clears 10.5. Ratings: good 42.6, marginal 43.4, poor 14.0. Saved to <code>results/stage-a.json</code>.</td></tr>
+      <tr><td>21 Aug 2026</td><td>Horizon &middot; Stage B</td><td><b>Measured, not estimated.</b> 93 dates, 558 departures, scored against Open-Meteo previous model runs at this location. <b>Wet-or-dry is forecastable</b>: skill over baseline 0.41 at 1 day, 0.26 at 3, 0.21 at 5, 0.04 at 7. <b>Rain timing inside the window is not</b>: 0.04 at 1 day and negative at 3, 5 and 7, meaning worse than always guessing the commonest shape. Product consequence: the rain strip is now shown for today and tomorrow only, and beyond that the app reports wet or dry and says plainly that it cannot place the rain. Confidence tiers in <code>config.py</code> replaced with the measured figures. Saved to <code>results/stage-b-horizon.json</code>.</td></tr>
+      <tr><td>21 Aug 2026</td><td>Tool layer</td><td><code>tools.py</code> with four custom schemas, plus web search and the text editor. <b>The boundary writing is the work here</b>: four tools touch weather, so each description says what it is for and what it is NOT for, and web search is pinned to met.gov.my and official domains so it cannot drift into fetching forecasts. <code>plan_reallocation</code> carries the line that stops the earlier mistake: prefer it over <code>compare_slots</code> whenever real passengers are involved, because compare_slots names a better slot without checking whether they fit in it. <code>editor.py</code> implements the half Claude does not ship: path confinement, backup before every write, and a loud failure on an ambiguous replace. All four guards tested. Error messages are written for the model to recover from, so a bad slot id returns the six valid ones.</td></tr>
+      <tr><td>21 Aug 2026</td><td>Multi-turn loop</td><td><code>agent.py</code> running live against Claude with streaming, six tools, and Gemini as a same-interface fallback so a provider outage does not take the jetty offline. Streamed blocks are rebuilt into plain dicts before re-entering history, tool errors return as results with <code>is_error</code> rather than exceptions, and the loop exits on <code>stop_reason</code>. <b>Verified on a real question:</b> asked where twelve passengers go when Monday 15:00 cannot run, it called <code>plan_reallocation</code> and returned Tuesday 13:00, matching the planner run exactly, and reported the thunderstorm correctly (codes 95 in the last three buckets, checked against the raw data). <b>Two prompt faults found and fixed:</b> it first used a one-day reallocation range, forcing a split a wider range avoided; and it wrote dashes, which the founder house style bans on any surface a reader sees.</td></tr>
+      <tr><td>21 Aug 2026</td><td>UI wired live</td><td><code>app.py</code> on FastAPI serves three endpoints and the page: <code>/api/board</code> reads straight from the same brain the gates ran against, <code>/api/schedule/{date}</code> serves the file the assistant edits, and <code>/api/chat</code> streams the loop as server-sent events so tool chips appear as they fire rather than after the answer lands. <b>Stage B changed the screen, not just the config:</b> beyond tomorrow the rain strip is drawn flat and the caption reads <i>rain expected</i> or <i>no rain expected</i> with the reason, because eight varied bars would claim precision the record does not support. The confidence block now prints the measured skill instead of promising a future measurement. Verified live in a browser: asked whether Monday 15:00 is workable and where the twelve go, it called two tools and returned Tuesday 13:00 with two alternatives and the timing caveat.</td></tr>
+      <tr><td>21 Aug 2026</td><td>Cloud Run packaging</td><td>Dockerfile (python:3.12-slim, no build step), <code>requirements.txt</code>, and <code>.dockerignore</code> plus <code>.gcloudignore</code> both excluding <code>.env</code> so a stray key cannot ship. <code>DEPLOY.md</code> carries the gcloud commands, Secret Manager setup, the post-deploy health check and the reason behind two settings that matter: a 120 second timeout, because a chat turn chaining several tools can run past the default and cut the stream mid-answer, and min-instances 0 to keep the bill near nothing when the boat is not running. <b>Two limits recorded rather than hidden:</b> Cloud Run has an ephemeral filesystem, so the forecast cache and, more importantly, the schedule files do not survive an instance recycling. Until a GCS mount or Firestore is added, the schedule is a working document inside a session, not a record. <b>Not yet deployed:</b> the deploy spends GCP budget and puts a public URL into the world, so it waits for the founder to run it.</td></tr>
+      <tr><td>21 Aug 2026</td><td>Evening Firefly Run</td><td><b>Operator decision, 21 Aug 2026.</b> The 17:00 boat is back before sunset and cannot show it, so the sunset and firefly trips merged onto the 19:00 departure. Named the <b>Evening Firefly Run</b>: the fireflies are the product and the sunset is a bonus. <b>That is not cosmetic, it changed the arithmetic.</b> The run was rated on the worse of its two halves, which over 181 evenings would have called two nights in three unworkable over a thing that was never promised. Now the firefly half sets the rating alone and the sunset half can only add a note. On the next eight nights that recovers three: 24, 25 and 26 August move from POOR to MARGINAL. Rain cut-off set to 0.5 mm/h as decided. New module <code>combined.py</code>. <b>A calibration error found and corrected:</b> the first gust figures sampled the 20:00 hour only, while the scorer takes a maximum across the whole 20:00 to 21:00 phase. Redone over the full window, gusts breach the poor mark on 1.7 percent of evenings rather than 0.6.</td></tr>
+      <tr><td>21 Aug 2026</td><td>Scope correction</td><td><b>Founder pulled the build back on track.</b> The brief was an assistant that helps decide whether to disembark and how likely rain is during a trip. The twelve-activity list had pulled the scoring into grading how pretty an evening would be, and four of the five threshold questions I put to the founder were about cloud thickness and moon brightness rather than whether the boat should go out. <b>Corrected:</b> a rating is now set only by rain, wind, thunderstorm and visibility. Cloud and moon are reported as things to tell the guest and can never cost a night. <b>The cost of the drift, measured:</b> over the same 181 evenings the Evening Firefly Run scored good on 49 percent when cloud and moon could pull it down, and scores good on <b>82 percent</b> now. On the next eight nights, 24 and 25 August moved from poor to good. Both were clear and calm; they were being failed for a bright moon and a covered sky. <b>The lesson worth keeping:</b> a threshold that does not change whether you sail does not belong in a rating.</td></tr>
+      <tr><td>21 Aug 2026</td><td>Deploy readiness</td><td><b>Four blockers from the readiness audit, all cleared.</b> <b>1.</b> The Evening Firefly Run is wired into the board, so the 19:00 slot shows one trip and the retired Sunset cruise is gone from every surface. Old bookings carrying the retired names are aliased, not orphaned. <b>2.</b> Bring-your-own-key, Claude only. The visitor pastes a key, it is held in their browser and sent per question, never stored, never logged, and redacted out of error messages (unit tested). Gemini removed, which also drops <code>google-generativeai</code> from the image. <b>3.</b> Schedule files are now one folder per visitor, so two people in the demo cannot clobber each other. <b>4.</b> A 20-per-minute per-address cap on both endpoints, because the Open-Meteo quota is the operator's to lose even when the tokens are not. <b>The board needs no key at all</b>, verified: full ratings, rain shapes and reallocation with an empty key. <b>One observability gap found while debugging:</b> the stream reported which tool fired but not what it asked for, so a wrong answer could not be traced. Tool arguments are now emitted and shown as a chip.</td></tr>
+      <tr><td>21 Aug 2026</td><td>Rolling window</td><td><b>Confirmed:</b> the five days always start from the day the app is opened. No pinned date, because a pinned date goes stale and quietly contradicts the claim that the page is live. A <code>?start=</code> in the address opens a chosen week without changing the default, so a portfolio link can point at a demonstrative week. Edge arrows now shift the whole window instead of going dead. <b>A hole the rolling window exposed:</b> sample bookings were pinned to 24 to 28 August, so the day the window rolled past them the board would show every departure empty and the reallocation panel would never appear. Bookings now hang off the first day on screen, so there are always passengers to reason about. Verified across eleven consecutive windows: moves, splits and cancels all firing, no crashes. <b>And a real operational finding, not a bug.</b> On a bad stretch, daytime parties are always rehoused (25 passengers affected, 0 refunded) while evening parties are never rehoused (49 affected, 49 refunded, zero options each). Five evening departures across a window hold 60 seats and 53 are already sold, so the Evening Firefly Run runs on seven seats of slack, and it is sun-locked so it can only move to another evening. <b>The earner is the bottleneck and it has no recovery path.</b></td></tr>
+      <tr><td>21 Aug 2026</td><td>Acceptance benchmark</td><td>Ten weighted criteria from the project outline written into <code>benchmark.html</code> as a scoring instrument: live totals, the four bands, a fixed four-turn test script and a written pass condition per turn. <b>Fixed before it was used</b>, so the score could not be argued backwards from the result. Six of the ten criteria are judgements a runner cannot make, which is why the instrument is a document rather than a test suite.</td></tr>
+      <tr><td>21 Aug 2026</td><td>Measured against the benchmark</td><td><b>80 out of 100, strong working prototype.</b> Strongest two: safety framing at 13 of 14, with the disclaimer travelling inside every tool result rather than living only in the system prompt, and booking confidence at 10 of 10, measured across 558 past departures rather than asserted. <b>One defect outranked the rest.</b> On the outline&rsquo;s own canonical turn, &ldquo;this Sunday&rdquo; resolved to 2024-08-24: the forecast layer served August 2024 archive data, labelled it a <code>firm</code> forecast at zero days lead, and left nothing in the payload to reveal it. The wrong year then propagated into the web search query. Root cause is the tool lecture note 03 builds first and this build skipped, a current date and time tool, compounded by an archive fallback that cannot fail loudly. Also found: the text editor aimed at an internal schedule file rather than the customer reply the brief defines it for, scoring 4 of 7, and four overlapping weather tools where the brief specifies one.</td></tr>
+      <tr><td>21 Aug 2026</td><td>Scope realigned to the outline</td><td>Problem statement rewritten against the project outline: the three tools named with the boundary between them, the operator-and-customer framing restored, the 7-day booking horizon and the recheck rule stated, and the ten criteria carried in as the acceptance measure. <b>Moved out of scope:</b> seat reallocation and refunds, combined-trip phase scoring, moon illumination and the twelve-activity fit table. Each answers a real question. None of them answers one the outline asks, and together they are what pushed the tool count from three to six.</td></tr>
+      <tr><td>21 Aug 2026</td><td>Screen redesign</td><td>Two layouts compared, card grid kept: the table draft spent its second column on a statistics panel and left the assistant nowhere to live. <b>Three faults both drafts shared, all corrected:</b> a green &#10003; Safe badge on a departure, which is the one claim the positioning forbids; occupancy rendered as the largest element on every card when it does not decide whether the boat sails; and wind in knots against thresholds written in km/h. <b>A founder rule changed the logic, not the wording:</b> a party moves together or not at all, so the search now skips any departure that cannot seat the whole group and carries into the next day rather than proposing a split. On live data the twelve on the 15:00 have nothing left that day, so the plan reads move all 12 to 09:00 tomorrow. Three surfaces had to be corrected together, since the assistant thread and the drafted customer message were both still offering a split. <b>Also added:</b> an Under the hood tab that shows the loop block by block, and a metric-tile grid that tints from the operator's own thresholds. One tint was wrong and was fixed: visibility flagged at 5 km against a threshold set at 1.5.</td></tr>
+      <tr><td>22 Aug 2026</td><td>The assistant knows what day it is</td><td><b>GATE PASS.</b> The heaviest defect closed. <code>get_current_datetime</code> added, returning the date, weekday and time at the jetty plus an <code>upcoming</code> map naming the next eight days, so a relative date is a lookup rather than arithmetic. Today's date also stamped on the system prompt, <b>built per request rather than at import</b>, because a server that stays up past midnight would otherwise carry yesterday. And <code>get_day()</code> now refuses a past date rather than serving the archive in its place, with <code>is_history</code> on the payload so observation cannot pass as forecast. <b>The escape hatch is explicit:</b> <code>allow_past=True</code> keeps the archive reachable for the measurement code, which is the only caller that should have it. <b>Verified on the canonical turn:</b> the date resolves to 2026-08-23 and the reply opens by stating it, which is the benchmark's own pass condition. A separate probe about last Tuesday was refused as history rather than answered from the archive. Stage A re-ran clean, so the classifier is untouched.</td></tr>
+      <tr><td>22 Aug 2026</td><td>The reply the operator sends</td><td>The text editor retargeted from an internal schedule file to the customer message, which is what the brief defines the tool for. <b>Three surfaces moved together:</b> the editor working directory (<code>data/replies</code>, one folder per visitor), the endpoint (<code>/api/schedule/{date}</code> became <code>/api/replies</code>, newest first), and the panel, which used to generate a schedule table client side and now says how to get a draft rather than inventing a form letter. <b>The system prompt is where the aiming happens</b>, because the built-in editor schema carries no description of its own: draft the message whenever the operator asks what to tell a customer, write it to the customer rather than the operator, plain text for WhatsApp, no ratings or millimetres or gust figures, never say a trip is safe, sign off as the boat. <b>Verified with nothing else asked for:</b> the canonical turn produced a saved, sendable message on the first request. <b>Two things worth keeping:</b> the path-confinement guard refused a write to <code>/tmp</code> and the model corrected itself from the error text alone, and a first pass signed off blank, which is why the sign-off is now an instruction rather than a hope.</td></tr>
+      <tr><td>22 Aug 2026</td><td>Tool set trimmed to the brief</td><td><b>Seven schemas to four.</b> The four weather tools merged into one <code>get_boat_conditions</code> that reads its grain from the arguments. <b>The step began with a wrong plan and reading the code caught it:</b> the intent had been to delete <code>rebooking.py</code>, <code>combined.py</code> and <code>moon.py</code>. Testing showed <code>rebooking.py</code> is the source of all occupancy data, which the founder had just decided to keep, and that bypassing <code>combined.py</code> returns zero activities for the 19:00, which would send every firefly party to cancel and refund. The conflation was mine: criterion 2 counts the schemas a model chooses between, not the modules on disk. <b>Nothing was deleted; the choices were.</b> Two more decisions moved from prompt to code at the same time: the reallocation lookahead is now fixed rather than argued for in the prompt, and a clock time is resolved to a real departure by the tool rather than guessed as a slot id by the model. One prompt paragraph was deleted as a result. <b>Verified live:</b> "around 4 PM this Sunday" now takes one weather call and the reply names the 15:00 departure; a full 15:00 going bad takes one call and returns the whole-party move inside it.</td></tr>
+      <tr><td>22 Aug 2026</td><td>A week in one request</td><td><b>A wrong claim, checked, became the work.</b> Step 17 had recorded that <code>/api/board</code> served one day at a time and could not answer the whole-party search. The endpoint has always taken <code>?days=</code>, default 5, capped at 10, and the planner has always run the whole window. <b>The real fault was underneath:</b> a seven-day board cost 16.1s cold because the forecast layer fetched one date per HTTP call. Open-Meteo serves a range in one response, so <code>get_days()</code> now takes the span in a single call and splits it into the per-date payloads, caching all of them. <b>Verified identical before trusting it:</b> 7 of 7 dates match a per-date fetch exactly, hourly and 15-minute series included. <b>Cold fell from 16.1s to a median 4.3s</b>, one sixth of the quota; the spread is 1.2s to 10s so the figure is a band. The outlook grain and the relocation lookahead used the same loop and got the same fix. <b>Seven days also pays for itself in passengers:</b> across the full week the planner keeps 35 of 35 and refunds none, where narrower windows refund. Stage A re-ran clean.</td></tr>
+      <tr><td>22 Aug 2026</td><td>Screen wired to the engine</td><td><b>No hardcoded weather left in the page.</b> The approved design now runs on <code>/api/board?days=7</code>, keeping its stylesheet verbatim so what was signed off is what shipped. <b>One request brings the week and switching day is local</b>, because a board that refetched per click would spend seven times the quota on data it already held. A day strip carries a workable count per day. <b>The plan on each card comes from the server planner rather than being recomputed in the browser</b>, so it reflects seats actually reserved across the window: the full 15:00 reads move all 12 to 13:00 Saturday, whole party together. The reply tab reads <code>/api/replies</code> and copies to clipboard; Under the hood fills in live from the stream, one round per exchange with real tool arguments, <code>is_error</code> results and the <code>stop_reason</code> that drives the loop. <b>Checked through the running server, not the browser</b>, so the key stayed out of the page: 4 tool calls, 1 recovered tool error, clean end_turn, and the browser then rendered the message that run had drafted. Phone width: zero horizontal overflow.</td></tr>
+      <tr><td>22 Aug 2026</td><td>Benchmark run</td><td><b>95 of 100, production-quality band.</b> Four turns, one session, scored against the pass conditions written before the run. Full marks on seven of the ten criteria including live data accuracy, which stood at 10 of 18 when this started. <b>The five points lost are the first measurement's fault returning:</b> asked what to tell the customer, the assistant answered in operator voice and asked permission to draft instead of drafting. The message it produced on the next turn is exactly right, but the benchmark scores the run, not the capability. <b>Worth recording precisely because it is intermittent:</b> the same prompt drafted unprompted twice and asked once, so step 15 improved the odds without settling them, and a prompt instruction is not a guarantee. <b>A separate fix paid off measurably:</b> the editor now absorbs the absolute-path convention the built-in schema promises the model, so the wasted <code>/tmp</code> write is gone and turn 1 fell from 37.5s to 16.4s, with confinement unchanged. <b>One run was lost to a billing limit mid-benchmark</b>, handled by the loop as a clean error rather than a crash, and rerun in full afterwards rather than stitched together, because the benchmark specifies one continuous conversation.</td></tr>
+    </table>
+    </div>
+    <div class="lbl">Update protocol</div>
+    <div class="tmpl">At each phase boundary: flip the milestone cell, restamp the last-updated line, append one build-log row with the result rather than the intention. A phase that ends without a result to record has not closed.</div>
+  </div>
+
+  <div class="foot">
+    <p><b>What makes this one different from the usual tree.</b> The forecast is bought in, so the data layer is not where the work sits. What the project produces is a repeatable reading of someone else's data against rules that belong to the operator. That means the recovery check is aimed at the classifier rather than at a prediction: run it over past days whose outcome is already known, and see whether it separates the day that cleared at ten from the day that broke at four. Everything downstream inherits that separation.</p>
+    <p><b>Where the credibility actually sits.</b> Two places, and neither is the chat interface. First, the thresholds and the shelter list live in a file the operator can open and correct, so the verdict is inspectable rather than taken on trust. Second, every answer carries the confidence tier for its lead time, so a slot quoted eleven days out is labelled as pattern rather than forecast before anyone takes a deposit on it.</p>
+    <p><b>The slot grid cannot serve three of the twelve activities.</b> Sunset falls at 19:26 all week. The 17:00 departure is back at the jetty before the sun is down, and the 19:00 departure is already the firefly run, so <b>the sunset cruise and the firefly trip want the same boat</b>. Stargazing needs dark from about 20:58 and the last departure ends at 21:00, so it has no slot at all. None of this is a coding fault. It is the timetable meeting the sky, and it is the operator's call: a shorter dedicated run, a later departure, or accepting that the 19:00 sells as one trip that catches the sunset and then the fireflies.</p>
+
+    <p><b>Two findings the gate surfaced.</b> First, <b>stargazing has no slot</b>. The last departure ends at 21:00 and proper dark at this latitude starts around 20:58, so the activity as listed cannot be served by the current grid without a later or longer run. That is a scheduling constraint for the operator to decide on, not a bug to fix in code. Second, the archive is hourly, so a real-data window carries two buckets and only four of the five shapes can arise; <code>intermittent</code> is unreachable at that resolution by construction, proven by enumerating all four patterns rather than left as an unexplained gap. A consequence worth watching: at hourly resolution a light drizzle in both hours reads as wet throughout, which is why that share sits at 35 percent and would fall once the same days are read at 15 minutes.</p>
+
+    <p><b>What it does not do.</b> No radar, so it cannot nowcast a shower the operator can already see. No tide, which matters for the wildlife trips and stays out of version 1 rather than being approximated. It rates operating conditions, not sighting probability: dolphins depend on tide, season and luck, and a forecast API knows none of that.</p>
+    <p>&copy; 2026 &middot; Kuala Sepetang Tour Boat &middot; build workflow</p>
+  </div>
+</div>
+</body>
+</html>

@@ -2,10 +2,10 @@
 
 [![Portfolio Website](https://img.shields.io/badge/Portfolio-Live-green?logo=vercel)](https://lyven81.github.io/ai-project/)
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-black?logo=github)](https://github.com/lyven81/ai-project)
-[![Projects](https://img.shields.io/badge/Projects-58-blue)](#projects-by-category)
+[![Projects](https://img.shields.io/badge/Projects-59-blue)](#projects-by-category)
 [![AI Powered](https://img.shields.io/badge/AI-Powered-orange?logo=tensorflow)](https://github.com/lyven81/ai-project)
 
-**56 production AI apps across 8 business categories** — each one solves a real, named pain point with a working demo you can click and try today.
+**59 production AI apps across 8 business categories** — each one solves a real, named pain point with a working demo you can click and try today.
 
 <div align="center">
 <img width="1200" height="400" alt="AI Portfolio Banner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
@@ -13,7 +13,7 @@
 
 ## 🌟 Portfolio Overview
 
-This repo contains **56 completed AI applications**, each with a working demo (live cloud URL or local `demo.html`). Projects are organized by **business use case** — so a reader can scan the list, find the category that matches their work, and immediately see which problems AI can solve there.
+This repo contains **59 completed AI applications**, each with a working demo (live cloud URL or local `demo.html`). Projects are organized by **business use case** — so a reader can scan the list, find the category that matches their work, and immediately see which problems AI can solve there.
 
 **Live site:** [lyven81.github.io/ai-project](https://lyven81.github.io/ai-project/)
 
@@ -21,10 +21,11 @@ This repo contains **56 completed AI applications**, each with a working demo (l
 
 An index of every published AI project, **newest first**. The date is when the project was **deployed** (from the per-project "Deployed" field below).
 
-**Total published AI projects: 58**
+**Total published AI projects: 59**
 
 | # | Date deployed | AI project | Page |
 |---|---|---|---|
+| 59 | 2026-08-21 | Kuala Sepetang Tour Boat | [demo](https://kuala-sepetang-tour-boat-522143897885.asia-southeast1.run.app) |
 | 58 | 2026-08-21 | Evaluate AI Retail Customer Agent | [demo](https://lyven81.github.io/ai-project/projects/evaluate-ai-retail-customer-agent/demo.html) |
 | 57 | 2026-07-29 | Fire Claim Examiner | [demo](https://lyven81.github.io/ai-project/projects/fire-claim-examiner/demo.html) |
 | 56 | 2026-07-28 | Catering Knowledge Assistant | [demo](https://lyven81.github.io/ai-project/projects/catering-knowledge-assistant/demo.html) |
@@ -96,7 +97,7 @@ The 8 categories below match the [live category pages](https://lyven81.github.io
 | 2 | [Multi-Agent Decision Systems](#2-multi-agent-decision-systems-8-projects) | 8 | Owners needing research → verdict pipelines |
 | 3 | [Conversational Data Analytics](#3-conversational-data-analytics-9-projects) | 9 | SME owners with data, no analyst |
 | 4 | [Content Automation](#4-content-automation-6-projects) | 6 | Solo consultants, creators, educators |
-| 5 | [Industry Specialist Advisors](#5-industry-specialist-advisors-12-projects) | 12 | Vertical experts (legal, finance, education, retail, property) |
+| 5 | [Industry Specialist Advisors](#5-industry-specialist-advisors-13-projects) | 13 | Vertical experts (legal, finance, education, retail, property) |
 | 6 | [Knowledge & Reference Chatbots](#6-knowledge--reference-chatbots-9-projects) | 9 | Consumers seeking guidance in plain language |
 | 7 | [Document & Productivity Tools](#7-document--productivity-tools-5-projects) | 5 | Knowledge workers, accessibility users |
 | 8 | [Agentic Commerce](#8-agentic-commerce-2-projects) | 2 | Storefronts ready for AI shopping agents |
@@ -339,7 +340,14 @@ The 8 categories below match the [live category pages](https://lyven81.github.io
 
 ---
 
-### 5. Industry Specialist Advisors (12 projects)
+### 5. Industry Specialist Advisors (13 projects)
+
+#### Kuala Sepetang Tour Boat
+- **What it does:** Weather-driven departure planner for a one-boat tour operator.
+- **How it's built:** Claude Sonnet 4.5 in a streaming multi-turn tool loop over four tools: a custom conditions tool that reads its own grain from the arguments, a custom date and time tool, server-side web search, and the built-in text editor. Underneath sits a deterministic Python classifier that calls no model, reading Open-Meteo against thresholds the operator owns. FastAPI on Cloud Run.
+- **Problem solved:** A tour-boat operator with one hull and six fixed two-hour departures decides go or no-go from a phone weather app that reports the day rather than the window, so it cannot say whether rain lands at the start, when a short delay fixes it, or on the return leg, when the boat is furthest from cover. This rates each departure against the operator's own limits, says how far ahead a slot is worth promising, moves a whole affected party to a departure that seats all of them, and drafts the message to send the customer.
+- **Demo:** [Try it](https://kuala-sepetang-tour-boat-522143897885.asia-southeast1.run.app)
+- **Deployed:** 2026-08-21
 
 #### Fire Claim Examiner
 - **What it does:** Tells claims examiners which clause governs and what to pay.
