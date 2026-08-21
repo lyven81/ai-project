@@ -324,20 +324,29 @@ def compare_slots(day: dict, exposure: str = "sheltered") -> dict:
 
 
 def _nearest_better(slot_id: str, scored: list) -> dict | None:
+    """
+    The next workable departure on this day, looking FORWARD only.
+
+    It used to sort on absolute distance, so a party on the 13:00 was offered
+    the 09:00 of the same day. A departure that has already sailed is not an
+    alternative to one that has not, however close it is on the clock.
+
+    Returning None is a real answer: it means nothing later that day works, and
+    the caller should look at another day rather than be handed a slot that
+    cannot be taken.
+    """
     ids = [s["id"] for s in C.SLOTS]
     i = ids.index(slot_id)
-    candidates = sorted(
-        [v for v in scored if v["rating"] != "poor"],
-        key=lambda v: (abs(ids.index(v["slot"]) - i), RANK[v["rating"]]),
-    )
-    if not candidates:
+    later = [v for v in scored
+             if v["rating"] != "poor" and ids.index(v["slot"]) > i]
+    if not later:
         return None
-    best = candidates[0]
-    gap = abs(ids.index(best["slot"]) - i)
+    best = sorted(later, key=lambda v: (ids.index(v["slot"]) - i, RANK[v["rating"]]))[0]
+    gap = ids.index(best["slot"]) - i
     return {
         "slot": best["slot"], "label": best["label"], "rating": best["rating"],
         "shape": best["shape"]["shape"],
-        "note": f"{gap * 2} hours {'earlier' if ids.index(best['slot']) < i else 'later'}",
+        "note": f"{gap * 2} hours later",
     }
 
 

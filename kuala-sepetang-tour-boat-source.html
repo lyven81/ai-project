@@ -205,7 +205,7 @@
   "about": "Four tools, one streaming loop, and a deterministic engine underneath that calls no model at all. The interesting code is not the chat: it is the classifier that reads a two-hour window against the operator's own thresholds, and the guards that stop a wrong date returning real weather.",
   "structure": {
     "label": "Project structure",
-    "code": "kuala-sepetang-tour-boat/\n├── src/\n│   ├── config.py        thresholds, departures, activities. The operator's file.\n│   ├── forecast.py      Open-Meteo client. One call per range, cached, split per date.\n│   ├── brain.py         the classifier: rain shape, hazard, rating, confidence.\n│   ├── combined.py      the evening run, scored as two halves.\n│   ├── rebooking.py     seat-reserving planner: who moves where, nobody displaced.\n│   ├── tools.py         the four tool schemas and the router.\n│   ├── editor.py        the text editor half Claude does not ship.\n│   ├── agent.py         the multi-turn loop, streamed.\n│   ├── app.py           FastAPI: board, replies, chat over server-sent events.\n│   ├── eval_stage_a.py  classifier gate: planted shapes, invariants, real archive.\n│   └── eval_stage_b.py  forecast skill by lead time, measured not assumed.\n├── web/index.html       the board, the assistant, the drafted reply.\n├── data/bookings.json   sample bookings standing in for a booking system.\n├── results/             the gate output the page is allowed to cite.\n├── Dockerfile           python:3.12-slim, no build step.\n└── DEPLOY.md            Cloud Run commands, secrets, and the two limits that bite."
+    "code": "kuala-sepetang-tour-boat/\n├── src/\n│   ├── config.py        thresholds, departures, activities. The operator's file.\n│   ├── forecast.py      Open-Meteo client. One call per range, cached, split per date.\n│   ├── brain.py         the classifier: rain shape, hazard, rating, confidence.\n│   ├── combined.py      the evening run, scored as two halves.\n│   ├── rebooking.py     seat-reserving planner: who moves where, nobody displaced.\n│   ├── tools.py         the four tool schemas and the router.\n│   ├── editor.py        the text editor half Claude does not ship.\n│   ├── agent.py         the multi-turn loop, streamed.\n│   ├── app.py           FastAPI: board, replies, chat over server-sent events.\n│   ├── eval_stage_a.py  classifier gate: planted shapes, invariants, real archive.\n│   ├── eval_stage_b.py  forecast skill by lead time, measured not assumed.\n│   └── eval_relocation.py  a move must be forward in time and still catchable.\n├── web/index.html       the board, the assistant, the drafted reply.\n├── data/bookings.json   sample bookings standing in for a booking system.\n├── results/             the gate output the page is allowed to cite.\n├── Dockerfile           python:3.12-slim, no build step.\n└── DEPLOY.md            Cloud Run commands, secrets, and the two limits that bite."
   },
   "walkthrough": [
     {
@@ -230,7 +230,7 @@
     },
     {
       "heading": "One Weather Tool That Reads Its Own Grain",
-      "body": "An earlier version had four overlapping weather tools, which meant the model had to choose correctly between them before it could be right about anything. They are now one. A date and a time gives one departure, a bare date gives the day, a date and an end_date gives the outlook. The functions behind it did not change; they simply stopped being choices.",
+      "body": "Weather is one tool, not several. A date and a time gives one departure, a bare date gives the day, a date and an end_date gives the outlook. Keeping the grain in the arguments means the model never has to pick correctly between similar tools before it can be right about anything, and the functions behind it stay separate and testable.",
       "files": [
         {
           "label": "tools.py: the grain comes from the arguments",
@@ -250,7 +250,7 @@
     },
     {
       "heading": "A Past Date Cannot Pass as a Forecast",
-      "body": "The archive and the forecast return identical shapes, which is convenient for the measurement code and dangerous everywhere else. A date the model guessed wrong lands in the archive and comes back as real weather, at zero days lead, labelled firm. That happened, and it is why a past date is now an error by default, with today's date carried in the message so the caller can correct its own arithmetic.",
+      "body": "The archive and the forecast return identical shapes, which is convenient for the measurement code and unsafe anywhere near a booking: weather that already happened would read as a firm forecast at zero days lead. So a past date is an error by default, and the message carries today's date so the caller can correct its own arithmetic. The measurement code opts back in explicitly with allow_past.",
       "files": [
         {
           "label": "forecast.py: refuse, and say what day it is",
@@ -270,12 +270,14 @@
       ]
     },
     {
-      "heading": "Things That Bit, and What They Cost",
+      "heading": "Engineering Decisions",
       "bullets": [
-        "<b>The date was the biggest defect in the build.</b> Asked about \"this Sunday\", the assistant answered for a date two years gone, read the archive, and reported it as a firm forecast. The fix was the tool the course builds first and this project had skipped.",
-        "<b>Seven sequential calls for a seven-day board</b> cost sixteen seconds on a cold cache, which on Cloud Run with min-instances 0 is every time an instance wakes. Open-Meteo serves a range in one response; the same board now takes about four seconds and one sixth of the quota.",
-        "<b>The built-in editor schema promises the model an absolute path</b> while this tool confines writes to one folder, so every drafted reply wasted a call on a refused write to /tmp. The editor now reduces a path to its file name, keeps it in the folder and says so, with confinement unchanged.",
-        "<b>Cloud Run has an ephemeral filesystem.</b> The forecast cache and the drafted replies do not survive an instance recycling. For a demo that is fine; for an operator it wants a bucket mount or Firestore, and the README says so rather than hiding it."
+        "<b>The date is a tool call, not a memory.</b> <code>get_current_datetime</code> returns today's date, weekday and the calendar date of each of the next eight days, so a phrase like \"this Sunday\" is resolved by lookup rather than arithmetic. Today's date is also stamped on the system prompt per request rather than at import, so a server that stays up past midnight still knows what day it is.",
+        "<b>A past date cannot return as a forecast.</b> The archive and the forecast are shaped identically, so the forecast layer refuses a date already gone and every payload carries <code>is_history</code>. Observation and prediction are never interchangeable here.",
+        "<b>A week costs one request.</b> The forecast layer fetches the whole span in a single call and splits it per date into the cache, so a seven-day board is one round trip rather than seven. Cold load is about four seconds against sixteen for the same data fetched a day at a time, and it uses a sixth of the free-tier quota.",
+        "<b>A move must be forward in time and still catchable.</b> A party can only be offered a departure that leaves after the one they are on and has not already sailed, with a minimum notice the operator sets. <code>eval_relocation.py</code> gates the build on it, alongside capacity, no-displacement and activity-fit properties.",
+        "<b>The editor absorbs a convention mismatch instead of bouncing it.</b> The built-in editor schema describes an absolute path while this tool writes to one folder per visitor, so a path is reduced to its file name, kept in the folder, and the result says where the file went. Confinement is unchanged; a traversal attempt still lands inside the folder.",
+        "<b>State that outlives a request needs somewhere to live.</b> Cloud Run's filesystem is ephemeral, so the forecast cache and drafted replies are per-instance. For an operator using this daily the next step is a bucket mount or Firestore, and <code>DEPLOY.md</code> carries the commands."
       ]
     }
   ],

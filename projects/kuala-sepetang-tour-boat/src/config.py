@@ -38,6 +38,12 @@ SLOTS = [
 
 BOAT = {"name": "Boat 1", "seats": 12}
 
+# The shortest notice on which a party can realistically be put on a different
+# departure. A boat leaving in ten minutes is not somewhere you can move twelve
+# people who are not at the jetty yet.
+# TODO(operator): your call. Longer for school groups, shorter for walk-ins.
+MIN_NOTICE_MINUTES = 60
+
 # ---------------------------------------------------------------------------
 # Thresholds. Split by exposure, because the open estuary and the sheltered
 # mangrove channels do not behave the same in wind.

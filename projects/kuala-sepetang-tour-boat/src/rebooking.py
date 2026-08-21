@@ -122,6 +122,36 @@ def _day_gap(a: str, b: str) -> int:
     return abs((datetime.strptime(a, "%Y-%m-%d") - datetime.strptime(b, "%Y-%m-%d")).days)
 
 
+def departure_dt(date_iso: str, slot_id: str) -> datetime:
+    """When a departure actually leaves the jetty."""
+    slot = next(s for s in C.SLOTS if s["id"] == slot_id)
+    return datetime.strptime(f"{date_iso} {slot['start']}", "%Y-%m-%d %H:%M")
+
+
+def is_reachable(cand_date: str, cand_slot: str,
+                 src_date: str, src_slot: str, now: datetime | None = None) -> bool:
+    """
+    Whether a party sitting on one departure could actually be put on another.
+
+    Two conditions, and the first one is the whole reason this function exists.
+
+    A candidate must leave AFTER the departure being abandoned. The planner
+    used to compare only seats, ratings and calendar-day distance, so it would
+    cheerfully offer the 09:00 to a party booked on the 13:00 of the same day,
+    which reads fine in a table and is impossible on a jetty. Same-day scored
+    better than next-day, so it actively preferred going backwards.
+
+    A candidate must also not have left already, with a little notice on top,
+    because a boat pulling away in ten minutes is not somewhere twelve people
+    who are still at home can be moved to.
+    """
+    cand = departure_dt(cand_date, cand_slot)
+    if cand <= departure_dt(src_date, src_slot):
+        return False
+    now = now or datetime.now()
+    return cand >= now + timedelta(minutes=C.MIN_NOTICE_MINUTES)
+
+
 def candidates_for(party: dict, board: dict, reserved: dict) -> list[dict]:
     """
     Every departure this party could move to without displacing anyone.
@@ -137,6 +167,8 @@ def candidates_for(party: dict, board: dict, reserved: dict) -> list[dict]:
             continue
         if cell["rating"] == "poor":
             continue
+        if not is_reachable(cell["date"], cell["slot"], src_date, src_slot):
+            continue                                   # already gone, or earlier than the one they are on
         if C.resolve_activity(party["activity"]) not in cell["fits"]:
             continue                                   # the sun, or the clock, says no
         free = cell["free"] - reserved.get(key, 0)
@@ -167,10 +199,12 @@ def split_options(party: dict, board: dict, reserved: dict) -> list[dict] | None
     Only offered, never chosen automatically. Splitting a school group across
     two boats is the operator's call and the customer's, not the app's.
     """
-    src_date, _ = party["from_cell"]
+    src_date, src_slot = party["from_cell"]
     pool = []
     for key, cell in board.items():
         if key == party["from_cell"] or cell["rating"] == "poor":
+            continue
+        if not is_reachable(cell["date"], cell["slot"], src_date, src_slot):
             continue
         if C.resolve_activity(party["activity"]) not in cell["fits"]:
             continue
@@ -270,7 +304,7 @@ def _dow(iso: str) -> str:
 
 
 def _move_sentence(party: dict, best: dict) -> str:
-    when = "same day" if best["same_day"] else f"{_dow(best['date'])}"
+    when = "later the same day" if best["same_day"] else f"{_dow(best['date'])}"
     return (f"Move {party['name']} ({party['size']}) to {when} {best['label']}. "
             f"Rated {best['rating']}, {best['shape']}. "
             f"{best['free_after']} seats still free after the move, "
@@ -289,9 +323,9 @@ def _cancel_sentence(party: dict) -> str:
             "same departure on another day, and every one of those is either "
             "unworkable or full. ") if party["activity"] in SUN_LOCKED else ""
     return (f"Cancel and refund {party['name']} ({party['size']}). {lock}"
-            f"Nothing in the window takes a party this size without bumping "
-            f"someone already booked. Offer a date beyond the window, or a "
-            f"different trip, before refunding.")
+            f"Nothing still to depart in the window takes a party this size "
+            f"without bumping someone already booked. Offer a date beyond the "
+            f"window, or a different trip, before refunding.")
 
 
 if __name__ == "__main__":
