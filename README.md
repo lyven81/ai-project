@@ -96,7 +96,7 @@ The 8 categories below match the [live category pages](https://lyven81.github.io
 | 2 | [Multi-Agent Decision Systems](#2-multi-agent-decision-systems-8-projects) | 8 | Owners needing research → verdict pipelines |
 | 3 | [Conversational Data Analytics](#3-conversational-data-analytics-9-projects) | 9 | SME owners with data, no analyst |
 | 4 | [Content Automation](#4-content-automation-6-projects) | 6 | Solo consultants, creators, educators |
-| 5 | [Industry Specialist Advisors](#5-industry-specialist-advisors-11-projects) | 11 | Vertical experts (legal, finance, education, retail, property) |
+| 5 | [Industry Specialist Advisors](#5-industry-specialist-advisors-12-projects) | 12 | Vertical experts (legal, finance, education, retail, property) |
 | 6 | [Knowledge & Reference Chatbots](#6-knowledge--reference-chatbots-9-projects) | 9 | Consumers seeking guidance in plain language |
 | 7 | [Document & Productivity Tools](#7-document--productivity-tools-5-projects) | 5 | Knowledge workers, accessibility users |
 | 8 | [Agentic Commerce](#8-agentic-commerce-2-projects) | 2 | Storefronts ready for AI shopping agents |
