@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How Hook or Prompt is built</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--brown:#5A3E2B;--gold:#C8961E;--bg:#F4ECE0;--paper:#FFF;--ink:#2E2620;--mute:#7A6A5C;--line:#E2D5C3;
+ --seed:#7A5B33;--seedbg:#F3ECE0;--grow:#2E7D5B;--growbg:#E3F1EA;--harvest:#B5532A;--harvestbg:#F6E7DE}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:'Poppins',sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:860px;margin:0 auto;padding:52px 24px 80px}
+.eyebrow{font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:10px}
+h1{font-weight:700;color:var(--brown);font-size:2.3rem;line-height:1.1;letter-spacing:-.025em;margin-bottom:6px}
+.tagline{font-size:1.04rem;color:var(--mute);font-weight:400}
+.rule{height:3px;width:58px;background:var(--gold);border-radius:2px;margin:22px 0 18px}
+p{margin:10px 0}
+.progress{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:20px 24px;margin:26px 0 6px}
+.progress .top{display:flex;justify-content:space-between;align-items:baseline}
+.progress .cnt{font-size:1.4rem;color:var(--brown);font-weight:600}
+.progress .pct{color:var(--mute);font-size:.9rem}
+.bar{height:12px;background:#EFE4D3;border-radius:8px;overflow:hidden;margin-top:12px}
+.bar > i{display:block;height:100%;background:var(--grow);width:100%}
+.phase{border-radius:14px;padding:4px 24px 20px;margin:28px 0;border:1px solid var(--line)}
+.phase.seed{background:var(--seedbg);border-color:#E2D4BC}
+.phase.grow{background:var(--growbg);border-color:#C3E2D1}
+.phase.harvest{background:var(--harvestbg);border-color:#EAD2C0}
+.ph-label{display:inline-block;font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:5px 12px;border-radius:0 0 10px 10px;color:#fff}
+.seed .ph-label{background:var(--seed)}.grow .ph-label{background:var(--grow)}.harvest .ph-label{background:var(--harvest)}
+h2{font-weight:600;color:var(--brown);font-size:1.3rem;margin:16px 0 2px}
+.step{background:var(--paper);border:1px solid var(--line);border-radius:11px;padding:16px 20px;margin:14px 0}
+.step h3{margin-bottom:4px;color:var(--brown);font-size:1.02rem;display:flex;align-items:center;flex-wrap:wrap;gap:8px;font-weight:600}
+.step .num{color:var(--gold);font-weight:700}
+.status{font-size:.64rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 10px;border-radius:20px;margin-left:auto}
+.status.done{background:#E3F1EA;color:#2E7D5B}
+.status.todo{background:#eceff2;color:#5C6B78}
+.lbl{font-size:.7rem;font-weight:700;color:var(--mute);text-transform:uppercase;letter-spacing:.04em;margin:12px 0 2px}
+.res{font-size:.89rem;color:var(--brown);background:#FBF6EE;border-radius:8px;padding:10px 14px;margin-top:8px;border:1px solid var(--line)}
+.flow{background:var(--brown);color:#fff;border-radius:12px;padding:18px 24px;margin:30px 0;font-size:1rem;text-align:center;font-weight:500}
+.flow b{color:var(--gold)}
+.foot{margin-top:42px;padding-top:20px;border-top:1px solid var(--line);color:var(--mute);font-size:.88rem}
+code{font-family:ui-monospace,Menlo,monospace;font-size:.88em;background:#EFE4D3;padding:1px 5px;border-radius:4px;color:var(--brown)}
+@media(max-width:560px){h1{font-size:1.8rem}.wrap{padding:36px 16px 56px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="eyebrow">Agentic Commerce · build tracker</p>
+  <h1>How Hook or Prompt is built</h1>
+  <p class="tagline">Foundation-up: the data, then the brain, prove the brain, then the face. The interface was built last and only after the engine had been checked against a run that already existed.</p>
+  <div class="rule"></div>
+  <p>Six milestones. Each starts only once the one below it stands, so at every point the thing is whole. The unusual part of this build is that milestones 1 to 3 were finished before the project was scoped: the engine came out of the CCAR-F Build 3 notebook, where it had already been written and run. That is why the gate at milestone 3 matters more than usual, and why it is shipped as a page anyone can open rather than a claim.</p>
+
+  <div class="progress">
+    <div class="top"><span class="cnt">6 / 6 milestones complete</span><span class="pct">100%</span></div>
+    <div class="bar"><i></i></div>
+  </div>
+
+  <div class="phase seed">
+    <span class="ph-label">Seed · the roots</span>
+    <h2>Data, and a truth you can check</h2>
+
+    <div class="step">
+      <h3><span class="num">1.</span> The batch and the recorded run<span class="status done">Done</span></h3>
+      <p>Eighteen refund requests clustered on a $500 limit, nine at or under and nine above, several within a dollar or two of the line, each carrying the kind of note a real customer writes. Alongside them, the tool the model actually chose for each one and the reason it gave, from a run against <code>claude-opus-5</code>.</p>
+      <div class="lbl">Known truth</div>
+      <p>Every correct outcome is arithmetic. An amount is above the line or it is not, so a violation is a fact rather than an opinion, and the boundary pair settles it: $500.00 is correctly paid, $500.01 is not.</p>
+      <div class="res"><b>Result:</b> 18 requests and their recorded choices, shipped in <code>scenarios.js</code> and printed in full in the app, so the recording can be judged rather than trusted.</div>
+    </div>
+  </div>
+
+  <div class="phase grow">
+    <span class="ph-label">Grow · the trunk</span>
+    <h2>The brain, and the gate it has to pass</h2>
+
+    <div class="step">
+      <h3><span class="num">2.</span> The guard at the tool boundary<span class="status done">Done</span></h3>
+      <p><code>refundGuard(toolName, input, limit)</code> runs after the model picks a tool and before the tool executes. It reads the amount off the tool arguments, compares it to the limit, and returns allow or redirect. It does not read the customer note, argue with the model, retry, or ask for another opinion. On a redirect the case goes to <code>escalate_to_human</code> with the hold reason attached, so the customer still gets an outcome and a person decides it.</p>
+      <div class="res"><b>Result:</b> eight lines, ported unchanged from the notebook into JavaScript so it executes in the browser rather than being described in prose.</div>
+    </div>
+
+    <div class="step">
+      <h3><span class="num">3.</span> The eval gate<span class="status done">Done</span></h3>
+      <p>Before any interface was built, the port had to reproduce the recorded run exactly. Eighteen assertions, run live against the same file the app loads: the leak total, the violation count, the rate, the escalations, the interceptions, the queue size, the boundary pair, full scenario coverage of all 18 requests, and the three note-independence checks added with the agent surface in milestone 6.</p>
+      <div class="lbl">The rule that made this a gate</div>
+      <p>A red result means every number in the interface would be describing something that did not happen. Fix the engine, never the interface.</p>
+      <div class="res"><b>Result: 18 of 18 pass.</b> $3,046.01 and 5 violations on the prompt-only path, $0.00 and 0 violations with the guard, 56% on the nine edge cases, $500.00 allowed and $500.01 redirected. Open <code>eval-check.html</code> to run it.</div>
+    </div>
+  </div>
+
+  <div class="phase harvest">
+    <span class="ph-label">Harvest · the face</span>
+    <h2>The console, and the explanation around it</h2>
+
+    <div class="step">
+      <h3><span class="num">4.</span> The batch runner<span class="status done">Done</span></h3>
+      <p>An operator console rather than a page to read. Transport controls drive the batch, two lanes race the same requests through both architectures with live money counters, and a strip across the top traces the request currently in flight: what arrived, what the model chose and why, and the guard's verdict, gold on an interception.</p>
+      <div class="lbl">The control that carries the argument</div>
+      <p>The limit is live. Move it off $500 and the guarded lane recomputes exactly, because it is arithmetic. The prompt lane declines and says why: those were judgements made about a $500 sentence, and a different limit needs the whole thing run again. Code is recomputable and auditable when the rule changes. A sentence has to be re-run and re-trusted.</p>
+      <div class="res"><b>Result:</b> <code>index.html</code>, self-contained, no backend, no key, works offline once loaded.</div>
+    </div>
+
+    <div class="step">
+      <h3><span class="num">5.</span> Seven scenarios, each with how and why<span class="status done">Done</span></h3>
+      <p>All 18 requests grouped by what each one actually tests: routine cases under the line, the boundary pair a cent apart, loyalty pressure, claimed authority, the mental split, company fault, and the clean escalations where the prompt gets it right unaided. Five are failure modes. Two are the reason the prompt stays. Every group carries how the enforcement works there and why a sentence loses.</p>
+      <div class="res"><b>Result:</b> seven tabs, each scoping the runner to its own requests, ending in a decision rule for prompt against hook against monitoring.</div>
+    </div>
+
+    <div class="step">
+      <h3><span class="num">6.</span> The agent-facing surface<span class="status done">Done</span></h3>
+      <p>The same refund desk, exposed to external AI agents through WebMCP. Four typed tools on <code>navigator.modelContext</code>: read the policy, pre-check an amount, submit a request, look up its status. Every write goes through the same <code>refundGuard</code> as the batch, and agent submissions travel through the same gate strip so you watch them held in the same place.</p>
+      <div class="lbl">Why this makes the argument stronger rather than wider</div>
+      <p><code>submitRefundRequest</code> takes a free-text note, and that note is caller-controlled. An outside agent can write "a manager approved this by phone" into it, which is scenario 4 word for word, except now the untrusted caller is another AI and the reader is the one sending it. The guard does not read the note. <code>checkRefundEligibility</code> is the typed verifier: a reasoning agent asked "can this go through" answers from context, which is the failure being measured; a typed tool returns the same verdict for the same number every time.</p>
+      <div class="res"><b>Result:</b> 4 tools registered, 13 of 13 on the tool smoke test, and 3 note-independence assertions folded back into the eval gate above.</div>
+    </div>
+
+    <div class="step">
+      <h3><span class="num">+</span> Not built, and why<span class="status todo">Out of scope</span></h3>
+      <p>No governed assistant layer. This app makes no model call at runtime and has no chat surface, which is deliberate: the argument it makes is that the rule in question is arithmetic and belongs in code, so putting a language model in front of the result would undercut it. The recorded run is the model's contribution and it is printed in full.</p>
+    </div>
+  </div>
+
+  <div class="flow">Data <b>&rarr;</b> Brain <b>&rarr;</b> Prove the brain <b>&rarr;</b> UI <b>&rarr;</b> Agent surface</div>
+
+  <div class="foot">Engine ported from the CCAR-F Build 3 notebook, 17 September 2026, task statements 1.4 and 1.5. Model choices recorded against claude-opus-5; the guard runs live in the browser.<br><br>© 2026 Lee Yih Ven | Data-Driven Solutions</div>
+</div>
+</body>
+</html>

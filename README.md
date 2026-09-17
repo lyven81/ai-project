@@ -21,10 +21,11 @@ This repo contains **59 completed AI applications**, each with a working demo (l
 
 An index of every published AI project, **newest first**. The date is when the project was **deployed** (from the per-project "Deployed" field below).
 
-**Total published AI projects: 59**
+**Total published AI projects: 60**
 
 | # | Date deployed | AI project | Page |
 |---|---|---|---|
+| 60 | 2026-09-17 | Hook or Prompt | [demo](https://lyven81.github.io/ai-project/projects/hook-or-prompt/demo.html) |
 | 59 | 2026-08-21 | Kuala Sepetang Tour Boat | [demo](https://kuala-sepetang-tour-boat-522143897885.asia-southeast1.run.app) |
 | 58 | 2026-08-21 | Evaluate AI Retail Customer Agent | [demo](https://lyven81.github.io/ai-project/projects/evaluate-ai-retail-customer-agent/demo.html) |
 | 57 | 2026-07-29 | Fire Claim Examiner | [demo](https://lyven81.github.io/ai-project/projects/fire-claim-examiner/demo.html) |
@@ -100,9 +101,9 @@ The 8 categories below match the [live category pages](https://lyven81.github.io
 | 5 | [Industry Specialist Advisors](#5-industry-specialist-advisors-13-projects) | 13 | Vertical experts (legal, finance, education, retail, property) |
 | 6 | [Knowledge & Reference Chatbots](#6-knowledge--reference-chatbots-9-projects) | 9 | Consumers seeking guidance in plain language |
 | 7 | [Document & Productivity Tools](#7-document--productivity-tools-5-projects) | 5 | Knowledge workers, accessibility users |
-| 8 | [Agentic Commerce](#8-agentic-commerce-2-projects) | 2 | Storefronts ready for AI shopping agents |
+| 8 | [Agentic Commerce](#8-agentic-commerce-3-projects) | 3 | Storefronts ready for AI shopping agents |
 
-**Total: 54 projects.**
+**Total: 55 projects.**
 
 ---
 
@@ -547,9 +548,16 @@ The 8 categories below match the [live category pages](https://lyven81.github.io
 
 ---
 
-### 8. Agentic Commerce (2 projects)
+### 8. Agentic Commerce (3 projects)
 
 **Who it's for:** Storefront owners who want their site to be shoppable by AI agents reliably — not just by humans clicking.
+
+#### Hook or Prompt
+- **What it does:** Races 18 refund requests through two agent architectures at once, one with the limit in the system prompt and one with a check before the tool runs, then exposes the same refund desk to external AI agents through 4 WebMCP tools. Killer tool: `checkRefundEligibility`.
+- **How it's built:** Vanilla JS + static HTML + WebMCP (W3C `navigator.modelContext`), with the engine ported from a CCAR-F study notebook. The guard runs live in the browser; the model's tool choices are a recorded run against Claude Opus 5, printed in full.
+- **Problem solved:** A merchant writes the refund limit into the agent's system prompt because that is what every guide shows, and it works most of the time. On a recorded batch of 18 requests the agent released $3,046.01 past a $500 limit stated plainly in its own instructions, with no error and nothing in any log. Moving the same rule to a check at the tool boundary takes it to $0.00 on identical requests. The WebMCP surface then hands that check to outside agents: `submitRefundRequest` takes a caller-controlled note, and a $640 request claiming "a manager approved this by phone" still returns held, `amountPaid: 0`, `noteAffectedOutcome: false`.
+- **Demo:** [Try it](https://lyven81.github.io/ai-project/projects/hook-or-prompt/demo.html)
+- **Deployed:** 2026-09-17
 
 #### Sunny Car Accessories
 - **What it does:** Agent-ready car-accessory storefront. 18 SKUs, 4 categories, 7 WebMCP tools with per-view scoping. Killer tool: `checkFitment`.
